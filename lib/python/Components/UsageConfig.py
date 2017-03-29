@@ -484,6 +484,8 @@ def InitUsageConfig():
 	SystemInfo["12V_Output"] = enigma.Misc_Options.getInstance().detected_12V_output()
 
 	config.usage.keymap = ConfigText(default = eEnv.resolve("${datadir}/enigma2/keymap.xml"))
+	config.usage.keytrans = ConfigText(default = eEnv.resolve("${datadir}/enigma2/keytranslation.xml"))
+	config.usage.keymap_usermod = ConfigText(default = eEnv.resolve("${datadir}/enigma2/keymap_usermod.xml"))
 
 	config.network = ConfigSubsection()
 	config.network.AFP_autostart = ConfigYesNo(default = False)

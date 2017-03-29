@@ -30,7 +30,7 @@ def countFrontpanelLEDs():
 		leds += 1
 
 	return leds
-
+	
 SystemInfo["12V_Output"] = Misc_Options.getInstance().detected_12V_output()
 SystemInfo["ZapMode"] = fileCheck("/proc/stb/video/zapmode") or fileCheck("/proc/stb/video/zapping_mode")
 SystemInfo["NumFrontpanelLEDs"] = countFrontpanelLEDs()
@@ -69,10 +69,7 @@ SystemInfo["LcdLiveTV"] = fileCheck("/proc/stb/fb/sd_detach")
 SystemInfo["HaveTouchSensor"] = getBoxType() in ('dm520', 'dm525', 'dm900')
 SystemInfo["DefaultDisplayBrightness"] = getBoxType() == 'dm900' and 8 or 5
 SystemInfo["RecoveryMode"] = fileCheck("/proc/stb/fp/boot_mode")
-<<<<<<< HEAD
+SystemInfo["need_dsw"] = getBoxType() not in ('osminiplus','osmega')
 SystemInfo["ForceLNBPowerChanged"] = fileCheck("/proc/stb/frontend/fbc/force_lnbon")
 SystemInfo["ForceToneBurstChanged"] = fileCheck("/proc/stb/frontend/fbc/force_toneburst")
 SystemInfo["USETunersetup"] = SystemInfo["ForceLNBPowerChanged"] or SystemInfo["ForceToneBurstChanged"]
-=======
-SystemInfo["need_dsw"] = getBoxType() not in ('osminiplus','osmega')
->>>>>>> 7b4b135943d170c783562864a2d3264f494b8289
