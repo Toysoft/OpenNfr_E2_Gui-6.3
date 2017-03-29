@@ -1,12 +1,12 @@
 from boxbranding import getMachineBrand, getMachineName
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
-import os
+
 from enigma import eTimer, eEnv
 
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
-from Components.config import config, ConfigText, ConfigPassword, KEY_LEFT, KEY_RIGHT, KEY_0, KEY_DELETE, KEY_BACKSPACE, KEY_ASCII, ConfigSelection, ConfigBoolean
+from Components.config import config, ConfigText, ConfigPassword, KEY_LEFT, KEY_RIGHT, KEY_0, KEY_DELETE, KEY_BACKSPACE, KEY_ASCII
 from Components.Label import Label
 from Components.Sources.StaticText import StaticText
 from Components.Slider import Slider
@@ -14,17 +14,20 @@ from Components.ActionMap import NumberActionMap
 from Components.ConfigList import ConfigList
 from Components.Sources.List import List
 
+
 class WizardSummary(Screen):
 	def __init__(self, session, parent):
 		Screen.__init__(self, session, parent)
 		self["text"] = StaticText("")
+		self["entry"] = StaticText("")
 		self.onShow.append(self.setCallback)
 
 	def setCallback(self):
 		self.parent.setLCDTextCallback(self.setText)
 
 	def setText(self, text):
-		self["text"].setText(text)
+		self["text"].setText(text[0])
+		self["entry"].setText(text[1])
 
 class Wizard(Screen):
 	instance = None
@@ -78,8 +81,7 @@ class Wizard(Screen):
 				if attrs.has_key('type'):
 					if attrs["type"] == "dynamic":
 						self.wizard[self.lastStep]["dynamiclist"] = attrs.get("source")
-					if attrs["type"] == "config":
-						self.wizard[self.lastStep]["configelement"] = attrs.get("configelement")
+					#self.wizard[self.lastStep]["list"].append(("Hallo", "test"))
 				if attrs.has_key("evaluation"):
 					#print "evaluation"
 					self.wizard[self.lastStep]["listevaluation"] = attrs.get("evaluation")
@@ -203,6 +205,7 @@ class Wizard(Screen):
 		Wizard.instance = self
 
 		self.lcdCallbacks = []
+		self.first = False
 
 		self.disableKeys = False
 
@@ -332,11 +335,6 @@ class Wizard(Screen):
 				nextStep = self["list"].current[1]
 				if self.wizard[currStep].has_key("listevaluation"):
 					exec("self." + self.wizard[self.currStep]["listevaluation"] + "('" + nextStep + "')")
-				elif (self.wizard[currStep].has_key("configelement")):
-					configelement = self.wizard[currStep]["configelement"]
-					element = eval(configelement)
-					element.value = self["list"].current[1]
-					element.save()
 				else:
 					self.currStep = self.getStepWithID(nextStep)
 
@@ -421,6 +419,7 @@ class Wizard(Screen):
 				#self.selection = self.wizard[self.currStep]["evaluatedlist"][self["list"].l.getCurrentSelectionIndex()][1]
 				exec("self." + self.wizard[self.currStep]["onselect"] + "()")
 # 		print "up"
+		self.updateLcd()
 
 	def down(self):
 		self.resetCounter()
@@ -438,6 +437,38 @@ class Wizard(Screen):
 				#self.selection = self.wizard[self.currStep]["evaluatedlist"][self["list"].l.getCurrentSelectionIndex()][1]
 				exec("self." + self.wizard[self.currStep]["onselect"] + "()")
 # 		print "down"
+		self.updateLcd()
+
+	def updateLcd(self):
+		if self.wizard[self.currStep]["id"] == "end":
+			return
+		else:
+			displaytext = []
+			displaytext.append(self.getTranslation(self.wizard[self.currStep]["text"]))
+			if self.first:
+				try:
+					getlist = self.getTranslation(self.wizard[self.currStep]["list"][0][0])
+					if getlist is not None:
+						entry = getlist
+				except:
+					entry = ""
+				self.first = False
+			else:
+				if self.showList:
+					if self["list"].getCurrent() is not None:
+						getlistentry = self["list"].getCurrent()[0]
+						entry = getlistentry
+					else:
+						entry = ""
+				elif self.showConfig:
+					getconfigentry = self.wizard[self.currStep]["config"]
+					entry = getconfigentry
+				else:
+					entry = ""
+			displaytext.append(entry)
+#			print "set LCD text"
+			for x in self.lcdCallbacks:
+				x(displaytext)
 
 	def selChanged(self):
 		self.resetCounter()
@@ -448,13 +479,7 @@ class Wizard(Screen):
 			if self.wizard[self.currStep].has_key("onselect"):
 				self.selection = self["list"].current[-1]
 				print "self.selection:", self.selection
-				if self.selection == 'eth0' or self.selection == 'wlan0' or self.selection == 'ra0':
-					os.system("echo %s > /tmp/netwizardselection" % self.selection) 
 				exec("self." + self.wizard[self.currStep]["onselect"] + "()")
-				#f = open("/tmp/netwizardselection", "w")
-				#name = self.selection	
-                		#f.write("\n".join(map(lambda x: str(x), name)))	
-                		#f.close() 
 
 	def resetCounter(self):
 		self.timeoutCounter = self.wizard[self.currStep]["timeout"]
@@ -507,6 +532,7 @@ class Wizard(Screen):
 			else:
 				self.currStep += 1
 				self.updateValues()
+			self.first = True
 		else:
 			if self.wizard[self.currStep].has_key("displaytext"):
 				displaytext = self.getTranslation(self.wizard[self.currStep]["displaytext"])
@@ -541,6 +567,7 @@ class Wizard(Screen):
 					self.onShown.remove(self.updateValues)
 			else:
 				self.afterAsyncCode()
+		self.updateLcd()
 
 	def afterAsyncCode(self):
 		if not self.updateValues in self.onShown:
@@ -557,7 +584,6 @@ class Wizard(Screen):
 		else:
 			if self.showList:
 # 				print "showing list,", self.currStep
-				index = 0
 				for renderer in self.renderer:
 					rootrenderer = renderer
 					while renderer.source is not None:
@@ -576,32 +602,13 @@ class Wizard(Screen):
 						#self.wizard[self.currStep]["evaluatedlist"].append(entry)
 						self.list.append(entry)
 					#del self.wizard[self.currStep]["dynamiclist"]
-				if (self.wizard[self.currStep].has_key("configelement")):
-					configelement = self.wizard[self.currStep]["configelement"]
-					print "configelement:", configelement
-					element = eval(configelement)
-					
-					if isinstance(element, ConfigSelection):
-						for choice in element.choices.choices:
-							print "choice:", choice
-							if configelement == "config.timezone.val":
-								self.list.append((choice, choice))
-							else:
-								self.list.append((choice[1], choice[0]))
-						index = element.getIndex()
-					elif isinstance(element, ConfigBoolean):
-						self.list.append((_(element.descriptions[True]), True))
-						self.list.append((_(element.descriptions[False]), False))
-						index = 1
-						if element.value:
-							index = 0
 				if len(self.wizard[self.currStep]["list"]) > 0:
 					#self["list"].instance.setZPosition(2)
 					for x in self.wizard[self.currStep]["list"]:
 						self.list.append((self.getTranslation(x[0]), x[1]))
 				self.wizard[self.currStep]["evaluatedlist"] = self.list
 				self["list"].list = self.list
-				self["list"].index = index
+				self["list"].index = 0
 			else:
 				self["list"].hide()
 

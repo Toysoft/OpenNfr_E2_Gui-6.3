@@ -24,6 +24,7 @@ class VideoEnhancementSetup(Screen, ConfigListScreen):
 		self["VKeyIcon"] = Boolean(False)
 		self['footnote'] = Label()
 		self["description"] = Label(_(""))
+		self["introduction"] = StaticText()
 
 		self.list = [ ]
 		self.xtdlist = [ ]
