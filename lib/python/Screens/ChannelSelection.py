@@ -59,7 +59,8 @@ except:
 
 profile("ChannelSelection.py after imports")
 
-FLAG_SERVICE_NEW_FOUND = 64 #define in lib/dvb/idvb.h as dxNewFound = 64
+FLAG_SERVICE_NEW_FOUND = 64
+FLAG_IS_DEDICATED_3D = 128 #define in lib/dvb/idvb.h as dxNewFound = 64 and dxIsDedicated3D = 128
 
 class BouquetSelector(Screen):
 	def __init__(self, session, bouquets, selectedFunc, enableWrapAround=True):

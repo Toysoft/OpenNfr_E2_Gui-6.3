@@ -3,6 +3,7 @@ from os import path
 from enigma import iPlayableService, iServiceInformation, eTimer, eServiceCenter, eServiceReference, eDVBDB
 
 from Screens.Screen import Screen
+from Screens.ChannelSelection import FLAG_IS_DEDICATED_3D
 from Components.About import about
 from Components.SystemInfo import SystemInfo
 from Components.ConfigList import ConfigListScreen
@@ -56,8 +57,8 @@ class VideoSetup(Screen, ConfigListScreen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		# for the skin: first try VideoSetup, then Setup, this allows individual skinning
-		self.skinName = ["Setup" ]
-		self.setup_title = _("A/V settings")
+		self.skinName = ["VideoSetup", "Setup" ]
+		self.setup_title = _("Video settings")
 		self["HelpWindow"] = Pixmap()
 		self["HelpWindow"].hide()
 		self["VKeyIcon"] = Boolean(False)
@@ -213,36 +214,23 @@ class VideoSetup(Screen, ConfigListScreen):
 				if SystemInfo["ScartSwitch"]:
 					self.list.append(getConfigListEntry(_("Auto scart switching"), config.av.vcrswitch, _("When enabled, your receiver will detect activity on the VCR SCART input.")))
 
-		if level >= 1:
-			if SystemInfo["CanDownmixAC3"]:
-				self.list.append(getConfigListEntry(_("Dolby Digital / DTS downmix"), config.av.downmix_ac3, _("Choose whether multi channel sound tracks should be downmixed to stereo.")))
-			if SystemInfo["CanDownmixAAC"]:
-				self.list.append(getConfigListEntry(_("AAC downmix"), config.av.downmix_aac, _("Choose whether multi channel sound tracks should be downmixed to stereo.")))
-			if SystemInfo["Canaudiosource"]:
-				self.list.append(getConfigListEntry(_("Audio Source"), config.av.audio_source, _("Choose whether multi channel sound tracks should be convert to PCM or SPDIF.")))		
-			self.list.extend((
-				getConfigListEntry(_("General AC3 delay"), config.av.generalAC3delay, _("This option configures the general audio delay of Dolby Digital sound tracks.")),
-				getConfigListEntry(_("General PCM delay"), config.av.generalPCMdelay, _("This option configures the general audio delay of stereo sound tracks."))
-			))
-
-			if SystemInfo["Can3DSurround"]:
-				self.list.append(getConfigListEntry(_("3D Surround"), config.av.surround_3d,_("This option allows you to enable 3D Surround Sound.")))
-
-			if SystemInfo["CanAutoVolume"]:
-				self.list.append(getConfigListEntry(_("Audio Auto Volume Level"), config.av.autovolume,_("This option configures you can set Auto Volume Level.")))
-
-			if SystemInfo["Canedidchecking"]:
-				self.list.append(getConfigListEntry(_("Bypass HDMI EDID Check"), config.av.bypass_edid_checking,_("This option allows you to bypass HDMI EDID check")))
-
-#		if not isinstance(config.av.scaler_sharpness, ConfigNothing):
-#			self.list.append(getConfigListEntry(_("Scaler sharpness"), config.av.scaler_sharpness, _("This option configures the picture sharpness.")))
+		if not isinstance(config.av.scaler_sharpness, ConfigNothing) and not path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/VideoEnhancement/plugin.pyo"):
+			self.list.append(getConfigListEntry(_("Scaler sharpness"), config.av.scaler_sharpness, _("This option configures the picture sharpness.")))
 
 		if SystemInfo["havecolorspace"]:
 			self.list.append(getConfigListEntry(_("HDMI Colorspace"), config.av.hdmicolorspace,_("This option allows you can config the Colorspace from Auto to RGB")))
 
+		if SystemInfo["havecolorimetry"]:
+			self.list.append(getConfigListEntry(_("HDMI Colorimetry"), config.av.hdmicolorimetry,_("This option allows you can config the Colorimetry for HDR")))
+
+		if SystemInfo["havehdmicolordepth"]:
+			self.list.append(getConfigListEntry(_("HDMI Colordepth"), config.av.hdmicolordepth,_("This option allows you can config the Colordepth for UHD")))
+
+		if SystemInfo["Canedidchecking"]:
+			self.list.append(getConfigListEntry(_("Bypass HDMI EDID Check"), config.av.bypass_edid_checking,_("This option allows you to bypass HDMI EDID check")))
+
 		if SystemInfo["haveboxmode"]:
 			self.list.append(getConfigListEntry(_("Change Boxmode to control Hardware Chip Modes*"), config.av.boxmode,_("Switch Mode to enable HDR Modes or PIP Functions")))
-
 
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
@@ -482,7 +470,11 @@ class AudioSetup(Screen, ConfigListScreen):
 			if SystemInfo["CanPcmMultichannel"]:
 				self.list.append(getConfigListEntry(_("PCM Multichannel"), config.av.pcm_multichannel, _("Choose whether multi channel sound tracks should be output as PCM.")))
 			if SystemInfo["CanDownmixAC3"]:
-				self.list.append(getConfigListEntry(_("Dolby Digital / DTS downmix"), config.av.downmix_ac3, _("Choose whether multi channel sound tracks should be downmixed to stereo.")))
+				self.list.append(getConfigListEntry(_("AC3 downmix"), config.av.downmix_ac3, _("Choose whether AC3 sound tracks should be downmixed to stereo.")))
+			if SystemInfo["CanAC3plusTranscode"]:
+				self.list.append(getConfigListEntry(_("AC3 plus transcoding"), config.av.transcodeac3plus, _("Choose whether AC3 Plus sound tracks should be transcoded to AC3.")))
+			if SystemInfo["CanDownmixDTS"]:
+				self.list.append(getConfigListEntry(_("DTS downmix"), config.av.downmix_dts, _("Choose whether DTS channel sound tracks should be downmixed to stereo.")))
 			if SystemInfo["CanDownmixAAC"]:
 				self.list.append(getConfigListEntry(_("AAC downmix"), config.av.downmix_aac, _("Choose whether multi channel sound tracks should be downmixed to stereo.")))
 			if SystemInfo["Canaudiosource"]:
@@ -502,9 +494,6 @@ class AudioSetup(Screen, ConfigListScreen):
 
 			if SystemInfo["CanAutoVolume"]:
 				self.list.append(getConfigListEntry(_("Audio Auto Volume Level"), config.av.autovolume,_("This option configures you can set Auto Volume Level.")))
-
-			if SystemInfo["Canedidchecking"]:
-				self.list.append(getConfigListEntry(_("Bypass HDMI EDID Check"), config.av.bypass_edid_checking,_("This option allows you to bypass HDMI EDID check")))
 
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
@@ -561,6 +550,31 @@ class AutoVideoModeLabel(Screen):
 			idx += 4
 			self.hideTimer.start(idx*1000, True)
 
+previous = None
+isDedicated3D = False
+
+def applySettings(mode=config.osd.threeDmode.value, znorm=int(config.osd.threeDznorm.value)):
+	global previous, isDedicated3D
+	mode = isDedicated3D and mode == "auto" and "sidebyside" or mode
+	if previous != (mode, znorm):
+		try:
+			previous = (mode, znorm)
+			if SystemInfo["CanUse3DModeChoices"]:
+				f = open("/proc/stb/fb/3dmode_choices", "r")
+				choices = f.readlines()[0].split()
+				f.close()
+				if mode not in choices:
+					if mode == "sidebyside":
+						mode = "sbs"
+					elif mode == "topandbottom":
+						mode = "tab"
+					elif mode == "auto":
+						mode = "off"
+			open(SystemInfo["3DMode"], "w").write(mode)
+			open(SystemInfo["3DZNorm"], "w").write('%d' % znorm)
+		except:
+			return
+
 class AutoVideoMode(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
@@ -583,6 +597,29 @@ class AutoVideoMode(Screen):
 		self.detecttimer = eTimer()
 		self.detecttimer.callback.append(self.VideoChangeDetect)
 
+	def checkIfDedicated3D(self):
+			service = self.session.nav.getCurrentlyPlayingServiceReference()
+			servicepath = service and service.getPath()
+			if servicepath and servicepath.startswith("/"):
+					if service.toString().startswith("1:"):
+						info = eServiceCenter.getInstance().info(service)
+						service = info and info.getInfoString(service, iServiceInformation.sServiceref)
+						return service and eDVBDB.getInstance().getFlag(eServiceReference(service)) & FLAG_IS_DEDICATED_3D == FLAG_IS_DEDICATED_3D and "sidebyside"
+					else:
+						return ".3d." in servicepath.lower() and "sidebyside" or ".tab." in servicepath.lower() and "topandbottom"
+			service = self.session.nav.getCurrentService()
+			info = service and service.info()
+			return info and info.getInfo(iServiceInformation.sIsDedicated3D) == 1 and "sidebyside"
+
+	def __evStart(self):
+		if config.osd.threeDmode.value == "auto":
+			global isDedicated3D
+			isDedicated3D = self.checkIfDedicated3D()
+			if isDedicated3D:
+				applySettings(isDedicated3D)
+			else:
+				applySettings()
+
 	def BufferInfo(self):
 		bufferInfo = self.session.nav.getCurrentService().streamed().getBufferCharge()
 		if bufferInfo[0] > 98:
@@ -595,16 +632,6 @@ class AutoVideoMode(Screen):
 	def BufferInfoStop(self):
 		self.bufferfull = True
 		#print '-'*50, 'BufferInfoStop'
-
-	def __evStart(self):
-		if config.osd.threeDmode.value == "auto":
-			global isDedicated3D
-			isDedicated3D = self.checkIfDedicated3D()
-			if isDedicated3D:
-				applySettings(isDedicated3D)
-			else:
-				applySettings()
-
 
 	def VideoChanged(self):
 		if config.av.autores.value == 'disabled' or getAutoresPlugin_enabled():
@@ -929,10 +956,10 @@ class AutoVideoMode(Screen):
 				else:
 					print "DEBUG VIDEOMODE/ no path or no service reference, presumably live TV"
 					new_rate = '50' # for TV / or no service reference, then stay at 1080p50
-				
+
 				new_rate = new_rate.replace('25', '50')
 				new_rate = new_rate.replace('30', '60')
-				
+
 				if  (config.av.smart1080p.value == '1080p50') or (config.av.smart1080p.value == 'true'): # for compatibility with old ConfigEnableDisable
 					write_mode = '1080p' + new_rate
 				elif config.av.smart1080p.value == '2160p50':
@@ -949,7 +976,6 @@ class AutoVideoMode(Screen):
 			if write_mode and current_mode != write_mode and self.bufferfull or self.firstrun:
 				# first we read now the real available values for every stb,
 				# before we try to write the new mode
-				self.firstrun = False
 				changeResolution = False
 				try:
 					if path.exists("/proc/stb/video/videomode_choices"):
