@@ -17,6 +17,7 @@
 #include <string>
 #include <new>
 #include <cxxabi.h>
+
 typedef struct
 {
 	unsigned int address;
@@ -109,7 +110,7 @@ void DumpUnfreed();
 
 #define CHECKFORMAT __attribute__ ((__format__(__printf__, 1, 2)))
 
-extern Signal2<void, int, const std::string&> logOutput;
+extern sigc::signal2<void, int, const std::string&> logOutput;
 extern int logOutputConsole;
 
 void CHECKFORMAT eFatal(const char*, ...);
