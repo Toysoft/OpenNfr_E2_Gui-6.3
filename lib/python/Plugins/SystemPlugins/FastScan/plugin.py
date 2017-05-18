@@ -210,7 +210,7 @@ class FastScanScreen(ConfigListScreen, Screen):
 		self["introduction"] = Label(_("Select your provider, and press OK to start the scan"))
 
 
-	def addSatTransponder(self, tlist, frequency, symbol_rate, polarisation, fec, inversion, orbital_position, system, modulation, rolloff, pilot):
+	def addSatTransponder(self, tlist, frequency, symbol_rate, polarisation, fec, inversion, orbital_position, system, modulation, rolloff, pilot, is_id, pls_mode, pls_code):
 		parm = eDVBFrontendParametersSatellite()
 		parm.modulation = modulation
 		parm.system = system
@@ -222,6 +222,9 @@ class FastScanScreen(ConfigListScreen, Screen):
 		parm.orbital_position = orbital_position
 		parm.rolloff = rolloff
 		parm.pilot = pilot
+		parm.is_id = is_id
+		parm.pls_mode = pls_mode
+		parm.pls_code = pls_code
 		tlist.append(parm)
 		
 	def restoreService(self):
@@ -324,7 +327,13 @@ class FastScanScreen(ConfigListScreen, Screen):
 				self.rolloff = 0 #
 			
 				self.pilot = 2 # 0 - off, 1 - on 2 - AUTO
-		
+
+				self.is_id = 0 #-1
+
+				self.pls_mode = eDVBFrontendParametersSatellite.PLS_Root
+
+				self.pls_code = 1
+
 				self.addSatTransponder(tlist, int(self.frequency),
 							int(self.symbolrate),
 							int(self.polarization),
@@ -334,7 +343,10 @@ class FastScanScreen(ConfigListScreen, Screen):
 							int(self.system),
 							int(self.modulation),
 							int(self.rolloff),
-							int(self.pilot))
+							int(self.pilot),
+							int(self.is_id),
+							int(self.pls_mode),
+							int(self.pls_code))
 		 
                         self.session.openWithCallback(self.bouqmake, ServiceScan, [{"transponders": tlist, "feid": int(self.scan_nims.value), "flags": 0, "networkid": 0}])
                 except:
@@ -698,4 +710,3 @@ def Plugins(**kwargs):
 		return PluginDescriptor(name=_("Fast Scan"), description="Scan Diefferent sat provider", where = PluginDescriptor.WHERE_MENU, fnc=FastScanStart)
 	else:
 		return []
-
