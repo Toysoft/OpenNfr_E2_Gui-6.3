@@ -414,7 +414,7 @@ void eFastScan::servicesTableReady(int error)
 
 void eFastScan::networkTableReady(int error)
 {
-	eDebug("eFastScan::networkTableReady %d", error);
+	eDebug("[eFastScan] networkTableReady %d", error);
 
 	if (!error)
 	{
@@ -499,6 +499,9 @@ void eFastScan::parseResult()
 			fesat.modulation = (*it)->getModulation();
 			fesat.rolloff = (*it)->getRollOff();
 			fesat.pilot = eDVBFrontendParametersSatellite::Pilot_Unknown;
+			fesat.is_id = 0; //NO_STREAM_ID_FILTER;
+			fesat.pls_mode = eDVBFrontendParametersSatellite::PLS_Root;
+			fesat.pls_code = 1;
 
 			parm->setDVBS(fesat);
 			db->addChannelToList(chid, parm);
