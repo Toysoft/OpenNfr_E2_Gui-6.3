@@ -765,7 +765,6 @@ lib/python/Plugins/Extensions/Infopanel/data/Makefile
 lib/python/Plugins/Extensions/Infopanel/icons/Makefile
 lib/python/Plugins/Extensions/Infopanel/images/Makefile
 lib/python/Plugins/Extensions/Infopanel/pics/Makefile
-lib/python/Plugins/Extensions/Infopanel/locale/Makefile
 lib/python/Plugins/Extensions/Infopanel/Extra/Makefile
 lib/python/Plugins/Extensions/MenuSort/Makefile
 lib/python/Plugins/Extensions/CustomSubservices/Makefile
