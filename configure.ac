@@ -833,6 +833,7 @@ lib/python/Plugins/Extensions/MediaPortal/skins_1080/clean_fhd/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/clean_fhd/simpleplayer/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/clean_fhd/images/Makefile
 lib/python/Plugins/Extensions/MediaPortal/userfiles/Makefile
+lib/python/Plugins/SystemPlugins/Makefile
 lib/python/Plugins/SystemPlugins/CableScan/Makefile
 lib/python/Plugins/SystemPlugins/CommonInterfaceAssignment/Makefile
 lib/python/Plugins/SystemPlugins/CommonInterfaceAssignment/meta/Makefile
