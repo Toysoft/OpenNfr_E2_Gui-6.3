@@ -155,7 +155,8 @@ class FastScanScreen(ConfigListScreen, Screen):
         	self.providers['ORF'] = (0, 900, True)
         	self.providers['Deutsch_HD'] = (0, 900, True)
         	self.providers['Deutsch_SD'] = (0, 900, True)
-
+        	self.providers['Full_HD'] = (0, 900, True)
+        	self.providers['Full_SD'] = (0, 900, True)
 		self.transponders = ((12515000, 22000000, eDVBFrontendParametersSatellite.FEC_5_6, 192,
 			eDVBFrontendParametersSatellite.Polarisation_Horizontal, eDVBFrontendParametersSatellite.Inversion_Unknown,
 			eDVBFrontendParametersSatellite.System_DVB_S, eDVBFrontendParametersSatellite.Modulation_QPSK,
@@ -359,7 +360,13 @@ class FastScanScreen(ConfigListScreen, Screen):
 		global ret
 		ret1 = ret
         	if prov == 'sky_orf_de':
-            		provlist = ['ORF','Deutsch_HD','Deutsch_SD','Sky_HD','Sky_SD']
+            		provlist = ['ORF',
+             			'Deutsch_HD',
+             			'Deutsch_SD',
+             			'Sky_HD',
+             			'Sky_SD',
+             			'Full_HD',
+             			'Full_SD']
                         for xprov in provlist:
                                 newprov = xprov
 				self.path = "/etc/enigma2"
@@ -432,7 +439,7 @@ class FastScanScreen(ConfigListScreen, Screen):
                         		print 'My error, value:no xml found'
                         eDVBDB.getInstance().reloadBouquets()         
 #####new
-		elif prov in ('Sky_HD', 'Sky_SD', 'ORF', 'Deutsch_HDDeutsch_SD'):
+		        elif prov in ('Sky_HD', 'Sky_SD', 'ORF', 'Deutsch_HD', 'Deutsch_SD', 'Full_HD', 'Full_SD'):
 			self.path = "/etc/enigma2"
 			lastsc = self.path + "/userbouquet.LastScanned.tv"
 			newbouq = self.path + "/userbouquet." + self.scan_provider.value + ".tv"
@@ -620,7 +627,7 @@ class FastScanScreen(ConfigListScreen, Screen):
 
         def keyGo(self):
 		prov = self.scan_provider.value.lower()
-                if prov == 'sky_hd' or prov == 'sky_sd' or prov == 'orf' or prov == 'deutsch_hd' or prov == 'deutsch_sd' or prov == 'sky_orf_de':           
+                if prov == 'sky_hd' or prov == 'sky_sd' or prov == 'orf' or prov == 'deutsch_hd' or prov == 'deutsch_sd' or prov == 'sky_orf_de' or prov == 'full_hd' or prov == 'full_sd':          
                   if self.scan_alternative_number_mode.value == True:
                         config.usage.alternative_number_mode.value = True
                         config.usage.alternative_number_mode.save()
