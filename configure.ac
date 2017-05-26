@@ -465,12 +465,15 @@ if test x"$with_amlogic" = xyes ; then
 	ALSA_CFLAGS="-lasound"
 fi
 
+if test "$BOXTYPE" == "dm7080" -o "$BOXTYPE" == "dm820"  -o "$BOXTYPE" == "dm900" -o "$BOXTYPE" == "dm520"; then
+	AC_DEFINE(CONFIG_ION, 1,[define BOX use ION Allocator])
+fi
 
 if test "$BOXTYPE" == "dm7080" -o "$BOXTYPE" == "dm820" -o "$BOXTYPE" == "dm800se" -o "$BOXTYPE" == "dm800sev2" -o "$BOXTYPE" == "dm7020hd" -o "$BOXTYPE" == "dm7020hdv2" -o "$BOXTYPE" == "dm900"; then
 	AC_DEFINE(TUNER_DM7080, 1,[define BOXTYPE DM7080])
 fi
 
-if test "$BOXTYPE" == "vusolo4k" -o "$BOXTYPE" == "vuuno4k" -o "$BOXTYPE" == "vuultimo4k" -o "$BOXTYPE" == "gb7252" -o "$MACHINEBUILD" == "force3uhdplus" -o "$MACHINEBUILD" == "galaxy4k" -o "$MACHINEBUILD" == "tm4ksuper" -o "$MACHINEBUILD" == "spycat4k"; then
+if test "$BOXTYPE" == "vusolo4k" -o "$BOXTYPE" == "vuuno4k" -o "$BOXTYPE" == "vuultimo4k" -o "$BOXTYPE" == "gb7252" -o "$BOXTYPE" == "8100s" -o "$MACHINEBUILD" == "force3uhdplus" -o "$MACHINEBUILD" == "galaxy4k" -o "$MACHINEBUILD" == "tm4ksuper" -o "$MACHINEBUILD" == "spycat4k"; then
 	AC_DEFINE(TUNER_FBC, 1,[define HAVE FBC TUNER])
 fi
 
