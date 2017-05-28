@@ -8,7 +8,7 @@ from Screens.Screen import Screen
 from boxbranding import getBoxType
 
 from Components.Pixmap import Pixmap
-from Components.config import *
+from Components.config import config, ConfigBoolean, configfile
 
 from LanguageSelection import LanguageWizard
 from Screens.Nfrstartwizard import NfrWizardSetupScreen
