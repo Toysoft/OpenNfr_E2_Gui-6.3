@@ -92,32 +92,6 @@ def _ifinfo(sock, addr, ifname):
 	else:
 		return socket.inet_ntoa(info[20:24])
 
-def getIfConfig(ifname):
-	ifreq = {'ifname': ifname}
-	infos = {}
-	sock  = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	# offsets defined in /usr/include/linux/sockios.h on linux 2.6
-	infos['addr']    = 0x8915 # SIOCGIFADDR
-	infos['brdaddr'] = 0x8919 # SIOCGIFBRDADDR
-	infos['hwaddr']  = 0x8927 # SIOCSIFHWADDR
-	infos['netmask'] = 0x891b # SIOCGIFNETMASK
-	try:
-		for k,v in infos.items():
-			ifreq[k] = _ifinfo(sock, v, ifname)
-	except:
-		pass
-	sock.close()
-	return ifreq
-
-def getIfTransferredData(ifname):
-	f = open('/proc/net/dev', 'r')
-	for line in f:
-		if ifname in line:
-			data = line.split('%s:' % ifname)[1].split()
-			rx_bytes, tx_bytes = (data[0], data[8])
-			f.close()
-			return rx_bytes, tx_bytes
-
 def getModelString():	
 	try:
 		file = open("/proc/stb/info/boxtype", "r")
@@ -125,14 +99,16 @@ def getModelString():
 		file.close()
 		return model
 	except IOError:
-		return "unknown"		
+		return "unknown"
 
 def getChipSetString():
 	if getMachineBuild() in ('dm7080','dm820'):
 		return "7435"
-	elif getMachineBuild() in ('dm520'):
+	elif getMachineBuild() in ('dm520','dm525'):
 		return "73625"
-	elif getMachineBuild() in ('hd51'):
+	elif getMachineBuild() in ('dm900','dm920','et13000','sf5008'):
+		return "7252S"
+	elif getMachineBuild() in ('hd51','vs1500','h7'):
 		return "7251S"
 	else:
 		try:
@@ -144,11 +120,15 @@ def getChipSetString():
 			return "unavailable"
 
 def getCPUSpeedString():
-	if getMachineBuild() in ('vusolo4k'):
+	if getMachineBuild() in ('vusolo4k','vuultimo4k'):
 		return "1,5 GHz"
-	elif getMachineBuild() in ('vuuno4k','vuultimo4k'):
+	elif getMachineBuild() in ('formuler1tc','formuler1', 'triplex', 'tiviaraplus'):
+		return "1,3 GHz"
+	elif getMachineBuild() in ('u5'):
+		return "1,6 GHz"
+	elif getMachineBuild() in ('vuuno4kse','vuuno4k','dm900','dm920', 'gb7252', 'dags7252','xc7439','8100s'):
 		return "1,7 GHz"
-	elif getMachineBuild() in ('hd51','hd52','sf4008'):
+	elif getMachineBuild() in ('hd51','hd52','sf4008','vs1500','et1x000','h7','et13000','sf5008'):
 		try:
 			import binascii
 			f = open('/sys/firmware/devicetree/base/cpus/cpu@0/clock-frequency', 'rb')
@@ -176,10 +156,11 @@ def getCPUSpeedString():
 		except IOError:
 			return "unavailable"
 
-
 def getCPUString():
-	if getMachineBuild() in ('vuuno4k', 'vuultimo4k','xc7362', 'vusolo4k', 'hd51', 'hd52','sf4008'):
+	if getMachineBuild() in ('vuuno4kse','vuuno4k', 'vuultimo4k','vusolo4k', 'hd51', 'hd52', 'sf4008', 'dm900','dm920', 'gb7252', 'dags7252', 'vs1500', 'et1x000', 'xc7439','h7','8100s','et13000','sf5008'):
 		return "Broadcom"
+	elif getMachineBuild() in ('u5'):
+		return "Hisilicon"
 	else:
 		try:
 			system="unknown"
@@ -207,7 +188,9 @@ def getCpuCoresString():
 			if len(splitted) > 1:
 				splitted[1] = splitted[1].replace('\n','')
 				if splitted[0].startswith("processor"):
-					if int(splitted[1]) > 0:
+					if getMachineBuild() in ('vuultimo4k','u5'):
+						cores = 4
+					elif int(splitted[1]) > 0:
 						cores = 2
 					else:
 						cores = 1
@@ -215,6 +198,40 @@ def getCpuCoresString():
 		return cores
 	except IOError:
 		return "unavailable"
+
+def _ifinfo(sock, addr, ifname):
+	iface = struct.pack('256s', ifname[:15])
+	info  = fcntl.ioctl(sock.fileno(), addr, iface)
+	if addr == 0x8927:
+		return ''.join(['%02x:' % ord(char) for char in info[18:24]])[:-1].upper()
+	else:
+		return socket.inet_ntoa(info[20:24])
+
+def getIfConfig(ifname):
+	ifreq = {'ifname': ifname}
+	infos = {}
+	sock  = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	# offsets defined in /usr/include/linux/sockios.h on linux 2.6
+	infos['addr']    = 0x8915 # SIOCGIFADDR
+	infos['brdaddr'] = 0x8919 # SIOCGIFBRDADDR
+	infos['hwaddr']  = 0x8927 # SIOCSIFHWADDR
+	infos['netmask'] = 0x891b # SIOCGIFNETMASK
+	try:
+		for k,v in infos.items():
+			ifreq[k] = _ifinfo(sock, v, ifname)
+	except:
+		pass
+	sock.close()
+	return ifreq
+
+def getIfTransferredData(ifname):
+	f = open('/proc/net/dev', 'r')
+	for line in f:
+		if ifname in line:
+			data = line.split('%s:' % ifname)[1].split()
+			rx_bytes, tx_bytes = (data[0], data[8])
+			f.close()
+			return rx_bytes, tx_bytes
 
 def getPythonVersionString():
 	try:

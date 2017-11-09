@@ -15,7 +15,6 @@ base_libenigma_base_a_SOURCES = \
 	base/estring.cpp \
 	base/etpm.cpp \
 	base/freesatv2.cpp \
-	base/filepush.cpp \
 	base/init.cpp \
 	base/ioprio.cpp \
 	base/message.cpp \
@@ -23,6 +22,7 @@ base_libenigma_base_a_SOURCES = \
 	base/rawfile.cpp \
 	base/smartptr.cpp \
 	base/thread.cpp \
+	base/httpsstream.cpp \
 	base/httpstream.cpp \
 	base/wrappers.cpp
 
@@ -44,7 +44,6 @@ baseinclude_HEADERS = \
 	base/eptrlist.h \
 	base/estring.h \
 	base/etpm.h \
-	base/filepush.h \
 	base/freesatv2.h \
 	base/i18n.h \
 	base/itssource.h \
@@ -58,5 +57,6 @@ baseinclude_HEADERS = \
 	base/ringbuffer.h \
 	base/smartptr.h \
 	base/thread.h \
+	base/httpsstream.h \
 	base/httpstream.h \
 	base/wrappers.h
