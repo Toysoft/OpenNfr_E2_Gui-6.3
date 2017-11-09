@@ -1429,7 +1429,7 @@ RESULT eDVBScan::processSDT(eDVBNamespace dvbnamespace, const ServiceDescription
 	for (ServiceDescriptionConstIterator s(services.begin()); s != services.end(); ++s)
 	{
 		unsigned short service_id = (*s)->getServiceId();
-		SCAN_eDebugNoNewLineStart("[eDVBScan] SID %04x: ", service_id);
+		SCAN_eDebugNoNewLine("[eDVBScan] SID %04x: ", service_id);
 		bool is_crypted = false;
 
 		std::map<unsigned short, service>::iterator it = m_pmts_to_read.find(service_id);
