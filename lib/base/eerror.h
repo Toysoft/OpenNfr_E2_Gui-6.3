@@ -120,6 +120,9 @@ enum { lvlDebug=1, lvlWarning=2, lvlFatal=4 };
     void CHECKFORMAT eDebug(const char*, ...);
     void CHECKFORMAT eDebugNoNewLine(const char*, ...);
     void CHECKFORMAT eWarning(const char*, ...);
+    void CHECKFORMAT eLog(int level, const char* fmt, ...)
+    void CHECKFORMAT eLogNoNewLine(int level, const char* fmt, ...)
+
     #define ASSERT(x) { if (!(x)) eFatal("%s:%d ASSERTION %s FAILED!", __FILE__, __LINE__, #x); }
 #else  // DEBUG
     inline void eDebug(const char* fmt, ...)
@@ -135,10 +138,6 @@ enum { lvlDebug=1, lvlWarning=2, lvlFatal=4 };
     }
 
     inline void eLog(int level, const char* fmt, ...)
-    {
-    }
-
-    inline void eLogNoNewLine(int level, const char* fmt, ...)
     {
     }
 
