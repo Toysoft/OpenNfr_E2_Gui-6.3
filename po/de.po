@@ -1756,7 +1756,7 @@ msgid "Common Interface assignment"
 msgstr "Common Interface Zuweisung"
 
 msgid "Common interface"
-msgstr ""
+msgstr "Modul schnittstelle"
 
 msgid "Communication"
 msgstr "Kommunikation"
@@ -14213,3 +14213,172 @@ msgstr "Workaround für den alten Tuner-Treiber"
 
 msgid "Basic settings"
 msgstr "Grundeinstellungen"
+
+msgid ""
+"Enigma2 playback system was changed and Enigma2 should be restarted\n"
+"\n"
+"Do you want to restart it now?"
+msgstr ""
+"Das Enigma2-Wiedergabesystem wurde geändert und Enigma2 sollte neu gestartet "
+"werden\n"
+"\n"
+"Möchtest du es jetzt neu starten?"
+
+msgid "Enigma2 playback system"
+msgstr "Enigma2-Wiedergabesystem"
+
+msgid "Embedded subtitles"
+msgstr "Eingebettete Untertitel"
+
+msgid "Buffer size"
+msgstr "Puffergröße"
+
+msgid "Buffer duration"
+msgstr "Pufferdauer"
+
+msgid "Auto turn on subtitles"
+msgstr "Untertitel automatisch einschalten"
+
+msgid "Auto select stream"
+msgstr "Stream automatisch auswählen"
+
+msgid "Connection speed"
+msgstr "Verbindungsgeschwindigkeit"
+
+msgid "The BMediaCenter plugin is not installed!\nInstall now?"
+msgstr "Das BMediaCenter Plugin ist nicht installiert!\nJetzt installieren?"
+
+msgid "The MediaPortal plugin is not installed!\nInstall now?"
+msgstr "Das MediaPortal Plugin ist nicht installiert!\nJetzt installieren?"
+
+msgid "The IPTVPlayer plugin is not installed!\nInstall now?"
+msgstr "Das IPTVPlayer Plugin ist nicht installiert!\nJetzt installieren?"
+
+msgid "The Youtube plugin is not installed!\nInstall now?"
+msgstr "Das Youtube Plugin ist nicht installiert!\nJetzt installieren?"
+
+msgid "The Kodi plugin is not installed!\nInstall now?"
+msgstr "Das Kodi Plugin ist nicht installiert!\nJetzt installieren?"
+
+msgid "The MP3Browser plugin is not installed!\nInstall now?"
+msgstr "Das MP3Browser Plugin ist nicht installiert!\nJetzt installieren?"
+
+msgid "The TSmedia plugin is not installed!\nInstall now?"
+msgstr "Das TSmedia Plugin ist nicht installiert!\nJetzt installieren?"
+
+msgid "The WebradioFS plugin is not installed!\nInstall now?"
+msgstr "Das WebradioFS Plugin ist nicht installiert!\nJetzt installieren?"
+
+msgid ""
+"Your %s %s will be restarted after the installation of service\n"
+"Ready to install %s ?"
+msgstr ""
+
+msgid "Configure which tuner type will be preferred, when the same service is available on different types of tuners."
+msgstr "Konfigurieren der bevorzugten von mehreren für einen Sender verfügbaren Empfangsarten."
+
+msgid "Configure which tuner will be preferred, when more than one tuner is available. If set to 'auto' the system will give priority to the tuner having the lowest number of channels/satellites."
+msgstr "Konfigurieren, welcher von mehreren Tunern bevorzugt benutzt werden soll. Bei 'Automatisch' wird zuerst der Tuner mit den wenigsten Sendern/Satelliten genommen."
+
+msgid "In expert mode, configure which tuners will be preferred, when more than one tuner is available."
+msgstr "Konfiguriere im Expertenmodus, welche von mehreren Tunern bevorzugt benutzt werden sollen."
+
+msgid "Configure whether another tuner from the preferred list is allocated instead of sharing a tuner that is already active recording the same channel."
+msgstr "Konfiguriere, ob ein weiterer bevorzugter Tuner belegt wird, selbst wenn ein anderer Tuner mit verwendet werden könnte, der den gleichen Kanal aufnimmt."
+
+msgid "Experimental mode"
+msgstr "Experimenteller Modus"
+
+msgid "Preferred tuners, multiple selection allowed"
+msgstr "Bevorzugte Tuner, Mehrfachauswahl möglich"
+
+msgid "Experimental: strict limitation to preferred tuners"
+msgstr "Experimentell: strikte Beschränkung auf bevorzugte Tuner"
+
+msgid "While available"
+msgstr "Solange verfügbar"
+
+msgid "Preferred tuners for recordings, multiple selection allowed"
+msgstr "Bevorzugte Tuner bei Aufnahmen, Mehrfachauswahl möglich"
+
+msgid "Experimental: strict limitation to preferred tuners for recordings"
+msgstr "Experimentell: strikte Beschränkung auf bevorzugte Tuner bei Aufnahmen"
+
+msgid "Configure which tuner for recordings will be preferred, when more than one tuner is available."
+msgstr "Konfigurieren Sie, welcher Tuner für Aufnahmen bevorzugt benutzt werden soll, wenn mehr als ein Tuner verfügbar ist."
+
+msgid "CI Operation Mode"
+msgstr "CI Betriebs Modus"
+
+msgid "CI settings"
+msgstr "CI-Einstellungen"
+
+msgid "Expert mode"
+msgstr "Expertenmodus"
+
+msgid "Wakeup time before a timer begins [mins]"
+msgstr "Aufwachzeit bevor ein Timer beginnt (min)"
+
+msgid "Time window for detection of the wakeup by a timer [mins]"
+msgstr "Zeitfenster für die Erkennung des Aufwachens durch einen Timer (min)"
+
+msgid "Use workaround for wakeup from deep-standby?"
+msgstr "Workaround für das Aufwachen aus dem Deep-Standby benutzen?"
+
+msgid "Disable Animations"
+msgstr "Animation deaktivieren"
+
+msgid "Animation Speed"
+msgstr "Animations Geschwindigkeit"
+
+msgid "Animation Setup"
+msgstr "Animation - Einstellungen"
+
+msgid "Simple fade"
+msgstr "Einfaches Verblassen"
+
+msgid "Grow drop"
+msgstr "Von oben fallend"
+
+msgid "Grow from left"
+msgstr "Von links einschiebend"
+
+msgid "Slide drop"
+msgstr "Von oben gleitend"
+
+msgid "Slide left to right"
+msgstr "Von links nach rechts"
+
+msgid "Slide top to bottom"
+msgstr "Von oben nach unten"
+
+msgid "Stripes"
+msgstr "Streifen"
+
+msgid "* current animation"
+msgstr "* gewählte Animation"
+
+msgid "Simple zoom"
+msgstr "Einfacher Zoom"
+
+msgid "Extrude from left"
+msgstr "Verformen nach links"
+
+msgid "Slide from left"
+msgstr "Von links gleiten"
+
+msgid "Slide right to left"
+msgstr "Von rechts nach links"
+
+msgid "Zoom from left"
+msgstr "Zoom von links"
+
+msgid "Zoom from right"
+msgstr "Zoom von rechts"
+
+msgid "Clock"
+msgstr "Uhr"
+
+msgid "AnimationSetup Config"
+msgstr "Animation Einstellungen"
+
