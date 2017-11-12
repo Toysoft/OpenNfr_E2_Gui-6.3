@@ -6300,8 +6300,8 @@ msgstr "Wähle Verzeichnisse"
 msgid "Select how to activate the Quick EPG mode:"
 msgstr "Wähle die Taste die QuickEPG aktivieren soll:"
 
-msgid "Select if timeshift should continue when set to record."
-msgstr "Wähle ob TimeShift auch bei einer Aufnahme weiter gehen soll."
+msgid "Select if timeshift must continue when set to record."
+msgstr "Wählen Sie, wie sich Timeshift verhalten bzw. was mit der Timeshift-Datei geschehen soll, nach dem Umschalten."
 
 msgid "Select if you want the Subservice mode to be activated."
 msgstr "Wähle ob Unterkanäle aktiviert werden sollen."
@@ -12807,9 +12807,6 @@ msgstr ""
 "wechseln, 'EXIT' beendet die Vorschau und du kommst zurück zum Programm das "
 "du zuvor geschaut hast. Das Menü ist dadurch ein wenig langsamer."
 
-msgid "Enable infobar fade-out"
-msgstr "Infobar langsam ausblenden"
-
 msgid "Infobar fade-out speed"
 msgstr "Infobar Ausblendgeschwindigkeit"
 
@@ -14382,3 +14379,161 @@ msgstr "Uhr"
 msgid "AnimationSetup Config"
 msgstr "Animation Einstellungen"
 
+msgid "Configure which tuner will be preferred for recordings, when more than one tuner is available. 'Disabled' would select a tuner based on preferred tuner in customise screen. 'Auto' would choose based on E2's default rules, ignoring preferred tuner in customise screen."
+msgstr "Konfiguriere welcher Tuner für Aufnahmen bevorzugt werden soll, wenn mehr als ein Tuner verfügbar ist. 'Deaktiviert' verwendet den bevorzugten Tuner der unter Anpassen eingestellt ist. 'Automatisch' wählt den Tuner nach E2-Regeln und ignoriert die Einstellung in Anpassen."
+
+msgid "Workaround for old tuner driver"
+msgstr "Nur aktivieren, wenn es Probleme mit Multituner gibt"
+
+msgid "The default settings are 5 minutes earlier to wakeup from deep standby. It possibly may be necessary to change this. (e.g.: the actual wake-up time is inaccurate or to late, waiting to a network-drive, etc.)"
+msgstr "Die Standardeinstellungen sind 5 Minuten früher aus dem Deep-Standby aufzuwachen. Es kann erforderlich sein dies zu ändern. (z.B.: die tatsächliche Aufwachzeit ist ungenau oder zu spät, warten auf ein Netzlaufwerk, usw.)"
+
+msgid "The default settings are wakeup time - 5 minutes and timer begin time + 5 minutes. This setting changed the time window before the wakeup time. So can be detected a wakeup by a timer even at very early starting receivers."
+msgstr "Die Standardeinstellungen sind Aufwachzeit - 5 Minuten und Timerbeginn + 5 Minuten. Diese Einstellung verändert das Zeitfenster vor der Aufwachzeit. So kann das aufwachen durch einen Timer auch bei sehr früh startenden Receivern erkannt werden."
+
+msgid "If enabled, will checks for the time after the start of the receiver is within the time window and optionally switched to standby. If disabled, must additional be available a signal for the successful wakeup detection. (some receiver send a false or none signal)"
+msgstr "Wenn aktiviert, wird überprüft ob die Zeit nach dem Start des Receivers innerhalb des Zeitfensters ist und schaltet gegebenenfalls in den Standby-Modus. Wenn deaktiviert, muss zusätzlich noch ein Signal für die erfolgreiche Erkennung zur Verfügung stehen. (manche Receiver senden ein falsches oder kein Signal)"
+
+msgid "When enabled, a recording is allowed to interrupt live tv, when there are no free tuners."
+msgstr "Wenn aktiviert, darf eine Aufnahme das live TV unterbrechen, falls kein freier Tuner zur Verfügung steht."
+
+msgid "Configure whether another tuner from the preferred list is allocated for recordings instead of sharing a tuner that is already active receiving the same live TV channel."
+msgstr "Konfiguriere, ob bei Aufnahmen ein weiterer bevorzugter Tuner belegt wird, selbst wenn ein anderer Tuner mit verwendet werden könnte, der den gleichen Kanal live empfängt."
+
+msgid "Configure the skip time interval for the '1'/'3' buttons."
+msgstr "Konfigurieren Sie den Sprung-Zeitintervall für die '1'/'3' Tasten."
+
+msgid "Configure the skip time interval for the '4'/'6' buttons."
+msgstr "Konfigurieren Sie den Sprung-Zeitintervall für die '4'/'6' Tasten."
+
+msgid "Configure the skip time interval for the '7'/'9' buttons."
+msgstr "Konfigurieren Sie den Sprung-Zeitintervall für die '7'/'9' Tasten."
+
+msgid "If enabled, AIT data is included in recordings."
+msgstr "Wenn aktiviert, sind AIT-Daten in Aufzeichnungen enthalten."
+
+msgid "Configure whether the 'recording' symbol (in the display skin and LCD skin) is visible for real recordings only or also for streaming and pseuso recordings (e.g. EPGrefresh)."
+msgstr "Legt fest, ob das Aufnahme-Symbol (auf Bildschirm und LCD Display) nur bei echten Aufnahmen sichtbar ist oder auch bei Streaming bzw. Pseudo-Aufnahmen (z.B. EPG Refresh)"
+
+msgid "Configure for which types of recordings a warning about active recordings is shown when attempting to restart the box or the ."
+msgstr "Konfigurieren Sie, für welche Arten von Aufzeichnungen eine Warnung zu aktiven Aufzeichnungen angezeigt wird, wenn Sie versuchen, die Box oder die Benutzeroberfläche neu zu starten ."
+
+msgid "In expert mode, configure which tuners will be preferred for recordings, when more than one tuner is available."
+msgstr "Konfiguriere im Expertenmodus, welche Tuner für Aufnahmen bevorzugt werden sollen, wenn mehr als ein Tuner verfügbar ist."
+
+msgid "Set the default location for your autorecord-files. Press 'OK' to add new locations, select left/right to select an existing location."
+msgstr ""
+"Wählen Sie das Standardverzeichnis für automatische Aufnahmen.\n"
+"'OK' um ein neues Verzeichnis zu wählen oder links/rechts um bestehende Verzeichnisse zu wählen."
+
+msgid "If set to 'yes', enable autorecord for automatically background timeshift"
+msgstr "Aktiviert die automatische Aufnahme für Timeshift im Hintergrund"
+
+msgid "When enabled, timeshift starts automatically in background after specified time."
+msgstr "Wenn aktiviert, startet Timeshift automatisch nach der vorgegebenen Zeit."
+
+msgid "When enabled, show status or error messages."
+msgstr "Wenn 'Ja' ausgewählt wird, werden Status- oder Fehlermeldungen angezeigt."
+
+msgid "Stop's timeshift being used if a recording is in progress. (adviseable for usb sticks)"
+msgstr "Stoppt die Timeshift-Funktion, wenn eine Aufzeichnung läuft. (ratsam für USB-Sticks)"
+
+msgid "If set to 'yes', allows you use the seekbar to jump to a point within the event."
+msgstr "Wenn 'Ja' eingestellt ist, können Sie innerhalb der SeekBar zu jedem beliebigen Zeitpunkt vor oder zurück springen."
+
+msgid "Older files in the timeshift directory are removed on every event change."
+msgstr ""
+"Ältere Dateien im Timeshift-Verzeichnis,\n"
+"nach eingestellter Zeit automatisch löschen."
+
+msgid "'Buffer in hours' or 'number of last events'. For deleting older timeshift files, the condition which occurred first has priority."
+msgstr "'Puffer in Stunden' oder 'Anzahl der letzten Ereignisse'. Priorität hat die Bedingung zum Löschen älterer Timeshift Dateien, die zuerst aufgetreten ist."
+
+msgid "In addition to the check at an event start, a repetitive check can be used, so that the conditions 'buffer limit in hours' or 'check free space' are detected earlier."
+msgstr "Zusätzlich zu der Überprüfung bei einem Event-Start kann diese Einstellung genutzt werden. Damit wird die Bedingung 'Puffer Limit in Stunden' oder 'Überprüfung auf freien Speicherplatz' eher erkannt."
+
+msgid "If the free space is less than setting value, then an attempt is made to delete the old timeshift files."
+msgstr "Wenn der freie Speicherplatz kleiner als der eingestellte Wert ist, wird versucht, die alten Timeshift-Dateien zu löschen."
+
+msgid "If set to 'no', timeshift used only one buffer file. It's recommend 'Timeshift checking for older files [in minutes]' and 'Timeshift checking for free space?' to adjust."
+msgstr "Wenn 'Nein' eingestellt ist, wird nur eine Datei als Puffer verwendet. Es wird empfohlen 'Timeshift-Überprüfung auf ältere Dateien (in Minuten)' und 'Timeshift-Überprüfung auf freien Speicherplatz?' anzupassen."
+
+msgid "If set to 'no', can you save older events even after zapping or interruption of the timeshift."
+msgstr "Wenn 'Nein' eingestellt ist, bleiben Timeshift-Aufnahmen nach dem Umschalten oder Beenden im Timeshift-Verzeichnis erhalten."
+
+msgid "Configure if epg.dat should be saved at all."
+msgstr "Konfigurieren Sie, ob die EPG Daten gespeichert werden sollen."
+
+msgid "Enable Virgin EPG"
+msgstr "Virgin EPG aktivieren"
+
+msgid "Use Virgin EPG information when it is available."
+msgstr "Verwende Virgin EPG Information, wenn sie verfügbar ist."
+
+msgid "Configure the minimum width before showing the 'i' icon, '0' is equal to not showing the icon at all."
+msgstr "Konfiguriere die Minimumbreite bevor das 'I' Icon gezeigt wird. '0' bedeutet das Icon wird gar nicht gezeigt."
+
+msgid "Show time in 24 hour clock format."
+msgstr "Zeige Zeit im 24 Stunden Format."
+
+msgid "When enabled, Enigma2 will load unlinked bouquets. This means that bouquets that are available, but not included in the bouquets.tv or bouquets.radio files, will still be loaded. This allows you for example to keep your own user bouquet while installed settings are upgraded"
+msgstr "Wenn Sie diese Option aktivieren, werden alle vorhandenen Favoritenlisten geladen, auch wenn sie nicht in der bouquets.tv oder bouquets.radio enthalten sind. Dies erlaubt Ihnen z.B. Ihre eigenen Favoritenlisten zu erhalten, wenn Upgrades der installierten Bouquets erfolgen"
+
+msgid "Configure if and how long the latest service in the PiP will be remembered."
+msgstr "Konfigurieren Sie, ob und wie lange der aktuelle Bild in Bild Service in Erinnerung bleiben soll."
+
+msgid "Configure if and how wide the service name column will be shown in the channel selection list."
+msgstr "Konfigurieren ob und wie Sendernamen in der Senderliste gezeigt werden."
+
+msgid "Configure if and how the record indicator will be shown in the channel selection list."
+msgstr "Konfigurieren ob und wie Icons für die Aufnahme in der Senderliste gezeigt werden."
+
+msgid "This option allows you can config the Colorspace from Auto to RGB"
+msgstr "Diese Option erlaubt das Umstellen des Farbraums von Auto auf RGB"
+
+msgid "Set the time to hide the infobar."
+msgstr "Bestimmt die Anzeigedauer der Infoleiste."
+
+msgid "Set the time to hide the second infobar. The bar also disappears on pressing 'OK'."
+msgstr "Bestimmt die Anzeigedauer der 2. Infoleiste. Sie verschwindet auch bei Druck auf OK."
+
+msgid "Enable infobar fade-out"
+msgstr "Infobar langsam ausblenden"
+
+msgid "Fade the infobar when hiding"
+msgstr "Hiermit können Sie einstellen, ob die Infobar langsam ausgeblendet werden soll"
+
+msgid "Configure the infobar fading speed"
+msgstr "Infobar Ausblendegeschwindigkeit"
+
+msgid "Control the Infobar fading speed"
+msgstr "Hier können Sie die Ausblendegeschwindigkeit der Infobar einstellen"
+
+msgid "Enable and set the duration of the second infobar (press OK twice) that may include more information on the current service."
+msgstr "Zweite Infoleiste mit Zusatzinformationen aktivieren und ihre Anzeigedauer bestimmen (OK zweimal drücken). Die Oberfläche muss dies unterstützen."
+
+msgid "Show openNFR spinning logo when the system is bussy."
+msgstr "Zeige openNFR spinner logo wenn das System beschäftigt ist."
+
+msgid "You can Display MiniTV with or without OSD Menu"
+msgstr "Zeige MiniTV im Display mit oder ohne OSD-Menü"
+
+msgid "Lower Framerate save CPU Time"
+msgstr "Geringe Wiederholrate reduziert die CPU Belastung"
+
+msgid "Enable screenshot of LCD in /tmp"
+msgstr ""
+"Wenn aktiviert, wird ein Screenshot\n"
+"vom LCD-Display in /tmp gespeichert"
+
+msgid "Configure the function of a long press on the power button."
+msgstr "Konfigurieren Sie die Funktion, die bei langem Drücken der Power-Taste ausgeführt werden soll."
+
+msgid "Configure the function of a short press on the power button."
+msgstr "Konfigurieren Sie die Funktion, die bei kurzem Drücken der Power-Taste ausgeführt werden soll."
+
+msgid "Select what you want the TV button to activate:"
+msgstr "Wählen Sie was die TV Taste bewirken soll:"
+
+msgid "Hide parental locked services"
+msgstr "Jugendschutz geschützte Kanäle verbergen"
