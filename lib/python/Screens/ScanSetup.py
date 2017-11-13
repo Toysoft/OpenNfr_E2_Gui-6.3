@@ -839,7 +839,7 @@ class ScanSetup(ConfigListScreen, Screen, CableTransponderSearchSupport, Terrest
 				self.scan_networkScan.value = True
 		elif nim.isCompatible("DVB-T"):
 			if self.scan_typeterrestrial.value == "single_transponder":
-				if getBoxType() in ('gbultraue'):
+				if getBoxType() in ('gbultraue', 'gbx2'):
 					if nim.isCompatible("DVB-T2"):
 						self.systemEntry = getConfigListEntry(_('System'), self.scan_ter.system)
 						self.list.append(self.systemEntry)
