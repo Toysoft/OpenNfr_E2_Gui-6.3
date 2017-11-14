@@ -12,7 +12,7 @@ from Screens.InfoBar import InfoBar
 from Screens.MessageBox import MessageBox
 from enigma import eTimer, eDVBFrontendParametersSatellite, eComponentScan, eDVBFrontendParametersTerrestrial, eDVBFrontendParametersCable, eDVBFrontendParametersATSC, eConsoleAppContainer, eDVBResourceManager, iDVBFrontend
 from Components.Converter.ChannelNumbers import channelnumbers
-from boxbranding import getMachineBrand
+from boxbranding import getMachineBrand, getBoxType
 
 def buildTerTransponder(frequency,
 		inversion=2, bandwidth = 7000000, fechigh = 6, feclow = 6,
@@ -839,9 +839,14 @@ class ScanSetup(ConfigListScreen, Screen, CableTransponderSearchSupport, Terrest
 				self.scan_networkScan.value = True
 		elif nim.isCompatible("DVB-T"):
 			if self.scan_typeterrestrial.value == "single_transponder":
-				if nim.isCompatible("DVB-T2"):
-					self.systemEntry = getConfigListEntry(_('System'), self.scan_ter.system)
-					self.list.append(self.systemEntry)
+				if getBoxType() in ('gbultraue', 'gbx2'):
+					if nim.isCompatible("DVB-T2"):
+						self.systemEntry = getConfigListEntry(_('System'), self.scan_ter.system)
+						self.list.append(self.systemEntry)
+					else:
+						if nim.isCompatible("DVB-T"):
+							self.systemEntry = getConfigListEntry(_('System'), self.scan_ter.system)
+							self.list.append(self.systemEntry)
 				else:
 					self.scan_ter.system.value = eDVBFrontendParametersTerrestrial.System_DVB_T
 				if self.ter_channel_input and self.scan_input_as.value == "channel":
