@@ -439,7 +439,7 @@ class FastScanScreen(ConfigListScreen, Screen):
                         		print 'My error, value:no xml found'
                         eDVBDB.getInstance().reloadBouquets()         
 #####new
-		        elif prov in ('Sky_HD', 'Sky_SD', 'ORF', 'Deutsch_HD', 'Deutsch_SD', 'Full_HD', 'Full_SD'):
+        	elif prov in ('Sky_HD', 'Sky_SD', 'ORF', 'Deutsch_HD', 'Deutsch_SD', 'Full_HD', 'Full_SD'):
 			self.path = "/etc/enigma2"
 			lastsc = self.path + "/userbouquet.LastScanned.tv"
 			newbouq = self.path + "/userbouquet." + self.scan_provider.value + ".tv"
