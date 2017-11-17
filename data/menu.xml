@@ -67,7 +67,7 @@ self.session.openWithCallback(msgClosed, EpgLoadMsg)
 				<id val="system" />
 				<item weight="1" text="A/V settings" entryID="av_setup"><screen module="VideoMode" screen="VideoSetup" /></item>
 				<item weight="2" level="0" entryID="usage_setup"><setup id="usage" /></item>
-			        <item weight="20" level="0" entryID="specialfeatures_menu"><setup id="specialfeatures" /></item>
+			        <!--item weight="20" level="0" entryID="specialfeatures_menu"><setup id="specialfeatures" /></item-->
 				<menu weight="3" level="2" text="User interface" entryID="osd_setup" requires="OsdMenu">
 					<id val="osd_menu" />
 					<item level="0" entryID="user_interface"><setup id="userinterface" /></item>
