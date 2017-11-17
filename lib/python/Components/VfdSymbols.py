@@ -1,20 +1,19 @@
 from twisted.internet import threads
 from config import config
-from enigma import eDBoxLCD, eTimer, iPlayableService, iServiceInformation, pNavigation
-from boxbranding import getMachineProcModel
+from enigma import eDBoxLCD, eTimer, iPlayableService, pNavigation
 import NavigationInstance
 from Tools.Directories import fileExists
 from Components.ParentalControl import parentalControl
 from Components.ServiceEventTracker import ServiceEventTracker
 from Components.SystemInfo import SystemInfo
-from boxbranding import getBoxType
+from boxbranding import getBoxType, getMachineBuild, getMachineProcModel
 import Components.RecordingConfig
 
 POLLTIME = 5 # seconds
 
 def SymbolsCheck(session, **kwargs):
 		global symbolspoller, POLLTIME
-		if getBoxType() in ('ixussone', 'ixusszero', 'mbmicro', 'e4hd'):
+		if getBoxType() in ('osnino','tmtwin4k','mbmicrov2','revo4k','force3uhd','wetekplay', 'wetekplay2', 'wetekhub', 'ixussone', 'ixusszero', 'mbmicro', 'e4hd', 'e4hdhybrid', 'dm7020hd', 'dm7020hdv2', '9910lx', '9911lx') or getMachineBuild() in ('dags7362' , 'dags73625', 'dags5'):
 			POLLTIME = 1
 		symbolspoller = SymbolsCheckPoller(session)
 		symbolspoller.start()
@@ -62,19 +61,19 @@ class SymbolsCheckPoller:
 
 	def Recording(self):
 		if fileExists("/proc/stb/lcd/symbol_circle"):
-			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.value)))
+			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.getValue())))
 			if recordings > 0:
 				open("/proc/stb/lcd/symbol_circle", "w").write("3")
 			else:
 				open("/proc/stb/lcd/symbol_circle", "w").write("0")
-		elif getBoxType() in ('mixosf5', 'mixoslumi', 'mixosf7', 'gi9196m', 'sf3038'):
-			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.value)))
+		elif getBoxType() in ('alphatriple','mixosf5', 'mixoslumi', 'mixosf7', 'gi9196m', 'sf3038'):
+			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.getValue())))
 			if recordings > 0:
 				open("/proc/stb/lcd/symbol_recording", "w").write("1")
 			else:
 				open("/proc/stb/lcd/symbol_recording", "w").write("0")
-		elif getBoxType() in ('ixussone', 'ixusszero'):
-			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.value)))
+		elif getBoxType() in ('wetekplay', 'wetekplay2', 'wetekhub', 'ixussone', 'ixusszero', '9910lx', '9911lx', 'osnino'):
+			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.getValue())))
 			self.blink = not self.blink
 			if recordings > 0:
 				if self.blink:
@@ -85,8 +84,8 @@ class SymbolsCheckPoller:
 					self.led = "0"
 			elif self.led == "1":
 				open("/proc/stb/lcd/powerled", "w").write("0")
-		elif getBoxType() in ('mbmicro', 'e4hd'):
-			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.value)))
+		elif getBoxType() in ('mbmicrov2','mbmicro', 'e4hd', 'e4hdhybrid'):
+			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.getValue())))
 			self.blink = not self.blink
 			if recordings > 0:
 				if self.blink:
@@ -97,12 +96,36 @@ class SymbolsCheckPoller:
 					self.led = "0"
 			elif self.led == "1":
 				open("/proc/stb/lcd/powerled", "w").write("1")
+		elif getBoxType() in ('dm7020hd', 'dm7020hdv2'):
+			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.getValue())))
+			self.blink = not self.blink
+			if recordings > 0:
+				if self.blink:
+					open("/proc/stb/fp/led_set", "w").write("0x00000000")
+					self.led = "1"
+				else:
+					open("/proc/stb/fp/led_set", "w").write("0xffffffff")
+					self.led = "0"
+			else:
+				open("/proc/stb/fp/led_set", "w").write("0xffffffff")
+		elif getMachineBuild() in ('dags7362' , 'dags73625', 'dags5') or getBoxType() in ('tmtwin4k','revo4k','force3uhd'):
+			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.getValue())))
+			self.blink = not self.blink
+			if recordings > 0:
+				if self.blink:
+					open("/proc/stb/lcd/symbol_rec", "w").write("1")
+					self.led = "1"
+				else:
+					open("/proc/stb/lcd/symbol_rec", "w").write("0")
+					self.led = "0"
+			elif self.led == "1":
+				open("/proc/stb/lcd/symbol_rec", "w").write("0")
 
 		else:
 			if not fileExists("/proc/stb/lcd/symbol_recording") or not fileExists("/proc/stb/lcd/symbol_record_1") or not fileExists("/proc/stb/lcd/symbol_record_2"):
 				return
 	
-			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.value)))
+			recordings = len(NavigationInstance.instance.getRecordings(False,Components.RecordingConfig.recType(config.recording.show_rec_symbol_for_rec_types.getValue())))
 		
 			if recordings > 0:
 				open("/proc/stb/lcd/symbol_recording", "w").write("1")
