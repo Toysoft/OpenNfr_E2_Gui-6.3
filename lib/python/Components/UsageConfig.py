@@ -835,19 +835,45 @@ def InitUsageConfig():
 	config.logmanager.additionalinfo = NoSave(ConfigText(default = ""))
 	config.logmanager.sentfiles = ConfigLocations(default='')
 
-	config.vixsettings = ConfigSubsection()
-	config.vixsettings.Subservice = ConfigYesNo(default = True)
-	config.vixsettings.ColouredButtons = ConfigYesNo(default = True)
-	config.vixsettings.InfoBarEpg_mode = ConfigSelection(default="3", choices = [
+	config.plisettings = ConfigSubsection()
+	config.plisettings.Subservice = ConfigYesNo(default = True)
+	config.plisettings.ColouredButtons = ConfigYesNo(default = False)
+	config.plisettings.InfoBarEpg_mode = ConfigSelection(default="3", choices = [
 					("0", _("as plugin in extended bar")),
 					("1", _("with long OK press")),
 					("2", _("with exit button")),
 					("3", _("with left/right buttons"))])
+	if fileExists("/usr/lib/enigma2/python/Plugins/Extensions/CoolTVGuide/plugin.pyo"):
+		config.plisettings.PLIEPG_mode = ConfigSelection(default="cooltvguide", choices = [
+					("pliepg", _("Show Graphical EPG")),
+					("single", _("Show Single EPG")),
+					("multi", _("Show Multi EPG")),
+					("eventview", _("Show Eventview")),
+					("merlinepgcenter", _("Show Merlin EPG Center")),
+					("cooltvguide", _("Show CoolTVGuide"))])
+		config.plisettings.PLIINFO_mode = ConfigSelection(default="coolinfoguide", choices = [
+					("eventview", _("Show Eventview")),
+					("epgpress", _("Show EPG")),
+					("single", _("Show Single EPG")),
+					("coolsingleguide", _("Show CoolSingleGuide")),
+					("coolinfoguide", _("Show CoolInfoGuide")),
+					("cooltvguide", _("Show CoolTVGuide"))])
+	else:
+		config.plisettings.PLIEPG_mode = ConfigSelection(default="pliepg", choices = [
+					("pliepg", _("Show Graphical EPG")),
+					("single", _("Show Single EPG")),
+					("multi", _("Show Multi EPG")),
+					("eventview", _("Show Eventview")),
+					("merlinepgcenter", _("Show Merlin EPG Center"))])
+		config.plisettings.PLIINFO_mode = ConfigSelection(default="eventview", choices = [
+					("eventview", _("Show Eventview")),
+					("epgpress", _("Show EPG")),
+					("single", _("Show Single EPG"))])
 
 	config.epgselection = ConfigSubsection()
 	config.epgselection.sort = ConfigSelection(default="0", choices = [("0", _("Time")),("1", _("Alphanumeric"))])
 	config.epgselection.overjump = ConfigYesNo(default = False)
-	config.epgselection.infobar_type_mode = ConfigSelection(choices = [("graphics",_("Multi EPG")), ("single", _("Single EPG"))], default = "graphics")
+	config.epgselection.infobar_type_mode = ConfigSelection(choices = [("text", _("Text")), (graphics",_("Multi EPG")), ("single", _("Single EPG"))], default = "graphics")
 	if SystemInfo.get("NumVideoDecoders", 1) > 1:
 		config.epgselection.infobar_preview_mode = ConfigSelection(choices = [("0",_("Disabled")), ("1", _("Fullscreen")), ("2", _("PiP"))], default = "1")
 	else:
@@ -892,18 +918,42 @@ def InitUsageConfig():
 	config.epgselection.graph_primetimehour = ConfigSelectionNumber(default = 20, stepwidth = 1, min = 00, max = 23, wraparound = True)
 	config.epgselection.graph_primetimemins = ConfigSelectionNumber(default = 00, stepwidth = 1, min = 00, max = 59, wraparound = True)
 	config.epgselection.graph_servicetitle_mode = ConfigSelection(default = "picon+servicename", choices = [("servicename", _("Service Name")),("picon", _("Picon")),("picon+servicename", _("Picon and Service Name")) ])
-	config.epgselection.graph_channel1 = ConfigYesNo(default = False)
+	config.epgselection.graph_startmode = ConfigSelection(default = "standard", choices = [("standard", _("Standard")), ("primetime", _("Primetime")),("channel1", _("Channel 1")), ("channel1+primetime", _("Channel 1 with Primetime")) ])
 	config.epgselection.graph_servfs = ConfigSelectionNumber(default = 0, stepwidth = 1, min = -8, max = 10, wraparound = True)
 	config.epgselection.graph_eventfs = ConfigSelectionNumber(default = 0, stepwidth = 1, min = -8, max = 10, wraparound = True)
+	possibleAlignmentChoices = [
+		( str(RT_HALIGN_LEFT   | RT_VALIGN_CENTER          ) , _("left")),
+		( str(RT_HALIGN_CENTER | RT_VALIGN_CENTER          ) , _("centered")),
+		( str(RT_HALIGN_RIGHT  | RT_VALIGN_CENTER          ) , _("right")),
+		( str(RT_HALIGN_LEFT   | RT_VALIGN_CENTER | RT_WRAP) , _("left, wrapped")),
+		( str(RT_HALIGN_CENTER | RT_VALIGN_CENTER | RT_WRAP) , _("centered, wrapped")),
+		( str(RT_HALIGN_RIGHT | RT_VALIGN_CENTER | RT_WRAP) , _("right, wrapped"))]
+	config.epgselection.graph_event_alignment = ConfigSelection(default = possibleAlignmentChoices[0][0], choices = possibleAlignmentChoices)
+	config.epgselection.graph_servicename_alignment = ConfigSelection(default = possibleAlignmentChoices[0][0], choices = possibleAlignmentChoices)
 	config.epgselection.graph_timelinefs = ConfigSelectionNumber(default = 0, stepwidth = 1, min = -8, max = 10, wraparound = True)
 	config.epgselection.graph_timeline24h = ConfigYesNo(default = True)
 	config.epgselection.graph_itemsperpage = ConfigSelectionNumber(default = 8, stepwidth = 1, min = 3, max = 20, wraparound = True)
-	config.epgselection.graph_pig = ConfigYesNo(default = True)
+	config.epgselection.graph_pig = ConfigYesNo(default = False)
 	config.epgselection.graph_heightswitch = NoSave(ConfigYesNo(default = False))
 	config.epgselection.graph_servicewidth = ConfigSelectionNumber(default = 250, stepwidth = 1, min = 70, max = 500, wraparound = True)
 	config.epgselection.graph_piconwidth = ConfigSelectionNumber(default = 100, stepwidth = 1, min = 70, max = 500, wraparound = True)
 	config.epgselection.graph_infowidth = ConfigSelectionNumber(default = 50, stepwidth = 25, min = 0, max = 150, wraparound = True)
+	config.epgselection.graph_rec_icon_height = ConfigSelection(choices = [("bottom",_("bottom")),("top", _("top")), ("middle", _("middle")),  ("hide", _("hide"))], default = "bottom")
 
+	epg_colorkeys = [('autotimer', _('Auto Timer')),
+					('timer', _('Add/Remove Timer')),
+					('24plus', _('24+ Hours')),
+					('24minus', _('24- Hours')),
+					('imdb', _('IMDB search')),
+					('bouquetlist', _('Bouquet List')),
+					('showmovies', _('Show Movies List')),
+					('record', _('Record - same as record button')),
+					('gotodatetime', _('Goto Date/Timer')),
+					('epgsearch', _('EPG search'))]
+	config.epgselection.graph_red = ConfigSelection(default='imdb', choices=epg_colorkeys)
+	config.epgselection.graph_green = ConfigSelection(default='timer', choices=epg_colorkeys)
+	config.epgselection.graph_yellow = ConfigSelection(default='epgsearch',choices=epg_colorkeys)
+	config.epgselection.graph_blue = ConfigSelection(default='autotimer', choices=epg_colorkeys)
 
 	if not os.path.exists('/usr/emu/'):
 		os.mkdir('/usr/emu/',0755)
