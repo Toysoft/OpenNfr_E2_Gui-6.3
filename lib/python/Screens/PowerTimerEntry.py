@@ -19,6 +19,7 @@ from Screens.Setup import SetupSummary
 class TimerEntry(Screen, ConfigListScreen):
 	def __init__(self, session, timer):
 		Screen.__init__(self, session)
+		self.setup_title = _("Timer entry")
 		self.timer = timer
 
 		self.entryDate = None

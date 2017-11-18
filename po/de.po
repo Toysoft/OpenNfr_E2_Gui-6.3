@@ -14346,3 +14346,47 @@ msgstr "umgeschaltet"
 msgid "FreeSpace"
 msgstr "Freier Speicher"
 
+msgid "Command type"
+msgstr "Befehlstyp"
+
+msgid "ParentalControlSetup"
+msgstr "Kindersicherung einrichten"
+
+msgid "Scrolling speed (software renderer)"
+msgstr "Scrollgeschwindigkeit (Software-Renderer)"
+
+msgid "Set the scrolling speed of text on the front display, this is used by software renderer in some skins."
+msgstr "Setzen Sie die Scrollgeschwindigkeit für Text im Display. Wird vom Software-Renderer in einigen Skins genutzt."
+
+msgid "Scrolling delay (software renderer)"
+msgstr "Scrollverzögerung (Software-Renderer)"
+
+msgid "Set the delay time between repeated loops, this is used by software renderer in some skins."
+msgstr "Setzen Sie die Verzögerungszeit zwischen Scrolldurchläufen. Wird vom Software-Renderer in einigen Skins genutzt."
+
+msgid "Dim the LCD after specified time."
+msgstr "Das Display wird nach der angegebenen Zeit gedimmt."
+
+msgid "This option allows you choose how to display elapsed time  as + or -"
+msgstr "Diese Option erlaubt Ihnen zu wählen, ob die verstrichene Zeit mit + oder - angezeigt wird"
+
+msgid "This option allows you choose how to display the remaining/elapsed time for Media playback."
+msgstr "Diese Option erlaubt Ihnen zu wählen, ob verbleibende/verstrichene Zeit oder beides in Medienwiedergabe angezeigt wird."
+
+msgid "This option allows you choose how to display the remaining/elapsed time for live tv."
+msgstr "Diese Option erlaubt Ihnen zu wählen, ob verbleibende/verstrichene Zeit oder beides für Transponder angezeigt wird."
+
+msgid "This option allows you choose how to display the remaining/elapsed time for media playback."
+msgstr "Diese Option erlaubt Ihnen zu wählen, ob verbleibende/verstrichene Zeit oder beides bei Medienwiedergabe angezeigt wird."
+
+msgid "Screenshot of LCD in /tmp"
+msgstr "LCD Screenshot in /tmp erstellen"
+
+msgid "Dim delay"
+msgstr "Ausblendungs-Verzögerung"
+
+msgid "Brightness (Dimmed)"
+msgstr "Helligkeit (gedimmt)"
+
+msgid "Configure the brightness level of the front panel display for dimmed operation."
+msgstr "Konfigurieren Sie die Helligkeit des Displays für den gedimmten Zustand."
