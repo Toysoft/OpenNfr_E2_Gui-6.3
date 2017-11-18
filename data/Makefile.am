@@ -20,8 +20,8 @@ dist_pkgdata_DATA = \
 	lcd_picon_default.png
 	
 if HAVE_TEXTLCD
-if SPARK
-SUBDIRS += displaydualtext
+if HAVE_7SEGMENT
+SUBDIRS += 7segment
 else
 SUBDIRS += displaytext
 endif

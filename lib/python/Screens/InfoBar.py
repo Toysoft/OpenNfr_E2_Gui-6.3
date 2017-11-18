@@ -110,10 +110,27 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 		config.misc.initialchannelselection.save()
 		self.mainMenu()
 
+	def doButtonsCheck(self):
+		if config.plisettings.ColouredButtons.value:
+			self["key_yellow"].setText(_("Search"))
+
+			if config.usage.defaultEPGType.value == "Graphical EPG..." or config.usage.defaultEPGType.value == "None":
+				self["key_red"].setText(_("Single EPG"))
+			else:
+				self["key_red"].setText(_("ViX EPG"))
+
+			if not config.plisettings.Subservice.value:
+				self["key_green"].setText(_("Timers"))
+			else:
+				self["key_green"].setText(_("Subservices"))
+		self["key_blue"].setText(_("Extensions"))
+
 	def _volUp(self):
 		print "_volUp"
 		from Components.VolumeControl import VolumeControl
 		VolumeControl.instance.volUp()
+
+
 
 	def _volDown(self):
 		print "_volDown"
@@ -406,7 +423,7 @@ class MoviePlayer(InfoBarAspectSelection, InfoBarBase, InfoBarShowHide,
 		MoviePlayer.instance = self
 
 	def doButtonsCheck(self):
-		if config.vixsettings.ColouredButtons.value:
+		if config.plisettings.ColouredButtons.value:
 			self["key_yellow"].setText(_("Search"))
 			self["key_green"].setText(_("Timers"))
 		self["key_blue"].setText(_("Extensions"))
