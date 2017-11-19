@@ -569,7 +569,7 @@ def InitUsageConfig():
 	config.softwareupdate.updateisunstable = ConfigInteger(default=0)
 
 	config.timeshift = ConfigSubsection()
-	choicelist = [("0", "Disabled")]
+	choicelist = [("0", _("Disabled"))]
 	for i in (2, 3, 4, 5, 10, 20, 30):
 		choicelist.append(("%d" % i, ngettext("%d second", "%d seconds", i) % i))
 	for i in (60, 120, 300):
@@ -648,8 +648,10 @@ def InitUsageConfig():
 					 "Your receiver restarts in 10 seconds!\n" \
 					 "Component: enigma2") % config.crash.debug_path.value
 	config.crash.debug_text = ConfigText(default=crashlogheader, fixed_size=False)
+	config.crash.skin_error_crash = ConfigYesNo(default = True)
 
 	config.usage.timerlist_finished_timer_position = ConfigSelection(default = "end", choices = [("beginning", _("at beginning")), ("end", _("at end"))])
+	config.usage.timerlist_show_epg = ConfigYesNo(default = True)
 
 	def updateEnterForward(configElement):
 		if not configElement.value:
@@ -666,9 +668,9 @@ def InitUsageConfig():
 	config.seek.speeds_backward.addNotifier(updateEnterBackward, immediate_feedback = False)
 
 	def updateEraseSpeed(el):
-		enigma.eBackgroundFileEraser.getInstance().setEraseSpeed(int(el.value))
+		eBackgroundFileEraser.getInstance().setEraseSpeed(int(el.value))
 	def updateEraseFlags(el):
-		enigma.eBackgroundFileEraser.getInstance().setEraseFlags(int(el.value))
+		eBackgroundFileEraser.getInstance().setEraseFlags(int(el.value))
 	config.misc.erase_speed = ConfigSelection(default="20", choices = [
 		("10", "10 MB/s"),
 		("20", "20 MB/s"),
@@ -794,12 +796,12 @@ def InitUsageConfig():
 		("tur Audio_TUR", _("Turkish"))]
 
 	def setEpgLanguage(configElement):
-		enigma.eServiceEvent.setEPGLanguage(configElement.value)
+		eServiceEvent.setEPGLanguage(configElement.value)
 	config.autolanguage.audio_epglanguage = ConfigSelection(audio_language_choices[:1] + audio_language_choices [2:], default="---")
 	config.autolanguage.audio_epglanguage.addNotifier(setEpgLanguage)
 
 	def setEpgLanguageAlternative(configElement):
-		enigma.eServiceEvent.setEPGLanguageAlternative(configElement.value)
+		eServiceEvent.setEPGLanguageAlternative(configElement.value)
 	config.autolanguage.audio_epglanguage_alternative = ConfigSelection(audio_language_choices[:1] + audio_language_choices [2:], default="---")
 	config.autolanguage.audio_epglanguage_alternative.addNotifier(setEpgLanguageAlternative)
 
@@ -821,10 +823,10 @@ def InitUsageConfig():
 	config.autolanguage.subtitle_defaultdvb = ConfigYesNo(default = False)
 	config.autolanguage.subtitle_usecache = ConfigYesNo(default = True)
 	config.autolanguage.equal_languages = ConfigSelection(default = "15", choices = [
-		("0", "None"),("1", "1"),("2", "2"),("3", "1,2"),
+		("0", _("None")),("1", "1"),("2", "2"),("3", "1,2"),
 		("4", "3"),("5", "1,3"),("6", "2,3"),("7", "1,2,3"),
 		("8", "4"),("9", "1,4"),("10", "2,4"),("11", "1,2,4"),
-		("12", "3,4"),("13", "1,3,4"),("14", "2,3,4"),("15", "All")])
+		("12", "3,4"),("13", "1,3,4"),("14", "2,3,4"),("15", _("All"))])
 
 	config.logmanager = ConfigSubsection()
 	config.logmanager.showinextensions = ConfigYesNo(default = False)
