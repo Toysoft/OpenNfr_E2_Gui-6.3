@@ -1,4 +1,4 @@
-SUBDIRS = spinner fonts extensions keymaps bootvideos bootlogos radiologos SpinnerSelector
+SUBDIRS = spinner fonts extensions keymaps bootvideos bootlogos radiologos SpinnerSelector OpenNfr_FHD
 
 dist_pkgdata_DATA = \
 	encoding.conf \
@@ -61,9 +61,5 @@ endif
 
 if HAVE_BWLCD128
 SUBDIRS += vfd128
-endif
-
-if GB7252
-SUBDIRS += OpenNfr_FHD
 endif
 
