@@ -8,15 +8,15 @@
     </widget>
   <eLabel backgroundColor="#20000000" text="MediaPortal" font="mediaportal_clean;50" halign="left" valign="center" position="50,10" shadowColor="#00000000" shadowOffset="4,4" size="1200,90" transparent="1" />
   <widget name="version" backgroundColor="#20000000" font="mediaportal_clean;20" halign="center" valign="left" position="315,50" shadowColor="#00000000" shadowOffset="4,4" size="130,25" transparent="1" />
-  <widget backgroundColor="#20000000" font="mediaportal_clean;50" halign="center" name="name" position="20,120" size="1880,60" transparent="1" />
+  <widget backgroundColor="#20000000" font="mediaportal_clean;50" halign="center" valign="center" name="name" position="20,120" size="920,70" transparent="1" />
   <widget backgroundColor="#20000000" font="mediaportal;25" name="F1" position="15,1030" size="365,40" valign="center" halign="center" transparent="1" />
   <widget backgroundColor="#20000000" font="mediaportal;25" name="F2" position="385,1030" size="365,40" valign="center" halign="center" transparent="1" />
   <widget backgroundColor="#20000000" font="mediaportal;25" name="F3" position="755,1030" size="365,40" valign="center" halign="center" transparent="1" />
   <widget backgroundColor="#20000000" font="mediaportal;25" name="F4" position="1125,1030" size="365,40" valign="center" halign="center" transparent="1" />
-  <widget backgroundColor="#20000000" foregroundColorSelected="#ffffff" name="liste" position="30,225" scrollbarMode="showOnDemand" size="900,768" transparent="1" itemHeight="96" />
+  <widget backgroundColor="#20000000" foregroundColorSelected="#ffffff" name="liste" position="30,230" scrollbarMode="showOnDemand" size="900,768" transparent="1" itemHeight="96" />
   <eLabel name="bg_up" position="10,10" size="1900,90" zPosition="-1" backgroundColor="#20000000" />
-  <eLabel name="bg_name" position="10,110" size="1900,80" zPosition="-1" backgroundColor="#20000000" />
-  <eLabel name="bg_list" position="10,200" size="940,820" zPosition="-1" backgroundColor="#20000000" />
+  <eLabel name="bg_name" position="10,110" size="940,90" zPosition="-1" backgroundColor="#20000000" />
+  <eLabel name="bg_list" position="10,210" size="940,810" zPosition="-1" backgroundColor="#20000000" />
   <eLabel name="bg_down" position="10,1030" size="1900,40" zPosition="-1" backgroundColor="#20000000" />
   <eLabel name="button red" position="15,1068" size="365,2" backgroundColor="#00f23d21" zPosition="1" />
   <eLabel name="button green" position="385,1068" size="365,2" backgroundColor="#0031a500" zPosition="1" />

@@ -51,7 +51,7 @@ json_headers = {
 class YourPornSexyGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -77,7 +77,7 @@ class YourPornSexyGenreScreen(MPScreen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		url = "http://yourporn.sexy"
-		getPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('<span>Popular HashTags</span>(.*?)<div class="spacer" style="clear: both;">', data, re.S)
@@ -183,7 +183,7 @@ class YourPornSexyTrendsScreen(MPScreen):
 		self['name'].setText(_('Please wait...'))
 		self.genreliste = []
 		url = self.Link.replace('%s', str((self.page-1)*150))
-		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, '', 'ctrl_el.*>(\d+)</div')
@@ -279,10 +279,9 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 				}
 			url = 'http://yourporn.sexy/php/popular_append.php'
 			getPage(url, agent=myagent, method='POST', postdata=urlencode(urldata), headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
-			return
 		else:
 			url = self.Link.replace('%s', str((self.page-1)*count))
-		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+			twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, '', 'ctrl_el.*>(\d+)</div')
@@ -298,7 +297,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 		if Movies:
 			for (Image, Url, Title, RuntimeAddedViews) in Movies:
 				if ("mini_post_player_img" in RuntimeAddedViews) or ("maxi_post_player_img" in RuntimeAddedViews):
-					av = re.findall("class='duration_small'>(.*?)</span.*?>([\d|Hour].*?ago|Yesterday|Last month|Last year)\s<strong>.{0,3}</strong>\s(\d+)\sviews", RuntimeAddedViews, re.S)
+					av = re.findall("class='duration_small.*?'>(.*?)</span.*?>([\d|Hour].*?ago|Yesterday|Last month|Last year)\s<strong>.{0,3}</strong>\s(\d+)\sviews", RuntimeAddedViews, re.S)
 					if av:
 						Runtime = av[0][0]
 						Added = av[0][1]
@@ -334,7 +333,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 			return
 		Link = self['liste'].getCurrent()[0][1]
 		self.keyLocked = True
-		getPage(Link, agent=myagent).addCallback(self.getVideoUrl).addErrback(self.dataError)
+		twAgentGetPage(Link, agent=myagent).addCallback(self.getVideoUrl).addErrback(self.dataError)
 
 	def getVideoUrl(self, data):
 		videoUrl = re.findall('<source\ssrc="(.*?)"\stype="video/mp4">', data, re.S)

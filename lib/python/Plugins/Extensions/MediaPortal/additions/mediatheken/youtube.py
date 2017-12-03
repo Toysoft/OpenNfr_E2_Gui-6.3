@@ -107,8 +107,8 @@ class youtubeGenreScreen(MenuHelper):
 			(_('Search request'), (self.paraQuery, None), (0,1,2,)),
 			(_('Event type'), (self.param_event_types, config.mediaportal.yt_param_event_types_idx), (0,)),
 			(_('Sort by'), (self.param_time, config.mediaportal.yt_param_time_idx), (0,1,2,)),
-			(_('Language'), (self.param_metalang, config.mediaportal.yt_param_meta_idx), (0,1,2,3,7,9,10,11,12,13,14)),
-			(_('Search region'), (self.param_regionid, config.mediaportal.yt_param_regionid_idx), (0,1,2,3,7,9,10,11,12,13,14)),
+			(_('Language'), (self.param_metalang, config.mediaportal.yt_param_meta_idx), (0,1,2,6,8,9,10,11,12,13)),
+			(_('Search region'), (self.param_regionid, config.mediaportal.yt_param_regionid_idx), (0,1,2,6,8,9,10,11,12,13)),
 			(_('User name'), (self.paraAuthor, None), (0,1,2,)),
 			(_('3D Search'), (self.param_3d, config.mediaportal.yt_param_3d_idx), (0,)),
 			(_('Runtime'), (self.param_duration, config.mediaportal.yt_param_duration_idx), (0,)),
@@ -379,7 +379,7 @@ class youtubeGenreScreen(MenuHelper):
 			else:
 				self.subCatUserChannels.append(None)
 
-		MenuHelper.__init__(self, session, 2, None, "", "", self._defaultlistcenter, 'MP_YouTube')
+		MenuHelper.__init__(self, session, 2, None, "", "", self._defaultlistcenter, 'MP_PluginDescr', widgets_files=('MP_widget_youtube',))
 
 		self["yt_actions"] = ActionMap(["MP_Actions"], {
 			"yellow": self.keyYellow,
@@ -388,6 +388,7 @@ class youtubeGenreScreen(MenuHelper):
 
 		self['title'] = Label("YouTube")
 		self['ContentTitle'] = Label(_("VIDEOSEARCH"))
+
 		self['Query'] = Label(_("Search request"))
 		self['query'] = Label()
 		self['Time'] = Label(_("Sort by"))
@@ -400,7 +401,6 @@ class youtubeGenreScreen(MenuHelper):
 		self['author'] = Label()
 		self['Keywords'] = Label(_("Event type"))
 		self['keywords'] = Label()
-		self['Parameter'] = Label(_("Parameter"))
 		self['3D'] = Label(_("3D Search"))
 		self['3d'] = Label()
 		self['Duration'] = Label(_("Runtime"))
@@ -409,7 +409,9 @@ class youtubeGenreScreen(MenuHelper):
 		self['reserve1'] = Label()
 		self['Reserve2'] = Label(_("Video type"))
 		self['reserve2'] = Label()
-		self['coverArt'] = Pixmap()
+
+		self['Parameter'] = Label()
+		self['Parameter'].hide()
 
 		self['F3'] = Label(_("Edit Parameter"))
 		self['F4'] = Label(_("Request YT-Token"))
@@ -522,11 +524,9 @@ class youtubeGenreScreen(MenuHelper):
 			self.old_mainidx = self.mh_menuIdx[0]
 
 		showCtr = 0
-		self['Parameter'].hide()
 		if self.mh_menuIdx[0] in self.paramList[0][2]:
 			self['query'].show()
 			self['Query'].show()
-			self['Parameter'].show()
 			showCtr = 1
 		else:
 			self['query'].hide()
@@ -551,7 +551,6 @@ class youtubeGenreScreen(MenuHelper):
 		if self.mh_menuIdx[0] in self.paramList[3][2]:
 			self['metalang'].show()
 			self['Metalang'].show()
-			self['Parameter'].show()
 			showCtr = 1
 		else:
 			self['metalang'].hide()
@@ -1033,14 +1032,17 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		self.filmliste = []
 		if self.apiUrlv3:
 			def getThumbnail(thumbnails):
-				if 'standard' in thumbnails:
+				if 'maxres' in thumbnails:
+					return str(thumbnails['maxres']['url'])
+				elif 'medium' in thumbnails:
+					return str(thumbnails['medium']['url'])
+				elif 'standard' in thumbnails:
 					return str(thumbnails['standard']['url'])
 				elif 'high' in thumbnails:
 					return str(thumbnails['high']['url'])
-				elif 'medium' in thumbnails:
-					return str(thumbnails['medium']['url'])
 				else:
 					return str(thumbnails['default']['url'])
+
 
 			listType = re.search('ItemList|subscriptionList|activityList|playlistList|CategoryList|channelList', data.get('kind', '')) != None
 			for item in data.get('items', []):
@@ -1281,6 +1283,8 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		self['handlung'].setText(desc)
 		if self.lastCover != stvImage:
 			self.lastCover = stvImage
+			stvImage = stvImage.replace('s240-c-k', 's900-c-k').replace('s100-c-k', 's900-c-k').replace('s88-c-k', 's900-c-k')
+			stvImage = stvImage.replace('s240-nd-c', 's900-nd-c').replace('s100-nd-c', 's900-nd-c').replace('s88-nd-c', 's900-nd-c')
 			self.coverHelper.getCover(stvImage)
 
 	def youtubeErr(self, error):

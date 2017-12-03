@@ -1,5 +1,5 @@
-<!-- defaultGenreScreen -->
-<screen name="defaultGenre" position="center,center" size="900,655" backgroundColor="#00060606" flags="wfNoBorder">
+<!-- defaultListWideScreen -->
+<screen name="defaultListWide" position="center,center" size="900,655" backgroundColor="#00060606" flags="wfNoBorder">
 	<widget name="title" position="20,10" size="500,40" backgroundColor="#00101214" transparent="1" zPosition="10" font="mediaportal; 26" valign="center" halign="left" />
 	<widget source="global.CurrentTime" render="Label" position="730,8" size="150,30" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal; 26" valign="center" halign="right" foregroundColor="#00dcdcdc">
 		<convert type="ClockToText">Format:%-H:%M</convert>
@@ -7,10 +7,14 @@
 	<widget source="global.CurrentTime" render="Label" position="580,39" size="300,20" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal;18" valign="center" halign="right" foregroundColor="#00dcdcdc">
 		<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
 	</widget>
-	<widget name="ContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
-	<widget name="liste" position="0,135" size="900,250" backgroundColor="#00101214" scrollbarMode="showOnDemand" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/original/images/sel.png" foregroundColorSelected="#00e5b243" transparent="0" itemHeight="25" />
+	<widget name="ContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="0" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
+	<widget name="liste" position="0,86" size="900,300" backgroundColor="#00101214" scrollbarMode="showOnDemand" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/original/images/sel.png" foregroundColorSelected="#00e5b243" transparent="0" itemHeight="25" />
+	<eLabel position="20,390" size="860,2" backgroundColor="#00555556" />
 	<widget name="coverArt" pixmap="~/original/images/no_coverArt.png" position="20,396" size="270,200" transparent="1" alphatest="blend" borderWidth="2" borderColor="#00555556" />
-	<widget name="name" position="20,95" size="860,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" />
+	<widget name="name" position="300,395" size="580,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" zPosition="0" />
+	<widget name="handlung" position="300,425" size="580,160" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" zPosition="0" /> 
+	<widget name="Page" position="840,590" size="60,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal;16" valign="center" halign="center" zPosition="0" />
+	<widget name="page" position="840,605" size="60,40" backgroundColor="#00101214" transparent="1" font="mediaportal;16" valign="center" halign="center" zPosition="0" />
 	<ePixmap pixmap="~/original/images/buttonred.png" position="20,635" size="100,2" alphatest="blend" />
 	<ePixmap pixmap="~/original/images/buttongreen.png" position="225,635" size="100,2" alphatest="blend" />
 	<ePixmap pixmap="~/original/images/buttonyellow.png" position="430,635" size="100,2" alphatest="blend" />

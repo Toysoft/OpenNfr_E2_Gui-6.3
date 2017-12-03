@@ -89,6 +89,7 @@ class get_stream_link:
 	from hosters.divxpress import divxpress, divxpressPostdata
 	from hosters.epornik import epornik
 	from hosters.exashare import exashare
+	from hosters.flashx import flashx
 	from hosters.flyflv import flyflv, flyflvData
 	from hosters.google import google
 	from hosters.kodik import kodik, kodikData
@@ -106,6 +107,7 @@ class get_stream_link:
 	from hosters.rapidvideocom import rapidvideocom
 	from hosters.streamango import streamango
 	from hosters.streamin import streamin
+	from hosters.thevideome import thevideome
 	from hosters.trollvid import trollvid
 	from hosters.uptostream import uptostream
 	from hosters.videonest import videonest
@@ -595,7 +597,20 @@ class get_stream_link:
 					self.prz = 1
 					self.callPremium(link)
 				else:
-					self.only_premium()
+					#id = re.search('flashx\.tv/(\w+)', data.replace('\.html',''))
+					#if id:
+						#id = id.groups(0)
+					headers = {'Host': 'www.flashx.tv',
+							'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.137 Safari/537.36',
+							'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+							'Accept-Language': 'en-US,en;q=0.5',
+							#'Accept-Encoding': 'gzip, deflate, br', 
+							'Connection': 'keep-alive',
+							'Upgrade-Insecure-Requests': '1',
+							'Cookie': ''}
+					url = "https://www.flashx.tv/embed.php?c="+id.group(3)
+					print url
+					getPage(url, headers=headers).addCallback(self.flashx, id.group(3)).addErrback(self.errorload)
 
 			elif re.search('userporn.com', data, re.S):
 				link = data
@@ -843,9 +858,10 @@ class get_stream_link:
 					self.callPremium(link)
 				else:
 					link = "https://api.openload.co/1/streaming/get?file=" + id.group(1)
-					getPage(link).addCallback(self.openloadApi).addErrback(self.errorload)
+					getPage(link).addCallback(self.openloadApi, id.group(1)).addErrback(self.errorload)
 
 			elif re.search('thevideo\.me', data, re.S):
+				print data
 				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
 					if (re.search('thevideo\.me/embed-', data, re.S) or re.search('640x360.html', data, re.S)):
 						id = re.findall('thevideo\.me/(?:embed-|)(.*?)(?:\.html|-\d+x\d+\.html)', data)
@@ -857,7 +873,12 @@ class get_stream_link:
 					self.prz = 1
 					self.callPremium(link)
 				else:
-					self.only_premium()
+					if (re.search('thevideo\.me/embed-', data, re.S) or re.search('640x360.html', data, re.S)):
+						id = re.findall('thevideo\.me/(?:embed-|)(.*?)(?:\.html|-\d+x\d+\.html)', data)
+						if id:
+							link = "https://thevideo.me/embed-%s-640x360.html" % id[0]
+							print link
+							getPage(link, agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36').addCallback(self.thevideome).addErrback(self.errorload)
 
 			elif re.search('exashare\.com', data, re.S):
 				if re.search('exashare\.com/embed-', data, re.S):

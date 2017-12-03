@@ -362,7 +362,7 @@ class SimpleSeekHelper:
 			self.percent = 100.0
 
 	def numberKeySeek(self, val):
-		if self.ltype == 'dmax.de':
+		if self.ltype == 'dmax.de' or self.dash:
 			return
 		if self.length:
 			length = float(self.length[1])
@@ -1213,6 +1213,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		self._playing = False
 		self.isTSVideo = False
 		def playService(url):
+			self.dash = False
 			if url == 'cancelled': return
 			if not self._playing:
 				self._playing = True
@@ -1234,11 +1235,13 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 								if suburi:
 									try:
 										sref.setSuburi(suburi)
+										self.dash = True
 									except:
 										pass
 							else:
 								if suburi:
 									url = url + "&suburi=" + suburi
+									self.dash = True
 								sref = eServiceReference(0x1001, 0, url)
 					sref.setName(video_title)
 
@@ -1333,7 +1336,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			return
 		if self.isTSVideo:
 			InfoBarSeek.seekFwd(self)
-		elif self.seekBarShown and not self.seekBarLocked:
+		elif self.seekBarShown and not self.seekBarLocked and not self.dash:
 			self.initSeek()
 		elif self.seekBarLocked:
 			self.seekRight()
@@ -1345,7 +1348,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			return
 		if self.isTSVideo:
 			InfoBarSeek.seekBack(self)
-		elif self.seekBarShown and not self.seekBarLocked:
+		elif self.seekBarShown and not self.seekBarLocked and not self.dash:
 			self.initSeek()
 		elif self.seekBarLocked:
 			self.seekLeft()
@@ -2029,50 +2032,40 @@ class SimplePlaylistIO:
 			f1.close()
 			return list
 
-try:
-	from Plugins.Extensions.MerlinMusicPlayer.plugin import MerlinMusicPlayerScreenSaver
-	class SimpleScreenSaver(MerlinMusicPlayerScreenSaver):
-		def __init__(self, session):
-			MerlinMusicPlayerScreenSaver.__init__(self, session)
+class SimpleScreenSaver(Screen):
 
-		def createSummary(self):
-			return SimplePlayerSummary
-
-except:
-	class SimpleScreenSaver(Screen):
+	def __init__(self, session):
 		if mp_globals.videomode == 2:
-			skin = '<screen position="0,0" size="1920,1080" flags="wfNoBorder" zPosition="15" transparent="0" backgroundColor="#00000000"></screen>'
+			self.skin = '<screen position="0,0" size="1920,1080" flags="wfNoBorder" zPosition="15" transparent="0" backgroundColor="#00000000"></screen>'
 		else:
-			skin = '<screen position="0,0" size="1280,720" flags="wfNoBorder" zPosition="15" transparent="0" backgroundColor="#00000000"></screen>'
+			self.skin = '<screen position="0,0" size="1280,720" flags="wfNoBorder" zPosition="15" transparent="0" backgroundColor="#00000000"></screen>'
 
-		def __init__(self, session):
-			Screen.__init__(self, session)
-			self.skin = SimpleScreenSaver.skin
+		Screen.__init__(self, session)
 
-			self["actions"] = ActionMap(["WizardActions", "DirectionActions", "ColorActions", "EventViewActions"],
-			{
-				"back": self.close,
-				"right": self.close,
-				"left": self.close,
-				"up": self.close,
-				"down": self.close,
-				"ok": self.close,
-				"pageUp": self.close,
-				"pageDown": self.close,
-				"yellow": self.close,
-				"blue": self.close,
-				"red": self.close,
-				"green": self.close,
-				"right": self.close,
-				"left": self.close,
-				"prevBouquet": self.close,
-				"nextBouquet": self.close,
-				"info": self.close
+		self["actions"] = ActionMap(["WizardActions", "DirectionActions", "ColorActions", "EventViewActions"],
+		{
+			"back": self.close,
+			"right": self.close,
+			"left": self.close,
+			"up": self.close,
+			"down": self.close,
+			"ok": self.close,
+			"pageUp": self.close,
+			"pageDown": self.close,
+			"yellow": self.close,
+			"blue": self.close,
+			"red": self.close,
+			"green": self.close,
+			"right": self.close,
+			"left": self.close,
+			"prevBouquet": self.close,
+			"nextBouquet": self.close,
+			"info": self.close
 
-			}, -1)
+		}, -1)
 
-		def createSummary(self):
-			return SimplePlayerSummary
+	def createSummary(self):
+		return SimplePlayerSummary
 
 class SimplePlayerSummary(Screen):
 

@@ -45,7 +45,7 @@ default_cover = "file://%s/srg.png" % (config.mediaportal.iconcachepath.value + 
 class SRGGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -261,7 +261,7 @@ class SRGStreamScreen(MPScreen):
 		self.staffel = staffel
 		self.urlid = urlid
 		self.channel = channel
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,

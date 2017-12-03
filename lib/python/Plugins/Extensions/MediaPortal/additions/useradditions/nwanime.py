@@ -4,7 +4,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 class nwanimeMain(MPScreen):
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -48,7 +48,7 @@ class nwanimeMain(MPScreen):
 class nwanimeAnimes(MPScreen, SearchHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin', widgets=('MP_widget_search',))
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', widgets=('MP_widget_search',))
 		SearchHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -120,7 +120,7 @@ class nwanimeAnimes(MPScreen, SearchHelper):
 
 class nwanimeWatchlist(MPScreen):
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,

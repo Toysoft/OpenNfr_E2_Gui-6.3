@@ -56,7 +56,7 @@ class TnAflixGenreScreen(MPScreen):
 			self.baseurl = "https://www.empflix.com"
 			self.default_cover = "file://%s/empflix.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

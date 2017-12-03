@@ -46,7 +46,7 @@ default_cover = "file://%s/3sat.png" % (config.mediaportal.iconcachepath.value +
 class dreisatGenreScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

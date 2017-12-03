@@ -71,7 +71,7 @@ class RadioGenreScreen(MPScreen):
 
 	def __init__(self, session):
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -133,7 +133,7 @@ class RadioSubGenreScreen(MPScreen):
 		self.genre = genre
 		self.url = url
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -185,7 +185,7 @@ class RadioSubValueGenreScreen(MPScreen):
 		self.genre = genre
 		self.url = url
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -238,7 +238,7 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
 			"0" : self.closeAll,
-			"5" : self.keyShowThumb,
+			"long5" : self.keyShowThumb,
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,

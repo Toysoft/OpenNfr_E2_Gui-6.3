@@ -2,6 +2,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
+from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 import Queue
 import threading
 from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
@@ -135,6 +136,7 @@ class streamitFilmListeScreen(MPScreen, ThumbsHelper):
 		self["hdpic"] = Pixmap()
 		self['rating10'] = ProgressBar()
 		self['rating0'] = Pixmap()
+		self['bg_rating'] = Label()
 		self["hdpic"].hide()
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -345,11 +347,6 @@ class streamitFilmListeScreen(MPScreen, ThumbsHelper):
 		self.updateP = 1
 		CoverHelper(self['coverArt'], self.showCoverExit).getCover(streamPic, agent=sit_agent, cookieJar=sit_cookies)
 		rate = self['liste'].getCurrent()[0][4]
-		hd = self['liste'].getCurrent()[0][5]
-		if hd:
-			self['hdpic'].show()
-		else:
-			self['hdpic'].hide()
 		rating = int(rate)
 		if rating > 100:
 			rating = 100
@@ -460,8 +457,7 @@ class streamitFilmListeScreen(MPScreen, ThumbsHelper):
 			self.handleSort()
 
 	def handleSort(self):
-		from Screens.ChoiceBox import ChoiceBox
-		self.session.openWithCallback(self.cb_handleSort, ChoiceBox, title=_("Sort Selection"), list = self.sortFuncs)
+		self.session.openWithCallback(self.cb_handleSort, ChoiceBoxExt, title=_("Sort Selection"), list = self.sortFuncs)
 
 	def cb_handleSort(self, answer):
 		href = answer and answer[1]

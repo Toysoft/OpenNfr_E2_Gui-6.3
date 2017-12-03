@@ -43,7 +43,7 @@ default_cover = "file://%s/atv.png" % (config.mediaportal.iconcachepath.value + 
 class atvGenreScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

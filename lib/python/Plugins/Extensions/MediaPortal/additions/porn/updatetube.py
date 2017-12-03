@@ -65,7 +65,7 @@ class updatetubeGenreScreen(MPScreen):
 			self.baseurl = "www.pornsharing.com"
 			self.default_cover = "file://%s/pornsharing.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

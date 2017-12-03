@@ -8,7 +8,7 @@ from debuglog import printlog as printl
 MDEBUG = False
 
 class MenuHelper(MPScreen):
-	def __init__(self, session, menuMaxLevel, genreMenu, baseUrl, genreBase, menuListentry, skin_name='MP_Plugin', red_label=True, widgets_files=None, cookieJar=None):
+	def __init__(self, session, menuMaxLevel, genreMenu, baseUrl, genreBase, menuListentry, skin_name='MP_PluginDescr', red_label=True, widgets_files=None, cookieJar=None):
 
 		self.mh_cookieJar = cookieJar
 
@@ -340,7 +340,10 @@ class MenuHelper(MPScreen):
 
 				self.mh_genreUrl[self.mh_menuLevel] = genreLink
 			self.mh_genreTitle = "%s%s%s" % (self.mh_genreName[0],self.mh_genreName[1],self.mh_genreName[2])
-			self['name'].setText(_("Selection:")+" "+self.mh_genreTitle)
+			if self.mh_genreTitle != (400 * "—"):
+				self['name'].setText(_("Selection:")+" "+self.mh_genreTitle)
+			else:
+				self['name'].setText("")
 
 			for f, args in self.mh_On_setGenreStrTitle:
 				f(*args)

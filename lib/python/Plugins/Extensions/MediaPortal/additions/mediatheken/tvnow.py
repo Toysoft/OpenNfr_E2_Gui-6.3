@@ -47,7 +47,7 @@ default_cover = "file://%s/tvnow.png" % (config.mediaportal.iconcachepath.value 
 class tvnowFirstScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -107,7 +107,7 @@ class tvnowSubGenreScreen(MPScreen, ThumbsHelper):
 		self.Link = Link
 		self.Name = Name
 		self.Image = Image
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -180,7 +180,7 @@ class tvnowStaffelScreen(MPScreen):
 		self.Link = Link
 		self.Name = Name
 		self.Image = Image
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,

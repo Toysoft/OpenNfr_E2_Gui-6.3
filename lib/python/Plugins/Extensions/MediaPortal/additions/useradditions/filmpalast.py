@@ -66,7 +66,7 @@ def fp_grabpage(pageurl, method='GET', postdata={}, headers={}):
 class filmPalastMain(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -363,7 +363,7 @@ class filmPalastStreams(MPScreen):
 		self.stream_name = stream_name
 		self.url = url
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,

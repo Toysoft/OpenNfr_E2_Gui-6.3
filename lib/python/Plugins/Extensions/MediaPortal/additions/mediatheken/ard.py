@@ -52,7 +52,7 @@ ardPic = "file://%s/ard.png" % (config.mediaportal.iconcachepath.value + "logos"
 class ARDGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -126,7 +126,7 @@ class ARDPreSelect(MPScreen):
 	def __init__(self,session,genreName,genreFlag):
 		self.gN = genreName
 		self.gF = genreFlag
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -287,7 +287,7 @@ class ARDPreSelectSender(MPScreen):
 		self.gF = genreFlag
 		self.sender = sender
 		self.such = such
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -363,7 +363,6 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
 			"5" : self.keyShowThumb,
-			"green" : self.keyGreen,
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
@@ -373,11 +372,9 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self['title'] = Label("ARD Mediathek")
 		self['ContentTitle'] = Label("Auswahl der Inhalte")
-		self['F2'] = Label("Info")
 
 		self['Page'] = Label(_("Page:"))
 		self.genreliste = []
-		self.textTrigger = 0
 		self.page = 1
 		self.sendungen = ""
 		self.lastpage = 1	# Alles hier hat nur 1 Seite
@@ -442,10 +439,7 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 				else:
 					media = "?"
 				handlung = "Media: %s\nGenre: %s\nSender: %s\nClips: %s" % (media,self.gN,sender,ausgaben)
-		if self.textTrigger == 1:
-			streamHandlung = itxt
-		elif self.textTrigger == 0:
-			streamHandlung = handlung
+		streamHandlung = handlung+"\n\n"+itxt
 		self['handlung'].setText(streamHandlung)
 		streamName = self['liste'].getCurrent()[0][0]
 		self['name'].setText("Sendung / Thema\n"+streamName)
@@ -461,15 +455,6 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 		if streamLink == None:
 			return
 		self.session.open(ARDStreamScreen,streamLink,self.gN,self.gF)
-
-	def keyGreen(self):
-		if self.keyLocked:
-			return
-		if self.textTrigger == 0:
-			self.textTrigger = 1
-		elif self.textTrigger == 1:
-			self.textTrigger = 0
-		self.showInfos()
 
 class ARDStreamScreen(MPScreen, ThumbsHelper):
 
@@ -489,7 +474,6 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 			"down" : self.keyDown,
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
-			"green" : self.keyGreen,
 			"yellow" : self.keyYellow,
 			"blue" : self.keyBlue,
 			"nextBouquet" : self.keyPageUp,
@@ -503,7 +487,6 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		else:
 			self['ContentTitle'] = Label("Auswahl des Clips")
 		self['name'] = Label(_("Please wait..."))
-		self['F2'] = Label("Info")
 		if self.gF == "1" or self.gF == "6":
 			self['F3'] = Label("Relevanz")
 		else:
@@ -513,7 +496,6 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		self.future = 0
 		self.page = 1
 		self.lastpage = 1
-		self.textTrigger = 0
 		self.suchTrigger = "date"
 		self.blueTrigger = 0
 		self.blueURL = ""
@@ -667,24 +649,12 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 				dur = meta[1]
 			url = self['liste'].getCurrent()[0][1]
 			handlung = "Genre: %s\nSender: %s\nClip-Datum: %s%s\nDauer: %s" % (self.gN,sender,airtime,uhr,dur)
-		if self.textTrigger == 1:
-			streamHandlung = itxt
-		elif self.textTrigger == 0:
-			streamHandlung = handlung
+		streamHandlung = handlung+"\n\n"+itxt
 		self['handlung'].setText(streamHandlung)
 		streamName = self['liste'].getCurrent()[0][0]
 		self['name'].setText("Sendung / Thema\n"+decodeHtml(self.sendung))
 		if streamPic:
 			CoverHelper(self['coverArt']).getCover(streamPic)
-
-	def keyGreen(self):
-		if self.keyLocked:
-			return
-		if self.textTrigger == 0:
-			self.textTrigger = 1
-		elif self.textTrigger == 1:
-			self.textTrigger = 0
-		self.showInfos()
 
 	def keyYellow(self):
 		if self.keyLocked:

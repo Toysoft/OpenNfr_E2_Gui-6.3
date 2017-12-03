@@ -6,6 +6,18 @@ from enigma import eListbox, eListboxPythonConfigContent, eRCInput, eTimer, quit
 from Screens.MessageBox import MessageBox
 from Screens.ChoiceBox import ChoiceBox
 import skin
+from Components.ProgressBar import ProgressBar
+import os
+from os import popen, system, remove, listdir, chdir, getcwd, statvfs, mkdir, path, walk
+
+def getVarSpaceKb():
+    try:
+        s = statvfs('/')
+    except OSError:
+        return (0, 0)
+
+    return (float(s.f_bfree * (s.f_bsize / 1024)), float(s.f_blocks * (s.f_bsize / 1024)))
+
 
 class ConfigList(HTMLComponent, GUIComponent, object):
 	def __init__(self, list, session = None):
@@ -135,6 +147,8 @@ class ConfigList(HTMLComponent, GUIComponent, object):
 
 class ConfigListScreen:
 	def __init__(self, list, session = None, on_change = None):
+		self['spaceused'] = ProgressBar()
+		self.onShown.append(self.setWindowTitle)		
 		self["config_actions"] = NumberActionMap(["SetupActions", "InputAsciiActions", "KeyboardInputActions"],
 		{
 			"gotAsciiCode": self.keyGotAscii,
@@ -345,3 +359,25 @@ class ConfigListScreen:
 	
 	def closeRecursive(self):
 		self.closeMenuList(True)
+
+	def ConvertSize(self, size):
+		size = int(size)
+		if size >= 1073741824:
+			Size = '%0.2f TB' % (size / 1073741824.0)
+		elif size >= 1048576:
+			Size = '%0.2f GB' % (size / 1048576.0)
+		elif size >= 1024:
+			Size = '%0.2f MB' % (size / 1024.0)
+		else:
+			Size = '%0.2f KB' % size
+		return str(Size)		
+		
+	def setWindowTitle(self):
+		diskSpace = getVarSpaceKb()
+		percFree = int(diskSpace[0] / diskSpace[1] * 100)
+		percUsed = int((diskSpace[1] - diskSpace[0]) / diskSpace[1] * 100)
+		self.setTitle('%s - %s: %s (%d%%)' % (_('Einstellungen'),
+		 _('Frei'),
+		 self.ConvertSize(int(diskSpace[0])),
+		 percFree))
+		self['spaceused'].setValue(percUsed)		

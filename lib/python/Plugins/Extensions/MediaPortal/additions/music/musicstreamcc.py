@@ -17,7 +17,7 @@ class show_MSCC_Genre(MPScreen):
 		self.genre_url = url
 		self.ctitle = ctitle
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -114,7 +114,7 @@ class show_MSCC_ListScreen(MPScreen):
 		self.album = album
 		self.baseUrl = baseUrl
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"			: self.closeAll,

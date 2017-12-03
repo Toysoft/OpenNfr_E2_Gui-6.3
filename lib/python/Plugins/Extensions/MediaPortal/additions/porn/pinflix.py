@@ -63,7 +63,7 @@ class pinflixGenreScreen(MPScreen):
 			self.baseurl = "www.pornrox.com"
 			default_cover = "file://%s/pornrox.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

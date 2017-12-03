@@ -5,7 +5,6 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 
 # Globals
-NL = "\n"
 suchCache = ""	# Letzte Sucheingabe
 AdT = " "	# Default: Anzahl der Treffer/Clips/Sendungen
 BASE_URL = "https://www.zdf.de"
@@ -41,7 +40,7 @@ class ZDFGenreScreen(MPScreen):
 
 	def __init__(self, session):
 		self.keyLocked = True
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -506,7 +505,7 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 							if not "/static" in image:
 								image += "~768x432"
 						title = decodeHtml(title)
-						handlung = "Clip-Datum: "+airtime+clock+NL+"Dauer: "+dur
+						handlung = "Clip-Datum: "+airtime+clock+"\nDauer: "+dur
 						self.dur = dur
 						assetId = "https://api.zdf.de/content/documents/"+assetId+".json?profile=player"
 						assetPath = BASE_URL + assetPath
@@ -530,7 +529,7 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 					title = decodeHtml(title)
 					dur = int(dur)
 					self.dur = str(int(dur/60))+" min"
-					handlung = "Kanal: Podcast"+NL+"Clip-Datum: "+airtime+NL+"Dauer: "+self.dur+NL+info
+					handlung = "Kanal: Podcast"+"\nClip-Datum: "+airtime+"\nDauer: "+self.dur+"\n\n"+info
 					self.filmliste.append((title,streamLink,handlung,image,title,''))
 		else:
 			tmp = sorted(glob.glob(config.mediaportal.storagepath.value + "*.soap"))
@@ -632,7 +631,7 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 						genre = " ("+re.search('itemprop="genre">.*?class="teaser-cat-category">(.*?)</span',data,re.S).group(1).strip().split("|")[0].strip()+")"
 					except:
 						pass
-				handlung = "Sendung: "+decodeHtml(sendung)+genre+NL+"Clip-Datum: "+airtime+NL+"Dauer: "+dur+"\n"+info
+				handlung = "Sendung: "+decodeHtml(sendung)+genre+"\nClip-Datum: "+airtime+"\nDauer: "+dur+"\n\n"+info
 				assetId = "https://api.zdf.de/content/documents/"+assetId+".json?profile=player"
 				assetPath = BASE_URL + assetPath
 				self.filmliste.append((decodeHtml(title),assetId,handlung,image,sendung,assetPath))

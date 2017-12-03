@@ -30,7 +30,7 @@ class SearchHelper:
 		else:
 			self.numericalTextInput.timer.callback.append(self.doSearch)
 
-		self["search_numberactions"] = NumberActionMap(["NumberActions"], {
+		self["search_numberactions"] = NumberActionMap(["MP_NumberActions"], {
 			"1": self.goToNumber,
 			"2": self.goToNumber,
 			"3": self.goToNumber,
@@ -222,7 +222,7 @@ class MPScreen(Screen, HelpableScreen):
 		try:
 			self['title'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
 			self['ContentTitle'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
-			self['name'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
+			#self['name'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
 			self['coverArt'].instance.setShowHideAnimation(config.mediaportal.animation_coverart.value)
 		except:
 			pass
@@ -266,15 +266,18 @@ class MPScreen(Screen, HelpableScreen):
 	def mp_tmdb(self):
 		if self.mp_hide:
 			return
+		if self.keyLocked:
+			return
+		from tmdb import MediaPortalTmdbScreen
 		try:
-			exist = self['liste'].getCurrent()
-			if self.keyLocked or exist == None:
-				return
 			movie_title = self['liste'].getCurrent()[0][0]
-			from tmdb import MediaPortalTmdbScreen
 			self.session.open(MediaPortalTmdbScreen, movie_title)
 		except:
-			pass
+			try:
+				movie_title = self.thumbfilmliste[self.section * self.thumbsC + self.index][0]
+				self.session.open(MediaPortalTmdbScreen, movie_title)
+			except:
+				pass
 
 	def loadPageQueued(self, headers={}):
 		self['name'].setText(_('Please wait...'))

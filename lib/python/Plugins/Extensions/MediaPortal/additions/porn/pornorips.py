@@ -45,7 +45,7 @@ default_cover = "file://%s/pornorips.png" % (config.mediaportal.iconcachepath.va
 class pornoRipsGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -102,7 +102,7 @@ class pornoRipsSubGenreScreen(MPScreen):
 
 	def __init__(self, session, Name):
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,

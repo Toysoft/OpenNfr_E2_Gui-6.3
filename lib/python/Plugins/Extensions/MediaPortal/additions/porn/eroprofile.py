@@ -44,7 +44,7 @@ default_cover = "file://%s/eroprofile.png" % (config.mediaportal.iconcachepath.v
 class eroprofileGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

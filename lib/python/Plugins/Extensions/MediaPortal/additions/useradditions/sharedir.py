@@ -152,7 +152,7 @@ class sharedirMenueScreen(sharedirHelper, MPScreen):
 
 	def __init__(self, session):
 		self.Name = "--- Multi Search Engine ---"
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -257,7 +257,7 @@ class sharedirKeyword(MPScreen):
 
 	def __init__(self, session, type):
 		self.type = type
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

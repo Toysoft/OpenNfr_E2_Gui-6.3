@@ -43,7 +43,7 @@ default_cover = "file://%s/myspass.png" % (config.mediaportal.iconcachepath.valu
 class myspassGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -106,7 +106,7 @@ class myspassStaffelListeScreen(MPScreen):
 	def __init__(self, session, myspassName, myspassUrl):
 		self.myspassName = myspassName
 		self.myspassUrl = myspassUrl
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,

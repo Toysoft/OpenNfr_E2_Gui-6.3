@@ -45,7 +45,7 @@ default_cover = "file://%s/lfporn.png" % (config.mediaportal.iconcachepath.value
 class LFPornGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

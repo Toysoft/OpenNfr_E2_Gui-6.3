@@ -20,7 +20,7 @@ import json
 import re
 from datetime import date
 from urllib import quote
-from urllib2 import urlopen, Request, HTTPError, URLError
+import requests
 
 API_URL = 'http://app.4players.de/services/app/data.php'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36'
@@ -188,18 +188,11 @@ class ForPlayersApi(object):
     def __api_call(method, *params):
         parts = [API_URL, method] + [quote(str(p)) for p in params]
         url = '/'.join(parts)
-        log('Opening URL: %s' % url)
-	headers = {'User-Agent': USER_AGENT}
-	req = Request(url, headers=headers)
+        s = requests.session()
+        headers = {'User-Agent': USER_AGENT}
         try:
-            response = urlopen(req).read()
-	    log('got %d bytes' % len(response))
-	    json_data = json.loads(response)
+            page = s.get(url, headers=headers)
+            json_data = json.loads(page.content)
             return json_data
-        except HTTPError, error:
-            print 'HTTPError: %s' % error
-        except URLError, error:
-            print 'URLError: %s' % error
- 
-def log(msg):
-    print '[ForPlayersApi]: %s' % msg
+        except:
+            return 'empty'

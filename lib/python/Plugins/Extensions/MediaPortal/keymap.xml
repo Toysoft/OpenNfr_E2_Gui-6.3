@@ -11,17 +11,17 @@
 			<key id="KEY_ESC" mapto="cancel" flags="m" />
 			<key id="KEY_ENTER" mapto="ok" flags="m" />
 		</device>
-		<key id="KEY_1" mapto="1" flags="m" />
-		<key id="KEY_2" mapto="2" flags="m" />
-		<key id="KEY_3" mapto="3" flags="m" />
-		<key id="KEY_4" mapto="4" flags="m" />
-		<key id="KEY_5" mapto="5" flags="m" />
-		<key id="KEY_5" mapto="5" flags="l" />
-		<key id="KEY_6" mapto="6" flags="m" />
-		<key id="KEY_7" mapto="7" flags="m" />
-		<key id="KEY_8" mapto="8" flags="m" />
-		<key id="KEY_9" mapto="9" flags="m" />
-		<key id="KEY_0" mapto="0" flags="m" />
+		<key id="KEY_1" mapto="1" flags="b" />
+		<key id="KEY_2" mapto="2" flags="b" />
+		<key id="KEY_3" mapto="3" flags="b" />
+		<key id="KEY_4" mapto="4" flags="b" />
+		<key id="KEY_5" mapto="5" flags="b" />
+		<key id="KEY_5" mapto="long5" flags="l" />
+		<key id="KEY_6" mapto="6" flags="b" />
+		<key id="KEY_7" mapto="7" flags="b" />
+		<key id="KEY_8" mapto="8" flags="b" />
+		<key id="KEY_9" mapto="9" flags="b" />
+		<key id="KEY_0" mapto="0" flags="b" />
 		<key id="KEY_RED" mapto="red" flags="m" />
 		<key id="KEY_GREEN" mapto="green" flags="m" />
 		<key id="KEY_YELLOW" mapto="yellow" flags="m" />
@@ -65,6 +65,18 @@
 		<key id="KEY_UP" mapto="upUp" flags="b" />
 		<key id="KEY_DOWN" mapto="downUp" flags="b" />
 	</map>
+	<map context="MP_NumberActions">
+		<key id="KEY_1" mapto="1" flags="b" />
+		<key id="KEY_2" mapto="2" flags="b" />
+		<key id="KEY_3" mapto="3" flags="b" />
+		<key id="KEY_4" mapto="4" flags="b" />
+		<key id="KEY_5" mapto="5" flags="b" />
+		<key id="KEY_6" mapto="6" flags="b" />
+		<key id="KEY_7" mapto="7" flags="b" />
+		<key id="KEY_8" mapto="8" flags="b" />
+		<key id="KEY_9" mapto="9" flags="b" />
+		<key id="KEY_0" mapto="0" flags="b" />
+	</map>
 	<map context="MP_KeyActions">
 		<device name="compatible: pcKeyboard">
 			<key id="KEY_1" mapto="1" flags="m" />
@@ -106,7 +118,7 @@
 			<key id="KEY_SPACE" mapto="space" flags="m" />
 			<key id="KEY_BACKSPACE" mapto="back" flags="mr" />
 		</device>
-	</map>	
+	</map>
 	<map context="MP_SpecialActions">
 		<device name="compatible: pcKeyboard">
 			<key id="KEY_F9" mapto="specTv" flags="l" />

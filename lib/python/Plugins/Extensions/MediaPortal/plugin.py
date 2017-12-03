@@ -189,7 +189,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2017112602"))
+config.mediaportal.version = NoSave(ConfigText(default="2017120301"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.retries = ConfigSubsection()
@@ -598,7 +598,7 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			self.configlist.append(getConfigListEntry(_("Wall-Selector-Color:"), config.mediaportal.selektor, False))
 			self.configlist.append(getConfigListEntry(_("Page Display Style:"), config.mediaportal.pagestyle, False))
 		self.configlist.append(getConfigListEntry(_("Skin:"), config.mediaportal.skin2, False))
-		self.configlist.append(getConfigListEntry(_("ShowAsThumb as Default:"), config.mediaportal.showAsThumb, False))
+		#self.configlist.append(getConfigListEntry(_("ShowAsThumb as Default:"), config.mediaportal.showAsThumb, False))
 		self.configlist.append(getConfigListEntry(_("Disable Background-TV:"), config.mediaportal.backgroundtv, True))
 		if not config.mediaportal.backgroundtv.value:
 			self.configlist.append(getConfigListEntry(_("Restore last service:"), config.mediaportal.restorelastservice, False))
@@ -1168,13 +1168,14 @@ class MPList(Screen, HelpableScreen):
 						ds.run(downloadPage, url, poster_path)
 			poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 		else:
-			local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
 			if self.icons_data:
 				for x,y in self.icons_data:
-					if y == icon+'.png': remote_hash = x
-				if remote_hash != local_hash:
-					ds.run(downloadPage, url, poster_path)
-					poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
+					if y == icon+'.png':
+						remote_hash = x
+						local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
+						if remote_hash != local_hash:
+							ds.run(downloadPage, url, poster_path)
+							poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 
 		logo_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", icon)
 		url = self.icon_url+"logos/" + icon + ".png"
@@ -1184,12 +1185,13 @@ class MPList(Screen, HelpableScreen):
 					if y == icon+'.png':
 						ds.run(downloadPage, url, logo_path)
 		else:
-			local_hash = hashlib.md5(open(logo_path, 'rb').read()).hexdigest()
 			if self.logo_data:
 				for x,y in self.logo_data:
-					if y == icon+'.png': remote_hash = x
-				if remote_hash != local_hash:
-					ds.run(downloadPage, url, logo_path)
+					if y == icon+'.png':
+						remote_hash = x
+						local_hash = hashlib.md5(open(logo_path, 'rb').read()).hexdigest()
+						if remote_hash != local_hash:
+							ds.run(downloadPage, url, logo_path)
 
 		scale = AVSwitch().getFramebufferScale()
 		if mp_globals.videomode == 2:
@@ -1306,10 +1308,10 @@ class MPList(Screen, HelpableScreen):
 								kids = x.get("kids")
 								if param1 != "":
 									param = ", \"" + param1 + "\""
-									exec("self.par1 = \"" + x.get("param1") + "\"")
+									self.par1 = param1
 								if param2 != "":
 									param = param + ", \"" + param2 + "\""
-									exec("self.par2 = \"" + x.get("param2") + "\"")
+									self.par2 = param2
 								if confcat == "porn":
 									exec("self.pornscreen = " + x.get("screen") + "")
 								elif kids != "1" and config.mediaportal.kidspin.value:
@@ -1346,10 +1348,10 @@ class MPList(Screen, HelpableScreen):
 										kids = x.get("kids")
 										if param1 != "":
 											param = ", \"" + param1 + "\""
-											exec("self.par1 = \"" + x.get("param1") + "\"")
+											self.par1 = param1
 										if param2 != "":
 											param = param + ", \"" + param2 + "\""
-											exec("self.par2 = \"" + x.get("param2") + "\"")
+											self.par2 = param2
 										if confcat == "porn":
 											exec("self.pornscreen = " + x.get("screen") + "")
 										elif kids != "1" and config.mediaportal.kidspin.value:
@@ -1387,9 +1389,13 @@ class MPList(Screen, HelpableScreen):
 				self.session.open(self.pornscreen, self.par1, self.par2)
 
 	def keyCancel(self):
+		config.mediaportal.filter.save()
+		configfile.save()
 		self.close(self.session, True, self.lastservice)
 
 	def restart(self):
+		config.mediaportal.filter.save()
+		configfile.save()
 		if autoStartTimer is not None:
 			autoStartTimer.update()
 		self.close(self.session, False, self.lastservice)
@@ -1432,9 +1438,18 @@ class MPList(Screen, HelpableScreen):
 				elif filter[1] == "porn":
 					xfilter = "Porn"
 				config.mediaportal.filter.value = xfilter
-				exec("self.ml.setList(self."+filter[1]+")")
-				self.ml.moveToIndex(0)
-				self['F4'].setText(filter[0])
+				exec("self.currentlist = self."+filter[1])
+				if len(self.currentlist) == 0:
+					self.chFilter()
+					config.mediaportal.filter.save()
+					configfile.save()
+					self.close(self.session, False, self.lastservice)
+				else:
+					exec("self.ml.setList(self."+filter[1]+")")
+					self['F4'].setText(filter[0])
+					self.ml.moveToIndex(0)
+					auswahl = self['liste'].getCurrent()[0][0]
+					self['name'].setText(auswahl)
 
 class MPpluginSort(Screen):
 
@@ -2027,13 +2042,14 @@ class MPWall(Screen, HelpableScreen):
 								ds.run(downloadPage, url, poster_path)
 					poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 				else:
-					local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
 					if icons_data:
 						for a,b in icons_data:
-							if b == postername+'.png': remote_hash = a
-						if remote_hash != local_hash:
-							ds.run(downloadPage, url, poster_path)
-							poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
+							if b == postername+'.png':
+								remote_hash = a
+								local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
+								if remote_hash != local_hash:
+									ds.run(downloadPage, url, poster_path)
+									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 			else:
 				poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons", postername)
 				url = icon_url+"icons/" + postername + ".png"
@@ -2044,13 +2060,14 @@ class MPWall(Screen, HelpableScreen):
 								ds.run(downloadPage, url, poster_path)
 					poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 				else:
-					local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
 					if icons_data:
 						for a,b in icons_data:
-							if b == postername+'.png': remote_hash = a
-						if remote_hash != local_hash:
-							ds.run(downloadPage, url, poster_path)
-							poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
+							if b == postername+'.png':
+								remote_hash = a
+								local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
+								if remote_hash != local_hash:
+									ds.run(downloadPage, url, poster_path)
+									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 
 			logo_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", postername)
 			url = icon_url+"logos/" + postername + ".png"
@@ -2060,12 +2077,13 @@ class MPWall(Screen, HelpableScreen):
 						if b == postername+'.png':
 							ds.run(downloadPage, url, logo_path)
 			else:
-				local_hash = hashlib.md5(open(logo_path, 'rb').read()).hexdigest()
 				if logo_data:
 					for a,b in logo_data:
-						if b == postername+'.png': remote_hash = a
-					if remote_hash != local_hash:
-						ds.run(downloadPage, url, logo_path)
+						if b == postername+'.png':
+							remote_hash = a
+							local_hash = hashlib.md5(open(logo_path, 'rb').read()).hexdigest()
+							if remote_hash != local_hash:
+								ds.run(downloadPage, url, logo_path)
 
 			scale = AVSwitch().getFramebufferScale()
 			if mp_globals.videomode == 2:
@@ -2095,13 +2113,15 @@ class MPWall(Screen, HelpableScreen):
 								ds.run(downloadPage, url, poster_path)
 					poster_path = "%s/images/comingsoon_zoom.png" % mp_globals.pluginPath
 				else:
-					local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
 					if icons_data_zoom:
 						for a,b in icons_data_zoom:
-							if b == postername+'.png': remote_hash = a
-						if remote_hash != local_hash:
-							ds.run(downloadPage, url, poster_path)
-							poster_path = "%s/images/comingsoon_zoom.png" % mp_globals.pluginPath
+							if b == postername+'.png':
+								remote_hash = a
+								local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
+								if remote_hash != local_hash:
+									ds.run(downloadPage, url, poster_path)
+									poster_path = "%s/images/comingsoon_zoom.png" % mp_globals.pluginPath
+
 				scale = AVSwitch().getFramebufferScale()
 				if mp_globals.videomode == 2:
 					self.picload.setPara((308, 190, scale[0], scale[1], True, 1, "#FF000000"))
@@ -2250,10 +2270,10 @@ class MPWall(Screen, HelpableScreen):
 								kids = x.get("kids")
 								if param1 != "":
 									param = ", \"" + param1 + "\""
-									exec("self.par1 = \"" + x.get("param1") + "\"")
+									self.par1 = param1
 								if param2 != "":
 									param = param + ", \"" + param2 + "\""
-									exec("self.par2 = \"" + x.get("param2") + "\"")
+									self.par2 = param2
 								if confcat == "porn":
 									exec("self.pornscreen = " + x.get("screen") + "")
 								elif kids != "1" and config.mediaportal.kidspin.value:
@@ -2290,10 +2310,10 @@ class MPWall(Screen, HelpableScreen):
 										kids = x.get("kids")
 										if param1 != "":
 											param = ", \"" + param1 + "\""
-											exec("self.par1 = \"" + x.get("param1") + "\"")
+											self.par1 = param1
 										if param2 != "":
 											param = param + ", \"" + param2 + "\""
-											exec("self.par2 = \"" + x.get("param2") + "\"")
+											self.par2 = param2
 										if confcat == "porn":
 											exec("self.pornscreen = " + x.get("screen") + "")
 										elif kids != "1" and config.mediaportal.kidspin.value:
@@ -3003,13 +3023,14 @@ class MPWall2(Screen, HelpableScreen):
 								ds.run(downloadPage, url, poster_path)
 					poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 				else:
-					local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
 					if icons_data:
 						for x,y in icons_data:
-							if y == p_picname+'.png': remote_hash = x
-						if remote_hash != local_hash:
-							ds.run(downloadPage, url, poster_path)
-							poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
+							if y == p_picname+'.png':
+								remote_hash = x
+								local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
+								if remote_hash != local_hash:
+									ds.run(downloadPage, url, poster_path)
+									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 			else:
 				poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons", p_picname)
 				url = icon_url+"icons/" + p_picname + ".png"
@@ -3020,13 +3041,14 @@ class MPWall2(Screen, HelpableScreen):
 								ds.run(downloadPage, url, poster_path)
 					poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 				else:
-					local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
 					if icons_data:
 						for x,y in icons_data:
-							if y == p_picname+'.png': remote_hash = x
-						if remote_hash != local_hash:
-							ds.run(downloadPage, url, poster_path)
-							poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
+							if y == p_picname+'.png':
+								remote_hash = x
+								local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
+								if remote_hash != local_hash:
+									ds.run(downloadPage, url, poster_path)
+									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 
 			logo_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", p_picname)
 			url = icon_url+"logos/" + p_picname + ".png"
@@ -3036,12 +3058,13 @@ class MPWall2(Screen, HelpableScreen):
 						if y == p_picname+'.png':
 							ds.run(downloadPage, url, logo_path)
 			else:
-				local_hash = hashlib.md5(open(logo_path, 'rb').read()).hexdigest()
 				if logo_data:
 					for x,y in logo_data:
-						if y == p_picname+'.png': remote_hash = x
-					if remote_hash != local_hash:
-						ds.run(downloadPage, url, logo_path)
+						if y == p_picname+'.png':
+							remote_hash = x
+							local_hash = hashlib.md5(open(logo_path, 'rb').read()).hexdigest()
+							if remote_hash != local_hash:
+								ds.run(downloadPage, url, logo_path)
 
 			row.append((p_name, p_picname, poster_path, p_genre, p_hits, p_sort))
 			posterlist.append(poster_path)
@@ -3110,10 +3133,10 @@ class MPWall2(Screen, HelpableScreen):
 								kids = x.get("kids")
 								if param1 != "":
 									param = ", \"" + param1 + "\""
-									exec("self.par1 = \"" + x.get("param1") + "\"")
+									self.par1 = param1
 								if param2 != "":
 									param = param + ", \"" + param2 + "\""
-									exec("self.par2 = \"" + x.get("param2") + "\"")
+									self.par2 = param2
 								if confcat == "porn":
 									exec("self.pornscreen = " + x.get("screen") + "")
 								elif kids != "1" and config.mediaportal.kidspin.value:
@@ -3150,10 +3173,10 @@ class MPWall2(Screen, HelpableScreen):
 										kids = x.get("kids")
 										if param1 != "":
 											param = ", \"" + param1 + "\""
-											exec("self.par1 = \"" + x.get("param1") + "\"")
+											self.par1 = param1
 										if param2 != "":
 											param = param + ", \"" + param2 + "\""
-											exec("self.par2 = \"" + x.get("param2") + "\"")
+											self.par2 = param2
 										if confcat == "porn":
 											exec("self.pornscreen = " + x.get("screen") + "")
 										elif kids != "1" and config.mediaportal.kidspin.value:
@@ -3790,13 +3813,14 @@ class MPWallVTi(Screen, HelpableScreen):
 								ds.run(downloadPage, url, poster_path)
 					poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 				else:
-					local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
 					if icons_data:
 						for x,y in icons_data:
-							if y == p_picname+'.png': remote_hash = x
-						if remote_hash != local_hash:
-							ds.run(downloadPage, url, poster_path)
-							poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
+							if y == p_picname+'.png':
+								remote_hash = x
+								local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
+								if remote_hash != local_hash:
+									ds.run(downloadPage, url, poster_path)
+									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 			else:
 				poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons", p_picname)
 				url = icon_url+"icons/" + p_picname + ".png"
@@ -3807,13 +3831,14 @@ class MPWallVTi(Screen, HelpableScreen):
 								ds.run(downloadPage, url, poster_path)
 					poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 				else:
-					local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
 					if icons_data:
 						for x,y in icons_data:
-							if y == p_picname+'.png': remote_hash = x
-						if remote_hash != local_hash:
-							ds.run(downloadPage, url, poster_path)
-							poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
+							if y == p_picname+'.png':
+								remote_hash = x
+								local_hash = hashlib.md5(open(poster_path, 'rb').read()).hexdigest()
+								if remote_hash != local_hash:
+									ds.run(downloadPage, url, poster_path)
+									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 
 			logo_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", p_picname)
 			url = icon_url+"logos/" + p_picname + ".png"
@@ -3823,12 +3848,13 @@ class MPWallVTi(Screen, HelpableScreen):
 						if y == p_picname+'.png':
 							ds.run(downloadPage, url, logo_path)
 			else:
-				local_hash = hashlib.md5(open(logo_path, 'rb').read()).hexdigest()
 				if logo_data:
 					for x,y in logo_data:
-						if y == p_picname+'.png': remote_hash = x
-					if remote_hash != local_hash:
-						ds.run(downloadPage, url, logo_path)
+						if y == p_picname+'.png':
+							remote_hash = x
+							local_hash = hashlib.md5(open(logo_path, 'rb').read()).hexdigest()
+							if remote_hash != local_hash:
+								ds.run(downloadPage, url, logo_path)
 
 			row.append(((p_name, p_picname, poster_path, p_genre, p_hits, p_sort),))
 			posterlist.append(((p_name, p_picname, poster_path, p_genre, p_hits, p_sort),))
@@ -3898,10 +3924,10 @@ class MPWallVTi(Screen, HelpableScreen):
 								kids = x.get("kids")
 								if param1 != "":
 									param = ", \"" + param1 + "\""
-									exec("self.par1 = \"" + x.get("param1") + "\"")
+									self.par1 = param1
 								if param2 != "":
 									param = param + ", \"" + param2 + "\""
-									exec("self.par2 = \"" + x.get("param2") + "\"")
+									self.par2 = param2
 								if confcat == "porn":
 									exec("self.pornscreen = " + x.get("screen") + "")
 								elif kids != "1" and config.mediaportal.kidspin.value:
@@ -3938,10 +3964,10 @@ class MPWallVTi(Screen, HelpableScreen):
 										kids = x.get("kids")
 										if param1 != "":
 											param = ", \"" + param1 + "\""
-											exec("self.par1 = \"" + x.get("param1") + "\"")
+											self.par1 = param1
 										if param2 != "":
 											param = param + ", \"" + param2 + "\""
-											exec("self.par2 = \"" + x.get("param2") + "\"")
+											self.par2 = param2
 										if confcat == "porn":
 											exec("self.pornscreen = " + x.get("screen") + "")
 										elif kids != "1" and config.mediaportal.kidspin.value:

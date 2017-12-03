@@ -53,7 +53,7 @@ class wrestlingnetworkGenreScreen(MPScreen):
 			self.portal = "wrestlingnetwork.tv"
 			self.baseurl = "http://wrestlingnetwork.tv/"
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,

@@ -13,7 +13,7 @@ thumb_agent = ''
 
 class ThumbsHelper:
 	def __init__(self):
-		self.defaultThumb = config.mediaportal.showAsThumb.value
+		self.defaultThumb = False #config.mediaportal.showAsThumb.value
 		self.toShowThumb = False
 		self.th_filmList = []
 		self.th_filmnamePos = None

@@ -59,7 +59,7 @@ class toSearchForPorn(MPScreen, SearchHelper):
 
 	def __init__(self, session):
 		self.skin_path = mp_globals.pluginPath + mp_globals.skinsPath
-		MPScreen.__init__(self, session, skin='MP_Plugin', widgets=('MP_widget_search',))
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', widgets=('MP_widget_search',))
 		SearchHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -181,7 +181,7 @@ class toSearchForPornBrowse(MPScreen):
 
 	def __init__(self, session, suchString):
 		self.suchString = suchString
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -218,7 +218,7 @@ class toSearchForPornBrowse(MPScreen):
 						else:
 							mod = eval("config.mediaportal." + x.get("confopt") + ".value")
 							if mod:
-								exec("self.genreliste.append((\""+x.get("name").replace("&amp;","&")+"\", None))")
+								self.genreliste.append((x.get("name").replace("&amp;","&"), None))
 
 		try:
 			xmlpath = resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/additions/")
@@ -240,7 +240,7 @@ class toSearchForPornBrowse(MPScreen):
 									else:
 										mod = eval("config.mediaportal." + x.get("confopt") + ".value")
 										if mod:
-											exec("self.genreliste.append((\""+x.get("name").replace("&amp;","&")+"\", None))")
+											self.genreliste.append((x.get("name").replace("&amp;","&"), None))
 		except:
 			pass
 
@@ -262,11 +262,10 @@ class toSearchForPornBrowse(MPScreen):
 						if x.get("type") == "mod":
 							if x.get("confcat") == "porn" and x.get("search") == "1":
 									if auswahl == x.get("name").replace("&amp;","&"):
-										modfile = x.get("modfile")
-										modfile = "Plugins.Extensions.MediaPortal.additions.%s.%s" % (modfile.split(".")[0], modfile.split(".")[1])
+										Name = "2Search4Porn - %s" % self.suchString
+										Link = x.get("searchurl").replace("&amp;","&") % self.suchString.replace(" ",x.get("delim"))
+										modfile = "Plugins.Extensions.MediaPortal.additions."+x.get("modfile")
 										exec("from "+modfile+" import *")
-										exec("Name = \"2Search4Porn - %s\" % self.suchString")
-										exec("Link = \""+x.get("searchurl").replace("&amp;","&")+"\" % self.suchString.replace(\" \",\""+x.get("delim")+"\")")
 										exec("self.session.open("+x.get("searchscreen")+", Link, Name"+x.get("searchparam").replace("&quot;","\"")+")")
 		try:
 			xmlpath = resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/additions/")
@@ -283,11 +282,10 @@ class toSearchForPornBrowse(MPScreen):
 									if x.get("type") == "mod":
 										if x.get("confcat") == "porn" and x.get("search") == "1":
 												if auswahl == x.get("name").replace("&amp;","&"):
-													modfile = x.get("modfile")
-													modfile = "Plugins.Extensions.MediaPortal.additions.%s.%s" % (modfile.split(".")[0], modfile.split(".")[1])
+													Name = "2Search4Porn - %s" % self.suchString
+													Link = x.get("searchurl").replace("&amp;","&") % self.suchString.replace(" ",x.get("delim"))
+													modfile = "Plugins.Extensions.MediaPortal.additions."+x.get("modfile")
 													exec("from "+modfile+" import *")
-													exec("Name = \"2Search4Porn - %s\" % self.suchString")
-													exec("Link = \""+x.get("searchurl").replace("&amp;","&")+"\" % self.suchString.replace(\" \",\""+x.get("delim")+"\")")
 													exec("self.session.open("+x.get("searchscreen")+", Link, Name"+x.get("searchparam").replace("&quot;","\"")+")")
 		except:
 			pass

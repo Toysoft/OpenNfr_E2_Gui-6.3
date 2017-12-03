@@ -39,12 +39,12 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-BASE_URL = 'http://www.vkstreamingfilm.biz'
+BASE_URL = 'http://www.vkstreamingfilm.co'
 
 class vkstreamingfilmMain(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -69,32 +69,32 @@ class vkstreamingfilmMain(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		self.streamList.append(("New Movies","/film/page/"))
-		self.streamList.append(("Action","/film/action/page/"))
-		self.streamList.append(("Animation","/film/animation/page/"))
-		self.streamList.append(("Arts-Martiaux","/film/arts-martiaux/page/"))
-		self.streamList.append(("Aventure","/film/aventure/page/"))
-		self.streamList.append(("Biographique","/film/biographique/page/"))
-		self.streamList.append(("Comedie","/film/comedie/page/"))
-		self.streamList.append(("Danse","/film/danse/page/"))
-		self.streamList.append(("Documentaire","/film/documentaire/page/"))
-		self.streamList.append(("Drame","/film/drame/page/"))
-		self.streamList.append(("Epouvante-Horreur","/film/epouvante-horreur/page/"))
-		self.streamList.append(("Espionnage","/film/espionnage/page/"))
-		self.streamList.append(("Fantastique","/film/fantastique/page/"))
-		self.streamList.append(("Famille","/film/famille/page/"))
-		self.streamList.append(("Divers","/film/divers/page/"))
-		self.streamList.append(("Guerre","/film/guerre/page/"))
-		self.streamList.append(("Historique","/film/historique/page/"))
-		self.streamList.append(("Musical","/film/musical/page/"))
-		self.streamList.append(("Peplum","/film/peplum/page/"))
-		self.streamList.append(("Polcicier","/film/policier/page/"))
-		self.streamList.append(("Romance","/film/romance/page/"))
-		self.streamList.append(("Science-Fiction","/film/science-fiction/page/"))
-		self.streamList.append(("Spectacle","/film/spectacle/page/"))
-		self.streamList.append(("Sport","/film/sport/page/"))
-		self.streamList.append(("Thriller","/film/thriller/page/"))
-		self.streamList.append(("Western","/film/western/page/"))
+		self.streamList.append(("New Movies","/films/page/"))
+		self.streamList.append(("Action","/films/action/page/"))
+		self.streamList.append(("Animation","/films/animation/page/"))
+		self.streamList.append(("Arts-Martiaux","/films/arts-martiaux/page/"))
+		self.streamList.append(("Aventure","/films/aventure/page/"))
+		self.streamList.append(("Biographique","/films/biographique/page/"))
+		self.streamList.append(("Comedie","/films/comedie/page/"))
+		self.streamList.append(("Danse","/films/danse/page/"))
+		self.streamList.append(("Documentaire","/films/documentaire/page/"))
+		self.streamList.append(("Drame","/films/drame/page/"))
+		self.streamList.append(("Epouvante-Horreur","/films/epouvante-horreur/page/"))
+		self.streamList.append(("Espionnage","/films/espionnage/page/"))
+		self.streamList.append(("Fantastique","/films/fantastique/page/"))
+		self.streamList.append(("Famille","/films/famille/page/"))
+		self.streamList.append(("Divers","/films/divers/page/"))
+		self.streamList.append(("Guerre","/films/guerre/page/"))
+		self.streamList.append(("Historique","/films/historique/page/"))
+		self.streamList.append(("Musical","/films/musical/page/"))
+		self.streamList.append(("Peplum","/films/peplum/page/"))
+		self.streamList.append(("Polcicier","/films/policier/page/"))
+		self.streamList.append(("Romance","/films/romance/page/"))
+		self.streamList.append(("Science-Fiction","/films/science-fiction/page/"))
+		self.streamList.append(("Spectacle","/films/spectacle/page/"))
+		self.streamList.append(("Sport","/films/sport/page/"))
+		self.streamList.append(("Thriller","/films/thriller/page/"))
+		self.streamList.append(("Western","/films/western/page/"))
 		self.streamList.insert(0, ("--- Search ---", "search"))
 		self.ml.setList(map(self._defaultlistcenter, self.streamList))
 		self.keyLocked = False
@@ -165,7 +165,7 @@ class vkstreamingfilmParsing(MPScreen, ThumbsHelper):
 		if self.genre == '--- Search ---':
 			getLastpage = re.findall('<a onclick="javascript:list_submit\(\d+\);\s+return\(false\)"\s+href=".">(\d+)<', data, re.S)
 		else:
-			getLastpage = re.findall('<a href="http://www.vkstreamingfilm.biz/film/.*?page/.*?/">(\d*?)</a>', data, re.S)
+			getLastpage = re.findall('<a href="%s/films/.*?page/.*?/">(\d*?)</a>' % BASE_URL, data, re.S)
 		if getLastpage:
 			if int(getLastpage[-1]) != self.page-1:
 				self.lastpage = int(getLastpage[-1])

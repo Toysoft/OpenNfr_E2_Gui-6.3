@@ -5,6 +5,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
+from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 import Queue
 import threading
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
@@ -403,8 +404,7 @@ class SKTO_FilmListeScreen(MPScreen, ThumbsHelper):
 			self.handleSort()
 
 	def handleSort(self):
-		from Screens.ChoiceBox import ChoiceBox
-		self.session.openWithCallback(self.cb_handleSort, ChoiceBox, title=_("Sort Selection"), list = self.sortFuncs, selection=self.sortFuncsSel)
+		self.session.openWithCallback(self.cb_handleSort, ChoiceBoxExt, title=_("Sort Selection"), list = self.sortFuncs, selection=self.sortFuncsSel)
 
 	def cb_handleSort(self, answer):
 		href = answer and answer[1][0]

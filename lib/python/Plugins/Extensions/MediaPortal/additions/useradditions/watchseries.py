@@ -2,12 +2,12 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-ws_url = "ewatchseries.to"
+ws_url = "itswatchseries.to"
 
 class watchseriesGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -46,7 +46,7 @@ class watchseriesNewSeriesScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -88,7 +88,7 @@ class watchseriesSeriesLetterScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -153,7 +153,7 @@ class watchseriesSeriesScreen(MPScreen, ThumbsHelper):
 		twAgentGetPage(self.streamGenreLink).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		series = re.findall('<li><a href="(http://ewatchseries.to/serie/.*?)" title="(.*?)">.*?</li>', data, re.S)
+		series = re.findall('<li><a href="(http://%s/serie/.*?)" title="(.*?)">.*?</li>' % ws_url, data, re.S)
 		if series:
 			self.filmliste = []
 			for (url,title) in series:
@@ -217,7 +217,7 @@ class watchseriesEpisodeListeScreen(MPScreen):
 	def loadPageData(self, data):
 		parse = re.search('<ul class="listings(.*)class="sp-leader-bottom">', data, re.S)
 		if parse:
-			eps = re.findall('content="(http://ewatchseries.to/episode/.*?)"/>.*?itemprop="name"\s{0,1}>(?:Episode\s\d+|)(?:&nbsp;){0,10}(.*?)<', parse.group(1), re.S)
+			eps = re.findall('content="(http://%s/episode/.*?)"/>.*?itemprop="name"\s{0,1}>(?:Episode\s\d+|)(?:&nbsp;){0,10}(.*?)<' % ws_url, parse.group(1), re.S)
 			if eps:
 				self.filmliste = []
 				for (url, title) in eps:

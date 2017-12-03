@@ -82,7 +82,7 @@ class m4kGenreScreen(MPScreen):
 
 	def __init__(self, session, mode=""):
 		self.showM4kPorn = mode
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -624,7 +624,7 @@ class m4kStreamListeScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamName):
 		self.streamGenreLink = streamGenreLink
 		self.streamName = streamName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -761,7 +761,7 @@ class m4kPartListeScreen(MPScreen):
 	def __init__(self, session, data, streamName):
 		self.data = data
 		self.streamName = streamName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -967,7 +967,7 @@ class m4kABCAuswahl(MPScreen):
 	def __init__(self, session, url, name):
 		self.url = url
 		self.name = name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,

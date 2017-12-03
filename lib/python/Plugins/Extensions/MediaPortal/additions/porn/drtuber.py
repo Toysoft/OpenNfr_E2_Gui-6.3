@@ -55,7 +55,7 @@ class drtuberGenreScreen(MPScreen):
 
 	def __init__(self, session):
 		self.session = session
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 		self.scope = 0
 		self.scopeText = ['Straight', 'Gays', 'Transsexual']
 
