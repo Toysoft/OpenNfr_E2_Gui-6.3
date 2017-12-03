@@ -1,4 +1,4 @@
-SUBDIRS = spinner fonts extensions keymaps bootvideos bootlogos radiologos SpinnerSelector OpenNfr_FHD
+SUBDIRS = spinner fonts extensions keymaps bootvideos bootlogos radiologos SpinnerSelector
 
 dist_pkgdata_DATA = \
 	encoding.conf \
