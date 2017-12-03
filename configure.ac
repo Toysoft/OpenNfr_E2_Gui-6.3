@@ -773,6 +773,7 @@ data/display720/Makefile
 data/vfd128/Makefile
 data/vfd140/Makefile
 data/vfd255/Makefile
+data/OpenNfr_FHD/Makefile
 data/OpenNfr_FHD/buttons/Makefile
 data/OpenNfr_FHD/ca/Makefile
 data/OpenNfr_FHD/countries/Makefile
