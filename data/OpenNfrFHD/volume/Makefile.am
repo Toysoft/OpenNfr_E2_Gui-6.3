@@ -1,3 +1,3 @@
-installdir = $(pkgdatadir)/OpenNfr_FHD/volume
+installdir = $(pkgdatadir)/OpenNfrFHD/volume
 
 dist_install_DATA = *.png 

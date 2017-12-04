@@ -1,3 +1,3 @@
-installdir = $(pkgdatadir)/OpenNfr_FHD/piconCam
+installdir = $(pkgdatadir)/OpenNfrFHD/piconCam
 
 dist_install_DATA = *.png 

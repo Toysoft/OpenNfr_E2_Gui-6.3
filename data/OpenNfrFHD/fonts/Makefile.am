@@ -1,3 +1,3 @@
-installdir = $(pkgdatadir)/OpenNfr_FHD/fonts
+installdir = $(pkgdatadir)/OpenNfrFHD/fonts
 
 dist_install_DATA = *.ttf

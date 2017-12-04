@@ -1,3 +1,3 @@
-installdir = $(pkgdatadir)/OpenNfr_FHD/crypt
+installdir = $(pkgdatadir)/OpenNfrFHD/crypt
 
 dist_install_DATA = *.png 
