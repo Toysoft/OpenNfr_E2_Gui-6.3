@@ -777,7 +777,6 @@ data/OpenNfrFHD/Makefile
 data/OpenNfrFHD/buttons/Makefile
 data/OpenNfrFHD/ca/Makefile
 data/OpenNfrFHD/countries/Makefile
-data/OpenNfrFHD/crypt/Makefile
 data/OpenNfrFHD/fonts/Makefile
 data/OpenNfrFHD/icons/Makefile
 data/OpenNfrFHD/infobar/Makefile

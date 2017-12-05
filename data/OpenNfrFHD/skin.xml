@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <skin>
-  <!-- OpenNfr_FHD_SKIN for NFR images  OE 6.1 by schleichdi -->
+  <!-- OpenNfrFHD_SKIN for NFR images  OE 6.1 by schleichdi -->
   <output id="0">
     <resolution xres="1920" yres="1080" bpp="32" />
   </output>
@@ -91,9 +91,9 @@
     <font filename="ae_AlMateen.ttf" name="Replacement" scale="100" replacement="1" />
     <font filename="tuxtxt.ttf" name="Console" scale="100" />
     <font filename="nmsbd.ttf" name="Arial" scale="100" />
-    <font filename="/usr/share/enigma2/OpenNfr_FHD/fonts/digi.ttf" name="DIGI" scale="100" />
-    <font filename="/usr/share/enigma2/OpenNfr_FHD/fonts/Roboto-Regular.ttf" name="Regular" scale="100" />
-    <font filename="/usr/share/enigma2/OpenNfr_FHD/fonts/arial.ttf" name="RegularLight" scale="100" />
+    <font filename="/usr/share/enigma2/OpenNfrFHD/fonts/digi.ttf" name="DIGI" scale="100" />
+    <font filename="/usr/share/enigma2/OpenNfrFHD/fonts/Roboto-Regular.ttf" name="Regular" scale="100" />
+    <font filename="/usr/share/enigma2/OpenNfrFHD/fonts/arial.ttf" name="RegularLight" scale="100" />
   </fonts>
   <subtitles>
     <sub name="Subtitle_TTX" font="Regular;30" shadowColor="#40101010" shadowOffset="3,3" />
@@ -116,24 +116,24 @@
     <color name="WindowTitleForeground" color="white" />
     <color name="WindowTitleBackground" color="black" />
     <borderset name="bsWindow">
-      <pixmap pos="bpTopLeft" filename="OpenNfr_FHD/window/bs_tl.png" />
-      <pixmap pos="bpTop" filename="OpenNfr_FHD/window/bs_t.png" />
-      <pixmap pos="bpTopRight" filename="OpenNfr_FHD/window/bs_tr.png" />
-      <pixmap pos="bpLeft" filename="OpenNfr_FHD/window/bs_l.png" />
-      <pixmap pos="bpRight" filename="OpenNfr_FHD/window/bs_r.png" />
-      <pixmap pos="bpBottomLeft" filename="OpenNfr_FHD/window/bs_bl.png" />
-      <pixmap pos="bpBottom" filename="OpenNfr_FHD/window/bs_b.png" />
-      <pixmap pos="bpBottomRight" filename="OpenNfr_FHD/window/bs_br.png" />
+      <pixmap pos="bpTopLeft" filename="OpenNfrFHD/window/bs_tl.png" />
+      <pixmap pos="bpTop" filename="OpenNfrFHD/window/bs_t.png" />
+      <pixmap pos="bpTopRight" filename="OpenNfrFHD/window/bs_tr.png" />
+      <pixmap pos="bpLeft" filename="OpenNfrFHD/window/bs_l.png" />
+      <pixmap pos="bpRight" filename="OpenNfrFHD/window/bs_r.png" />
+      <pixmap pos="bpBottomLeft" filename="OpenNfrFHD/window/bs_bl.png" />
+      <pixmap pos="bpBottom" filename="OpenNfrFHD/window/bs_b.png" />
+      <pixmap pos="bpBottomRight" filename="OpenNfrFHD/window/bs_br.png" />
     </borderset>
     <borderset name="bsListboxEntry">
-      <pixmap pos="bpTopLeft" filename="OpenNfr_FHD/window/white.png" />
-      <pixmap pos="bpTop" filename="OpenNfr_FHD/window/h-white.png" />
-      <pixmap pos="bpTopRight" filename="OpenNfr_FHD/window/white.png" />
-      <pixmap pos="bpLeft" filename="OpenNfr_FHD/window/v-white.png" />
-      <pixmap pos="bpRight" filename="OpenNfr_FHD/window/v-white.png" />
-      <pixmap pos="bpBottomLeft" filename="OpenNfr_FHD/window/white.png" />
-      <pixmap pos="bpBottom" filename="OpenNfr_FHD/window/h-white.png" />
-      <pixmap pos="bpBottomRight" filename="OpenNfr_FHD/window/white.png" />
+      <pixmap pos="bpTopLeft" filename="OpenNfrFHD/window/white.png" />
+      <pixmap pos="bpTop" filename="OpenNfrFHD/window/h-white.png" />
+      <pixmap pos="bpTopRight" filename="OpenNfrFHD/window/white.png" />
+      <pixmap pos="bpLeft" filename="OpenNfrFHD/window/v-white.png" />
+      <pixmap pos="bpRight" filename="OpenNfrFHD/window/v-white.png" />
+      <pixmap pos="bpBottomLeft" filename="OpenNfrFHD/window/white.png" />
+      <pixmap pos="bpBottom" filename="OpenNfrFHD/window/h-white.png" />
+      <pixmap pos="bpBottomRight" filename="OpenNfrFHD/window/white.png" />
     </borderset>
   </windowstyle>
   <windowstyle type="skinned" id="1">
@@ -150,23 +150,23 @@
     <color name="WindowTitleForeground" color="white" />
     <color name="WindowTitleBackground" color="black" />
   </windowstyle>
-  <screen name="Volume" position="center,30" size="750,150" title="Volume" flags="wfNoBorder" backgroundColor="transparent" zPosition="1">
-    <ePixmap position="0,0" size="750,150" zPosition="1" pixmap="OpenNfr_FHD/volume/volume_bg.png" transparent="1" alphatest="blend" />
-    <widget name="Volume" position="155,59" size="412,31" zPosition="2" pixmap="OpenNfr_FHD/volume/volume.png" transparent="1" orientation="orLeftToRight" />
+  <screen name="Volume" position="center,30" size="752,152" title="Volume" flags="wfNoBorder" backgroundColor="transparent" zPosition="1">
+    <ePixmap position="0,0" size="752,152" zPosition="1" pixmap="OpenNfrFHD/volume/volume_bg.png" alphatest="blend" />
+    <widget name="Volume" position="155,59" size="412,31" zPosition="2" pixmap="OpenNfrFHD/volume/volume.png" transparent="1" orientation="orLeftToRight" />
     <widget font="Regular;20" foregroundColor="white" halign="center" render="VVolumeText1" source="global.CurrentTime" position="567,center" size="50,33" zPosition="20" transparent="1" />
   </screen>
-  <screen name="Mute" position="100,100" size="300,76" title="Mute" zPosition="11" flags="wfNoBorder" backgroundColor="transparent">
-    <ePixmap position="0,0" size="300,76" pixmap="OpenNfr_FHD/volume/mute.png" alphatest="blend" />
+  <screen name="Mute" position="100,128" size="294,63" title="Mute" zPosition="11" flags="wfNoBorder" backgroundColor="transparent">
+    <ePixmap position="0,0" size="294,63" pixmap="OpenNfrFHD/volume/mute.png" />
   </screen>
-  <screen name="UnhandledKey" position="100,100" size="300,76" title="UnhandledKey" zPosition="100" backgroundColor="transparent" flags="wfNoBorder">
-    <widget alphatest="off" name="UnhandledKeyPixmap" pixmap="OpenNfr_FHD/icons/no_key.png" position="0,0" size="300,76" />
+  <screen name="UnhandledKey" position="100,128" size="294,63" title="UnhandledKey" zPosition="100" backgroundColor="transparent" flags="wfNoBorder">
+    <widget alphatest="off" name="UnhandledKeyPixmap" pixmap="OpenNfrFHD/icons/no_key.png" position="0,0" size="294,63" />
   </screen>
   <screen name="MessageBox" position="center,300" size="800,10" title="Message">
     <widget name="text" position="110,8" size="680,0" font="Regular;22" />
-    <widget name="ErrorPixmap" pixmap="skin_default/icons/input_error.png" position="30,30" size="53,53" alphatest="blend" />
-    <widget name="QuestionPixmap" pixmap="skin_default/icons/input_question.png" position="30,30" size="53,53" alphatest="blend" />
-    <widget name="InfoPixmap" pixmap="skin_default/icons/input_info.png" position="30,30" size="53,53" alphatest="blend" />
-    <widget name="list" position="20,95" size="760,320" itemHeight="32" transparent="1" />
+    <widget name="ErrorPixmap" pixmap="OpenNfrFHD/icons/input_error.png" position="30,30" size="53,53" alphatest="blend" />
+    <widget name="QuestionPixmap" pixmap="OpenNfrFHD/icons/input_question.png" position="30,30" size="53,53" alphatest="blend" />
+    <widget name="InfoPixmap" pixmap="OpenNfrFHD/icons/input_info.png" position="30,30" size="53,53" alphatest="blend" />
+    <widget name="list" position="20,95" size="760,320" itemHeight="34" transparent="1" />
     <applet type="onLayoutFinish"># this should be factored out into some helper code,but currently demonstrates applets.
 from enigma import eSize,ePoint
 orgwidth = self.instance.size().width()
@@ -200,13 +200,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
 </applet>
   </screen>
   <screen name="Menu" position="0,0" size="1920,1080" title="Main menu" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -226,13 +226,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     </widget>
   </screen>
   <screen name="menu_mainmenu" position="0,0" size="1920,1080" title="Main menu" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -252,13 +252,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     </widget>
   </screen>
   <screen name="menu_information" position="0,0" size="1920,1080" title="Main menu" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -278,13 +278,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     </widget>
   </screen>
   <screen name="menu_setup" position="0,0" size="1920,1080" title="Main menu" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -304,13 +304,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     </widget>
   </screen>
   <screen name="menu_scan" position="0,0" size="1920,1080" title="Main menu" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -330,13 +330,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     </widget>
   </screen>
   <screen name="menu_system" position="0,0" size="1920,1080" title="Main menu" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -356,13 +356,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     </widget>
   </screen>
   <screen name="menu_harddisk" position="0,0" size="1920,1080" title="Main menu" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -380,27 +380,27 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
 				}
 			</convert>
     </widget>
-    <widget source="menu" render="Pixmap" pixmap="OpenNfr_FHD/menu/hdd.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
+    <widget source="menu" render="Pixmap" pixmap="OpenNfrFHD/menu/hdd.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
       <convert type="MenuEntryCompare">harddisk_init</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="menu" render="Pixmap" pixmap="OpenNfr_FHD/menu/hdd.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
+    <widget source="menu" render="Pixmap" pixmap="OpenNfrFHD/menu/hdd.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
       <convert type="MenuEntryCompare">harddisk_check</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="menu" render="Pixmap" pixmap="OpenNfr_FHD/menu/hdd.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
+    <widget source="menu" render="Pixmap" pixmap="OpenNfrFHD/menu/hdd.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
       <convert type="MenuEntryCompare">harddisk_setup</convert>
       <convert type="ConditionalShowHide" />
     </widget>
   </screen>
   <screen name="menu_shutdown" position="0,0" size="1920,1080" title="Main menu" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -418,39 +418,39 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
 				}
 			</convert>
     </widget>
-    <widget source="menu" render="Pixmap" pixmap="OpenNfr_FHD/menu/shutdown.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
+    <widget source="menu" render="Pixmap" pixmap="OpenNfrFHD/menu/shutdown.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
       <convert type="MenuEntryCompare">deep_standby</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="menu" render="Pixmap" pixmap="OpenNfr_FHD/menu/shutdown.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
+    <widget source="menu" render="Pixmap" pixmap="OpenNfrFHD/menu/shutdown.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
       <convert type="MenuEntryCompare">restart</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="menu" render="Pixmap" pixmap="OpenNfr_FHD/menu/reset.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
+    <widget source="menu" render="Pixmap" pixmap="OpenNfrFHD/menu/reset.png" position="950,430" size="150,150" alphatest="blend" zPosition="1">
       <convert type="MenuEntryCompare">restart_enigma</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="menu" render="Pixmap" pixmap="OpenNfr_FHD/menu/reset.png" position="950,430" size="150,150" alphatest="on" zPosition="1">
+    <widget source="menu" render="Pixmap" pixmap="OpenNfrFHD/menu/reset.png" position="950,430" size="150,150" alphatest="on" zPosition="1">
       <convert type="MenuEntryCompare">Hardreset</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="menu" render="Pixmap" pixmap="OpenNfr_FHD/menu/shutdown.png" position="950,430" size="150,150" alphatest="on" zPosition="1">
+    <widget source="menu" render="Pixmap" pixmap="OpenNfrFHD/menu/shutdown.png" position="950,430" size="150,150" alphatest="on" zPosition="1">
       <convert type="MenuEntryCompare">standby</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="menu" render="Pixmap" pixmap="OpenNfr_FHD/menu/timer.png" position="950,430" size="150,150" alphatest="on" zPosition="1">
+    <widget source="menu" render="Pixmap" pixmap="OpenNfrFHD/menu/timer.png" position="950,430" size="150,150" alphatest="on" zPosition="1">
       <convert type="MenuEntryCompare">sleep</convert>
       <convert type="ConditionalShowHide" />
     </widget>
   </screen>
   <screen name="About" position="0,0" size="1920,1080" title="About" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -461,15 +461,15 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     </widget>
     <eLabel text="About" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="center" />
     <widget name="AboutScrollLabel" scrollbarMode="showOnDemand" font="Regular;23" position="55,220" size="920,700" backgroundColor="black" foregroundColor="white" transparent="1" render="Listbox" />
-	</screen>
+  </screen>
   <screen name="PluginBrowser" position="0,0" size="1920,1080" title="Plugin browser" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -480,23 +480,23 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     </widget>
     <widget name="list" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <eLabel text="Plugin browser" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="center" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
     <widget name="key_red" render="Label" position="77,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_green" render="Label" position="590,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_yellow" render="Label" position="1088,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_blue" render="Label" position="1587,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
   </screen>
   <screen name="PluginDownloadBrowser" position="0,0" size="1920,1080" title="Downloadable plugins" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -509,24 +509,24 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <widget name="list" position="55,220" size="920,600" zPosition="4" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <widget name="text" position="55,863" size="920,60" zPosition="1" font="LCD;35" halign="center" valign="center" foregroundColor="cyan" transparent="1" backgroundColor="cyan" />
     <eLabel name="spaceused" text="% Flash Used..." position="52,944" size="150,20" font="LCD; 19" halign="left" foregroundColor="white" backgroundColor="black" transparent="1" zPosition="5" />
-    <widget name="spaceused" position="214,955" size="750,7" pixmap="OpenNfr_FHD/menu/space-free.png" zPosition="6" />
-    <ePixmap pixmap="OpenNfr_FHD/menu/space.png" position="209,948" size="760,20" zPosition="5" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="spaceused" position="214,955" size="750,7" pixmap="OpenNfrFHD/menu/space-free.png" zPosition="6" />
+    <ePixmap pixmap="OpenNfrFHD/menu/space.png" position="209,948" size="760,20" zPosition="5" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
     <widget name="key_red" render="Label" position="77,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_green" render="Label" position="590,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_yellow" render="Label" position="1088,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_blue" render="Label" position="1587,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
-    <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfr_FHD/menu/selector.png" zPosition="1" />
-	</screen>
+    <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
+  </screen>
   <screen name="PluginInstall" position="center,center" size="1920,1080" title="Installiere Plugins" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -542,24 +542,24 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <eLabel name="" position="1152,142" size="720,43" font="LCD; 35" text="Liste der zu Installierenden Plugins" zPosition="3" halign="center" transparent="1" foregroundColor="cyan1" />
     <widget name="text" position="55,863" size="920,60" zPosition="1" font="LCD;35" halign="center" valign="center" foregroundColor="cyan" transparent="1" backgroundColor="cyan" />
     <eLabel name="spaceused" text="% Flash Used..." position="52,944" size="150,20" font="LCD; 19" halign="left" foregroundColor="white" backgroundColor="black" transparent="1" zPosition="5" />
-    <widget name="spaceused" position="214,955" size="750,7" pixmap="OpenNfr_FHD/menu/space-free.png" zPosition="6" />
-    <ePixmap pixmap="OpenNfr_FHD/menu/space.png" position="209,948" size="760,20" zPosition="5" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="spaceused" position="214,955" size="750,7" pixmap="OpenNfrFHD/menu/space-free.png" zPosition="6" />
+    <ePixmap pixmap="OpenNfrFHD/menu/space.png" position="209,948" size="760,20" zPosition="5" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
     <widget name="key_red" render="Label" position="77,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_green" render="Label" position="590,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_yellow" render="Label" position="1088,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_blue" render="Label" position="1587,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
-     <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfr_FHD/menu/selector.png" zPosition="1" />
- </screen>
+    <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
+  </screen>
   <screen name="PluginDeinstall" position="center,center" size="1920,1080" title="Deinstalliere Plugins" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -575,22 +575,22 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <eLabel name="" position="1152,142" size="720,43" font="LCD; 35" text="Liste der zu Deinstallierenden Plugins" zPosition="3" halign="center" transparent="1" foregroundColor="cyan1" />
     <widget name="text" position="55,863" size="920,60" zPosition="1" font="LCD;35" halign="center" valign="center" foregroundColor="cyan" transparent="1" backgroundColor="cyan" />
     <eLabel name="spaceused" text="% Flash Used..." position="52,944" size="150,20" font="LCD; 19" halign="left" foregroundColor="white" backgroundColor="black" transparent="1" zPosition="5" />
-    <widget name="spaceused" position="214,955" size="750,7" pixmap="OpenNfr_FHD/menu/space-free.png" zPosition="6" />
-    <ePixmap pixmap="OpenNfr_FHD/menu/space.png" position="209,948" size="760,20" zPosition="5" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="spaceused" position="214,955" size="750,7" pixmap="OpenNfrFHD/menu/space-free.png" zPosition="6" />
+    <ePixmap pixmap="OpenNfrFHD/menu/space.png" position="209,948" size="760,20" zPosition="5" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
     <widget name="key_red" render="Label" position="77,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_green" render="Label" position="590,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_yellow" render="Label" position="1088,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_blue" render="Label" position="1587,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
-    <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfr_FHD/menu/selector.png" zPosition="1" />
-	</screen>
+    <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
+  </screen>
   <!-- test -->
   <screen name="InfoBar" position="center,center" size="1920,1080" title="InfoBar" backgroundColor="transparent" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-1" size="1920,1080" pixmap="OpenNfr_FHD/infobar/infobar.png" borderWidth="0" borderColor="transparent" />
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/infobar/progress.png" position="center,901" size="775,10" zPosition="3" transparent="1">
+    <ePixmap position="center,center" zPosition="-1" size="1920,1080" pixmap="OpenNfrFHD/infobar/infobar.png" borderWidth="0" borderColor="transparent" />
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/infobar/progress.png" position="center,901" size="775,10" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1518,740" size="100,32" font="LCD; 30" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
@@ -613,83 +613,83 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <widget source="session.FrontendStatus" render="Label" position="1535,910" zPosition="4" size="70,30" font="LCD; 28" halign="center" foregroundColor="yellow" backgroundColor="black" transparent="1">
       <convert type="FrontendInfo">AGC</convert>
     </widget>
-    <widget source="session.CurrentService" render="MaggyPiconEmu" path="OpenNfr_FHD/piconCam/" position="144,871" size="115,40" transparent="1" alphatest="blend" zPosition="3">
+    <widget source="session.CurrentService" render="MaggyPiconEmu" path="OpenNfrFHD/piconCam/" position="146,825" size="109,35" transparent="1" alphatest="blend" zPosition="3">
       <convert type="EmuName">
       </convert>
     </widget>
-    <ePixmap pixmap="OpenNfr_FHD/crypt/fta.png" position="264,871" size="115,27" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Betacrypt.png" position="264,871" size="115,27" zPosition="5" transparent="1" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/ca/fta.png" position="154,875" size="100,60" alphatest="blend" zPosition="1" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/Betacrypt.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">BetaEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/DRE-crypt.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/DRE-crypt.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">DreamEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/irdeto.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/irdeto.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">IrdEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Seca.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/seca.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">SecaEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Viaccess.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/viaccess.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">ViaEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Nagravision.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/nagravision.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">NagraEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Cryptoworks.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/cryptoworks.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">CrwEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Videoguard.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/videoguard.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">NdsEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/conax.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/conax.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">ConaxEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/biss.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/biss.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">BisEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_dolby_off.png" position="144,911" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_dolby_on.png" position="144,911" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_dolby_off.png" position="374,869" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_dolby_on.png" position="374,869" size="68,35" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsMultichannel</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_format_off.png" position="144,911" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_format_on.png" position="228,911" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_format_off.png" position="476,869" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_format_on.png" position="476,869" size="68,35" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsWidescreen</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_txt_off.png" position="308,911" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_txt_on.png" position="308,911" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_txt_off.png" position="269,910" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_txt_on.png" position="269,910" size="68,35" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">HasTelext</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_hd_off.png" position="392,911" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_hd_on.png" position="392,911" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_hd_off.png" position="375,910" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_hd_on.png" position="375,910" size="68,35" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">VideoWidth</convert>
       <convert type="ValueRange">721,1980</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_crypt_off.png" position="400,872" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_crypt_on.png" position="400,872" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_crypt_off.png" position="269,869" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_crypt_on.png" position="269,869" size="68,35" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsCrypted</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_rec_off.png" position="477,872" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.RecordState" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_rec_on.png" position="477,872" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_rec_off.png" position="529,809" size="70,25" zPosition="1" alphatest="blend" />
+    <widget source="session.RecordState" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_rec_on.png" position="530,799" size="70,25" zPosition="2" alphatest="blend">
       <convert type="ConditionalShowHide">Blink</convert>
     </widget>
-    <ePixmap pixmap="skin_default/icons/subtitle_off.png" position="476,911" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/subtitle_on.png" position="476,911" zPosition="2" size="70,25" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/subtitle_off.png" position="476,910" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/subtitle_on.png" position="476,910" zPosition="2" size="68,35" alphatest="blend">
       <convert type="ServiceInfo">SubservicesAvailable</convert>
       <convert type="ConditionalShowHide" />
     </widget>
@@ -709,121 +709,121 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
       <convert type="ConditionalShowHide" />
     </widget>
     <!--TUNER STATUS A -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_a_no.png" size="30,30" position="1375,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_a_akt.png" size="30,30" position="1375,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_a_no.png" size="30,30" position="1375,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_a_akt.png" size="30,30" position="1375,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">1</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_a.png" size="30,30" position="1375,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_a.png" size="30,30" position="1375,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">0,0</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!--TUNER STATUS B  -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_b_no.png" size="30,30" position="1411,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_b_akt.png" size="30,30" position="1411,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_b_no.png" size="30,30" position="1411,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_b_akt.png" size="30,30" position="1411,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">2</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_b.png" size="30,30" position="1411,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_b.png" size="30,30" position="1411,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">1,1</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS C -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_c_no.png" size="30,30" position="1449,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_c_akt.png" size="30,30" position="1449,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_c_no.png" size="30,30" position="1449,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_c_akt.png" size="30,30" position="1449,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">4</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_c.png" size="30,30" position="1449,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_c.png" size="30,30" position="1449,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">2,2</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS D -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_d_no.png" size="30,30" position="1487,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_d_akt.png" size="30,30" position="1487,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_d_no.png" size="30,30" position="1487,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_d_akt.png" size="30,30" position="1487,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">8</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_d.png" size="30,30" position="1487,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_d.png" size="30,30" position="1487,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">3,3</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!--TUNER STATUS E -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_e_no.png" size="30,30" position="1529,872" zPosition="0" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_e_akt.png" size="30,30" position="1529,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_e_no.png" size="30,30" position="1529,872" zPosition="0" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_e_akt.png" size="30,30" position="1529,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">16</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_e.png" size="30,30" position="1529,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_e.png" size="30,30" position="1529,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">4,4</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!--TUNER STATUS F  -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_f_no.png" size="30,30" position="1570,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_f_akt.png" size="30,30" position="1570,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_f_no.png" size="30,30" position="1570,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_f_akt.png" size="30,30" position="1570,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">32</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_f.png" size="30,30" position="1570,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_f.png" size="30,30" position="1570,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">5,5</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS G -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_g_no.png" size="30,30" position="1613,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_g_akt.png" size="30,30" position="1613,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_g_no.png" size="30,30" position="1613,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_g_akt.png" size="30,30" position="1613,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">64</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_g.png" size="30,30" position="1613,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_g.png" size="30,30" position="1613,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">6,6</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS H -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_h_no.png" size="30,30" position="1652,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_h_akt.png" size="30,30" position="1652,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_h_no.png" size="30,30" position="1652,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_h_akt.png" size="30,30" position="1652,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">128</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_h.png" size="30,30" position="1652,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_h.png" size="30,30" position="1652,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">7,7</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS I -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_i_no.png" size="30,30" position="1692,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_i_akt.png" size="30,30" position="1692,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_i_no.png" size="30,30" position="1692,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_i_akt.png" size="30,30" position="1692,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">256</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_i.png" size="30,30" position="1692,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_i.png" size="30,30" position="1692,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">8,8</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS J -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_j_no.png" size="30,30" position="1735,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_j_akt.png" size="30,30" position="1735,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_j_no.png" size="30,30" position="1735,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_j_akt.png" size="30,30" position="1735,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">512</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_j.png" size="30,30" position="1735,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_j.png" size="30,30" position="1735,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">9,9</convert>
       <convert type="ConditionalShowHide" />
@@ -870,8 +870,8 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
   </screen>
   <!-- SecondInfoBar -->
   <screen name="SecondInfoBar" position="center,center" size="1920,1080" title="Second Infobar" backgroundColor="transparent" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-1" size="1920,1080" pixmap="OpenNfr_FHD/infobar/secondinfobar.png" borderWidth="0" borderColor="transparent" />
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/infobar/progress.png" position="center,901" size="775,10" zPosition="3" transparent="1">
+    <ePixmap position="center,center" zPosition="-1" size="1920,1080" pixmap="OpenNfrFHD/infobar/secondinfobar.png" borderWidth="0" borderColor="transparent" />
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/infobar/progress.png" position="center,901" size="775,10" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1518,740" size="100,32" font="LCD; 30" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
@@ -894,83 +894,83 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <widget source="session.FrontendStatus" render="Label" position="1535,910" zPosition="4" size="70,30" font="LCD; 28" halign="center" foregroundColor="yellow" backgroundColor="black" transparent="1">
       <convert type="FrontendInfo">AGC</convert>
     </widget>
-    <widget source="session.CurrentService" render="MaggyPiconEmu" path="OpenNfr_FHD/piconCam/" position="144,871" size="115,27" transparent="1" alphatest="blend" zPosition="3">
+    <widget source="session.CurrentService" render="MaggyPiconEmu" path="OpenNfrFHD/piconCam/" position="146,825" size="109,35" transparent="1" alphatest="blend" zPosition="3">
       <convert type="EmuName">
       </convert>
     </widget>
-    <ePixmap pixmap="OpenNfr_FHD/crypt/fta.png" position="264,871" size="115,27" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Betacrypt.png" position="264,871" size="115,27" zPosition="5" transparent="1" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/ca/fta.png" position="154,875" size="100,60" alphatest="blend" zPosition="1" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/Betacrypt.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">BetaEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/DRE-crypt.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/DRE-crypt.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">DreamEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/irdeto.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/irdeto.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">IrdEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Seca.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/seca.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">SecaEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Viaccess.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/viaccess.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">ViaEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Nagravision.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/nagravision.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">NagraEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Cryptoworks.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/cryptoworks.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">CrwEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/Videoguard.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/videoguard.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">NdsEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/conax.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/conax.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">ConaxEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/crypt/biss.png" position="264,871" size="115,27" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/biss.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">BisEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_dolby_off.png" position="144,911" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_dolby_on.png" position="144,911" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_dolby_off.png" position="374,869" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_dolby_on.png" position="374,869" size="68,35" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsMultichannel</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_format_off.png" position="144,911" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_format_on.png" position="228,911" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_format_off.png" position="476,869" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_format_on.png" position="476,869" size="68,35" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsWidescreen</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_txt_off.png" position="308,911" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_txt_on.png" position="308,911" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_txt_off.png" position="269,910" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_txt_on.png" position="269,910" size="68,35" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">HasTelext</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_hd_off.png" position="392,911" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_hd_on.png" position="392,911" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_hd_off.png" position="375,910" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_hd_on.png" position="375,910" size="68,35" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">VideoWidth</convert>
       <convert type="ValueRange">721,1980</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_crypt_off.png" position="400,872" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_crypt_on.png" position="400,872" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_crypt_off.png" position="269,869" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_crypt_on.png" position="269,869" size="68,35" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsCrypted</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="skin_default/icons/ico_rec_off.png" position="477,872" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.RecordState" render="Pixmap" pixmap="OpenNfr_FHD/icons/ico_rec_on.png" position="477,872" size="70,25" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_rec_off.png" position="529,809" size="70,25" zPosition="1" alphatest="blend" />
+    <widget source="session.RecordState" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_rec_on.png" position="530,799" size="70,25" zPosition="2" alphatest="blend">
       <convert type="ConditionalShowHide">Blink</convert>
     </widget>
-    <ePixmap pixmap="skin_default/icons/subtitle_off.png" position="476,911" size="70,25" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfr_FHD/icons/subtitle_on.png" position="476,911" zPosition="2" size="70,25" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/subtitle_off.png" position="476,910" size="68,35" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/subtitle_on.png" position="476,910" zPosition="2" size="68,35" alphatest="blend">
       <convert type="ServiceInfo">SubservicesAvailable</convert>
       <convert type="ConditionalShowHide" />
     </widget>
@@ -990,121 +990,121 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
       <convert type="ConditionalShowHide" />
     </widget>
     <!--TUNER STATUS A -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_a_no.png" size="30,30" position="1375,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_a_akt.png" size="30,30" position="1375,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_a_no.png" size="30,30" position="1375,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_a_akt.png" size="30,30" position="1375,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">1</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_a.png" size="30,30" position="1375,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_a.png" size="30,30" position="1375,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">0,0</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!--TUNER STATUS B  -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_b_no.png" size="30,30" position="1411,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_b_akt.png" size="30,30" position="1411,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_b_no.png" size="30,30" position="1411,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_b_akt.png" size="30,30" position="1411,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">2</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_b.png" size="30,30" position="1411,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_b.png" size="30,30" position="1411,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">1,1</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS C -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_c_no.png" size="30,30" position="1449,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_c_akt.png" size="30,30" position="1449,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_c_no.png" size="30,30" position="1449,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_c_akt.png" size="30,30" position="1449,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">4</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_c.png" size="30,30" position="1449,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_c.png" size="30,30" position="1449,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">2,2</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS D -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_d_no.png" size="30,30" position="1487,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_d_akt.png" size="30,30" position="1487,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_d_no.png" size="30,30" position="1487,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_d_akt.png" size="30,30" position="1487,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">8</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_d.png" size="30,30" position="1487,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_d.png" size="30,30" position="1487,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">3,3</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!--TUNER STATUS E -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_e_no.png" size="30,30" position="1529,872" zPosition="0" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_e_akt.png" size="30,30" position="1529,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_e_no.png" size="30,30" position="1529,872" zPosition="0" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_e_akt.png" size="30,30" position="1529,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">16</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_e.png" size="30,30" position="1529,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_e.png" size="30,30" position="1529,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">4,4</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!--TUNER STATUS F  -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_f_no.png" size="30,30" position="1570,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_f_akt.png" size="30,30" position="1570,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_f_no.png" size="30,30" position="1570,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_f_akt.png" size="30,30" position="1570,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">32</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_f.png" size="30,30" position="1570,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_f.png" size="30,30" position="1570,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">5,5</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS G -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_g_no.png" size="30,30" position="1613,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_g_akt.png" size="30,30" position="1613,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_g_no.png" size="30,30" position="1613,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_g_akt.png" size="30,30" position="1613,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">64</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_g.png" size="30,30" position="1613,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_g.png" size="30,30" position="1613,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">6,6</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS H -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_h_no.png" size="30,30" position="1652,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_h_akt.png" size="30,30" position="1652,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_h_no.png" size="30,30" position="1652,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_h_akt.png" size="30,30" position="1652,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">128</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_h.png" size="30,30" position="1652,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_h.png" size="30,30" position="1652,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">7,7</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS I -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_i_no.png" size="30,30" position="1692,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_i_akt.png" size="30,30" position="1692,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_i_no.png" size="30,30" position="1692,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_i_akt.png" size="30,30" position="1692,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">256</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_i.png" size="30,30" position="1692,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_i.png" size="30,30" position="1692,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">8,8</convert>
       <convert type="ConditionalShowHide" />
     </widget>
     <!-- TUNER STATUS J -->
-    <ePixmap alphatest="blend" pixmap="OpenNfr_FHD/tuner/icon_j_no.png" size="30,30" position="1735,872" zPosition="1" />
-    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_j_akt.png" size="30,30" position="1735,872" zPosition="2" alphatest="blend">
+    <ePixmap alphatest="blend" pixmap="OpenNfrFHD/tuner/icon_j_no.png" size="30,30" position="1735,872" zPosition="1" />
+    <widget source="session.TunerInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_j_akt.png" size="30,30" position="1735,872" zPosition="2" alphatest="blend">
       <convert type="TunerInfo">TunerUseMask</convert>
       <convert type="ValueBitTest">512</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfr_FHD/tuner/icon_j.png" size="30,30" position="1735,872" zPosition="3" alphatest="blend">
+    <widget source="session.FrontendInfo" render="Pixmap" pixmap="OpenNfrFHD/tuner/icon_j.png" size="30,30" position="1735,872" zPosition="3" alphatest="blend">
       <convert type="FrontendInfo">NUMBER</convert>
       <convert type="ValueRange">9,9</convert>
       <convert type="ConditionalShowHide" />
@@ -1174,13 +1174,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
   </screen>
   <!-- TEST-start -->
   <screen name="SkinSelector" position="0,0" size="1920,1080" title="Skin Selector" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -1189,10 +1189,10 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="1528,79" size="320,35" font="LCD; 30" halign="right" backgroundColor="white" transparent="1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <ePixmap pixmap="OpenNfr_FHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
     <widget source="key_red" render="Label" position="77,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget source="key_green" render="Label" position="590,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget source="key_yellow" render="Label" position="1088,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
@@ -1201,16 +1201,16 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <widget name="SkinList" position="55,220" size="920,600" font="LCD; 34" itemHeight="50" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <widget name="Preview" position="1054,208" size="805,500" alphatest="blend" zPosition="3" />
     <widget source="introduction" render="Label" position="55,863" size="920,60" font="LCD; 30" halign="center" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
-    <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfr_FHD/menu/selector.png" zPosition="1" />
+    <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
   </screen>
   <screen name="LCDSkinSelector" position="0,0" size="1920,1080" title="LCD SkinSelector" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -1219,10 +1219,10 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="1528,79" size="320,35" font="LCD; 30" halign="right" backgroundColor="white" transparent="1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <ePixmap pixmap="OpenNfr_FHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
     <widget source="key_red" render="Label" position="77,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget source="key_green" render="Label" position="590,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget source="key_yellow" render="Label" position="1088,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
@@ -1231,16 +1231,16 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <widget name="SkinList" position="55,220" size="920,600" font="LCD; 34" itemHeight="50" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <widget name="Preview" position="1054,208" size="805,500" alphatest="blend" zPosition="3" />
     <widget source="introduction" render="Label" position="55,863" size="920,60" font="LCD; 30" halign="center" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
-    <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfr_FHD/menu/selector.png" zPosition="1" />
+    <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
   </screen>
   <screen name="LCDClockSelector" position="0,0" size="1920,1080" title="LCD ClockSelector" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -1249,10 +1249,10 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="1528,79" size="320,35" font="LCD; 30" halign="right" backgroundColor="white" transparent="1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <ePixmap pixmap="OpenNfr_FHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
     <widget source="key_red" render="Label" position="77,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget source="key_green" render="Label" position="590,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget source="key_yellow" render="Label" position="1088,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
@@ -1261,7 +1261,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <widget name="ClockList" position="55,220" size="920,600" font="LCD; 34" itemHeight="50" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <widget name="Preview" position="1054,208" size="805,500" alphatest="blend" zPosition="3" />
     <widget source="introduction" render="Label" position="55,863" size="920,60" font="LCD; 30" halign="center" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
-    <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfr_FHD/menu/selector.png" zPosition="1" />
+    <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
   </screen>
   <screen name="SimpleChannelSelection" position="0,0" size="1280,720" title="Channel Selection" flags="wfNoBorder">
     <ePixmap position="0,0" zPosition="-10" size="1280,720" pixmap="skin_default/menu/back2b.png" />
@@ -1287,13 +1287,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <ePixmap position="962,431" size="128,128" zPosition="2" pixmap="skin_default/icons/setup.png" transparent="1" alphatest="blend" />
   </screen>
   <screen name="Setup" position="0,0" size="1920,1080" title="Setup" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfr_FHD/menu/menu.png" />
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1054,208" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1054,208" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfr_FHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1068,832" size="767,15" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1748,37" size="100,40" font="LCD; 39" halign="right" backgroundColor="white" transparent="1">
@@ -1302,25 +1302,25 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="1528,79" size="320,35" font="LCD; 30" halign="right" backgroundColor="white" transparent="1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <ePixmap pixmap="OpenNfr_FHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfr_FHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
     <widget source="key_red" render="Label" position="77,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget source="key_green" render="Label" position="590,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget source="key_yellow" render="Label" position="1088,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget source="key_blue" render="Label" position="1587,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="label3" position="55,560" size="920,40" font="Regular;19" halign="center" foregroundColor="yellow" backgroundColor="yellow" transparent="1" zPosition="5" />
     <eLabel name="spaceused" text="% Flash Used..." position="52,944" size="150,20" font="LCD; 19" halign="left" foregroundColor="white" backgroundColor="black" transparent="1" zPosition="5" />
-    <widget name="spaceused" position="214,955" size="750,7" pixmap="OpenNfr_FHD/menu/space-free.png" zPosition="6" />
-    <ePixmap pixmap="OpenNfr_FHD/menu/space.png" position="209,948" size="760,20" zPosition="5" alphatest="blend" />
-    <ePixmap name="selector" position="52,813" size="930,10" pixmap="OpenNfr_FHD/menu/selector.png" zPosition="1" />
+    <widget name="spaceused" position="214,955" size="750,7" pixmap="OpenNfrFHD/menu/space-free.png" zPosition="6" />
+    <ePixmap pixmap="OpenNfrFHD/menu/space.png" position="209,948" size="760,20" zPosition="5" alphatest="blend" />
+    <ePixmap name="selector" position="52,813" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
     <widget name="label1" position="54,598" size="920,200" zPosition="1" halign="center" font="Regular;20" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <eLabel text="Setup" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="center" />
     <widget source="Title" render="Label" position="55,141" size="790,43" font="LCD; 35" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
     <widget name="config" position="55,220" size="920,578" font="Regular;26" itemHeight="34" scrollbarMode="showOnDemand" enableWrapAround="1" backgroundColor="background" transparent="1" />
-    <widget name="HelpWindow" position="55,561" size="920,200" transparent="1" alphatest="blend" zPosition="2" />
-    <widget name="description" render="Label" position="55,839" size="920,80" font="LCD; 26" halign="center" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget name="HelpWindow" position="223,680" size="920,200" transparent="1" alphatest="blend" zPosition="2" />
+    <widget name="description" render="Label" position="55,823" size="920,100" font="Regular; 21" halign="center" valign="center" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
   </screen>
   <screen name="ServiceInfo" position="0,0" size="1280,720" title="Serviceinfo" flags="wfNoBorder">
     <ePixmap position="0,0" zPosition="-10" size="1280,720" pixmap="skin_default/menu/back2b.png" />
