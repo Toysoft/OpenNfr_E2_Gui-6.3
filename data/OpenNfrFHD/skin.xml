@@ -618,69 +618,69 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
       </convert>
     </widget>
     <ePixmap pixmap="OpenNfrFHD/ca/fta.png" position="154,875" size="100,60" alphatest="blend" zPosition="1" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/Betacrypt.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/Betacrypt.png" position="154,876" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">BetaEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/DRE-crypt.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/DRE-crypt.png" position="154,876" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">DreamEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/irdeto.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/irdeto.png" position="154,876" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">IrdEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/seca.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/seca.png" position="154,876" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">SecaEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/viaccess.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/viaccess.png" position="154,876" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">ViaEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/nagravision.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/nagravision.png" position="154,876" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">NagraEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/cryptoworks.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/cryptoworks.png" position="154,876" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">CrwEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/videoguard.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/videoguard.png" position="153,876" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">NdsEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/conax.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/conax.png" position="154,876" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">ConaxEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/biss.png" position="154,875" size="100,60" zPosition="7" transparent="1" alphatest="blend">
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/ca/biss.png" position="154,876" size="100,60" zPosition="7" transparent="1" alphatest="blend">
       <convert type="MaggyCryptInfo">BisEcm</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_dolby_off.png" position="457,912" size="89,23" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_dolby_on.png" position="457,912" size="89,23" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_dolby_off.png" position="461,909" size="83,34" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_dolby_on.png" position="461,909" size="83,34" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsMultichannel</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_format_off.png" position="360,875" size="89,23" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_format_on.png" position="360,875" size="89,23" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_format_off.png" position="366,871" size="83,33" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_format_on.png" position="366,871" size="83,34" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsWidescreen</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_txt_off.png" position="457,875" size="89,23" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_txt_on.png" position="457,875" size="89,23" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_txt_off.png" position="461,871" size="83,34" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_txt_on.png" position="461,871" size="83,34" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">HasTelext</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_hd_off.png" position="262,912" size="89,23" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_hd_on.png" position="262,912" size="89,23" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_hd_off.png" position="270,909" size="83,32" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_hd_on.png" position="270,909" size="83,32" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">VideoWidth</convert>
       <convert type="ValueRange">721,1980</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_crypt_off.png" position="262,875" size="89,23" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_crypt_on.png" position="262,875" size="89,23" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_crypt_off.png" position="270,871" size="83,34" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_crypt_on.png" position="270,871" size="83,34" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsCrypted</convert>
       <convert type="ConditionalShowHide" />
     </widget>
@@ -688,8 +688,8 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2,orgpos.y()))
     <widget source="session.RecordState" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_rec_on.png" position="1555,937" size="131,63" zPosition="2" alphatest="blend">
       <convert type="ConditionalShowHide">Blink</convert>
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/subtitle_off.png" position="360,912" size="89,23" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/subtitle_on.png" position="360,912" zPosition="2" size="89,23" alphatest="blend" transparent="0">
+    <ePixmap pixmap="OpenNfrFHD/icons/subtitle_off.png" position="366,909" size="83,34" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/subtitle_on.png" position="366,909" zPosition="2" size="83,34" alphatest="blend" transparent="0">
       <convert type="ServiceInfo">SubservicesAvailable</convert>
       <convert type="ConditionalShowHide" />
     </widget>
