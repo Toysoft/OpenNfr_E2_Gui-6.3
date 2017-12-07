@@ -227,7 +227,7 @@ class homemoviestubeFilmScreen(MPScreen, ThumbsHelper):
 			return
 		Link = self['liste'].getCurrent()[0][2]
 		self.keyLocked = True
-		getPage(Link, agent=hmtAgent).addCallback(self.getplayerconfig).addErrback(self.dataError)
+		getPage(Link, agent=hmtAgent).addCallback(self.getVideo).addErrback(self.dataError)
 
 	def keySort(self):
 		if self.keyLocked or not re.match('.*?\/channels\/', self.Link):
@@ -241,13 +241,9 @@ class homemoviestubeFilmScreen(MPScreen, ThumbsHelper):
 			self.sort = result[0]
 			self.loadPage()
 
-	def getplayerconfig(self, data):
-		confurl = re.findall('(http://www.homemoviestube.com/playerConfig.php\?.*?)["|\|]', data, re.S)
-		getPage(confurl[-1], agent=hmtAgent).addCallback(self.gotvideo).addErrback(self.dataError)
-
-	def gotvideo(self, data):
+	def getVideo(self, data):
 		Title = self['liste'].getCurrent()[0][0]
-		File = re.findall("flvMask:(.*?);", data)
+		File = re.findall('<source src="(.*?)" type=\'video/mp4\'>', data)
 		if File:
 			self.keyLocked = False
 			self.session.open(SimplePlayer, [(Title, File[0])], showPlaylist=False, ltype='homemoviestube')

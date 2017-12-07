@@ -82,7 +82,9 @@ class ChoiceBoxExt(Screen):
 		pos = 0
 		for x in list:
 			strpos = str(self.__keys[pos])
-			self.list.append((strpos, x))
+			# don't show empty entries (filters for mainscreen)
+			if x[0] != "":
+				self.list.append((strpos, x))
 			if self.__keys[pos] != "":
 				self.keymap[self.__keys[pos]] = list[pos]
 			self.summarylist.append((self.__keys[pos],x[0]))

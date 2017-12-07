@@ -189,7 +189,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2017120301"))
+config.mediaportal.version = NoSave(ConfigText(default="2017120601"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.retries = ConfigSubsection()
@@ -274,18 +274,16 @@ config.mediaportal.minitv = ConfigYesNo(default = True)
 # Konfiguration erfolgt in SimplePlayer
 config.mediaportal.sp_playmode = ConfigSelection(default = "forward", choices = [("forward", _("Forward")),("backward", _("Backward")),("random", _("Random")),("endless", _("Endless"))])
 config.mediaportal.sp_scrsaver = ConfigSelection(default = "off", choices = [("on", _("On")),("off", _("Off")),("automatic", _("Automatic"))])
-config.mediaportal.sp_on_movie_stop = ConfigSelection(default = "ask", choices = [("ask", _("Ask user")), ("quit", _("Return to previous service"))])
-config.mediaportal.sp_on_movie_eof = ConfigSelection(default = "ask", choices = [("ask", _("Ask user")), ("quit", _("Return to previous service")), ("pause", _("Pause movie at end"))])
+config.mediaportal.sp_on_movie_stop = ConfigSelection(default = "quit", choices = [("ask", _("Ask user")), ("quit", _("Return to previous service"))])
+config.mediaportal.sp_on_movie_eof = ConfigSelection(default = "quit", choices = [("ask", _("Ask user")), ("quit", _("Return to previous service")), ("pause", _("Pause movie at end"))])
 config.mediaportal.sp_seekbar_sensibility = ConfigInteger(default = 10, limits = (1,50))
 config.mediaportal.sp_infobar_cover_off = ConfigYesNo(default = False)
 config.mediaportal.sp_use_number_seek = ConfigYesNo(default = True)
 config.mediaportal.sp_pl_number = ConfigInteger(default = 1, limits = (1,99))
 config.mediaportal.sp_mi_key = ConfigSelection(default = "instantRecord", choices = [("displayHelp", _("HELP")),("showMovies", _("PVR/VIDEO")),("instantRecord", _("RECORD"))])
 config.mediaportal.sp_use_yt_with_proxy = ConfigSelection(default = "no", choices = [("no", _("No")), ("prz", "with Premiumize"), ("rdb", "with Real-Debrid"), ("proxy", "with a HTTP Proxy")])
-config.mediaportal.sp_on_movie_start = ConfigSelection(default = "ask", choices = [("start", _("Start from the beginning")), ("ask", _("Ask user")), ("resume", _("Resume from last position"))])
+config.mediaportal.sp_on_movie_start = ConfigSelection(default = "start", choices = [("start", _("Start from the beginning")), ("ask", _("Ask user")), ("resume", _("Resume from last position"))])
 config.mediaportal.sp_save_resumecache = ConfigYesNo(default = False)
-config.mediaportal.premiumize_yt_buffering_opt = ConfigSelection(default = "off", choices = [("off", _("Off")), ("smart", _("Smart")), ("all", _("Always"))])
-config.mediaportal.premiumize_use_yt_buffering_size = ConfigSelection(default = "2", choices = [("0", _("Whole file size")), ("1", "1MB"), ("2", "2MB"), ("5", "5MB"), ("10", "10MB")])
 config.mediaportal.sp_imdb_key = ConfigSelection(default = "info", choices = [("displayHelp", _("HELP")),("showMovies", _("PVR/VIDEO")),("info", _("EPG/INFO"))])
 config.mediaportal.yt_proxy_username = ConfigText(default="user!", fixed_size=False)
 config.mediaportal.yt_proxy_password = ConfigPassword(default="pass!", fixed_size=False)
@@ -2780,19 +2778,22 @@ class MPWall2(Screen, HelpableScreen):
 			self.skin = f.read()
 			f.close()
 
+		self.dump_liste_page_tmp = self.plugin_liste
+		if config.mediaportal.filter.value != "ALL":
+			self.plugin_liste_page_tmp = []
+			self.plugin_liste_page_tmp = [x for x in self.dump_liste_page_tmp if re.search(config.mediaportal.filter.value, x[2])]
+		else:
+			self.plugin_liste_page_tmp = self.plugin_liste
+
+		if len(self.plugin_liste_page_tmp) != 0:
+			self.counting_pages = int(round(float((len(self.plugin_liste_page_tmp)-1) / self.perpage) + 0.5))
+
 		# Page Style
 		if config.mediaportal.pagestyle.value == "Graphic":
 			skincontent = ""
 			self.skin = self.skin.replace('</screen>', '')
-			self.dump_liste_page_tmp = self.plugin_liste
-			if config.mediaportal.filter.value != "ALL":
-				self.plugin_liste_page_tmp = []
-				self.plugin_liste_page_tmp = [x for x in self.dump_liste_page_tmp if re.search(config.mediaportal.filter.value, x[2])]
-			else:
-				self.plugin_liste_page_tmp = self.plugin_liste
 
 			if len(self.plugin_liste_page_tmp) != 0:
-				self.counting_pages = int(round(float((len(self.plugin_liste_page_tmp)-1) / self.perpage) + 0.5))
 				pagebar_size = self.counting_pages * pageiconwidth + (self.counting_pages-1) * pageicondist
 				start_pagebar = int(screenwidth / 2 - pagebar_size / 2)
 
@@ -3215,6 +3216,13 @@ class MPWall2(Screen, HelpableScreen):
 
 	def setInfo(self):
 		if self["covercollection"].getCurrentIndex() >=0:
+			totalPages = self["covercollection"].getTotalPages()
+
+			if totalPages != self.counting_pages:
+				msg = "Fatal MP_Wall2.xml error! Wrong covercollection size!"
+				printl(msg,'','E')
+				raise Exception(msg)
+
 			item = self["covercollection"].getCurrent()
 			(p_name, p_picname, p_picpath, p_genre, p_hits, p_sort) = item[0]
 			try:
@@ -3226,7 +3234,6 @@ class MPWall2(Screen, HelpableScreen):
 				self.refresh_apple_page_bar()
 			else:
 				currentPage = self["covercollection"].getCurrentPage()
-				totalPages = self["covercollection"].getTotalPages()
 				pageinfo = _("Page") + " %s / %s" % (currentPage, totalPages)
 				self['page'].setText(pageinfo)
 
@@ -4194,6 +4201,9 @@ def exit(session, result, lastservice):
 			if not mp_globals.premium_yt_proxy_host:
 				CheckPremiumize(session).premiumizeProxyConfig(False)
 
+		mp_globals.currentskin = config.mediaportal.skin2.value
+		_stylemanager(1)
+
 		if config.mediaportal.ansicht.value == "liste":
 			session.openWithCallback(exit, MPList, lastservice)
 		elif config.mediaportal.ansicht.value == "wall":
@@ -4477,7 +4487,6 @@ def startMP(session):
 	addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "mediaportal1.ttf", "mediaportal", 100, False)
 	addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "mediaportal_clean.ttf", "mediaportal_clean", 100, False)
 	addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "unifont.otf", "Replacement", 100, True)
-	mp_globals.font = 'mediaportal'
 	mp_globals.currentskin = config.mediaportal.skin2.value
 	_stylemanager(1)
 
@@ -4619,6 +4628,7 @@ def getNextWakeup():
 
 def Plugins(path, **kwargs):
 	mp_globals.pluginPath = path
+	mp_globals.font = 'mediaportal'
 
 	result = [
 		PluginDescriptor(name="MediaPortal", description="MediaPortal - EPG Importer", where = [PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], fnc = autostart, wakeupfnc = getNextWakeup),

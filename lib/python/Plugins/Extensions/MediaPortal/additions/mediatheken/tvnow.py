@@ -287,7 +287,7 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 				continue
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('Currently no free episodes available!'), None, None, None))
-		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
+		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.keyLocked = False
 		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, 1, 1, mode=1)
 		self.showInfos()
@@ -315,6 +315,8 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 		format = None
 		dashclear = nowdata["manifest"]["dashclear"]
 		url = str(dashclear.replace('dash', 'hls').replace('.mpd','fairplay.m3u8'))
+		if "?" in url:
+			url = url.split('?')[0]
 		getPage(url, agent=nowAgent).addCallback(self.loadplaylist, url).addErrback(self.dataError)
 
 	def loadplaylist(self, data, baseurl):

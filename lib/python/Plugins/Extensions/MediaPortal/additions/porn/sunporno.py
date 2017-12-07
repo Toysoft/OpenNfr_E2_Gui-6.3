@@ -136,7 +136,7 @@ class sunpornoGenreScreen(MPScreen):
 		elif err:
 			printl(str(suggestions),self,'E')
 		return list
-		
+
 class sunpornoFilmScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name):
@@ -186,16 +186,17 @@ class sunpornoFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, '', '"maxPage":(\d+),"')
-		Movies = re.findall('id":"(\d+)","thumb":"(.*?)".*?"duration":"(.*?)","rating":"(\d+)".*?"name":"(.*?)"', data, re.S)
-		if Movies:
-			for (Id, Image, Runtime, Rating, Title) in Movies:
-				Title = stripAllTags(Title)
-				Url = "https://www.sunporno.com/videos/%s/" % Id
-				Image = Image.replace('\/','/')
-				Rating = Rating + "%"
-				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Rating))
+		res = json.loads(data)
+		for node in res["list"]:
+			Title = str(node["name"])
+			Url = "https://www.sunporno.com/videos/%s/" % str(node["id"])
+			Image = str(node["thumb"])
+			Rating = str(node["rating"]) + "%"
+			Runtime = str(node["duration"])
+			Added = str(node["ago"])
+			self.filmliste.append((Title, Url, Image, Runtime, Rating, Added))
 		if len(self.filmliste) == 0:
-			self.filmliste.append((_('No videos found!'), '', None, ''))
+			self.filmliste.append((_('No videos found!'), '', None, '', '', ''))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -208,7 +209,8 @@ class sunpornoFilmScreen(MPScreen, ThumbsHelper):
 		pic = self['liste'].getCurrent()[0][2]
 		runtime = self['liste'].getCurrent()[0][3]
 		rating = self['liste'].getCurrent()[0][4]
-		self['handlung'].setText("Runtime: %s\nRating: %s" % (runtime, rating))
+		added = self['liste'].getCurrent()[0][5]
+		self['handlung'].setText("Runtime: %s\nAdded: %s\nRating: %s" % (runtime, added, rating))
 		self['name'].setText(title)
 		CoverHelper(self['coverArt']).getCover(pic)
 

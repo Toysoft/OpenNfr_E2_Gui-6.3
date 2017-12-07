@@ -302,7 +302,7 @@ class pinflixFilmScreen(MPScreen, ThumbsHelper):
 			self.getLastPage(data, '', 'data-last-page="(\d+)"')
 		else:
 			self.getLastPage(data, 'paging">(.*?)</ul>')
-		Movies = re.findall('class="thumb(?: videoThumb|)"\shref="(.*?)"><img\salt="(.*?)"\s+src="(.*?)"(\sclass="lazy"\sdata-original=".*?"|).*?class="meta transition"><time>(.*?)</time', data, re.S)
+		Movies = re.findall('class="thumb(?: videoThumb|)(?: popTrigger|)"\shref="(.*?)"><img\salt="(.*?)"\s+src="(.*?)"(\sclass="lazy"\sdata-original=".*?"|).*?class="meta transition"><time>(.*?)</time', data, re.S)
 		if Movies:
 			for (Url, Title, Image, BackupImage, Runtime) in Movies:
 				Url = 'http://' + self.baseurl + Url

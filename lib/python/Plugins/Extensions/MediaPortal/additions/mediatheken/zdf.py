@@ -82,7 +82,7 @@ class ZDFGenreScreen(MPScreen):
 		self.genreliste.append(("ZDFneo", "7", "https://www.zdf.de/assets/2400_ZDFneo-100~768x432"))
 		self.genreliste.append(("ZDFinfo", "8", "https://www.zdf.de/assets/2400_ZDFinfo-100~768x432"))
 		self.genreliste.append(("ZDFtivi", "9", "https://www.zdf.de/assets/ueber-zdftivi-sendungstypical-100~768x432"))
-		self.ml.setList(map(self._defaultlistleft, self.genreliste))
+		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
 		self.showInfos()
 
@@ -219,7 +219,7 @@ class ZDFPreSelect(MPScreen):
 			self.genreliste.append(("Sport", "11", "https://www.zdf.de/assets/zdfsport-logo-hintergrund-100~768x432"))
 			self.genreliste.append(("Verbraucher", "12", "https://www.zdf.de/assets/verbraucher-100~768x432"))
 			self['ContentTitle'].setText(self.gN)
-		self.ml.setList(map(self._defaultlistleft, self.genreliste))
+		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
 		self.showInfos()
 
@@ -581,6 +581,8 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 							image = image.split("=")[0]+"="
 						else:
 							image = image.split("~")[0]
+					else:
+						image = ""
 				if image != "":
 					if "/static" in image:
 						try:

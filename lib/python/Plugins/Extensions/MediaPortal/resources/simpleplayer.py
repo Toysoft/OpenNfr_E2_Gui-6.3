@@ -546,7 +546,7 @@ class SimplePlayerResume:
 		self.eofResumeFlag = False
 
 	def resumeEOF(self):
-		if self.use_sp_resume and self.posTrackerActive and self.lruKey in mp_globals.lruCache and self.ltype not in ('rtlnow','nowtv'):
+		if self.use_sp_resume and self.posTrackerActive and self.lruKey in mp_globals.lruCache:
 			self.savePlayPosition(is_eof=True)
 			lru_value = mp_globals.lruCache[self.lruKey]
 			if (lru_value[1]+90000*120) < lru_value[0]:

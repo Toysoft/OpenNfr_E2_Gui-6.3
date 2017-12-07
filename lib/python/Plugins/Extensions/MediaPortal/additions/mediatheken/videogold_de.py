@@ -22,7 +22,7 @@ class show_VGDE_Genre(MenuHelper):
 
 	def mh_parseCategorys(self, data):
 		themes = ['Nach Format','Nach Thema']
-		menu_marker = 'class="menu-footer'
+		menu_marker = 'class="menu"'
 		excludes = ['/livestreams','/videos-eintragen','/wp-login']
 		menu=self.scanMenu(data,menu_marker,themes=themes,base_url=self.mh_baseUrl,url_ex=excludes)
 		self.mh_genMenu2(menu)
@@ -119,7 +119,7 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		while not self.filmQ.empty():
 			url = self.filmQ.get_nowait()
-		twAgentGetPage(url, timeout=30).addCallback(self.loadPageData).addErrback(self.dataError)
+		twAgentGetPage(url, timeout=60).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def dataError(self, error):
 		self.eventL.clear()
@@ -132,14 +132,14 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 	def loadPageData(self, data):
 		self.dokusListe = []
 		for m in re.finditer('<article id=(.*?)</article>', data, re.S):
-			m2 = re.search('="bookmark">(.*?)</a.*?="entry-content">.*?href="(.*?)".*?<img.*?src="(.*?)".*?<p>(.*?)</p>', m.group(1), re.S)
+			m2 = re.search('<a href="(.*?)" title="(.*?)">.*?data-lazy-src="(.*?)".*?<p>(.*?)</p>', m.group(1), re.S)
 			if m2:
-				nm, url, img, desc = m2.groups()
+				url, nm, img, desc = m2.groups()
 				self.dokusListe.append((decodeHtml(nm), url, img, decodeHtml(desc)))
 
 		if self.dokusListe:
 			if not self.pages:
-				ps = re.findall('class=.page-numbers. .*?>(.*?)</', data)
+				ps = re.findall("class='pages'>Seite \d+ von (\d+.{0,1}\d+)", data)
 				try:
 					pages = int(ps[-1].replace('.',''))
 				except:
@@ -287,7 +287,7 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		if (self.keyLocked|self.eventL.is_set()):
 			return
 		streamLink = self['liste'].getCurrent()[0][1]
-		twAgentGetPage(streamLink, timeout=30).addCallback(self.parseYTStream).addErrback(self.dataError)
+		twAgentGetPage(streamLink, timeout=60).addCallback(self.parseYTStream).addErrback(self.dataError)
 
 	def keyUpRepeated(self):
 		if self.keyLocked:

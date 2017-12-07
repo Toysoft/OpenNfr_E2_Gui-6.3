@@ -85,7 +85,7 @@ class drtuberGenreScreen(MPScreen):
 		getPage(url, agent=dtAgent, cookies=ck).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('<h2>%s</h2>(.*?)</div></div>' % self.scopeText[self.scope], data, re.S)
+		parse = re.search('<h2>%s</h2>(.*?)</div> </div>' % self.scopeText[self.scope], data, re.S)
 		if parse:
 			genre = re.findall('<a\shref="(.*?)"\sdata-catFilter_category>(.*?)\s{0,1}<span>', parse.group(1), re.S)
 			if genre:
@@ -206,7 +206,7 @@ class drtuberFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, '<ul class="pagination"(.*?)<div class="holder">')
-		Movies = re.findall('><a\shref="(/video/.*?)"\sclass="th\sch-video.*?src="(.*?)"\salt="(.*?)".*?<em>(\d+:\d+)<', data, re.S)
+		Movies = re.findall('>\s{0,1}<a\shref="(/video/.*?)"\sclass="th\sch-video.*?src="(.*?)"\salt="(.*?)".*?<em>(\d+:\d+(?::\d+|))<', data, re.S)
 		if Movies:
 			for (Url, Image, Title, Runtime) in Movies:
 				Url = '%s%s' % (BASE_URL, Url)
