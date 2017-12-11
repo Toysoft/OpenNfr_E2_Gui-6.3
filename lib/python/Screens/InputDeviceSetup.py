@@ -400,8 +400,13 @@ class RemoteControlType(Screen, ConfigListScreen):
 			"save": self.keySave,
 		}, -1)
 
+		self["HelpWindow"] = Pixmap()
+		self["HelpWindow"].hide()
+
 		self["key_green"] = StaticText(_("Save"))
 		self["key_red"] = StaticText(_("Cancel"))
+		self["footnote"] = StaticText()
+		self["description"] = StaticText()
 
 		self.list = []
 		ConfigListScreen.__init__(self, self.list, session = self.session)

@@ -13492,3 +13492,42 @@ msgstr "nichtlinear strecken"
 
 msgid "Miscellaneous languages"
 msgstr "Verschiedene Sprachen"
+
+msgid "Force LNB Power"
+msgstr "LNB Power erzwingen"
+
+msgid "Force LNB Tuner Power settings."
+msgstr "Einstellung für LNB Power."
+
+msgid "Force ToneBurst"
+msgstr "Toneburst erzwingen"
+
+msgid "Force LNB Tuner ToneBurst settings."
+msgstr "Einstellung für Toneburst."
+
+msgid "This option allows you can config the Colorimetry for HDR"
+msgstr "Diese Option erlaubt die Farbprofile Steuerung im HDR Modus"
+
+msgid "This option allows you can config the Colordepth for UHD"
+msgstr "Diese Option erlaubt die Umstellung der Farbtiefe im UHD Modus"
+
+msgid "Show openNFR spinning logo when the system is busy."
+msgstr "Zeige das openNFR Logo wenn das System nicht reagiert oder Beschäftigt ist."
+
+msgid "You can Display PIP with or without OSD Menu"
+msgstr "Sie können sich PIP mit oder ohne OSD Menü im Front-Display anzeigen lassen."
+
+msgid "Hide VBI line for this service"
+msgstr "Verstecke VBI Line für diesen Kanal"
+
+msgid "Remove hide VBI line for this service"
+msgstr "Verstecken der VBI Line deaktivieren"
+
+msgid "Do not center DVB subs on this service"
+msgstr "Untertitel auf diesem Sender niemals zentrieren"
+
+msgid "Do center DVB subs on this service"
+msgstr "Untertitel auf diesem Sender immer zentrieren"
+
+msgid "MOVIE SELECTION"
+msgstr "FILMAUSWAHL"
