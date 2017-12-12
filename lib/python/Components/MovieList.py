@@ -325,8 +325,8 @@ class MovieList(GUIComponent):
 				txt = p[1]
 				if txt == ".Trash":
 					if self.screenwidth and self.screenwidth == 1920:
-						res.append(MultiContentEntryPixmapAlphaBlend(pos=(3,5), size=(iconSize,37), png=self.iconTrash))
-						res.append(MultiContentEntryText(pos=(40+20, 5), size=(width-166, self.itemHeight), font = 0, flags = RT_HALIGN_LEFT, text = _("Deleted items")))
+						res.append(MultiContentEntryPixmapAlphaBlend(pos=(7,7), size=(iconSize,24), png=self.iconTrash))
+						res.append(MultiContentEntryText(pos=(40+20, 3), size=(width-166, self.itemHeight), font = 0, flags = RT_HALIGN_LEFT, text = _("Deleted items")))
 						res.append(MultiContentEntryText(pos=(width-145, 0), size=(145, self.itemHeight), font=1, flags=RT_HALIGN_RIGHT|RT_VALIGN_CENTER, text=_("Trashcan")))
 						return res
 					else:
@@ -335,7 +335,7 @@ class MovieList(GUIComponent):
 						res.append(MultiContentEntryText(pos=(width-150, 0), size=(145, self.itemHeight), font=1, flags=RT_HALIGN_RIGHT|RT_VALIGN_CENTER, text=_("Trashcan")))
 						return res
 			if self.screenwidth and self.screenwidth == 1920:
-				res.append(MultiContentEntryPixmapAlphaBlend(pos=(3,5), size=(iconSize,iconSize), png=self.iconFolder))
+				res.append(MultiContentEntryPixmapAlphaBlend(pos=(5,5), size=(iconSize,iconSize), png=self.iconFolder))
 				res.append(MultiContentEntryText(pos=(40+20, 5), size=(width-166, self.itemHeight), font = 0, flags = RT_HALIGN_LEFT, text = txt))
 				res.append(MultiContentEntryText(pos=(width-145, 0), size=(145, self.itemHeight), font=1, flags=RT_HALIGN_RIGHT|RT_VALIGN_CENTER, text=_("Directory")))
 				return res
@@ -396,7 +396,7 @@ class MovieList(GUIComponent):
 		if switch == 'i':
 			if self.screenwidth and self.screenwidth == 1920:
 				iconSize = 42
-				res.append(MultiContentEntryPixmapAlphaBlend(pos=(2,3), size=(iconSize,iconSize), png=data.icon))
+				res.append(MultiContentEntryPixmapAlphaBlend(pos=(5,6), size=(iconSize,iconSize), png=data.icon))
 			else:
 				iconSize = 22
 				res.append(MultiContentEntryPixmapAlphaBlend(pos=(0,1), size=(iconSize,20), png=data.icon))
@@ -466,11 +466,11 @@ class MovieList(GUIComponent):
 			if fileExtension in RECORD_EXTENSIONS:
 				if self.screenwidth and self.screenwidth == 1920:
 					if ext == '1':
-						res.append(MultiContentEntryText(pos=(iconSize+20, 5), size=(width - iconSize - dateSize - dateSize / 2 - 15, ih), font=0, flags=RT_HALIGN_LEFT, text=data.txt))
+						res.append(MultiContentEntryText(pos=(iconSize+20, 2), size=(width - iconSize - dateSize - dateSize / 2 - 15, ih), font=0, flags=RT_HALIGN_LEFT, text=data.txt))
 						res.append(MultiContentEntryText(pos=(width - dateSize - dateSize / 2 - 5, 1), size=(dateSize + dateSize / 2, ih), font=1, flags=RT_HALIGN_RIGHT | RT_VALIGN_CENTER, text=service))
 					if ext == '2':
 						piconSize = ih * 2
-						res.append(MultiContentEntryText(pos=(iconSize+20, 5), size=(width - iconSize - dateSize - 15, ih+2), font=0, flags=RT_HALIGN_LEFT, text=data.txt))
+						res.append(MultiContentEntryText(pos=(iconSize+20, 2), size=(width - iconSize - dateSize - 15, ih+2), font=0, flags=RT_HALIGN_LEFT, text=data.txt))
 						res.append(MultiContentEntryPixmapAlphaTest(pos=(width - 48 - 5, 1), size=(piconSize, ih-2), png=picon, flags = BT_SCALE | BT_KEEP_ASPECT_RATIO))
 					res.append(MultiContentEntryText(pos=(iconSize+20, ih), size=(width - iconSize - dateSize - 15, ih), font=1, flags=RT_HALIGN_LEFT, text=desc))
 					res.append(MultiContentEntryText(pos=(width-dateSize, 0), size=(dateSize, ih), font=1, flags=RT_HALIGN_RIGHT, text=begin_string))
@@ -488,7 +488,7 @@ class MovieList(GUIComponent):
 					return res
 			else:
 				if self.screenwidth and self.screenwidth == 1920:
-					res.append(MultiContentEntryText(pos=(iconSize+20, 5), size=(width-iconSize-dateSize-15, ih), font = 0, flags = RT_HALIGN_LEFT, text = data.txt))
+					res.append(MultiContentEntryText(pos=(iconSize+20, 2), size=(width-iconSize-dateSize-15, ih), font = 0, flags = RT_HALIGN_LEFT, text = data.txt))
 					res.append(MultiContentEntryText(pos=(width-dateSize, ih), size=(dateSize, ih), font=1, flags=RT_HALIGN_RIGHT, text=begin_string))
 					return res
 				else:
@@ -497,7 +497,7 @@ class MovieList(GUIComponent):
 					return res
 		else:
 			if self.screenwidth and self.screenwidth == 1920:
-				res.append(MultiContentEntryText(pos=(iconSize+20, 5), size=(width-iconSize-dateSize-15, ih), font = 0, flags = RT_HALIGN_LEFT, text = data.txt))
+				res.append(MultiContentEntryText(pos=(iconSize+20, 2), size=(width-iconSize-dateSize-15, ih), font = 0, flags = RT_HALIGN_LEFT, text = data.txt))
 				res.append(MultiContentEntryText(pos=(width-dateSize, 0), size=(dateSize, ih), font=1, flags=RT_HALIGN_RIGHT, text=begin_string))
 				return res
 			else:
