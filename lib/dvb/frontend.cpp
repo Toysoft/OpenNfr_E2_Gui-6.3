@@ -1318,6 +1318,7 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 		|| strstr(m_description, "BCM4505")
 		|| strstr(m_description, "BCM73625 (G3)")
 		|| strstr(m_description, "BCM45208")
+		|| strstr(m_description, "BCM45308")
 		)
 	{
 		ret = (snr * 100) >> 8;
@@ -1542,6 +1543,8 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 
 int eDVBFrontend::readFrontendData(int type)
 {
+	char force_legacy_signal_stats[64];
+	sprintf(force_legacy_signal_stats, "config.Nims.%d.force_legacy_signal_stats", m_slotid);
 	switch(type)
 	{
 		case iFrontendInformation_ENUMS::bitErrorRate:
@@ -1577,7 +1580,7 @@ int eDVBFrontend::readFrontendData(int type)
 				int signalquality = 0;
 				int signalqualitydb = 0;
 #if DVB_API_VERSION > 5 || DVB_API_VERSION == 5 && DVB_API_VERSION_MINOR >= 10
-				if (m_dvbversion >= DVB_VERSION(5, 10) && !strstr(m_description, "FTM-4862 (Availink AVL6862)") && !strstr(m_description, "Sundtek"))
+				if (m_dvbversion >= DVB_VERSION(5, 10) && !eConfigManager::getConfigBoolValue(force_legacy_signal_stats, false))
 				{
 					dtv_property prop[1];
 					prop[0].cmd = DTV_STAT_CNR;
@@ -1639,7 +1642,7 @@ int eDVBFrontend::readFrontendData(int type)
 				if (!m_simulate)
 				{
 #if DVB_API_VERSION > 5 || DVB_API_VERSION == 5 && DVB_API_VERSION_MINOR >= 10
-					if (m_dvbversion >= DVB_VERSION(5, 10))
+					if (m_dvbversion >= DVB_VERSION(5, 10) && !eConfigManager::getConfigBoolValue(force_legacy_signal_stats, false))
 					{
 						dtv_property prop[1];
 						memset(prop, 0, sizeof(prop));
@@ -1981,7 +1984,7 @@ int eDVBFrontend::tuneLoopInt()  // called by m_tuneTimer
 						eDebugNoSimulateNoNewLine("");
 					duration = (((end.tv_usec - start.tv_usec)/1000) + 1000 ) % 1000;
 					duration_est = (m_sec_sequence.current()->diseqc.len * 14) + 10;
-					eDebugNoSimulateNoNewLine("[SEC] diseqc ioctl duration: %d ms", duration);
+					eDebugNoSimulateNoNewLine("[eDVBFrontend] [SEC] diseqc ioctl duration: %d ms", duration);
 					if (duration < duration_est)
 						delay = duration_est - duration;
 					if (delay > 94) delay = 94;

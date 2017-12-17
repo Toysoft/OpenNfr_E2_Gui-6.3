@@ -1,4 +1,4 @@
-from boxbranding import getBoxType
+from boxbranding import getBoxType, getBrandOEM
 from time import localtime, mktime
 from datetime import datetime
 import xml.etree.cElementTree
@@ -2147,6 +2147,7 @@ def InitNimManager(nimmgr, update_slots = []):
 	for slot in nimmgr.nim_slots:
 		x = slot.slot
 		nim = config.Nims[x]
+		nim.force_legacy_signal_stats = ConfigYesNo(default = False)
 		if slot.canBeCompatible("DVB-S"):
 			nim = config.Nims[x].dvbs
 			createSatConfig(nim, x, empty_slots)
@@ -2203,7 +2204,7 @@ def InitNimManager(nimmgr, update_slots = []):
 	nimmgr.sec = SecConfigure(nimmgr)
 
 	def tunerTypeChanged(nimmgr, configElement):
-		if int(iDVBFrontend.dvb_api_version) < 5:
+		if int(iDVBFrontend.dvb_api_version) < 5 or getBrandOEM() in ('vuplus'):
 			print "dvb_api_version ",iDVBFrontend.dvb_api_version
 			print "api <5 or old style tuner driver"
 			fe_id = configElement.fe_id
