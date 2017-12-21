@@ -80,10 +80,15 @@ class faapyGenreScreen(MPScreen):
 			for (Url, Title) in Cats:
 				self.genreliste.append((Title, Url))
 			self.genreliste.sort()
-		self.genreliste.insert(0, ("Tags", "http://faapy.com"))
 		self.genreliste.insert(0, ("Channels", "http://faapy.com/channels"))
-		self.genreliste.insert(0, ("Top Rated", "http://faapy.com/top-rated/"))
-		self.genreliste.insert(0, ("Most Popular", "http://faapy.com/most-popular/"))
+		self.genreliste.insert(0, ("Top Rated (All Time)", "http://faapy.com/top-rated/"))
+		self.genreliste.insert(0, ("Top Rated (Monthly)", "http://faapy.com/top-rated/month/"))
+		self.genreliste.insert(0, ("Top Rated (Weekly)", "http://faapy.com/top-rated/week/"))
+		self.genreliste.insert(0, ("Top Rated (Daily)", "http://faapy.com/top-rated/today/"))
+		self.genreliste.insert(0, ("Most Popular (All Time)", "http://faapy.com/most-popular/"))
+		self.genreliste.insert(0, ("Most Popular (Monthly)", "http://faapy.com/most-popular/month/"))
+		self.genreliste.insert(0, ("Most Popular (Weekly)", "http://faapy.com/most-popular/week/"))
+		self.genreliste.insert(0, ("Most Popular (Daily)", "http://faapy.com/most-popular/today/"))
 		self.genreliste.insert(0, ("Latest", "http://faapy.com/"))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
@@ -95,7 +100,7 @@ class faapyGenreScreen(MPScreen):
 		Name = self['liste'].getCurrent()[0][0]
 		if Name == "--- Search ---":
 			self.suchen()
-		elif Name == "Channels" or Name == "Tags":
+		elif Name == "Channels":
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(faapyChannelsScreen, Link, Name)
 		else:
@@ -140,6 +145,8 @@ class faapyChannelsScreen(MPScreen, ThumbsHelper):
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
+		self['F2'].setText(_("Page"))
+		self['Page'].setText(_("Page:"))
 
 		self.onLayoutFinish.append(self.loadPage)
 
@@ -151,23 +158,12 @@ class faapyChannelsScreen(MPScreen, ThumbsHelper):
 		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		if self.Name == "Channels":
-			self['F2'].setText(_("Page"))
-			self['Page'].setText(_("Page:"))
-			self.getLastPage(data, 'class="pagination">(.*?)</ul>')
-			parse = re.search('class="heading">(.*?)class="footer"', data, re.S)
-			Movies = re.findall('<a\shref="(.*?/)"\stitle="(.*?)">.*?img\ssrc="(.*?)"', parse.group(1), re.S)
-			if Movies:
-				for (Url, Title, Image) in Movies:
-					self.filmliste.append((decodeHtml(Title), Url, Image))
-		else:
-			self.lastpage = 1
-			parse = re.search('class="tags".*?<ul>(.*?)</ul>', data, re.S)
-			Movies = re.findall('<a\shref="(.*?/)".*?title="(.*?)">', parse.group(1), re.S)
-			if Movies:
-				for (Url, Title) in Movies:
-					self.filmliste.append((decodeHtml(Title.title()), Url, None))
-					self.filmliste.sort()
+		self.getLastPage(data, 'class="pagination">(.*?)</ul>')
+		parse = re.search('class="heading">(.*?)class="footer', data, re.S)
+		Movies = re.findall('<a\shref="(.*?/)"\stitle="(.*?)">.*?img\ssrc="(.*?)"', parse.group(1), re.S)
+		if Movies:
+			for (Url, Title, Image) in Movies:
+				self.filmliste.append((decodeHtml(Title), Url, Image))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('Parsing error!'), None))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
@@ -238,7 +234,7 @@ class faapyFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination">(.*?)</ul>')
-		Movies = re.findall('class="thumb".*?\s*href="(.*?)"\stitle="(.*?)".*?img\ssrc="(.*?)".*?class="date">(\d+)\s*</span>', data, re.S)
+		Movies = re.findall('class="thumb".*?\s*href="(.*?)"\stitle="(.*?)".*?img\ssrc="(.*?)".*?class="icon-eye"></i>(\d+)\s*</span>', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Views) in Movies:
 				self.filmliste.append((decodeHtml(Title), Url, Image, Views))
@@ -266,7 +262,7 @@ class faapyFilmScreen(MPScreen, ThumbsHelper):
 		getPage(Link).addCallback(self.getVideoUrl).addErrback(self.dataError)
 
 	def getVideoUrl(self, data):
-		videoUrl = re.findall('file:\s"(.*?)",', data, re.S)
+		videoUrl = re.findall("video_url:\s'(.*?)',", data, re.S)
 		if videoUrl:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]

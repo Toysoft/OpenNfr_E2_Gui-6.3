@@ -45,7 +45,7 @@ def profile(id):
 			else:
 				perc = PERCENTAGE_START
 			try:
-				if boxtype in ("sf108", "sf3038", "classm", "ew7362", "atemio6100", "atemio6000", "atemio6200", "axodin", "axodinc", "starsatlx", "evo", "genius", "galaxym6", "formuler1", "sparktriplex", "sparkone" ):
+				if boxtype in ("classm", "axodin", "axodinc", "starsatlx", "evo", "genius", "galaxym6" ):
 					f = open("/dev/dbox/oled0", "w")
 					f.write("%d" % perc)
 				elif boxtype == "xpeedlx1":
@@ -69,16 +69,16 @@ def profile(id):
 				elif boxtype == "gb800se" or boxtype == "gb800solo":
 					f = open("/dev/dbox/oled0", "w")
 					f.write("%d  \n" % perc)
-				elif boxtype == "gb800seplus":
+				elif boxtype in ('gb800solo', 'gb800se', 'gb800seplus', 'gbultrase'):
 					f = open("/dev/mcu", "w")
 					f.write("%d  \n" % perc)
-				elif boxtype in ("mixosf5", "gi9196m"):
+				elif boxtype in ("mixosf5", "gi9196m", "osmini", "spycatmini", "osminiplus", "spycatminiplus"):
 					f = open("/proc/progress", "w")
 					f.write("%d" % perc)
-				elif boxtype in ("xpeedlx3", "atemionemesis"):
+				elif boxtype in ("xpeedlx3", "sezammarvel", "atemionemesis", "fegasusx3", "fegasusx5s", "fegasusx5t"):
 					f = open("/proc/vfd", "w")
 					f.write("Loading %d %%" % perc)
-				elif getBoxType() in ('amikomini', 'amiko8900', 'sognorevolution', 'arguspingulux', 'arguspinguluxmini', 'sparkreloaded', 'sabsolo', 'sparklx', 'gis8120'):
+				elif boxtype in ('amikomini', 'amiko8900', 'sognorevolution', 'arguspingulux', 'arguspinguluxmini', 'sparkreloaded', 'sabsolo', 'sparklx', 'gis8120'):
 					f = open("/proc/vfd", "w")
 					f.write("%d \n" % perc)
 				else:

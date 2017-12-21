@@ -47,10 +47,10 @@
 		<plugin type="mod" modfile="useradditions.solarmovie" confopt="showSolarmovie" default="False" confcat="useradditions" gz="1" name="SolarMovie" icon="solarmovie" filter="User-additions" screen="solarMovieMain" param1="" param2=""/>
 		<plugin type="mod" modfile="useradditions.onlinefilme" confopt="showOnlineFilme" default="False" confcat="useradditions" gz="1" name="OnlineFilme" icon="onlinefilme" filter="User-additions" screen="show_SKTO_Genre" param1="" param2=""/>
 		<plugin type="mod" modfile="useradditions.hdfilme" confopt="showhdfilme" default="False" confcat="useradditions" gz="1" name="HDFilme" icon="hdfilme" filter="User-additions" screen="hdfilmeMain" param1="" param2=""/>
-		<plugin type="mod" modfile="useradditions.video4k" confopt="showvideoe4k" default="False" confcat="useradditions" gz="1" name="Video4K" icon="video4k" filter="User-additions" screen="video4kMain" param1="" param2=""/>
 		<plugin type="mod" modfile="useradditions.vkstreamingfilm" confopt="showvkstreamingfilm" default="False" confcat="useradditions" gz="1" name="VKStreamingFilm" icon="vkstreamingfilm" filter="User-additions" screen="vkstreamingfilmMain" param1="" param2=""/>
 		<plugin type="mod" modfile="useradditions.serienstream" confopt="showserienstream" default="False" confcat="useradditions" gz="1" name="Serienstream" icon="serienstream" filter="User-additions" screen="ssMain" param1="" param2=""/>
 		<plugin type="mod" modfile="useradditions.seriesever" confopt="showseriesever" default="False" confcat="useradditions" gz="1" name="SeriesEver" icon="seriesever" filter="User-additions" screen="serieseverMain" param1="" param2=""/>
 		<plugin type="mod" modfile="useradditions.flimmerstube" confopt="showflimmerstube" default="False" confcat="useradditions" gz="1" name="FlimmerStube" icon="flimmerstube" filter="User-additions" screen="flimmerstubeGenreScreen" param1="" param2=""/>
+		<plugin type="mod" modfile="useradditions.foxx" confopt="showfoxx" default="False" confcat="useradditions" gz="1" name="foxx" icon="foxx" filter="User-additions" screen="foxxGenreScreen" param1="" param2=""/>
 	</set>
 </plugins>

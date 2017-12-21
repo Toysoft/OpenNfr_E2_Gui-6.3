@@ -538,7 +538,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <eLabel text="Plugin browser" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="center" />
-    <widget source="Title" render="Label" position="55,142" size="790,43" zPosition="1" halign="center" font="LCD; 35" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget source="Title" render="Label" position="55,142" size="790,43" zPosition="1" halign="center" font="LCD; 35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="list" position="55,220" size="920,600" foregroundColor="white" backgroundColor="black" transparent="1" scrollbarMode="showOnDemand" zPosition="2" enableWrapAround="1" />
     <widget name="status" position="1054,208" size="805,500" scrollbarMode="showNever" font="LCD; 30" halign="center" noWrap="1" zPosition="3" backgroundColor="black" />
     <eLabel name="" position="1098,141" size="720,43" font="LCD; 35" text="Liste der zu Installierenden Plugins" zPosition="3" halign="center" transparent="1" foregroundColor="cyan1" />
@@ -607,7 +607,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="session.CurrentService" render="Label" position="181,708" size="340,32" font="LCD; 30" valign="center" noWrap="1" backgroundColor="backtop" transparent="1" halign="center">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <eLabel text="SNR:" position="1624,910" size="70,30" font="LCD; 28" valign="center" foregroundColor="cyan1" backgroundColor="background" transparent="1" />
+    <eLabel text="SNR:" position="1624,910" size="70,30" font="LCD; 28" valign="center" foregroundColor="cyan1" backgroundColor="cyan1" transparent="1" />
     <widget source="session.FrontendStatus" render="Label" position="1694,910" zPosition="4" size="70,30" halign="center" font="LCD; 28" foregroundColor="cyan1" transparent="1" backgroundColor="black">
       <convert type="FrontendInfo">SNR</convert>
     </widget>
@@ -700,17 +700,17 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
       <convert type="ServiceInfo">SubservicesAvailable</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-S" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="backtop" transparent="1" halign="left" foregroundColor="cyan1">
+    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-S" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="cyan1" transparent="1" halign="left" foregroundColor="cyan1">
       <convert type="FrontendInfo">TYPE</convert>
       <convert type="ValueRange">0,0</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-C" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="backtop" transparent="1" halign="left" foregroundColor="cyan1">
+    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-C" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="cyan1" transparent="1" halign="left" foregroundColor="cyan1">
       <convert type="FrontendInfo">TYPE</convert>
       <convert type="ValueRange">1,1</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-T" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="backtop" transparent="1" halign="left" foregroundColor="cyan1">
+    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-T" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="cyan1" transparent="1" halign="left" foregroundColor="cyan1">
       <convert type="FrontendInfo">TYPE</convert>
       <convert type="ValueRange">2,2</convert>
       <convert type="ConditionalShowHide" />
@@ -847,14 +847,14 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
       <convert type="ClockToText">Default</convert>
     </widget>
     <eLabel text="-" position="656,880" size="15,34" font="Arial; 30" halign="center" backgroundColor="background" transparent="1" foregroundColor="blue" zPosition="1" />
-    <widget source="session.Event_Now" render="Label" position="671,880" size="85,34" font="LCD; 32" halign="center" backgroundColor="background" transparent="1" foregroundColor="blue" zPosition="1">
+    <widget source="session.Event_Now" render="Label" position="671,880" size="85,34" font="LCD; 32" halign="center" backgroundColor="blue" transparent="1" foregroundColor="blue" zPosition="1">
       <convert type="EventTime">EndTime</convert>
       <convert type="ClockToText">Default</convert>
     </widget>
-    <widget source="session.Event_Now" render="Label" position="756,880" size="478,34" font="LCD; 32" halign="center" backgroundColor="background" transparent="1" foregroundColor="cyan1" zPosition="1">
+    <widget source="session.Event_Now" render="Label" position="756,880" size="478,34" font="LCD; 32" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" zPosition="1">
       <convert type="EventName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Label" position="1234,880" size="113,34" font="LCD; 32" halign="center" backgroundColor="background" transparent="1" foregroundColor="blue" zPosition="1">
+    <widget source="session.Event_Now" render="Label" position="1234,880" size="113,34" font="LCD; 32" halign="center" backgroundColor="blue" transparent="1" foregroundColor="blue" zPosition="1">
       <convert type="EventTime">Remaining</convert>
       <convert type="RemainingToText">InMinutes</convert>
     </widget>
@@ -893,12 +893,12 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="session.CurrentService" render="Label" position="181,708" size="340,32" font="LCD; 30" valign="center" noWrap="1" backgroundColor="backtop" transparent="1" halign="center">
       <convert type="ServiceName">Name</convert>
     </widget>
-    <eLabel text="SNR:" position="1624,910" size="70,30" font="LCD; 28" valign="center" foregroundColor="cyan1" backgroundColor="background" transparent="1" />
-    <widget source="session.FrontendStatus" render="Label" position="1694,910" zPosition="4" size="70,30" halign="center" font="LCD; 28" foregroundColor="cyan1" transparent="1" backgroundColor="black">
+    <eLabel text="SNR:" position="1624,910" size="70,30" font="LCD; 28" valign="center" foregroundColor="cyan1" backgroundColor="cyan1" transparent="1" />
+    <widget source="session.FrontendStatus" render="Label" position="1694,910" zPosition="4" size="70,30" halign="center" font="LCD; 28" foregroundColor="cyan1" transparent="1" backgroundColor="cyan1">
       <convert type="FrontendInfo">SNR</convert>
     </widget>
     <eLabel text="AGC:" position="1475,910" size="60,30" font="LCD; 28" valign="center" foregroundColor="yellow" backgroundColor="background" transparent="1" />
-    <widget source="session.FrontendStatus" render="Label" position="1535,910" zPosition="4" size="70,30" font="LCD; 28" halign="center" foregroundColor="yellow" backgroundColor="black" transparent="1">
+    <widget source="session.FrontendStatus" render="Label" position="1535,910" zPosition="4" size="70,30" font="LCD; 28" halign="center" foregroundColor="yellow" backgroundColor="yellow" transparent="1">
       <convert type="FrontendInfo">AGC</convert>
     </widget>
     <widget source="session.CurrentService" render="MaggyPiconEmu" path="OpenNfrFHD/piconCam/" position="188,932" size="286,63" transparent="1" alphatest="blend" zPosition="3">
@@ -986,17 +986,17 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
       <convert type="ServiceInfo">SubservicesAvailable</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-S" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="backtop" transparent="1" halign="left" foregroundColor="cyan1">
+    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-S" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="cyan1" transparent="1" halign="left" foregroundColor="cyan1">
       <convert type="FrontendInfo">TYPE</convert>
       <convert type="ValueRange">0,0</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-C" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="backtop" transparent="1" halign="left" foregroundColor="cyan1">
+    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-C" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="cyan1" transparent="1" halign="left" foregroundColor="cyan1">
       <convert type="FrontendInfo">TYPE</convert>
       <convert type="ValueRange">1,1</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-T" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="backtop" transparent="1" halign="left" foregroundColor="cyan1">
+    <widget source="session.FrontendInfo" render="FixedLabel" text="DVB-T" position="1375,910" size="80,30" font="LCD; 28" backgroundColor="cyan1" transparent="1" halign="left" foregroundColor="cyan1">
       <convert type="FrontendInfo">TYPE</convert>
       <convert type="ValueRange">2,2</convert>
       <convert type="ConditionalShowHide" />
@@ -1137,10 +1137,10 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
       <convert type="EventTime">EndTime</convert>
       <convert type="ClockToText">Default</convert>
     </widget>
-    <widget source="session.Event_Now" render="Label" position="756,880" size="478,34" font="LCD; 32" halign="center" backgroundColor="background" transparent="1" foregroundColor="cyan1" zPosition="1">
+    <widget source="session.Event_Now" render="Label" position="756,880" size="478,34" font="LCD; 32" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" zPosition="1">
       <convert type="EventName">Name</convert>
     </widget>
-    <widget source="session.Event_Now" render="Label" position="1234,880" size="113,34" font="LCD; 32" halign="center" backgroundColor="background" transparent="1" foregroundColor="blue" zPosition="1">
+    <widget source="session.Event_Now" render="Label" position="1234,880" size="113,34" font="LCD; 32" halign="center" backgroundColor="blue" transparent="1" foregroundColor="blue" zPosition="1">
       <convert type="EventTime">Remaining</convert>
       <convert type="RemainingToText">InMinutes</convert>
     </widget>
@@ -1170,11 +1170,11 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
       <convert type="ConverterRotator">3</convert>
     </widget>
     <eLabel text="Now:" position="230,138" size="100,38" zPosition="2" font="Regular; 30" transparent="1" backgroundColor="background" foregroundColor="orange" halign="left" />
-    <eLabel text="Next:" position="1011,138" size="100,38" zPosition="2" font="Regular; 30" foregroundColor="unff0000" transparent="1" backgroundColor="backtop" halign="left" />
-    <widget source="session.Event_Now" render="Label" position="331,138" size="570,38" font="LCD; 32" halign="center" backgroundColor="backtop" transparent="1" foregroundColor="cyan">
+    <eLabel text="Next:" position="1011,138" size="100,38" zPosition="2" font="Regular; 30" foregroundColor="yellow" transparent="1" backgroundColor="backtop" halign="left" />
+    <widget source="session.Event_Now" render="Label" position="331,138" size="570,38" font="LCD; 32" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan">
       <convert type="EventName">Name</convert>
     </widget>
-    <widget source="session.Event_Next" render="Label" position="1111,138" size="570,38" font="LCD; 32" halign="center" backgroundColor="backtop" transparent="1" foregroundColor="cyan">
+    <widget source="session.Event_Next" render="Label" position="1111,138" size="570,38" font="LCD; 32" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan">
       <convert type="EventName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Label" position="231,218" size="675,430" font="Regular; 28" zPosition="1" backgroundColor="backtop" foregroundColor="white" transparent="1" halign="center">
@@ -1212,7 +1212,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <eLabel text="Choose your Skin" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="center" />
     <widget name="SkinList" position="55,220" size="920,600" font="LCD; 34" itemHeight="50" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <widget name="Preview" position="1054,208" size="805,500" alphatest="blend" zPosition="3" />
-    <widget source="introduction" render="Label" position="55,863" size="920,60" font="LCD; 30" halign="center" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget source="introduction" render="Label" position="55,863" size="920,60" font="LCD; 30" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
   </screen>
   <screen name="LCDSkinSelector" position="0,0" size="1920,1080" title="LCD SkinSelector" flags="wfNoBorder">
@@ -1242,7 +1242,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <eLabel text="Choose your Skin" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="center" />
     <widget name="SkinList" position="55,220" size="920,600" font="LCD; 34" itemHeight="50" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <widget name="Preview" position="1054,208" size="805,500" alphatest="blend" zPosition="3" />
-    <widget source="introduction" render="Label" position="55,863" size="920,60" font="LCD; 30" halign="center" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget source="introduction" render="Label" position="55,863" size="920,60" font="LCD; 30" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
   </screen>
   <screen name="LCDClockSelector" position="0,0" size="1920,1080" title="LCD ClockSelector" flags="wfNoBorder">
@@ -1272,7 +1272,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <eLabel text="Choose your Skin" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="center" />
     <widget name="ClockList" position="55,220" size="920,600" font="LCD; 34" itemHeight="50" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <widget name="Preview" position="1054,208" size="805,500" alphatest="blend" zPosition="3" />
-    <widget source="introduction" render="Label" position="55,863" size="920,60" font="LCD; 30" halign="center" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget source="introduction" render="Label" position="55,863" size="920,60" font="LCD; 30" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <ePixmap name="selector" position="51,835" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
   </screen>
   <screen name="SlimChannelSelection" position="0,0" size="1920,1080" title="Channel Selection" flags="wfNoBorder">
@@ -1300,9 +1300,9 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget name="key_yellow" render="Label" position="1088,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget name="key_blue" render="Label" position="1587,1021" size="255,26" zPosition="1" font="LCD;24" halign="center" backgroundColor="black" transparent="1" />
     <widget source="Title" render="Label" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="right" />
-    <eLabel text="Channel Selection" halign="left" position="74,50" size="320,43" font="LCD; 40" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="Channel Selection" halign="left" position="74,50" size="320,43" font="LCD; 40" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="list" position="55,220" zPosition="2" size="920,560" scrollbarMode="showOnDemand" serviceItemHeight="30" serviceNumberFont="Regular;28" serviceNameFont="Regular;28" serviceInfoFont="Regular;25" colorServiceDescription="myblue" transparent="1" />
-    <widget source="ServiceEvent" render="EmptyEpg" emptyText="Event data unavailable" position="1153,705" size="610,32" halign="center" valign="center" font="LCD;30" foregroundColor="cyan1" backgroundColor="black" transparent="1">
+    <widget source="ServiceEvent" render="EmptyEpg" emptyText="Event data unavailable" position="1153,705" size="610,32" halign="center" valign="center" font="LCD;30" foregroundColor="cyan1" backgroundColor="cyan1" transparent="1">
       <convert type="EventName">Name</convert>
     </widget>
     <widget source="ServiceEvent" render="Label" position="1080,707" size="75,30" font="LCD; 28" backgroundColor="blue" foregroundColor="blue" transparent="1" halign="left" valign="center">
@@ -1321,7 +1321,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
       <convert type="ServiceName2">Provider</convert>
     </widget>
     <widget source="ServiceEvent" render="Picon2" position="1693,203" size="100,60" zPosition="5" transparent="1" alphatest="blend" />
-    <widget source="ServiceEvent" render="NextEvent2" position="55,805" size="920,120" font="Regular;20" foregroundColor="cyan1" backgroundColor="black" noWrap="1" transparent="1" zPosition="3" halign="center" valign="center" />
+    <widget source="ServiceEvent" render="NextEvent2" position="55,805" size="920,120" font="Regular;20" foregroundColor="cyan1" backgroundColor="cyan1" noWrap="1" transparent="1" zPosition="3" halign="center" valign="center" />
     <widget source="ServiceEvent" render="Label" position="1098,141" size="720,43" font="LCD; 35" backgroundColor="background" transparent="1" halign="center" noWrap="1" valign="center" text="19.2E  1:0:1:6D66:437:1:C00000:0:0:0" foregroundColor="cyan1" zPosition="3">
       <convert type="ServiceName2">Reference</convert>
     </widget>
@@ -1370,7 +1370,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <eLabel text="Setup" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="center" />
     <widget name="config" position="55,220" size="920,578" font="Regular;26" itemHeight="34" scrollbarMode="showOnDemand" enableWrapAround="1" backgroundColor="background" transparent="1" />
     <widget name="HelpWindow" position="225,598" size="520,200" transparent="1" alphatest="blend" zPosition="2" />
-    <widget name="description" render="Label" position="55,823" size="920,100" font="Regular; 21" halign="center" valign="center" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget name="description" render="Label" position="55,823" size="920,100" font="Regular; 21" halign="center" valign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
   </screen>
   <screen name="ServiceInfoSimple" position="0,0" size="1920,1080" title="Serviceinfo" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
@@ -1391,9 +1391,9 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="Title" render="Label" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="center" />
     <widget name="infolist" position="55,220" size="920,700" itemHeight="30" selectionDisabled="1" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <ePixmap position="50,946" size="30,25" zPosition="10" pixmap="OpenNfrFHD/buttons/key_left.png" transparent="1" alphatest="blend" />
-    <eLabel text="page up" position="88,946" size=" 140,25" font="Regular;21" halign="center" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="page up" position="88,946" size=" 140,25" font="Regular;21" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <ePixmap position="950,946" size="30,25" zPosition="10" pixmap="OpenNfrFHD/buttons/key_right.png" transparent="1" alphatest="blend" />
-    <eLabel text="page down" position="803,946" size=" 140,25" font="Regular;21" halign="center" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="page down" position="803,946" size=" 140,25" font="Regular;21" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
@@ -1422,9 +1422,9 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="Title" render="Label" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="center" />
     <widget name="infolist" position="53,220" size="920,700" itemHeight="30" selectionDisabled="1" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <ePixmap position="50,946" size="30,25" zPosition="10" pixmap="OpenNfrFHD/buttons/key_left.png" transparent="1" alphatest="blend" />
-    <eLabel text="page up" position="88,946" size=" 140,25" font="Regular;21" halign="center" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="page up" position="88,946" size=" 140,25" font="Regular;21" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <ePixmap position="950,946" size="30,25" zPosition="10" pixmap="OpenNfrFHD/buttons/key_right.png" transparent="1" alphatest="blend" />
-    <eLabel text="page down" position="803,946" size=" 140,25" font="Regular;21" halign="center" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="page down" position="803,946" size=" 140,25" font="Regular;21" halign="center" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
@@ -1460,9 +1460,9 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
       <convert type="ValueRange">2,2</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget name="network" position="55,141" size="790,45" font="LCD;35" backgroundColor="background" foregroundColor="cyan1" transparent="1" halign="center" valign="center" />
-    <widget name="transponder" position="1150,141" size="720,45" font="LCD;35" backgroundColor="background" foregroundColor="cyan1" transparent="1" halign="center" valign="center" />
-    <widget name="scan_state" position="1078,748" size="755,45" zPosition="2" font="LCD; 35" backgroundColor="background" foregroundColor="cyan1" transparent="1" halign="center" valign="center" />
+    <widget name="network" position="55,141" size="790,45" font="LCD;35" backgroundColor="cyan1" foregroundColor="cyan1" transparent="1" halign="center" valign="center" />
+    <widget name="transponder" position="1150,141" size="720,45" font="LCD;35" backgroundColor="cyan1" foregroundColor="cyan1" transparent="1" halign="center" valign="center" />
+    <widget name="scan_state" position="1078,748" size="755,45" zPosition="2" font="LCD; 35" backgroundColor="cyan1" foregroundColor="cyan1" transparent="1" halign="center" valign="center" />
     <widget name="pass" position="55,220" size="920,25" font="Regular; 24" backgroundColor="background" transparent="1" halign="center" valign="center" />
     <widget name="scan_progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,832" size="767,15" transparent="1" />
     <widget name="servicelist" position="55,270" size="920,655" itemHeight="30" font="Regular; 24" selectionDisabled="1" transparent="1" halign="center" valign="center" />
@@ -1474,13 +1474,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="837,95" zPosition="-8" size="375,214" />
     <ePixmap position="848,596" size="350,44" pixmap="skin_default/menu/db.png" transparent="1" alphatest="blend" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
+    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Default</convert>
     </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
+    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <eLabel text="Service scan" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="Service scan" position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="header" position="65,98" size="670,28" font="Regular;24" backgroundColor="background" transparent="1" />
     <eLabel position="65,130" size="710,2" backgroundColor="grey" />
     <widget name="config" position="65,140" size="710,500" itemHeight="30" scrollbarMode="showOnDemand" enableWrapAround="1" backgroundColor="background" transparent="1" />
@@ -1506,7 +1506,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <eLabel text="Service scan" position="74,50" size="720,43" font="LCD;40" backgroundColor="backtop" transparent="1" halign="center" foregroundColor="white" />
     <widget name="config" position="55,220" size="920,660" itemHeight="34" font="Regular; 26" scrollbarMode="showOnDemand" enableWrapAround="1" backgroundColor="background" transparent="1" />
     <ePixmap name="selector" position="51,889" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
-    <widget name="introduction" position="55,903" size="920,25" font="Regular;22" halign="center" valign="center" backgroundColor="black" foregroundColor="cyan1" transparent="1" />
+    <widget name="introduction" position="55,903" size="920,25" font="Regular;22" halign="center" valign="center" backgroundColor="cyan1" foregroundColor="cyan1" transparent="1" />
   </screen>
   <screen name="Satfinder" position="0,0" size="1920,1080" title="Satfinder" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
@@ -1514,13 +1514,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <eLabel position="805,86" size="426,240" zPosition="3" backgroundColor="black" />
     <ePixmap pixmap="skin_default/icons/dish_scan.png" position="967,148" size="119,110" zPosition="4" alphatest="blend" />
     <ePixmap position="848,596" size="350,44" pixmap="skin_default/menu/db.png" transparent="1" alphatest="blend" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
+    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Default</convert>
     </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
+    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <eLabel text="Satfinder" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="Satfinder" position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget source="Frontend" render="Label" position="120,95" size="600,22" zPosition="2" font="Regular;21" backgroundColor="backtop" halign="center" transparent="1">
       <convert type="FrontendInfo">SNRdB</convert>
     </widget>
@@ -1557,13 +1557,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="837,95" zPosition="-8" size="375,214" />
     <ePixmap position="848,596" size="350,44" pixmap="skin_default/menu/db.png" transparent="1" alphatest="blend" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
+    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Default</convert>
     </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
+    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <eLabel text="Recording paths" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="Recording paths" position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="config" position="65,98" size="710,540" itemHeight="30" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <ePixmap pixmap="skin_default/buttons/red.png" position=" 70,670" size="30,30" alphatest="blend" />
     <ePixmap pixmap="skin_default/buttons/green.png" position="360,670" size="30,30" alphatest="blend" />
@@ -1576,14 +1576,14 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="837,95" zPosition="-8" size="375,214" />
     <ePixmap position="848,596" size="350,44" pixmap="skin_default/menu/db.png" transparent="1" alphatest="blend" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
+    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Default</convert>
     </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
+    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <eLabel text="Setup" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <eLabel text="Language selection" position="70,95" size="715,30" font="Regular;24" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="Setup" position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="Language selection" position="70,95" size="715,30" font="Regular;24" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <eLabel position="70,130" size="715,2" backgroundColor="grey" />
     <widget source="languages" render="Listbox" position="70,135" size="715,480" zPosition="3" scrollbarMode="showOnDemand" transparent="1">
       <convert type="TemplatedMultiContent">
@@ -1615,9 +1615,9 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <widget name="text" position="74,50" size="720,43" font="LCD; 40" backgroundColor="backtop" transparent="1" halign="center" />
-    <widget name="target" position="55,220" size="920,28" font="LCD;24" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget name="target" position="55,220" size="920,28" font="LCD;24" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="filelist" position="55,268" size="920,300" itemHeight="34" scrollbarMode="showOnDemand" transparent="1" selectionDisabled="1" />
-    <widget name="textbook" position="55,579" size="920,28" font="LCD; 24" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget name="textbook" position="55,579" size="920,28" font="LCD; 24" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="booklist" position="55,627" size="920,300" itemHeight="30" font="Regular;24" scrollbarMode="showOnDemand" transparent="1" />
     <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
@@ -1799,7 +1799,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <eLabel text="Select HDD" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="Select HDD" position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="hddlist" position="70,95" size="700,545" itemHeight="30" transparent="1" />
     <ePixmap position="962,431" size="128,128" zPosition="2" pixmap="skin_default/icons/setup.png" transparent="1" alphatest="blend" />
   </screen>
@@ -1813,7 +1813,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <eLabel text="Harddisk Setup" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="Harddisk Setup" position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="model" position="70,105" size="670,30" font="Regular;23" transparent="1" />
     <widget name="capacity" position="70,200" size="670,30" font="Regular;23" transparent="1" />
     <widget name="bus" position="70,290" size="670,30" font="Regular;23" transparent="1" />
@@ -1826,7 +1826,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <ePixmap position="0,0" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
     <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="837,95" zPosition="-8" size="375,214" />
-    <widget source="Title" render="Label" position="65,17" size="720,43" font="Regular;35" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget source="Title" render="Label" position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="background" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Default</convert>
     </widget>
@@ -1868,7 +1868,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="background" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <widget source="Title" render="Label" position="65,17" size="720,43" font="Regular;35" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget source="Title" render="Label" position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget source="model" render="Label" position="70,95" size="670,25" font="Regular;23" transparent="1" />
     <widget source="capacity" render="Label" position="70,150" size="670,25" font="Regular;23" transparent="1" />
     <widget source="bus" render="Label" position="70,200" size="670,25" font="Regular;23" transparent="1" />
@@ -1895,7 +1895,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="background" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <widget source="Title" render="Label" position="65,17" size="720,43" font="Regular;35" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget source="Title" render="Label" position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="filelist" position="70,95" size="700,545" itemHeight="30" scrollbarMode="showOnDemand" transparent="1" />
     <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
     <ePixmap pixmap="skin_default/buttons/key_green.png" position="340,670" size="30,30" alphatest="blend" />
@@ -1916,7 +1916,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="background" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <widget source="Title" render="Label" position="65,17" size="720,43" font="Regular;35" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget source="Title" render="Label" position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="wait" position="70,95" size="700,545" transparent="1" />
     <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
     <ePixmap position="962,431" size="128,128" zPosition="2" pixmap="skin_default/icons/setup.png" transparent="1" alphatest="blend" />
@@ -1929,7 +1929,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <eLabel text="Help..." position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="Help..." position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="rc" position="160,95" size="164,550" pixmaps="skin_default/rc.png,skin_default/rcold.png" zPosition="10" alphatest="blend" />
     <widget name="long_key" position="90,670" size="300,30" font="Regular;24" halign="center" foregroundColor="yellow" backgroundColor="black" transparent="1" />
     <widget name="list" position="500,95" size="720,550" itemHeight="38" scrollbarMode="showOnDemand" transparent="1" />
@@ -1948,7 +1948,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="background" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <widget source="Title" render="Label" position="65,17" size="720,43" font="Regular;35" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <widget source="Title" render="Label" position="65,17" size="720,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget name="detailtext" position="70,95" size="700,545" zPosition="10" font="Regular;21" transparent="1" halign="left" valign="top" />
     <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
     <ePixmap pixmap="skin_default/buttons/key_yellow.png" position="340,670" size="30,30" alphatest="blend" />
@@ -1970,7 +1970,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="background" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <eLabel text="Softwaremanager" position="65,17" size="750,43" font="Regular;35" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
+    <eLabel text="Softwaremanager" position="65,17" size="750,43" font="Regular;35" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1" />
     <widget source="menu" render="Listbox" position="65,98" size="710,350" scrollbarMode="showNever" enableWrapAround="1" transparent="1">
       <convert type="TemplatedMultiContent">
 				{"template": [
@@ -1981,7 +1981,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 				}
 		  </convert>
     </widget>
-    <widget source="menu" render="Listbox" position="65,470" size="710,170" zPosition="3" scrollbarMode="showNever" selectionDisabled="1" foregroundColor="cyan1" backgroundColor="background" transparent="1">
+    <widget source="menu" render="Listbox" position="65,470" size="710,170" zPosition="3" scrollbarMode="showNever" selectionDisabled="1" foregroundColor="cyan1" backgroundColor="cyan1" transparent="1">
       <convert type="TemplatedMultiContent">
 				{"template": [
 				   MultiContentEntryText(pos = (0,0),size = (715,150),flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER|RT_WRAP,text = 2),# index 2 is the Description,
@@ -2003,10 +2003,10 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2.png" />
     <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
+    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Default</convert>
     </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
+    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="cyan1" transparent="1" foregroundColor="cyan1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <eLabel text="Network Setup" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />

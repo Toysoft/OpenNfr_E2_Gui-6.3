@@ -218,7 +218,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 		list = glob.glob(path)
 		for fn in list:
 			n = int(re.search('mp_global_pl_(\d+)', fn).group(1))
-			self.genreliste.append(('2', 'Global Playlist-%02d' % n, n))
+			self.genreliste.append(('2', 'Global Playlist-%02d' % n, fn))
 
 		self.m3u_list.clear()
 		path = mp_globals.pluginPath + "/userfiles/"
@@ -655,7 +655,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 				self.getExtPLList(path, base_url, ('/tmp/.hasbahca.de.txt', dpath), sel)
 			else:
 				self['F2'].hide()
-				self.playlist_num = self['liste'].getCurrent()[0][2]
+				self.playlist_num = int(re.search('mp_global_pl_(\d+)', self['liste'].getCurrent()[0][2]).group(1))
 				self.globalList()
 
 	def getExtPLList(self, path, base_url, dpath, sel):

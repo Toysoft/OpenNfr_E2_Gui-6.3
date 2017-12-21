@@ -74,7 +74,7 @@ class eightiesMusicListeScreen(MPScreen):
 		vids = re.findall('<a target="_self" href="(.*?)">(.*?)</a><br>', data, re.S)
 		if vids:
 			for url,title in vids:
-				url = "%s%s" % (self.baseurl, url)
+				url = "%s%s" % (self.baseurl, url.replace(' ','%20'))
 				self.filmliste.append((decodeHtml(title),url))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.keyLocked = False
@@ -91,6 +91,7 @@ class EightiesPlayer(SimplePlayer):
 		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, listTitle=listTitle, ltype='eighties')
 		self.token = token
 		self.listTitle = listTitle
+		self.eightieslink = EightiesLink(self.session)
 
 	def getVideo(self):
 		title = self.playList[self.playIdx][self.title_inr]
@@ -113,4 +114,4 @@ class EightiesPlayer(SimplePlayer):
 			scArtist = ''
 			scTitle = playinfos
 
-		EightiesLink(self.session).getLink(self.playStream, self.dataError, scTitle, scArtist, self.listTitle, url, self.token, None)
+		self.eightieslink.getLink(self.playStream, self.dataError, scTitle, scArtist, self.listTitle, url, self.token, None)

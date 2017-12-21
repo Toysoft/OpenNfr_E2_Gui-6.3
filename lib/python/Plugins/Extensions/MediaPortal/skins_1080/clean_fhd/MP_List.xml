@@ -7,7 +7,7 @@
         <convert type="ClockToText">Format:%A                   %d. %B</convert>
     </widget>
   <eLabel backgroundColor="#20000000" text="MediaPortal" font="mediaportal_clean;50" halign="left" valign="center" position="50,10" shadowColor="#00000000" shadowOffset="4,4" size="1200,90" transparent="1" />
-  <widget name="version" backgroundColor="#20000000" font="mediaportal_clean;20" halign="center" valign="left" position="315,50" shadowColor="#00000000" shadowOffset="4,4" size="130,25" transparent="1" />
+  <widget name="version" backgroundColor="#20000000" font="mediaportal_clean;20" halign="left" valign="bottom" position="330,53" shadowColor="#00000000" shadowOffset="4,4" size="130,25" transparent="1" />
   <widget backgroundColor="#20000000" font="mediaportal_clean;50" halign="center" valign="center" name="name" position="20,120" size="920,70" transparent="1" />
   <widget backgroundColor="#20000000" font="mediaportal;25" name="F1" position="15,1030" size="365,40" valign="center" halign="center" transparent="1" />
   <widget backgroundColor="#20000000" font="mediaportal;25" name="F2" position="385,1030" size="365,40" valign="center" halign="center" transparent="1" />

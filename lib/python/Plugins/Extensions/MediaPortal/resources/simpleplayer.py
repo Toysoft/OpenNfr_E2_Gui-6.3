@@ -932,6 +932,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		self.last_progress = 0
 		self.last_path = None
 		self.youtubelive = False
+		self.dash = False
 
 		self.SaverTimer = eTimer()
 		if mp_globals.isDreamOS:
@@ -1397,6 +1398,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self.close()
 		try:
 			if mp_globals.isDreamOS and mp_globals.stateinfo:
+				InfoBarServiceErrorPopupSupport._stateInfo.hide()
 				InfoBarServiceErrorPopupSupport._stateInfo = self.session.instantiateDialog(InfoBarStateInfo,zPosition=-5)
 				InfoBarServiceErrorPopupSupport._stateInfo.neverAnimate()
 		except:

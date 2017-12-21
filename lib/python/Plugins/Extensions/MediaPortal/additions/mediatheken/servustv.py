@@ -67,6 +67,8 @@ class sTVGenreScreen(MPScreen):
 	def layoutFinished(self):
 		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.genreliste.append(("Aktuelles", "/de/aktuelles"))
+		self.genreliste.append(("Abenteuer", "/de/abenteuer"))
+		self.genreliste.append(("Dokumentarfilm", "/de/dokumentarfilm"))
 		self.genreliste.append(("Kultur", "/de/kultur"))
 		self.genreliste.append(("Natur", "/de/natur"))
 		self.genreliste.append(("Sport", "/de/sport"))
@@ -78,7 +80,7 @@ class sTVGenreScreen(MPScreen):
 	def keyOK(self):
 		name = self['liste'].getCurrent()[0][0]
 		url = self['liste'].getCurrent()[0][1]
-		url = baseurl + url + "?page="
+		url = baseurl + url
 		self.session.open(sTVids,name,url)
 
 class sTVids(MPScreen):
@@ -95,9 +97,7 @@ class sTVids(MPScreen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft,
-			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"left" : self.keyLeft
 		}, -1)
 
 		self.keyLocked = True
@@ -113,15 +113,14 @@ class sTVids(MPScreen):
 
 	def loadPage(self):
 		self.keyLocked = True
-		url = self.Link
-		getPage(url, agent=stvAgent).addCallback(self.loadPageData).addErrback(self.dataError)
+		getPage(self.Link, agent=stvAgent).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
 		parse = re.search('row products(.*?)id="foot"', data, re.S)
-		shows = re.findall('video-play"\shref=".*?([A-Z0-9-]+)\/">.*?src="(https://da\d{0,2}.rbmbtnx.net/.*?\.jpg).*?class="card-title"><a href=".*?">(.*?)</a>', parse.group(1), re.S)
+		shows = re.findall('video-play"\shref="(.*?([A-Z0-9-]+)\/)">.*?src="(https://da\d{0,2}.rbmbtnx.net/.*?\.jpg).*?class="card-title"><a href=".*?">(.*?)</a>', parse.group(1), re.S)
 		if shows:
-			for (id,image,title) in shows:
-				self.filmliste.append((decodeHtml(title),id,image))
+			for (url,id,image,title) in shows:
+				self.filmliste.append((decodeHtml(title),id,image,url))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.ml.moveToIndex(0)
 			self.keyLocked = False
@@ -130,8 +129,18 @@ class sTVids(MPScreen):
 	def showInfos(self):
 		title = self['liste'].getCurrent()[0][0]
 		pic = self['liste'].getCurrent()[0][2]
+		url = self['liste'].getCurrent()[0][3]
+		url = baseurl + url
 		self['name'].setText(title)
 		CoverHelper(self['coverArt']).getCover(pic)
+		self['handlung'].setText('')
+		getPage(url, agent=stvAgent).addCallback(self.getDescr).addErrback(self.dataError)
+
+	def getDescr(self, data):
+		descr = re.findall('class="product-content.*?</div><br>(.*?)(?:</div>|<div)', data, re.S)
+		if descr:
+			descr = decodeHtml(stripAllTags(descr[0].replace('<br /><br />', '\n').replace('<br />', '\n')))
+			self['handlung'].setText(descr)
 
 	def keyOK(self):
 		if self.keyLocked:

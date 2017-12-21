@@ -29,6 +29,7 @@ class CoverHelper:
 		self._nc_callback = nc_callback
 		self.downloadPath = None
 		self.err_nocover = True
+		self.logofix = False
 
 	def downloadPage(self, url, path, agent=None, cookieJar=None):
 		if not agent:
@@ -48,6 +49,7 @@ class CoverHelper:
 	def getCover(self, url, download_cb=None, agent=None, cookieJar=None):
 		global glob_icon_num
 		global glob_last_cover
+		self.logofix = False
 		if url:
 			if url.startswith('http'):
 				if glob_last_cover[0] == url and glob_last_cover[1]:
@@ -65,6 +67,9 @@ class CoverHelper:
 						d.addCallback(self.cb_getCover, download_cb)
 					d.addErrback(self.dataErrorP)
 			elif url.startswith('file://'):
+				logopath = (config.mediaportal.iconcachepath.value + "logos")
+				if logopath in url:
+					self.logofix = True
 				self.showCoverFile(url[7:])
 				if download_cb:
 					download_cb(url[7:])
@@ -112,7 +117,7 @@ class CoverHelper:
 				self._cover.instance.setPixmap(gPixmapPtr())
 				scale = AVSwitch().getFramebufferScale()
 				size = self._cover.instance.size()
-				if mp_globals.fakeScale:
+				if mp_globals.fakeScale and not self.logofix:
 					self.picload.setPara((size.width(), size.height(), scale[0], scale[1], False, 1, "#00000000"))
 				else:
 					self.picload.setPara((size.width(), size.height(), scale[0], scale[1], False, 1, "#FF000000"))

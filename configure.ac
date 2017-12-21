@@ -756,6 +756,7 @@ data/Makefile
 data/spinner/Makefile
 data/SpinnerSelector/Makefile
 data/SpinnerSelector/Obelix/Makefile
+data/SpinnerSelector/spinner_nfr_dunkel/Makefile
 data/bootvideos/Makefile
 data/bootlogos/Makefile
 data/radiologos/Makefile
@@ -786,6 +787,7 @@ data/OpenNfrFHD/piconCam/Makefile
 data/OpenNfrFHD/tuner/Makefile
 data/OpenNfrFHD/volume/Makefile
 data/OpenNfrFHD/window/Makefile
+data/OpenNfrFHD/spinner/Makefile
 include/Makefile
 lib/Makefile
 lib/base/eenv.cpp

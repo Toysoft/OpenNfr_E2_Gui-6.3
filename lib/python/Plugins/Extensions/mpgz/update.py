@@ -119,7 +119,7 @@ class MPUpdateScreen(Screen):
 	def __onLayoutFinished(self):
 		height = self['mplog'].l.getItemSize().height()
 		try:
-			self.ml.l.setFont(gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
+			self.ml.l.setFont(gFont("mediaportal", height - 2 * mp_globals.sizefactor))
 		except:
 			pass
 		self.list.append(_("Starting update, please wait..."))

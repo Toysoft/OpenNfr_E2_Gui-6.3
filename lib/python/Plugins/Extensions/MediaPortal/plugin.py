@@ -189,7 +189,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2017120601"))
+config.mediaportal.version = NoSave(ConfigText(default="2017121701"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.retries = ConfigSubsection()
