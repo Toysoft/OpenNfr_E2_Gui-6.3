@@ -6,7 +6,7 @@ if HAVE_LIBDDVD
 SUBDIRS += DVDPlayer
 endif
 
-if GBUE4K
+if GB7252
 SUBDIRS += QuadPip
 endif
 
