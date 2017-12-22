@@ -24,11 +24,13 @@ import urllib2
 import os
 import shutil
 import math
-from boxbranding import getBoxType,  getImageDistro, getMachineName, getMachineBuild, getMachineBrand, getBrandOEM, getImageVersion, getMachineKernelFile, getMachineRootFile
+from boxbranding import getBoxType,  getImageDistro, getMachineMtdKernel, getMachineMtdRoot, getMachineName, getMachineBuild, getMachineBrand, getBrandOEM, getImageVersion, getMachineKernelFile, getMachineRootFile
 distro =  getImageDistro()
 ImageVersion = getImageVersion()
 ROOTFSBIN = getMachineRootFile()
 KERNELBIN = getMachineKernelFile()
+MTDKERNEL = getMachineMtdKernel()
+MTDROOTFS = getMachineMtdRoot()
 
 #############################################################################################################
 image = 0 # 0=openNFR
@@ -89,14 +91,14 @@ class FlashOnline(Screen):
 		
 		Screen.setTitle(self, _("Flash On the Fly"))
 		if SystemInfo["HaveMultiBoot"]:
-			self["key_yellow"] = Button(_("STARTUP"))
+			self["key_yellow"] = StaticText(_("STARTUP"))
 		else:
-			self["key_yellow"] = Button("")
-		self["key_green"] = Button("Online")
-		self["key_red"] = Button(_("Exit"))
-		self["key_blue"] = Button("Local")
-		self["info-local"] = Label(_("Local = Flash a image from local path /hdd/images"))
-		self["info-online"] = Label(_("Online = Download a image and flash it"))
+			self["key_yellow"] = StaticText("")
+		self["key_green"] = StaticText("Online")
+		self["key_red"] = StaticText(_("Exit"))
+		self["key_blue"] = StaticText("Local")
+		self["info-local"] = StaticText(_("Local = Flash a image from local path /hdd/images"))
+		self["info-online"] = StaticText(_("Online = Download a image and flash it"))
 		
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"], 
 		{
@@ -188,7 +190,7 @@ class FlashOnline(Screen):
 		files = []
 		if SystemInfo["HaveMultiBoot"]:
 			path = PATH
-			if getMachineBuild() in ("hd51","vs1500","h7","ceryon7252"):
+			if getMachineBuild() in ("hd51","vs1500","h7","ceryon7252" ,"gb7252"):
 				for name in os.listdir(path):
 					if name != 'bootname' and os.path.isfile(os.path.join(path, name)):
 						try:
@@ -514,6 +516,8 @@ class doFlashImage(Screen):
 				text += _("Simulate (no write)")
 				if SystemInfo["HaveMultiBoot"]:
 					cmdlist.append("%s -n -r -k -m%s %s > /dev/null 2>&1" % (ofgwritePath, self.multi, flashTmp))
+				elif getMachineBuild() in ("u5","u5pvr"):
+ 					cmdlist.append("%s -n -r%s -k%s %s > /dev/null 2>&1" % (ofgwritePath, MTDROOTFS, MTDKERNEL, flashTmp))					
 				else:
 					cmdlist.append("%s -n -r -k %s > /dev/null 2>&1" % (ofgwritePath, flashTmp))
 				self.close()
@@ -529,6 +533,8 @@ class doFlashImage(Screen):
 					if not self.List == "STARTUP":
 						cmdlist.append("umount -fl /oldroot_bind")
 						cmdlist.append("umount -fl /newroot")
+					elif getMachineBuild() in ("u5","u5pvr"):
+	 					cmdlist.append("%s -r%s -k%s %s > /dev/null 2>&1" % (ofgwritePath, MTDROOTFS, MTDKERNEL, flashTmp))					
 				else:
 					cmdlist.append("%s -r -k %s > /dev/null 2>&1" % (ofgwritePath, flashTmp))
 				message = "echo -e '\n"
