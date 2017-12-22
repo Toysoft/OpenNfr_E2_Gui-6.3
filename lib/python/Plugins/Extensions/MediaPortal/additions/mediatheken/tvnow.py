@@ -209,9 +209,16 @@ class tvnowStaffelScreen(MPScreen):
 
 	def parseData(self, data):
 		nowdata = json.loads(data)
-		for node in nowdata["formatTabs"]["items"]:
-			self.filmliste.append((str(node["headline"]), str(node["id"]), str(node["visible"]),str(node["tv"])))
-		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
+		try:
+			for node in nowdata["formatTabs"]["items"]:
+				self.filmliste.append((str(node["headline"]), str(node["id"]), str(node["visible"]),str(node["tv"])))
+		except:
+			pass
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('Currently no seasons available!'), None, None, None))
+			self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		else:
+			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
 		CoverHelper(self['coverArt']).getCover(self.Image)
 		self.showInfos()
@@ -226,7 +233,8 @@ class tvnowStaffelScreen(MPScreen):
 			return
 		Name = self.Name + ":" + self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		self.session.open(tvnowEpisodenScreen, Link, Name, self.Image)
+		if Link:
+			self.session.open(tvnowEpisodenScreen, Link, Name, self.Image)
 
 class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 
@@ -256,46 +264,81 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
+		self.container = 0
 
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		url = BASE_URL + "formatlists/" + self.Link + "?fields=*,formatTabPages.*,formatTabPages.container.movies.*,formatTabPages.container.movies.format.*,formatTabPages.container.movies.livestreamEvent.*,formatTabPages.container.movies.pictures,formatTabPages.container.movies.files.*"
+		url = BASE_URL + "formatlists/" + self.Link + "?fields=*,formatTabPages.*,formatTabPages.container.*,formatTabPages.container.movies.format.*,formatTabPages.container.movies.pictures"
 		twAgentGetPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
+
+	def loadContainer(self, id):
+		url = BASE_URL + "containers/" + id + "/movies?fields=*,format.*,pictures&maxPerPage=500"
+		twAgentGetPage(url, agent=nowAgent).addCallback(self.parseContainer, id=True).addErrback(self.dataError)
 
 	def parseData(self, data):
 		nowdata = json.loads(data)
-		for node in nowdata["formatTabPages"]["items"]:
+		try:
+			for node in nowdata["formatTabPages"]["items"]:
+				try:
+					try:
+						containerid = str(node["container"]["id"])
+						if containerid:
+							self.container += 1
+							self.loadContainer(containerid)
+					except:
+						for nodex in node["container"]["movies"]["items"]:
+							try:
+								if nodex["free"] and not nodex["isDrm"]:
+									try:
+										image = "http://ais.tvnow.de/rtlnow/%s/660x660/formatimage.jpg" % nodex["pictures"]["default"][0]["id"]
+									except:
+										image = self.Image
+									descr = str(nodex["articleLong"])
+									if descr == "":
+										descr = str(nodex["articleShort"])
+									self.filmliste.append((str(nodex["title"]), str(nodex["id"]), descr, image))
+							except:
+								continue
+				except:
+					continue
+			self.parseContainer("", False)
+		except:
+			pass
+
+	def parseContainer(self, data, id=False):
+		if id:
+			self.container -= 1
+			nowdata = json.loads(data)
 			try:
-				for nodex in node["container"]["movies"]["items"]:
+				for nodex in nowdata["items"]:
 					try:
 						if nodex["free"] and not nodex["isDrm"]:
 							try:
 								image = "http://ais.tvnow.de/rtlnow/%s/660x660/formatimage.jpg" % nodex["pictures"]["default"][0]["id"]
 							except:
 								image = self.Image
-							try:
-								file = str(nodex["files"]["items"][0]["path"])
-								file = re.sub(r'/(.+)/((\d+)/(.*))', r'/\1/videos/\2', file)
-								file = file.strip('/')
-							except:
-								file = None
-							self.filmliste.append((str(nodex["title"]), str(nodex["id"]), str(nodex["articleLong"]), image, file))
+							descr = str(nodex["articleLong"])
+							if descr == "":
+								descr = str(nodex["articleShort"])
+							self.filmliste.append((str(nodex["title"]), str(nodex["id"]), descr, image))
 					except:
 						continue
 			except:
-				continue
-		if len(self.filmliste) == 0:
-			self.filmliste.append((_('Currently no free episodes available!'), None, None, None))
-		self.ml.setList(map(self._defaultlistleft, self.filmliste))
-		self.keyLocked = False
-		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, 1, 1, mode=1)
-		self.showInfos()
+				pass
+		if self.container == 0:
+			if len(self.filmliste) == 0:
+				self.filmliste.append((_('Currently no free episodes available!'), None, None, None))
+			self.ml.setList(map(self._defaultlistleft, self.filmliste))
+			self.keyLocked = False
+			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, 1, 1, mode=1)
+			self.showInfos()
 
 	def showInfos(self):
 		Descr = self['liste'].getCurrent()[0][2]
 		Image = self['liste'].getCurrent()[0][3]
-		self['handlung'].setText(decodeHtml(Descr))
+		if Descr:
+			self['handlung'].setText(Descr)
 		CoverHelper(self['coverArt']).getCover(Image)
 		Name = self['liste'].getCurrent()[0][0]
 		self['name'].setText(_("Selection:") + " " + self.Name + ":" + Name)
@@ -305,10 +348,9 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 		if self.keyLocked or exist == None:
 			return
 		id = self['liste'].getCurrent()[0][1]
-		if not id:
-			return
-		url = 'http://api.tvnow.de/v3/movies/%s?fields=manifest' % id
-		getPage(url, agent=nowAgent).addCallback(self.get_stream).addErrback(self.dataError)
+		if id:
+			url = 'http://api.tvnow.de/v3/movies/%s?fields=manifest' % id
+			getPage(url, agent=nowAgent).addCallback(self.get_stream).addErrback(self.dataError)
 
 	def get_stream(self, data):
 		nowdata = json.loads(data)

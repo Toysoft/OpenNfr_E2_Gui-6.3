@@ -80,7 +80,7 @@ class myspassGenreScreen(MPScreen):
 				self.genreliste.append((decodeHtml(name), link, image))
 			# remove duplicates
 			self.genreliste = list(set(self.genreliste))
-			self.genreliste.sort()
+			self.genreliste.sort(key=lambda t : t[0].lower())
 		if len(self.genreliste) == 0:
 			self.genreliste.append((_("No shows found!"), None, None))
 		self.ml.setList(map(self._defaultlistleft, self.genreliste))
@@ -128,96 +128,76 @@ class myspassStaffelListeScreen(MPScreen):
 		getPage(self.myspassUrl).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
+		self.data = data
 		parse = re.search('data-category="full_episode".*?data-target="#episodes_season__category_">(.*?)</ul>', data, re.S)
 		if parse:
 			staffeln = re.findall('data-query=".*?.*?formatId=(\d+).*?seasonId=(\d+)&amp(.*?)data-target.*?>\t{0,5}\s{0,15}(.*?)</li', parse.group(1), re.S)
 			if staffeln:
 				self.staffelliste = []
 				for (formatid, seasonid, pages, name) in staffeln:
-					page = re.search('data-maxpages="(.*?)"', pages, re.S)
-					if page:
-						pages = page.group(1)
-					else:
-						pages = 0
-					link = "http://www.myspass.de/frontend/php/ajax.php?ajax=true&query=getEpisodeListFromSeason&formatId=%s&seasonId=%s&category=full_episode&sortBy=episode_desc" % (formatid, seasonid)
-					self.staffelliste.append((decodeHtml(name).strip(), link, pages))
+					self.staffelliste.append((decodeHtml(name).strip(), seasonid))
 		if len(self.staffelliste) == 0:
-			self.staffelliste.append((_('No seasons found!'), None, 0))
+			self.staffelliste.append((_('No seasons found!'), None))
 		self.ml.setList(map(self._defaultlistleft, self.staffelliste))
 		self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		Name = self['liste'].getCurrent()[0][0]
-		Link = self['liste'].getCurrent()[0][1]
-		Pages = self['liste'].getCurrent()[0][2]
-		if Link:
-			self.session.open(myspassFolgenListeScreen, Name, Link, Pages)
+		season = self['liste'].getCurrent()[0][0]
+		seasonid = self['liste'].getCurrent()[0][1]
+		if seasonid:
+			self.session.open(myspassFolgenListeScreen, season, seasonid, self.data)
 
-class myspassFolgenListeScreen(MPScreen, ThumbsHelper):
+class myspassFolgenListeScreen(MPScreen):
 
-	def __init__(self, session, myspassName, myspassUrl, myspassPages):
-		self.myspassName = myspassName
-		self.myspassUrl = myspassUrl
-		self.myspassPages = myspassPages
+	def __init__(self, session, season, seasonid, data):
+		self.season = season
+		self.seasonid = seasonid
+		self.data = data
 		MPScreen.__init__(self, session, skin='MP_PluginDescr')
-		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
-			"5" : self.keyShowThumb,
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft,
-			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"left" : self.keyLeft
 		}, -1)
 
 		self.keyLocked = True
 		self['title'] = Label("MySpass.de")
-		self['ContentTitle'] = Label("Folgen:")
-		self['Page'] = Label(_("Page:"))
-
-		self.page = 0
-		self.lastpage = 0
+		self['ContentTitle'] = Label(self.season + " Episoden:")
 
 		self.folgenliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 
-		self.onLayoutFinish.append(self.loadPage)
+		self.onLayoutFinish.append(self.loadPageData)
 
-	def loadPage(self):
-		self.folgenliste = []
-		url = "%s%s" % (self.myspassUrl, str(self.page))
-		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
-
-	def loadPageData(self, data):
-		self.lastpage = int(self.myspassPages)
-		self['page'].setText(str(self.page+1) + ' / ' + str(self.lastpage+1))
-		folgen = re.findall('data-original="(.*?)".\s{0,25}alt="(.*?)".*?--\/(\d+)\/">(.*?)</a>', data, re.S|re.I)
+	def loadPageData(self):
+		data = re.search('.*?div class="full_episode_seasonlist full_episode_seasonId%s" data-view="list(.*?)</tbody>' % self.seasonid, self.data, re.S).group(1)
+		folgen = re.findall('data-href=".*?--\/(\d+)\/"\s+title="(.*?)".*?<b>(.*?)</b></td><td>(.*?)</td><td>.*?\s+(\d+:\d+(?::\d+|))\s+', data, re.S|re.I)
 		if folgen:
-			for (image, title, id, description) in folgen:
+			for (id, description, episode, title, runtime) in folgen:
 				link = "http://www.myspass.de/includes/apps/video/getvideometadataxml.php?id=%s" % id
-				image = "http:" + image
-				description = description.replace('\t','').replace('\n','')
-				self.folgenliste.append((decodeHtml(title), link, image, description))
+				image = "http://www.myspass.de/myspass/media/images/videos/%s/%s_640x360.jpg" % (id[-2:], id)
+				title = "Episode " + episode + " - " + decodeHtml(title)
+				self.folgenliste.append((title, link, image, description, runtime))
 			self.ml.setList(map(self._defaultlistleft, self.folgenliste))
 			self.keyLocked = False
 			self.showInfos()
-			self.th_ThumbsQuery(self.folgenliste, 0, 1, 2, None, None, self.page+1, self.lastpage+1, mode=1, pagefix=-1)
 
 	def showInfos(self):
-		streamTitle = self['liste'].getCurrent()[0][0]
-		streamPic = self['liste'].getCurrent()[0][2]
-		streamHandlung = self['liste'].getCurrent()[0][3]
-		self['name'].setText(streamTitle)
-		self['handlung'].setText(streamHandlung)
-		CoverHelper(self['coverArt']).getCover(streamPic)
+		title = self['liste'].getCurrent()[0][0]
+		pic = self['liste'].getCurrent()[0][2]
+		descr = self['liste'].getCurrent()[0][3]
+		runtime = self['liste'].getCurrent()[0][4]
+		self['name'].setText(title)
+		self['handlung'].setText("Laufzeit: "+runtime+"\n\n"+descr)
+		CoverHelper(self['coverArt']).getCover(pic)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -230,17 +210,3 @@ class myspassFolgenListeScreen(MPScreen, ThumbsHelper):
 		stream_url = re.search('<url_flv><.*?CDATA\[(.*?)\]\]></url_flv>', data, re.S)
 		if stream_url:
 			self.session.open(SimplePlayer, [(self.myname, stream_url.group(1))], showPlaylist=False, ltype='myspass')
-
-	def keyPageDown(self):
-		if self.keyLocked:
-			return
-		if not self.page < 1:
-			self.page -= 1
-			self.loadPage()
-
-	def keyPageUp(self):
-		if self.keyLocked:
-			return
-		if self.page < self.lastpage:
-			self.page += 1
-			self.loadPage()

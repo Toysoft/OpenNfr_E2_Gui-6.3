@@ -349,7 +349,6 @@ class youtubeGenreScreen(MenuHelper):
 			from os.path import exists
 			if not exists(self.user_path):
 				shutil.copyfile(fname, self.user_path)
-				return
 			fp = open(self.user_path)
 			data = fp.read()
 			fp.close()
@@ -387,7 +386,7 @@ class youtubeGenreScreen(MenuHelper):
 		}, -1)
 
 		self['title'] = Label("YouTube")
-		self['ContentTitle'] = Label(_("VIDEOSEARCH"))
+		self['ContentTitle'] = Label(_("Genres"))
 
 		self['Query'] = Label(_("Search request"))
 		self['query'] = Label()

@@ -220,8 +220,8 @@ class MPScreen(Screen, HelpableScreen):
 
 	def _animation(self):
 		try:
-			self['title'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
-			self['ContentTitle'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
+			#self['title'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
+			#self['ContentTitle'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
 			#self['name'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
 			self['coverArt'].instance.setShowHideAnimation(config.mediaportal.animation_coverart.value)
 		except:

@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MediaPortal\n"
-"POT-Creation-Date: 2017-11-25 17:34+0100\n"
-"PO-Revision-Date: 2017-11-25 17:41+0100\n"
+"POT-Creation-Date: 2017-12-21 14:56+0100\n"
+"PO-Revision-Date: 2017-12-21 14:57+0100\n"
 "Last-Translator: dhwz <dhwz@gmx.net>\n"
 "Language-Team: MediaPortal Team\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.5\n"
 "X-Poedit-Basepath: ../../../..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -29,12 +29,12 @@ msgstr "Alben:"
 #: mpgz/src/additions/useradditions/seriesever.py:217
 #: mpgz/src/additions/useradditions/sharedir.py:278
 #: mpgz/src/additions/useradditions/watchseriesonline.py:236
-#: src/additions/mediatheken/youtube.py:812 src/additions/music/radio.py:378
-#: src/additions/porn/x2search4porn.py:81 src/resources/simpleplayer.py:618
+#: src/additions/mediatheken/youtube.py:810 src/additions/music/radio.py:378
+#: src/additions/porn/x2search4porn.py:81 src/resources/simpleplayer.py:614
 msgid "Delete"
 msgstr "Löschen"
 
-#: mpgz/src/additions/music/canna.py:108 src/resources/simpleplayer.py:1510
+#: mpgz/src/additions/music/canna.py:108 src/resources/simpleplayer.py:1511
 msgid "No entries in the playlist available!"
 msgstr "Keine Einträge in der Playlist vorhanden!"
 
@@ -70,12 +70,12 @@ msgstr "Jahr:"
 #: src/additions/mediatheken/tvnow.py:126
 #: src/additions/mediatheken/tvnow.py:166
 #: src/additions/mediatheken/tvnow.py:197
-#: src/additions/mediatheken/tvnow.py:221
-#: src/additions/mediatheken/tvnow.py:253
-#: src/additions/mediatheken/tvnow.py:301
+#: src/additions/mediatheken/tvnow.py:228
+#: src/additions/mediatheken/tvnow.py:261
+#: src/additions/mediatheken/tvnow.py:344
 #: src/additions/mediatheken/youtube_user.py:23
 #: src/additions/porn/x2search4porn.py:197 src/resources/menuhelper.py:35
-#: src/resources/menuhelper.py:343 src/resources/simplelist.py:173
+#: src/resources/menuhelper.py:360 src/resources/simplelist.py:173
 msgid "Selection:"
 msgstr "Auswahl:"
 
@@ -83,11 +83,11 @@ msgstr "Auswahl:"
 #: mpgz/src/additions/music/musicstreamcc.py:134
 #: src/additions/fun/germanytv.py:58 src/additions/fun/germanytv.py:101
 #: src/additions/fun/germanytv.py:161 src/additions/fun/heisevideo.py:26
-#: src/additions/mediatheken/youtube.py:818
-#: src/additions/mediatheken/youtube_user.py:24 src/plugin.py:918
-#: src/plugin.py:1834 src/plugin.py:2831 src/plugin.py:3608
+#: src/additions/mediatheken/youtube.py:816
+#: src/additions/mediatheken/youtube_user.py:24 src/plugin.py:914
+#: src/plugin.py:1845 src/plugin.py:2859 src/plugin.py:3654
 #: src/resources/showAsThumb.py:244 src/resources/simplelist.py:214
-#: src/resources/simplelist.py:754 src/resources/simpleplayer.py:626
+#: src/resources/simplelist.py:754 src/resources/simpleplayer.py:622
 msgid "Exit"
 msgstr "Beenden"
 
@@ -97,7 +97,7 @@ msgstr "Beenden"
 #: mpgz/src/additions/porn/freeomovie.py:144
 #: mpgz/src/additions/porn/ivhunter.py:166
 #: mpgz/src/additions/porn/ivhunter.py:223
-#: mpgz/src/additions/porn/javhd3x.py:191
+#: mpgz/src/additions/porn/javhd3x.py:198
 #: mpgz/src/additions/porn/justporn.py:126
 #: mpgz/src/additions/porn/lfporn.py:142
 #: mpgz/src/additions/porn/mydirtyhobby.py:79
@@ -117,11 +117,13 @@ msgstr "Beenden"
 #: mpgz/src/additions/porn/streamxxx.py:263
 #: mpgz/src/additions/porn/top1porn.py:137
 #: mpgz/src/additions/porn/tubebang.py:140
-#: mpgz/src/additions/porn/yourpornsexy.py:183
-#: mpgz/src/additions/porn/yourpornsexy.py:251
+#: mpgz/src/additions/porn/yourpornsexy.py:193
+#: mpgz/src/additions/porn/yourpornsexy.py:254
+#: mpgz/src/additions/porn/yourpornsexy.py:322
 #: mpgz/src/additions/sport/wrestlingnetwork.py:67
 #: mpgz/src/additions/useradditions/ddl_me.py:223
 #: mpgz/src/additions/useradditions/flimmerstube.py:129
+#: mpgz/src/additions/useradditions/foxx.py:94
 #: mpgz/src/additions/useradditions/hdfilme.py:104
 #: mpgz/src/additions/useradditions/kinoxto.py:93
 #: mpgz/src/additions/useradditions/movie4k.py:120
@@ -140,9 +142,9 @@ msgstr "Beenden"
 #: mpgz/src/additions/useradditions/seriesever.py:373
 #: mpgz/src/additions/useradditions/sharedir.py:424
 #: mpgz/src/additions/useradditions/streamit.py:89
-#: mpgz/src/additions/useradditions/streamit.py:233
-#: mpgz/src/additions/useradditions/streamit.py:238
-#: mpgz/src/additions/useradditions/streamit.py:506
+#: mpgz/src/additions/useradditions/streamit.py:234
+#: mpgz/src/additions/useradditions/streamit.py:239
+#: mpgz/src/additions/useradditions/streamit.py:502
 #: mpgz/src/additions/useradditions/watchseries.py:275
 #: src/additions/fun/chefkoch.py:60 src/additions/fun/chefkoch.py:113
 #: src/additions/fun/e2world.py:98 src/additions/fun/funnyvideoclips_de.py:122
@@ -150,7 +152,7 @@ msgstr "Beenden"
 #: src/additions/fun/hanswurst_net.py:147 src/additions/fun/heisevideo.py:38
 #: src/additions/fun/heisevideo.py:136 src/additions/fun/lachmeister_de.py:121
 #: src/additions/fun/lachschon_de.py:175 src/additions/fun/retrotv.py:43
-#: src/additions/mediatheken/ard.py:505 src/additions/mediatheken/ard.py:722
+#: src/additions/mediatheken/ard.py:489 src/additions/mediatheken/ard.py:692
 #: src/additions/mediatheken/arte.py:170 src/additions/mediatheken/atv.py:62
 #: src/additions/mediatheken/atv.py:121 src/additions/mediatheken/atv.py:137
 #: src/additions/mediatheken/atv.py:174 src/additions/mediatheken/atv.py:215
@@ -167,10 +169,10 @@ msgstr "Beenden"
 #: src/additions/mediatheken/southpark.py:125
 #: src/additions/mediatheken/southpark.py:207
 #: src/additions/mediatheken/videogold_de.py:119
-#: src/additions/mediatheken/youtube.py:891
-#: src/additions/mediatheken/zdf.py:169 src/additions/mediatheken/zdf.py:335
-#: src/additions/mediatheken/zdf.py:344 src/additions/mediatheken/zdf.py:444
-#: src/additions/mediatheken/zdf.py:462 src/additions/mediatheken/zdf.py:675
+#: src/additions/mediatheken/youtube.py:889
+#: src/additions/mediatheken/zdf.py:168 src/additions/mediatheken/zdf.py:334
+#: src/additions/mediatheken/zdf.py:343 src/additions/mediatheken/zdf.py:443
+#: src/additions/mediatheken/zdf.py:461 src/additions/mediatheken/zdf.py:676
 #: src/additions/music/jukebox.py:223 src/additions/music/jukebox.py:232
 #: src/additions/music/radio.py:272 src/additions/newsdoku/bild.py:126
 #: src/additions/newsdoku/doku_to.py:136
@@ -187,35 +189,36 @@ msgstr "Beenden"
 #: src/additions/porn/dachix.py:140 src/additions/porn/digitalplayground.py:172
 #: src/additions/porn/drtuber.py:201 src/additions/porn/elladies.py:115
 #: src/additions/porn/eporner.py:181 src/additions/porn/eroprofile.py:155
-#: src/additions/porn/extremetube.py:185 src/additions/porn/faapy.py:148
-#: src/additions/porn/faapy.py:231 src/additions/porn/hclips.py:180
+#: src/additions/porn/extremetube.py:185 src/additions/porn/faapy.py:155
+#: src/additions/porn/faapy.py:227 src/additions/porn/hclips.py:180
 #: src/additions/porn/hdporn.py:101 src/additions/porn/hdzog.py:163
 #: src/additions/porn/homemoviestube.py:183 src/additions/porn/hotmovs.py:162
-#: src/additions/porn/mofos.py:75 src/additions/porn/mofos.py:168
-#: src/additions/porn/mofos.py:252 src/additions/porn/mofos.py:325
+#: src/additions/porn/mofos.py:75 src/additions/porn/mofos.py:170
+#: src/additions/porn/mofos.py:256 src/additions/porn/mofos.py:331
 #: src/additions/porn/moviefap.py:149 src/additions/porn/naughtyamerica.py:168
-#: src/additions/porn/pinflix.py:183 src/additions/porn/pinflix.py:288
-#: src/additions/porn/pornhub.py:948 src/additions/porn/pornoxo.py:146
-#: src/additions/porn/pornrabbit.py:155 src/additions/porn/realgfporn.py:178
-#: src/additions/porn/realitykings.py:76 src/additions/porn/realitykings.py:174
-#: src/additions/porn/redtube.py:212 src/additions/porn/sexu.py:145
-#: src/additions/porn/sunporno.py:78 src/additions/porn/sunporno.py:179
-#: src/additions/porn/teamskeet.py:76 src/additions/porn/teamskeet.py:163
-#: src/additions/porn/tnaflix.py:163 src/additions/porn/tube8.py:198
-#: src/additions/porn/tubepornclassic.py:148 src/additions/porn/tubewolf.py:69
-#: src/additions/porn/tubewolf.py:129 src/additions/porn/txxx.py:181
-#: src/additions/porn/updatetube.py:93 src/additions/porn/updatetube.py:187
-#: src/additions/porn/upornia.py:182 src/additions/porn/vjav.py:163
-#: src/additions/porn/voyeurhit.py:142 src/additions/porn/vporn.py:96
-#: src/additions/porn/vporn.py:284 src/additions/porn/wetplace.py:155
-#: src/additions/porn/wicked.py:145 src/additions/porn/wicked.py:227
-#: src/additions/porn/x4tube.py:216 src/additions/porn/x4tube.py:308
-#: src/additions/porn/xhamster.py:495 src/additions/porn/youporn.py:405
-#: src/additions/sport/pokerstars.py:59 src/additions/sport/pokerstars.py:118
-#: src/additions/sport/pokerstars.py:168 src/additions/sport/pokerstars.py:200
-#: src/additions/sport/sporttotal.py:68 src/resources/menuhelper.py:65
-#: src/resources/mpscreen.py:280 src/resources/simplelist.py:466
-#: src/resources/simplelist.py:655
+#: src/additions/porn/nubilefilms.py:74 src/additions/porn/nubilefilms.py:150
+#: src/additions/porn/nubilefilms.py:222 src/additions/porn/pinflix.py:183
+#: src/additions/porn/pinflix.py:288 src/additions/porn/pornhub.py:948
+#: src/additions/porn/pornoxo.py:146 src/additions/porn/pornrabbit.py:155
+#: src/additions/porn/realgfporn.py:178 src/additions/porn/realitykings.py:76
+#: src/additions/porn/realitykings.py:174 src/additions/porn/redtube.py:212
+#: src/additions/porn/sexu.py:145 src/additions/porn/sunporno.py:78
+#: src/additions/porn/sunporno.py:179 src/additions/porn/teamskeet.py:76
+#: src/additions/porn/teamskeet.py:163 src/additions/porn/tnaflix.py:163
+#: src/additions/porn/tube8.py:198 src/additions/porn/tubepornclassic.py:148
+#: src/additions/porn/tubewolf.py:69 src/additions/porn/tubewolf.py:129
+#: src/additions/porn/txxx.py:181 src/additions/porn/updatetube.py:93
+#: src/additions/porn/updatetube.py:187 src/additions/porn/upornia.py:182
+#: src/additions/porn/vjav.py:163 src/additions/porn/voyeurhit.py:142
+#: src/additions/porn/vporn.py:96 src/additions/porn/vporn.py:284
+#: src/additions/porn/wetplace.py:155 src/additions/porn/wicked.py:145
+#: src/additions/porn/wicked.py:227 src/additions/porn/x4tube.py:216
+#: src/additions/porn/x4tube.py:308 src/additions/porn/xhamster.py:495
+#: src/additions/porn/youporn.py:405 src/additions/sport/pokerstars.py:59
+#: src/additions/sport/pokerstars.py:118 src/additions/sport/pokerstars.py:168
+#: src/additions/sport/pokerstars.py:200 src/additions/sport/sporttotal.py:68
+#: src/resources/menuhelper.py:67 src/resources/mpscreen.py:283
+#: src/resources/simplelist.py:466 src/resources/simplelist.py:655
 msgid "Please wait..."
 msgstr "Bitte warten..."
 
@@ -321,6 +324,7 @@ msgid "Similar artists"
 msgstr "Ähnliche Interpreten"
 
 #: mpgz/src/additions/music/myfreemp3.py:370
+#: src/additions/mediatheken/youtube.py:389
 msgid "Genres"
 msgstr "Genres"
 
@@ -382,7 +386,7 @@ msgid "Show All"
 msgstr "Zeige Alle"
 
 #: mpgz/src/additions/music/myfreemp3.py:497 src/additions/music/jukebox.py:241
-#: src/additions/music/jukebox.py:319 src/resources/menuhelper.py:328
+#: src/additions/music/jukebox.py:319 src/resources/menuhelper.py:330
 msgid "No results found!"
 msgstr "Keine Ergebnisse gefunden!"
 
@@ -394,8 +398,8 @@ msgid "Yes"
 msgstr "Ja"
 
 #: mpgz/src/additions/music/myfreemp3.py:508
-#: mpgz/src/additions/music/myfreemp3.py:515 src/plugin.py:282
-#: src/plugin.py:296 src/resources/simplelist.py:623
+#: mpgz/src/additions/music/myfreemp3.py:515 src/plugin.py:283
+#: src/plugin.py:294 src/resources/simplelist.py:623
 #: src/resources/simplelist.py:800 src/resources/simplelist.py:824
 #: src/resources/simpleplayer.py:1365 src/resources/simpleplayer.py:1371
 msgid "No"
@@ -406,7 +410,7 @@ msgstr "Nein"
 #: mpgz/src/additions/porn/freeomovie.py:134
 #: mpgz/src/additions/porn/hqporner.py:178
 #: mpgz/src/additions/porn/ivhunter.py:153
-#: mpgz/src/additions/porn/javhd3x.py:178
+#: mpgz/src/additions/porn/javhd3x.py:185
 #: mpgz/src/additions/porn/justporn.py:129
 #: mpgz/src/additions/porn/lfporn.py:129
 #: mpgz/src/additions/porn/mydirtyhobby.py:167
@@ -421,12 +425,14 @@ msgstr "Nein"
 #: mpgz/src/additions/porn/streamxxx.py:188
 #: mpgz/src/additions/porn/top1porn.py:124
 #: mpgz/src/additions/porn/tubebang.py:127
-#: mpgz/src/additions/porn/yourpornsexy.py:170
-#: mpgz/src/additions/porn/yourpornsexy.py:238
+#: mpgz/src/additions/porn/yourpornsexy.py:179
+#: mpgz/src/additions/porn/yourpornsexy.py:241
+#: mpgz/src/additions/porn/yourpornsexy.py:309
 #: mpgz/src/additions/sport/wrestlingnetwork.py:129
 #: mpgz/src/additions/useradditions/ddl_me.py:170
 #: mpgz/src/additions/useradditions/filmpalast.py:306
 #: mpgz/src/additions/useradditions/flimmerstube.py:116
+#: mpgz/src/additions/useradditions/foxx.py:80
 #: mpgz/src/additions/useradditions/ganime.py:73
 #: mpgz/src/additions/useradditions/hdfilme.py:191
 #: mpgz/src/additions/useradditions/kinoxto.py:450
@@ -437,9 +443,8 @@ msgstr "Nein"
 #: mpgz/src/additions/useradditions/primewire.py:147
 #: mpgz/src/additions/useradditions/sharedir.py:392
 #: mpgz/src/additions/useradditions/solarmovie.py:131
-#: mpgz/src/additions/useradditions/streamit.py:173
+#: mpgz/src/additions/useradditions/streamit.py:174
 #: mpgz/src/additions/useradditions/topimdb.py:33
-#: mpgz/src/additions/useradditions/video4k.py:187
 #: mpgz/src/additions/useradditions/vkstreamingfilm.py:143
 #: src/additions/fun/failto.py:30 src/additions/fun/forplayers.py:116
 #: src/additions/fun/forplayers.py:295
@@ -449,15 +454,15 @@ msgstr "Nein"
 #: src/additions/fun/lachmeister_de.py:85 src/additions/fun/lachschon_de.py:139
 #: src/additions/fun/liveleak.py:109 src/additions/fun/retrotv.py:33
 #: src/additions/fun/twitch.py:68 src/additions/fun/twitch.py:133
-#: src/additions/mediatheken/ard.py:378 src/additions/mediatheken/ard.py:512
+#: src/additions/mediatheken/ard.py:376 src/additions/mediatheken/ard.py:495
 #: src/additions/mediatheken/atv.py:122 src/additions/mediatheken/br_tv.py:281
 #: src/additions/mediatheken/dreisat.py:198
 #: src/additions/mediatheken/myspass.py:183 src/additions/mediatheken/n24.py:80
 #: src/additions/mediatheken/srg.py:189
 #: src/additions/mediatheken/videogold_de.py:80
 #: src/additions/mediatheken/watchbox.py:126
-#: src/additions/mediatheken/youtube.py:821
-#: src/additions/mediatheken/zdf.py:446 src/additions/music/jukebox.py:196
+#: src/additions/mediatheken/youtube.py:819
+#: src/additions/mediatheken/zdf.py:445 src/additions/music/jukebox.py:196
 #: src/additions/newsdoku/autobild.py:65 src/additions/newsdoku/doku_to.py:92
 #: src/additions/newsdoku/dokus4_me.py:98
 #: src/additions/newsdoku/dokustream.py:142 src/additions/newsdoku/wissen.py:27
@@ -469,12 +474,13 @@ msgstr "Nein"
 #: src/additions/porn/dachix.py:143 src/additions/porn/digitalplayground.py:159
 #: src/additions/porn/drtuber.py:188 src/additions/porn/elladies.py:98
 #: src/additions/porn/eporner.py:168 src/additions/porn/eroprofile.py:141
-#: src/additions/porn/extremetube.py:172 src/additions/porn/faapy.py:156
-#: src/additions/porn/faapy.py:218 src/additions/porn/hclips.py:167
+#: src/additions/porn/extremetube.py:172 src/additions/porn/faapy.py:149
+#: src/additions/porn/faapy.py:214 src/additions/porn/hclips.py:167
 #: src/additions/porn/hdporn.py:88 src/additions/porn/hdzog.py:150
 #: src/additions/porn/homemoviestube.py:168 src/additions/porn/hotmovs.py:149
-#: src/additions/porn/mofos.py:239 src/additions/porn/mofos.py:312
+#: src/additions/porn/mofos.py:243 src/additions/porn/mofos.py:318
 #: src/additions/porn/moviefap.py:136 src/additions/porn/naughtyamerica.py:155
+#: src/additions/porn/nubilefilms.py:137 src/additions/porn/nubilefilms.py:209
 #: src/additions/porn/pinflix.py:169 src/additions/porn/pinflix.py:269
 #: src/additions/porn/pornhub.py:338 src/additions/porn/pornhub.py:500
 #: src/additions/porn/pornhub.py:656 src/additions/porn/pornhub.py:796
@@ -496,7 +502,7 @@ msgid "Page:"
 msgstr "Seite:"
 
 #: mpgz/src/additions/music/myfreemp3.py:591
-#: mpgz/src/additions/porn/yourpornsexy.py:112
+#: mpgz/src/additions/porn/yourpornsexy.py:119
 #: mpgz/src/additions/useradditions/ddl_me.py:118
 #: mpgz/src/additions/useradditions/kinoxto.py:161
 #: mpgz/src/additions/useradditions/movie4k.py:210
@@ -506,8 +512,8 @@ msgstr "Seite:"
 #: src/additions/fun/forplayers.py:81 src/additions/fun/lachschon_de.py:91
 #: src/additions/mediatheken/br_tv.py:47
 #: src/additions/mediatheken/redbull.py:53
-#: src/additions/mediatheken/youtube.py:485
-#: src/additions/mediatheken/zdf.py:112 src/additions/music/jukebox.py:109
+#: src/additions/mediatheken/youtube.py:486
+#: src/additions/mediatheken/zdf.py:111 src/additions/music/jukebox.py:109
 #: src/additions/newsdoku/dokus4_me.py:43 src/additions/porn/drtuber.py:115
 #: src/additions/porn/eporner.py:110 src/additions/porn/extremetube.py:114
 #: src/additions/porn/hclips.py:110 src/additions/porn/homemoviestube.py:107
@@ -516,7 +522,7 @@ msgstr "Seite:"
 #: src/additions/porn/tube8.py:117 src/additions/porn/txxx.py:110
 #: src/additions/porn/upornia.py:111 src/additions/porn/x4tube.py:138
 #: src/additions/porn/xhamster.py:157 src/additions/porn/youporn.py:165
-#: src/resources/mpscreen.py:355
+#: src/resources/mpscreen.py:358
 msgid "Enter search criteria"
 msgstr "Suchkriterium eingeben"
 
@@ -566,7 +572,7 @@ msgstr ""
 #: mpgz/src/additions/porn/freeomovie.py:132
 #: mpgz/src/additions/porn/hqporner.py:176
 #: mpgz/src/additions/porn/ivhunter.py:151
-#: mpgz/src/additions/porn/javhd3x.py:176
+#: mpgz/src/additions/porn/javhd3x.py:183
 #: mpgz/src/additions/porn/justporn.py:127
 #: mpgz/src/additions/porn/lfporn.py:127
 #: mpgz/src/additions/porn/mydirtyhobby.py:165
@@ -581,13 +587,13 @@ msgstr ""
 #: mpgz/src/additions/porn/streamxxx.py:186
 #: mpgz/src/additions/porn/top1porn.py:122
 #: mpgz/src/additions/porn/tubebang.py:125
-#: mpgz/src/additions/porn/yourpornsexy.py:168
-#: mpgz/src/additions/porn/yourpornsexy.py:236
+#: mpgz/src/additions/porn/yourpornsexy.py:177
+#: mpgz/src/additions/porn/yourpornsexy.py:239
+#: mpgz/src/additions/porn/yourpornsexy.py:307
 #: mpgz/src/additions/useradditions/flimmerstube.py:114
 #: mpgz/src/additions/useradditions/movie4k.py:376
 #: mpgz/src/additions/useradditions/movie4k.py:876
 #: mpgz/src/additions/useradditions/primewire.py:148
-#: mpgz/src/additions/useradditions/video4k.py:188
 #: src/additions/fun/failto.py:28 src/additions/fun/gigatv.py:91
 #: src/additions/fun/retrotv.py:31 src/additions/fun/twitch.py:66
 #: src/additions/fun/twitch.py:131 src/additions/mediatheken/srg.py:183
@@ -599,12 +605,13 @@ msgstr ""
 #: src/additions/porn/dachix.py:141 src/additions/porn/digitalplayground.py:157
 #: src/additions/porn/drtuber.py:187 src/additions/porn/elladies.py:95
 #: src/additions/porn/eporner.py:166 src/additions/porn/eroprofile.py:139
-#: src/additions/porn/extremetube.py:170 src/additions/porn/faapy.py:155
-#: src/additions/porn/faapy.py:216 src/additions/porn/hclips.py:165
+#: src/additions/porn/extremetube.py:170 src/additions/porn/faapy.py:148
+#: src/additions/porn/faapy.py:212 src/additions/porn/hclips.py:165
 #: src/additions/porn/hdporn.py:86 src/additions/porn/hdzog.py:148
 #: src/additions/porn/homemoviestube.py:164 src/additions/porn/hotmovs.py:147
-#: src/additions/porn/mofos.py:237 src/additions/porn/mofos.py:310
+#: src/additions/porn/mofos.py:241 src/additions/porn/mofos.py:316
 #: src/additions/porn/moviefap.py:134 src/additions/porn/naughtyamerica.py:153
+#: src/additions/porn/nubilefilms.py:135 src/additions/porn/nubilefilms.py:207
 #: src/additions/porn/pinflix.py:166 src/additions/porn/pinflix.py:266
 #: src/additions/porn/pornhub.py:335 src/additions/porn/pornhub.py:497
 #: src/additions/porn/pornhub.py:653 src/additions/porn/pornhub.py:793
@@ -622,8 +629,8 @@ msgstr ""
 #: src/additions/porn/x4tube.py:200 src/additions/porn/x4tube.py:289
 #: src/additions/porn/xhamster.py:469 src/additions/porn/xhamster.py:601
 #: src/additions/porn/youporn.py:321 src/additions/porn/youporn.py:388
-#: src/plugin.py:2191 src/plugin.py:2427 src/plugin.py:2444 src/plugin.py:3196
-#: src/plugin.py:3971 src/resources/showAsThumb.py:245
+#: src/plugin.py:2207 src/plugin.py:2443 src/plugin.py:2460 src/plugin.py:3233
+#: src/plugin.py:4020 src/resources/showAsThumb.py:245
 msgid "Page"
 msgstr "Seite"
 
@@ -631,7 +638,7 @@ msgstr "Seite"
 #: mpgz/src/additions/porn/adultbay.py:196
 #: mpgz/src/additions/porn/hqporner.py:200
 #: mpgz/src/additions/porn/ivhunter.py:195
-#: mpgz/src/additions/porn/javhd3x.py:224
+#: mpgz/src/additions/porn/javhd3x.py:231
 #: mpgz/src/additions/porn/justporn.py:156
 #: mpgz/src/additions/porn/lfporn.py:160
 #: mpgz/src/additions/porn/paradisehill.py:175
@@ -655,9 +662,7 @@ msgstr "Seite"
 #: mpgz/src/additions/useradditions/movie4k.py:590
 #: mpgz/src/additions/useradditions/movie4k.py:790
 #: mpgz/src/additions/useradditions/movie4k.py:925
-#: mpgz/src/additions/useradditions/streamit.py:249
-#: mpgz/src/additions/useradditions/video4k.py:243
-#: mpgz/src/additions/useradditions/video4k.py:268
+#: mpgz/src/additions/useradditions/streamit.py:250
 #: mpgz/src/additions/useradditions/vkstreamingfilm.py:183
 #: src/additions/porn/hclips.py:219 src/additions/porn/pornhub.py:1009
 #: src/additions/porn/pornhub.py:1030 src/additions/porn/pornoxo.py:163
@@ -694,7 +699,6 @@ msgstr "Keine Filme gefunden!"
 #: mpgz/src/additions/useradditions/primewire.py:366
 #: mpgz/src/additions/useradditions/primewire.py:370
 #: mpgz/src/additions/useradditions/serienstream.py:764
-#: mpgz/src/additions/useradditions/video4k.py:358
 #: mpgz/src/additions/useradditions/vkstreamingfilm.py:245
 #: mpgz/src/additions/useradditions/watchseries.py:292
 #: mpgz/src/additions/useradditions/watchseriesonline.py:413
@@ -742,29 +746,31 @@ msgid "This plugin requires packages python-pyexecjs and nodejs."
 msgstr "Dieses Plugin benötigt die Pakete python-pyexecjs und nodejs."
 
 #: mpgz/src/additions/porn/mydirtyhobby.py:196
-#: mpgz/src/additions/porn/yourpornsexy.py:314
+#: mpgz/src/additions/porn/yourpornsexy.py:386
+#: mpgz/src/additions/useradditions/foxx.py:106
 #: mpgz/src/additions/useradditions/primewire.py:188
 #: src/additions/fun/funnyvideoclips_de.py:130
 #: src/additions/fun/funnyvideoclips_de.py:186
 #: src/additions/fun/gaskrank_tv.py:132 src/additions/fun/gaskrank_tv.py:156
 #: src/additions/fun/germanytv.py:182 src/additions/fun/heisevideo.py:204
 #: src/additions/mediatheken/arte.py:192
-#: src/additions/mediatheken/youtube.py:1388 src/additions/newsdoku/bild.py:145
+#: src/additions/mediatheken/youtube.py:1391 src/additions/newsdoku/bild.py:145
 #: src/additions/porn/bangbros.py:183 src/additions/porn/beeg.py:209
 #: src/additions/porn/brazzers.py:183 src/additions/porn/cliphunter.py:251
 #: src/additions/porn/digitalplayground.py:193
 #: src/additions/porn/drtuber.py:215 src/additions/porn/eroprofile.py:175
-#: src/additions/porn/faapy.py:246 src/additions/porn/hdporn.py:114
+#: src/additions/porn/faapy.py:242 src/additions/porn/hdporn.py:114
 #: src/additions/porn/hdzog.py:184 src/additions/porn/homemoviestube.py:204
-#: src/additions/porn/hotmovs.py:190 src/additions/porn/mofos.py:351
+#: src/additions/porn/hotmovs.py:190 src/additions/porn/mofos.py:357
 #: src/additions/porn/moviefap.py:164 src/additions/porn/naughtyamerica.py:187
-#: src/additions/porn/realitykings.py:193 src/additions/porn/redtube.py:256
-#: src/additions/porn/sunporno.py:198 src/additions/porn/teamskeet.py:180
-#: src/additions/porn/tnaflix.py:178 src/additions/porn/tubewolf.py:166
-#: src/additions/porn/txxx.py:198 src/additions/porn/upornia.py:213
-#: src/additions/porn/vjav.py:188 src/additions/porn/vporn.py:308
-#: src/additions/porn/wicked.py:255 src/additions/porn/x4tube.py:325
-#: src/additions/porn/xhamster.py:561 src/additions/porn/youporn.py:428
+#: src/additions/porn/nubilefilms.py:238 src/additions/porn/realitykings.py:193
+#: src/additions/porn/redtube.py:256 src/additions/porn/sunporno.py:199
+#: src/additions/porn/teamskeet.py:180 src/additions/porn/tnaflix.py:178
+#: src/additions/porn/tubewolf.py:166 src/additions/porn/txxx.py:198
+#: src/additions/porn/upornia.py:213 src/additions/porn/vjav.py:188
+#: src/additions/porn/vporn.py:308 src/additions/porn/wicked.py:255
+#: src/additions/porn/x4tube.py:325 src/additions/porn/xhamster.py:561
+#: src/additions/porn/youporn.py:428
 msgid "No videos found!"
 msgstr "Keine Videos gefunden!"
 
@@ -801,7 +807,6 @@ msgstr "Video wurde gelöscht oder hat einen Fehler!"
 
 #: mpgz/src/additions/useradditions/burningseries.py:60
 #: mpgz/src/additions/useradditions/serienstream.py:100
-#: mpgz/src/additions/useradditions/video4k.py:103
 #: mpgz/src/additions/useradditions/vkstreamingfilm.py:60
 #: mpgz/src/additions/useradditions/watchseriesonline.py:59
 msgid "Selection"
@@ -875,9 +880,7 @@ msgstr "Keine Episoden gefunden!"
 #: mpgz/src/additions/useradditions/serienstream.py:734
 #: mpgz/src/additions/useradditions/serienstream.py:735
 #: mpgz/src/additions/useradditions/seriesever.py:359
-#: mpgz/src/additions/useradditions/streamit.py:494
-#: mpgz/src/additions/useradditions/video4k.py:335
-#: mpgz/src/additions/useradditions/video4k.py:336
+#: mpgz/src/additions/useradditions/streamit.py:490
 #: mpgz/src/additions/useradditions/vkstreamingfilm.py:222
 #: mpgz/src/additions/useradditions/vkstreamingfilm.py:223
 #: mpgz/src/additions/useradditions/watchseriesonline.py:392
@@ -931,10 +934,10 @@ msgid "Parts Selection"
 msgstr "Part Auswahl"
 
 #: mpgz/src/additions/useradditions/movie4k.py:220
-#: mpgz/src/additions/useradditions/sharedir.py:235 src/plugin.py:1218
-#: src/plugin.py:1230 src/plugin.py:1362 src/plugin.py:2305 src/plugin.py:2469
-#: src/plugin.py:2544 src/plugin.py:3156 src/plugin.py:3246 src/plugin.py:3321
-#: src/plugin.py:3935 src/plugin.py:4022 src/plugin.py:4097
+#: mpgz/src/additions/useradditions/sharedir.py:235 src/plugin.py:1215
+#: src/plugin.py:1227 src/plugin.py:1359 src/plugin.py:2321 src/plugin.py:2485
+#: src/plugin.py:2560 src/plugin.py:3187 src/plugin.py:3283 src/plugin.py:3358
+#: src/plugin.py:3984 src/plugin.py:4071 src/plugin.py:4146
 msgid "Please enter the correct PIN"
 msgstr "Bitte die korrekte PIN eingeben"
 
@@ -950,12 +953,12 @@ msgstr "PIN eingeben"
 #: mpgz/src/additions/useradditions/seriesever.py:432
 #: mpgz/src/additions/useradditions/seriesever.py:441
 #: mpgz/src/additions/useradditions/seriesever.py:448
-#: src/additions/mediatheken/kindertube.py:228 src/resources/streams.py:959
+#: src/additions/mediatheken/kindertube.py:228 src/resources/streams.py:998
 msgid "Stream not found, try another Stream Hoster."
 msgstr "Stream nicht gefunden, versuche einen anderen Stream Hoster."
 
 #: mpgz/src/additions/useradditions/onlinefilme.py:150
-#: mpgz/src/additions/useradditions/streamit.py:174
+#: mpgz/src/additions/useradditions/streamit.py:175
 msgid "Sort by..."
 msgstr "Sortieren nach..."
 
@@ -965,7 +968,7 @@ msgid "No movies / series found!"
 msgstr "Keine Filme / Serien gefunden!"
 
 #: mpgz/src/additions/useradditions/onlinefilme.py:407
-#: mpgz/src/additions/useradditions/streamit.py:464
+#: mpgz/src/additions/useradditions/streamit.py:460
 msgid "Sort Selection"
 msgstr "Auswahl sortieren"
 
@@ -982,7 +985,7 @@ msgstr "Filter"
 #: src/additions/porn/pornhub.py:794 src/additions/porn/redtube.py:189
 #: src/additions/porn/tube8.py:176 src/additions/porn/vporn.py:267
 #: src/additions/porn/x4tube.py:201 src/additions/porn/x4tube.py:290
-#: src/plugin.py:1830 src/plugin.py:2827 src/plugin.py:3604
+#: src/plugin.py:1841 src/plugin.py:2855 src/plugin.py:3650
 msgid "Sort"
 msgstr "Sortieren"
 
@@ -1007,7 +1010,7 @@ msgstr "Wähle Aktion"
 #: src/additions/porn/pornhub.py:286 src/additions/porn/vporn.py:200
 #: src/additions/porn/vporn.py:202 src/additions/porn/youporn.py:80
 #: src/additions/porn/youporn.py:226 src/additions/porn/youporn.py:228
-#: src/plugin.py:552
+#: src/plugin.py:550
 msgid "Setup"
 msgstr "Einstellungen"
 
@@ -1046,7 +1049,7 @@ msgstr "Hinzufügen"
 #: mpgz/src/additions/useradditions/seriesever.py:151
 #: mpgz/src/additions/useradditions/seriesever.py:328
 #: src/additions/mediatheken/kindertube.py:136
-#: src/additions/mediatheken/kindertube.py:206 src/additions/porn/faapy.py:172
+#: src/additions/mediatheken/kindertube.py:206 src/additions/porn/faapy.py:168
 msgid "Parsing error!"
 msgstr "Parsing error!"
 
@@ -1082,7 +1085,7 @@ msgstr "Keine Dateien gefunden!"
 msgid "No link found."
 msgstr "Kein Link gefunden."
 
-#: mpgz/src/additions/useradditions/streamit.py:297
+#: mpgz/src/additions/useradditions/streamit.py:298
 #: src/additions/music/radio.py:404 src/resources/simplelist.py:282
 #: src/resources/simplelist.py:437 src/resources/simplelist.py:726
 msgid "No entries found!"
@@ -1092,7 +1095,7 @@ msgstr "Keine Einträge gefunden!"
 msgid "A-Z"
 msgstr "A-Z"
 
-#: mpgz/src/update.py:84
+#: mpgz/src/update.py:85
 #, python-format
 msgid ""
 "An update is available for the %s Plugin!\n"
@@ -1101,11 +1104,11 @@ msgstr ""
 "Ein Update für das %s Plugin ist verfügbar!\n"
 "Soll das Update jetzt heruntergeladen und installiert werden?"
 
-#: mpgz/src/update.py:125 src/resources/update.py:132
+#: mpgz/src/update.py:126 src/resources/update.py:132
 msgid "Starting update, please wait..."
 msgstr "Starte Update, bitte warten..."
 
-#: mpgz/src/update.py:148
+#: mpgz/src/update.py:149
 #, python-format
 msgid ""
 "%s successfully updated!\n"
@@ -1114,13 +1117,13 @@ msgstr ""
 "%s erfolgreich aktualisiert!\n"
 "Soll die Enigma2 GUI jetzt neu gestartet werden?"
 
-#: mpgz/src/update.py:150
+#: mpgz/src/update.py:151
 #, python-format
 msgid "%s update failed! Check the update log carefully!"
 msgstr "%s Update fehlgeschlagen! Überprüfe das Updatelog sorgfältig!"
 
 #: src/additions/fun/germanytv.py:56 src/additions/fun/germanytv.py:99
-#: src/plugin.py:920 src/plugin.py:1836 src/plugin.py:2833 src/plugin.py:3610
+#: src/plugin.py:916 src/plugin.py:1847 src/plugin.py:2861 src/plugin.py:3656
 msgid "Menu"
 msgstr "Menü"
 
@@ -1188,11 +1191,15 @@ msgstr "Sender:"
 msgid "Seasons:"
 msgstr "Staffeln:"
 
-#: src/additions/mediatheken/tvnow.py:252
+#: src/additions/mediatheken/tvnow.py:218
+msgid "Currently no seasons available!"
+msgstr "Momentan sind keine Staffeln verfügbar!"
+
+#: src/additions/mediatheken/tvnow.py:260
 msgid "Episodes:"
 msgstr "Episoden:"
 
-#: src/additions/mediatheken/tvnow.py:289
+#: src/additions/mediatheken/tvnow.py:331
 msgid "Currently no free episodes available!"
 msgstr "Momentan gibt es keine kostenlosen Folgen!"
 
@@ -1208,32 +1215,32 @@ msgstr ""
 "angesehen werden."
 
 #: src/additions/mediatheken/youtube.py:50
-#: src/additions/mediatheken/youtube.py:1408
+#: src/additions/mediatheken/youtube.py:1411
 msgid "Date"
 msgstr "Datum"
 
 #: src/additions/mediatheken/youtube.py:51
-#: src/additions/mediatheken/youtube.py:1409
+#: src/additions/mediatheken/youtube.py:1412
 msgid "Rating"
 msgstr "Bewertung"
 
 #: src/additions/mediatheken/youtube.py:52
-#: src/additions/mediatheken/youtube.py:1410
+#: src/additions/mediatheken/youtube.py:1413
 msgid "Relevance"
 msgstr "Relevanz"
 
 #: src/additions/mediatheken/youtube.py:53
-#: src/additions/mediatheken/youtube.py:1411
+#: src/additions/mediatheken/youtube.py:1414
 msgid "Title"
 msgstr "Titel"
 
 #: src/additions/mediatheken/youtube.py:54
-#: src/additions/mediatheken/youtube.py:1412
+#: src/additions/mediatheken/youtube.py:1415
 msgid "Video count"
 msgstr "Anzahl der Videos"
 
 #: src/additions/mediatheken/youtube.py:55
-#: src/additions/mediatheken/youtube.py:1413
+#: src/additions/mediatheken/youtube.py:1416
 msgid "View count"
 msgstr "Anzahl der Aufrufe"
 
@@ -1290,11 +1297,11 @@ msgstr "2D"
 msgid "3D"
 msgstr "3D"
 
-#: src/additions/mediatheken/youtube.py:89 src/plugin.py:256
+#: src/additions/mediatheken/youtube.py:89 src/plugin.py:258
 msgid "High"
 msgstr "Hoch"
 
-#: src/additions/mediatheken/youtube.py:90 src/plugin.py:256
+#: src/additions/mediatheken/youtube.py:90 src/plugin.py:258
 msgid "Low"
 msgstr "Niedrig"
 
@@ -1335,8 +1342,8 @@ msgstr "Event Typ"
 
 #: src/additions/mediatheken/youtube.py:109
 #: src/additions/mediatheken/youtube.py:393
-#: src/additions/mediatheken/youtube.py:815
-#: src/additions/mediatheken/youtube.py:1415
+#: src/additions/mediatheken/youtube.py:813
+#: src/additions/mediatheken/youtube.py:1418
 msgid "Sort by"
 msgstr "Sortieren nach"
 
@@ -1356,22 +1363,22 @@ msgid "User name"
 msgstr "Username"
 
 #: src/additions/mediatheken/youtube.py:113
-#: src/additions/mediatheken/youtube.py:404
+#: src/additions/mediatheken/youtube.py:403
 msgid "3D Search"
 msgstr "3D Suche"
 
 #: src/additions/mediatheken/youtube.py:114
-#: src/additions/mediatheken/youtube.py:406
+#: src/additions/mediatheken/youtube.py:405
 msgid "Runtime"
 msgstr "Laufzeit"
 
 #: src/additions/mediatheken/youtube.py:115
-#: src/additions/mediatheken/youtube.py:408
+#: src/additions/mediatheken/youtube.py:407
 msgid "Video definition"
 msgstr "Videoauflösung"
 
 #: src/additions/mediatheken/youtube.py:116
-#: src/additions/mediatheken/youtube.py:410
+#: src/additions/mediatheken/youtube.py:409
 msgid "Video type"
 msgstr "Videotyp"
 
@@ -1422,13 +1429,13 @@ msgid "Channel search"
 msgstr "Kanal Suche"
 
 #: src/additions/mediatheken/youtube.py:153
-#: src/additions/mediatheken/youtube.py:710
+#: src/additions/mediatheken/youtube.py:708
 msgid "My channel"
 msgstr "Mein Kanal"
 
 #: src/additions/mediatheken/youtube.py:154
-#: src/additions/mediatheken/youtube.py:699
-#: src/additions/mediatheken/youtube.py:770 src/additions/music/radio.py:96
+#: src/additions/mediatheken/youtube.py:697
+#: src/additions/mediatheken/youtube.py:768 src/additions/music/radio.py:96
 #: src/additions/music/radio.py:117
 msgid "Favorites"
 msgstr "Favoriten"
@@ -1480,10 +1487,11 @@ msgstr "USA"
 msgid "News"
 msgstr "Nachrichten"
 
-#: src/additions/mediatheken/youtube.py:170 src/plugin.py:895 src/plugin.py:968
-#: src/plugin.py:1081 src/plugin.py:1405 src/plugin.py:1928 src/plugin.py:1959
-#: src/plugin.py:2913 src/plugin.py:2944 src/plugin.py:3691 src/plugin.py:3722
-#: src/plugin.py:4227
+#: src/additions/mediatheken/youtube.py:170 src/plugin.py:891
+#: src/plugin.py:1076 src/plugin.py:1406 src/plugin.py:1819 src/plugin.py:1939
+#: src/plugin.py:1970 src/plugin.py:2592 src/plugin.py:2833 src/plugin.py:2941
+#: src/plugin.py:2972 src/plugin.py:3390 src/plugin.py:3628 src/plugin.py:3737
+#: src/plugin.py:3768 src/plugin.py:4178
 msgid "Music"
 msgstr "Musik"
 
@@ -1491,10 +1499,11 @@ msgstr "Musik"
 msgid "Gaming"
 msgstr "Gaming"
 
-#: src/additions/mediatheken/youtube.py:172 src/plugin.py:896 src/plugin.py:968
-#: src/plugin.py:1083 src/plugin.py:1405 src/plugin.py:1930 src/plugin.py:1961
-#: src/plugin.py:2915 src/plugin.py:2946 src/plugin.py:3693 src/plugin.py:3724
-#: src/plugin.py:4229
+#: src/additions/mediatheken/youtube.py:172 src/plugin.py:892
+#: src/plugin.py:1078 src/plugin.py:1406 src/plugin.py:1820 src/plugin.py:1941
+#: src/plugin.py:1972 src/plugin.py:2592 src/plugin.py:2834 src/plugin.py:2943
+#: src/plugin.py:2974 src/plugin.py:3390 src/plugin.py:3629 src/plugin.py:3739
+#: src/plugin.py:3770 src/plugin.py:4178
 msgid "Sports"
 msgstr "Sport"
 
@@ -1502,83 +1511,75 @@ msgstr "Sport"
 msgid "Education"
 msgstr "Bildung"
 
-#: src/additions/mediatheken/youtube.py:358
-#: src/additions/mediatheken/youtube.py:372
-#: src/additions/mediatheken/youtube.py:887
+#: src/additions/mediatheken/youtube.py:357
+#: src/additions/mediatheken/youtube.py:371
+#: src/additions/mediatheken/youtube.py:885
 #: src/additions/mediatheken/youtube_user.py:74
 #: src/additions/porn/pornhub.py:830
 msgid "No channels found!"
 msgstr "Keine Kanäle gefunden!"
 
-#: src/additions/mediatheken/youtube.py:390
-msgid "VIDEOSEARCH"
-msgstr "VIDEOSUCHE"
-
-#: src/additions/mediatheken/youtube.py:403
-msgid "Parameter"
-msgstr "Parameter"
-
-#: src/additions/mediatheken/youtube.py:414
-#: src/additions/mediatheken/youtube.py:629
-#: src/additions/mediatheken/youtube.py:652
+#: src/additions/mediatheken/youtube.py:415
+#: src/additions/mediatheken/youtube.py:627
+#: src/additions/mediatheken/youtube.py:650
 msgid "Edit Parameter"
 msgstr "Parameter Editieren"
 
-#: src/additions/mediatheken/youtube.py:415
+#: src/additions/mediatheken/youtube.py:416
 msgid "Request YT-Token"
 msgstr "YT-Token Anfordern"
 
-#: src/additions/mediatheken/youtube.py:442
+#: src/additions/mediatheken/youtube.py:443
 msgid "No Category"
 msgstr "Keine Kategorie"
 
-#: src/additions/mediatheken/youtube.py:493
+#: src/additions/mediatheken/youtube.py:494
 msgid "Author"
 msgstr "Autor"
 
-#: src/additions/mediatheken/youtube.py:712
+#: src/additions/mediatheken/youtube.py:710
 msgid "You need to request a token to allow access to your YouTube account."
 msgstr ""
 "Es muss ein Token angefordert werden, um Zugang zu Ihrem YouTube-Konto zu "
 "ermöglichen."
 
-#: src/additions/mediatheken/youtube.py:720
+#: src/additions/mediatheken/youtube.py:718
 msgid "Did you revoke the access?"
 msgstr "Wurde der Zugriff widerrufen?"
 
-#: src/additions/mediatheken/youtube.py:810
+#: src/additions/mediatheken/youtube.py:808
 msgid "Favorite"
 msgstr "Favorit"
 
-#: src/additions/mediatheken/youtube.py:1251
-#: src/additions/mediatheken/youtube.py:1268
+#: src/additions/mediatheken/youtube.py:1252
+#: src/additions/mediatheken/youtube.py:1269
 msgid "No contents / results found!"
 msgstr "Keine Inhalte / Ergebnisse gefunden!"
 
-#: src/additions/mediatheken/youtube.py:1287
+#: src/additions/mediatheken/youtube.py:1290
 msgid "Unfortunately, this video can not be played!\n"
 msgstr "Das Video kann leider nicht abgespielt werden!\n"
 
-#: src/additions/mediatheken/youtube.py:1319
-#: src/additions/mediatheken/youtube.py:1365
-#: src/additions/mediatheken/youtube.py:1403
+#: src/additions/mediatheken/youtube.py:1322
+#: src/additions/mediatheken/youtube.py:1368
+#: src/additions/mediatheken/youtube.py:1406
 msgid "Error!\n"
 msgstr "Fehler!\n"
 
-#: src/additions/mediatheken/youtube.py:1354
+#: src/additions/mediatheken/youtube.py:1357
 msgid "Favorite already exists"
 msgstr "Favorit schon vorhanden"
 
-#: src/additions/mediatheken/youtube.py:1360
+#: src/additions/mediatheken/youtube.py:1363
 msgid "Favorite added"
 msgstr "Favorit hinzugefügt"
 
-#: src/additions/mediatheken/youtube.py:1714
-#: src/additions/mediatheken/youtube.py:1715
+#: src/additions/mediatheken/youtube.py:1717
+#: src/additions/mediatheken/youtube.py:1718
 msgid "Error: Unable to request the Device code"
 msgstr "Fehler: Kann den Gerätecode nicht anfordern"
 
-#: src/additions/mediatheken/youtube.py:1721
+#: src/additions/mediatheken/youtube.py:1724
 #, python-brace-format
 msgid ""
 "You've to visit:\n"
@@ -1591,7 +1592,7 @@ msgstr ""
 "und diesen Code eingeben: {code}\n"
 "Aktion abbrechen?"
 
-#: src/additions/mediatheken/youtube.py:1725
+#: src/additions/mediatheken/youtube.py:1728
 msgid ""
 "Waiting for response from the server.\n"
 "Cancel action?"
@@ -1599,13 +1600,13 @@ msgstr ""
 "Warten auf Antwort vom Server.\n"
 "Aktion abbrechen?"
 
-#: src/additions/mediatheken/youtube.py:1741
-#: src/additions/mediatheken/youtube.py:1742
-#: src/additions/mediatheken/youtube.py:1748
+#: src/additions/mediatheken/youtube.py:1744
+#: src/additions/mediatheken/youtube.py:1745
+#: src/additions/mediatheken/youtube.py:1751
 msgid "Error: Unable to get tokens!"
 msgstr "Fehler: Der Token konnte nicht angefordert werden!"
 
-#: src/additions/mediatheken/youtube.py:1762
+#: src/additions/mediatheken/youtube.py:1765
 msgid ""
 "Access granted :)\n"
 "For safety you should create backup's of enigma2 settings and '/etc/enigma2/"
@@ -1617,7 +1618,7 @@ msgstr ""
 "etc/enigma2/mp_yt-access-tokens.json' gemacht werden.\n"
 "Die Token sind gültig, bis sie in Ihrem Google-Konto widerrufen werden."
 
-#: src/additions/mediatheken/youtube.py:1779
+#: src/additions/mediatheken/youtube.py:1782
 msgid "Error: Unable to refresh token!"
 msgstr "Fehler: Der Token konnte nicht aktualisert werden!"
 
@@ -1728,10 +1729,10 @@ msgid "No playable dokus found!"
 msgstr "Keine abspielbaren Dokus gefunden!"
 
 #: src/additions/porn/bangbros.py:104 src/additions/porn/brazzers.py:108
-#: src/additions/porn/digitalplayground.py:117 src/additions/porn/mofos.py:109
+#: src/additions/porn/digitalplayground.py:117 src/additions/porn/mofos.py:111
 #: src/additions/porn/naughtyamerica.py:104
-#: src/additions/porn/realitykings.py:119 src/additions/porn/teamskeet.py:108
-#: src/additions/porn/wicked.py:88
+#: src/additions/porn/nubilefilms.py:101 src/additions/porn/realitykings.py:119
+#: src/additions/porn/teamskeet.py:108 src/additions/porn/wicked.py:88
 #, python-format
 msgid "%s only works with enabled MP premiumize.me option (MP Setup)!"
 msgstr ""
@@ -1755,17 +1756,18 @@ msgstr "Cam ist zur Zeit offline."
 msgid "Scope"
 msgstr ""
 
-#: src/additions/porn/eporner.py:218 src/resources/mpscreen.py:337
+#: src/additions/porn/eporner.py:218 src/resources/mpscreen.py:340
 #: src/resources/showAsThumb.py:342
 msgid "Enter page number"
 msgstr "Seitennummer eingeben"
 
-#: src/additions/porn/mofos.py:193
+#: src/additions/porn/mofos.py:197
 msgid "No sites/series found!"
 msgstr "Keine Webseiten / Serien gefunden!"
 
-#: src/additions/porn/mofos.py:266 src/additions/porn/pornhub.py:688
-#: src/additions/porn/wicked.py:160 src/additions/porn/xhamster.py:368
+#: src/additions/porn/mofos.py:272 src/additions/porn/nubilefilms.py:163
+#: src/additions/porn/pornhub.py:688 src/additions/porn/wicked.py:160
+#: src/additions/porn/xhamster.py:368
 msgid "No pornstars found!"
 msgstr "Keine Pornstars gefunden!"
 
@@ -1878,445 +1880,409 @@ msgstr "Von unten hereingleiten"
 msgid "Crossfade"
 msgstr "Überblenden"
 
-#: src/plugin.py:233
+#: src/plugin.py:235
 msgid "Wall 2.0"
 msgstr "Wall 2.0"
 
-#: src/plugin.py:233 src/plugin.py:235 src/plugin.py:237 src/plugin.py:241
+#: src/plugin.py:235 src/plugin.py:237 src/plugin.py:239 src/plugin.py:243
 msgid "Wall"
 msgstr "Wall"
 
-#: src/plugin.py:233 src/plugin.py:235 src/plugin.py:237 src/plugin.py:239
-#: src/plugin.py:241
+#: src/plugin.py:235 src/plugin.py:237 src/plugin.py:239 src/plugin.py:241
+#: src/plugin.py:243
 msgid "List"
 msgstr "Liste"
 
-#: src/plugin.py:235
+#: src/plugin.py:237
 msgid "Wall VTi"
 msgstr "Wall VTi"
 
-#: src/plugin.py:242 src/plugin.py:243
+#: src/plugin.py:244 src/plugin.py:245
 msgid "Color"
 msgstr "Farbe"
 
-#: src/plugin.py:242 src/plugin.py:243
+#: src/plugin.py:244 src/plugin.py:245
 msgid "Black&White"
 msgstr "Schwarz/Weiß"
 
-#: src/plugin.py:242
+#: src/plugin.py:244
 msgid "Color (Zoom)"
 msgstr "Farbe (gezoomt)"
 
-#: src/plugin.py:242
+#: src/plugin.py:244
 msgid "Black&White (Zoom)"
 msgstr "Schwarz/Weiß (gezoomt)"
 
-#: src/plugin.py:244
+#: src/plugin.py:246
 msgid "Blue"
 msgstr "Blau"
 
-#: src/plugin.py:244 src/plugin.py:312
+#: src/plugin.py:246 src/plugin.py:310
 msgid "Green"
 msgstr "Grün"
 
-#: src/plugin.py:244 src/plugin.py:312
+#: src/plugin.py:246 src/plugin.py:310
 msgid "Red"
 msgstr "Rot"
 
-#: src/plugin.py:244
+#: src/plugin.py:246
 msgid "Aqua"
 msgstr "Türkis"
 
-#: src/plugin.py:244 src/plugin.py:312
+#: src/plugin.py:246 src/plugin.py:310
 msgid "White"
 msgstr "Weiß"
 
-#: src/plugin.py:256
+#: src/plugin.py:258
 msgid "Medium"
 msgstr "Mittel"
 
-#: src/plugin.py:259
+#: src/plugin.py:261
 msgid "never"
 msgstr "niemals"
 
-#: src/plugin.py:259
+#: src/plugin.py:261
 msgid "5 minutes"
 msgstr "5 Minuten"
 
-#: src/plugin.py:259
+#: src/plugin.py:261
 msgid "15 minutes"
 msgstr "15 Minuten"
 
-#: src/plugin.py:259
+#: src/plugin.py:261
 msgid "30 minutes"
 msgstr "30 Minuten"
 
-#: src/plugin.py:259
+#: src/plugin.py:261
 msgid "60 minutes"
 msgstr "60 Minuten"
 
-#: src/plugin.py:268
+#: src/plugin.py:270
 msgid "after SimplePlayer quits"
 msgstr "nachdem der SimplePlayer beendet wird"
 
-#: src/plugin.py:268
+#: src/plugin.py:270
 msgid "after MediaPortal quits"
 msgstr "nachdem das MediaPortal beendet wird"
 
-#: src/plugin.py:273
+#: src/plugin.py:275
 msgid "Forward"
 msgstr "Vorwärts"
 
-#: src/plugin.py:273
+#: src/plugin.py:275
 msgid "Backward"
 msgstr "Rückwärts"
 
-#: src/plugin.py:273
+#: src/plugin.py:275
 msgid "Random"
 msgstr "Zufällig"
 
-#: src/plugin.py:273
+#: src/plugin.py:275
 msgid "Endless"
 msgstr "Endlos"
 
-#: src/plugin.py:274
+#: src/plugin.py:276
 msgid "On"
 msgstr "An"
 
-#: src/plugin.py:274 src/plugin.py:285
+#: src/plugin.py:276
 msgid "Off"
 msgstr "Aus"
 
-#: src/plugin.py:274
+#: src/plugin.py:276
 msgid "Automatic"
 msgstr "Automatisch"
 
-#: src/plugin.py:275 src/plugin.py:276 src/plugin.py:283
+#: src/plugin.py:277 src/plugin.py:278 src/plugin.py:284
 msgid "Ask user"
 msgstr "Anwender fragen"
 
-#: src/plugin.py:275 src/plugin.py:276
+#: src/plugin.py:277 src/plugin.py:278
 msgid "Return to previous service"
 msgstr "Zum letzten Kanal zurückkehren"
 
-#: src/plugin.py:276
+#: src/plugin.py:278
 msgid "Pause movie at end"
 msgstr "Film am Ende pausieren"
 
-#: src/plugin.py:281 src/plugin.py:287
-msgid "HELP"
-msgstr "HILFE"
-
-#: src/plugin.py:281 src/plugin.py:287
-msgid "PVR/VIDEO"
-msgstr "PVR/VIDEO"
-
-#: src/plugin.py:281
-msgid "RECORD"
-msgstr "AUFNAHME"
-
-#: src/plugin.py:283
+#: src/plugin.py:284
 msgid "Start from the beginning"
 msgstr "Starte vom Anfang"
 
-#: src/plugin.py:283
+#: src/plugin.py:284
 msgid "Resume from last position"
 msgstr "Von letzter Position fortsetzen"
 
-#: src/plugin.py:285
-msgid "Smart"
-msgstr "Intelligent"
-
-#: src/plugin.py:285
-msgid "Always"
-msgstr "Immer"
-
-#: src/plugin.py:286
-msgid "Whole file size"
-msgstr "Gesamte Dateigröße"
-
-#: src/plugin.py:287
-msgid "EPG/INFO"
-msgstr "EPG/INFO"
-
-#: src/plugin.py:312
+#: src/plugin.py:310
 msgid "Yellow"
 msgstr "Gelb"
 
-#: src/plugin.py:312
+#: src/plugin.py:310
 msgid "Light Blue"
 msgstr "Hellblau"
 
-#: src/plugin.py:312
+#: src/plugin.py:310
 msgid "Light Green"
 msgstr "Hellgrün"
 
-#: src/plugin.py:474
+#: src/plugin.py:472
 msgid "premiumize.me is not activated."
 msgstr "premiumize.me ist nicht aktiviert."
 
-#: src/plugin.py:485
+#: src/plugin.py:483
 msgid "premiumize.me failed."
 msgstr "premiumize.me fehlgeschlagen."
 
-#: src/plugin.py:487 src/resources/streams.py:196
+#: src/plugin.py:485 src/resources/streams.py:198
 msgid "premiumize: Login failed."
 msgstr "premiumize: Login fehlgeschlagen."
 
-#: src/plugin.py:504
+#: src/plugin.py:502
 msgid "premiumize: YT ProxyHost found."
 msgstr "premiumize: YT ProxyHost gefunden."
 
-#: src/plugin.py:507
+#: src/plugin.py:505
 msgid "premiumize: YT ProxyHost not found!"
 msgstr "premiumize: YT ProxyHost nicht gefunden!"
 
-#: src/plugin.py:587
+#: src/plugin.py:585
 msgid "GENERAL"
 msgstr "ALLGEMEIN"
 
-#: src/plugin.py:589
+#: src/plugin.py:587
 msgid "Automatic Update Check:"
 msgstr "Automatische Updateüberprüfung:"
 
-#: src/plugin.py:590
+#: src/plugin.py:588
 msgid "Mainview Style:"
 msgstr "Hauptansicht Stil:"
 
-#: src/plugin.py:592
+#: src/plugin.py:590
 msgid "Wall Mode:"
 msgstr "Wall Modus:"
 
-#: src/plugin.py:594
+#: src/plugin.py:592
 msgid "Wall 2.0 Mode:"
 msgstr "Wall 2.0 Modus:"
 
-#: src/plugin.py:596
+#: src/plugin.py:594
 msgid "Wall-Selector-Color:"
 msgstr "Wall-Selektor-Farbe:"
 
-#: src/plugin.py:597
+#: src/plugin.py:595
 msgid "Page Display Style:"
 msgstr "Seitenanzeigestil:"
 
-#: src/plugin.py:598
+#: src/plugin.py:596
 msgid "Skin:"
 msgstr "Skin:"
 
-#: src/plugin.py:599
-msgid "ShowAsThumb as Default:"
-msgstr "ShowAsThumb als Default:"
-
-#: src/plugin.py:600
+#: src/plugin.py:598
 msgid "Disable Background-TV:"
 msgstr "Background-TV deaktivieren:"
 
-#: src/plugin.py:602
+#: src/plugin.py:600
 msgid "Restore last service:"
 msgstr "Letzten Kanal wiederherstellen:"
 
-#: src/plugin.py:603
+#: src/plugin.py:601
 msgid "Disable Mini-TV:"
 msgstr "Mini-TV deaktivieren:"
 
-#: src/plugin.py:604
+#: src/plugin.py:602
 msgid "Enable search suggestions:"
 msgstr "Suchvorschläge aktivieren:"
 
-#: src/plugin.py:606
+#: src/plugin.py:604
 msgid "Coverart animation"
 msgstr "Cover Animation"
 
-#: src/plugin.py:607
+#: src/plugin.py:605
 msgid "Label animation"
 msgstr "Label Animation"
 
-#: src/plugin.py:608
+#: src/plugin.py:606
 msgid "SimplePlayer animation"
 msgstr "SimplePlayer Animation"
 
-#: src/plugin.py:610
+#: src/plugin.py:608
 msgid "YOUTH PROTECTION"
 msgstr "JUGENDSCHUTZ"
 
-#: src/plugin.py:612
+#: src/plugin.py:610
 msgid "Setup PIN:"
 msgstr "Setup-PIN:"
 
-#: src/plugin.py:613
+#: src/plugin.py:611
 msgid "Setup PIN Query:"
 msgstr "Setup-PIN Abfrage:"
 
-#: src/plugin.py:614
+#: src/plugin.py:612
 msgid "Kids PIN Query:"
 msgstr "Kinder-PIN Abfrage:"
 
-#: src/plugin.py:615
+#: src/plugin.py:613
 msgid "Adult PIN:"
 msgstr "Erwachsenen-PIN:"
 
-#: src/plugin.py:616
+#: src/plugin.py:614
 msgid "Adult PIN Query:"
 msgstr "Erwachsenen-PIN Abfrage:"
 
-#: src/plugin.py:617
+#: src/plugin.py:615
 msgid "Remember Adult PIN:"
 msgstr "Erwachsenen-PIN merken:"
 
-#: src/plugin.py:619
+#: src/plugin.py:617
 msgid "OTHER"
 msgstr "SONSTIGES"
 
-#: src/plugin.py:621
+#: src/plugin.py:619
 msgid "Use HLS-Player:"
 msgstr "HLS-Player verwenden:"
 
-#: src/plugin.py:623
+#: src/plugin.py:621
 msgid "HLS-Player buffersize [MB]:"
 msgstr "HLS-Player Puffergröße [MB]:"
 
-#: src/plugin.py:626
+#: src/plugin.py:624
 msgid "Use HLS-Player Proxy:"
 msgstr "HLS-Player Proxy verwenden:"
 
-#: src/plugin.py:627
+#: src/plugin.py:625
 msgid "HLSP-HTTP-Proxy Host or IP:"
 msgstr "HLSP-HTTP-Proxy Host oder IP:"
 
-#: src/plugin.py:628
+#: src/plugin.py:626
 msgid "HLSP-Proxy Port:"
 msgstr "HLSP-Proxy Port:"
 
-#: src/plugin.py:629
+#: src/plugin.py:627
 msgid "HLSP-Proxy username:"
 msgstr "HLSP-Proxy Username:"
 
-#: src/plugin.py:630
+#: src/plugin.py:628
 msgid "HLSP-Proxy password:"
 msgstr "HLSP-Proxy Passwort:"
 
-#: src/plugin.py:631
+#: src/plugin.py:629
 msgid "Temporary Cachepath:"
 msgstr "Temporäres Cacheverzeichnis:"
 
-#: src/plugin.py:632
+#: src/plugin.py:630
 msgid "Icon Cachepath:"
 msgstr "Icon Cacheverzeichnis:"
 
-#: src/plugin.py:633 src/resources/simpleplayer.py:1756
+#: src/plugin.py:631 src/resources/simpleplayer.py:1754
 msgid "Videoquality:"
 msgstr "Videoqualität:"
 
-#: src/plugin.py:634
+#: src/plugin.py:632
 msgid "Watchlist/Playlist/Userchan path:"
 msgstr "Watchlist/Playlist/Userchan Verzeichnis:"
 
-#: src/plugin.py:635
-msgid "Show USER-Channels Help:"
-msgstr "Zeige Hilfe für Benutzer-Kanäle:"
-
-#: src/plugin.py:637 src/resources/simpleplayer.py:1765
-msgid "MediaInfo on key:"
-msgstr "MediaInfo mit Taste:"
-
-#: src/plugin.py:639
+#: src/plugin.py:634
 msgid "YOUTUBE"
 msgstr "YOUTUBE"
 
-#: src/plugin.py:641
+#: src/plugin.py:636
 msgid "Highest resolution for playback:"
 msgstr "Höchste Auflösung für die Wiedergabe:"
 
-#: src/plugin.py:642
+#: src/plugin.py:637
 msgid "Enable DASH format:"
 msgstr "DASH Format aktivieren:"
 
-#: src/plugin.py:644
+#: src/plugin.py:639
 msgid "Enable VP9 codec:"
 msgstr "VP9 Codec aktivieren:"
 
-#: src/plugin.py:645
+#: src/plugin.py:640
 msgid "Max. count results/page:"
 msgstr "Max. Anzahl Ergebnisse/Seite:"
 
-#: src/plugin.py:646
+#: src/plugin.py:641
+msgid "Show USER-Channels Help:"
+msgstr "Zeige Hilfe für Benutzer-Kanäle:"
+
+#: src/plugin.py:642
 msgid "Use Proxy:"
 msgstr "Verwende Proxy:"
 
-#: src/plugin.py:648
+#: src/plugin.py:644
 msgid "HTTP-Proxy Host or IP:"
 msgstr "HTTP-Proxy Host oder IP:"
 
-#: src/plugin.py:649
+#: src/plugin.py:645
 msgid "HTTP-Proxy Port:"
 msgstr "HTTP-Proxy Port:"
 
-#: src/plugin.py:650
+#: src/plugin.py:646
 msgid "HTTP-Proxy username:"
 msgstr "HTTP-Proxy Username:"
 
-#: src/plugin.py:651
+#: src/plugin.py:647
 msgid "HTTP-Proxy password:"
 msgstr "HTTP-Proxy Passwort:"
 
-#: src/plugin.py:664
+#: src/plugin.py:660
 msgid "Activate premiumize.me:"
 msgstr "premiumize.me aktivieren:"
 
-#: src/plugin.py:666
+#: src/plugin.py:662
 msgid "Customer ID:"
 msgstr "Kundennummer:"
 
-#: src/plugin.py:667
+#: src/plugin.py:663
 msgid "PIN:"
 msgstr "PIN:"
 
-#: src/plugin.py:672
+#: src/plugin.py:668
 msgid "Activate Real-Debrid.com:"
 msgstr "Real-Debrid.com aktivieren:"
 
-#: src/plugin.py:677
+#: src/plugin.py:673
 msgid "Streammarkercolor:"
 msgstr "Streammarkerfarbe:"
 
-#: src/plugin.py:713
+#: src/plugin.py:709
 msgid "LIBRARIES"
 msgstr "MEDIATHEKEN"
 
-#: src/plugin.py:717 src/plugin.py:724 src/plugin.py:731 src/plugin.py:738
-#: src/plugin.py:745 src/plugin.py:753 src/plugin.py:764
+#: src/plugin.py:713 src/plugin.py:720 src/plugin.py:727 src/plugin.py:734
+#: src/plugin.py:741 src/plugin.py:749 src/plugin.py:760
 msgid "Show "
 msgstr "Zeige "
 
-#: src/plugin.py:720
+#: src/plugin.py:716
 msgid "NEWS&DOCUMENTARY"
 msgstr "NACHRICHTEN&DOKUS"
 
-#: src/plugin.py:727
+#: src/plugin.py:723
 msgid "FUN"
 msgstr "FUN"
 
-#: src/plugin.py:734
+#: src/plugin.py:730
 msgid "SPORTS"
 msgstr "SPORT"
 
-#: src/plugin.py:741
+#: src/plugin.py:737
 msgid "MUSIC"
 msgstr "MUSIK"
 
-#: src/plugin.py:749
+#: src/plugin.py:745
 msgid "PORN"
 msgstr "PORNO"
 
-#: src/plugin.py:760
+#: src/plugin.py:756
 msgid "USER-ADDITIONS"
 msgstr "USER-ERWEITERUNGEN"
 
-#: src/plugin.py:771
+#: src/plugin.py:767
 msgid "Activate User-additions:"
 msgstr "User-Erweiterungen aktivieren:"
 
-#: src/plugin.py:814
+#: src/plugin.py:810
 #, python-format
 msgid ""
 "Some of the plugins may not be legally used in your country!\n"
@@ -2332,93 +2298,99 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/plugin.py:829
+#: src/plugin.py:825
 msgid "Real-Debrid.com is not activated."
 msgstr "Real-Debrid.com is not activated."
 
-#: src/plugin.py:837
+#: src/plugin.py:833
 msgid "Please enter the correct code"
 msgstr "Bitte den korrekten Code eingeben"
 
-#: src/plugin.py:837
+#: src/plugin.py:833
 msgid "Enter code"
 msgstr "Code eingeben"
 
-#: src/plugin.py:892 src/plugin.py:1071 src/plugin.py:1405 src/plugin.py:1918
-#: src/plugin.py:1949 src/plugin.py:2903 src/plugin.py:2934 src/plugin.py:3681
-#: src/plugin.py:3712 src/plugin.py:4217
+#: src/plugin.py:888 src/plugin.py:1066 src/plugin.py:1406 src/plugin.py:1816
+#: src/plugin.py:1929 src/plugin.py:1960 src/plugin.py:2592 src/plugin.py:2830
+#: src/plugin.py:2931 src/plugin.py:2962 src/plugin.py:3390 src/plugin.py:3625
+#: src/plugin.py:3727 src/plugin.py:3758 src/plugin.py:4178
 msgid "ALL"
 msgstr "ALLE"
 
-#: src/plugin.py:893 src/plugin.py:968 src/plugin.py:1073 src/plugin.py:1405
-#: src/plugin.py:1920 src/plugin.py:1951 src/plugin.py:2905 src/plugin.py:2936
-#: src/plugin.py:3683 src/plugin.py:3714 src/plugin.py:4219
+#: src/plugin.py:889 src/plugin.py:1068 src/plugin.py:1406 src/plugin.py:1817
+#: src/plugin.py:1931 src/plugin.py:1962 src/plugin.py:2592 src/plugin.py:2831
+#: src/plugin.py:2933 src/plugin.py:2964 src/plugin.py:3390 src/plugin.py:3626
+#: src/plugin.py:3729 src/plugin.py:3760 src/plugin.py:4178
 msgid "Libraries"
 msgstr "Mediatheken"
 
-#: src/plugin.py:894 src/plugin.py:968 src/plugin.py:1077 src/plugin.py:1405
-#: src/plugin.py:1924 src/plugin.py:1955 src/plugin.py:2909 src/plugin.py:2940
-#: src/plugin.py:3687 src/plugin.py:3718 src/plugin.py:4223
+#: src/plugin.py:890 src/plugin.py:1072 src/plugin.py:1406 src/plugin.py:1818
+#: src/plugin.py:1935 src/plugin.py:1966 src/plugin.py:2592 src/plugin.py:2832
+#: src/plugin.py:2937 src/plugin.py:2968 src/plugin.py:3390 src/plugin.py:3627
+#: src/plugin.py:3733 src/plugin.py:3764 src/plugin.py:4178
 msgid "Fun"
 msgstr "Fun"
 
-#: src/plugin.py:897 src/plugin.py:968 src/plugin.py:1079 src/plugin.py:1405
-#: src/plugin.py:1926 src/plugin.py:1957 src/plugin.py:2911 src/plugin.py:2942
-#: src/plugin.py:3689 src/plugin.py:3720 src/plugin.py:4225
+#: src/plugin.py:893 src/plugin.py:1074 src/plugin.py:1406 src/plugin.py:1821
+#: src/plugin.py:1937 src/plugin.py:1968 src/plugin.py:2592 src/plugin.py:2835
+#: src/plugin.py:2939 src/plugin.py:2970 src/plugin.py:3390 src/plugin.py:3630
+#: src/plugin.py:3735 src/plugin.py:3766 src/plugin.py:4178
 msgid "News&Documentary"
 msgstr "Nachrichten&Dokus"
 
-#: src/plugin.py:898 src/plugin.py:968 src/plugin.py:1085 src/plugin.py:1400
-#: src/plugin.py:1932 src/plugin.py:1963 src/plugin.py:2917 src/plugin.py:2948
-#: src/plugin.py:3695 src/plugin.py:3726 src/plugin.py:4231
+#: src/plugin.py:894 src/plugin.py:1080 src/plugin.py:1401 src/plugin.py:1822
+#: src/plugin.py:1943 src/plugin.py:1974 src/plugin.py:2587 src/plugin.py:2836
+#: src/plugin.py:2945 src/plugin.py:2976 src/plugin.py:3385 src/plugin.py:3631
+#: src/plugin.py:3741 src/plugin.py:3772 src/plugin.py:4173
 msgid "Porn"
 msgstr "Porno"
 
-#: src/plugin.py:899 src/plugin.py:968 src/plugin.py:1075 src/plugin.py:1404
-#: src/plugin.py:1922 src/plugin.py:1953 src/plugin.py:2907 src/plugin.py:2938
-#: src/plugin.py:3685 src/plugin.py:3716 src/plugin.py:4221
+#: src/plugin.py:895 src/plugin.py:1070 src/plugin.py:1405 src/plugin.py:1823
+#: src/plugin.py:1933 src/plugin.py:1964 src/plugin.py:2591 src/plugin.py:2837
+#: src/plugin.py:2935 src/plugin.py:2966 src/plugin.py:3389 src/plugin.py:3632
+#: src/plugin.py:3731 src/plugin.py:3762 src/plugin.py:4177
 msgid "User-additions"
 msgstr "User-Erweiterungen"
 
-#: src/plugin.py:902 src/plugin.py:1815 src/plugin.py:2812 src/plugin.py:3589
+#: src/plugin.py:898 src/plugin.py:1826 src/plugin.py:2840 src/plugin.py:3635
 msgid "Change filter"
 msgstr "Filter wechseln"
 
-#: src/plugin.py:903 src/plugin.py:1818 src/plugin.py:2815 src/plugin.py:3592
+#: src/plugin.py:899 src/plugin.py:1829 src/plugin.py:2843 src/plugin.py:3638
 msgid "Open SimpleList"
 msgstr "SimpleList öffnen"
 
-#: src/plugin.py:904 src/plugin.py:1819 src/plugin.py:2816 src/plugin.py:3593
+#: src/plugin.py:900 src/plugin.py:1830 src/plugin.py:2844 src/plugin.py:3639
 msgid "Open selected Plugin"
 msgstr "Ausgewähltes Plugin öffnen"
 
-#: src/plugin.py:905 src/plugin.py:1820 src/plugin.py:2817 src/plugin.py:3594
+#: src/plugin.py:901 src/plugin.py:1831 src/plugin.py:2845 src/plugin.py:3640
 msgid "Exit MediaPortal"
 msgstr "MediaPortal beenden"
 
-#: src/plugin.py:906 src/plugin.py:1823 src/plugin.py:2820 src/plugin.py:3597
+#: src/plugin.py:902 src/plugin.py:1834 src/plugin.py:2848 src/plugin.py:3643
 msgid "MediaPortal Setup"
 msgstr "MediaPortal Setup"
 
-#: src/plugin.py:919 src/plugin.py:1835 src/plugin.py:2832 src/plugin.py:3609
+#: src/plugin.py:915 src/plugin.py:1846 src/plugin.py:2860 src/plugin.py:3655
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/plugin.py:1218 src/plugin.py:1362 src/plugin.py:2305 src/plugin.py:2544
-#: src/plugin.py:3156 src/plugin.py:3321 src/plugin.py:3935 src/plugin.py:4097
+#: src/plugin.py:1215 src/plugin.py:1359 src/plugin.py:2321 src/plugin.py:2560
+#: src/plugin.py:3187 src/plugin.py:3358 src/plugin.py:3984 src/plugin.py:4146
 msgid "Enter adult PIN"
 msgstr "Erwachsenen-PIN eingeben"
 
-#: src/plugin.py:1230 src/plugin.py:2469 src/plugin.py:3246 src/plugin.py:4022
+#: src/plugin.py:1227 src/plugin.py:2485 src/plugin.py:3283 src/plugin.py:4071
 msgid "Enter setup PIN"
 msgstr "Setup-PIN eingeben"
 
-#: src/plugin.py:1270 src/plugin.py:2210 src/plugin.py:3063 src/plugin.py:3842
+#: src/plugin.py:1267 src/plugin.py:2226 src/plugin.py:3094 src/plugin.py:3891
 msgid "No connection to the Internet available."
 msgstr "Keine Verbindung zum Internet vorhanden."
 
-#: src/plugin.py:1297 src/plugin.py:1337 src/plugin.py:2240 src/plugin.py:2280
-#: src/plugin.py:3091 src/plugin.py:3131 src/plugin.py:3870 src/plugin.py:3910
+#: src/plugin.py:1294 src/plugin.py:1334 src/plugin.py:2256 src/plugin.py:2296
+#: src/plugin.py:3122 src/plugin.py:3162 src/plugin.py:3919 src/plugin.py:3959
 #, python-format
 msgid ""
 "This Plugin has been marked as \"not working\" by the developers.\n"
@@ -2437,8 +2409,8 @@ msgstr ""
 "Falls jemand anderes bereit ist einen Fix für dieses Plugin zur Verfügung zu "
 "stellen dann nehmt bitte Kontakt mit uns auf."
 
-#: src/plugin.py:1299 src/plugin.py:1339 src/plugin.py:2242 src/plugin.py:2282
-#: src/plugin.py:3093 src/plugin.py:3133 src/plugin.py:3872 src/plugin.py:3912
+#: src/plugin.py:1296 src/plugin.py:1336 src/plugin.py:2258 src/plugin.py:2298
+#: src/plugin.py:3124 src/plugin.py:3164 src/plugin.py:3921 src/plugin.py:3961
 #, python-format
 msgid ""
 "This Plugin has been marked as \"not working\" by the developers.\n"
@@ -2451,35 +2423,35 @@ msgstr ""
 "Aktueller Entwickler-Status dieses Plugins ist:\n"
 "\"%s\""
 
-#: src/plugin.py:1406
+#: src/plugin.py:1407 src/plugin.py:2593 src/plugin.py:3391 src/plugin.py:4179
 msgid "Select Filter"
 msgstr "Wähle Filter"
 
-#: src/plugin.py:1816 src/plugin.py:2813 src/plugin.py:3590
+#: src/plugin.py:1827 src/plugin.py:2841 src/plugin.py:3636
 msgid "Change sort order"
 msgstr "Sortierreihenfolge ändern"
 
-#: src/plugin.py:1817 src/plugin.py:2814 src/plugin.py:3591
+#: src/plugin.py:1828 src/plugin.py:2842 src/plugin.py:3637
 msgid "Manual sorting"
 msgstr "Manuelle Sortierung"
 
-#: src/plugin.py:1821 src/plugin.py:2818 src/plugin.py:3595
+#: src/plugin.py:1832 src/plugin.py:2846 src/plugin.py:3641
 msgid "Next page"
 msgstr "Nächste Seite"
 
-#: src/plugin.py:1822 src/plugin.py:2819 src/plugin.py:3596
+#: src/plugin.py:1833 src/plugin.py:2847 src/plugin.py:3642
 msgid "Previous page"
 msgstr "Vorherige Seite"
 
-#: src/plugin.py:1832 src/plugin.py:2829 src/plugin.py:3606
+#: src/plugin.py:1843 src/plugin.py:2857 src/plugin.py:3652
 msgid "CH+"
 msgstr "CH+"
 
-#: src/plugin.py:1833 src/plugin.py:2830 src/plugin.py:3607
+#: src/plugin.py:1844 src/plugin.py:2858 src/plugin.py:3653
 msgid "CH-"
 msgstr "CH-"
 
-#: src/plugin.py:1891 src/plugin.py:2874 src/plugin.py:3652
+#: src/plugin.py:1902 src/plugin.py:2902 src/plugin.py:3698
 msgid "Ordering is only possible with filter \"ALL\"."
 msgstr "Sortieren ist nur mit dem Filter \"ALLE\" möglich."
 
@@ -2488,7 +2460,7 @@ msgstr "Sortieren ist nur mit dem Filter \"ALLE\" möglich."
 msgid "Error: %s"
 msgstr "Fehler: %s"
 
-#: src/resources/choiceboxext.py:128
+#: src/resources/choiceboxext.py:130
 msgid "Input"
 msgstr "Eingabe"
 
@@ -2500,11 +2472,11 @@ msgstr "Wirklich schließen ohne die Einstellungen zu speichern?"
 msgid "Stream starts in 6 sec."
 msgstr "Stream startet in 6 Sek."
 
-#: src/resources/hosters/cloudyvideos.py:33 src/resources/streams.py:989
+#: src/resources/hosters/cloudyvideos.py:33 src/resources/streams.py:1028
 msgid "Stream starts in 3 sec."
 msgstr "Stream startet in 3 Sek."
 
-#: src/resources/hosters/openload.py:8
+#: src/resources/hosters/openload.py:21
 msgid "IP address not authorized. Visit https://openload.co/pair"
 msgstr "IP Adresse nicht autorisiert. Besuche https://openload.co/pair"
 
@@ -2572,7 +2544,7 @@ msgstr "Wähle virtuelle Tastatur"
 msgid "Select suggestions list"
 msgstr "Wähle Vorschlagsliste"
 
-#: src/resources/menuhelper.py:140
+#: src/resources/menuhelper.py:142
 msgid "No menudata found!"
 msgstr "Keine Menüdaten gefunden!"
 
@@ -2813,38 +2785,38 @@ msgstr "EPG Import gestartet"
 msgid "EPG import finished"
 msgstr "EPG Import fertig"
 
-#: src/resources/simpleplayer.py:99
+#: src/resources/simpleplayer.py:95
 msgid "You've to check Your HLS-PLayer Cachepath-Setting in MP-Setup:\n"
 msgstr ""
 "Bitte die HLS-Player Cacheverzeichnis Einstellung im MP-Setup prüfen:\n"
 
-#: src/resources/simpleplayer.py:541
+#: src/resources/simpleplayer.py:537
 msgid "Resuming playback"
 msgstr "Fortsetzen der Wiedergabe"
 
-#: src/resources/simpleplayer.py:543
+#: src/resources/simpleplayer.py:539
 msgid "Do you want to resume this playback?"
 msgstr "Soll diese Wiedergabe fortgesetzt werden?"
 
-#: src/resources/simpleplayer.py:543
+#: src/resources/simpleplayer.py:539
 #, python-format
 msgid "Resume position at %s"
 msgstr "Wiederaufnahmeposition bei %s"
 
-#: src/resources/simpleplayer.py:622
+#: src/resources/simpleplayer.py:618
 msgid "to Player"
 msgstr "zum Player"
 
-#: src/resources/simpleplayer.py:625
+#: src/resources/simpleplayer.py:621
 msgid "Playmode"
 msgstr "Abspielmodus"
 
-#: src/resources/simpleplayer.py:1003 src/resources/simpleplayer.py:1012
+#: src/resources/simpleplayer.py:1000 src/resources/simpleplayer.py:1009
 #, python-format
 msgid "This STB can't decode %s streams!"
 msgstr "Diese STB kann %s Streams nicht wiedergeben!"
 
-#: src/resources/simpleplayer.py:1032
+#: src/resources/simpleplayer.py:1029
 #, python-format
 msgid "Streaming error: %s"
 msgstr "Streaming Fehler: %s"
@@ -2862,113 +2834,109 @@ msgstr "Nein, aber von Anfang an neu beginnen"
 msgid "Stop playing this movie?"
 msgstr "Wiedergabe dieses Films stoppen?"
 
-#: src/resources/simpleplayer.py:1596
+#: src/resources/simpleplayer.py:1594
 msgid "Error: Service may be added only from the local playlist"
 msgstr "Fehler: Service darf nur von der lokalen Playlist hinzugefügt werden"
 
-#: src/resources/simpleplayer.py:1610
+#: src/resources/simpleplayer.py:1608
 msgid "Error: URL is not persistent!"
 msgstr "Fehler: URL ist nicht persistent!"
 
-#: src/resources/simpleplayer.py:1616
+#: src/resources/simpleplayer.py:1614
 msgid "Added entry"
 msgstr "Eintrag hinzugefügt"
 
-#: src/resources/simpleplayer.py:1618
+#: src/resources/simpleplayer.py:1616
 msgid "Entry already exists"
 msgstr "Eintrag schon vorhanden"
 
-#: src/resources/simpleplayer.py:1620
+#: src/resources/simpleplayer.py:1618
 msgid "Error!"
 msgstr "Fehler!"
 
-#: src/resources/simpleplayer.py:1749 src/resources/simpleplayer.py:1750
+#: src/resources/simpleplayer.py:1747 src/resources/simpleplayer.py:1748
 msgid "SimplePlayer Configuration"
 msgstr "SimplePlayer Konfiguration"
 
-#: src/resources/simpleplayer.py:1752
+#: src/resources/simpleplayer.py:1750
 msgid "Global playlist number:"
 msgstr "Globale Playlist-Nummer:"
 
-#: src/resources/simpleplayer.py:1753
+#: src/resources/simpleplayer.py:1751
 msgid "Playmode:"
 msgstr "Abspielmodus:"
 
-#: src/resources/simpleplayer.py:1754
+#: src/resources/simpleplayer.py:1752
 msgid "Screensaver:"
 msgstr "Bildschirmschoner:"
 
-#: src/resources/simpleplayer.py:1755
+#: src/resources/simpleplayer.py:1753
 msgid "Highest resolution for playback (only YouTube):"
 msgstr "Höchste Auflösung für die Wiedergabe (nur YouTube):"
 
-#: src/resources/simpleplayer.py:1757
+#: src/resources/simpleplayer.py:1755
 msgid "Save resume cache in flash memory:"
 msgstr "Speichere Wiederaufnahme-Cache im Flashspeicher:"
 
-#: src/resources/simpleplayer.py:1758
+#: src/resources/simpleplayer.py:1756
 msgid "Behavior on movie start:"
 msgstr "Verhalten bei Filmstart:"
 
-#: src/resources/simpleplayer.py:1759
+#: src/resources/simpleplayer.py:1757
 msgid "Behavior on movie stop:"
 msgstr "Verhalten bei Filmstopp:"
 
-#: src/resources/simpleplayer.py:1760
+#: src/resources/simpleplayer.py:1758
 msgid "Behavior on movie end:"
 msgstr "Verhalten bei Filmende:"
 
-#: src/resources/simpleplayer.py:1761
+#: src/resources/simpleplayer.py:1759
 msgid "Seekbar sensibility:"
 msgstr "Suchleistenempfindlichkeit:"
 
-#: src/resources/simpleplayer.py:1762
+#: src/resources/simpleplayer.py:1760
 msgid "Infobar cover always off:"
 msgstr "Infobar-Coveranzeige immer aus:"
 
-#: src/resources/simpleplayer.py:1763
+#: src/resources/simpleplayer.py:1761
 msgid "Use SP number seek:"
 msgstr "Verwende SP Nummernsuche:"
 
-#: src/resources/simpleplayer.py:1766
-msgid "TMDb/IMDb on key:"
-msgstr "TMDb/IMDb mit Taste:"
-
-#: src/resources/simpleplayer.py:1787 src/resources/simpleplayer.py:1788
+#: src/resources/simpleplayer.py:1782 src/resources/simpleplayer.py:1783
 msgid "SimplePlayer Menu"
 msgstr "SimplePlayer Menü"
 
-#: src/resources/simpleplayer.py:1798
+#: src/resources/simpleplayer.py:1793
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#: src/resources/simpleplayer.py:1801
+#: src/resources/simpleplayer.py:1796
 #, python-format
 msgid "Add service to global playlist-%02d"
 msgstr "Füge Service zu globaler Playlist-%02d hinzu"
 
-#: src/resources/simpleplayer.py:1803
+#: src/resources/simpleplayer.py:1798
 #, python-format
 msgid "Open global playlist-%02d"
 msgstr "Öffne globale Playlist-%02d"
 
-#: src/resources/simpleplayer.py:1805
+#: src/resources/simpleplayer.py:1800
 msgid "Open local playlist"
 msgstr "Öffne lokale Playlist"
 
-#: src/resources/simpleplayer.py:1807
+#: src/resources/simpleplayer.py:1802
 msgid "A/V Settings"
 msgstr "A/V Einstellungen"
 
-#: src/resources/simpleplayer.py:1809
+#: src/resources/simpleplayer.py:1804
 msgid "Advanced Audio Settings"
 msgstr "Erweiterte Audioeinstellungen"
 
-#: src/resources/simpleplayer.py:1810
+#: src/resources/simpleplayer.py:1805
 msgid "Mainmenu"
 msgstr "Hauptmenü"
 
-#: src/resources/simpleplayer.py:1870
+#: src/resources/simpleplayer.py:1865
 #, python-format
 msgid ""
 "The directory path does not end with '/':\n"
@@ -2977,7 +2945,7 @@ msgstr ""
 "Der Verzeichnispfad endet nicht mit '/':\n"
 "%s"
 
-#: src/resources/simpleplayer.py:1871
+#: src/resources/simpleplayer.py:1866
 #, python-format
 msgid ""
 "File with the same name exists in the directory path:\n"
@@ -2986,7 +2954,7 @@ msgstr ""
 "Datei mit gleichen Namen im Verzeichnispfad vorhanden:\n"
 "%s"
 
-#: src/resources/simpleplayer.py:1872
+#: src/resources/simpleplayer.py:1867
 #, python-format
 msgid ""
 "The missing directory:\n"
@@ -2995,7 +2963,7 @@ msgstr ""
 "Das fehlende Verzeichnis:\n"
 "%s konnte nicht angelegt werden!"
 
-#: src/resources/simpleplayer.py:1873
+#: src/resources/simpleplayer.py:1868
 #, python-format
 msgid ""
 "The directory path:\n"
@@ -3004,7 +2972,7 @@ msgstr ""
 "Der Verzeichnispfad:\n"
 "%s ist nicht vorhanden!"
 
-#: src/resources/simpleplayer.py:1874
+#: src/resources/simpleplayer.py:1869
 #, python-format
 msgid ""
 "There exists already a directory with this name:\n"
@@ -3013,7 +2981,7 @@ msgstr ""
 "Es existiert schon ein Verzeichnis mit diesem Namen:\n"
 "%s"
 
-#: src/resources/simpleplayer.py:1875
+#: src/resources/simpleplayer.py:1870
 #, python-format
 msgid ""
 "The path is OK, the file name was not specified:\n"
@@ -3022,7 +2990,7 @@ msgstr ""
 "Der Pfad ist i.O., der Dateiname wurde nicht angegeben:\n"
 "%s"
 
-#: src/resources/simpleplayer.py:1876
+#: src/resources/simpleplayer.py:1871
 #, python-format
 msgid ""
 "The directory path and file name is OK:\n"
@@ -3031,11 +2999,11 @@ msgstr ""
 "Der Verzeichnispfad & Dateiname ist i.O.:\n"
 "%s"
 
-#: src/resources/simpleplayer.py:1877
+#: src/resources/simpleplayer.py:1872
 msgid "The directory path is not specified!"
 msgstr "Der Verzeichnispfad wurde nicht angegeben!"
 
-#: src/resources/simpleplayer.py:1878
+#: src/resources/simpleplayer.py:1873
 #, python-format
 msgid ""
 "Symbolic link with the same name in the directory path:\n"
@@ -3044,7 +3012,7 @@ msgstr ""
 "Symbolischer Link mit gleichen Namen im Verzeichnispfad:\n"
 "%s vorhanden!"
 
-#: src/resources/simpleplayer.py:1879
+#: src/resources/simpleplayer.py:1874
 #, python-format
 msgid ""
 "The directory path does not begin with '/':\n"
@@ -3053,55 +3021,55 @@ msgstr ""
 "Der Verzeichnispfad beginnt nicht mit '/':\n"
 "%s"
 
-#: src/resources/streams.py:194
+#: src/resources/streams.py:196
 msgid "premiumize: No valid link."
 msgstr "premiumize: Ungültiger Link."
 
-#: src/resources/streams.py:198
+#: src/resources/streams.py:200
 msgid "premiumize: You are no Premium-User."
 msgstr "premiumize: Du bist kein Premium-User."
 
-#: src/resources/streams.py:200
+#: src/resources/streams.py:202
 msgid "premiumize: No Access."
 msgstr "premiumize: Kein Zugriff."
 
-#: src/resources/streams.py:202
+#: src/resources/streams.py:204
 msgid "premiumize: File not found."
 msgstr "premiumize: Datei nicht gefunden."
 
-#: src/resources/streams.py:204
+#: src/resources/streams.py:206
 msgid "premiumize: Hoster currently not available."
 msgstr "premiumize: Hoster momentan nicht verfügbar."
 
-#: src/resources/streams.py:206
+#: src/resources/streams.py:208
 msgid "premiumize: Unknown technical error."
 msgstr "premiumize: Unbekannter technischer Fehler."
 
-#: src/resources/streams.py:208
+#: src/resources/streams.py:210
 msgid "premiumize: Temporary technical error."
 msgstr "premiumize: Temporärer technischer Fehler."
 
-#: src/resources/streams.py:210
+#: src/resources/streams.py:212
 msgid "premiumize: Fair use limit exhausted."
 msgstr "premiumize: Fair Use Limit ausgschöpft."
 
-#: src/resources/streams.py:737 src/resources/streams.py:943
+#: src/resources/streams.py:770 src/resources/streams.py:982
 msgid "Mandatory Python module python-requests is missing!"
 msgstr "Zwingend erforderliches Python-Modul python-requests fehlt!"
 
-#: src/resources/streams.py:953
+#: src/resources/streams.py:992
 msgid "No supported Stream Hoster, try another one!"
 msgstr "Kein unterstützter Stream Hoster, versuche einen anderen!"
 
-#: src/resources/streams.py:955
+#: src/resources/streams.py:994
 msgid "Invalid Stream link, try another Stream Hoster!"
 msgstr "Ungültiger Stream Link, versuche eine anderen Stream Hoster!"
 
-#: src/resources/streams.py:963
+#: src/resources/streams.py:1002
 msgid "This hoster is only working with enabled Premium support."
 msgstr "Dieser Hoster funktioniert nur mit aktivierter Premium-Unterstützung."
 
-#: src/resources/streams.py:965
+#: src/resources/streams.py:1004
 msgid ""
 "This Stream link is currently not available via Premium, try another Stream "
 "Hoster."
@@ -3109,15 +3077,15 @@ msgstr ""
 "Dieser Stream ist aktuell nicht über Premium verfügbar, versuche einen "
 "anderen Stream Hoster."
 
-#: src/resources/streams.py:969
+#: src/resources/streams.py:1008
 msgid "Unknown error, check MP logfile."
 msgstr "Unbekannter Fehler, MP Logfile überprüfen."
 
-#: src/resources/streams.py:1064
+#: src/resources/streams.py:1103
 msgid "Stream starts in 10 sec."
 msgstr "Stream startet in 10 sek."
 
-#: src/resources/streams.py:1077
+#: src/resources/streams.py:1116
 msgid "This video is encoding now. Please check back later."
 msgstr "Das Video wird gerade encoded. Bitte später nochmal versuchen."
 

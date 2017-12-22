@@ -54,6 +54,8 @@ class MenuHelper(MPScreen):
 		self.mh_genreUrl = ["","","",""]
 		self.mh_genreTitle = ""
 		self.mh_lastPageUrl = ""
+		self.contenttitle = "%%EMPTY%%"
+
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 
@@ -339,6 +341,20 @@ class MenuHelper(MPScreen):
 					self.mh_genreName[self.mh_menuLevel] = ':'+genreName
 
 				self.mh_genreUrl[self.mh_menuLevel] = genreLink
+
+			if self.mh_menuLevel == 1:
+				contenttitle = "%s" % (self.mh_genreName[0])
+			elif self.mh_menuLevel == 2:
+				contenttitle = "%s%s" % (self.mh_genreName[0],self.mh_genreName[1])
+			else:
+				if self.contenttitle == "%%EMPTY%%":
+					self.contenttitle = self['ContentTitle'].text
+				else:
+					contenttitle = ""
+			if self.contenttitle != "%%EMPTY%%" and self.mh_menuLevel == 0:
+				self['ContentTitle'].setText(self.contenttitle)
+			else:
+				self['ContentTitle'].setText(contenttitle)
 			self.mh_genreTitle = "%s%s%s" % (self.mh_genreName[0],self.mh_genreName[1],self.mh_genreName[2])
 			if self.mh_genreTitle != (400 * "—"):
 				self['name'].setText(_("Selection:")+" "+self.mh_genreTitle)

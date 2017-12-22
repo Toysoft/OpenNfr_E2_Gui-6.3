@@ -471,6 +471,24 @@ class get_stream_link:
 				else:
 					self.only_premium()
 
+			elif re.search('nubilefilms.com', data, re.S):
+				link = data
+				if config.mediaportal.premiumize_use.value and not self.fallback:
+					self.rdb = 0
+					self.prz = 1
+					self.callPremium(link)
+				else:
+					self.only_premium()
+
+			elif re.search('julesjordan.com', data, re.S):
+				link = data
+				if config.mediaportal.premiumize_use.value and not self.fallback:
+					self.rdb = 0
+					self.prz = 1
+					self.callPremium(link)
+				else:
+					self.only_premium()
+					
 			elif re.search('realitykings.com', data, re.S):
 				link = data
 				if config.mediaportal.premiumize_use.value and not self.fallback:

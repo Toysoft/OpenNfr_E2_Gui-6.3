@@ -189,7 +189,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2017121701"))
+config.mediaportal.version = NoSave(ConfigText(default="2017122101"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.retries = ConfigSubsection()
@@ -280,11 +280,9 @@ config.mediaportal.sp_seekbar_sensibility = ConfigInteger(default = 10, limits =
 config.mediaportal.sp_infobar_cover_off = ConfigYesNo(default = False)
 config.mediaportal.sp_use_number_seek = ConfigYesNo(default = True)
 config.mediaportal.sp_pl_number = ConfigInteger(default = 1, limits = (1,99))
-config.mediaportal.sp_mi_key = ConfigSelection(default = "instantRecord", choices = [("displayHelp", _("HELP")),("showMovies", _("PVR/VIDEO")),("instantRecord", _("RECORD"))])
 config.mediaportal.sp_use_yt_with_proxy = ConfigSelection(default = "no", choices = [("no", _("No")), ("prz", "with Premiumize"), ("rdb", "with Real-Debrid"), ("proxy", "with a HTTP Proxy")])
 config.mediaportal.sp_on_movie_start = ConfigSelection(default = "start", choices = [("start", _("Start from the beginning")), ("ask", _("Ask user")), ("resume", _("Resume from last position"))])
 config.mediaportal.sp_save_resumecache = ConfigYesNo(default = False)
-config.mediaportal.sp_imdb_key = ConfigSelection(default = "info", choices = [("displayHelp", _("HELP")),("showMovies", _("PVR/VIDEO")),("info", _("EPG/INFO"))])
 config.mediaportal.yt_proxy_username = ConfigText(default="user!", fixed_size=False)
 config.mediaportal.yt_proxy_password = ConfigPassword(default="pass!", fixed_size=False)
 config.mediaportal.yt_proxy_host = ConfigText(default = "example_proxy.com!", fixed_size = False)
@@ -632,9 +630,6 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		self.configlist.append(getConfigListEntry(_("Icon Cachepath:"), config.mediaportal.iconcachepath, False))
 		self.configlist.append(getConfigListEntry(_("Videoquality:"), config.mediaportal.videoquali_others, False))
 		self.configlist.append(getConfigListEntry(_("Watchlist/Playlist/Userchan path:"), config.mediaportal.watchlistpath, False))
-		self.configlist.append(getConfigListEntry(_("Show USER-Channels Help:"), config.mediaportal.show_userchan_help, False))
-		if MediaInfoPresent:
-			self.configlist.append(getConfigListEntry(_('MediaInfo on key:'), config.mediaportal.sp_mi_key, False))
 		self._spacer()
 		self.configlist.append(getConfigListEntry(_("YOUTUBE"), ))
 		self._separator()
@@ -643,6 +638,7 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		if config.mediaportal.youtubeenabledash.value:
 			self.configlist.append(getConfigListEntry(_("Enable VP9 codec:"), config.mediaportal.youtubeenablevp9, False))
 		self.configlist.append(getConfigListEntry(_("Max. count results/page:"), config.mediaportal.youtube_max_items_pp, False))
+		self.configlist.append(getConfigListEntry(_("Show USER-Channels Help:"), config.mediaportal.show_userchan_help, False))
 		self.configlist.append(getConfigListEntry(_('Use Proxy:'), config.mediaportal.sp_use_yt_with_proxy, True))
 		if config.mediaportal.sp_use_yt_with_proxy.value == "proxy":
 			self.configlist.append(getConfigListEntry(_("HTTP-Proxy Host or IP:"), config.mediaportal.yt_proxy_host, False))

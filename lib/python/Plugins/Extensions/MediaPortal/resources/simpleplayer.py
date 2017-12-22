@@ -53,11 +53,7 @@ try:
 	from Plugins.Extensions.MediaInfo.plugin import MediaInfo
 	MediaInfoPresent = True
 except:
-	try:
-		from Plugins.Extensions.mediainfo.plugin import mediaInfo
-		MediaInfoPresent = True
-	except:
-		MediaInfoPresent = False
+	MediaInfoPresent = False
 
 seekbuttonpos = None
 STREAM_BUFFERING_ENABLED = False
@@ -815,17 +811,17 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self.skin = re.sub(r'progress_pointer="(.*?):\d+,\d+" render="PositionGauge"', r'pixmap="\1" render="Progress"', self.skin)
 			self.skin = re.sub(r'type="MPServicePosition">Gauge</convert>', r'type="MPServicePosition">Position</convert>', self.skin)
 
-		self["actions"] = ActionMap(["WizardActions",'MediaPlayerSeekActions','InfobarInstantRecord',"EPGSelectActions",'MoviePlayerActions','ColorActions','InfobarActions',"MenuActions","HelpActions","MP_SP_Move"],
+		self["actions"] = ActionMap(["WizardActions",'MediaPlayerSeekActions','InfobarInstantRecord',"EPGSelectActions",'MoviePlayerActions','ColorActions','InfobarActions',"MenuActions","HelpActions","MP_SP_Move","MP_Actions"],
 		{
 			"leavePlayer": self.leavePlayer,
-			config.mediaportal.sp_mi_key.value: self.openMediainfo,
-			config.mediaportal.sp_imdb_key.value: self.openMovieinfo,
-			"menu":		self.openMenu,
-			"up": 		self.openPlaylist,
-			"down":		self.randomNow,
-			"back":		self.leavePlayer,
-			"left":		self.seekBack,
-			"right":	self.seekFwd,
+			"mediaInfo": self.openMediainfo,
+			"info":	self.openMovieinfo,
+			"menu":	self.openMenu,
+			"up": self.openPlaylist,
+			"down":	self.randomNow,
+			"back":	self.leavePlayer,
+			"left":	self.seekBack,
+			"right": self.seekFwd,
 			"SPMoveDown": self.moveSkinDown,
 			"SPMoveUp": self.moveSkinUp
 		}, -1)
@@ -1543,10 +1539,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 	def openMediainfo(self):
 		if MediaInfoPresent:
-			try:
-				self.session.open(MediaInfo)
-			except:
-				self.session.open(mediaInfo, True)
+			self.session.open(MediaInfo)
 
 	def openMovieinfo(self):
 		service = self.session.nav.getCurrentService()
@@ -1766,9 +1759,6 @@ class SimpleConfig(Screen, ConfigListScreenExt):
 		self.list.append(getConfigListEntry(_('Seekbar sensibility:'), config.mediaportal.sp_seekbar_sensibility))
 		self.list.append(getConfigListEntry(_('Infobar cover always off:'), config.mediaportal.sp_infobar_cover_off))
 		self.list.append(getConfigListEntry(_('Use SP number seek:'), config.mediaportal.sp_use_number_seek))
-		if MediaInfoPresent:
-			self.list.append(getConfigListEntry(_('MediaInfo on key:'), config.mediaportal.sp_mi_key))
-		self.list.append(getConfigListEntry(_('TMDb/IMDb on key:'), config.mediaportal.sp_imdb_key))
 		ConfigListScreenExt.__init__(self, self.list)
 		self['setupActions'] = ActionMap(['SetupActions'],
 		{
