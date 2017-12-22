@@ -75,7 +75,7 @@ config.imagemanager.number_to_keep = ConfigNumber(default=0)
 autoImageManagerTimer = None
 HaveGZkernel = True
 
-if getMachineBuild() in ('sf5008','et13000','et1x000',"vuuno4k", "vuultimo4k", "vusolo4k", "spark", "spark7162", "hd51", "hd52", "sf4008", "dags7252", "gb7252", "vs1500","h7",'xc7439','8100s'):
+if getMachineBuild() in ('u5','u5pvr','sf5008','et13000','et1x000',"vuuno4k", "vuultimo4k", "vusolo4k", "spark", "spark7162", "hd51", "hd52", "sf4008", "dags7252", "gb7252", "vs1500","h7",'xc7439','8100s'):
 	HaveGZkernel = False
 
 def Freespace(dev):
@@ -532,7 +532,7 @@ class ImageBackup(Screen):
 			self.MTDBOOT = "none"
                         self.EMMCIMG = "none"
 		self.list = self.list_files("/boot")
-		print "[FULL BACKUP] BOX MACHINEBUILD = >%s<" %self.MACHINEBUILD
+                print "[FULL BACKUP] BOX MACHINEBUILD = >%s<" %self.MACHINEBUILD
 		print "[FULL BACKUP] BOX MACHINENAME = >%s<" %self.MACHINENAME
 		print "[FULL BACKUP] BOX MACHINEBRAND = >%s<" %self.MACHINEBRAND
 		print "[FULL BACKUP] BOX MODEL = >%s<" %self.MODEL
@@ -655,18 +655,18 @@ class ImageBackup(Screen):
 	def list_files(self, PATH):
 		files = []
 		if SystemInfo["HaveMultiBoot"]:
-		        self.path = PATH
+			self.path = PATH
 			for name in listdir(self.path):
 				if path.isfile(path.join(self.path, name)):
 					if self.MACHINEBUILD in ("hd51","vs1500","h7","ceryon7252"):
 						cmdline = self.read_startup("/boot/" + name).split("=",3)[3].split(" ",1)[0]
 					else:
-						cmdline = self.read_startup("/boot/" + name).split("=",1)[1].split(" ",1)[0]		
+						cmdline = self.read_startup("/boot/" + name).split("=",1)[1].split(" ",1)[0]
 					if cmdline in Harddisk.getextdevices("ext4"):
- 						files.append(name)
+						files.append(name)
 			if getMachineBuild() not in ("gb7252"):
 				files.append("Recovery")
-		return files	
+                return files
 
 	def SearchUSBcanidate(self):
 		for paths, subdirs, files in walk("/media"):
@@ -687,7 +687,7 @@ class ImageBackup(Screen):
 		self.IMAGEVERSION = self.imageInfo() #strftime("%Y%m%d", localtime(self.START))
 		if "ubi" in self.ROOTFSTYPE.split():
 			self.MKFS = "/usr/sbin/mkfs.ubifs"
-		elif "tar.bz2" in self.ROOTFSTYPE.split() or SystemInfo["HaveMultiBoot"]:
+		elif "tar.bz2" in self.ROOTFSTYPE.split() or SystemInfo["HaveMultiBoot"] or self.MACHINEBUILD in ("u5","u5pvr"):
 				self.MKFS = "/bin/tar"
 				self.BZIP2 = "/usr/bin/bzip2"
 		else:
@@ -728,7 +728,7 @@ class ImageBackup(Screen):
 		elif SystemInfo["HaveMultiBoot"] and self.list[self.selection] == "Recovery":
 			self.message += _("because of the used filesystem the back-up\n")
 			self.message += _("will take about 30 minutes for this system\n")
-		elif "tar.bz2" in self.ROOTFSTYPE.split() or SystemInfo["HaveMultiBoot"]:
+		elif "tar.bz2" in self.ROOTFSTYPE.split() or SystemInfo["HaveMultiBoot"] or self.MACHINEBUILD in ("u5","u5pvr"):
 				self.message += _("because of the used filesystem the back-up\n")
 				self.message += _("will take about 1-4 minutes for this system\n")
 		else:
@@ -752,7 +752,7 @@ class ImageBackup(Screen):
 			cmd1 = "%s --root=/tmp/bi/root --faketime --output=%s/root.jffs2 %s" % (self.MKFS, self.WORKDIR, self.MKUBIFS_ARGS)
 			cmd2 = None
 			cmd3 = None
-		elif "tar.bz2" in self.ROOTFSTYPE.split() or SystemInfo["HaveMultiBoot"]:
+		elif "tar.bz2" in self.ROOTFSTYPE.split() or SystemInfo["HaveMultiBoot"] or self.MACHINEBUILD in ("u5","u5pvr"):
 				cmd1 = "%s -cf %s/rootfs.tar -C /tmp/bi/root --exclude=/var/nmbd/* ." % (self.MKFS, self.WORKDIR)
 				cmd2 = "%s %s/rootfs.tar" % (self.BZIP2, self.WORKDIR)
 				cmd3 = None
@@ -797,17 +797,17 @@ class ImageBackup(Screen):
 		cmdlist.append('echo " "')
 		if SystemInfo["HaveMultiBoot"]:
 			cmdlist.append("dd if=/dev/%s of=%s/kernel.bin" % (self.MTDKERNEL ,self.WORKDIR))
-		elif self.MTDKERNEL == "mmcblk0p1" or self.MTDKERNEL == "mmcblk0p3":
+		elif self.MTDKERNEL == "mmcblk0p1" or self.MTDKERNEL == "mmcblk0p3" or self.MTDKERNEL == "mmcblk0p10":
 			cmdlist.append("dd if=/dev/%s of=%s/%s" % (self.MTDKERNEL ,self.WORKDIR, self.KERNELBIN))
 		else:
 			cmdlist.append("nanddump -a -f %s/vmlinux.gz /dev/%s" % (self.WORKDIR, self.MTDKERNEL))
 		cmdlist.append('echo " "')
-		
+
 		if HaveGZkernel:
 			cmdlist.append('echo "Check: kerneldump"')
 		cmdlist.append("sync")
 
-                if SystemInfo["HaveMultiBootHD"] and self.list[self.selection] == "Recovery":
+		if SystemInfo["HaveMultiBootHD"] and self.list[self.selection] == "Recovery":
 			GPT_OFFSET=0
 			GPT_SIZE=1024
 			BOOT_PARTITION_OFFSET = int(GPT_OFFSET) + int(GPT_SIZE)
@@ -901,7 +901,7 @@ class ImageBackup(Screen):
 				system('mv %s/root.%s %s/%s' %(self.WORKDIR, self.ROOTFSTYPE, self.MAINDEST, self.ROOTFSBIN))
 		if SystemInfo["HaveMultiBoot"]:
 		        system('mv %s/kernel.bin %s/kernel.bin' %(self.WORKDIR, self.MAINDEST))
-		elif self.MTDKERNEL == "mmcblk0p1" or self.MTDKERNEL == "mmcblk0p3":
+		elif self.MTDKERNEL == "mmcblk0p1" or self.MTDKERNEL == "mmcblk0p3" or self.MTDKERNEL == "mmcblk0p10":
 			system('mv %s/%s %s/%s' %(self.WORKDIR, self.KERNELBIN, self.MAINDEST, self.KERNELBIN))
 		else:
 				system('mv %s/vmlinux.gz %s/%s' %(self.WORKDIR, self.MAINDEST, self.KERNELBIN))

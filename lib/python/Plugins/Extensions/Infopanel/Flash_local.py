@@ -24,7 +24,7 @@ import urllib2
 import os
 import shutil
 import math
-from boxbranding import getBoxType,  getImageDistro, getMachineMtdKernel, getMachineMtdRoot, getMachineName, getMachineBuild, getMachineBrand, getBrandOEM, getImageVersion, getMachineKernelFile, getMachineRootFile
+from boxbranding import getBoxType,  getImageDistro, getMachineName, getMachineBuild, getMachineBrand, getBrandOEM, getImageVersion, getMachineKernelFile, getMachineRootFile, getMachineMtdKernel, getMachineMtdRoot
 distro =  getImageDistro()
 ImageVersion = getImageVersion()
 ROOTFSBIN = getMachineRootFile()
@@ -91,14 +91,14 @@ class FlashOnline(Screen):
 		
 		Screen.setTitle(self, _("Flash On the Fly"))
 		if SystemInfo["HaveMultiBoot"]:
-			self["key_yellow"] = StaticText(_("STARTUP"))
+			self["key_yellow"] = Button(_("STARTUP"))
 		else:
-			self["key_yellow"] = StaticText("")
-		self["key_green"] = StaticText("Online")
-		self["key_red"] = StaticText(_("Exit"))
-		self["key_blue"] = StaticText("Local")
-		self["info-local"] = StaticText(_("Local = Flash a image from local path /hdd/images"))
-		self["info-online"] = StaticText(_("Online = Download a image and flash it"))
+			self["key_yellow"] = Button("")
+		self["key_green"] = Button("Online")
+		self["key_red"] = Button(_("Exit"))
+		self["key_blue"] = Button("Local")
+		self["info-local"] = Label(_("Local = Flash a image from local path /hdd/images"))
+		self["info-online"] = Label(_("Online = Download a image and flash it"))
 		
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"], 
 		{
@@ -190,7 +190,7 @@ class FlashOnline(Screen):
 		files = []
 		if SystemInfo["HaveMultiBoot"]:
 			path = PATH
-			if getMachineBuild() in ("hd51","vs1500","h7","ceryon7252" ,"gb7252"):
+			if getMachineBuild() in ("hd51","vs1500","h7","ceryon7252"):
 				for name in os.listdir(path):
 					if name != 'bootname' and os.path.isfile(os.path.join(path, name)):
 						try:

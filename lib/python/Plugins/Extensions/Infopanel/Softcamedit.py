@@ -40,6 +40,18 @@ if sz_w > 800:
 else:
 	HDSkn = False
 	
+cEditor = """<screen name="cEditor" position="40,90" size="1180,590" title="File-Explorer">
+                          <widget name="filedata" position="5,7" size="1170,527" itemHeight="25" />
+                          <ePixmap position="6,559" size="35,27" pixmap="skin_default/buttons/key_red.png" alphatest="blend" />
+                          <ePixmap position="332,559" size="35,27" pixmap="skin_default/buttons/key_green.png" alphatest="blend" />
+                          <ePixmap position="658,559" size="35,27" pixmap="skin_default/buttons/key_yellow.png" alphatest="blend" />
+                          <ePixmap position="984,559" size="35,27" pixmap="skin_default/buttons/key_blue.png" alphatest="blend" />
+                          <widget source="key_red" render="Label" position="41,562" zPosition="2" size="214,22" valign="center" halign="center" font="Regular; 21" transparent="1" shadowColor="black" shadowOffset="-1,-1" />
+                          <widget source="key_green" render="Label" position="368,562" zPosition="2" size="214,22" valign="center" halign="center" font="Regular;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" backgroundColor="foreground" />
+                          <widget source="key_yellow" render="Label" position="695,562" zPosition="2" size="214,22" valign="center" halign="center" font="Regular;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" backgroundColor="foreground" />
+                          <widget source="key_blue" render="Label" position="1022,562" zPosition="2" size="214,22" valign="center" halign="center" font="Regular;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" backgroundColor="foreground" />
+                          <eLabel name="new eLabel" position="6,553" size="1170,2" backgroundColor="blue" foregroundColor="blue" />
+                          </screen>"""
                
 class vEditor(Screen):
 	global HDSkn
