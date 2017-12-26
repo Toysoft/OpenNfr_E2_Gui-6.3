@@ -13531,3 +13531,15 @@ msgstr "Untertitel auf diesem Sender immer zentrieren"
 
 msgid "MOVIE SELECTION"
 msgstr "FILMAUSWAHL"
+
+msgid "Ignore DVB-C namespace sub network"
+msgstr "Ignoriere das DVB-C Namespace Subnetzwerk"
+
+msgid "Ignore DVB-S namespace sub network"
+msgstr "Ignoriere das DVB-S Namespace Subnetzwerk"
+
+msgid "Ignore DVB-T namespace sub network"
+msgstr "Ignoriere das DVB-T Namespace Subnetzwerk"
+
+msgid "On valid ONIDs, ignore frequency sub network part"
+msgstr "Bei gültigen ONIDS, ignoriere das Frequenz Subnetzwerk"
