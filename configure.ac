@@ -756,7 +756,6 @@ data/Makefile
 data/spinner/Makefile
 data/SpinnerSelector/Makefile
 data/SpinnerSelector/Obelix/Makefile
-data/SpinnerSelector/spinner_nfr_dunkel/Makefile
 data/bootvideos/Makefile
 data/bootlogos/Makefile
 data/radiologos/Makefile

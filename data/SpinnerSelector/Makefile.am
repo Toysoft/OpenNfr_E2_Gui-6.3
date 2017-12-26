@@ -1,2 +1,2 @@
-SUBDIRS = Obelix spinner_nfr_dunkel
+SUBDIRS = Obelix
 installdir = $(pkgdatadir)/SpinnerSelector
