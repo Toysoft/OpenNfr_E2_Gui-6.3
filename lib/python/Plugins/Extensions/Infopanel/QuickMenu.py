@@ -1,4 +1,4 @@
-﻿from enigma import eListboxPythonMultiContent, gFont, eEnv
+from enigma import eListboxPythonMultiContent, gFont, eEnv
 from boxbranding import getBoxType, getMachineName, getMachineBrand, getBrandOEM, getMachineBuild
 from Components.Console import Console
 from Components.ActionMap import ActionMap
@@ -864,7 +864,7 @@ def QuickMenuEntryComponent(name, description, long_description = None, width=54
      	            _(name),
                     MultiContentEntryText(pos=(120, 5), size=(width-160, 33), font=0, text = _(name)),
 	            MultiContentEntryText(pos=(120, 38), size=(width-160, 27), font=1, text = _(description)),
-	            MultiContentEntryPixmapAlphaTest(pos=(0, 10), size=(100, 40), png = png),
+	            MultiContentEntryPixmapAlphaTest(pos=(15, 20), size=(100, 40), png = png),
 	            _(long_description),
 	          ]
 	else:
