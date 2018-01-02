@@ -786,7 +786,9 @@ data/OpenNfrFHD/piconCam/Makefile
 data/OpenNfrFHD/tuner/Makefile
 data/OpenNfrFHD/volume/Makefile
 data/OpenNfrFHD/window/Makefile
-data/OpenNfrFHD/spinner/Makefile
+data/OpenNfrFHD/epg/Makefile
+data/OpenNfrFHD/skin_default/Makefile
+data/OpenNfrFHD/extensions/Makefile
 include/Makefile
 lib/Makefile
 lib/base/eenv.cpp
