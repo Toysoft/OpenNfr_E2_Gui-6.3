@@ -789,6 +789,7 @@ data/OpenNfrFHD/window/Makefile
 data/OpenNfrFHD/epg/Makefile
 data/OpenNfrFHD/skin_default/Makefile
 data/OpenNfrFHD/extensions/Makefile
+data/OpenNfrFHD/spinner/Makefile
 include/Makefile
 lib/Makefile
 lib/base/eenv.cpp

@@ -6,6 +6,7 @@ from Tools.Directories import SCOPE_ACTIVE_SKIN, resolveFilename, fileExists, pa
 from enigma import RT_HALIGN_LEFT, eListboxPythonMultiContent, \
 	eServiceReference, eServiceCenter, gFont, getDesktop
 from Tools.LoadPixmap import LoadPixmap
+import skin
 
 EXTENSIONS = {
 		"m4a": "music",
