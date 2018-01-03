@@ -1044,7 +1044,7 @@
     <widget source="session.CurrentService" render="PositionGauge" position="380,661" size="460,16" transparent="1" zPosition="5">
       <convert type="ServicePosition">Gauge</convert>
     </widget>
-    <widget source="session.CurrentService" render="Progress" position="380,661" size="460,16" pixmap="skin_default/slider1.png" transparent="1" zPosition="4">
+    <widget source="session.CurrentService" render="Progress" position="380,661" size="460,16" pixmap="OpenNfrFHD/slider1.png" transparent="1" zPosition="4">
       <convert type="ServicePosition">Position</convert>
     </widget>
     <widget source="session.CurrentService" render="Label" position="472,614" size="119,32" zPosition="2" font="DIGI; 32" halign="right" backgroundColor="black" noWrap="1" transparent="1">
@@ -1054,7 +1054,7 @@
     <widget source="session.CurrentService" render="Label" position="615,614" size="119,32" zPosition="2" font="DIGI; 32" halign="right" backgroundColor="black" noWrap="1" transparent="1">
       <convert type="ServicePosition">Length,ShowHours</convert>
     </widget>
-    <ePixmap position="444,600" size="310,60" zPosition="0" pixmap="skin_default/menu/mediaplclock.png" transparent="1" alphatest="blend" />
+    <ePixmap position="444,600" size="310,60" zPosition="0" pixmap="OpenNfrFHD/menu/mediaplclock.png" transparent="1" alphatest="blend" />
   </screen>
   <screen name="MessageBox" position="center,300" size="800,10" title="Message">
     <widget name="text" position="110,8" size="680,0" font="Regular;24" />
@@ -1919,11 +1919,11 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
       <convert type="FrontendInfo">AGC</convert>
     </widget>
     <eLabel name="lock" text="Lock:" position="55,381" size="100,30" font="Regular; 26" halign="left" backgroundColor="white" transparent="1" />
-    <widget source="Frontend" render="Pixmap" position="156,381" size=" 38,31" zPosition="1" pixmap="skin_default/icons/lock_on.png" alphatest="blend">
+    <widget source="Frontend" render="Pixmap" position="156,381" size=" 38,31" zPosition="1" pixmap="OpenNfrFHD/icons/lock_on.png" alphatest="blend">
       <convert type="FrontendInfo">LOCK</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <widget source="Frontend" render="Pixmap" position="156,381" size=" 38,31" zPosition="1" pixmap="skin_default/icons/lock_off.png" alphatest="blend">
+    <widget source="Frontend" render="Pixmap" position="156,381" size=" 38,31" zPosition="1" pixmap="OpenNfrFHD/icons/lock_off.png" alphatest="blend">
       <convert type="FrontendInfo">LOCK</convert>
       <convert type="ConditionalShowHide">Invert</convert>
     </widget>
@@ -2677,7 +2677,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget name="DescriptionBorder" position="0,0" size="0,0" />
     <widget name="waitingtext" position="0,0" size="0,0" />
     <widget source="Service" render="Cover" position="1708,247" size="155,210" zPosition="6" transparent="4" alphatest="blend" />
-    <ePixmap pixmap="skin_default/extensions/no_cover.png" position="1715,257" size="140,190" zPosition="4" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/extensions/no_cover.png" position="1715,257" size="140,190" zPosition="4" alphatest="blend" />
     <ePixmap position="469,946" size="80,31" zPosition="10" pixmap="OpenNfrFHD/buttons/key_info.png" transparent="1" alphatest="blend" />
   </screen>
   <screen name="MovieSelectionSlim" position="0,0" size="1920,1080" title="Select a movie" flags="wfNoBorder">
@@ -2721,7 +2721,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
     <widget name="DescriptionBorder" position="0,0" size="0,0" />
     <widget name="waitingtext" position="0,0" size="0,0" />
     <widget source="Service" render="Cover" position="1708,247" size="155,210" zPosition="6" transparent="4" alphatest="blend" />
-    <ePixmap pixmap="skin_default/extensions/no_cover.png" position="1715,257" size="140,190" zPosition="4" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/extensions/no_cover.png" position="1715,257" size="140,190" zPosition="4" alphatest="blend" />
     <ePixmap position="469,946" size="80,31" zPosition="10" pixmap="OpenNfrFHD/buttons/key_info.png" transparent="1" alphatest="blend" />
   </screen>
   <screen name="HarddiskSelection" position="0,0" size="1920,1080" title="Select HDD" flags="wfNoBorder">
@@ -3337,13 +3337,13 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <eLabel text="Help..." position="74,50" size="720,43" font="LCD;40" backgroundColor="white" transparent="1" foregroundColor="white" halign="center" />
-    <widget name="rc" position="84,305" size="164,550" pixmaps="skin_default/rc.png,skin_default/rcold.png" zPosition="10" alphatest="blend" transparent="1" />
+    <widget name="rc" position="84,305" size="164,550" pixmaps="OpenNfrFHD/rc.png,OpenNfrFHD/rcold.png" zPosition="10" alphatest="blend" transparent="1" />
     <widget name="long_key" position="47,997" size="300,30" font="Regular;24" halign="center" foregroundColor="yellow" backgroundColor="black" transparent="1" />
     <widget name="list" position="280,220" size="700,700" itemHeight="35" scrollbarMode="showOnDemand" transparent="1" />
-    <widget name="arrowdown" position="-100,-100" size="37,70" pixmap="skin_default/arrowdown.png" zPosition="11" alphatest="blend" />
-    <widget name="arrowdown2" position="-100,-100" size="37,70" pixmap="skin_default/arrowdown.png" zPosition="11" alphatest="blend" />
-    <widget name="arrowup" position="-100,-100" size="37,70" pixmap="skin_default/arrowup.png" zPosition="11" alphatest="blend" />
-    <widget name="arrowup2" position="-100,-100" size="37,70" pixmap="skin_default/arrowup.png" zPosition="11" alphatest="blend" />
+    <widget name="arrowdown" position="-100,-100" size="37,70" pixmap="OpenNfrFHD/arrowdown.png" zPosition="11" alphatest="blend" />
+    <widget name="arrowdown2" position="-100,-100" size="37,70" pixmap="OpenNfrFHD/arrowdown.png" zPosition="11" alphatest="blend" />
+    <widget name="arrowup" position="-100,-100" size="37,70" pixmap="OpenNfrFHD/arrowup.png" zPosition="11" alphatest="blend" />
+    <widget name="arrowup2" position="-100,-100" size="37,70" pixmap="OpenNfrFHD/arrowup.png" zPosition="11" alphatest="blend" />
     <ePixmap name="selector-quick" position="228,209" size="40,722" zPosition="2" pixmap="OpenNfrFHD/menu/selector-quickmenu.png" />
   </screen>
   <screen name="BackupSelection" position="0,0" size="1920,1080" title="Select files/folders to backup..." flags="wfNoBorder">
