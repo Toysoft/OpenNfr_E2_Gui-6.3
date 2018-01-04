@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: enigma2\n"
 "POT-Creation-Date: 2017-05-27 23:21+0100\n"
-"PO-Revision-Date: 2017-11-18 19:21+0100\n"
+"PO-Revision-Date: 2018-01-04 08:50+0100\n"
 "Last-Translator: schleichdi2 <schleichdi2@team.nachtfalke.biz>\n"
 "Language-Team: openNFR <schleichdi2@team.nachtfalke.biz>\n"
 "MIME-Version: 1.0\n"
@@ -13543,3 +13543,30 @@ msgstr "Ignoriere das DVB-T Namespace Subnetzwerk"
 
 msgid "On valid ONIDs, ignore frequency sub network part"
 msgstr "Bei gültigen ONIDS, ignoriere das Frequenz Subnetzwerk"
+
+msgid "Move Spinner to HDD/USB"
+msgstr "Spinner verschieben auf HDD / USB"
+
+msgid "On Device is a folder Spinner, do you want to use this? Attention if you answer with yes Spinner from flash will be deleted!"
+msgstr "Auf dem Gerät ist ein Ordner Spinner, willst du den verwenden? Achtung, wenn du mit Ja antwortest wird dieser aus dem Flash gelöscht!"
+
+msgid "Spinner already moved to %s!"
+msgstr "Spinner bereits verschoben nach %s!"
+
+msgid "Spinner moved to %s ready!"
+msgstr "Spinner wurde verschoben nach %s!"
+
+msgid "Move Spinner back to flash?"
+msgstr "Spinner in den Flash zurück verschieben?"
+
+msgid "Do you really want move Spinner back to flash?"
+msgstr "Möchtest Du den Spinner wirklich in den Flash zurück verschieben?"
+
+msgid "Spinner moved back to flash ready!"
+msgstr "Spinner wurde in den Flash verschoben"
+
+msgid "Spinner outsource to: "
+msgstr "Spinner verschieben nach: "
+
+msgid "Do you really want to use selected Device for Spinner?\n"
+msgstr "Willst du wirklich das ausgewählte Laufwerk für den Spinner verwenden?\n"
