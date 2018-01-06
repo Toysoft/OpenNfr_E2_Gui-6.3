@@ -404,9 +404,9 @@ def videoEnhancementSetupMain(session, **kwargs):
 	session.open(VideoEnhancementSetup)
 
 def startSetup(menuid):
-	if menuid != "video_menu":
+	if menuid != "system":
 		return [ ]
-	return [(_("Extended settings") , videoEnhancementSetupMain, "videoenhancement_setup", 5)]
+	return [(_("VideoEnhancement Settings") , videoEnhancementSetupMain, "videoenhancement_setup", 5)]
 
 def Plugins(**kwargs):
 	list = []

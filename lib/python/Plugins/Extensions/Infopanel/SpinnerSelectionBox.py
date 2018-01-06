@@ -30,12 +30,8 @@ class SpinnerSelectionBox(Screen):
 		<widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" backgroundColor="transparent" zPosition="1" />
  		<ePixmap pixmap="skin_default/buttons/red.png" position="70,670" size="30,30" alphatest="blend" />
 		<ePixmap pixmap="skin_default/buttons/green.png" position="360,670" size="30,30" alphatest="blend" />
-                <ePixmap pixmap="skin_default/buttons/yellow.png" position="650,670" size="30,30" alphatest="blend" />
-		<ePixmap pixmap="skin_default/buttons/blue.png" position="940,670" size="30,30" alphatest="blend" />
 		<widget source="key_red" render="Label" position="105,672" size="240,24" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
 		<widget source="key_green" render="Label" position="395,672" size="240,24" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
-                <widget source="key_yellow" render="Label" position="685,672" size="240,24" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
-		<widget source="key_blue" render="Label" position="975,672" size="240,24" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" /> 
 		</screen>"""
 	def __init__(self, session, title = "", list = []):
 		Screen.__init__(self, session)
@@ -55,9 +51,7 @@ class SpinnerSelectionBox(Screen):
 		self["summary_list"] = StaticText()
 		self.updateSummary()
 		self["key_red"] = StaticText(_("Exit"))
-		self["key_green"] = StaticText(_("Save"))		
-		self["key_blue"] = StaticText(_("Back2Flash"))
-                self["key_yellow"] = StaticText(_("Outsourcing"))					
+		self["key_green"] = StaticText(_("Save"))					
 		self["actions"] = NumberActionMap(["WizardActions", "DirectionActions", "ColorActions"], 
 		{
 			"ok": self.go,
@@ -65,17 +59,10 @@ class SpinnerSelectionBox(Screen):
 			"up": self.up,
 			"down": self.down,
 			"red": self.cancel,                                				
-			"green": self.go,
-			"blue": self.KeyBlue,
-			"yellow": self.KeyYellow,				
+			"green": self.go,			
 		}, -1)
 		
-	def KeyYellow(self):
-		self.session.openWithCallback(self.Key_ex, MoveSpinner)
 
-	def KeyBlue(self):
-             self.session.openWithCallback(self.Key_ex, MoveSpinner_int)
-  
 	def Key_ex(self, arg):
                 self.cancel()
 
