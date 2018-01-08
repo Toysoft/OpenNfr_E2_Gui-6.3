@@ -1,7 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 
 from kinoxto import *
 from ddl_me import DDLME_FilmListeScreen
@@ -12,7 +11,6 @@ class timdbGenreScreen(MPScreen):
 		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
-			"ok"	: self.keyOK,
 			"0" : self.closeAll,
 			"cancel": self.keyCancel,
 			"up" : self.keyUp,
@@ -21,11 +19,11 @@ class timdbGenreScreen(MPScreen):
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
 			"prevBouquet" : self.keyPageDown,
-			"green" : self.kinoxSearch,
-			"blue" : self.ddlmeSearch
+			"green" : self.searchKinoxCallback,
+			"blue" : self.searchDdlmeCallback
 		}, -1)
 
-		self['title'] = Label("Top IMDb")
+		self['title'] = Label("Top1000 IMDb")
 		self['ContentTitle'] = Label(_("Selection:"))
 		self['F2'] = Label("Kinox")
 		self['F4'] = Label("ddl.me")
@@ -67,25 +65,12 @@ class timdbGenreScreen(MPScreen):
 		self['page'].setText("%s / 20" % str(self.page))
 		CoverHelper(self['coverArt']).getCover(coverUrl)
 
-	def keyOK(self):
-		if self.keyLocked:
-			return
+	def searchKinoxCallback(self):
 		self.searchTitle = self['liste'].getCurrent()[0][1]
+		url = "http://kinox.to/Search.html?q="
+		self.session.open(kxSucheScreen, url, self.searchTitle)
 
-	def kinoxSearch(self):
+	def searchDdlmeCallback(self):
 		self.searchTitle = self['liste'].getCurrent()[0][1]
-		self.session.openWithCallback(self.searchKinoxCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.searchTitle, is_dialog=True, auto_text_init=True)
-
-	def searchKinoxCallback(self, callbackStr):
-		if callbackStr is not None:
-			url = "http://kinox.to/Search.html?q="
-			self.session.open(kxSucheAlleFilmeListeScreen, url, callbackStr)
-
-	def ddlmeSearch(self):
-		self.searchTitle = self['liste'].getCurrent()[0][1]
-		self.session.openWithCallback(self.searchDdlmeCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.searchTitle, is_dialog=True, auto_text_init=True)
-
-	def searchDdlmeCallback(self, callbackStr):
-		if callbackStr is not None:
-			url = "http://de.ddl.me/search_99/?q=%s" % urllib.quote(callbackStr.strip())
-			self.session.open(DDLME_FilmListeScreen, url, "Suche...")
+		url = "http://de.ddl.me/search_99/?q=%s" % urllib.quote(self.searchTitle.strip())
+		self.session.open(DDLME_FilmListeScreen, url, "Suche...")

@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2017
+#    Coded by MediaPortal Team (c) 2013-2018
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -427,6 +427,9 @@ class bsEpisoden(MPScreen):
 			Staffel = "S0"+str(Staffel)
 		else:
 			Staffel = "S"+str(Staffel)
+			
+		data = re.search('.*?({.*})', data, re.S).group(1)
+		data = data.replace('\r\n2000\r\n', '').replace('\r\n\r\nD67\r\n', '').replace('\r\nD67\r\n', '').replace('\r\n0\r\n\r\nE94\r\n', '')
 		episoden = re.findall('german":"(.*?)","english":"(.*?)","epi":"(.*?)","watched', data, re.S)
 		if episoden:
 			Flag = ""

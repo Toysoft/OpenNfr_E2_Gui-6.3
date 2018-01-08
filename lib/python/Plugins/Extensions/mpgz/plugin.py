@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2017
+#    Coded by MediaPortal Team (c) 2013-2018
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -39,7 +39,7 @@
 from update import *
 
 config.mpgz = ConfigSubsection()
-config.mpgz.version = NoSave(ConfigText(default="2017121801"))
+config.mpgz.version = NoSave(ConfigText(default="2018010801"))
 
 def autostart(reason, session=None, **kwargs):
 	if reason == 0:

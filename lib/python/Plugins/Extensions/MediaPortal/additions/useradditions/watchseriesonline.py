@@ -1,41 +1,4 @@
 ﻿# -*- coding: utf-8 -*-
-###############################################################################################
-#
-#    MediaPortal for Dreambox OS
-#
-#    Coded by MediaPortal Team (c) 2013-2017
-#
-#  This plugin is open source but it is NOT free software.
-#
-#  This plugin may only be distributed to and executed on hardware which
-#  is licensed by Dream Property GmbH. This includes commercial distribution.
-#  In other words:
-#  It's NOT allowed to distribute any parts of this plugin or its source code in ANY way
-#  to hardware which is NOT licensed by Dream Property GmbH.
-#  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
-#  on hardware which is NOT licensed by Dream Property GmbH.
-#
-#  This applies to the source code as a whole as well as to parts of it, unless
-#  explicitely stated otherwise.
-#
-#  If you want to use or modify the code or parts of it,
-#  you have to keep OUR license and inform us about the modifications, but it may NOT be
-#  commercially distributed other than under the conditions noted above.
-#
-#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
-#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
-#
-#  As an exception regarding modifcations, you are NOT permitted to remove
-#  any copy protections implemented in this plugin or change them for means of disabling
-#  or working around the copy protections, unless the change has been explicitly permitted
-#  by the original authors. Also decompiling and modification of the closed source
-#  parts is NOT permitted.
-#
-#  Advertising with this plugin is NOT allowed.
-#  For other uses, permission from the authors is necessary.
-#
-###############################################################################################
-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import TwAgentHelper
@@ -117,16 +80,17 @@ class wsoIndex(MPScreen, SearchHelper):
 		self.keyLetterGlobal(key, self.streamList)
 
 	def loadPage(self):
-		url = "https://watchseries-online.pl/index"
+		url = "https://watchseries-online.be/index"
 		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		parse = re.search('<div class="ddmcc"><ul><p class="sep" id="goto\_\#">((.|\s)*?)style="clear:both;"></div></div><span', data, re.S)
 		if parse:
-			series = re.findall('<li><a\shref="(https://(?:watchseries-online.pl|wseries.org)/category/.*?)">(.*?)</a></li>', parse.group(1), re.S)
+			series = re.findall('<li><a\shref="(https://(?:watchseries-online.be|watchseries-online.pl|wseries.org)/category/.*?)">(.*?)</a></li>', parse.group(1), re.S)
 			if series:
 				for (url, serie) in series:
-					url = url.replace('wseries.org','watchseries-online.pl')
+					url = url.replace('wseries.org','watchseries-online.be')
+					url = url.replace('watchseries-online.pl','watchseries-online.be')
 					self.streamList.append((decodeHtml(serie), url))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No shows found!'), None))
@@ -188,14 +152,14 @@ class wsoNewEpisodes(MPScreen):
 
 	def loadPage(self):
 		self.streamList = []
-		url = "https://watchseries-online.pl/last-350-episodes"
+		url = "https://watchseries-online.be/last-350-episodes"
 		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		newEpisodes = re.findall('href="(https://(?:watchseries-online.pl|wseries.org)/episode/.*?)".*?</span>(.*?)</a></li>', data)
+		newEpisodes = re.findall('href="(https://(?:watchseries-online.be|wseries.org)/episode/.*?)".*?</span>(.*?)</a></li>', data)
 		if newEpisodes:
 			for url, episodeName in newEpisodes:
-				url = url.replace('wseries.org','watchseries-online.pl')
+				url = url.replace('wseries.org','watchseries-online.be')
 				self.streamList.append((decodeHtml(episodeName), url))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No episodes found!'), None))
@@ -346,10 +310,10 @@ class wsoEpisodes(MPScreen):
 				self.updates_read.close()
 		parse = re.search('<div id="episode-list">(.*?)</footer>', data, re.S)
 		if parse:
-			episodes = re.findall('<li.*?<a\shref=[\"|\'](https://(?:watchseries-online.pl|wseries.org)/.*?)[\"|\'].*?</span>(.*?)</a>', parse.group(1), re.S)
+			episodes = re.findall('<li.*?<a\shref=[\"|\'](https://(?:watchseries-online.be|wseries.org)/.*?)[\"|\'].*?</span>(.*?)</a>', parse.group(1), re.S)
 			if episodes:
 				for url, title in episodes:
-					url = url.replace('wseries.org','watchseries-online.pl')
+					url = url.replace('wseries.org','watchseries-online.be')
 					title=title.strip()
 					checkname = (decodeHtml(self.Title)) + " - " + (decodeHtml(title.strip()))
 					checkname2 = checkname.replace('ä','ae').replace('ö','oe').replace('ü','ue').replace('Ä','Ae').replace('Ö','Oe').replace('Ü','Ue')

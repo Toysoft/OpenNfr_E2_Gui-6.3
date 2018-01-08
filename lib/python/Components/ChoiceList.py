@@ -13,7 +13,7 @@ def ChoiceEntryComponent(key="", text=None):
 	if text[0] == "--":
 		res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 00, 1000, 25, 0, RT_HALIGN_LEFT, "-"*200))
 	else:
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, 65, 2, 1000, 40, 0, RT_HALIGN_LEFT, text[0]))
+		res.append((eListboxPythonMultiContent.TYPE_TEXT, 65, 6, 1000, 40, 0, RT_HALIGN_LEFT, text[0]))
 		pngfile = resolveFilename(SCOPE_ACTIVE_SKIN, "buttons/key_" + key + ".png")
 		if fileExists(pngfile):
 			png = LoadPixmap(pngfile)
@@ -36,7 +36,7 @@ class ChoiceList(MenuList):
             if getDesktop(0).size().width() == 1920:	
 		MenuList.__init__(self, list, enableWrapAround, eListboxPythonMultiContent)
 		font = skin.fonts["ChoiceList"]
-		self.l.setFont(0, gFont("Regular", 28))
+		self.l.setFont(0, gFont("Regular", 30))
 		self.l.setFont(1, gFont("Regular", 22))
 		self.l.setItemHeight(font[2])
 		self.selection = selection

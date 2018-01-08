@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2017
+#    Coded by MediaPortal Team (c) 2013-2018
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -40,13 +40,15 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 
-myagent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0'
+myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'
 json_headers = {
 	'Accept':'application/json',
 	'Accept-Language':'de,en-US;q=0.7,en;q=0.3',
 	'X-Requested-With':'XMLHttpRequest',
 	'Content-Type':'application/x-www-form-urlencoded',
 	}
+
+uid = ''
 
 class YourPornSexyGenreScreen(MPScreen):
 
@@ -80,6 +82,10 @@ class YourPornSexyGenreScreen(MPScreen):
 		twAgentGetPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
+		usss = re.findall('usss\[0\] = "(.*?)";', data, re.S)
+		if usss:
+			global uid
+			uid = usss[0]
 		parse = re.search('<span>Popular HashTags</span>(.*?)<div class="spacer" style="clear: both;">', data, re.S)
 		Cats = re.findall('<a\shref=[\'|"](/blog/.*?)[\'|"].*?<span>#(.*?)</span>', parse.group(1), re.S)
 		if Cats:
@@ -90,6 +96,7 @@ class YourPornSexyGenreScreen(MPScreen):
 			self.genreliste.sort()
 		self.genreliste.insert(0, ("Trends", "http://yourporn.sexy/searches/%s.html"))
 		self.genreliste.insert(0, ("Orgasmic", "http://yourporn.sexy/orgasm/"))
+		self.genreliste.insert(0, ("Pornstars", "http://yourporn.sexy/pornstars/%s.html"))
 		self.genreliste.insert(0, ("Top Viewed (All Time)", "http://yourporn.sexy/popular/top-viewed.html?p=all"))
 		self.genreliste.insert(0, ("Top Viewed (Monthly)", "http://yourporn.sexy/popular/top-viewed.html?p=month"))
 		self.genreliste.insert(0, ("Top Viewed (Weekly)", "http://yourporn.sexy/popular/top-viewed.html?p=week"))
@@ -98,7 +105,7 @@ class YourPornSexyGenreScreen(MPScreen):
 		self.genreliste.insert(0, ("Top Rated (Monthly)", "http://yourporn.sexy/popular/top-rated.html?p=month"))
 		self.genreliste.insert(0, ("Top Rated (Weekly)", "http://yourporn.sexy/popular/top-rated.html?p=week"))
 		self.genreliste.insert(0, ("Top Rated (Daily)", "http://yourporn.sexy/popular/top-rated.html?p=day"))
-		self.genreliste.insert(0, ("Newest", "http://yourporn.sexy/blog/all/%s.html"))
+		self.genreliste.insert(0, ("Newest", "http://yourporn.sexy/blog/all/%s.html?fl=all&sm=latest"))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -112,6 +119,8 @@ class YourPornSexyGenreScreen(MPScreen):
 			self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True, auto_text_init=False, suggest_func=self.getSuggestions)
 		elif Name == "Trends":
 			self.session.open(YourPornSexyTrendsScreen, Link, Name)
+		elif Name == "Pornstars":
+			self.session.open(YourPornSexyPornstarsScreen, Link, Name)
 		else:
 			self.session.open(YourPornSexyFilmScreen, Link, Name)
 
@@ -124,8 +133,8 @@ class YourPornSexyGenreScreen(MPScreen):
 
 	def getSuggestions(self, text, max_res):
 		url = "http://yourporn.sexy/php/livesearch2.php"
-		postdata = {'key': text.replace(' ','-'), 'c':'livesearch'}
-		d = twAgentGetPage(url, method='POST', postdata=urlencode(postdata), agent=myagent, headers=json_headers, timeout=5)
+		postdata = {'key': text.replace(' ','-'), 'c':'livesearch', 'uid': uid}
+		d = getPage(url, method='POST', postdata=urlencode(postdata), agent=myagent, headers=json_headers, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
 		d.addErrback(self.gotSuggestions, max_res, err=True)
 		return d
@@ -142,6 +151,68 @@ class YourPornSexyGenreScreen(MPScreen):
 		elif err:
 			printl(str(suggestions),self,'E')
 		return list
+
+class YourPornSexyPornstarsScreen(MPScreen):
+
+	def __init__(self, session, Link, Name):
+		self.Link = Link
+		self.Name = Name
+		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+
+		self["actions"] = ActionMap(["MP_Actions"], {
+			"ok" : self.keyOK,
+			"0" : self.closeAll,
+			"cancel" : self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft,
+			"nextBouquet" : self.keyPageUp,
+			"prevBouquet" : self.keyPageDown,
+			"green" : self.keyPageNumber
+		}, -1)
+
+		self['title'] = Label("YourPornSexy")
+		self['ContentTitle'] = Label("Pornstars:")
+		self['F2'] = Label(_("Page"))
+
+		self['Page'] = Label(_("Page:"))
+		self.keyLocked = True
+		self.page = 1
+		self.lastpage = 26
+
+		self.genreliste = []
+		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self['liste'] = self.ml
+
+		self.onLayoutFinish.append(self.loadPage)
+
+	def loadPage(self):
+		alfa = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		self.keyLocked = True
+		self['name'].setText(_('Please wait...'))
+		self.genreliste = []
+		url = self.Link.replace('%s', alfa[self.page-1])
+		print url
+		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+
+	def loadData(self, data):
+		self['page'].setText(str(self.page) + '/' +str(self.lastpage))
+		Cats = re.findall("<a href='/(.*?).html' title='.*?PornStar Page'><div class='ps_el'>(.*?)</div></a>", data , re.S)
+		if Cats:
+			for (Url, Title) in Cats:
+				self.genreliste.append((Title, Url))
+			self.genreliste.sort
+		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
+		self.ml.moveToIndex(0)
+		self.keyLocked = False
+		self.showInfos()
+
+	def keyOK(self):
+		if self.keyLocked:
+			return
+		Link = self['liste'].getCurrent()[0][1]
+		self.session.open(YourPornSexyFilmScreen, Link, self.Name)
 
 class YourPornSexyTrendsScreen(MPScreen):
 
@@ -251,11 +322,12 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if self.Name == "Newest":
-			count = 10
+			count = 20
 		else:
-			count = 30
-		if re.match(".*?Search", self.Name) or self.Name == "Trends":
-			url = "http://yourporn.sexy/%s.html?page=%s" % (self.Link, str((self.page-1)*count))
+			count = 20
+		if re.match(".*?Search", self.Name) or self.Name == "Trends" or self.Name == "Pornstars":
+			url = "https://yourporn.sexy/%s.html?page=%s" % (self.Link, str((self.page-1)*30))
+			getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 		elif (re.match(".*?Top Rated", self.Name) or re.match(".*?Top Viewed", self.Name) or self.Name == "Orgasmic") and self.page>1:
 			if re.match(".*?Rated", self.Name):
 				mode = 'rating'

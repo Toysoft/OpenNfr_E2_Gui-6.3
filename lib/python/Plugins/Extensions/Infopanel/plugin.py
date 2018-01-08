@@ -75,9 +75,6 @@ from Screens.CronTimer import *
 from Plugins.Extensions.Infopanel.skin_setup import NfrHD_Config
 from Plugins.Extensions.Infopanel.UserMainMenu import UserMainMenuConfig
 from Plugins.Extensions.Infopanel.ScriptRunner import *
-#from Plugins.Extensions.Infopanel.bootvideo import BootvideoSetupScreen
-#from Plugins.Extensions.Infopanel.diskspeed import Disk_Speed
-#from Plugins.Extensions.Infopanel.bootlogo import BootlogoSetupScreen, RadiologoSetupScreen
 from Plugins.Extensions.Infopanel.iptv_convert import IPTV
 from Screens.HddSetup import HddSetup
 from Screens.HddMount import HddFastRemove
@@ -193,24 +190,6 @@ def startcam(reason, **kwargs):
 			except:
 				pass 		
 
-#def camstart(reason, **kwargs):
-#	if config.NFRSoftcam.actcam.value != "none":
-#		if reason == 0: # Enigma start
-#			sleep(2)
-#			try:
-#				if "mgcamd" in config.NFRSoftcam.actcam.value:
-#	                        	os.system("rm /dev/dvb/adapter0/ca1")
-#	                        	os.system("ln -sf 'ca0' '/dev/dvb/adapter0/ca1'") 
-#				cmd = Softcam.getcamcmd(config.NFRSoftcam.actcam.value)
-#				Console().ePopen(cmd)
-#				print "[OpenNFR SoftCam Manager] ", cmd
-#			except:
-#				pass
-#		elif reason == 1: # Enigma stop
-#			try:
-#				Softcam.stopcam(config.NFRSoftcam.actcam.value)
-#			except:
-#				pass 
 
 def Plugins(**kwargs):
 	return [
@@ -261,7 +240,7 @@ INFO_SKIN2 =  """<screen name="PANEL-Info2"  position="center,center" size="530,
 ###################  Max Test ###################
 class PanelList(MenuList):
         if (getDesktop(0).size().width() == 1920):
-	        def __init__(self, list, font0 = 30, font1 = 26, itemHeight = 60, enableWrapAround = True):
+	        def __init__(self, list, font0 = 32, font1 = 26, itemHeight = 60, enableWrapAround = True):
 		        MenuList.__init__(self, list, enableWrapAround, eListboxPythonMultiContent)
 		        self.l.setFont(0, gFont("Regular", font0))
 		        self.l.setFont(1, gFont("Regular", font1))
@@ -306,9 +285,6 @@ class Infopanel(Screen, InfoBarPiP):
 		Screen.__init__(self, session)
 		self.session = session
 		self.skin = MENU_SKIN
-		global check_update
-		check_update = 0
-		self.onShown.append(self.checkTraficLight)
 		self.onShown.append(self.setWindowTitle)
                 self.service = None
 		self['spaceused'] = ProgressBar()			
@@ -360,34 +336,6 @@ class Infopanel(Screen, InfoBarPiP):
 		if self.isProtected() and config.ParentalControl.servicepin[0].value:
 			self.onFirstExecBegin.append(boundFunction(self.session.openWithCallback, self.pinEntered, PinInput, pinList=[x.value for x in config.ParentalControl.servicepin], triesEntry=config.ParentalControl.retries.servicepin, title=_("Please enter the correct pin code"), windowTitle=_("Enter pin code")))
 
-	def checkTraficLight(self):
-                global check_update
-                if config.opennfrupdate.enablecheckupdate.value is True:
-                	if check_update == 0:
-                		check_update = 1
-				currentTimeoutDefault = socket.getdefaulttimeout()
-				socket.setdefaulttimeout(3)
-				try:
-					if os.path.isfile("/tmp/lastrelease.txt"):
-                                		os.system("rm -f /tmp/lastrelease.txt")
-					d = os.popen("wget -P /tmp http://dev.nachtfalke.biz/nfr/feeds/lastrelease.txt").read()
-					tmpOnlineStatus = open("/tmp/lastrelease.txt", "r").read()
-                                	tmpFlashStatus = open("/etc/version", "r").read()
-					if int(tmpOnlineStatus) > int(tmpFlashStatus):
-						message = _("new Release avaible")
-						self.session.openWithCallback(self.setWindowTitle(), MessageBox, _("New Releaseimage on Server, read more about it by http://www.nachtfalke.biz/f742-opennfr-images.html"), MessageBox.TYPE_INFO, timeout=5)
-                        		else:
-                        			print "no new Release avaible"                                                                	
-				except:
-					print "no internetconnection to check imageupdates"
-
-				socket.setdefaulttimeout(currentTimeoutDefault)
-                	else:
-                		pass        	
-
-                else:
-                	check_update = 1
-                        self.setWindowTitle()
                 	
 	def isProtected(self):
 		return config.ParentalControl.setuppinactive.value and config.ParentalControl.config_sections.infopanel.value
@@ -532,8 +480,6 @@ class Infopanel(Screen, InfoBarPiP):
 			self.session.open(Info, "Partitions")
 		elif menu == "Swap":
 			self.session.open(Info, "Swap")
-		#elif menu == "DiskSpeed":
-			#self.session.open(Disk_Speed)
 		elif menu == "m3u-convert":
 			self.session.open(IPTV)			
 		elif menu == "PasswordChange":
@@ -572,12 +518,6 @@ class Infopanel(Screen, InfoBarPiP):
 				self.session.openWithCallback(self.startRestore, MessageBox, _("Are you sure you want to restore your STB backup?\nSTB will restart after the restore"))
 			else:
 				self.session.open(MessageBox, _("Sorry no backups found!"), MessageBox.TYPE_INFO, timeout = 10)
-		#elif menu == "bootvideomanager":
-		#	self.session.open(BootvideoSetupScreen)
-		#elif menu == "bootlogomanager":
-		#	self.session.open(BootlogoSetupScreen)	
-		#elif menu == "radiologomanager":
-		#	self.session.open(RadiologoSetupScreen) 
 		elif menu == "spinnermanager":
 			SpinnerSelector(self.session) 			
 		elif menu == "backup-files":
@@ -606,12 +546,8 @@ class Infopanel(Screen, InfoBarPiP):
 			self.session.open(PluginInstall)
 		elif menu == "PluginDeinstallwizard":
 			self.session.open(PluginDeinstall)
-		#elif menu == "OpenNFRWizard":
-			#self.session.open(OpenNFRWizardSetup)
 		elif menu == "SkinSetup":
-			self.session.open(NfrHD_Config)
-		elif menu == "ImageUpdateCheck":
-			self.session.open(OpenNFRWizardupdatecheck)                        	
+			self.session.open(NfrHD_Config)                 	
 		elif menu == "PluginReLoad":
                         if fileExists("/usr/lib/enigma2/python/Plugins/Extensions/Infopanel/PluginReLoad.pyo") or fileExists("/usr/lib/enigma2/python/Plugins/Extensions/Infopanel/PluginReLoad.py"):    
                             from Plugins.Extensions.Infopanel.PluginReLoad import PluginReLoadConfig
@@ -632,7 +568,6 @@ class Infopanel(Screen, InfoBarPiP):
 		self.tlist.append(MenuEntryItem((InfoEntryComponent('CronManager'), _("CronManager"), 'CronManager')))		
 		self.tlist.append(MenuEntryItem((InfoEntryComponent('SwapManager'), _("SwapManager"), 'SwapManager')))
 		self.tlist.append(MenuEntryItem((InfoEntryComponent ("LogManager" ), _("Log-Manager"), ("LogManager"))))
-		#self.tlist.append(MenuEntryItem((InfoEntryComponent('DiskSpeed'), _("Disk-Speed"), 'DiskSpeed')))
 		self.tlist.append(MenuEntryItem((InfoEntryComponent('m3u-convert'), _("m3u-convert"), 'm3u-convert')))
 		if os.path.isfile("/usr/lib/enigma2/python/Plugins/Extensions/MultiQuickButton/plugin.pyo") is True:
 			self.tlist.append(MenuEntryItem((InfoEntryComponent('MultiQuickButton'), _("MultiQuickButton"), 'MultiQuickButton')))
@@ -695,7 +630,6 @@ class Infopanel(Screen, InfoBarPiP):
 		self.tlist = []
 		self.oldmlist = []
 		self.oldmlist = self.Mlist
-        	self.tlist.append(MenuEntryItem((InfoEntryComponent('ImageUpdateCheck'), _("ImageUpdateCheck"), 'ImageUpdateCheck')))
        		self.tlist.append(MenuEntryItem((InfoEntryComponent ("SoftwareManager" ), _("Software update"), ("software-update"))))
 		self.tlist.append(MenuEntryItem((InfoEntryComponent ("ImageBackup" ), _("Software Backup"), ("backup-image"))))
 		self.tlist.append(MenuEntryItem((InfoEntryComponent ("Flash_local" ), _("Flash local online"), ("flash-local"))))
@@ -718,9 +652,6 @@ class Infopanel(Screen, InfoBarPiP):
 		self.tlist.append(MenuEntryItem((InfoEntryComponent('Blue-Key-Action'), _("Blue Panel"), 'Blue-Key-Action')))
 		self.tlist.append(MenuEntryItem((InfoEntryComponent('Multi-Key-Action'), _("Edit remote buttons"), 'Multi-Key-Action')))
 		self.tlist.append(MenuEntryItem((InfoEntryComponent('KeymapSel'), _("Keymap-Selection"), 'KeymapSel')))
-		#self.tlist.append(MenuEntryItem((InfoEntryComponent ("BootvideoManager" ), _("BootvideoManager"), ("bootvideomanager"))))
-		#self.tlist.append(MenuEntryItem((InfoEntryComponent ("BootlogoManager" ), _("BootlogoManager"), ("bootlogomanager")))) 
-		#self.tlist.append(MenuEntryItem((InfoEntryComponent ("RadiologoManager" ), _("RadiologoManager"), ("radiologomanager")))) 
 		self.tlist.append(MenuEntryItem((InfoEntryComponent ("SpinnerManager" ), _("SpinnerManager"), ("spinnermanager"))))
 		self.tlist.append(MenuEntryItem((InfoEntryComponent('PasswordChange'), _("PasswordChange"), 'PasswordChange')))
 		self.tlist.append(MenuEntryItem((InfoEntryComponent('UserMainMenu'), _("UserMainMenu"), 'UserMainMenu')))                		
@@ -737,7 +668,6 @@ class Infopanel(Screen, InfoBarPiP):
 		self.oldmlist = self.Mlist
 		self.tlist.append(MenuEntryItem((InfoEntryComponent('PluginInstallwizard'), _("PluginInstallwizard"), 'PluginInstallwizard')))
 		self.tlist.append(MenuEntryItem((InfoEntryComponent('PluginDeinstallwizard'), _("PluginDeinstallwizard"), 'PluginDeinstallwizard')))
-	#	self.tlist.append(MenuEntryItem((InfoEntryComponent('OpenNFRWizard'), _("OpenNFRWizard"), 'OpenNFRWizard')))
 		self.tlist.append(MenuEntryItem((InfoEntryComponent('PluginReLoad'), _("PluginReLoad"), 'PluginReLoad')))		
 		self["Mlist"].moveToIndex(0)
 		self["Mlist"].l.setList(self.tlist)

@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2017
+#    Coded by MediaPortal Team (c) 2013-2018
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -62,7 +62,7 @@ kx_cookies = CookieJar()
 kx_ck = {}
 kx_agent = ''
 
-class kxMain(MPScreen):
+class kxGenre(MPScreen):
 
 	def __init__(self, session):
 		MPScreen.__init__(self, session, skin='MP_PluginDescr')
@@ -167,7 +167,7 @@ class kxMain(MPScreen):
 			self.searchStr = callbackStr
 			url = "http://kinox.to/Search.html?q="
 			self.searchData = self.searchStr
-			self.session.open(kxSucheAlleFilmeListeScreen, url, self.searchData)
+			self.session.open(kxSucheScreen, url, self.searchData)
 
 class kxKino(MPScreen, ThumbsHelper):
 
@@ -971,7 +971,7 @@ class kxParts(MPScreen):
 			streamname = "%s - %s" % (self.stream_name ,part)
 			self.session.open(SimplePlayer, [(streamname, stream_url)], showPlaylist=False, ltype='kinox.to', cover=False)
 
-class kxSucheAlleFilmeListeScreen(MPScreen, ThumbsHelper):
+class kxSucheScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, searchURL, searchData):
 		self.kxGotLink = searchURL + searchData
@@ -1002,8 +1002,9 @@ class kxSucheAlleFilmeListeScreen(MPScreen, ThumbsHelper):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		self.streamList = []
-		getPage(self.kxGotLink, agent=kx_agent, cookies=kx_ck).addCallback(self.parseData).addErrback(self.dataError)
+		if requestsModule and cfscrapeModule:
+			self.streamList = []
+			getPage(self.kxGotLink, agent=kx_agent, cookies=kx_ck).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		movies = re.findall('<td\sclass="Icon"><img\swidth="16"\sheight="11"\ssrc="/gr/sys/lng/(.*?).png"\salt="language"></td>.*?title="(.*?)".*?<td\sclass="Title">(.*?)>(.*?)</a>', data, re.S)

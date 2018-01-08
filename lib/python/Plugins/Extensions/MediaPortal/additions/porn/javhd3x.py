@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2017
+#    Coded by MediaPortal Team (c) 2013-2018
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -76,6 +76,11 @@ class javhd3xGenreScreen(MPScreen):
 			self.baseurl = "pornhdx.to"
 			self.delim = "%20"
 			self.default_cover = "file://%s/pornhdxto.png" % (config.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "pornhd8k":
+			self.portal = "PORNHD8K.NET"
+			self.baseurl = "pornhd8k.net"
+			self.delim = "%20"
+			self.default_cover = "file://%s/pornhd8k.png" % (config.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
@@ -118,6 +123,8 @@ class javhd3xGenreScreen(MPScreen):
 		if self.mode == "pornhd3x":
 			maincat = "porn-movies"
 		elif self.mode == "pornhdx":
+			maincat = "porn-hd-videos"
+		elif self.mode == "pornhd8k":
 			maincat = "porn-hd-videos"
 		else:
 			maincat = "japanese-porn-videos"

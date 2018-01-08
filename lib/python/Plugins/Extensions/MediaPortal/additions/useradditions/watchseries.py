@@ -2,7 +2,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-ws_url = "itswatchseries.to"
+ws_url = "dwatchseries.to"
 
 class watchseriesGenreScreen(MPScreen):
 
@@ -217,7 +217,7 @@ class watchseriesEpisodeListeScreen(MPScreen):
 	def loadPageData(self, data):
 		parse = re.search('<ul class="listings(.*)class="sp-leader-bottom">', data, re.S)
 		if parse:
-			eps = re.findall('content="(http://%s/episode/.*?)"/>.*?itemprop="name"\s{0,1}>(?:Episode\s\d+|)(?:&nbsp;){0,10}(.*?)<' % ws_url, parse.group(1), re.S)
+			eps = re.findall('content="(http://%s/episode/.*?)"\s{0,1}/>.*?itemprop="name"\s{0,1}>(?:Episode\s\d+|)(?:&nbsp;){0,10}(.*?)<' % ws_url, parse.group(1), re.S)
 			if eps:
 				self.filmliste = []
 				for (url, title) in eps:
@@ -235,7 +235,7 @@ class watchseriesEpisodeListeScreen(MPScreen):
 						episode = "%s%s - %s" % (season, episode, title)
 						self.filmliste.append((decodeHtml(episode),url))
 		if len(self.filmliste) == 0:
-			self.filmliste.append((_("No episodes found!"), ''))
+			self.filmliste.append((_("No episodes found!"), None))
 		self.filmliste = list(set(self.filmliste))
 		self.filmliste.sort()
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -246,7 +246,8 @@ class watchseriesEpisodeListeScreen(MPScreen):
 			return
 		streamName = self['liste'].getCurrent()[0][0]
 		streamLink = self['liste'].getCurrent()[0][1]
-		self.session.open(watchseriesStreamListeScreen, streamLink, streamName)
+		if streamLink:
+			self.session.open(watchseriesStreamListeScreen, streamLink, streamName)
 
 class watchseriesStreamListeScreen(MPScreen):
 

@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2017
+#    Coded by MediaPortal Team (c) 2013-2018
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -48,6 +48,7 @@ class checkupdate:
 
 	def __init__(self, session):
 		self.session = session
+		mp_globals.currentskin = config.mediaportal.skin2.value
 
 	def standbyCounterChanged(self, configElement):
 		from Screens.Standby import inStandby
