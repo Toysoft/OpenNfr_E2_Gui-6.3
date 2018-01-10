@@ -17,7 +17,7 @@ def ChoiceEntryComponent(key="", text=None):
 		pngfile = resolveFilename(SCOPE_ACTIVE_SKIN, "buttons/key_" + key + ".png")
 		if fileExists(pngfile):
 			png = LoadPixmap(pngfile)
-			res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 10, 2, 35, 35, png))
+			res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 10, 4, 38, 38, png))
 	return res
     if getDesktop(0).size().width() == 1280:
 	if not text: text = ["--"]
