@@ -1,4 +1,4 @@
-AC_INIT([enigma2],[6.0],[http://www.nachtfalke.biz])
+AC_INIT([enigma2],[6.2],[http://www.nachtfalke.biz])
 AM_INIT_AUTOMAKE([dist-bzip2 no-define tar-pax -Wno-portability])
 AC_CONFIG_HEADERS([enigma2_config.h])
 
@@ -599,9 +599,9 @@ if test "$BOXTYPE" == "sh1" -o "$BOXTYPE" == "lc"; then
 	AC_DEFINE(KEY_PLAY_ACTUALLY_IS_KEY_PLAYPAUSE, 1,[define when rc sends a KEY_PLAY event for its KEY_PLAYPAUSE key])
 fi
 
-if test "$BOXTYPE" == "7000s" -0 "$BOXTYPE" == "7100s" -0 "$BOXTYPE" == "7105s" -0 "$BOXTYPE" == "7200s" -0 "$BOXTYPE" == "7205s" -0 "$BOXTYPE" == "7210s" -0 "$BOXTYPE" == "7215s" -0 "$BOXTYPE" == "7300s" -0 "$BOXTYPE" == "7400s"; then
-#	AC_DEFINE(FORCE_NO_BLENDING_ACCELERATION, 1,[define when the framebuffer acceleration does not have alphablending support, though the autodetection might indicate that it does])
+if test "$BOXTYPE" == "7000s" -0 "$BOXTYPE" == "7100s" -0 "$BOXTYPE" == "7105s" -0 "$BOXTYPE" == "7200s" -0 "$BOXTYPE" == "7205s" -0 "$BOXTYPE" == "7210s" -0 "$BOXTYPE" == "7215s" -0 "$BOXTYPE" == "7300s" -0 "$BOXTYPE" == "7400s" -0 "$BOXTYPE" == "8100s"; then
 	AC_DEFINE(KEY_PLAY_ACTUALLY_IS_KEY_PLAYPAUSE, 1,[define when rc sends a KEY_PLAY event for its KEY_PLAYPAUSE key])
+	AC_DEFINE(LCD_COLOR_BITORDER_RGB565, 1,[define if lcd uses RGB565 bitorder])
 fi
 
 if test "$MACHINEBUILD" == "e4hd" -0 "$MACHINEBUILD" == "e4hdhybrid"; then
@@ -644,6 +644,7 @@ if test "$BOXTYPE" == "gb800solo" -o "$BOXTYPE" == "gb800se" -o "$BOXTYPE" == "g
 	AC_DEFINE(KEY_GUIDE_TO_KEY_EPG, 1,[define when rc sends a KEY_HELP event for its KEY_EPG key])
 	AC_DEFINE(KEY_F2_TO_KEY_F6, 1,[define when rc sends a KEY_F2 event for its KEY_F6 key])
 	AC_DEFINE(KEY_SCREEN_TO_KEY_MODE, 1,[define when rc sends a KEY_MODE event for its KEY_ASPECT key])
+	AC_DEFINE(LCD_COLOR_BITORDER_RGB565, 1,[define if lcd uses RGB565 bitorder])
 fi
 
 if test "$BOXTYPE" == "gb7252"; then
@@ -730,20 +731,6 @@ AC_ARG_WITH(memcheck,
 if test "$with_memcheck" = "yes"; then
 	AC_DEFINE([MEMLEAK_CHECK],[1],[Define to 1 to enable memory leak checks])
 fi
-
-AC_ARG_WITH(po,
-	AS_HELP_STRING([--with-po],[enable updating of po files]),
-	[with_po="$withval"],[with_po="no"])
-if test "$with_po" = "yes"; then
-	AC_PATH_PROG(MSGINIT, msginit)
-	AC_PATH_PROG(MSGMERGE, msgmerge)
-	AC_PATH_PROG(MSGUNIQ, msguniq)
-	AC_PATH_PROG(XGETTEXT, xgettext)
-	if test -z "$MSGINIT" -o -z "$MSGMERGE" -o -z "$MSGUNIQ" -o -z "$XGETTEXT"; then
-		AC_MSG_ERROR([Could not find required gettext tools])
-	fi
-fi
-AM_CONDITIONAL(UPDATE_PO, test "$with_po" = "no")
 
 ENIGMA2_CFLAGS="-fno-rtti -fno-exceptions -rdynamic -funwind-tables"
 AC_SUBST(ENIGMA2_CFLAGS)
