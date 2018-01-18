@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2017
+#    Coded by MediaPortal Team (c) 2013-2018
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -189,7 +189,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2017122101"))
+config.mediaportal.version = NoSave(ConfigText(default="2018011601"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.retries = ConfigSubsection()
@@ -200,6 +200,9 @@ config.mediaportal.retries.pincode.tries = ConfigInteger(default = 3)
 config.mediaportal.retries.pincode.time = ConfigInteger(default = 0)
 
 config.mediaportal.adultpincode = ConfigPORNPIN(default = random.randint(1,999), len = 4)
+if config.mediaportal.adultpincode.value < 1:
+	config.mediaportal.adultpincode.value = random.randint(1,999)
+
 config.mediaportal.retries.adultpin = ConfigSubsection()
 config.mediaportal.retries.adultpin.tries = ConfigInteger(default = 3)
 config.mediaportal.retries.adultpin.time = ConfigInteger(default = 0)
@@ -211,7 +214,7 @@ config.mediaportal.ena_suggestions = ConfigYesNo(default = True)
 
 config.mediaportal.animation_coverart = ConfigSelection(default = "mp_crossfade_fast", choices = [("mp_crossfade_fast", _("Crossfade (fast)")),("mp_crossfade_slow", _("Crossfade (slow)"))])
 config.mediaportal.animation_label = ConfigSelection(default = "mp_crossfade_fast", choices = [("mp_crossfade_fast", _("Crossfade (fast)")),("mp_crossfade_slow", _("Crossfade (slow)"))])
-config.mediaportal.animation_simpleplayer = ConfigSelection(default = "mp_player_animation", choices = [("mp_player_animation", _("Slide from bottom")),("mp_crossfade_slow", _("Crossfade"))])
+config.mediaportal.animation_simpleplayer = ConfigSelection(default = "mp_crossfade_slow", choices = [("mp_player_animation", _("Slide from bottom")),("mp_crossfade_slow", _("Crossfade"))])
 
 skins = []
 if mp_globals.videomode == 2:
@@ -546,6 +549,9 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			config.mediaportal.skin2.setChoices(skins, "original")
 
 		self._getConfig()
+
+		if config.mediaportal.adultpincode.value < 1:
+			config.mediaportal.adultpincode.value = random.randint(1,999)
 
 		self['title'] = Label(_("Setup"))
 		self['F1'] = Label("Premium")
@@ -1208,7 +1214,10 @@ class MPList(Screen, HelpableScreen):
 	def showPorn(self):
 		if config.mediaportal.showporn.value:
 			config.mediaportal.showporn.value = False
+			if config.mediaportal.filter.value == "Porn":
+				config.mediaportal.filter.value = "ALL"
 			config.mediaportal.showporn.save()
+			config.mediaportal.filter.save()
 			configfile.save()
 			self.restart()
 		else:
@@ -1294,8 +1303,7 @@ class MPList(Screen, HelpableScreen):
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 										else:
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"") % status[0][2], MessageBoxExt.TYPE_INFO)
-										if not config.mediaportal.debugMode.value == "High":
-											return
+										return
 								param = ""
 								param1 = x.get("param1")
 								param2 = x.get("param2")
@@ -1334,8 +1342,7 @@ class MPList(Screen, HelpableScreen):
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 												else:
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"") % status[0][2], MessageBoxExt.TYPE_INFO)
-												if not config.mediaportal.debugMode.value == "High":
-													return
+												return
 										param = ""
 										param1 = x.get("param1")
 										param2 = x.get("param2")
@@ -2256,8 +2263,7 @@ class MPWall(Screen, HelpableScreen):
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 										else:
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"") % status[0][2], MessageBoxExt.TYPE_INFO)
-										if not config.mediaportal.debugMode.value == "High":
-											return
+										return
 								param = ""
 								param1 = x.get("param1")
 								param2 = x.get("param2")
@@ -2296,8 +2302,7 @@ class MPWall(Screen, HelpableScreen):
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 												else:
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"") % status[0][2], MessageBoxExt.TYPE_INFO)
-												if not config.mediaportal.debugMode.value == "High":
-													return
+												return
 										param = ""
 										param1 = x.get("param1")
 										param2 = x.get("param2")
@@ -2551,7 +2556,7 @@ class MPWall(Screen, HelpableScreen):
 		if config.mediaportal.showporn.value:
 			config.mediaportal.showporn.value = False
 			if config.mediaportal.filter.value == "Porn":
-				self.chFilter()
+				config.mediaportal.filter.value = "ALL"
 			config.mediaportal.showporn.save()
 			config.mediaportal.filter.save()
 			configfile.save()
@@ -3122,8 +3127,7 @@ class MPWall2(Screen, HelpableScreen):
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 										else:
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"") % status[0][2], MessageBoxExt.TYPE_INFO)
-										if not config.mediaportal.debugMode.value == "High":
-											return
+										return
 								param = ""
 								param1 = x.get("param1")
 								param2 = x.get("param2")
@@ -3162,8 +3166,7 @@ class MPWall2(Screen, HelpableScreen):
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 												else:
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"") % status[0][2], MessageBoxExt.TYPE_INFO)
-												if not config.mediaportal.debugMode.value == "High":
-													return
+												return
 										param = ""
 										param1 = x.get("param1")
 										param2 = x.get("param2")
@@ -3349,7 +3352,7 @@ class MPWall2(Screen, HelpableScreen):
 		if config.mediaportal.showporn.value:
 			config.mediaportal.showporn.value = False
 			if config.mediaportal.filter.value == "Porn":
-				self.chFilter()
+				config.mediaportal.filter.value = "ALL"
 			config.mediaportal.showporn.save()
 			config.mediaportal.filter.save()
 			configfile.save()
@@ -3919,8 +3922,7 @@ class MPWallVTi(Screen, HelpableScreen):
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 										else:
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"") % status[0][2], MessageBoxExt.TYPE_INFO)
-										if not config.mediaportal.debugMode.value == "High":
-											return
+										return
 								param = ""
 								param1 = x.get("param1")
 								param2 = x.get("param2")
@@ -3959,8 +3961,7 @@ class MPWallVTi(Screen, HelpableScreen):
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 												else:
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"") % status[0][2], MessageBoxExt.TYPE_INFO)
-												if not config.mediaportal.debugMode.value == "High":
-													return
+												return
 										param = ""
 										param1 = x.get("param1")
 										param2 = x.get("param2")
@@ -4137,7 +4138,7 @@ class MPWallVTi(Screen, HelpableScreen):
 		if config.mediaportal.showporn.value:
 			config.mediaportal.showporn.value = False
 			if config.mediaportal.filter.value == "Porn":
-				self.chFilter()
+				config.mediaportal.filter.value = "ALL"
 			config.mediaportal.showporn.save()
 			config.mediaportal.filter.save()
 			configfile.save()

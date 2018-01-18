@@ -23,6 +23,7 @@
 		<plugin type="mod" modfile="fun.forplayers" confopt="show4Players" default="True" confcat="fun" gz="0" name="4Players" icon="4players" filter="Fun" screen="forPlayersGenreScreen" param1="" param2=""/>
 		<!--<plugin type="mod" modfile="fun.filmon" confopt="showFilmOn" default="True" confcat="fun" gz="0" name="FilmOn" icon="filmon" filter="Fun" screen="filmON" param1="" param2=""/>-->
 		<plugin type="mod" modfile="fun.failto" confopt="showFail" default="True" confcat="fun" gz="0" name="Fail.to" icon="fail" filter="Fun" screen="failScreen" param1="" param2=""/>
+		<plugin type="mod" modfile="fun.ccc" confopt="showCCC" default="True" confcat="fun" gz="0" name="CCC Media" icon="ccc" filter="Fun" screen="CccOverviewScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="fun.cczwei" confopt="showCC2" default="True" confcat="fun" gz="0" name="CC2.tv" icon="cczwei" filter="Fun" screen="cczwei" param1="" param2=""/>
 		<plugin type="mod" modfile="fun.e2world" confopt="showe2world" default="True" confcat="fun" gz="0" name="E2WORLD" icon="e2world" filter="Fun" screen="e2world" param1="" param2=""/>
 		<plugin type="mod" modfile="fun.itunestrailers" confopt="showitunestrailers" default="True" confcat="fun" gz="0" name="iTunes Movie Trailers" icon="itunesmovietrailers" filter="Fun" screen="itunestrailersGenreScreen" param1="" param2=""/>
@@ -42,7 +43,6 @@
 		<plugin type="mod" modfile="mediatheken.arte" confopt="showArte" default="True" confcat="mediatheken" gz="0" name="arte Mediathek" icon="arte" filter="Mediathek" screen="arteFirstScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.atv" confopt="showatv" default="True" confcat="mediatheken" gz="0" name="ATV Mediathek" icon="atv" filter="Mediathek" screen="atvGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.br_tv" confopt="showBRTV" default="True" confcat="mediatheken" gz="0" name="BR Mediathek" icon="brtv" filter="Mediathek" screen="BRGenreScreen" param1="" param2=""/>
-		<plugin type="mod" modfile="mediatheken.dmax" confopt="showDMAX" default="True" confcat="mediatheken" gz="0" name="DMAX" icon="dmax" filter="Mediathek" screen="show_DMAX_Genre" param1="dmax" param2="DMAX.de"/>
 		<plugin type="mod" modfile="mediatheken.kindertube" confopt="showkindertube" default="True" confcat="mediatheken" gz="0" name="KinderTube" icon="kindertube" filter="Mediathek" screen="kindertubeMain" param1="" param2="" kids="1"/>
 		<plugin type="mod" modfile="mediatheken.myspass" confopt="showmyspass" default="True" confcat="mediatheken" gz="0" name="MySpass" icon="myspass" filter="Mediathek" screen="myspassGenreScreen" param1="" param2=""/>
 		<!--<plugin type="mod" modfile="mediatheken.n24" confopt="showshown24" default="True" confcat="mediatheken" gz="0" name="N24 Mediathek" icon="n24" filter="Mediathek" screen="n24GenreScreen" param1="" param2=""/>-->
@@ -51,8 +51,8 @@
 		<plugin type="mod" modfile="mediatheken.servustv" confopt="showServusTV" default="True" confcat="mediatheken" gz="0" name="ServusTV" icon="servustv" filter="Mediathek" screen="sTVGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.southpark" confopt="showsouthpark" default="True" confcat="mediatheken" gz="0" name="Southpark.de" icon="southpark" filter="Mediathek" screen="SouthparkGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.srg" confopt="showSRG" default="True" confcat="mediatheken" gz="0" name="SRG Play" icon="srg" filter="Mediathek" screen="SRGGenreScreen" param1="" param2=""/>
-		<plugin type="mod" modfile="mediatheken.dmax" confopt="showTLC" default="True" confcat="mediatheken" gz="0" name="TLC" icon="tlc" filter="Mediathek" screen="show_DMAX_Genre" param1="tlc" param2="TLC.de"/>
 		<plugin type="mod" modfile="mediatheken.tvnow" confopt="showtvnow" default="True" confcat="mediatheken" gz="0" name="TVNOW" icon="tvnow" filter="Mediathek" screen="tvnowFirstScreen" param1="" param2=""/>
+		<plugin type="mod" modfile="mediatheken.seventv" confopt="showseventv" default="True" confcat="mediatheken" gz="0" name="7TV" icon="seventv" filter="Mediathek" screen="sevenFirstScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.orf" confopt="showORF" default="True" confcat="mediatheken" gz="0" name="ORF TVthek" icon="orf" filter="Mediathek" screen="ORFGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.videogold_de" confopt="showVideoGold" default="True" confcat="mediatheken" gz="0" name="VideoGold.de" icon="videogold_de" filter="Mediathek" screen="show_VGDE_Genre" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.watchbox" confopt="showwatchbox" default="True" confcat="mediatheken" gz="0" name="Watchbox" icon="watchbox" filter="Mediathek" screen="watchboxGenreScreen" param1="" param2=""/>

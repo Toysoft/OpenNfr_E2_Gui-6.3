@@ -226,6 +226,10 @@ class realdebrid_oauth2(Screen):
 			config.mediaportal.realdebrid_accesstoken.value = ''
 			config.mediaportal.realdebrid_accesstoken.save()
 			self.codeerror('Realdebrid broken RefreshToken')
+		if result['error_code'] == 9:
+			config.mediaportal.realdebrid_accesstoken.value = ''
+			config.mediaportal.realdebrid_accesstoken.save()
+			self.codeerror('Realdebrid broken RefreshToken')
 		else:
 			self.raccesstoken = str(result['access_token'])
 			self.rrefreshtoken = str(result['refresh_token'])

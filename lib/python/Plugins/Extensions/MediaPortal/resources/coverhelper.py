@@ -1,14 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-
-from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-from enigma import gPixmapPtr, ePicLoad, eTimer
-from Components.AVSwitch import AVSwitch
-from Components.Pixmap import Pixmap
-from Tools.Directories import fileExists
-from Components.config import config
-import mp_globals
-from debuglog import printlog as printl
 from twagenthelper import twDownloadPage
 
 glob_icon_num = 0

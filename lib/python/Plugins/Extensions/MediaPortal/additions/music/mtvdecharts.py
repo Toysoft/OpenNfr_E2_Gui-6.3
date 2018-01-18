@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2017
+#    Coded by MediaPortal Team (c) 2013-2018
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -63,20 +63,20 @@ class MTVdeChartsGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		self.genreliste = [('MTV.DE Hitlist Germany - Top100',"http://www.mtv.de/charts/288-single-top-100"),
-				('MTV.DE Single Midweek Charts',"http://www.mtv.de/charts/287-midweek-single-top-100"),
-				('MTV.DE Videocharts',"http://www.mtv.de/charts/8-mtv-de-videocharts"),
-				('MTV.DE Single Top20',"http://www.mtv.de/charts/302-single-top-20"),
-				('MTV.DE Dance Charts',"http://www.mtv.de/charts/293-dance-charts"),
-				('MTV.DE Single Trending',"http://www.mtv.de/charts/301-single-trending"),
-				('MTV.DE Streaming Charts',"http://www.mtv.de/charts/286-top-100-music-streaming"),
-				('MTV.DE Deutschsprachige Single Charts Top15',"http://www.mtv.de/charts/304-top-15-deutschsprachige-singles"),
-				('MTV.DE Download Charts',"http://www.mtv.de/charts/289-download-charts-single"),
-				('MTV.DE Most Wanted 90\'s',"http://www.mtv.de/charts/295-most-wanted-90-s"),
-				('MTV.DE Most Wanted 2000\'s',"http://www.mtv.de/charts/296-most-wanted-2000-s"),
-				('MTV.DE Top100 Jahrescharts 2016',"http://www.mtv.de/charts/274-top-100-jahrescharts-2016"),
-				('MTV.DE Top100 Jahrescharts 2015',"http://www.mtv.de/charts/275-top-100-jahrescharts-2015"),
-				('MTV.DE Top100 Jahrescharts 2014',"http://www.mtv.de/charts/241-top-100-jahrescharts-2014"),
+		self.genreliste = [('MTV.DE Hitlist Germany - Top100',"http://www.mtv.de/charts/c6mc86/single-top-100"),
+				('MTV.DE Single Midweek Charts',"http://www.mtv.de/charts/n91ory/midweek-single-top-100"),
+				('MTV.DE Single Top20',"http://www.mtv.de/charts/bcgxiq/single-top-20"),
+				('MTV.DE Dance Charts',"http://www.mtv.de/charts/2ny5w9/dance-charts"),
+				('MTV.DE Single Trending',"http://www.mtv.de/charts/9gtiy5/single-trending"),
+				('MTV.DE Streaming Charts',"http://www.mtv.de/charts/h4oi23/top100-music-streaming"),
+				('MTV.DE Deutschsprachige Single Charts Top15',"http://www.mtv.de/charts/jlyhaa/top-15-deutschsprachige-single-charts"),
+				('MTV.DE Download Charts',"http://www.mtv.de/charts/pcbqpc/downloads-charts-single"),
+				('MTV.DE Most Wanted 90\'s',"http://www.mtv.de/charts/xlad55/most-wanted-90"),
+				('MTV.DE Most Wanted 2000\'s',"http://www.mtv.de/charts/h5hl40/most-wanted-2000"),
+				('MTV.DE Top100 Jahrescharts 2017',"http://www.mtv.de/charts/czzmta/top-100-jahrescharts-2017"),
+				('MTV.DE Top100 Jahrescharts 2016',"http://www.mtv.de/charts/yrk67s/top-100-jahrescharts-2016"),
+				('MTV.DE Top100 Jahrescharts 2015',"http://www.mtv.de/charts/4z2jri/top-100-jahrescharts-2015"),
+				('MTV.DE Top100 Jahrescharts 2014',"http://www.mtv.de/charts/ns9mkd/top-100-jahrescharts-2014"),
 				('MTV.CH Videocharts',"http://www.mtv.ch/charts/206-mtv-ch-videocharts"),
 				('MTV.DK Denmark Top5',"http://www.mtv.dk/hitlister/24-top-5-musikvideoer"),
 				('MTV.SE Sweden Top5',"http://www.mtv.se/charts/23-top-5-musikvideor"),
@@ -134,7 +134,7 @@ class MTVdeChartsSongListeScreen(MPScreen):
 						for (artist,title,type,token,image_id) in track:
 							image = "http://images.mtvnn.com/%s/306x172" % image_id.replace('"','')
 							title = str(pos) + ". " + artist + " - " + title
-							self.filmliste.append((decodeHtml(title),token,image))
+							self.filmliste.append((decodeHtml(title).replace('\\"','"'),token,image))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.showInfos()
 		self.keyLocked = False

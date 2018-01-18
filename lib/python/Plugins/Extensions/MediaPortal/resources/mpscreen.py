@@ -219,12 +219,12 @@ class MPScreen(Screen, HelpableScreen):
 			self.onLayoutFinish.append(self._animation)
 
 	def _animation(self):
-		try:
+		#try:
 			#self['title'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
 			#self['ContentTitle'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
 			#self['name'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
-			self['coverArt'].instance.setShowHideAnimation(config.mediaportal.animation_coverart.value)
-		except:
+			#self['coverArt'].instance.setShowHideAnimation(config.mediaportal.animation_coverart.value)
+		#except:
 			pass
 
 	def mp_showHide(self):

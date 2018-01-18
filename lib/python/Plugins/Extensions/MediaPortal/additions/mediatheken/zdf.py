@@ -507,7 +507,7 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 						title = decodeHtml(title)
 						handlung = "Clip-Datum: "+airtime+clock+"\nDauer: "+dur
 						self.dur = dur
-						assetId = "https://api.zdf.de/content/documents/"+assetId+".json?profile=player"
+						assetId = "https://api.zdf.de/content/documents/zdf/"+assetId+".json?profile=player"
 						assetPath = BASE_URL + assetPath
 						if 'itemprop="genre"' in data:
 							try:
@@ -634,7 +634,7 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 					except:
 						pass
 				handlung = "Sendung: "+decodeHtml(sendung)+genre+"\nClip-Datum: "+airtime+"\nDauer: "+dur+"\n\n"+info
-				assetId = "https://api.zdf.de/content/documents/"+assetId+".json?profile=player"
+				assetId = "https://api.zdf.de/content/documents/zdf/"+assetId+".json?profile=player"
 				assetPath = BASE_URL + assetPath
 				self.filmliste.append((decodeHtml(title),assetId,handlung,image,sendung,assetPath))
 			if self.filmliste == []:
@@ -694,13 +694,17 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 
 	def getTemplateJson(self,data):
 		a = json.loads(data)
-		b = a['mainVideoContent']['http://zdf.de/rels/target']['http://zdf.de/rels/streams/ptmd-template']
-		if b:
-			b = b.replace('{playerId}','ngplayer_2_3')
-			b = "https://api.zdf.de"+b
-			getPage(str(b), headers={'Api-Auth':'Bearer %s' % self.token, 'Accept':'application/vnd.de.zdf.v1.0+json'}).addCallback(self.getContentJson).addErrback(self.dataError)
-		else:
-			return
+		try:
+			url = "https://api.zdf.de" + str(a['location'])
+			getPage(url, headers={'Api-Auth':'Bearer %s' % self.token, 'Accept':'application/vnd.de.zdf.v1.0+json'}).addCallback(self.getTemplateJson).addErrback(self.dataError)
+		except:
+			b = a['mainVideoContent']['http://zdf.de/rels/target']['http://zdf.de/rels/streams/ptmd-template']
+			if b:
+				b = b.replace('{playerId}','ngplayer_2_3')
+				b = "https://api.zdf.de"+b
+				getPage(str(b), headers={'Api-Auth':'Bearer %s' % self.token, 'Accept':'application/vnd.de.zdf.v1.0+json'}).addCallback(self.getContentJson).addErrback(self.dataError)
+			else:
+				return
 
 	def getContentJson(self,data):
 		a = json.loads(data)

@@ -118,7 +118,7 @@ class TwClientContextFactory(ClientContextFactory):
 	"A SSL context factory which is more permissive against SSL bugs."
 
 	def __init__(self):
-		self.method = SSL.TLSv1_METHOD
+		self.method = SSL.SSLv23_METHOD
 
 	def getContext(self, hostname=None, port=None):
 		ctx = ClientContextFactory.getContext(self)

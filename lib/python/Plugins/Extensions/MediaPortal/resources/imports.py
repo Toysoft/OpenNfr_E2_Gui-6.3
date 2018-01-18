@@ -93,6 +93,9 @@ def r_getPage(url, *args, **kwargs):
 
 import mp_globals
 
+#if mp_globals.isDreamOS:
+#	from pixmapext import PixmapExt as Pixmap
+
 try:
 	from Screens.InfoBarGenerics import InfoBarServiceErrorPopupSupport
 except:
