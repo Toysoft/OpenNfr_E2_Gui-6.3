@@ -238,29 +238,29 @@
       <convert type="ServiceInfo">HasHBBTV</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_dolby_off.png" position="957,778" size="110,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_dolby_on.png" position="957,778" size="110,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_dolby_off.png" position="1007,778" size="110,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_dolby_on.png" position="1007,778" size="110,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsMultichannel</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_format_off.png" position="599,778" size="90,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_format_on.png" position="599,778" size="90,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_format_off.png" position="649,778" size="90,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_format_on.png" position="649,778" size="90,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsWidescreen</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_txt_off.png" position="494,778" size="110,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_txt_on.png" position="494,778" size="110,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_txt_off.png" position="544,778" size="110,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_txt_on.png" position="544,778" size="110,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">HasTelext</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_hd_off.png" position="686,778" size="95,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_hd_on.png" position="686,778" size="95,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_hd_off.png" position="736,778" size="95,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_hd_on.png" position="736,778" size="95,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">VideoWidth</convert>
       <convert type="ValueRange">721,1980</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_crypt_off.png" position="775,778" size="95,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_crypt_on.png" position="775,778" size="95,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_crypt_off.png" position="825,778" size="95,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_crypt_on.png" position="825,778" size="95,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsCrypted</convert>
       <convert type="ConditionalShowHide" />
     </widget>
@@ -268,8 +268,8 @@
     <widget source="session.RecordState" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_rec_on.png" position="1487,667" size="131,63" zPosition="2" alphatest="blend">
       <convert type="ConditionalShowHide">Blink</convert>
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/subtitle_off.png" position="857,778" size="75,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/subtitle_on.png" position="857,778" zPosition="2" size="75,31" alphatest="blend" transparent="0">
+    <ePixmap pixmap="OpenNfrFHD/icons/subtitle_off.png" position="907,778" size="75,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/subtitle_on.png" position="907,778" zPosition="2" size="75,31" alphatest="blend" transparent="0">
       <convert type="ServiceInfo">SubservicesAvailable</convert>
       <convert type="ConditionalShowHide" />
     </widget>
@@ -524,29 +524,29 @@
       <convert type="ServiceInfo">HasHBBTV</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_dolby_off.png" position="957,778" size="110,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_dolby_on.png" position="957,778" size="110,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_dolby_off.png" position="1007,778" size="110,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_dolby_on.png" position="1007,778" size="110,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsMultichannel</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_format_off.png" position="599,778" size="90,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_format_on.png" position="599,778" size="90,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_format_off.png" position="649,778" size="90,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_format_on.png" position="649,778" size="90,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsWidescreen</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_txt_off.png" position="494,778" size="110,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_txt_on.png" position="494,778" size="110,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_txt_off.png" position="544,778" size="110,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_txt_on.png" position="544,778" size="110,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">HasTelext</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_hd_off.png" position="686,778" size="95,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_hd_on.png" position="686,778" size="95,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_hd_off.png" position="736,778" size="95,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_hd_on.png" position="736,778" size="95,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">VideoWidth</convert>
       <convert type="ValueRange">721,1980</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_crypt_off.png" position="775,778" size="95,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_crypt_on.png" position="775,778" size="95,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_crypt_off.png" position="825,778" size="95,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_crypt_on.png" position="825,778" size="95,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsCrypted</convert>
       <convert type="ConditionalShowHide" />
     </widget>
@@ -554,8 +554,8 @@
     <widget source="session.RecordState" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_rec_on.png" position="1487,667" size="131,63" zPosition="2" alphatest="blend">
       <convert type="ConditionalShowHide">Blink</convert>
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/subtitle_off.png" position="857,778" size="75,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/subtitle_on.png" position="857,778" zPosition="2" size="75,31" alphatest="blend" transparent="0">
+    <ePixmap pixmap="OpenNfrFHD/icons/subtitle_off.png" position="907,778" size="75,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/subtitle_on.png" position="907,778" zPosition="2" size="75,31" alphatest="blend" transparent="0">
       <convert type="ServiceInfo">SubservicesAvailable</convert>
       <convert type="ConditionalShowHide" />
     </widget>
@@ -991,7 +991,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1021,7 +1021,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1051,7 +1051,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1102,7 +1102,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1134,7 +1134,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1157,7 +1157,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1183,7 +1183,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1205,7 +1205,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1240,7 +1240,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1284,7 +1284,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1307,7 +1307,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1339,7 +1339,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1368,7 +1368,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1397,7 +1397,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1426,7 +1426,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1455,7 +1455,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1484,7 +1484,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1513,7 +1513,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1554,7 +1554,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1607,7 +1607,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1640,7 +1640,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1662,7 +1662,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1692,7 +1692,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1725,7 +1725,7 @@
   </screen>
   <screen name="PluginInstall" position="center,center" size="1920,1080" title="Installiere Plugins" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1761,7 +1761,7 @@
   </screen>
   <screen name="PluginDeinstall" position="center,center" size="1920,1080" title="Deinstalliere Plugins" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1797,7 +1797,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1857,10 +1857,10 @@
     </widget>
     <widget name="network" position="55,141" size="790,45" font="LCD;35" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" halign="center" valign="center" />
     <widget name="transponder" position="1150,141" size="720,45" font="LCD;35" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" halign="center" valign="center" />
-    <widget name="scan_state" position="1078,748" size="755,45" zPosition="2" font="LCD; 35" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" halign="center" valign="center" />
+    <widget name="scan_state" position="1078,746" size="755,45" zPosition="2" font="LCD; 38" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" halign="center" valign="center" />
     <widget name="pass" position="55,220" size="920,25" font="Regular; 24" backgroundColor="white" transparent="1" halign="center" valign="center" />
     <widget name="scan_progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1" />
-    <widget name="servicelist" position="55,270" size="920,655" itemHeight="30" font="Regular; 24" selectionDisabled="1" transparent="1" halign="center" valign="center" />
+    <widget name="servicelist" position="55,270" size="920,655" itemHeight="30" font="Regular; 28" selectionDisabled="1" transparent="1" halign="center" valign="center" />
     <ePixmap name="selector" position="51,253" size="930,10" font="Regular; 24" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
     <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
     <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
@@ -1870,7 +1870,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1884,7 +1884,10 @@
     </widget>
     <eLabel text="Service scan" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
     <widget name="header" position="55,141" size="790,45" font="LCD; 35" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" halign="center" />
-    <widget name="config" position="55,220" size="920,700" itemHeight="30" font="Regular; 26" scrollbarMode="showOnDemand" enableWrapAround="1" backgroundColor="background" transparent="1" />
+    <widget name="config" position="55,220" size="920,700" font="Regular; 26" scrollbarMode="showOnDemand" enableWrapAround="1" backgroundColor="background" transparent="1" />
+    <applet type="onLayoutFinish">
+        self["config"].instance.setItemHeight(40)
+    </applet>
     <widget name="footer" position="55,941" size="920,30" font="Regular; 28" halign="center" backgroundColor="goldenrod" transparent="1" zPosition="1" foregroundColor="goldenrod" />
     <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
     <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
@@ -1894,7 +1897,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1907,7 +1910,10 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <eLabel text="Service scan" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-    <widget name="config" position="55,220" size="920,700" itemHeight="34" font="Regular; 26" scrollbarMode="showOnDemand" enableWrapAround="1" backgroundColor="background" transparent="1" />
+    <widget name="config" position="55,220" size="920,700" font="Regular; 30" scrollbarMode="showOnDemand" enableWrapAround="1" backgroundColor="background" transparent="1" />
+    <applet type="onLayoutFinish">
+        self["config"].instance.setItemHeight(40)
+    </applet>
     <widget name="introduction" position="55,941" size="920,30" font="Regular; 28" halign="center" valign="center" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" />
     <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
     <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
@@ -1915,7 +1921,7 @@
   </screen>
   <screen name="Satfinder" position="center,center" size="1920,1080" title="Satfinder" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1954,7 +1960,10 @@
       <convert type="FrontendInfo">LOCK</convert>
       <convert type="ConditionalShowHide">Invert</convert>
     </widget>
-    <widget name="config" position="55,439" size="920,490" itemHeight="30" scrollbarMode="showOnDemand" transparent="1" />
+    <widget name="config" position="55,439" size="920,487" scrollbarMode="showOnDemand" transparent="1" font="Regular; 30" />
+    <applet type="onLayoutFinish">
+        self["config"].instance.setItemHeight(40)
+    </applet>
     <widget name="introduction" position="55,941" size="920,30" font="Regular; 28" halign="center" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" />
     <ePixmap pixmap="OpenNfrFHD/menu/scan-s.png" position="1222,379" size="500,274" transparent="1" alphatest="blend" zPosition="7" />
     <ePixmap name="selector" position="51,423" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
@@ -1966,7 +1975,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -1982,10 +1991,10 @@
     <widget source="nimlist" render="Listbox" position="55,220" size="920,660" enableWrapAround="1" transparent="1">
       <convert type="TemplatedMultiContent">
 				{"template": [
-						MultiContentEntryText(pos = (10, 8), size = (680, 30), flags = RT_HALIGN_LEFT, text = 1), # index 1 is the nim name,
-						MultiContentEntryText(pos = (50, 43), size = (640, 45), font = 1, flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER | RT_WRAP, text = 2), # index 2 is a description of the nim settings,
+						MultiContentEntryText(pos = (10, 2), size = (900, 40), flags = RT_HALIGN_LEFT, text = 1), # index 1 is the nim name,
+						MultiContentEntryText(pos = (50, 43), size = (900, 60), font = 1, flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER | RT_WRAP, text = 2), # index 2 is a description of the nim settings,
 					],
-				 "fonts": [gFont("Regular", 23), gFont("Regular", 20)],
+				 "fonts": [gFont("Regular", 30), gFont("Regular", 26)],
 				 "itemHeight": 110
 				}
 			</convert>
@@ -1998,7 +2007,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2011,7 +2020,10 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <eLabel text="Reception Settings" position="74,50" size="720,45" halign="center" font="LCD; 42" transparent="1" foregroundColor="grey" backgroundColor="grey" />
-    <widget name="config" position="55,220" size="920,700" itemHeight="30" font="Regular; 26" scrollbarMode="showOnDemand" transparent="1" />
+    <widget name="config" position="55,220" size="920,680" font="Regular; 28" scrollbarMode="showOnDemand" transparent="1" />
+    <applet type="onLayoutFinish">
+        self["config"].instance.setItemHeight(40)
+    </applet>
     <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
     <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
     <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" />
@@ -2020,7 +2032,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2050,7 +2062,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2084,7 +2096,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2118,8 +2130,8 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1063,213" zPosition="1" size="611,295" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1063,213" size="611,295" zPosition="0" />
-    <widget source="ServiceEvent" render="EmptyEpg" emptyText="Event data unavailable" position="1079,556" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
+    <widget source="ServiceEvent" render="EmptyEpg" emptyText="Event data unavailable" position="1150,700" size="610,40" halign="center" valign="center" font="LCD;36" foregroundColor="white" backgroundColor="white" transparent="1" zPosition="1">
+      <convert type="EventName">Name</convert>
     </widget>
     <widget source="ServiceEvent" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1065,640" size="784,17" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
@@ -2141,19 +2153,19 @@
     <widget source="Title" render="Label" position="74,50" size="720,45" font="LCD; 42" backgroundColor="white" transparent="1" halign="right" />
     <eLabel text="Channel Selection" halign="left" position="74,50" size="320,45" font="LCD; 42" backgroundColor="grey" transparent="1" foregroundColor="grey" />
     <widget name="list" position="55,220" zPosition="2" size="920,560" scrollbarMode="showOnDemand" serviceItemHeight="30" serviceNumberFont="Regular;28" serviceNameFont="Regular;28" serviceInfoFont="Regular;25" colorServiceDescription="myblue" transparent="1" />
-    <widget source="ServiceEvent" render="EmptyEpg" emptyText="Event data unavailable" position="1158,705" size="610,32" halign="center" valign="center" font="LCD;30" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" zPosition="1">
-      <convert type="EventName">Name</convert>
+    <widget source="ServiceEvent" render="EmptyEpg" emptyText="Event data unavailable" position="1079,555" size="750,45" halign="center" valign="center" font="LCD;36" foregroundColor="white" backgroundColor="white" transparent="1" zPosition="1">
+      <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="ServiceEvent" render="Label" position="1080,705" size="75,32" font="LCD; 28" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" halign="left" valign="center" zPosition="1">
+    <widget source="ServiceEvent" render="Label" position="1051,700" size="95,40" font="LCD; 36" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" halign="right" valign="center" zPosition="1">
       <convert type="EventTime">StartTime</convert>
       <convert type="ClockToText">
       </convert>
     </widget>
-    <widget source="ServiceEvent" render="Label" position="1770,705" size="75,32" font="LCD; 28" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" zPosition="1" halign="left" valign="center">
+    <widget source="ServiceEvent" render="Label" position="1756,701" size="110,40" font="LCD; 36" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" zPosition="1" halign="left" valign="center">
       <convert type="EventTime">EndTime</convert>
       <convert type="ClockToText">Format: %H:%M</convert>
     </widget>
-    <widget source="ServiceEvent" render="RunningText" position="1043,785" zPosition="1" size="829,168" font="Regular; 28" halign="center" options="movetype=running,startpoint=0,direction=top,steptime=90,repeat=10,startdelay=10000,wrap" backgroundColor="transparent" alphatest="on" transparent="1">
+    <widget source="ServiceEvent" render="RunningText" position="1043,775" zPosition="1" size="829,176" font="Regular; 30" halign="center" options="movetype=running,startpoint=0,direction=top,steptime=90,repeat=10,startdelay=10000,wrap" backgroundColor="transparent" alphatest="on" transparent="1">
       <convert type="EventName">ExtendedDescription</convert>
     </widget>
     <widget source="ServiceEvent" render="PiconProv" position="1699,411" size="158,97" zPosition="5" transparent="1" alphatest="blend">
@@ -2176,7 +2188,6 @@
     <ePixmap position="60,948" size="24,22" zPosition="10" pixmap="OpenNfrFHD/buttons/key_up.png" transparent="1" alphatest="blend" />
     <ePixmap position="100,946" size="24,22" zPosition="10" pixmap="OpenNfrFHD/buttons/key_down.png" transparent="1" alphatest="blend" />
     <ePixmap name="selector" position="51,785" size="920,10" pixmap="OpenNfrFHD/menu/selector.png" />
-    <ePixmap name="selector" position="1043,770" size="820,10" pixmap="OpenNfrFHD/menu/selector.png" />
     <ePixmap name="tvback" position="1046,198" size="642,322" pixmap="OpenNfrFHD/menu/channelselectiontvback.png" />
     <ePixmap name="piconback" position="1690,197" size="179,120" pixmap="OpenNfrFHD/menu/channelselectionpiconback.png" />
     <ePixmap name="piconback1" position="1690,400" size="179,120" pixmap="OpenNfrFHD/menu/channelselectionpiconback.png" zPosition="0" />
@@ -2188,7 +2199,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2211,8 +2222,8 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1063,213" zPosition="1" size="611,295" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1063,213" size="611,295" zPosition="0" />
-    <widget source="ServiceEvent" render="EmptyEpg" emptyText="Event data unavailable" position="1079,556" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
+    <widget source="ServiceEvent" render="EmptyEpg" emptyText="Event data unavailable" position="1150,700" size="610,40" halign="center" valign="center" font="LCD;36" foregroundColor="white" backgroundColor="white" transparent="1" zPosition="1">
+      <convert type="EventName">Name</convert>
     </widget>
     <widget source="ServiceEvent" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1065,640" size="784,17" zPosition="3" transparent="1">
       <convert type="EventTime">Progress</convert>
@@ -2234,19 +2245,19 @@
     <widget source="Title" render="Label" position="74,50" size="720,45" font="LCD; 42" backgroundColor="white" transparent="1" halign="right" />
     <eLabel text="Channel Selection" halign="left" position="74,50" size="320,45" font="LCD; 42" backgroundColor="grey" transparent="1" foregroundColor="grey" />
     <widget name="list" position="55,220" zPosition="2" size="920,560" scrollbarMode="showOnDemand" serviceItemHeight="30" serviceNumberFont="Regular;28" serviceNameFont="Regular;28" serviceInfoFont="Regular;25" colorServiceDescription="myblue" transparent="1" />
-    <widget source="ServiceEvent" render="EmptyEpg" emptyText="Event data unavailable" position="1158,705" size="610,32" halign="center" valign="center" font="LCD;30" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" zPosition="1">
-      <convert type="EventName">Name</convert>
+    <widget source="ServiceEvent" render="EmptyEpg" emptyText="Event data unavailable" position="1079,555" size="750,45" halign="center" valign="center" font="LCD;36" foregroundColor="white" backgroundColor="white" transparent="1" zPosition="1">
+      <convert type="ServiceName">Name</convert>
     </widget>
-    <widget source="ServiceEvent" render="Label" position="1080,705" size="75,32" font="LCD; 28" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" halign="left" valign="center" zPosition="1">
+    <widget source="ServiceEvent" render="Label" position="1051,700" size="95,40" font="LCD; 36" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" halign="right" valign="center" zPosition="1">
       <convert type="EventTime">StartTime</convert>
       <convert type="ClockToText">
       </convert>
     </widget>
-    <widget source="ServiceEvent" render="Label" position="1770,705" size="75,32" font="LCD; 28" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" zPosition="1" halign="left" valign="center">
+    <widget source="ServiceEvent" render="Label" position="1756,701" size="110,40" font="LCD; 36" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" zPosition="1" halign="left" valign="center">
       <convert type="EventTime">EndTime</convert>
       <convert type="ClockToText">Format: %H:%M</convert>
     </widget>
-    <widget source="ServiceEvent" render="RunningText" position="1043,785" zPosition="1" size="829,168" font="Regular; 28" halign="center" options="movetype=running,startpoint=0,direction=top,steptime=90,repeat=10,startdelay=10000,wrap" backgroundColor="transparent" alphatest="on" transparent="1">
+    <widget source="ServiceEvent" render="RunningText" position="1043,775" zPosition="1" size="829,176" font="Regular; 30" halign="center" options="movetype=running,startpoint=0,direction=top,steptime=90,repeat=10,startdelay=10000,wrap" backgroundColor="transparent" alphatest="on" transparent="1">
       <convert type="EventName">ExtendedDescription</convert>
     </widget>
     <widget source="ServiceEvent" render="PiconProv" position="1699,411" size="158,97" zPosition="5" transparent="1" alphatest="blend">
@@ -2269,7 +2280,6 @@
     <ePixmap position="60,948" size="24,22" zPosition="10" pixmap="OpenNfrFHD/buttons/key_up.png" transparent="1" alphatest="blend" />
     <ePixmap position="100,946" size="24,22" zPosition="10" pixmap="OpenNfrFHD/buttons/key_down.png" transparent="1" alphatest="blend" />
     <ePixmap name="selector" position="51,785" size="920,10" pixmap="OpenNfrFHD/menu/selector.png" />
-    <ePixmap name="selector" position="1043,770" size="820,10" pixmap="OpenNfrFHD/menu/selector.png" />
     <ePixmap name="tvback" position="1046,198" size="642,322" pixmap="OpenNfrFHD/menu/channelselectiontvback.png" />
     <ePixmap name="piconback" position="1690,197" size="179,120" pixmap="OpenNfrFHD/menu/channelselectionpiconback.png" />
     <ePixmap name="piconback1" position="1690,400" size="179,120" pixmap="OpenNfrFHD/menu/channelselectionpiconback.png" zPosition="0" />
@@ -2291,10 +2301,10 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <eLabel text="Eventview" position="74,50" size="720,45" font="LCD; 42" backgroundColor="grey" transparent="1" halign="center" foregroundColor="grey" />
-    <widget name="epg_description" halign="center" position="55,220" size="920,700" font="Regular; 28" backgroundColor="background" transparent="1" />
-    <widget name="channel" position="1079,629" size="750,45" font="LCD; 34" halign="center" backgroundColor="white" transparent="1" zPosition="2" />
-    <widget name="datetime" position="1079,768" size="430,40" font="LCD; 34" halign="left" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" zPosition="2" />
-    <widget name="duration" position="1509,768" size="320,40" font="LCD; 34" halign="right" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" zPosition="2" />
+    <widget name="epg_description" halign="center" position="55,220" size="920,700" font="Regular; 30" backgroundColor="background" transparent="1" />
+    <widget name="channel" position="1079,629" size="750,45" font="LCD; 38" halign="center" backgroundColor="white" transparent="1" zPosition="2" />
+    <widget name="datetime" position="1079,766" size="430,40" font="LCD; 36" halign="left" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" zPosition="2" />
+    <widget name="duration" position="1509,766" size="320,40" font="LCD; 36" halign="right" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" zPosition="2" />
     <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
@@ -2307,43 +2317,43 @@
     <ePixmap position="82,948" size="24,22" zPosition="10" pixmap="OpenNfrFHD/buttons/key_right.png" transparent="1" alphatest="blend" />
     <ePixmap position="458,942" size="80,31" zPosition="10" pixmap="OpenNfrFHD/buttons/key_menu.png" transparent="1" alphatest="blend" />
     <ePixmap position="907,942" size="80,31" zPosition="10" pixmap="OpenNfrFHD/buttons/key_info.png" transparent="1" alphatest="blend" />
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_hbbtv_off.png" position="1394,850" size="100,70" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" position="1394,850" size="100,70" zPosition="2" pixmap="OpenNfrFHD/icons/ico_hbbtv_on.png" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_hbbtv_off.png" position="1200,898" size="100,70" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" position="1200,898" size="100,70" zPosition="2" pixmap="OpenNfrFHD/icons/ico_hbbtv_on.png" alphatest="blend">
       <convert type="ServiceInfo">HasHBBTV</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_dolby_off.png" position="1730,890" size="250,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_dolby_on.png" position="1731,890" size="250,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_dolby_off.png" position="1764,845" size="250,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_dolby_on.png" position="1764,845" size="250,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsMultichannel</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_format_off.png" position="1075,930" size="116,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_format_on.png" position="1075,930" size="116,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_format_off.png" position="1196,845" size="116,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_format_on.png" position="1196,845" size="116,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsWidescreen</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_txt_off.png" position="1079,890" size="223,31" zPosition="5" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_txt_on.png" position="1079,890" size="229,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_txt_off.png" position="1043,845" size="200,31" zPosition="5" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_txt_on.png" position="1043,845" size="200,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">HasTelext</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_hd_off.png" position="1225,930" size="95,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_hd_on.png" position="1225,930" size="95,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_hd_off.png" position="1338,845" size="95,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_hd_on.png" position="1338,845" size="95,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">VideoWidth</convert>
       <convert type="ValueRange">721,1980</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_crypt_off.png" position="1565,930" size="120,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_crypt_on.png" position="1565,930" size="120,31" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_crypt_off.png" position="1470,845" size="120,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_crypt_on.png" position="1470,845" size="120,31" zPosition="2" alphatest="blend">
       <convert type="ServiceInfo">IsCrypted</convert>
       <convert type="ConditionalShowHide" />
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/ico_rec_off.png" position="1386,900" size="131,63" zPosition="1" alphatest="blend" />
-    <widget source="session.RecordState" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_rec_on.png" position="1386,900" size="131,63" zPosition="2" alphatest="blend">
+    <ePixmap pixmap="OpenNfrFHD/icons/ico_rec_off.png" position="1608,895" size="131,63" zPosition="1" alphatest="blend" />
+    <widget source="session.RecordState" render="Pixmap" pixmap="OpenNfrFHD/icons/ico_rec_on.png" position="1441,971" size="131,63" zPosition="2" alphatest="blend">
       <convert type="ConditionalShowHide">Blink</convert>
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/icons/subtitle_off.png" position="1730,930" size="110,31" zPosition="1" alphatest="blend" />
-    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/subtitle_on.png" position="1730,930" zPosition="2" size="110,31" alphatest="blend" transparent="0">
+    <ePixmap pixmap="OpenNfrFHD/icons/subtitle_off.png" position="1606,845" size="110,31" zPosition="1" alphatest="blend" />
+    <widget source="session.CurrentService" render="Pixmap" pixmap="OpenNfrFHD/icons/subtitle_on.png" position="1606,845" zPosition="2" size="110,31" alphatest="blend" transparent="0">
       <convert type="ServiceInfo">SubservicesAvailable</convert>
       <convert type="ConditionalShowHide" />
     </widget>
@@ -2366,9 +2376,9 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <widget source="Title" render="Label" position="74,50" size="720,45" font="LCD; 42" valign="center" halign="center" noWrap="1" foregroundColor="grey" backgroundColor="grey" transparent="1" />
-    <widget name="duration" position="1081,750" size="250,40" font="LCD; 34" zPosition="1" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" noWrap="1" valign="center" halign="left" />
-    <widget name="FullDescription" halign="center" position="55,220" size="920,700" font="Regular; 28" foregroundColor="white" backgroundColor="background" transparent="1" />
-    <widget source="Service" render="Label" position="1583,750" size="250,40" font="LCD; 34" halign="right" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" zPosition="1">
+    <widget name="duration" position="1081,748" size="250,40" font="LCD; 36" zPosition="1" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" noWrap="1" valign="center" halign="left" />
+    <widget name="FullDescription" halign="center" position="55,220" size="920,700" font="Regular; 30" foregroundColor="white" backgroundColor="background" transparent="1" />
+    <widget source="Service" render="Label" position="1583,748" size="250,40" font="LCD; 36" halign="right" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" zPosition="1">
       <convert type="MovieInfo">FileSize</convert>
     </widget>
     <ePixmap position="469,942" size="80,31" zPosition="10" pixmap="OpenNfrFHD/buttons/key_info.png" transparent="1" alphatest="blend" />
@@ -2380,7 +2390,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2402,7 +2412,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2432,7 +2442,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2463,7 +2473,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2494,7 +2504,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2528,7 +2538,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1077,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2575,7 +2585,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1062,216" zPosition="1" size="796,365" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1062,216" size="796,365" zPosition="0" />
-    <widget source="Service" render="Label" position="1079,629" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="Service" render="Label" position="1079,629" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="Service" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,712" size="784,17" zPosition="3" transparent="1">
@@ -2596,21 +2606,20 @@
     <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue-long.png" position="1461,1004" size="405,76" alphatest="blend" />
     <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget name="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
-    <widget name="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_blue" render="Label" position="1479,1017" size="373,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <ePixmap position="327,948" size="24,22" zPosition="10" pixmap="OpenNfrFHD/buttons/key_left.png" transparent="1" alphatest="blend" />
     <ePixmap position="901,942" size="80,31" zPosition="10" pixmap="OpenNfrFHD/buttons/key_epg.png" transparent="1" alphatest="blend" />
     <ePixmap position="360,948" size="24,22" zPosition="10" pixmap="OpenNfrFHD/buttons/key_right.png" transparent="1" alphatest="blend" />
     <ePixmap position="598,942" size="80,31" zPosition="10" pixmap="OpenNfrFHD/buttons/key_menu.png" transparent="1" alphatest="blend" />
     <ePixmap position="60,948" size="24,22" zPosition="10" pixmap="OpenNfrFHD/buttons/key_up.png" transparent="1" alphatest="blend" />
     <ePixmap position="100,946" size="24,22" zPosition="10" pixmap="OpenNfrFHD/buttons/key_down.png" transparent="1" alphatest="blend" />
-    <widget source="Event" render="RunningText" position="1043,765" zPosition="1" size="829,196" font="Regular; 28" halign="center" options="movetype=running,startpoint=0,direction=top,steptime=90,repeat=10,startdelay=10000,wrap" backgroundColor="transparent" alphatest="on" transparent="1">
+    <widget source="Event" render="RunningText" position="1043,775" zPosition="1" size="829,176" font="Regular; 30" halign="center" options="movetype=running,startpoint=0,direction=top,steptime=90,repeat=10,startdelay=10000,wrap" backgroundColor="transparent" alphatest="on" transparent="1">
       <convert type="EventName">ExtendedDescription</convert>
     </widget>
-    <ePixmap name="selector" position="1043,752" size="820,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
     <ePixmap name="senderback" position="1042,612" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
     <ePixmap name="progressback" position="1046,694" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="1" />
     <ePixmap name="eventtv" position="1041,195" size="836,400" pixmap="OpenNfrFHD/menu/tvbackevent.png" zPosition="-1" />
@@ -2619,7 +2628,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2653,7 +2662,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2683,7 +2692,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2713,7 +2722,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2743,7 +2752,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2784,7 +2793,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2832,23 +2841,22 @@
     <widget source="Title" render="Label" position="55,141" size="790,43" font="LCD; 35" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" halign="center" />
     <widget name="list" position="55,220" size="920,700" scrollbarMode="showOnDemand" transparent="1" />
     <widget name="freeDiskSpace" position="1157,141" size="720,43" font="LCD; 35" valign="center" halign="center" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" />
-    <widget source="Service" render="Label" position="1082,554" size="750,45" font="LCD; 34" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" halign="center" zPosition="1">
+    <widget source="Service" render="Label" position="1082,552" size="750,45" font="LCD; 38" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" halign="center" zPosition="1">
       <convert type="MovieInfo">ShortDescription</convert>
     </widget>
-    <widget source="Service" render="Label" position="1082,646" size="300,38" font="LCD; 34" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" halign="center" zPosition="1">
+    <widget source="Service" render="Label" position="1082,644" size="300,40" font="LCD; 36" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" halign="left" zPosition="1">
       <convert type="MovieInfo">RecordServiceName</convert>
     </widget>
-    <widget source="Service" render="Label" position="1403,646" size="130,38" font="LCD; 34" halign="center" backgroundColor="white" transparent="1" zPosition="1">
+    <widget source="Service" render="Label" position="1401,644" size="140,40" font="LCD; 36" halign="center" backgroundColor="white" transparent="1" zPosition="1">
       <convert type="ServiceTime">Duration</convert>
       <convert type="ClockToText">AsLength</convert>
     </widget>
-    <widget source="Service" render="Label" position="1630,646" size="200,38" font="LCD; 34" halign="center" backgroundColor="goldenrod" transparent="1" zPosition="1" foregroundColor="goldenrod">
+    <widget source="Service" render="Label" position="1630,644" size="200,40" font="LCD; 36" halign="right" backgroundColor="goldenrod" transparent="1" zPosition="1" foregroundColor="goldenrod">
       <convert type="MovieInfo">FileSize</convert>
     </widget>
-    <widget source="Service" render="RunningText" position="1043,725" zPosition="1" size="829,224" font="Regular; 28" halign="center" options="movetype=running,startpoint=0,direction=top,steptime=90,repeat=10,startdelay=10000,wrap" backgroundColor="transparent" alphatest="on" transparent="1">
+    <widget source="Service" render="RunningText" position="1043,720" zPosition="1" size="829,229" font="Regular; 28" halign="center" options="movetype=running,startpoint=0,direction=top,steptime=90,repeat=10,startdelay=10000,wrap" backgroundColor="transparent" alphatest="on" transparent="1">
       <convert type="EventName">ExtendedDescription</convert>
     </widget>
-    <ePixmap name="selector" position="1043,712" size="820,10" pixmap="OpenNfrFHD/menu/selector.png" />
     <widget name="DescriptionBorder" position="center,center" size="0,0" />
     <widget name="waitingtext" position="center,center" size="0,0" />
     <widget source="Service" render="Cover" position="1713,247" size="146,208" zPosition="6" transparent="4" alphatest="blend" />
@@ -2881,23 +2889,22 @@
     <widget source="Title" render="Label" position="55,141" size="790,43" font="LCD; 35" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" halign="center" />
     <widget name="list" position="55,220" size="920,700" scrollbarMode="showOnDemand" transparent="1" />
     <widget name="freeDiskSpace" position="1157,141" size="720,43" font="LCD; 35" valign="center" halign="center" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" />
-    <widget source="Service" render="Label" position="1082,554" size="750,45" font="LCD; 34" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" halign="center" zPosition="1">
+    <widget source="Service" render="Label" position="1082,552" size="750,45" font="LCD; 38" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" halign="center" zPosition="1">
       <convert type="MovieInfo">ShortDescription</convert>
     </widget>
-    <widget source="Service" render="Label" position="1082,646" size="300,38" font="LCD; 34" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" halign="center" zPosition="1">
+    <widget source="Service" render="Label" position="1082,644" size="300,40" font="LCD; 36" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" halign="left" zPosition="1">
       <convert type="MovieInfo">RecordServiceName</convert>
     </widget>
-    <widget source="Service" render="Label" position="1403,646" size="130,38" font="LCD; 34" halign="center" backgroundColor="white" transparent="1" zPosition="1">
+    <widget source="Service" render="Label" position="1401,644" size="140,40" font="LCD; 36" halign="center" backgroundColor="white" transparent="1" zPosition="1">
       <convert type="ServiceTime">Duration</convert>
       <convert type="ClockToText">AsLength</convert>
     </widget>
-    <widget source="Service" render="Label" position="1630,646" size="200,38" font="LCD; 34" halign="center" backgroundColor="goldenrod" transparent="1" zPosition="1" foregroundColor="goldenrod">
+    <widget source="Service" render="Label" position="1630,644" size="200,40" font="LCD; 36" halign="right" backgroundColor="goldenrod" transparent="1" zPosition="1" foregroundColor="goldenrod">
       <convert type="MovieInfo">FileSize</convert>
     </widget>
-    <widget source="Service" render="RunningText" position="1043,725" zPosition="1" size="829,224" font="Regular;28" halign="center" options="movetype=running,startpoint=0,direction=top,steptime=90,repeat=10,startdelay=10000,wrap" backgroundColor="transparent" alphatest="on" transparent="1">
+    <widget source="Service" render="RunningText" position="1043,725" zPosition="1" size="829,224" font="Regular; 28" halign="center" options="movetype=running,startpoint=0,direction=top,steptime=90,repeat=10,startdelay=10000,wrap" backgroundColor="transparent" alphatest="on" transparent="1">
       <convert type="EventName">ExtendedDescription</convert>
     </widget>
-    <ePixmap name="selector" position="1043,712" size="820,10" pixmap="OpenNfrFHD/menu/selector.png" />
     <widget name="DescriptionBorder" position="center,center" size="0,0" />
     <widget name="waitingtext" position="center,center" size="0,0" />
     <widget source="Service" render="Cover" position="1713,247" size="146,208" zPosition="6" transparent="4" alphatest="blend" />
@@ -2934,7 +2941,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="background">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="background">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -2960,7 +2967,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3005,7 +3012,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3040,7 +3047,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3070,7 +3077,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3096,7 +3103,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3135,7 +3142,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3168,7 +3175,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3209,7 +3216,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3250,7 +3257,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3291,7 +3298,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3324,7 +3331,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3357,7 +3364,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3390,7 +3397,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3422,7 +3429,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3453,7 +3460,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3501,7 +3508,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3531,7 +3538,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3561,7 +3568,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3590,7 +3597,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3620,7 +3627,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3646,7 +3653,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3698,7 +3705,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3729,7 +3736,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3760,7 +3767,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3791,7 +3798,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3832,7 +3839,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3868,7 +3875,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3904,7 +3911,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3934,7 +3941,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3975,7 +3982,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -3998,7 +4005,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4031,7 +4038,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4066,7 +4073,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4101,7 +4108,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4136,7 +4143,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4171,7 +4178,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4206,7 +4213,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4241,7 +4248,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4276,7 +4283,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4311,7 +4318,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4341,7 +4348,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4381,7 +4388,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4411,7 +4418,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4445,7 +4452,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4469,7 +4476,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4499,7 +4506,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4530,7 +4537,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4558,7 +4565,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4586,7 +4593,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4617,7 +4624,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4640,7 +4647,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4670,7 +4677,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4700,7 +4707,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4773,7 +4780,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4835,7 +4842,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4869,7 +4876,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4897,7 +4904,7 @@
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
       <convert type="ServiceName">Name</convert>
     </widget>
     <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
@@ -4922,6 +4929,283 @@
     <widget source="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget source="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 30" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget source="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+  </screen>
+  <screen name="Ceparted" position="center,center" size="1920,1080" title="eParted v0.13" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <widget name="list" position="55,220" size="920,700" transparent="1" font="Regular; 28" />
+    <applet type="onLayoutFinish">
+        self["list"].instance.setItemHeight(40)
+    </applet>
+    <eLabel name="ceparted" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" text="CeParted" halign="center" />
+  </screen>
+  <screen name="AddPart" position="center,center" size="1920,1080" title="add Partition" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow_off.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue_off.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget source="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="config" position="55,220" size="920,700" scrollbarMode="showOnDemand" transparent="1" font="Regular; 30" />
+    <applet type="onLayoutFinish">
+        self["config"].instance.setItemHeight(40)
+    </applet>
+    <eLabel name="AddPart" position="74,50" size="720,45" transparent="1" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" halign="center" text="AddPart" />
+  </screen>
+  <screen name="Cpart" position="center,center" size="1920,1080" title="eParted" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <widget source="list" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="on" transparent="1">
+      <convert type="TemplatedMultiContent">
+				{"template": [
+				MultiContentEntryText(pos = (0,5), size = (100, 40), font=0, flags = RT_HALIGN_LEFT, text=0),
+				MultiContentEntryText(pos = (120,5), size = (200, 40), font=0, flags = RT_HALIGN_LEFT, text=1),
+				MultiContentEntryText(pos = (340,5), size = (200, 40), font=0, flags = RT_HALIGN_LEFT, text=2),
+				MultiContentEntryText(pos = (560,5), size = (200, 40), font=0, flags = RT_HALIGN_LEFT, text=3),
+				MultiContentEntryText(pos = (780,5), size = (160, 40), font=0, flags = RT_HALIGN_LEFT, text=4)
+				],
+				"fonts": [gFont("Regular", 30)],
+				"itemHeight": 40
+				}
+			</convert>
+    </widget>
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow_off.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <widget name="PixmapRed" position="55,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/red_off.png,OpenNfrFHD/buttons/red.png" transparent="1" alphatest="on" />
+    <widget name="LabelRed" position="77,1017" size="255,34" font="LCD;34" halign="center" valign="center" transparent="1" zPosition="1" />
+    <widget name="PixmapGreen" position="568,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/green_off.png,OpenNfrFHD/buttons/green.png" transparent="1" alphatest="on" />
+    <widget name="LabelGreen" position="590,1017" size="255,34" font="LCD;34" halign="center" valign="center" transparent="1" zPosition="1" />
+    <widget name="PixmapBlue" position="1565,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/blue_off.png,OpenNfrFHD/buttons/blue.png" transparent="1" alphatest="on" />
+    <widget name="LabelBlue" position="1587,1017" size="255,34" font="LCD;34" halign="center" valign="center" transparent="1" zPosition="1" />
+    <eLabel name="cpart" position="74,50" size="720,45" transparent="1" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" halign="center" text="CPart" />
+  </screen>
+  <screen name="Cpartexe" position="center,center" size="1920,1080" title=" " flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 34" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <widget source="list" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="on" transparent="1">
+      <convert type="TemplatedMultiContent">
+				{"template": [
+				MultiContentEntryText(pos = (40,4), size = (630, 40), font=0, flags = RT_HALIGN_LEFT, text=0),
+				MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (35,35), png=1),
+				],
+				"fonts": [gFont("Regular", 30)],
+				"itemHeight": 40
+				}
+			</convert>
+    </widget>
+    <ePixmap pixmap="OpenNfrFHD/buttons/red_off.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow_off.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue_off.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="PixmapButton" position="568,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/green.png,OpenNfrFHD/buttons/green_off.png" transparent="1" alphatest="on" />
+    <widget name="LabelButton" position="590,1017" size="255,34" font="LCD;34" halign="center" valign="center" transparent="1" zPosition="1" />
+    <eLabel name="CPartexe" position="74,50" size="720,45" transparent="1" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" halign="center" text="Cpartexe" />
+  </screen>
+  <screen name="FastScanScreen" position="center,center" size="1920,1080" title="FastScan" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <eLabel text="Cancel" position="77,1017" size="255,34" zPosition="1" font="LCD; 30" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="Scan" position="590,1017" size="255,34" zPosition="1" font="LCD; 30" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="config" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="1" font="Regular; 30" itemHeight="40" />
+    <widget name="introduction" position="55,941" size="920,30" font="Regular; 27" zPosition="1" transparent="1" foregroundColor="goldenrod" backgroundColor="goldenrod" halign="center" valign="center" />
+    <eLabel text="FastScan" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+  </screen>
+  <screen name="PositionerSetup" position="center,center" size="1920,1080" title="Positioner setup..." flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="Positioner setup..." position="74,50" size="720,45" font="LCD; 42" backgroundColor="grey" transparent="1" foregroundColor="grey" halign="center" />
+    <widget name="list" position="55,220" size="920,320" backgroundColor="background" transparent="1" font="Regular; 30" />
+    <applet type="onLayoutFinish">
+        self["list"].instance.setItemHeight(40)
+    </applet>
+    <widget name="snr_db" position="170,575" size="300,40" halign="center" valign="center" font="Regular; 30" backgroundColor="background" transparent="1" />
+    <eLabel text="SNR:" position="55,645" size="100,40" font="Regular; 30" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" />
+    <widget name="snr_bar" position="170,645" size="300,40" borderWidth="1" transparent="1" font="Regular; 30" />
+    <widget name="snr_percentage" position="481,645" size="100,40" font="Regular; 30" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" />
+    <eLabel text="BER:" position="55,710" size="100,40" font="Regular; 30" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" />
+    <widget name="ber_bar" position="170,710" size="300,40" borderWidth="1" transparent="1" font="Regular; 30" />
+    <widget name="ber_value" position="481,710" size="100,40" font="Regular; 30" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" />
+    <eLabel text="Lock:" position="55,775" size="100,40" font="Regular; 30" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" />
+    <widget name="lock_state" position="170,775" size="300,40" font="Regular; 30" backgroundColor="background" transparent="1" />
+    <eLabel text="Frequency:" position="599,645" size="200,40" font="Regular; 30" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" />
+    <widget name="frequency_value" position="803,645" size="150,40" font="Regular; 30" backgroundColor="background" transparent="1" />
+    <eLabel text="Symbolrate:" position="599,710" size="200,40" font="Regular; 30" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" />
+    <widget name="symbolrate_value" position="803,710" size="150,40" font="Regular; 30" backgroundColor="background" transparent="1" />
+    <eLabel text="FEC:" position="599,775" size="200,40" font="Regular; 30" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" />
+    <widget name="fec_value" position="803,775" size="150,40" font="Regular; 30" backgroundColor="background" transparent="1" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 30" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 30" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 30" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 29" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <ePixmap name="selector" position="51,550" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
+  </screen>
+  <screen name="CableScanStatus" position="center,center" size="1920,1080" title="Cable Scan" zPosition="1" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <widget name="frontend" pixmap="icons/scan-c.png" position="55,245" size="64,64" transparent="1" alphatest="on" />
+    <widget name="scan_state" position="125,279" zPosition="2" size="816,45" font="Regular; 30" transparent="1" />
+    <widget name="scan_progress" position="125,229" size="816,45" pixmap="OpenNfrFHD/infobar/slider2.png" borderWidth="2" borderColor="grey" />
+    <eLabel text="Cable Scan" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+  </screen>
+  <screen name="CableScanScreen" position="center,center" size="1920,1080" title="Cable Scan" zPosition="1" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <widget name="config" position="55,220" size="920,700" scrollbarMode="showOnDemand" font="Regular;30" />
+    <applet type="onLayoutFinish">
+        self["config"].instance.setItemHeight(40)
+    </applet>
+    <eLabel text="Cable Scan" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="introduction" position="55,941" size="920,30" font="Regular; 27" zPosition="1" transparent="1" foregroundColor="goldenrod" backgroundColor="goldenrod" halign="center" valign="center" />
+  </screen>
+  <screen name="UserInterfacePositioner" position="center,center" size="1920,1080" title="UserInterfacePositioner" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/Testbild1.png" />
+    <eLabel text="Set the red angles in the corner from the tv-screen" position="466,70" size="990,60" font="LCD; 44" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" halign="center" />
+    <widget name="config" position="center,380" size="563,310" font="Regular; 28" foregroundColor="white" backgroundColor="backtop" scrollbarMode="showOnDemand" transparent="1" />
+    <applet type="onLayoutFinish">
+        self["config"].instance.setItemHeight(40)
+    </applet>
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="264,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="810,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1355,1000" size="300,76" alphatest="blend" />
+    <widget source="key_red" render="Label" position="285,1020" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_green" render="Label" position="831,1020" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_yellow" render="Label" position="1376,1020" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel name="new eLabel" position="679,277" size="563,100" transparent="1" text="To save push green button" halign="center" font="Regular; 44" foregroundColor="green" backgroundColor="green" />
+    <eLabel name="new eLabel" position="679,697" size="563,100" zPosition="1" font="Regular;28" halign="center" valign="center" foregroundColor="green" backgroundColor="green" transparent="1" />/&gt;
   </screen>
   <!-- TEST -->
   <screen name="MPHelp" position="center,center" size="1920,1080" title="MPHelp" zPosition="1" flags="wfNoBorder">
@@ -5675,44 +5959,6 @@
     <ePixmap position="840,670" size="30,30" zPosition="10" pixmap="skin_default/buttons/key_ok.png" transparent="1" alphatest="blend" />
     <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
     <ePixmap position="962,431" size="128,128" zPosition="2" pixmap="skin_default/icons/setup.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="PositionerSetup" position="center,center" size="1920,1080" title="Positioner setup..." flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" zPosition="-8" size="375,214" />
-    <ePixmap position="848,596" size="350,44" pixmap="skin_default/menu/db.png" transparent="1" alphatest="blend" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="Positioner setup..." position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget name="list" position="160,98" size="500,220" itemHeight="30" backgroundColor="background" transparent="1" />
-    <widget name="snr_db" position="160,455" size="200,25" halign="center" valign="center" font="Regular;21" backgroundColor="background" transparent="1" />
-    <eLabel text="SNR:" position=" 70,490" size="80,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <widget name="snr_bar" position="160,490" size="200,25" borderWidth="1" transparent="1" />
-    <widget name="snr_percentage" position="370,490" size="80,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <eLabel text="BER:" position=" 70,525" size="80,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <widget name="ber_bar" position="160,525" size="200,25" borderWidth="1" transparent="1" />
-    <widget name="ber_value" position="370,525" size="80,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <eLabel text="Lock:" position=" 70,560" size="80,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <widget name="lock_state" position="160,560" size="200,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <eLabel text="Frequency:" position="450,490" size="150,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <widget name="frequency_value" position="600,490" size="150,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <eLabel text="Symbolrate:" position="450,525" size="150,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <widget name="symbolrate_value" position="600,525" size="150,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <eLabel text="FEC:" position="440,560" size="150,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <widget name="fec_value" position="600,560" size="150,25" font="Regular;21" backgroundColor="background" transparent="1" />
-    <ePixmap position="962,431" size="128,128" zPosition="2" pixmap="skin_default/icons/setup.png" transparent="1" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/green.png" position="360,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/yellow.png" position="650,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/blue.png" position="940,670" size="30,30" alphatest="blend" />
-    <widget name="key_red" position="105,672" size="240,24" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
-    <widget name="key_green" position="395,672" size="240,24" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
-    <widget name="key_yellow" position="685,672" size="240,24" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
-    <widget name="key_blue" render="Label" position="975,672" size="240,24" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
   </screen>
   <screen name="RdsInfoDisplay" position="center,center" size="1920,1080" zPosition="-2" backgroundColor="transparent" flags="wfNoBorder">
     <widget name="RassLogo" pixmap="skin_default/icons/rass_logo.png" position="100,585" size="50,21" />
@@ -7875,66 +8121,6 @@
     <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
     <ePixmap position="962,431" size="128,128" zPosition="2" pixmap="skin_default/icons/setup.png" transparent="1" alphatest="blend" />
   </screen>
-  <screen name="Blindscan" position="center,center" size="1920,1080" title="Blindscan" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" size="350,44" pixmap="skin_default/menu/db.png" alphatest="blend" transparent="1" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <eLabel position="70,590" size="670,2" backgroundColor="grey" />
-    <eLabel text="Blindscan" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget name="config" position="65,98" size="710,485" scrollbarMode="showOnDemand" transparent="1" />
-    <widget name="introduction" position="70,595" zPosition="1" size="670,40" font="Regular;24" foregroundColor="cyan1" backgroundColor="background" transparent="1" />
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position=" 70,670" size="30,30" alphatest="on" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="360,670" size="30,30" alphatest="on" />
-    <ePixmap pixmap="skin_default/buttons/key_blue.png" position="940,670" size="30,30" alphatest="on" />
-    <widget source="key_red" render="Label" position="105,672" size="260,25" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_green" render="Label" position="395,672" size="260,25" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_blue" render="Label" position="975,672" size="260,25" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
-    <ePixmap position="943,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-  </screen>
-  <screen name="SatBlindscanState" position="center,center" size="1920,1080" title="Satellite Blindscan" zPosition="1" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="background" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="background" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <widget source="Title" render="Label" position="65,17" size="730,43" font="Regular;35" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
-    <widget name="text" position="70,104" size="700,27" font="Regular;24" backgroundColor="background" transparent="1" />
-    <widget name="progress" position="70,153" size="700,25" font="Regular;22" backgroundColor="background" transparent="1" />
-    <eLabel position="70,185" size="700,2" backgroundColor="grey" />
-    <widget source="list" render="Listbox" position="70,195" size="700,415" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1">
-      <convert type="TemplatedMultiContent">
-			{"template": [ MultiContentEntryText(pos = (0,0),size = (730,22),flags = RT_HALIGN_LEFT, text = 0) ],
-			 "fonts": [gFont("Regular", 19)],
-				"itemHeight": 25
-			}
-		</convert>
-    </widget>
-    <eLabel position="70,145" size="700,2" backgroundColor="grey" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="70,670" size="30,30" alphatest="blend" />
-    <widget name="post_action" position="105,672" size="680,25" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="constellation" render="Canvas" position="900,330" size="256,256" correct_aspect="width" />
-    <ePixmap position="800,670" size="30,30" zPosition="10" pixmap="skin_default/buttons/key_exit.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
   <screen name="ExeManagerFile" flags="wfNoBorder" position="center,center" size="1920,1080" title="Select file to execute">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
     <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
@@ -8652,27 +8838,6 @@
     <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
     <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
     <widget name="list" position="65,98" size="715,500" font="Regular;16" transparent="1" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-  </screen>
-  <screen name="FastScanScreen" position="center,center" size="1920,1080" title="FastScan" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="380,670" size="30,30" alphatest="blend" />
-    <eLabel text="Cancel" position="105,672" zPosition="1" size="140,26" font="Regular; 22" halign="center" valign="center" backgroundColor="un9f1313" transparent="1" />
-    <eLabel text="Scan" position="419,672" zPosition="1" size="140,26" font="Regular; 22" halign="center" valign="center" backgroundColor="un1f771f" transparent="1" />
-    <widget name="config" position="65,98" size="715,300" scrollbarMode="showOnDemand" transparent="1" />
-    <widget name="introduction" position="center,center" size="0,0" />
-    <eLabel text="FastScan" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
     <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
   </screen>
   <screen name="NetworkMountsMenu" position="center,center" size="1920,1080" title="NetworkMountsMenu" flags="wfNoBorder">
@@ -9612,26 +9777,6 @@
   <screen name="Screensaver" position="center,center" size="1920,1080" flags="wfNoBorder" transparent="1">
     <eLabel position="center,center" size="128,72" backgroundColor="backtop" zPosition="0" transparent="1" />
     <widget name="picture" pixmap="/usr/share/enigma2/distro-logo.png" position="center,center" size="500,500" alphatest="on" zPosition="1" transparent="1" />
-  </screen>
-  <screen name="UserInterfacePositioner" position="center,center" size="1920,1080" title="UserInterfacePositioner" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="UserInterfacePositioner" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget name="config" position="65,97" size="720,204" foregroundColor="white" backgroundColor="backtop" scrollbarMode="showOnDemand" transparent="1" />
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="380,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_yellow.png" position="706,670" size="30,30" alphatest="blend" />
-    <widget source="key_red" render="Label" position="105,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_green" render="Label" position="419,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_yellow" render="Label" position="747,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="836,99" size="370,210" zPosition="0" alphatest="blend" transparent="1" />
   </screen>
   <screen name="PiPSetup" position="center,center" size="700,200" backgroundColor="transparent" flags="wfNoBorder">
     <widget name="text" position="center,center" size="700,200" font="Regular;23" />
