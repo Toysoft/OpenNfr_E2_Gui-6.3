@@ -5019,12 +5019,12 @@
 				}
 			</convert>
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/buttons/yellow_off.png" position="1066,1000" size="300,76" alphatest="blend" />
-    <widget name="PixmapRed" position="55,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/red_off.png,OpenNfrFHD/buttons/red.png" transparent="1" alphatest="on" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <widget name="PixmapRed" position="55,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/red.png" transparent="1" alphatest="on" />
     <widget name="LabelRed" position="77,1017" size="255,34" font="LCD;34" halign="center" valign="center" transparent="1" zPosition="1" />
-    <widget name="PixmapGreen" position="568,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/green_off.png,OpenNfrFHD/buttons/green.png" transparent="1" alphatest="on" />
+    <widget name="PixmapGreen" position="568,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/green.png" transparent="1" alphatest="on" />
     <widget name="LabelGreen" position="590,1017" size="255,34" font="LCD;34" halign="center" valign="center" transparent="1" zPosition="1" />
-    <widget name="PixmapBlue" position="1565,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/blue_off.png,OpenNfrFHD/buttons/blue.png" transparent="1" alphatest="on" />
+    <widget name="PixmapBlue" position="1565,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/blue.png" transparent="1" alphatest="on" />
     <widget name="LabelBlue" position="1587,1017" size="255,34" font="LCD;34" halign="center" valign="center" transparent="1" zPosition="1" />
     <eLabel name="cpart" position="74,50" size="720,45" transparent="1" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" halign="center" text="CPart" />
   </screen>
@@ -5058,10 +5058,10 @@
 				}
 			</convert>
     </widget>
-    <ePixmap pixmap="OpenNfrFHD/buttons/red_off.png" position="55,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfrFHD/buttons/yellow_off.png" position="1066,1000" size="300,76" alphatest="blend" />
-    <ePixmap pixmap="OpenNfrFHD/buttons/blue_off.png" position="1565,1000" size="300,76" alphatest="blend" />
-    <widget name="PixmapButton" position="568,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/green.png,OpenNfrFHD/buttons/green_off.png" transparent="1" alphatest="on" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="PixmapButton" position="568,1000" size="300,76" pixmaps="OpenNfrFHD/buttons/green.png" transparent="1" alphatest="on" />
     <widget name="LabelButton" position="590,1017" size="255,34" font="LCD;34" halign="center" valign="center" transparent="1" zPosition="1" />
     <eLabel name="CPartexe" position="74,50" size="720,45" transparent="1" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" halign="center" text="Cpartexe" />
   </screen>
