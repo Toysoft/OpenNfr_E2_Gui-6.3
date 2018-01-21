@@ -93,7 +93,7 @@ class pinflixGenreScreen(MPScreen):
 		getPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		Cats = re.findall('class="category"><a href="(.*?)".*?alt="(.*?)".*?data-original="(.*?)"', data, re.S)
+		Cats = re.findall('class="(?:category|pfx-cat)"><a href="(.*?)".*?alt="(.*?)".*?data-original="(.*?)"', data, re.S)
 		if Cats:
 			for (Url, Title, Image) in Cats:
 				Url = 'http://' + self.baseurl + Url
@@ -187,7 +187,7 @@ class pinflixSitesScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'paging">(.*?)</ul>')
-		Movies = re.findall('class="pornstar"><a href="(.*?)".*?data-original="(.*?)".*?alt="(.*?)"', data, re.S)
+		Movies = re.findall('class="(?:pfx-pornstar|pornstar)"><a href="(.*?)".*?data-original="(.*?)".*?alt="(.*?)"', data, re.S)
 		if Movies:
 			for (Url, Image, Title) in Movies:
 				Url = 'http://' + self.baseurl + Url

@@ -218,15 +218,27 @@ class hotmovsFilmScreen(MPScreen, ThumbsHelper):
 			printl('nodejs not found',self,'E')
 			self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
 			return
-		decstring = re.findall('sources\[\d\]={type:\'mp4\',file:([a-zA-Z0-9]+)\(', data, re.S)
-		decoder = re.findall('(%s=function.*?};)' % decstring[0], data, re.S)
-		if decoder:
-			video_url = re.findall('(var video_url.*?;)', data, re.S)
-			js = decoder[0] + "\n" + video_url[0] + "\n" + "vidurl = (%s(video_url));" % decstring[0] + "\n" + "return vidurl;"
-		else:
-			decoder = re.findall('(var (_0x[A-Za-z0-9]+)=.*?)var (?:m3u8|video)_url', data, re.S)
-			video_url = re.findall('(var video_url.*?;)', data, re.S)
-			js = decoder[0][0].replace('window[%s[1]]' % decoder[0][1],'%s[1]' % decoder[0][1])  + "\n" + video_url[0] + "\n" + "vidurl = (%s[1](video_url));" % decoder[0][1] + "\n" + "return vidurl;"
+		decoder = "decrypt=function(_0xf4bdx6) {"\
+			"var _0xf4bdx7 = '',"\
+			"    _0xf4bdx8 = 0;"\
+			"/[^\u0410\u0412\u0421\u0415\u041cA-Za-z0-9\.\,\~]/g ['exec'](_0xf4bdx6) && console['log']('error decoding url');"\
+			"_0xf4bdx6 = _0xf4bdx6['replace'](/[^\u0410\u0412\u0421\u0415\u041cA-Za-z0-9\.\,\~]/g, '');"\
+			"do {"\
+			"var _0xf4bdx9 = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
+			"_0xf4bdxa = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
+			"_0xf4bdxb = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
+			"_0xf4bdxc = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
+			"_0xf4bdx9 = _0xf4bdx9 << 2 | _0xf4bdxa >> 4,"\
+			"_0xf4bdxa = (_0xf4bdxa & 15) << 4 | _0xf4bdxb >> 2,"\
+			"_0xf4bdxd = (_0xf4bdxb & 3) << 6 | _0xf4bdxc,"\
+			"_0xf4bdx7 = _0xf4bdx7 + String['fromCharCode'](_0xf4bdx9);"\
+			"64 != _0xf4bdxb && (_0xf4bdx7 += String['fromCharCode'](_0xf4bdxa));"\
+			"64 != _0xf4bdxc && (_0xf4bdx7 += String['fromCharCode'](_0xf4bdxd))"\
+			"} while (_0xf4bdx8 < _0xf4bdx6['length']);;"\
+			"return unescape(_0xf4bdx7)"\
+			"};"
+		video_url = re.findall('var video_url=(.*?);', data, re.S)
+		js = decoder + "\n" + 'video_url=decrypt('+video_url[0]+');' + "return video_url;"
 		url = str(node.exec_(js))
 		self.keyLocked = False
 		Title = self['liste'].getCurrent()[0][0]

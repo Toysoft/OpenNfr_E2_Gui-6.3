@@ -150,7 +150,7 @@ class sevenGenreScreen(MPScreen):
 	def showInfos(self):
 		Name = self['liste'].getCurrent()[0][0]
 		self['name'].setText(_("Selection:") + " " + self.Name + ":" + Name)
-		
+
 	def keyOK(self):
 		if self.keyLocked:
 			return
@@ -195,7 +195,7 @@ class sevenSubGenreScreen(MPScreen, ThumbsHelper):
 		twAgentGetPage(url, agent=sevenAgent, cookieJar=sevenCookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		sevendata = json.loads(data)
+		sevendata = json.loads(data.replace('\u0096','-'))
 		for node in sevendata["entries"]:
 			url = BASE_URL + "/" + str(node["url"])
 			image = str(node["images"][0]["url"])
@@ -241,7 +241,6 @@ class sevenStreamScreen(MPScreen):
 		}, -1)
 
 		self['title'] = Label("7TV")
-		self['ContentTitle'] = Label(_("Episodes:"))
 		self['name'] = Label(_("Selection:") + " " + self.Name)
 
 		self.keyLocked = True
@@ -254,8 +253,10 @@ class sevenStreamScreen(MPScreen):
 	def loadPage(self, x=0):
 		if x == 0:
 			url = self.Link + "/ganze-folgen"
+			self['ContentTitle'].setText(_("Episodes:"))
 		else:
 			url = self.Link + "/alle-clips"
+			self['ContentTitle'].setText(_("Clips:"))
 		print url
 		twAgentGetPage(url, agent=sevenAgent, cookieJar=sevenCookies).addCallback(self.parseData, x).addErrback(self.dataError)
 
@@ -267,22 +268,58 @@ class sevenStreamScreen(MPScreen):
 				if episodes:
 					for (url, img, title) in episodes:
 						url = BASE_URL + url
+						img = img.replace('300x160','620x348')
 						self.filmliste.append((title, url, img))
 		if len(self.filmliste) == 0:
 			if x == 1:
-				self.filmliste.append((_('Currently no free episodes available!'), None, None))
+				CoverHelper(self['coverArt']).getCover(self.Image)
+				self.filmliste.append((_('Currently no episodes/clips available!'), None, None))
 				self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			else:
 				self.loadPage(1)
 		else:
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.keyLocked = False
-			CoverHelper(self['coverArt']).getCover(self.Image)
 			self.showInfos()
 
 	def showInfos(self):
+		self['handlung'].setText("")
 		Name = self['liste'].getCurrent()[0][0]
+		Link = self['liste'].getCurrent()[0][1]
+		Cover = self['liste'].getCurrent()[0][2]
 		self['name'].setText(_("Selection:") + " " + self.Name + ":" + Name)
+		CoverHelper(self['coverArt']).getCover(Cover)
+		if Link:
+			twAgentGetPage(Link, agent=sevenAgent, cookieJar=sevenCookies).addCallback(self.parseInfos).addErrback(self.dataError)
+
+	def parseInfos(self, data):
+		resources = re.findall('contentResources =\s\[(.*?}}})(?:\]|,{"tvShowTitle|,{"sourceCompany)', data, re.S)
+		if resources:
+			json_data = json.loads(resources[0])
+			descr = "\n" + str(json_data["teaser"]["description"])
+		else:
+			descr = ""
+		duration = re.findall('name="video_duration" content="(.*?)">', data, re.S)
+		date = re.findall('name="date" content="(.*?)">', data, re.S)
+		season = re.findall('property="video:series_number" content="(.*?)">', data, re.S)
+		episode = re.findall('property="video:episode_number" content="(.*?)">', data, re.S)
+
+		if duration:
+			runtime = "Laufzeit: " + duration[0] + "\n"
+		else:
+			runtime = ""
+
+		if date:
+			date = "Datum: " + date[0] + "\n"
+		else:
+			date = ""
+
+		if season and episode:
+			epi = "Staffel: " + season[0] + " Episode: " + episode[0] + "\n"
+		else:
+			epi = ""
+
+		self['handlung'].setText(date+runtime+epi+descr)
 
 	def keyOK(self):
 		exist = self['liste'].getCurrent()
@@ -306,12 +343,12 @@ class sevenStreamScreen(MPScreen):
 		json_data = json.loads(data)
 		self.salt = '01ree6eLeiwiumie7ieV8pahgeiTui3B'
 		self.source_id = 0
-		if json_data["is_protected"]==True:
-			message = self.session.open(MessageBoxExt, _("This episode can't be played it is protected with DRM."), MessageBoxExt.TYPE_INFO, timeout=5)
+		if json_data["is_protected"]:
+			message = self.session.open(MessageBoxExt, _("This episode/clip can't be played it's protected with DRM."), MessageBoxExt.TYPE_INFO, timeout=5)
 			return
 		else:
 			for stream in json_data['sources']:
-				if stream['mimetype']=='video/mp4':
+				if stream['mimetype'] == 'video/mp4':
 					if int(self.source_id) < int(stream['id']):
 						self.source_id = stream['id']
 		client_id_1 = self.salt[:2] + hashlib.sha1(''.join([str(self.video_id), self.salt, self.access_token, self.client_location, self.salt, self.client_name]).encode('utf-8')).hexdigest()

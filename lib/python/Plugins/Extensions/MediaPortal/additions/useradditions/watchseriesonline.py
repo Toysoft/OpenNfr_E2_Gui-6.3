@@ -81,7 +81,7 @@ class wsoIndex(MPScreen, SearchHelper):
 
 	def loadPage(self):
 		url = "https://watchseries-online.be/index"
-		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		parse = re.search('<div class="ddmcc"><ul><p class="sep" id="goto\_\#">((.|\s)*?)style="clear:both;"></div></div><span', data, re.S)
@@ -153,7 +153,7 @@ class wsoNewEpisodes(MPScreen):
 	def loadPage(self):
 		self.streamList = []
 		url = "https://watchseries-online.be/last-350-episodes"
-		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		newEpisodes = re.findall('href="(https://(?:watchseries-online.be|wseries.org)/episode/.*?)".*?</span>(.*?)</a></li>', data)
@@ -292,7 +292,7 @@ class wsoEpisodes(MPScreen):
 
 	def loadPage(self):
 		self.streamList = []
-		getPage(self.Url).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(self.Url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		self.watched_list = []
@@ -365,7 +365,7 @@ class wsoStreams(MPScreen):
 		self.tw_agent_hlp = TwAgentHelper()
 
 	def loadPage(self):
-		getPage(self.serieUrl).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(self.serieUrl).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		streams = re.findall('<a\starget="_blank"\srel="nofollow"\shref="(.*?)">(.*?)</a>', data, re.S)

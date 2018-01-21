@@ -189,7 +189,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018011601"))
+config.mediaportal.version = NoSave(ConfigText(default="2018011901"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.retries = ConfigSubsection()
@@ -1492,7 +1492,6 @@ class MPpluginSort(Screen):
 			self.last_plugin_genre = self["config2"].getCurrent()[0][2]
 			self.last_plugin_hits = self["config2"].getCurrent()[0][3]
 			self.last_plugin_msort = self["config2"].getCurrent()[0][4]
-			print "Select:", self.last_plugin_name, self.last_newidx
 			self.selected = True
 			self.readconfig()
 		else:
@@ -1515,8 +1514,6 @@ class MPpluginSort(Screen):
 				count_move += 1
 				config_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (name, pic, genre, hits, count_move))
 
-			print "change:", self.last_newidx+1, "with", self.now_newidx+1, "total:", len(self.config_list_select)
-
 			config_tmp.close()
 			shutil.move("/etc/enigma2/mp_pluginliste.tmp", "/etc/enigma2/mp_pluginliste")
 			self.selected = False
@@ -1526,7 +1523,6 @@ class MPpluginSort(Screen):
 		config_read = open("/etc/enigma2/mp_pluginliste","r")
 		self.config_list = []
 		self.config_list_select = []
-		print "Filter:", config.mediaportal.filter.value
 		for line in config_read.readlines():
 			ok = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', line, re.S)
 			if ok:
@@ -1631,55 +1627,45 @@ class MPWall(Screen, HelpableScreen):
 			# Erstelle Pluginliste falls keine vorhanden ist.
 			self.sort_plugins_file = "/etc/enigma2/mp_pluginliste"
 			if not fileExists(self.sort_plugins_file):
-				print "Erstelle Wall-Pluginliste."
 				open(self.sort_plugins_file,"w").close()
 
 			pluginliste_leer = os.path.getsize(self.sort_plugins_file)
 			if pluginliste_leer == 0:
-				print "1st time - Schreibe Wall-Pluginliste."
 				first_count = 0
 				read_pluginliste = open(self.sort_plugins_file,"a")
 				for name,picname,genre in self.plugin_liste:
 					read_pluginliste.write('"%s" "%s" "%s" "%s" "%s"\n' % (name, picname, genre, "0", str(first_count)))
 					first_count += 1
 				read_pluginliste.close()
-				print "Wall-Pluginliste wurde erstellt."
 
 			# Lese Pluginliste ein.
 			if fileExists(self.sort_plugins_file):
+				read_pluginliste_tmp = open(self.sort_plugins_file+".tmp","w")
+				read_pluginliste = open(self.sort_plugins_file,"r")
+				p_dupeliste = []
 
-				count_sort_plugins_file = len(open(self.sort_plugins_file).readlines())
-				count_plugin_liste = len(self.plugin_liste)
+				for rawData in read_pluginliste.readlines():
+					data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
 
-				if int(count_plugin_liste) != int(count_sort_plugins_file):
-					print "Ein Plugin wurde aktiviert oder deaktiviert.. erstelle neue pluginliste."
-
-					read_pluginliste_tmp = open(self.sort_plugins_file+".tmp","w")
-					read_pluginliste = open(self.sort_plugins_file,"r")
-					p_dupeliste = []
-
-					for rawData in read_pluginliste.readlines():
-						data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
-
-						if data:
-							(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
-							pop_count = 0
-							for pname, ppic, pgenre in self.plugin_liste:
-								if p_name not in p_dupeliste:
-									if p_name == pname:
-										read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, pgenre, p_hits, p_sort))
-										p_dupeliste.append((p_name))
-										self.plugin_liste.pop(int(pop_count))
-
-									pop_count += 1
-
-					if len(self.plugin_liste) != 0:
+					if data:
+						(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
+						pop_count = 0
 						for pname, ppic, pgenre in self.plugin_liste:
-							read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (pname, ppic, pgenre, "0", "99"))
+							if p_name not in p_dupeliste:
+								if p_name == pname:
+									read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, pgenre, p_hits, p_sort))
+									p_dupeliste.append((p_name))
+									self.plugin_liste.pop(int(pop_count))
 
-					read_pluginliste.close()
-					read_pluginliste_tmp.close()
-					shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
+								pop_count += 1
+
+				if len(self.plugin_liste) != 0:
+					for pname, ppic, pgenre in self.plugin_liste:
+						read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (pname, ppic, pgenre, "0", "99"))
+
+				read_pluginliste.close()
+				read_pluginliste_tmp.close()
+				shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
 
 				self.new_pluginliste = []
 				read_pluginliste = open(self.sort_plugins_file,"r")
@@ -1761,7 +1747,6 @@ class MPWall(Screen, HelpableScreen):
 
 			if len(self.plugin_liste_page_tmp) != 0:
 				self.counting_pages = int(round(float((len(self.plugin_liste_page_tmp)-1) / 40) + 0.5))
-				print "COUNTING PAGES:", self.counting_pages
 				pagebar_size = self.counting_pages * 26 + (self.counting_pages-1) * 4
 				start_pagebar = int(screenwidth / 2 - pagebar_size / 2)
 
@@ -2240,7 +2225,6 @@ class MPWall(Screen, HelpableScreen):
 		auswahl = self.plugin_liste[int(select_nr)-1][0]
 		icon = self.plugin_liste[int(select_nr)-1][1]
 		mp_globals.activeIcon = icon
-		print "Plugin:", auswahl
 
 		self.pornscreen = None
 		self.par1 = ""
@@ -2500,16 +2484,12 @@ class MPWall(Screen, HelpableScreen):
 			self.session.openWithCallback(self.restart, MPSetup)
 
 	def chSort(self):
-		print "Sort: %s" % config.mediaportal.sortplugins.value
-
 		if config.mediaportal.sortplugins.value == "hits":
 			config.mediaportal.sortplugins.value = "abc"
 		elif config.mediaportal.sortplugins.value == "abc":
 			config.mediaportal.sortplugins.value = "user"
 		elif config.mediaportal.sortplugins.value == "user":
 			config.mediaportal.sortplugins.value = "hits"
-
-		print "Sort changed:", config.mediaportal.sortplugins.value
 		self.restart()
 
 	def chFilter(self):
@@ -2539,15 +2519,12 @@ class MPWall(Screen, HelpableScreen):
 			self.plugin_liste = []
 			self.plugin_liste = [x for x in dump_liste2 if re.search(config.mediaportal.filter.value, x[2])]
 			if len(self.plugin_liste) == 0:
-				print "Filter ist deaktviert.. recheck..: %s" % config.mediaportal.filter.value
 				self.chFilter()
 			else:
-				print "Mediaportal restart."
 				config.mediaportal.filter.save()
 				configfile.save()
 				self.close(self.session, False, self.lastservice)
 		else:
-			print "Mediaportal restart."
 			config.mediaportal.filter.save()
 			configfile.save()
 			self.close(self.session, False, self.lastservice)
@@ -2683,55 +2660,45 @@ class MPWall2(Screen, HelpableScreen):
 			# Erstelle Pluginliste falls keine vorhanden ist.
 			self.sort_plugins_file = "/etc/enigma2/mp_pluginliste"
 			if not fileExists(self.sort_plugins_file):
-				print "Erstelle Wall-Pluginliste."
 				open(self.sort_plugins_file,"w").close()
 
 			pluginliste_leer = os.path.getsize(self.sort_plugins_file)
 			if pluginliste_leer == 0:
-				print "1st time - Schreibe Wall-Pluginliste."
 				first_count = 0
 				read_pluginliste = open(self.sort_plugins_file,"a")
 				for name,picname,genre in self.plugin_liste:
 					read_pluginliste.write('"%s" "%s" "%s" "%s" "%s"\n' % (name, picname, genre, "0", str(first_count)))
 					first_count += 1
 				read_pluginliste.close()
-				print "Wall-Pluginliste wurde erstellt."
 
 			# Lese Pluginliste ein.
 			if fileExists(self.sort_plugins_file):
+				read_pluginliste_tmp = open(self.sort_plugins_file+".tmp","w")
+				read_pluginliste = open(self.sort_plugins_file,"r")
+				p_dupeliste = []
 
-				count_sort_plugins_file = len(open(self.sort_plugins_file).readlines())
-				count_plugin_liste = len(self.plugin_liste)
+				for rawData in read_pluginliste.readlines():
+					data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
 
-				if int(count_plugin_liste) != int(count_sort_plugins_file):
-					print "Ein Plugin wurde aktiviert oder deaktiviert.. erstelle neue pluginliste."
-
-					read_pluginliste_tmp = open(self.sort_plugins_file+".tmp","w")
-					read_pluginliste = open(self.sort_plugins_file,"r")
-					p_dupeliste = []
-
-					for rawData in read_pluginliste.readlines():
-						data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
-
-						if data:
-							(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
-							pop_count = 0
-							for pname, ppic, pgenre in self.plugin_liste:
-								if p_name not in p_dupeliste:
-									if p_name == pname:
-										read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, pgenre, p_hits, p_sort))
-										p_dupeliste.append((p_name))
-										self.plugin_liste.pop(int(pop_count))
-
-									pop_count += 1
-
-					if len(self.plugin_liste) != 0:
+					if data:
+						(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
+						pop_count = 0
 						for pname, ppic, pgenre in self.plugin_liste:
-							read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (pname, ppic, pgenre, "0", "99"))
+							if p_name not in p_dupeliste:
+								if p_name == pname:
+									read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, pgenre, p_hits, p_sort))
+									p_dupeliste.append((p_name))
+									self.plugin_liste.pop(int(pop_count))
 
-					read_pluginliste.close()
-					read_pluginliste_tmp.close()
-					shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
+								pop_count += 1
+
+				if len(self.plugin_liste) != 0:
+					for pname, ppic, pgenre in self.plugin_liste:
+						read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (pname, ppic, pgenre, "0", "99"))
+
+				read_pluginliste.close()
+				read_pluginliste_tmp.close()
+				shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
 
 				self.new_pluginliste = []
 				read_pluginliste = open(self.sort_plugins_file,"r")
@@ -2931,7 +2898,6 @@ class MPWall2(Screen, HelpableScreen):
 			checkupdate(self.session).checkforupdate()
 
 		# load plugin icons
-		print "Set Filter:", config.mediaportal.filter.value
 		if config.mediaportal.filter.value == "ALL":
 			name = _("ALL")
 		elif config.mediaportal.filter.value == "Mediathek":
@@ -3104,7 +3070,6 @@ class MPWall2(Screen, HelpableScreen):
 			(p_name, p_picname, p_picpath, p_genre, p_hits, p_sort) = item[0]
 
 		mp_globals.activeIcon = p_picname
-		print "Plugin:", p_name
 
 		self.pornscreen = None
 		self.par1 = ""
@@ -3296,16 +3261,12 @@ class MPWall2(Screen, HelpableScreen):
 			self.session.openWithCallback(self.restart, MPSetup)
 
 	def chSort(self):
-		print "Sort: %s" % config.mediaportal.sortplugins.value
-
 		if config.mediaportal.sortplugins.value == "hits":
 			config.mediaportal.sortplugins.value = "abc"
 		elif config.mediaportal.sortplugins.value == "abc":
 			config.mediaportal.sortplugins.value = "user"
 		elif config.mediaportal.sortplugins.value == "user":
 			config.mediaportal.sortplugins.value = "hits"
-
-		print "Sort changed:", config.mediaportal.sortplugins.value
 		self.restart()
 
 	def chFilter(self):
@@ -3335,15 +3296,12 @@ class MPWall2(Screen, HelpableScreen):
 			self.plugin_liste = []
 			self.plugin_liste = [x for x in dump_liste2 if re.search(config.mediaportal.filter.value, x[2])]
 			if len(self.plugin_liste) == 0:
-				print "Filter ist deaktviert.. recheck..: %s" % config.mediaportal.filter.value
 				self.chFilter()
 			else:
-				print "Mediaportal restart."
 				config.mediaportal.filter.save()
 				configfile.save()
 				self.close(self.session, False, self.lastservice)
 		else:
-			print "Mediaportal restart."
 			config.mediaportal.filter.save()
 			configfile.save()
 			self.close(self.session, False, self.lastservice)
@@ -3479,55 +3437,45 @@ class MPWallVTi(Screen, HelpableScreen):
 			# Erstelle Pluginliste falls keine vorhanden ist.
 			self.sort_plugins_file = "/etc/enigma2/mp_pluginliste"
 			if not fileExists(self.sort_plugins_file):
-				print "Erstelle Wall-Pluginliste."
 				open(self.sort_plugins_file,"w").close()
 
 			pluginliste_leer = os.path.getsize(self.sort_plugins_file)
 			if pluginliste_leer == 0:
-				print "1st time - Schreibe Wall-Pluginliste."
 				first_count = 0
 				read_pluginliste = open(self.sort_plugins_file,"a")
 				for name,picname,genre in self.plugin_liste:
 					read_pluginliste.write('"%s" "%s" "%s" "%s" "%s"\n' % (name, picname, genre, "0", str(first_count)))
 					first_count += 1
 				read_pluginliste.close()
-				print "Wall-Pluginliste wurde erstellt."
 
 			# Lese Pluginliste ein.
 			if fileExists(self.sort_plugins_file):
+				read_pluginliste_tmp = open(self.sort_plugins_file+".tmp","w")
+				read_pluginliste = open(self.sort_plugins_file,"r")
+				p_dupeliste = []
 
-				count_sort_plugins_file = len(open(self.sort_plugins_file).readlines())
-				count_plugin_liste = len(self.plugin_liste)
+				for rawData in read_pluginliste.readlines():
+					data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
 
-				if int(count_plugin_liste) != int(count_sort_plugins_file):
-					print "Ein Plugin wurde aktiviert oder deaktiviert.. erstelle neue pluginliste."
-
-					read_pluginliste_tmp = open(self.sort_plugins_file+".tmp","w")
-					read_pluginliste = open(self.sort_plugins_file,"r")
-					p_dupeliste = []
-
-					for rawData in read_pluginliste.readlines():
-						data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
-
-						if data:
-							(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
-							pop_count = 0
-							for pname, ppic, pgenre in self.plugin_liste:
-								if p_name not in p_dupeliste:
-									if p_name == pname:
-										read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, pgenre, p_hits, p_sort))
-										p_dupeliste.append((p_name))
-										self.plugin_liste.pop(int(pop_count))
-
-									pop_count += 1
-
-					if len(self.plugin_liste) != 0:
+					if data:
+						(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
+						pop_count = 0
 						for pname, ppic, pgenre in self.plugin_liste:
-							read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (pname, ppic, pgenre, "0", "99"))
+							if p_name not in p_dupeliste:
+								if p_name == pname:
+									read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, pgenre, p_hits, p_sort))
+									p_dupeliste.append((p_name))
+									self.plugin_liste.pop(int(pop_count))
 
-					read_pluginliste.close()
-					read_pluginliste_tmp.close()
-					shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
+								pop_count += 1
+
+				if len(self.plugin_liste) != 0:
+					for pname, ppic, pgenre in self.plugin_liste:
+						read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (pname, ppic, pgenre, "0", "99"))
+
+				read_pluginliste.close()
+				read_pluginliste_tmp.close()
+				shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
 
 				self.new_pluginliste = []
 				read_pluginliste = open(self.sort_plugins_file,"r")
@@ -3725,7 +3673,6 @@ class MPWallVTi(Screen, HelpableScreen):
 			checkupdate(self.session).checkforupdate()
 
 		# load plugin icons
-		print "Set Filter:", config.mediaportal.filter.value
 		if config.mediaportal.filter.value == "ALL":
 			name = _("ALL")
 		elif config.mediaportal.filter.value == "Mediathek":
@@ -3899,7 +3846,6 @@ class MPWallVTi(Screen, HelpableScreen):
 			(p_name, p_picname, p_picpath, p_genre, p_hits, p_sort) = item
 
 		mp_globals.activeIcon = p_picname
-		print "Plugin:", p_name
 
 		self.pornscreen = None
 		self.par1 = ""
@@ -4082,16 +4028,12 @@ class MPWallVTi(Screen, HelpableScreen):
 			self.session.openWithCallback(self.restart, MPSetup)
 
 	def chSort(self):
-		print "Sort: %s" % config.mediaportal.sortplugins.value
-
 		if config.mediaportal.sortplugins.value == "hits":
 			config.mediaportal.sortplugins.value = "abc"
 		elif config.mediaportal.sortplugins.value == "abc":
 			config.mediaportal.sortplugins.value = "user"
 		elif config.mediaportal.sortplugins.value == "user":
 			config.mediaportal.sortplugins.value = "hits"
-
-		print "Sort changed:", config.mediaportal.sortplugins.value
 		self.restart()
 
 	def chFilter(self):
@@ -4121,15 +4063,12 @@ class MPWallVTi(Screen, HelpableScreen):
 			self.plugin_liste = []
 			self.plugin_liste = [x for x in dump_liste2 if re.search(config.mediaportal.filter.value, x[2])]
 			if len(self.plugin_liste) == 0:
-				print "Filter ist deaktviert.. recheck..: %s" % config.mediaportal.filter.value
 				self.chFilter()
 			else:
-				print "Mediaportal restart."
 				config.mediaportal.filter.save()
 				configfile.save()
 				self.close(self.session, False, self.lastservice)
 		else:
-			print "Mediaportal restart."
 			config.mediaportal.filter.save()
 			configfile.save()
 			self.close(self.session, False, self.lastservice)

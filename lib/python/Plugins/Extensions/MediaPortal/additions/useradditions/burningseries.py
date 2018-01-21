@@ -427,7 +427,7 @@ class bsEpisoden(MPScreen):
 			Staffel = "S0"+str(Staffel)
 		else:
 			Staffel = "S"+str(Staffel)
-			
+
 		data = re.search('.*?({.*})', data, re.S).group(1)
 		data = data.replace('\r\n2000\r\n', '').replace('\r\n\r\nD67\r\n', '').replace('\r\nD67\r\n', '').replace('\r\n0\r\n\r\nE94\r\n', '')
 		episoden = re.findall('german":"(.*?)","english":"(.*?)","epi":"(.*?)","watched', data, re.S)

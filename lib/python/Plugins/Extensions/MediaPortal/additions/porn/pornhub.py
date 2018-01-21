@@ -163,7 +163,7 @@ class pornhubGenreScreen(MPScreen, rnCalc):
 				phLoggedIn = True
 			else:
 				phLoggedIn = False
-			Cats = re.findall('<div\sclass="category-wrapper">.*?<a\shref="(.*?)".*?<img\ssrc="(.*?)".*?alt="(.*?)"', data, re.S)
+			Cats = re.findall('<div\sclass="category-wrapper\s{0,1}">.*?<a\shref="(.*?)".*?<img\ssrc="(.*?)".*?alt="(.*?)"', data, re.S)
 			if Cats:
 				for (Url, Image, Title) in Cats:
 					if re.match(".*\?",Url):
@@ -818,7 +818,7 @@ class pornhubChannelScreen(MPScreen, ThumbsHelper, rnCalc):
 			self.rncalc(data, self.loadPage)
 		else:
 			self.getLastPage(data, 'class="pagination3">(.*?)</div>')
-			Cats = re.findall('class="channelsWrapper.*?class="rank"><span>Rank<br/>\s{0,1}(\d+)</span>.*?href="(.*?)".*?img\salt="(.*?)"\ssrc="(.*?)".*?Videos<span>(.*?)</span>.*?data-subscribe-url="(.*?)"\sdata-unsubscribe-url="(.*?)"\sdata-subscribed="(.*?)"', data, re.S)
+			Cats = re.findall('class="channelsWrapper.*?class="rank">.*?<span>Rank<br/>\s{0,1}(\d+)</span>.*?href="(.*?)".*?img\salt="(.*?)"\ssrc="(.*?)".*?Videos<span>(.*?)</span>.*?data-subscribe-url="(.*?)"\sdata-unsubscribe-url="(.*?)"\sdata-subscribed="(.*?)"', data, re.S)
 			if Cats:
 				for Rank, Url, Title, Image, Videos, Reg, Unreg, Subscribed in Cats:
 					Url = base_url + Url + "/videos?o=da&page="

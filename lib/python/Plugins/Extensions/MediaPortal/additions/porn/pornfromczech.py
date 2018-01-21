@@ -208,11 +208,14 @@ class pornCzechFilmAuswahlScreen(MPScreen):
 		getPage(self.genreLink, agent=myagent).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		streams = re.findall('<iframe\ssrc=[\'|"](http[s]?://(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
+		streams = re.findall('<iframe.*?src=[\'|"](http[s]?://(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
 		if streams:
 			for (stream, hostername) in streams:
 				if isSupportedHoster(hostername, True):
 					hostername = hostername.replace('www.','').replace('embed.','').replace('play.','')
+					self.filmliste.append((hostername, stream))
+				if hostername == "www.strdef.world":
+					hostername = "Openload"
 					self.filmliste.append((hostername, stream))
 			# remove duplicates
 			self.filmliste = list(set(self.filmliste))
@@ -226,7 +229,32 @@ class pornCzechFilmAuswahlScreen(MPScreen):
 			return
 		url = self['liste'].getCurrent()[0][1]
 		if url:
-			get_stream_link(self.session).check_link(url, self.got_link)
+			if "strdef.world" in url:
+				url = url.replace('https','http')
+				getPage(url, headers={'Referer':'http://www.pornfromczech.com/'}, agent=myagent).addCallback(self.parseOL).addErrback(self.dataError)
+			else:
+				get_stream_link(self.session).check_link(url, self.got_link)
+
+	def parseOL(self, data):
+		try:
+			import execjs
+			node = execjs.get("Node")
+		except:
+			printl('nodejs not found',self,'E')
+			self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
+			return
+		script = re.findall('<script language="JavaScript" type="text/javascript">(.*?)</script>', data, re.S)
+		if script:
+			func = re.findall('function\s(.*?)\(', data, re.S)[0]
+			js = script[0].replace(func, 'decrypt').replace('document.write', 'video_url=') + "return video_url;"
+			data = str(node.exec_(js))
+			script = re.findall('<script language="JavaScript" type="text/javascript">(.*?)</script>', data, re.S)
+			if script:
+				func = re.findall('function\s(.*?)\(', data, re.S)[0]
+				js = script[0].replace(func, 'decrypt').replace('document.write', 'video_url=') + "return video_url;"
+				data = str(node.exec_(js))
+				stream = re.findall('<iframe.*?src=[\'|"](http[s]?://.*?\/.*?)[\'|"|\&|<]', data, re.S|re.I)
+				get_stream_link(self.session).check_link(stream[0], self.got_link)
 
 	def got_link(self, stream_url):
 		title = self.genreName

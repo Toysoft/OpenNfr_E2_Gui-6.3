@@ -163,6 +163,8 @@ class faapyChannelsScreen(MPScreen, ThumbsHelper):
 		Movies = re.findall('<a\shref="(.*?/)"\stitle="(.*?)">.*?img\ssrc="(.*?)"', parse.group(1), re.S)
 		if Movies:
 			for (Url, Title, Image) in Movies:
+				if Image.startswith('//'):
+					Image = "http:" + Image
 				self.filmliste.append((decodeHtml(Title), Url, Image))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('Parsing error!'), None))
@@ -237,6 +239,8 @@ class faapyFilmScreen(MPScreen, ThumbsHelper):
 		Movies = re.findall('class="thumb".*?\s*href="(.*?)"\stitle="(.*?)".*?img\ssrc="(.*?)".*?class="icon-eye"></i>(\d+)\s*</span>', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Views) in Movies:
+				if Image.startswith('//'):
+					Image = "http:" + Image
 				self.filmliste.append((decodeHtml(Title), Url, Image, Views))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), '', None, ''))

@@ -125,8 +125,9 @@ class SRGListScreen(MPScreen, ThumbsHelper):
 				id = node["id"].encode('utf-8')
 				try:
 					image = node['Image']['ImageRepresentations']['ImageRepresentation'][0]['url'].encode('utf-8')
+					image = image.replace('/16x9','')
 				except:
-					image = ""
+					image = None
 				try:
 					handlung = node["description"].encode('utf-8')
 				except:
@@ -220,8 +221,9 @@ class SRGFilmeListeScreen(MPScreen, ThumbsHelper):
 							desc = ""
 						try:
 							image = node["Assets"]["Video"][0]["Image"]["ImageRepresentations"]["ImageRepresentation"][0]["url"].encode("utf-8")
+							image = image.replace('/16x9','')
 						except:
-							image = ""
+							image = None
 						self.filmliste.append((decodeHtml(serie), url, desc, image))
 					except:
 						pass

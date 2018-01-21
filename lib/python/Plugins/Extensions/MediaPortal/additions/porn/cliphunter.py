@@ -238,15 +238,11 @@ class cliphunterFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, '', 'maxPages="(.*?)"')
-		Movies = re.findall('class="t"\shref="(/w/\d+/(.*?))".*?class="i"\ssrc="(.*?)".*?class="tr">(.*?)</div>.*?class="vttl.*?">(.*?)</a>.*?class="info.*?quality:.(\d+\%|\?).', data, re.S)
+		Movies = re.findall('class="t"\shref="(/w/\d+/(.*?))".*?class="i"\ssrc="(.*?)".*?class="tr">(.*?)</div>.*?class="vttl.*?">(.*?)</a>', data, re.S)
 		if Movies:
-			for (Url, TitleUrl, Image, Runtime, Title, Rating) in Movies:
+			for (Url, TitleUrl, Image, Runtime, Title) in Movies:
 				Url = "http://www.cliphunter.com" + Url
-				if Rating != "?":
-					Rating = "\nRating: " + Rating
-				else:
-					Rating = ""
-				self.filmliste.append((TitleUrl.replace('_',' '), Url, Image, Runtime, Rating))
+				self.filmliste.append((TitleUrl.replace('_',' '), Url, Image, Runtime))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), '', None, ''))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -260,8 +256,7 @@ class cliphunterFilmScreen(MPScreen, ThumbsHelper):
 		url = self['liste'].getCurrent()[0][1]
 		pic = self['liste'].getCurrent()[0][2]
 		runtime = self['liste'].getCurrent()[0][3]
-		rating = self['liste'].getCurrent()[0][4]
-		self['handlung'].setText("Runtime: %s%s" % (runtime, rating))
+		self['handlung'].setText("Runtime: %s" % runtime)
 		self['name'].setText(title)
 		CoverHelper(self['coverArt']).getCover(pic)
 

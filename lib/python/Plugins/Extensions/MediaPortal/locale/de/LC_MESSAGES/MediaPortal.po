@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MediaPortal\n"
-"POT-Creation-Date: 2018-01-16 21:24+0100\n"
-"PO-Revision-Date: 2018-01-16 21:24+0100\n"
+"POT-Creation-Date: 2018-01-17 18:27+0100\n"
+"PO-Revision-Date: 2018-01-17 18:32+0100\n"
 "Last-Translator: dhwz <dhwz@gmx.net>\n"
 "Language-Team: MediaPortal Team\n"
 "Language: de_DE\n"
@@ -69,11 +69,12 @@ msgstr "Jahr:"
 #: src/additions/mediatheken/seventv.py:97
 #: src/additions/mediatheken/seventv.py:126
 #: src/additions/mediatheken/seventv.py:127
-#: src/additions/mediatheken/seventv.py:178
-#: src/additions/mediatheken/seventv.py:179
-#: src/additions/mediatheken/seventv.py:208
-#: src/additions/mediatheken/seventv.py:240
-#: src/additions/mediatheken/seventv.py:280
+#: src/additions/mediatheken/seventv.py:152
+#: src/additions/mediatheken/seventv.py:183
+#: src/additions/mediatheken/seventv.py:184
+#: src/additions/mediatheken/seventv.py:213
+#: src/additions/mediatheken/seventv.py:245
+#: src/additions/mediatheken/seventv.py:285
 #: src/additions/mediatheken/tvnow.py:66 src/additions/mediatheken/tvnow.py:94
 #: src/additions/mediatheken/tvnow.py:125
 #: src/additions/mediatheken/tvnow.py:126
@@ -94,7 +95,7 @@ msgstr "Auswahl:"
 #: src/additions/fun/germanytv.py:161 src/additions/fun/heisevideo.py:26
 #: src/additions/mediatheken/youtube.py:816
 #: src/additions/mediatheken/youtube_user.py:24 src/plugin.py:920
-#: src/plugin.py:1852 src/plugin.py:2864 src/plugin.py:3657
+#: src/plugin.py:1837 src/plugin.py:2831 src/plugin.py:3605
 #: src/resources/showAsThumb.py:244 src/resources/simplelist.py:214
 #: src/resources/simplelist.py:754 src/resources/simpleplayer.py:622
 msgid "Exit"
@@ -635,8 +636,8 @@ msgstr ""
 #: src/additions/porn/x4tube.py:200 src/additions/porn/x4tube.py:289
 #: src/additions/porn/xhamster.py:469 src/additions/porn/xhamster.py:601
 #: src/additions/porn/youporn.py:321 src/additions/porn/youporn.py:388
-#: src/plugin.py:2214 src/plugin.py:2448 src/plugin.py:2465 src/plugin.py:3236
-#: src/plugin.py:4021 src/resources/showAsThumb.py:245
+#: src/plugin.py:2199 src/plugin.py:2432 src/plugin.py:2449 src/plugin.py:3201
+#: src/plugin.py:3967 src/resources/showAsThumb.py:245
 msgid "Page"
 msgstr "Seite"
 
@@ -941,9 +942,9 @@ msgstr "Part Auswahl"
 
 #: mpgz/src/additions/useradditions/movie4k.py:220
 #: mpgz/src/additions/useradditions/sharedir.py:235 src/plugin.py:1224
-#: src/plugin.py:1236 src/plugin.py:1366 src/plugin.py:2326 src/plugin.py:2490
-#: src/plugin.py:2565 src/plugin.py:3190 src/plugin.py:3286 src/plugin.py:3361
-#: src/plugin.py:3985 src/plugin.py:4072 src/plugin.py:4147
+#: src/plugin.py:1236 src/plugin.py:1366 src/plugin.py:2310 src/plugin.py:2474
+#: src/plugin.py:2542 src/plugin.py:3155 src/plugin.py:3251 src/plugin.py:3319
+#: src/plugin.py:3931 src/plugin.py:4018 src/plugin.py:4086
 msgid "Please enter the correct PIN"
 msgstr "Bitte die korrekte PIN eingeben"
 
@@ -991,7 +992,7 @@ msgstr "Filter"
 #: src/additions/porn/pornhub.py:794 src/additions/porn/redtube.py:189
 #: src/additions/porn/tube8.py:176 src/additions/porn/vporn.py:267
 #: src/additions/porn/x4tube.py:201 src/additions/porn/x4tube.py:290
-#: src/plugin.py:1848 src/plugin.py:2860 src/plugin.py:3653
+#: src/plugin.py:1833 src/plugin.py:2827 src/plugin.py:3601
 msgid "Sort"
 msgstr "Sortieren"
 
@@ -1146,7 +1147,7 @@ msgid "No events found!"
 msgstr "Keine Ereignisse gefunden!"
 
 #: src/additions/fun/germanytv.py:56 src/additions/fun/germanytv.py:99
-#: src/plugin.py:922 src/plugin.py:1854 src/plugin.py:2866 src/plugin.py:3659
+#: src/plugin.py:922 src/plugin.py:1839 src/plugin.py:2833 src/plugin.py:3607
 msgid "Menu"
 msgstr "Menü"
 
@@ -1192,19 +1193,18 @@ msgstr "Genre:"
 msgid "Stations:"
 msgstr "Sender:"
 
-#: src/additions/mediatheken/seventv.py:239
+#: src/additions/mediatheken/seventv.py:244
 #: src/additions/mediatheken/tvnow.py:260
 msgid "Episodes:"
 msgstr "Episoden:"
 
-#: src/additions/mediatheken/seventv.py:268
-#: src/additions/mediatheken/tvnow.py:331
-msgid "Currently no free episodes available!"
-msgstr "Momentan gibt es keine kostenlosen Folgen!"
+#: src/additions/mediatheken/seventv.py:273
+msgid "Currently no episodes/clips available!"
+msgstr "Momentan sind keine Folgen/Clips verfügbar!"
 
-#: src/additions/mediatheken/seventv.py:305
-msgid "This episode can't be played it is protected with DRM."
-msgstr "Diese Episode kann nicht abgespielt werden da sie DRM-geschützt ist."
+#: src/additions/mediatheken/seventv.py:310
+msgid "This episode/clip can't be played it's protected with DRM."
+msgstr "Episode/Clip kann nicht abgespielt werden da DRM-geschützt."
 
 #: src/additions/mediatheken/southpark.py:181
 #: src/additions/mediatheken/southpark.py:265
@@ -1232,6 +1232,10 @@ msgstr "Staffeln:"
 #: src/additions/mediatheken/tvnow.py:218
 msgid "Currently no seasons available!"
 msgstr "Momentan sind keine Staffeln verfügbar!"
+
+#: src/additions/mediatheken/tvnow.py:331
+msgid "Currently no free episodes available!"
+msgstr "Momentan gibt es keine kostenlosen Folgen!"
 
 #: src/additions/mediatheken/videogold_de.py:128
 #: src/additions/newsdoku/doku_to.py:145
@@ -1518,10 +1522,10 @@ msgid "News"
 msgstr "Nachrichten"
 
 #: src/additions/mediatheken/youtube.py:170 src/plugin.py:897
-#: src/plugin.py:1082 src/plugin.py:1413 src/plugin.py:1826 src/plugin.py:1946
-#: src/plugin.py:1977 src/plugin.py:2597 src/plugin.py:2838 src/plugin.py:2946
-#: src/plugin.py:2977 src/plugin.py:3393 src/plugin.py:3631 src/plugin.py:3740
-#: src/plugin.py:3771 src/plugin.py:4179
+#: src/plugin.py:1082 src/plugin.py:1413 src/plugin.py:1811 src/plugin.py:1931
+#: src/plugin.py:1962 src/plugin.py:2574 src/plugin.py:2805 src/plugin.py:2912
+#: src/plugin.py:2943 src/plugin.py:3351 src/plugin.py:3579 src/plugin.py:3687
+#: src/plugin.py:3718 src/plugin.py:4118
 msgid "Music"
 msgstr "Musik"
 
@@ -1530,10 +1534,10 @@ msgid "Gaming"
 msgstr "Gaming"
 
 #: src/additions/mediatheken/youtube.py:172 src/plugin.py:898
-#: src/plugin.py:1084 src/plugin.py:1413 src/plugin.py:1827 src/plugin.py:1948
-#: src/plugin.py:1979 src/plugin.py:2597 src/plugin.py:2839 src/plugin.py:2948
-#: src/plugin.py:2979 src/plugin.py:3393 src/plugin.py:3632 src/plugin.py:3742
-#: src/plugin.py:3773 src/plugin.py:4179
+#: src/plugin.py:1084 src/plugin.py:1413 src/plugin.py:1812 src/plugin.py:1933
+#: src/plugin.py:1964 src/plugin.py:2574 src/plugin.py:2806 src/plugin.py:2914
+#: src/plugin.py:2945 src/plugin.py:3351 src/plugin.py:3580 src/plugin.py:3689
+#: src/plugin.py:3720 src/plugin.py:4118
 msgid "Sports"
 msgstr "Sport"
 
@@ -2340,87 +2344,87 @@ msgstr "Bitte den korrekten Code eingeben"
 msgid "Enter code"
 msgstr "Code eingeben"
 
-#: src/plugin.py:894 src/plugin.py:1072 src/plugin.py:1413 src/plugin.py:1823
-#: src/plugin.py:1936 src/plugin.py:1967 src/plugin.py:2597 src/plugin.py:2835
-#: src/plugin.py:2936 src/plugin.py:2967 src/plugin.py:3393 src/plugin.py:3628
-#: src/plugin.py:3730 src/plugin.py:3761 src/plugin.py:4179
+#: src/plugin.py:894 src/plugin.py:1072 src/plugin.py:1413 src/plugin.py:1808
+#: src/plugin.py:1921 src/plugin.py:1952 src/plugin.py:2574 src/plugin.py:2802
+#: src/plugin.py:2902 src/plugin.py:2933 src/plugin.py:3351 src/plugin.py:3576
+#: src/plugin.py:3677 src/plugin.py:3708 src/plugin.py:4118
 msgid "ALL"
 msgstr "ALLE"
 
-#: src/plugin.py:895 src/plugin.py:1074 src/plugin.py:1413 src/plugin.py:1824
-#: src/plugin.py:1938 src/plugin.py:1969 src/plugin.py:2597 src/plugin.py:2836
-#: src/plugin.py:2938 src/plugin.py:2969 src/plugin.py:3393 src/plugin.py:3629
-#: src/plugin.py:3732 src/plugin.py:3763 src/plugin.py:4179
+#: src/plugin.py:895 src/plugin.py:1074 src/plugin.py:1413 src/plugin.py:1809
+#: src/plugin.py:1923 src/plugin.py:1954 src/plugin.py:2574 src/plugin.py:2803
+#: src/plugin.py:2904 src/plugin.py:2935 src/plugin.py:3351 src/plugin.py:3577
+#: src/plugin.py:3679 src/plugin.py:3710 src/plugin.py:4118
 msgid "Libraries"
 msgstr "Mediatheken"
 
-#: src/plugin.py:896 src/plugin.py:1078 src/plugin.py:1413 src/plugin.py:1825
-#: src/plugin.py:1942 src/plugin.py:1973 src/plugin.py:2597 src/plugin.py:2837
-#: src/plugin.py:2942 src/plugin.py:2973 src/plugin.py:3393 src/plugin.py:3630
-#: src/plugin.py:3736 src/plugin.py:3767 src/plugin.py:4179
+#: src/plugin.py:896 src/plugin.py:1078 src/plugin.py:1413 src/plugin.py:1810
+#: src/plugin.py:1927 src/plugin.py:1958 src/plugin.py:2574 src/plugin.py:2804
+#: src/plugin.py:2908 src/plugin.py:2939 src/plugin.py:3351 src/plugin.py:3578
+#: src/plugin.py:3683 src/plugin.py:3714 src/plugin.py:4118
 msgid "Fun"
 msgstr "Fun"
 
-#: src/plugin.py:899 src/plugin.py:1080 src/plugin.py:1413 src/plugin.py:1828
-#: src/plugin.py:1944 src/plugin.py:1975 src/plugin.py:2597 src/plugin.py:2840
-#: src/plugin.py:2944 src/plugin.py:2975 src/plugin.py:3393 src/plugin.py:3633
-#: src/plugin.py:3738 src/plugin.py:3769 src/plugin.py:4179
+#: src/plugin.py:899 src/plugin.py:1080 src/plugin.py:1413 src/plugin.py:1813
+#: src/plugin.py:1929 src/plugin.py:1960 src/plugin.py:2574 src/plugin.py:2807
+#: src/plugin.py:2910 src/plugin.py:2941 src/plugin.py:3351 src/plugin.py:3581
+#: src/plugin.py:3685 src/plugin.py:3716 src/plugin.py:4118
 msgid "News&Documentary"
 msgstr "Nachrichten&Dokus"
 
-#: src/plugin.py:900 src/plugin.py:1086 src/plugin.py:1408 src/plugin.py:1829
-#: src/plugin.py:1950 src/plugin.py:1981 src/plugin.py:2592 src/plugin.py:2841
-#: src/plugin.py:2950 src/plugin.py:2981 src/plugin.py:3388 src/plugin.py:3634
-#: src/plugin.py:3744 src/plugin.py:3775 src/plugin.py:4174
+#: src/plugin.py:900 src/plugin.py:1086 src/plugin.py:1408 src/plugin.py:1814
+#: src/plugin.py:1935 src/plugin.py:1966 src/plugin.py:2569 src/plugin.py:2808
+#: src/plugin.py:2916 src/plugin.py:2947 src/plugin.py:3346 src/plugin.py:3582
+#: src/plugin.py:3691 src/plugin.py:3722 src/plugin.py:4113
 msgid "Porn"
 msgstr "Porno"
 
-#: src/plugin.py:901 src/plugin.py:1076 src/plugin.py:1412 src/plugin.py:1830
-#: src/plugin.py:1940 src/plugin.py:1971 src/plugin.py:2596 src/plugin.py:2842
-#: src/plugin.py:2940 src/plugin.py:2971 src/plugin.py:3392 src/plugin.py:3635
-#: src/plugin.py:3734 src/plugin.py:3765 src/plugin.py:4178
+#: src/plugin.py:901 src/plugin.py:1076 src/plugin.py:1412 src/plugin.py:1815
+#: src/plugin.py:1925 src/plugin.py:1956 src/plugin.py:2573 src/plugin.py:2809
+#: src/plugin.py:2906 src/plugin.py:2937 src/plugin.py:3350 src/plugin.py:3583
+#: src/plugin.py:3681 src/plugin.py:3712 src/plugin.py:4117
 msgid "User-additions"
 msgstr "User-Erweiterungen"
 
-#: src/plugin.py:904 src/plugin.py:1833 src/plugin.py:2845 src/plugin.py:3638
+#: src/plugin.py:904 src/plugin.py:1818 src/plugin.py:2812 src/plugin.py:3586
 msgid "Change filter"
 msgstr "Filter wechseln"
 
-#: src/plugin.py:905 src/plugin.py:1836 src/plugin.py:2848 src/plugin.py:3641
+#: src/plugin.py:905 src/plugin.py:1821 src/plugin.py:2815 src/plugin.py:3589
 msgid "Open SimpleList"
 msgstr "SimpleList öffnen"
 
-#: src/plugin.py:906 src/plugin.py:1837 src/plugin.py:2849 src/plugin.py:3642
+#: src/plugin.py:906 src/plugin.py:1822 src/plugin.py:2816 src/plugin.py:3590
 msgid "Open selected Plugin"
 msgstr "Ausgewähltes Plugin öffnen"
 
-#: src/plugin.py:907 src/plugin.py:1838 src/plugin.py:2850 src/plugin.py:3643
+#: src/plugin.py:907 src/plugin.py:1823 src/plugin.py:2817 src/plugin.py:3591
 msgid "Exit MediaPortal"
 msgstr "MediaPortal beenden"
 
-#: src/plugin.py:908 src/plugin.py:1841 src/plugin.py:2853 src/plugin.py:3646
+#: src/plugin.py:908 src/plugin.py:1826 src/plugin.py:2820 src/plugin.py:3594
 msgid "MediaPortal Setup"
 msgstr "MediaPortal Setup"
 
-#: src/plugin.py:921 src/plugin.py:1853 src/plugin.py:2865 src/plugin.py:3658
+#: src/plugin.py:921 src/plugin.py:1838 src/plugin.py:2832 src/plugin.py:3606
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/plugin.py:1224 src/plugin.py:1366 src/plugin.py:2326 src/plugin.py:2565
-#: src/plugin.py:3190 src/plugin.py:3361 src/plugin.py:3985 src/plugin.py:4147
+#: src/plugin.py:1224 src/plugin.py:1366 src/plugin.py:2310 src/plugin.py:2542
+#: src/plugin.py:3155 src/plugin.py:3319 src/plugin.py:3931 src/plugin.py:4086
 msgid "Enter adult PIN"
 msgstr "Erwachsenen-PIN eingeben"
 
-#: src/plugin.py:1236 src/plugin.py:2490 src/plugin.py:3286 src/plugin.py:4072
+#: src/plugin.py:1236 src/plugin.py:2474 src/plugin.py:3251 src/plugin.py:4018
 msgid "Enter setup PIN"
 msgstr "Setup-PIN eingeben"
 
-#: src/plugin.py:1276 src/plugin.py:2233 src/plugin.py:3099 src/plugin.py:3894
+#: src/plugin.py:1276 src/plugin.py:2218 src/plugin.py:3065 src/plugin.py:3841
 msgid "No connection to the Internet available."
 msgstr "Keine Verbindung zum Internet vorhanden."
 
-#: src/plugin.py:1303 src/plugin.py:1342 src/plugin.py:2263 src/plugin.py:2302
-#: src/plugin.py:3127 src/plugin.py:3166 src/plugin.py:3922 src/plugin.py:3961
+#: src/plugin.py:1303 src/plugin.py:1342 src/plugin.py:2247 src/plugin.py:2286
+#: src/plugin.py:3092 src/plugin.py:3131 src/plugin.py:3868 src/plugin.py:3907
 #, python-format
 msgid ""
 "This Plugin has been marked as \"not working\" by the developers.\n"
@@ -2439,8 +2443,8 @@ msgstr ""
 "Falls jemand anderes bereit ist einen Fix für dieses Plugin zur Verfügung zu "
 "stellen dann nehmt bitte Kontakt mit uns auf."
 
-#: src/plugin.py:1305 src/plugin.py:1344 src/plugin.py:2265 src/plugin.py:2304
-#: src/plugin.py:3129 src/plugin.py:3168 src/plugin.py:3924 src/plugin.py:3963
+#: src/plugin.py:1305 src/plugin.py:1344 src/plugin.py:2249 src/plugin.py:2288
+#: src/plugin.py:3094 src/plugin.py:3133 src/plugin.py:3870 src/plugin.py:3909
 #, python-format
 msgid ""
 "This Plugin has been marked as \"not working\" by the developers.\n"
@@ -2453,35 +2457,35 @@ msgstr ""
 "Aktueller Entwickler-Status dieses Plugins ist:\n"
 "\"%s\""
 
-#: src/plugin.py:1414 src/plugin.py:2598 src/plugin.py:3394 src/plugin.py:4180
+#: src/plugin.py:1414 src/plugin.py:2575 src/plugin.py:3352 src/plugin.py:4119
 msgid "Select Filter"
 msgstr "Wähle Filter"
 
-#: src/plugin.py:1834 src/plugin.py:2846 src/plugin.py:3639
+#: src/plugin.py:1819 src/plugin.py:2813 src/plugin.py:3587
 msgid "Change sort order"
 msgstr "Sortierreihenfolge ändern"
 
-#: src/plugin.py:1835 src/plugin.py:2847 src/plugin.py:3640
+#: src/plugin.py:1820 src/plugin.py:2814 src/plugin.py:3588
 msgid "Manual sorting"
 msgstr "Manuelle Sortierung"
 
-#: src/plugin.py:1839 src/plugin.py:2851 src/plugin.py:3644
+#: src/plugin.py:1824 src/plugin.py:2818 src/plugin.py:3592
 msgid "Next page"
 msgstr "Nächste Seite"
 
-#: src/plugin.py:1840 src/plugin.py:2852 src/plugin.py:3645
+#: src/plugin.py:1825 src/plugin.py:2819 src/plugin.py:3593
 msgid "Previous page"
 msgstr "Vorherige Seite"
 
-#: src/plugin.py:1850 src/plugin.py:2862 src/plugin.py:3655
+#: src/plugin.py:1835 src/plugin.py:2829 src/plugin.py:3603
 msgid "CH+"
 msgstr "CH+"
 
-#: src/plugin.py:1851 src/plugin.py:2863 src/plugin.py:3656
+#: src/plugin.py:1836 src/plugin.py:2830 src/plugin.py:3604
 msgid "CH-"
 msgstr "CH-"
 
-#: src/plugin.py:1909 src/plugin.py:2907 src/plugin.py:3701
+#: src/plugin.py:1894 src/plugin.py:2874 src/plugin.py:3649
 msgid "Ordering is only possible with filter \"ALL\"."
 msgstr "Sortieren ist nur mit dem Filter \"ALLE\" möglich."
 

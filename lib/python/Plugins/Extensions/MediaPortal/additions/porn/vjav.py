@@ -176,7 +176,7 @@ class vjavFilmScreen(MPScreen, ThumbsHelper):
 			self.getLastPage(data, 'class="pagination"(.*?)</div>', '.*\s(\d+)')
 		else:
 			self.getLastPage(data, 'class="pagination"(.*?)</div>', '"page:(\d+)">Last')
-		Movies = re.findall('<div class="item.*?href="(.*?)".*?img.*?data-original="(.*?)"\s{0,1}alt="(.*?)(?:"|,).*?class="duration">(.*?)</div.*?class="added">(.*?)</div', data, re.S)
+		Movies = re.findall('<div class="item.*?href="(.*?)".*?img.*?src="(.*?)"\s{0,1}alt="(.*?)(?:"|,).*?class="duration">(.*?)</div.*?class="added">(.*?)</div', data, re.S)
 		if Movies:
 			for (Url, Image, Title, Runtime, Added) in Movies:
 				Runtime = Runtime.replace('h','').replace('m','').replace('s','')
