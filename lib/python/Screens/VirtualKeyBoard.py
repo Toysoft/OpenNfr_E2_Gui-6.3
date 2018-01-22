@@ -16,7 +16,7 @@ import skin
 class VirtualKeyBoardList(MenuList):
 	def __init__(self, list, enableWrapAround=False):
 		MenuList.__init__(self, list, enableWrapAround, eListboxPythonMultiContent)
-		font = skin.fonts.get("VirtualKeyboard", ("Regular", 28, 45))
+		font = skin.fonts.get("VirtualKeyboard", ("Regular", 30, 60))
 		self.l.setFont(0, gFont(font[0], font[1]))
 		self.l.setItemHeight(font[2])
 
@@ -281,7 +281,7 @@ class VirtualKeyBoard(Screen):
 		self.max_key=47+len(self.keys_list[4])
 
 	def virtualKeyBoardEntryComponent(self, keys):
-		w, h = skin.parameters.get("VirtualKeyboard",(45, 45))
+		w, h = skin.parameters.get("VirtualKeyboard",(68, 53))
 		key_bg_width = self.key_bg and self.key_bg.size().width() or w
 		key_images = self.shiftMode and self.keyImagesShift or self.keyImages
 		res = [keys]
@@ -307,7 +307,7 @@ class VirtualKeyBoard(Screen):
 		self.markSelectedKey()
 
 	def markSelectedKey(self):
-		w, h = skin.parameters.get("VirtualKeyboard",(45, 45))
+		w, h = skin.parameters.get("VirtualKeyboard",(68, 53))
 		if self.previousSelectedKey is not None:
 			self.list[self.previousSelectedKey /12] = self.list[self.previousSelectedKey /12][:-1]
 		width = self.key_sel.size().width()
