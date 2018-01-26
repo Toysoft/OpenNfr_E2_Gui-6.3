@@ -1,4 +1,4 @@
-from boxbranding import getBoxType, getMachineBrand, getMachineName, getBrandOEM
+from boxbranding import getBoxType, getMachineBrand, getMachineName
 from os import path as os_path, system, remove, unlink, rename, chmod, access, X_OK
 from shutil import move
 import time
@@ -31,7 +31,7 @@ from Components.ActionMap import ActionMap, NumberActionMap, HelpableActionMap
 from Tools.Directories import fileExists, resolveFilename, SCOPE_PLUGINS, SCOPE_ACTIVE_SKIN
 from Tools.LoadPixmap import LoadPixmap
 from Plugins.Plugin import PluginDescriptor
-from Plugins.Extensions.Infopanel.Softcamedit import vEditor
+from Plugins.Extensions.Infopanel.Softcamedit import vEditor, cEditor
 from Plugins.Extensions.Infopanel.nfsedit import NFS_EDIT
 from os import path, listdir
 import commands
@@ -523,13 +523,18 @@ class AdapterSetup(Screen, ConfigListScreen, HelpableScreen):
 		self.default = None
 
 		if iNetwork.isWirelessInterface(self.iface):
-			from Plugins.SystemPlugins.WirelessLan.Wlan import wpaSupplicant
-			self.ws = wpaSupplicant()
+			if iNetwork.detectWlanModule(self.iface) == 'wl':
+				from Plugins.SystemPlugins.WirelessLan.Wlan import wl
+				self.ws = wl()
+			else:
+				from Plugins.SystemPlugins.WirelessLan.Wlan import wpaSupplicant
+				self.ws = wpaSupplicant()
 			self.encryptionlist = []
 			self.encryptionlist.append(("Unencrypted", _("Unencrypted")))
 			self.encryptionlist.append(("WEP", _("WEP")))
 			self.encryptionlist.append(("WPA", _("WPA")))
-			self.encryptionlist.append(("WPA/WPA2", _("WPA or WPA2")))
+			if iNetwork.detectWlanModule(self.iface) != 'wl':
+				self.encryptionlist.append(("WPA/WPA2", _("WPA or WPA2")))
 			self.encryptionlist.append(("WPA2", _("WPA2")))
 			self.weplist = []
 			self.weplist.append("ASCII")
@@ -2244,7 +2249,9 @@ class NetworkOpenvpn(Screen):
 
 	def StartStopCallback(self, result = None, retval = None, extra_args = None):
 		openvpnfile = '0' 
- 		for file in os.listdir('/etc/openvpn'): 
+		if not os.path.exists('/etc/openvpn'):
+			os.makedirs('/etc/openvpn')
+		for file in os.listdir('/etc/openvpn'): 
  			if fnmatch.fnmatch(file, '*.conf'): 
  				print file 
  				openvpnfile = '1' 
@@ -2413,8 +2420,8 @@ class NetworkSamba(Screen):
 		self.session.open(NetworkSambaLog)
 		
 	def Sambaedit(self):
-		if path.exists("/etc/samba/smb.conf"):
-                	self.session.open(vEditor, "/etc/samba/smb.conf")
+		if path.exists("/etc/samba/smb-user.conf"):
+                	self.session.open(cEditor, "/etc/samba/smb-user.conf")
                 else:
                 	pass        	
 
