@@ -2964,9 +2964,6 @@
     </widget>
     <widget source="Title" render="Label" position="50,7" size="600,45" font="LCD; 38" transparent="1" foregroundColor="grey" backgroundColor="grey" zPosition="1" />
     <widget name="list" position="256,69" size="860,160" backgroundColor="black" scrollbarMode="showNever" zPosition="1" transparent="1" font="Regular; 30" borderWidth="0" borderColor="DarkRed" />
-    <applet type="onLayoutFinish">
-        self["list"].instance.setItemHeight(40)
-    </applet>
     <ePixmap pixmap="OpenNfrFHD/buttons/key_menu.png" position="1797,252" size="80,31" alphatest="blend" transparent="1" zPosition="4" />
     <ePixmap pixmap="OpenNfrFHD/skin_default/buttons/red.png" position="45,248" size="38,38" alphatest="blend" transparent="1" zPosition="4" />
     <widget name="key_red" position="84,244" size="150,40" zPosition="4" font="LCD; 34" halign="left" transparent="1" valign="center" noWrap="1" foregroundColor="white" backgroundColor="white" />
