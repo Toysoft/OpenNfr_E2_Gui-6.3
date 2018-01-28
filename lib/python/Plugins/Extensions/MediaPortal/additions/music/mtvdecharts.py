@@ -116,28 +116,65 @@ class MTVdeChartsSongListeScreen(MPScreen):
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
+		self.json_url = None
+		self.page = 0
 
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
+		self['name'].setText(_('Please wait...'))
 		self.keyLocked = True
-		getPage(self.genreLink).addCallback(self.loadPageData).addErrback(self.dataError)
+		if self.page > 0:
+			url = self.json_url + "/" + str(self.page)
+		else:
+			url = self.genreLink
+		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		charts = re.findall('<div\sclass="chart-position">(.*?)</div>.*?data-object-id="(.*?)">', data, re.S)
-		if charts:
-			part = re.search('pagePlaylist(.*?)trackingParams', data, re.S)
-			if part:
-				for (pos, id) in charts:
-					track = re.findall('"id":%s,"title":"(.*?)","subtitle":"(.*?)","video_type":"(.*?)","video_token":"(.*?)","riptide_image_id":(".*?"|null),' % id, part.group(1), re.S)
-					if track:
-						for (artist,title,type,token,image_id) in track:
-							image = "http://images.mtvnn.com/%s/306x172" % image_id.replace('"','')
-							title = str(pos) + ". " + artist + " - " + title
-							self.filmliste.append((decodeHtml(title).replace('\\"','"'),token,image))
+		if "MTV.DE" in self.genreName:
+			if not self.json_url:
+				jsonurl = re.findall('class="module intl_m327" data-tfstatic="true" data-tffeed="(.*?)"', data, re.S)
+				if jsonurl:
+					self.json_url = jsonurl[0]
+				self.page += 1
+				self.loadPage()
+			else:
+				json_data = json.loads(data)
+				for item in json_data["result"]["data"]["items"]:
+					if item.has_key('videoUrl'):
+						videourl = str(item["videoUrl"])
+						pos = str(item["chartPosition"]["current"])
+						title = str(item["title"])
+						try:
+							artist = str(item["artists"][0]["name"])
+						except:
+							artist = str(item["shortTitle"])
+						image = str(item["images"][0]["url"])
+
+						vidtitle = pos + ". " + artist + " - " + title
+						self.filmliste.append((vidtitle,videourl,image))
+				if "nextPageURL" in data:
+					self.page += 1
+					self.loadPage()
+				else:
+					self.ml.setList(map(self._defaultlistleft, self.filmliste))
+					self.showInfos()
+					self.keyLocked = False
+		else:
+			charts = re.findall('<div\sclass="chart-position">(.*?)</div>.*?data-object-id="(.*?)">', data, re.S)
+			if charts:
+				part = re.search('pagePlaylist(.*?)trackingParams', data, re.S)
+				if part:
+					for (pos, id) in charts:
+						track = re.findall('"id":%s,"title":"(.*?)","subtitle":"(.*?)","video_type":"(.*?)","video_token":"(.*?)","riptide_image_id":(".*?"|null),' % id, part.group(1), re.S)
+						if track:
+							for (artist,title,type,token,image_id) in track:
+								image = "http://images.mtvnn.com/%s/306x172" % image_id.replace('"','')
+								title = str(pos) + ". " + artist + " - " + title
+								self.filmliste.append((decodeHtml(title).replace('\\"','"'),token,image))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.showInfos()
-		self.keyLocked = False
+			self.keyLocked = False
 
 	def showInfos(self):
 		title = self['liste'].getCurrent()[0][0]

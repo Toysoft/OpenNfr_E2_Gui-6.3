@@ -71,10 +71,14 @@ class sevenFirstScreen(MPScreen, ThumbsHelper):
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 
-		self.onLayoutFinish.append(self.genreData)
+		self.onLayoutFinish.append(self.loadPage)
 
-	def genreData(self):
+	def loadPage(self):
 		CoverHelper(self['coverArt']).getCover(default_cover)
+		twAgentGetPage(BASE_URL, agent=sevenAgent, cookieJar=sevenCookies).addCallback(self.genreData).addErrback(self.dataError)
+
+	def genreData(self, data):
+		stations = re.findall('<li class="brandgrid-item"><a class="brandgrid-link brandgrid-[A-Za-z0-9\s]+" title="[A-Za-z0-9\s]+" href="/[A-Za-z0-9\s]+">(.*?)</a></li>', data, re.S)
 		self.senderliste.append(("ProSieben", "ProSieben", default_cover))
 		self.senderliste.append(("SAT.1", "SAT.1", default_cover))
 		self.senderliste.append(("kabel eins", "kabel%20eins", default_cover))
@@ -82,9 +86,12 @@ class sevenFirstScreen(MPScreen, ThumbsHelper):
 		self.senderliste.append(("ProSieben MAXX", "ProSieben%20MAXX", default_cover))
 		self.senderliste.append(("SAT.1 Gold", "SAT.1%20Gold",  default_cover))
 		self.senderliste.append(("kabel eins Doku", "kabel%20eins%20Doku",  default_cover))
-		self.senderliste.append(("DMAX", "DMAX", "file://%s/dmax.png" % (config.mediaportal.iconcachepath.value + "logos")))
-		self.senderliste.append(("TLC", "TLC",  "file://%s/tlc.png" % (config.mediaportal.iconcachepath.value + "logos")))
-		self.senderliste.append(("Eurosport", "Eurosport",  default_cover))
+		if "DMAX" in stations:
+			self.senderliste.append(("DMAX", "DMAX", "file://%s/dmax.png" % (config.mediaportal.iconcachepath.value + "logos")))
+		if "TLC" in stations:
+			self.senderliste.append(("TLC", "TLC",  "file://%s/tlc.png" % (config.mediaportal.iconcachepath.value + "logos")))
+		if "Eurosport" in stations:
+			self.senderliste.append(("Eurosport", "Eurosport",  default_cover))
 		self.ml.setList(map(self._defaultlistcenter, self.senderliste))
 		self.keyLocked = False
 		self.th_ThumbsQuery(self.senderliste, 0, 1, 2, None, None, 1, 1, mode=1)

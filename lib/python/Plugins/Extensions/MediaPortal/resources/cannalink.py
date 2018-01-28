@@ -2,6 +2,7 @@
 from imports import *
 from debuglog import printlog as printl
 from messageboxext import MessageBoxExt
+from Plugins.Extensions.MediaPortal.plugin import _
 import mechanize
 
 canna_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36"
@@ -20,7 +21,7 @@ class CannaLink:
 		if stream_url:
 			cb_play(sc_title, stream_url, album=sc_album, artist=sc_artist, imgurl=imgurl)
 		else:
-			cb_err('stream_url not found!')
+			cb_err(_('No URL found!'))
 
 	def getDLurl(self, url):
 		try:

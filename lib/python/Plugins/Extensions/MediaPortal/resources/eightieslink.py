@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 
 from imports import *
+from Plugins.Extensions.MediaPortal.plugin import _
 
 class EightiesLink:
 	def __init__(self, session):
@@ -44,7 +45,7 @@ class EightiesLink:
 			else:
 				self._callback(self.title, stream_url, album=self.album, artist=self.artist, imgurl=self.imgurl)
 		else:
-			self._errback('stream_url not found!')
+			self._errback(_('No URL found!'))
 
 	def finishedDownload(self, retval):
 		self.container.kill()

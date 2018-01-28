@@ -189,7 +189,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018011901"))
+config.mediaportal.version = NoSave(ConfigText(default="2018012801"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.retries = ConfigSubsection()
@@ -208,6 +208,7 @@ config.mediaportal.retries.adultpin.tries = ConfigInteger(default = 3)
 config.mediaportal.retries.adultpin.time = ConfigInteger(default = 0)
 
 config.mediaportal.showporn = ConfigYesNo(default = False)
+config.mediaportal.hideporn_startup = ConfigYesNo(default = True)
 config.mediaportal.showuseradditions = ConfigYesNo(default = False)
 config.mediaportal.pinuseradditions = ConfigYesNo(default = False)
 config.mediaportal.ena_suggestions = ConfigYesNo(default = True)
@@ -619,6 +620,7 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		self.configlist.append(getConfigListEntry(_("Adult PIN:"), config.mediaportal.adultpincode, False))
 		self.configlist.append(getConfigListEntry(_("Adult PIN Query:"), config.mediaportal.pornpin, False))
 		self.configlist.append(getConfigListEntry(_("Remember Adult PIN:"), config.mediaportal.pornpin_cache, False))
+		self.configlist.append(getConfigListEntry(_("Auto hide adult section on startup:"), config.mediaportal.hideporn_startup,False))
 		self._spacer()
 		self.configlist.append(getConfigListEntry(_("OTHER"), ))
 		self._separator()
@@ -4149,6 +4151,14 @@ def exit(session, result, lastservice):
 		elif config.mediaportal.ansicht.value == "wall_vti":
 			session.openWithCallback(exit, MPWallVTi, lastservice, config.mediaportal.filter.value)
 	else:
+		if config.mediaportal.hideporn_startup.value and config.mediaportal.showporn.value:
+			config.mediaportal.showporn.value = False
+			if config.mediaportal.filter.value == "Porn":
+				config.mediaportal.filter.value = "ALL"
+			config.mediaportal.showporn.save()
+			config.mediaportal.filter.save()
+			configfile.save()
+
 		try:
 			if mp_globals.animationfix:
 				getDesktop(0).setAnimationsEnabled(False)

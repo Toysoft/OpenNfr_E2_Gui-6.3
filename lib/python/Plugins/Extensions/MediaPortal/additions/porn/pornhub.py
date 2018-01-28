@@ -66,27 +66,10 @@ nodejs = True
 
 class rnCalc:
 	def rncalc(self, data, callback):
-		try:
-			import execjs
-			node = execjs.get("Node")
-			js = re.search('<script type="text/javascript">(?:<!--)(.*?)(?://-->)</script>', data, re.S).group(1)
-			js = js.replace("if (typeof phantom !== 'undefined') return 'phantom';", '')
-			js = js.replace("if (typeof module !== 'undefined' && module.exports) return 'node';", '')
-			js = js.replace('document.location.reload(true);', '')
-			js = js.replace('document.cookie=', 'rnkey=')
-			js = js + 'go(); return rnkey;'
-			result = node.exec_(js)
-			rnkey = result.replace('RNKEY=','')
-			printl('found new rnkey: '+rnkey,self,'A')
-			ck.update({'RNKEY':rnkey})
-			ckUrl.update({'RNKEY':rnkey})
-			callback()
-		except:
-			global nodejs
-			nodejs = False
-			printl('nodejs not found',self,'E')
-			self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
-			callback()
+		ck.clear()
+		global phLoggedIn
+		phLoggedIn = False
+		callback()
 
 class pornhubGenreScreen(MPScreen, rnCalc):
 
@@ -154,7 +137,7 @@ class pornhubGenreScreen(MPScreen, rnCalc):
 		getPage(url, agent=phAgent, cookies=ck).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		if "function leastFactor" in data and nodejs:
+		if 'class="recaptchaContent"' in data and nodejs:
 			self.rncalc(data, self.layoutFinished)
 		else:
 			self.filmliste = []
@@ -357,7 +340,7 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper, rnCalc):
 		getPage(url, agent=phAgent, cookies=ck).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if "function leastFactor" in data and nodejs:
+		if 'class="recaptchaContent"' in data and nodejs:
 			self.rncalc(data, self.loadPage)
 		else:
 			countprofile = re.findall('class="showingInfo">Showing up to (\d+) playlists.</div>', data, re.S)
@@ -401,7 +384,7 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper, rnCalc):
 		self['handlung'].setText("%s: %s" % (_("Sort order"), self.sortname) + submsg)
 
 	def showInfos2(self, data):
-		if "function leastFactor" in data and nodejs:
+		if 'class="recaptchaContent"' in data and nodejs:
 			self.rncalc(data, self.showInfos)
 		else:
 			fav = re.findall('var\salreadyAddedToFav\s=\s(\d);', data, re.S)
@@ -503,7 +486,7 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper, rnCalc):
 		self.lastpage = 1
 		if self.Name == "Pornstar Subscriptions":
 			self.sort = ''
-			self.sortname = ''
+			self.sortname = 'Recent Subscriptions'
 		else:
 			self.sort = '&orderby=recent_subscribers'
 			self.sortname = 'Recent Subscriptions'
@@ -526,7 +509,7 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper, rnCalc):
 			getPage(url, agent=phAgent, cookies=ck).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if "function leastFactor" in data and nodejs:
+		if 'class="recaptchaContent"' in data and nodejs:
 			self.rncalc(data, self.loadPage)
 		else:
 			if self.page == 1 and self.Name == "Member Subscriptions":
@@ -674,7 +657,7 @@ class pornhubPornstarScreen(MPScreen, ThumbsHelper, rnCalc):
 		getPage(url, agent=phAgent, cookies=ck).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if "function leastFactor" in data and nodejs:
+		if 'class="recaptchaContent"' in data and nodejs:
 			self.rncalc(data, self.loadPage)
 		else:
 			self.getLastPage(data, 'class="pagination3">(.*?)</div>')
@@ -703,7 +686,7 @@ class pornhubPornstarScreen(MPScreen, ThumbsHelper, rnCalc):
 			getPage(url, agent=phAgent, cookies=ck).addCallback(self.showInfos2).addErrback(self.dataError)
 
 	def showInfos2(self, data):
-		if "function leastFactor" in data and nodejs:
+		if 'class="recaptchaContent"' in data and nodejs:
 			self.rncalc(data, self.showInfos)
 		else:
 			subs = re.findall('data-subscribed="(\d)"', data, re.S)
@@ -814,7 +797,7 @@ class pornhubChannelScreen(MPScreen, ThumbsHelper, rnCalc):
 		getPage(url, agent=phAgent, cookies=ck).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if "function leastFactor" in data and nodejs:
+		if 'class="recaptchaContent"' in data and nodejs:
 			self.rncalc(data, self.loadPage)
 		else:
 			self.getLastPage(data, 'class="pagination3">(.*?)</div>')
@@ -937,6 +920,12 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 		self.favkey = ""
 		self.favhash = ""
 
+		self.infoTimer = eTimer()
+		try:
+			self.infoTimer_conn = self.infoTimer.timeout.connect(self.getInfos2)
+		except:
+			self.infoTimer.callback.append(self.getInfos2)
+
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
@@ -960,7 +949,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 
 	def genreData(self, data):
 		self.filmliste = []
-		if "function leastFactor" in data and nodejs:
+		if 'class="recaptchaContent"' in data and nodejs:
 			self.rncalc(data, self.loadPage)
 		else:
 			Movies = None
@@ -999,7 +988,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 								parse = re.search('id="lrelateRecommendedItems"(.*?)</ul>', data, re.S)
 
 			if parse:
-				Movies = re.findall('class="videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-mediumthumb="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', parse.group(1), re.S)
+				Movies = re.findall('class="(?:js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', parse.group(1), re.S)
 			if Movies:
 				for (Url, Title, Image, Runtime, Views, Added) in Movies:
 					Url = base_url + Url
@@ -1020,7 +1009,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 		parse = re.findall('feedItemSection"(.*?)</section', data, re.S)
 		if parse:
 			for each in parse:
-				Movies = re.findall('class="videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-mediumthumb="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', each, re.S)
+				Movies = re.findall('class="(?:js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', each, re.S)
 				if Movies:
 					for (Url, Title, Image, Runtime, Views, Added) in Movies:
 						Url = base_url + Url
@@ -1038,11 +1027,17 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 		self.showInfos()
 
 	def showInfos(self):
+		if self.infoTimer.isActive():
+			self.infoTimer.stop()
 		self.count = 0
 		title = self['liste'].getCurrent()[0][0]
 		pic = self['liste'].getCurrent()[0][2]
 		self['name'].setText(title)
 		CoverHelper(self['coverArt']).getCover(pic)
+		runtime = self['liste'].getCurrent()[0][3]
+		views = self['liste'].getCurrent()[0][4]
+		added = self['liste'].getCurrent()[0][5]
+		self['handlung'].setText("Runtime: %s\nViews: %s\nAdded: %s" % (runtime, views, added))
 		if phLoggedIn:
 			self.url = self['liste'].getCurrent()[0][1]
 			if self.url:
@@ -1050,11 +1045,13 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 				self['F1'].setText('')
 				self['F3'].setText('')
 				self['F4'].setText('')
-				self['handlung'].setText('')
-				getPage(self.url, agent=phAgent, cookies=ck).addCallback(self.showInfos2).addErrback(self.dataError)
+				self.infoTimer.start(5000, True)
+
+	def getInfos2(self):
+		getPage(self.url, agent=phAgent, cookies=ck).addCallback(self.showInfos2).addErrback(self.dataError)
 
 	def showInfos2(self, data):
-		if "function leastFactor" in data and nodejs:
+		if 'class="recaptchaContent"' in data and nodejs:
 			self.rncalc(data, self.showInfos)
 		else:
 			runtime = self['liste'].getCurrent()[0][3]
@@ -1181,7 +1178,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 				self.session.open(MessageBoxExt, _("Unknown error."), MessageBoxExt.TYPE_INFO)
 
 	def parseData(self, data):
-		if "function leastFactor" in data and nodejs:
+		if 'class="recaptchaContent"' in data and nodejs:
 			self.rncalc(data, self.keyOK)
 		else:
 			match = re.findall('quality":"720","videoUrl"."(.*?)"', data, re.S)

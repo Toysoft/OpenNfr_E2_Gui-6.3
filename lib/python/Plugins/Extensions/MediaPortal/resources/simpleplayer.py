@@ -130,7 +130,7 @@ class M3U8Player:
 				proxycfg = ''
 			return url, proxycfg
 
-		if '.m3u8' in url:
+		if ('.m3u8' in url) or ('m3u8-aapl' in url):
 			self._bitrate = self._getBandwidth()
 			path = config.mediaportal.storagepath.value
 			ip = "127.0.0.1" #".".join(str(x) for x in config.mediaportal.hls_proxy_ip.value)
@@ -1090,7 +1090,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		#elif self.ltype == 'zdf' and ".m3u8" in url and mp_globals.isDreamOS:
 		#	self.youtubelive = False
 		if not url:
-			self.dataError('[SP]: no URL given!')
+			printl(_('No URL found!'),self,"E")
 		elif url.startswith('#SERVICE'):
 			self._initStream(title, url, **kwargs)
 		elif url.rfind('#oklitv-stream#') > 0:
@@ -1115,7 +1115,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 				FilmOnLink(self.session).getStream(url.split('#filmon-stream#')[0]).addCallback(lambda url: self._initStream(title, url, **kwargs)).addErrback(self.dataError)
 		elif self.youtubelive:
 			self._initStream(title, url, **kwargs)
-		elif config.mediaportal.use_hls_proxy.value and not self.forceGST and '.m3u8' in url:
+		elif config.mediaportal.use_hls_proxy.value and not self.forceGST and ('.m3u8' in url or 'm3u8-aapl' in url):
 			self._getM3U8Video(title, url, **kwargs)
 		else:
 			self._initStream(title, url, **kwargs)

@@ -10,7 +10,7 @@ class CccOverviewScreen(MPScreen):
 		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
-			"0"		: self.closeAll,
+			"0"	: self.closeAll,
 			"ok"	: self.keyOK,
 			"cancel": self.keyCancel,
 			"up"    : self.keyUp,
@@ -49,7 +49,8 @@ class CccOverviewScreen(MPScreen):
 					acronym = conference.get('acronym').encode('utf-8')
 					if acronym in watcheduids:
 						recent.append((title.strip(), url, True, False, image_url, acronym))
-					alls.append((title, url, self.watchdb.hasBeenWatched(acronym), False, image_url, acronym))
+					else:
+						alls.append((title, url, self.watchdb.hasBeenWatched(acronym), False, image_url, acronym))
 		except:
 			pass
 
@@ -58,7 +59,7 @@ class CccOverviewScreen(MPScreen):
 
 		alls.sort(key=lambda t : t[0].lower())
 
-		self.filmliste = alls#recent + alls
+		self.filmliste = recent + alls
 
 		self.ml.setList(map(self._defaultlistleftmarked, self.filmliste))
 		self.keyLocked = False
@@ -133,7 +134,7 @@ class CccConferenceScreen(MPScreen):
 					description += ", Veröffentlichung: " + event.get('release_date').encode('utf-8')
 					description += ", " + str(event.get('view_count')) + " Abrufe\n"
 					if event.get('description') != None:
-						description += event.get('description').encode('utf-8')
+						description += decodeHtml(stripAllTags(event.get('description').encode('utf-8')))
 					self.filmliste.append((title.strip(), url, self.watchdb.hasBeenWatched(event.get('guid').encode('utf-8')), False, image_url, description));
 		except:
 			pass
