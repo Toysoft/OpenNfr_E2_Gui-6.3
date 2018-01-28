@@ -779,6 +779,7 @@ data/OpenNfrFHD/window/Makefile
 data/OpenNfrFHD/epg/Makefile
 data/OpenNfrFHD/skin_default/Makefile
 data/OpenNfrFHD/skin_default/buttons/Makefile
+data/OpenNfrFHD/skin_default/icons/Makefile
 data/OpenNfrFHD/extensions/Makefile
 data/OpenNfrFHD/spinner/Makefile
 include/Makefile
