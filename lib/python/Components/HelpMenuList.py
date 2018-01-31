@@ -44,11 +44,11 @@ class HelpMenuList(GUIComponent):
 					self.extendedHelp = True
 					print "extendedHelpEntry found"
 					entry.extend((
-						(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 500, 26, 0, 0, help[0]),
-						(eListboxPythonMultiContent.TYPE_TEXT, 0, 28, 500, 20, 1, 0, help[1])
+						(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 700, 40, 0, 0, help[0]),
+						(eListboxPythonMultiContent.TYPE_TEXT, 0, 28, 700, 30, 1, 0, help[1])
 					))
 				else:
-					entry.append( (eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 500, 28, 0, 0, help) )
+					entry.append( (eListboxPythonMultiContent.TYPE_TEXT, 0, 2, 700, 40, 0, 0, help) )
 					
                                 if "HotkeyActions" in entry[0]: 
                                 	helpnotused = False 
@@ -58,12 +58,12 @@ class HelpMenuList(GUIComponent):
 
 		self.l.setList(l)
 		if self.extendedHelp is True:
-			self.l.setFont(0, gFont("Regular", 24))
-			self.l.setFont(1, gFont("Regular", 18))
+			self.l.setFont(0, gFont("Regular", 28))
+			self.l.setFont(1, gFont("Regular", 22))
 			self.l.setItemHeight(50)
 		else:
-			self.l.setFont(0, gFont("Regular", 24))
-			self.l.setItemHeight(38)
+			self.l.setFont(0, gFont("Regular", 30))
+			self.l.setItemHeight(40)
 
 	def ok(self):
 		# a list entry has a "private" tuple as first entry...
