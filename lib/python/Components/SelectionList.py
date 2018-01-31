@@ -11,19 +11,19 @@ selectionoffpng = LoadPixmap(cached=True, path=resolveFilename(SCOPE_ACTIVE_SKIN
 def SelectionEntryComponent(description, value, index, selected):
 	res = [
 		(description, value, index, selected),
-		(eListboxPythonMultiContent.TYPE_TEXT, 25, 3, 800, 30, 0, RT_HALIGN_LEFT, description)
+		(eListboxPythonMultiContent.TYPE_TEXT, 25, 3, 900, 40, 0, RT_HALIGN_LEFT, description)
 	]
 	if selected:
-		res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 0, 2, 25, 24, selectiononpng))
+		res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 2, 8, 25, 24, selectiononpng))
 	else:
-		res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 0, 2, 25, 24, selectionoffpng))
+		res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 2, 8, 25, 24, selectionoffpng))
 	return res
 
 class SelectionList(MenuList):
 	def __init__(self, list = None, enableWrapAround = False):
 		MenuList.__init__(self, list or [], enableWrapAround, content = eListboxPythonMultiContent)
-		self.l.setFont(0, gFont("Regular", 20))
-		self.l.setItemHeight(30)
+		self.l.setFont(0, gFont("Regular", 28))
+		self.l.setItemHeight(40)
 
 	def addSelection(self, description, value, index, selected = True):
 		self.list.append(SelectionEntryComponent(description, value, index, selected))
