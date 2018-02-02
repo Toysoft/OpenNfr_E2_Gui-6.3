@@ -422,7 +422,7 @@ class Cpart(Screen):
 		partnr = val[PA_NR]
 		if mkpart:
 			fs = val[PA_FS]
-			com = "parted -s -a optimal %s mkpart primary %s %s%s %s%s" % (self.__devpath, fs, val[PA_START], self.__unit, val[PA_END], self.__unit)
+			com = "parted -s -a optimal %s mkpart primary %s %s%s %s%s | sleep 35 | echo -e  y" % (self.__devpath, fs, val[PA_START], self.__unit, val[PA_END], self.__unit)
 			list.append((com , _("create partition %s") % partnr, None))
 		
 		mountdev = None
@@ -437,8 +437,8 @@ class Cpart(Screen):
 			mountdev = self.__devpath + partnr
 			if val[PA_FS] == "xfs":
 				mkfs += " -f"
-
-		com = "%s %s%s" % (mkfs, self.__devpath, partnr)
+		
+		com = "%s %s%s | sleep 35 | echo -e  y" % (mkfs, self.__devpath, partnr)
 		list.append((com , _("make filesystem '%s' on partition %s (%d %s)") % (val[PA_FS], partnr, val[PA_SIZE], self.__unit), mountdev))
 		
 	def __delPart2Comlist(self, list, val):
