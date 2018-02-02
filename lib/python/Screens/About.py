@@ -97,7 +97,6 @@ class About(Screen):
 		AboutText += _("Image:\t\t%s") % about.getImageVersionString() + "\n"
 		AboutText += _("Build:\t\t%s") % getImageBuild() + "\n"		
 		AboutText += _("Kernel: \t\t%s") % about.getKernelVersionString() + "\n"
-		AboutText += _("Oe-Core:\t\t%s") % about.getEnigmaVersionString() + "\n"
 		AboutText += _("Oe-Core:\t\t%s") % getOEVersion() + "\n"
 		AboutText += _("Enigma (re)starts:\t%d\n") % config.misc.startCounter.value
 		AboutText += _("GStreamer:\t\t%s") % about.getGStreamerVersionString() + "\n"	
