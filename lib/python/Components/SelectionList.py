@@ -11,7 +11,7 @@ selectionoffpng = LoadPixmap(cached=True, path=resolveFilename(SCOPE_ACTIVE_SKIN
 def SelectionEntryComponent(description, value, index, selected):
 	res = [
 		(description, value, index, selected),
-		(eListboxPythonMultiContent.TYPE_TEXT, 25, 3, 900, 40, 0, RT_HALIGN_LEFT, description)
+		(eListboxPythonMultiContent.TYPE_TEXT, 30, 5, 900, 40, 0, RT_HALIGN_LEFT, description)
 	]
 	if selected:
 		res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 2, 8, 25, 24, selectiononpng))
