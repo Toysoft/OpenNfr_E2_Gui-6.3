@@ -1,6 +1,6 @@
 import os
 import re
-
+from enigma import eConsoleAppContainer
 class Disks():
 	ptypes = {
 	 "0": "Empty"             , "24":  "NEC DOS"        , "81":  "Minix / old Lin"     , "bf":  "Solaris",
@@ -134,18 +134,18 @@ class Disks():
 		return True
 		
 	def umountP(self, device, partition):
-		if os.system("umount /dev/%s%d" % (device, partition)) != 0:
+		if eConsoleAppContainer().execute("umount /dev/%s%d" % (device, partition)) != 0:
 			return False
 			
 		return True
 			
 	def mountP(self, device, partition, path):
-		if os.system("mount /dev/%s%d %s" % (device, partition, path)) != 0:
+		if eConsoleAppContainer().execute("mount /dev/%s%d %s" % (device, partition, path)) != 0:
 			return False
 		return True
 		
 	def mount(self, fdevice, path):
-		if os.system("mount /dev/%s %s" % (fdevice, path)) != 0:
+		if eConsoleAppContainer().execute("mount /dev/%s %s" % (fdevice, path)) != 0:
 			return False
 		return True
 		
@@ -197,7 +197,7 @@ class Disks():
 			return -2
 			
 		# we need to call mdev just to be sure all devices are populated
-		os.system("/sbin/mdev -s")
+		eConsoleAppContainer().execute("/sbin/mdev -s")
 		return 0
 		
 	# return value:
@@ -220,13 +220,13 @@ class Disks():
 				return -1
 			
 		if fstype == 0:
-			ret = os.system("/sbin/fsck /dev/%s" % fdevice)
+			ret = eConsoleAppContainer().execute("/sbin/fsck.ext4/dev/%s" % fdevice)
 		elif fstype == 1:
-			ret = os.system("/sbin/fsck /dev/%s" % fdevice)
+			ret = eConsoleAppContainer().execute("/sbin/fsck.ext3/dev/%s" % fdevice)
 		elif fstype == 2:
-			ret = os.system("/usr/bin/ntfsfix /dev/%s" % fdevice)
+			ret = eConsoleAppContainer().execute("/usr/bin/ntfsfix /dev/%s" % fdevice)
 		elif fstype == 3:
-			ret = os.system("/usr/sbin/dosfsck -a /dev/%s" % fdevice)
+			ret = eConsoleAppContainer().execute("/usr/sbin/dosfsck -a /dev/%s" % fdevice)
 		
 		if len(oldmp) > 0:
 			self.mount(fdevice, oldmp)
