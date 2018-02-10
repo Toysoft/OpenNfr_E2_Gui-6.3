@@ -1,6 +1,7 @@
 import os
 import re
-from enigma import eConsoleAppContainer
+from os import system as os_system
+
 class Disks():
 	ptypes = {
 	 "0": "Empty"             , "24":  "NEC DOS"        , "81":  "Minix / old Lin"     , "bf":  "Solaris",
@@ -134,18 +135,18 @@ class Disks():
 		return True
 		
 	def umountP(self, device, partition):
-		if eConsoleAppContainer().execute("umount /dev/%s%d" % (device, partition)) != 0:
+		if os_system("umount /dev/%s%d" % (device, partition)) != 0:
 			return False
 			
 		return True
 			
 	def mountP(self, device, partition, path):
-		if eConsoleAppContainer().execute("mount /dev/%s%d %s" % (device, partition, path)) != 0:
+		if os_system("mount /dev/%s%d %s" % (device, partition, path)) != 0:
 			return False
 		return True
 		
 	def mount(self, fdevice, path):
-		if eConsoleAppContainer().execute("mount /dev/%s %s" % (fdevice, path)) != 0:
+		if os_system("mount /dev/%s %s" % (fdevice, path)) != 0:
 			return False
 		return True
 		
@@ -197,7 +198,7 @@ class Disks():
 			return -2
 			
 		# we need to call mdev just to be sure all devices are populated
-		eConsoleAppContainer().execute("/sbin/mdev -s")
+		os_system("/sbin/mdev -s")
 		return 0
 		
 	# return value:
@@ -220,13 +221,13 @@ class Disks():
 				return -1
 			
 		if fstype == 0:
-			ret = eConsoleAppContainer().execute("/sbin/fsck.ext4/dev/%s" % fdevice)
+			ret = os_system("/sbin/fsck.ext4/dev/%s" % fdevice)
 		elif fstype == 1:
-			ret = eConsoleAppContainer().execute("/sbin/fsck.ext3/dev/%s" % fdevice)
+			ret = os_system("/sbin/fsck.ext3/dev/%s" % fdevice)
 		elif fstype == 2:
-			ret = eConsoleAppContainer().execute("/usr/bin/ntfsfix /dev/%s" % fdevice)
+			ret = os_system("/usr/bin/ntfsfix /dev/%s" % fdevice)
 		elif fstype == 3:
-			ret = eConsoleAppContainer().execute("/usr/sbin/dosfsck -a /dev/%s" % fdevice)
+			ret = os_system("/usr/sbin/dosfsck -a /dev/%s" % fdevice)
 		
 		if len(oldmp) > 0:
 			self.mount(fdevice, oldmp)
@@ -277,7 +278,7 @@ class Disks():
 				self.mount(dev, oldmp)
 			return -3
 		
-		ret = eConsoleAppContainer().execute(cmd)
+		ret = os_system(cmd)
 		
 		if len(oldmp) > 0:
 			self.mount(dev, oldmp)
