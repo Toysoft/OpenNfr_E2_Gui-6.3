@@ -277,7 +277,7 @@ class Disks():
 				self.mount(dev, oldmp)
 			return -3
 		
-		ret = os.system(cmd)
+		ret = eConsoleAppContainer().execute(cmd)
 		
 		if len(oldmp) > 0:
 			self.mount(dev, oldmp)
