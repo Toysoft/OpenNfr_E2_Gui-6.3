@@ -200,7 +200,7 @@ class AddPart(Screen, ConfigListScreen):
 			menu.append("xfs")
 		if pathExists("/sbin/mkswap"):
 			menu.append("linux-swap")
-		if pathExists("/sbin/mkfs.vfat"):
+		if pathExists("/usr/sbin/mkfs.vfat"):
 			menu.append("fat32")
 		if pathExists("/usr/sbin/mkfs.msdos"):
 			menu.append("fat16")
