@@ -1,6 +1,5 @@
 import os
 import re
-from os import system as os_system
 
 class Disks():
 	ptypes = {
@@ -135,18 +134,18 @@ class Disks():
 		return True
 		
 	def umountP(self, device, partition):
-		if os_system("umount /dev/%s%d" % (device, partition)) != 0:
+		if os.system("umount /dev/%s%d" % (device, partition)) != 0:
 			return False
 			
 		return True
 			
 	def mountP(self, device, partition, path):
-		if os_system("mount /dev/%s%d %s" % (device, partition, path)) != 0:
+		if os.system("mount /dev/%s%d %s" % (device, partition, path)) != 0:
 			return False
 		return True
 		
 	def mount(self, fdevice, path):
-		if os_system("mount /dev/%s %s" % (fdevice, path)) != 0:
+		if os.system("mount /dev/%s %s" % (fdevice, path)) != 0:
 			return False
 		return True
 		
@@ -198,7 +197,7 @@ class Disks():
 			return -2
 			
 		# we need to call mdev just to be sure all devices are populated
-		os_system("/sbin/mdev -s")
+		os.system("/sbin/mdev -s")
 		return 0
 		
 	# return value:
@@ -221,13 +220,13 @@ class Disks():
 				return -1
 			
 		if fstype == 0:
-			ret = os_system("/sbin/fsck.ext4/dev/%s" % fdevice)
+			ret = os.system("/sbin/fsck /dev/%s" % fdevice)
 		elif fstype == 1:
-			ret = os_system("/sbin/fsck.ext3/dev/%s" % fdevice)
+			ret = os.system("/sbin/fsck /dev/%s" % fdevice)
 		elif fstype == 2:
-			ret = os_system("/usr/bin/ntfsfix /dev/%s" % fdevice)
+			ret = os.system("/usr/bin/ntfsfix /dev/%s" % fdevice)
 		elif fstype == 3:
-			ret = os_system("/usr/sbin/dosfsck -a /dev/%s" % fdevice)
+			ret = os.system("/usr/sbin/dosfsck -a /dev/%s" % fdevice)
 		
 		if len(oldmp) > 0:
 			self.mount(fdevice, oldmp)
@@ -278,7 +277,7 @@ class Disks():
 				self.mount(dev, oldmp)
 			return -3
 		
-		ret = os_system(cmd)
+		ret = os.system(cmd)
 		
 		if len(oldmp) > 0:
 			self.mount(dev, oldmp)
