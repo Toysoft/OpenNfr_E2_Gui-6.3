@@ -18,7 +18,7 @@
 		<plugin type="mod" modfile="newsdoku.doku_to" confopt="showDUTO" default="True" confcat="newsdoku" gz="0" name="DOKU.to" icon="doku_to" filter="NewsDoku" screen="show_DUTO_Genre" param1="" param2=""/>
 		<plugin type="mod" modfile="newsdoku.urknall" confopt="showurknall" default="True" confcat="newsdoku" gz="0" name="Urknall, Weltall und das Leben" icon="urknall" filter="NewsDoku" screen="UrknallFilmListeScreen" param1="" param2=""/>
 		<!--fun section-->
-		<plugin type="mod" modfile="fun.heisevideo" confopt="showHeiseVideo" default="True" confcat="fun" gz="0" name="HeiseVideo" icon="heisevideo" filter="Fun" screen="HeiseTvGenreScreen" param1="" param2=""/>
+		<plugin type="mod" modfile="fun.heisevideo" confopt="showHeiseVideo" default="True" confcat="fun" gz="0" name="heise Video" icon="heisevideo" filter="Fun" screen="HeiseTvGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="fun.retrotv" confopt="showretrotv" default="True" confcat="fun" gz="0" name="retro-tv" icon="retrotv" filter="Fun" screen="retrotvFilmListeScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="fun.forplayers" confopt="show4Players" default="True" confcat="fun" gz="0" name="4Players" icon="4players" filter="Fun" screen="forPlayersGenreScreen" param1="" param2=""/>
 		<!--<plugin type="mod" modfile="fun.filmon" confopt="showFilmOn" default="True" confcat="fun" gz="0" name="FilmOn" icon="filmon" filter="Fun" screen="filmON" param1="" param2=""/>-->
@@ -42,13 +42,13 @@
 		<plugin type="mod" modfile="mediatheken.ard" confopt="showARD" default="True" confcat="mediatheken" gz="0" name="ARD Mediathek" icon="ard" filter="Mediathek" screen="ARDGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.arte" confopt="showArte" default="True" confcat="mediatheken" gz="0" name="arte Mediathek" icon="arte" filter="Mediathek" screen="arteFirstScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.atv" confopt="showatv" default="True" confcat="mediatheken" gz="0" name="ATV Mediathek" icon="atv" filter="Mediathek" screen="atvGenreScreen" param1="" param2=""/>
-		<plugin type="mod" modfile="mediatheken.br_tv" confopt="showBRTV" default="True" confcat="mediatheken" gz="0" name="BR Mediathek" icon="brtv" filter="Mediathek" screen="BRGenreScreen" param1="" param2=""/>
+		<!--<plugin type="mod" modfile="mediatheken.br_tv" confopt="showBRTV" default="True" confcat="mediatheken" gz="0" name="BR Mediathek" icon="brtv" filter="Mediathek" screen="BRGenreScreen" param1="" param2=""/>-->
 		<plugin type="mod" modfile="mediatheken.funk" confopt="showFUNK" default="True" confcat="mediatheken" gz="0" name="FUNK" icon="funk" filter="Mediathek" screen="funkGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.kindertube" confopt="showkindertube" default="True" confcat="mediatheken" gz="0" name="KinderTube" icon="kindertube" filter="Mediathek" screen="kindertubeMain" param1="" param2="" kids="1"/>
 		<plugin type="mod" modfile="mediatheken.myspass" confopt="showmyspass" default="True" confcat="mediatheken" gz="0" name="MySpass" icon="myspass" filter="Mediathek" screen="myspassGenreScreen" param1="" param2=""/>
 		<!--<plugin type="mod" modfile="mediatheken.n24" confopt="showshown24" default="True" confcat="mediatheken" gz="0" name="N24 Mediathek" icon="n24" filter="Mediathek" screen="n24GenreScreen" param1="" param2=""/>-->
 		<plugin type="mod" modfile="mediatheken.netzkino" confopt="showNetzKino" default="True" confcat="mediatheken" gz="0" name="NetzKino" icon="netzkino" filter="Mediathek" screen="netzKinoGenreScreen" param1="" param2=""/>
-		<!--<plugin type="mod" modfile="mediatheken.redbull" confopt="showRedBullTV" default="True" confcat="mediatheken" gz="0" name="Red Bull TV" icon="redbull" filter="Mediathek" screen="RBtvGenreScreen" param1="" param2=""/>-->
+		<plugin type="mod" modfile="mediatheken.redbull" confopt="showRedBullTV" default="True" confcat="mediatheken" gz="0" name="Red Bull TV" icon="redbull" filter="Mediathek/Sport" screen="RBtvGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.servustv" confopt="showServusTV" default="True" confcat="mediatheken" gz="0" name="ServusTV" icon="servustv" filter="Mediathek" screen="sTVGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.southpark" confopt="showsouthpark" default="True" confcat="mediatheken" gz="0" name="Southpark.de" icon="southpark" filter="Mediathek" screen="SouthparkGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.srg" confopt="showSRG" default="True" confcat="mediatheken" gz="0" name="SRG Play" icon="srg" filter="Mediathek" screen="SRGGenreScreen" param1="" param2=""/>

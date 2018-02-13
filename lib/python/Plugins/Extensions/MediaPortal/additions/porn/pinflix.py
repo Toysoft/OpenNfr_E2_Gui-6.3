@@ -63,7 +63,7 @@ class pinflixGenreScreen(MPScreen):
 			self.baseurl = "www.pornrox.com"
 			default_cover = "file://%s/pornrox.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -88,7 +88,6 @@ class pinflixGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "http://%s/category" % self.baseurl
 		getPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -143,7 +142,7 @@ class pinflixSitesScreen(MPScreen, ThumbsHelper):
 		self.Name = Name
 		self.portal = portal
 		self.baseurl = baseurl
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -243,7 +242,16 @@ class pinflixFilmScreen(MPScreen, ThumbsHelper):
 		self.Name = Name
 		self.portal = portal
 		self.baseurl = baseurl
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+
+		global default_cover
+		if self.portal == "Pinflix.com":
+			default_cover = "file://%s/pinflix.png" % (config.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "PornHD.com":
+			default_cover = "file://%s/pornhd.png" % (config.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "Pornrox.com":
+			default_cover = "file://%s/pornrox.png" % (config.mediaportal.iconcachepath.value + "logos")
+
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -302,7 +310,7 @@ class pinflixFilmScreen(MPScreen, ThumbsHelper):
 			self.getLastPage(data, '', 'data-last-page="(\d+)"')
 		else:
 			self.getLastPage(data, 'paging">(.*?)</ul>')
-		Movies = re.findall('class="thumb(?: videoThumb|)(?: popTrigger|)"\shref="(.*?)"><img\salt="(.*?)"\s+src="(.*?)"(\sclass="lazy"\sdata-original=".*?"|).*?class="meta transition"><time>(.*?)</time', data, re.S)
+		Movies = re.findall('class="thumb(?: videoThumb|)(?: popTrigger|)"\shref="(.*?)"><img\salt="(.*?)"\s+src="(.*?)"(\sclass="(?:pfx-|)lazy"\sdata-original=".*?"|).*?class="meta transition"><time>(.*?)</time', data, re.S)
 		if Movies:
 			for (Url, Title, Image, BackupImage, Runtime) in Movies:
 				Url = 'http://' + self.baseurl + Url

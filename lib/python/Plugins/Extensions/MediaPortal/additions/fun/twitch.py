@@ -40,13 +40,14 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from enigma import eLabel
 
+default_cover = "file://%s/twitch.png" % (config.mediaportal.iconcachepath.value + "logos")
 headers = {'Accept': 'application/vnd.twitchtv.v5+json', 'Client-ID': '6r2dhbo9ek6mm1gab2snj0navo4sgqy'}
 limit = 19
 
 class twitchGames(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -111,7 +112,7 @@ class twitchChannels(MPScreen):
 
 	def __init__(self, session, gameName):
 		self.gameName = gameName
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -205,7 +206,7 @@ class twitchStreamQuality(MPScreen):
 		self.m3u8 = str(m3u8)
 		self.channel = channel
 		self.game = game
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,

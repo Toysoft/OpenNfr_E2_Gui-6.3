@@ -113,7 +113,7 @@ class SearchHelper:
 
 class MPSetupScreen(Screen):
 
-	def __init__(self, session, parent=None, skin=None, *ret_args):
+	def __init__(self, session, parent=None, skin=None, default_cover=None, *ret_args):
 		if skin:
 			self.skin_path = mp_globals.pluginPath + mp_globals.skinsPath
 			path = "%s/%s/%s.xml" % (self.skin_path, mp_globals.currentskin, skin)
@@ -132,7 +132,8 @@ class MPScreen(Screen, HelpableScreen):
 
 	DEFAULT_LM = 0
 
-	def __init__(self, session, parent=None, skin=None, widgets=None, *ret_args):
+	def __init__(self, session, parent=None, skin=None, widgets=None, default_cover=None, *ret_args):
+		self.default_cover = default_cover
 		if skin:
 			self.skin_path = mp_globals.pluginPath + mp_globals.skinsPath
 			path = "%s/%s/%s.xml" % (self.skin_path, mp_globals.currentskin, skin)
@@ -217,6 +218,11 @@ class MPScreen(Screen, HelpableScreen):
 
 		if mp_globals.isDreamOS:
 			self.onLayoutFinish.append(self._animation)
+
+		self.onLayoutFinish.append(self.loadDefaultCover)
+
+	def loadDefaultCover(self):
+		CoverHelper(self['coverArt']).getCover(self.default_cover)
 
 	def _animation(self):
 		#try:
@@ -956,16 +962,6 @@ class MPScreen(Screen, HelpableScreen):
 		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
 		res = [entry]
 		res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, width, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2] + " - " + entry[0]))
-		return res
-##################
-
-####### heisetv
-	def heiseTvGenreListEntry(self, entry):
-		width = self['liste'].instance.size().width()
-		height = self['liste'].l.getItemSize().height()
-		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
-		res = [entry]
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, self.DEFAULT_LM, 0, width - 2 * self.DEFAULT_LM, height, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[4]))
 		return res
 ##################
 

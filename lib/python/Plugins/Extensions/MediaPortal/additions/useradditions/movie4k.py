@@ -115,6 +115,7 @@ class m4kGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
+		m4k_ck.clear()
 		self.keyLocked = True
 		thread.start_new_thread(self.get_tokens,("GetTokens",))
 		self['name'].setText(_("Please wait..."))

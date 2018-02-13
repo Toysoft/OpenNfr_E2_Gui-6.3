@@ -43,7 +43,7 @@ default_cover = "file://%s/atv.png" % (config.mediaportal.iconcachepath.value + 
 class atvGenreScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -68,7 +68,6 @@ class atvGenreScreen(MPScreen, ThumbsHelper):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.filmliste = []
 		url = "http://atv.at/mediathek"
 		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
@@ -102,7 +101,7 @@ class atvListScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -119,7 +118,6 @@ class atvListScreen(MPScreen, ThumbsHelper):
 		self['title'] = Label("ATV Mediathek")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['name'] = Label(_("Please wait..."))
-		self['Page'] = Label(_("Page:"))
 
 		self.filmliste = []
 		self.handlung = ''
@@ -141,10 +139,10 @@ class atvListScreen(MPScreen, ThumbsHelper):
 			if handlung:
 				self.handlung = handlung.group(1)
 		if parse:
-			raw = re.findall('<li class="teaser">.*?href="(.*?)".*?teaser_image_file(?:/|\%252F)(.*?jpg).*?class="title">(.*?)<', parse.group(), re.S)
+			raw = re.findall('<li class="teaser">.*?href="(.*?)".*?<img src="(.*?)".*?class="title">(.*?)<', parse.group(), re.S)
 			if raw:
 				for (Url, Image, Title) in raw:
-					Image = 'http://atv.at/static/assets/cms/media_items/teaser_image_file/%s' % Image
+					Image = Image.replace('&amp;','&')
 					self.filmliste.append((decodeHtml(Title), Url, Image))
 		nextpage = re.search('data-jsb="url=(.*?)" style=.*?Weitere Folgen', data, re.S)
 		if nextpage:
@@ -200,7 +198,7 @@ class atvPartScreen(MPScreen):
 	def __init__(self, session, Name, Linkliste):
 		self.Linkliste = Linkliste
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -213,7 +211,6 @@ class atvPartScreen(MPScreen):
 		self['title'] = Label("ATV Mediathek")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['name'] = Label(_("Please wait..."))
-
 
 		self.keyLocked = True
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)

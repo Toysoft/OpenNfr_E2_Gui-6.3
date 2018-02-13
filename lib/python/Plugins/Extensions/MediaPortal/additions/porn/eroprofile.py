@@ -44,7 +44,7 @@ default_cover = "file://%s/eroprofile.png" % (config.mediaportal.iconcachepath.v
 class eroprofileGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -64,7 +64,6 @@ class eroprofileGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.genreliste.append(("--- Search ---", ""))
 		self.genreliste.append(("Newest", "home"))
 		self.genreliste.append(("Most Popular", "popular"))
@@ -117,7 +116,7 @@ class eroprofileFilmScreen(MPScreen, ThumbsHelper):
 		self.SearchString = SearchString
 		self.ID = ID
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

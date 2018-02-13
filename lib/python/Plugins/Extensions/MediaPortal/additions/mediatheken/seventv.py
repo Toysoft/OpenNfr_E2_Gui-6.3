@@ -36,7 +36,7 @@
 #
 ###############################################################################################
 
-from Plugins.Extensions.MediaPortal.plugin import _
+from Plugins.Extensions.MediaPortal.plugin import _, grabpage, downloadPage
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
@@ -45,10 +45,41 @@ sevenAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 sevenCookies = CookieJar()
 default_cover = "file://%s/seventv.png" % (config.mediaportal.iconcachepath.value + "logos")
 
+logos = ["dmax", "tlc"]
+
+def getlogos():
+	ds = defer.DeferredSemaphore(tokens=5)
+
+	icon_url = getIconUrl()
+
+	logo_hashes = grabpage(icon_url+"logos/hashes")
+	if logo_hashes:
+		logo_data = re.findall('(.*?)\s\*(.*?\.png)', logo_hashes)
+	else:
+		logo_data = None
+
+	for logo in logos:
+		logo_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", logo)
+		url = icon_url+"logos/" + logo + ".png"
+		if not fileExists(logo_path):
+			if logo_data:
+				for a,b in logo_data:
+					if b == logo+'.png':
+						ds.run(downloadPage, url, logo_path)
+		else:
+			if logo_data:
+				for a,b in logo_data:
+					if b == logo+'.png':
+						remote_hash = a
+						local_hash = hashlib.md5(open(logo_path, 'rb').read()).hexdigest()
+						if remote_hash != local_hash:
+							ds.run(downloadPage, url, logo_path)
+
 class sevenFirstScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		getlogos()
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -74,31 +105,30 @@ class sevenFirstScreen(MPScreen, ThumbsHelper):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		twAgentGetPage(BASE_URL, agent=sevenAgent, cookieJar=sevenCookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		stations = re.findall('<li class="brandgrid-item"><a class="brandgrid-link brandgrid-[A-Za-z0-9\s]+" title="[A-Za-z0-9\s]+" href="/[A-Za-z0-9\s]+">(.*?)</a></li>', data, re.S)
-		self.senderliste.append(("ProSieben", "ProSieben", default_cover))
-		self.senderliste.append(("SAT.1", "SAT.1", default_cover))
-		self.senderliste.append(("kabel eins", "kabel%20eins", default_cover))
-		self.senderliste.append(("sixx", "sixx",  default_cover))
-		self.senderliste.append(("ProSieben MAXX", "ProSieben%20MAXX", default_cover))
-		self.senderliste.append(("SAT.1 Gold", "SAT.1%20Gold",  default_cover))
-		self.senderliste.append(("kabel eins Doku", "kabel%20eins%20Doku",  default_cover))
+		self.senderliste.append(("ProSieben", "ProSieben", "seventv"))
+		self.senderliste.append(("SAT.1", "SAT.1", "seventv"))
+		self.senderliste.append(("kabel eins", "kabel%20eins", "seventv"))
+		self.senderliste.append(("sixx", "sixx", "seventv"))
+		self.senderliste.append(("ProSieben MAXX", "ProSieben%20MAXX", "seventv"))
+		self.senderliste.append(("SAT.1 Gold", "SAT.1%20Gold", "seventv"))
+		self.senderliste.append(("kabel eins Doku", "kabel%20eins%20Doku", "seventv"))
 		if "DMAX" in stations:
-			self.senderliste.append(("DMAX", "DMAX", "file://%s/dmax.png" % (config.mediaportal.iconcachepath.value + "logos")))
+			self.senderliste.append(("DMAX", "DMAX", "dmax"))
 		if "TLC" in stations:
-			self.senderliste.append(("TLC", "TLC",  "file://%s/tlc.png" % (config.mediaportal.iconcachepath.value + "logos")))
+			self.senderliste.append(("TLC", "TLC",  "tlc"))
 		if "Eurosport" in stations:
-			self.senderliste.append(("Eurosport", "Eurosport",  default_cover))
+			self.senderliste.append(("Eurosport", "Eurosport", "seventv"))
 		self.ml.setList(map(self._defaultlistcenter, self.senderliste))
 		self.keyLocked = False
 		self.th_ThumbsQuery(self.senderliste, 0, 1, 2, None, None, 1, 1, mode=1)
 		self.showInfos()
 
 	def showInfos(self):
-		Image = self['liste'].getCurrent()[0][2]
+		Image = "file://%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", self['liste'].getCurrent()[0][2])
 		CoverHelper(self['coverArt']).getCover(Image)
 		Name = self['liste'].getCurrent()[0][0]
 		self['name'].setText(_("Selection:") + " " + Name)
@@ -108,16 +138,16 @@ class sevenFirstScreen(MPScreen, ThumbsHelper):
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		Image = self['liste'].getCurrent()[0][2]
-		self.session.open(sevenGenreScreen, Link, Name, Image)
+		global default_cover
+		default_cover = "file://%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", self['liste'].getCurrent()[0][2])
+		self.session.open(sevenGenreScreen, Link, Name)
 
 class sevenGenreScreen(MPScreen):
 
-	def __init__(self, session, Link, Name, Image):
+	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		self.Image = Image
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -141,7 +171,6 @@ class sevenGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		CoverHelper(self['coverArt']).getCover(self.Image)
 		url = BASE_URL + "/queue/format/(brand)/" + self.Link
 		twAgentGetPage(url, agent=sevenAgent, cookieJar=sevenCookies).addCallback(self.parseData).addErrback(self.dataError)
 
@@ -163,16 +192,15 @@ class sevenGenreScreen(MPScreen):
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		self.session.open(sevenSubGenreScreen, Link, Name, self.Image, self.Link)
+		self.session.open(sevenSubGenreScreen, Link, Name, self.Link)
 
 class sevenSubGenreScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name, Image, TopLink):
+	def __init__(self, session, Link, Name, TopLink):
 		self.Link = Link
 		self.Name = Name
-		self.Image = Image
 		self.TopLink = TopLink
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -235,7 +263,7 @@ class sevenStreamScreen(MPScreen):
 		self.Link = Link
 		self.Name = Name
 		self.Image = Image
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,

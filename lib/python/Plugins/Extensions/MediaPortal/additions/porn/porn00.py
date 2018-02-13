@@ -45,7 +45,7 @@ default_cover = "file://%s/porn00.png" % (config.mediaportal.iconcachepath.value
 class porn00GenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -66,7 +66,6 @@ class porn00GenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "http://www.porn00.org/"
 		twAgentGetPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -105,7 +104,7 @@ class porn00FilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -186,7 +185,7 @@ class porn00FilmAuswahlScreen(MPScreen):
 		self.genreLink = genreLink
 		self.genreName = genreName
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

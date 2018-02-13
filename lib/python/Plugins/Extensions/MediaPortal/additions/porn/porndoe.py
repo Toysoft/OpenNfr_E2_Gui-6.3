@@ -49,7 +49,7 @@ ck = {}
 class porndoeGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -75,7 +75,6 @@ class porndoeGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		ck.update({'__language':'en'})
 		url = "https://www.porndoe.com/categories"
 		getPage(url, agent=agent, cookies=ck).addCallback(self.genreData).addErrback(self.dataError)
@@ -87,7 +86,7 @@ class porndoeGenreScreen(MPScreen):
 				Url = "https://www.porndoe.com" + Url
 				if Image.startswith('//'):
 					Image = 'https:' + Image
-				self.genreliste.append((Title, Url, Image, True))
+				self.genreliste.append((Title.replace('&amp;','&'), Url, Image, True))
 			self.genreliste.sort()
 			self.genreliste.insert(0, ("Longest", "https://www.porndoe.com/videos?sort=duration-down", default_cover, False))
 			self.genreliste.insert(0, ("Most Viewed", "https://www.porndoe.com/videos?sort=views-down", default_cover, False))
@@ -127,7 +126,7 @@ class porndoeFilmScreen(MPScreen, ThumbsHelper):
 		self.Link = Link
 		self.Name = Name
 		self.Sort = Sort
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

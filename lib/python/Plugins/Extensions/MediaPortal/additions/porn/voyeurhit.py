@@ -44,7 +44,7 @@ default_cover = "file://%s/voyeurhit.png" % (config.mediaportal.iconcachepath.va
 class voyeurhitGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -70,7 +70,6 @@ class voyeurhitGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = 'http://voyeurhit.com/categories/'
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -105,7 +104,7 @@ class voyeurhitFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -148,7 +147,7 @@ class voyeurhitFilmScreen(MPScreen, ThumbsHelper):
 	def loadData(self, data):
 		self.getLastPage(data, 'lass="pagination">(.*?)</ul>')
 		parse = re.search('<div class="block-thumb">(.*?)<div class="pagination">', data, re.S)
-		videos = re.findall('<a href="(.*?)" class="thumb">.*?<span class="image"><img src="(.*?)" alt="(.*?)" onmouseover=".*?" onmouseout=".*?">.*?<span class="dur_ovimg">(.*?)</span>', parse.group(0), re.S)
+		videos = re.findall('<a href="(.*?)" class="thumb">.*?<span class="image"><img.*?src="(.*?)"\s{0,1}alt="(.*?)".*?<span class="dur_ovimg">(.*?)</span>', parse.group(0), re.S)
 		for (url,img,desc,dur) in videos:
 			self.filmliste.append((decodeHtml(desc), url, img))
 		if len(self.filmliste) == 0:
@@ -175,7 +174,7 @@ class voyeurhitFilmScreen(MPScreen, ThumbsHelper):
 		getPage(Link).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall("video_url:\s'(.*?)'", data, re.S)
+		videoPage = re.findall('video_url="(.*?)";', data, re.S)
 		if videoPage:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]

@@ -46,7 +46,7 @@ default_cover = "file://%s/nubilefilms.png" % (config.mediaportal.iconcachepath.
 class nubilefilmsGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -70,7 +70,6 @@ class nubilefilmsGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self['name'].setText(_('Please wait...'))
 		url = "http://nubilefilms.com/category/video/popular"
 		getPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
@@ -113,7 +112,7 @@ class nubilefilmsModelsScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -157,6 +156,8 @@ class nubilefilmsModelsScreen(MPScreen, ThumbsHelper):
 		Movies = re.findall('class="thumbnail-grid model.*?<img.*?src="(.*?)".*?<a\sclass="model"\shref="(.*?)">(.*?)</a>', data, re.S)
 		if Movies:
 			for (Image, Url, Title) in Movies:
+				if Image.startswith('//'):
+					Image = "http:" + Image
 				Url = "http://nubilefilms.com" + Url
 				self.filmliste.append((decodeHtml(Title), Url, Image))
 		if len(self.filmliste) == 0:
@@ -185,7 +186,7 @@ class nubilefilmsFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -229,6 +230,8 @@ class nubilefilmsFilmScreen(MPScreen, ThumbsHelper):
 		Movies = re.findall('class="thumbnail-grid videoset.*?<img.*?src="(.*?)".*?<a\sclass="title"\shref="(.*?)">(.*?)</a>.*?class="date">(.*?)</span.*?class="models">.*?Featuring:(.*?) </div>.*?class="rating">.*?</i>\s{0,1}(.*?)</span', data, re.S)
 		if Movies:
 			for (Image, Url, Title, Date, Models, Rating) in Movies:
+				if Image.startswith('//'):
+					Image = "http:" + Image
 				Url = "http://nubilefilms.com" + Url
 				models = stripAllTags(Models).replace('&nbsp;',',')
 				models = re.sub('\s+', ' ', models).strip().rstrip(',')

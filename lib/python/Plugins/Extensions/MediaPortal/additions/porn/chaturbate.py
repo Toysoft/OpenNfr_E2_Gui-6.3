@@ -47,7 +47,7 @@ default_cover = "file://%s/chaturbate.png" % (config.mediaportal.iconcachepath.v
 class chaturbateGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -72,7 +72,6 @@ class chaturbateGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		if config.mediaportal.chaturbate_filter.value == "all":
 			filter = ""
 		else:
@@ -154,7 +153,7 @@ class chaturbateFilmScreen(MPScreen, ThumbsHelper):
 			self.filter = ""
 		else:
 			self.filter = config.mediaportal.chaturbate_filter.value + "/"
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {

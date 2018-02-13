@@ -857,12 +857,12 @@ class get_stream_link:
 
 			elif re.search('vid\.gg|vidgg\.to', data, re.S):
 				data = data.replace('vid.gg','vidgg.to')
-				if re.search('vidgg\.to/embed', data, re.S):
+				if re.search('vidgg.to/embed', data, re.S):
 					link = data
 				else:
-					id = re.findall('vidgg\.to/video/(.*?)$', data)
+					id = re.findall('vidgg.to/video/(.*?)$', data)
 					if id:
-						link = "http://www.vidgg\.to/embed/?id=%s" % id[0]
+						link = "http://www.vidgg.to/embed/?id=%s" % id[0]
 				getPage(link).addCallback(self.movshare, link, "vidgg").addErrback(self.errorload)
 
 			elif re.search('openload', data, re.S):

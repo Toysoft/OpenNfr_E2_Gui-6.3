@@ -54,7 +54,7 @@ default_cover = "file://%s/vporn.png" % (config.mediaportal.iconcachepath.value 
 class vpornGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -94,7 +94,6 @@ class vpornGenreScreen(MPScreen):
 
 	def Login(self):
 		self['name'].setText(_('Please wait...'))
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		loginUrl = "https://www.vporn.com/login"
 		loginData = {'backto': "", 'password': self.password, 'sub': 1, 'username': self.username}
 		getPage(loginUrl, agent=vpagent, method='POST', postdata=urlencode(loginData), cookies=vpck, timeout=30, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.Login2).addErrback(self.dataError)
@@ -105,7 +104,6 @@ class vpornGenreScreen(MPScreen):
 		self.layoutFinished()
 
 	def layoutFinished(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.keyLocked = True
 		url = "https://www.vporn.com"
 		getPage(url, agent=vpagent, cookies=vpck, timeout=30).addCallback(self.genreData).addErrback(self.dataError)
@@ -242,7 +240,7 @@ class vpornFilmScreen(MPScreen, ThumbsHelper):
 			self.date = "month/"
 		else:
 			self.date = ""
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -350,6 +348,8 @@ class vpornFilmScreen(MPScreen, ThumbsHelper):
 
 	def getVideoPage(self, data):
 		videoPage = re.findall('flashvars.videoUrl(?:Low|Low2|Medium|Medium2|HD|HD2)\s=\s"(http.*?.mp4)"', data, re.S)
+		if not videoPage:
+			videoPage = re.findall('flashvars.downloadUrl\s=\s"(http.*?.mp4)"', data, re.S)	
 		if videoPage:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]

@@ -42,13 +42,13 @@ from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoard
 
 tcAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
 
-baseurl = "http://de.tubepornclassic.com"
+baseurl = "http://tubepornclassic.com"
 default_cover = "file://%s/tubepornclassic.png" % (config.mediaportal.iconcachepath.value + "logos")
 
 class tubepornclassicGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -70,7 +70,6 @@ class tubepornclassicGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "http://tubepornclassic.com/categories/"
 		getPage(url, agent=tcAgent, headers={'Cookie': 'language=en'}).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -111,7 +110,7 @@ class tubepornclassicFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -156,7 +155,7 @@ class tubepornclassicFilmScreen(MPScreen, ThumbsHelper):
 	def loadData(self, data):
 		data = data.replace('http://tubepornclassic.com/videos', 'http://de.tubepornclassic.com/videos')
 		self.getLastPage(data, 'class="pagination"(.*?)</div>', '.*>\s{0,80}(\d+)\s{0,80}<')
-		Movies = re.findall('class="item.*?<a\shref="(http://[a-z]{2,3}.tubepornclassic.com/videos/.*?)"\stitle="(.*?)".*?class="thumb.*?data-original="(.*?)".*?class="duration">(.*?)</div.*?class="added">(.*?)</div.*?class="views ico ico-eye">(.*?)</div', data, re.S)
+		Movies = re.findall('class="item.*?<a\shref="(https?://tubepornclassic.com/videos/.*?)"\stitle="(.*?)".*?class="thumb.*?src="(.*?)".*?class="duration">(.*?)</div.*?class="added">(.*?)</div.*?class="views ico ico-eye">(.*?)</div', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Runtime, Added, Views) in Movies:
 				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views.replace(' ',''), stripAllTags(Added)))
@@ -191,7 +190,7 @@ class tubepornclassicFilmScreen(MPScreen, ThumbsHelper):
 		getPage(Link, agent=tcAgent, headers={'Cookie': 'language=en'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall("'file':\s[\"|'](.*?)(?:&f=video.m3u8|)[\"|']", data, re.S)
+		videoPage = re.findall('video_url="(.*?)";', data, re.S)
 		if videoPage:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]

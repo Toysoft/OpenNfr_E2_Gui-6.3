@@ -189,7 +189,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018012801"))
+config.mediaportal.version = NoSave(ConfigText(default="2018020801"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.retries = ConfigSubsection()
@@ -721,14 +721,14 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			self.configlist.append((_("Show ")+x[0]+":",x[1], False))
 
 		self._spacer()
-		self.configlist.append(getConfigListEntry(_("NEWS&DOCUMENTARY"), ))
+		self.configlist.append(getConfigListEntry(_("NEWS & DOCUMENTARY"), ))
 		self._separator()
 		self.newsdoku.sort(key=lambda t : t[0].lower())
 		for x in self.newsdoku:
 			self.configlist.append((_("Show ")+x[0]+":",x[1], False))
 
 		self._spacer()
-		self.configlist.append(getConfigListEntry(_("FUN"), ))
+		self.configlist.append(getConfigListEntry(_("TECH & FUN"), ))
 		self._separator()
 		self.fun.sort(key=lambda t : t[0].lower())
 		for x in self.fun:
@@ -895,10 +895,10 @@ class MPList(Screen, HelpableScreen):
 			"info"  : self.showPorn,
 			"0": boundFunction(self.gotFilter, (_('ALL'),"all")),
 			"1": boundFunction(self.gotFilter, (_('Libraries'),"mediatheken")),
-			"2": boundFunction(self.gotFilter, (_('Fun'),"fun")),
+			"2": boundFunction(self.gotFilter, (_('Tech & Fun'),"fun")),
 			"3": boundFunction(self.gotFilter, (_('Music'),"music")),
 			"4": boundFunction(self.gotFilter, (_('Sports'),"sport")),
-			"5": boundFunction(self.gotFilter, (_('News&Documentary'),"newsdoku")),
+			"5": boundFunction(self.gotFilter, (_('News & Documentary'),"newsdoku")),
 			"6": boundFunction(self.gotFilter, (_('Porn'),"porn")),
 			"7": boundFunction(self.gotFilter, (_('User-additions'),"useradditions"))
 		}, -1)
@@ -1077,9 +1077,9 @@ class MPList(Screen, HelpableScreen):
 		elif config.mediaportal.filter.value == "User-additions":
 			name = _("User-additions")
 		elif config.mediaportal.filter.value == "Fun":
-			name = _("Fun")
+			name = _("Tech & Fun")
 		elif config.mediaportal.filter.value == "NewsDoku":
-			name = _("News&Documentary")
+			name = _("News & Documentary")
 		elif config.mediaportal.filter.value == "Music":
 			name = _("Music")
 		elif config.mediaportal.filter.value == "Sport":
@@ -1412,7 +1412,7 @@ class MPList(Screen, HelpableScreen):
 			useradd = ""
 		else:
 			useradd = _('User-additions')
-		rangelist = [[_('ALL'), 'all'], [_('Libraries'), 'mediatheken'], [_('Fun'), 'fun'], [_('Music'), 'music'], [_('Sports'), 'sport'], [_('News&Documentary'), 'newsdoku'], [xporn, 'porn'], [useradd, 'useradditions']]
+		rangelist = [[_('ALL'), 'all'], [_('Libraries'), 'mediatheken'], [_('Tech & Fun'), 'fun'], [_('Music'), 'music'], [_('Sports'), 'sport'], [_('News & Documentary'), 'newsdoku'], [xporn, 'porn'], [useradd, 'useradditions']]
 		self.session.openWithCallback(self.gotFilter, ChoiceBoxExt, keys=["0", "1", "2", "3", "4", "5", "6", "7"], title=_('Select Filter'), list = rangelist)
 
 	def gotFilter(self, filter):
@@ -1809,10 +1809,10 @@ class MPWall(Screen, HelpableScreen):
 			"info"  : self.showPorn,
 			"0": boundFunction(self.gotFilter, (_('ALL'),"all")),
 			"1": boundFunction(self.gotFilter, (_('Libraries'),"Mediathek")),
-			"2": boundFunction(self.gotFilter, (_('Fun'),"Fun")),
+			"2": boundFunction(self.gotFilter, (_('Tech & Fun'),"Fun")),
 			"3": boundFunction(self.gotFilter, (_('Music'),"Music")),
 			"4": boundFunction(self.gotFilter, (_('Sports'),"Sport")),
-			"5": boundFunction(self.gotFilter, (_('News&Documentary'),"NewsDoku")),
+			"5": boundFunction(self.gotFilter, (_('News & Documentary'),"NewsDoku")),
 			"6": boundFunction(self.gotFilter, (_('Porn'),"Porn")),
 			"7": boundFunction(self.gotFilter, (_('User-additions'),"User-additions"))
 		}, -1)
@@ -1926,9 +1926,9 @@ class MPWall(Screen, HelpableScreen):
 		elif config.mediaportal.filter.value == "User-additions":
 			name = _("User-additions")
 		elif config.mediaportal.filter.value == "Fun":
-			name = _("Fun")
+			name = _("Tech & Fun")
 		elif config.mediaportal.filter.value == "NewsDoku":
-			name = _("News&Documentary")
+			name = _("News & Documentary")
 		elif config.mediaportal.filter.value == "Music":
 			name = _("Music")
 		elif config.mediaportal.filter.value == "Sport":
@@ -1957,9 +1957,9 @@ class MPWall(Screen, HelpableScreen):
 			elif config.mediaportal.filter.value == "User-additions":
 				name = _("User-additions")
 			elif config.mediaportal.filter.value == "Fun":
-				name = _("Fun")
+				name = _("Tech & Fun")
 			elif config.mediaportal.filter.value == "NewsDoku":
-				name = _("News&Documentary")
+				name = _("News & Documentary")
 			elif config.mediaportal.filter.value == "Music":
 				name = _("Music")
 			elif config.mediaportal.filter.value == "Sport":
@@ -2573,7 +2573,7 @@ class MPWall(Screen, HelpableScreen):
 			useradd = ""
 		else:
 			useradd = _('User-additions')
-		rangelist = [[_('ALL'), 'all'], [_('Libraries'), 'Mediathek'], [_('Fun'), 'Fun'], [_('Music'), 'Music'], [_('Sports'), 'Sport'], [_('News&Documentary'), 'NewsDoku'], [xporn, 'Porn'], [useradd, 'User-additions']]
+		rangelist = [[_('ALL'), 'all'], [_('Libraries'), 'Mediathek'], [_('Tech & Fun'), 'Fun'], [_('Music'), 'Music'], [_('Sports'), 'Sport'], [_('News & Documentary'), 'NewsDoku'], [xporn, 'Porn'], [useradd, 'User-additions']]
 		self.session.openWithCallback(self.gotFilter, ChoiceBoxExt, keys=["0", "1", "2", "3", "4", "5", "6", "7"], title=_('Select Filter'), list = rangelist)
 
 	def gotFilter(self, filter):
@@ -2803,10 +2803,10 @@ class MPWall2(Screen, HelpableScreen):
 			"info"  : self.showPorn,
 			"0": boundFunction(self.gotFilter, (_('ALL'),"all")),
 			"1": boundFunction(self.gotFilter, (_('Libraries'),"Mediathek")),
-			"2": boundFunction(self.gotFilter, (_('Fun'),"Fun")),
+			"2": boundFunction(self.gotFilter, (_('Tech & Fun'),"Fun")),
 			"3": boundFunction(self.gotFilter, (_('Music'),"Music")),
 			"4": boundFunction(self.gotFilter, (_('Sports'),"Sport")),
-			"5": boundFunction(self.gotFilter, (_('News&Documentary'),"NewsDoku")),
+			"5": boundFunction(self.gotFilter, (_('News & Documentary'),"NewsDoku")),
 			"6": boundFunction(self.gotFilter, (_('Porn'),"Porn")),
 			"7": boundFunction(self.gotFilter, (_('User-additions'),"User-additions"))
 		}, -1)
@@ -2907,9 +2907,9 @@ class MPWall2(Screen, HelpableScreen):
 		elif config.mediaportal.filter.value == "User-additions":
 			name = _("User-additions")
 		elif config.mediaportal.filter.value == "Fun":
-			name = _("Fun")
+			name = _("Tech & Fun")
 		elif config.mediaportal.filter.value == "NewsDoku":
-			name = _("News&Documentary")
+			name = _("News & Documentary")
 		elif config.mediaportal.filter.value == "Music":
 			name = _("Music")
 		elif config.mediaportal.filter.value == "Sport":
@@ -2938,9 +2938,9 @@ class MPWall2(Screen, HelpableScreen):
 			elif config.mediaportal.filter.value == "User-additions":
 				name = _("User-additions")
 			elif config.mediaportal.filter.value == "Fun":
-				name = _("Fun")
+				name = _("Tech & Fun")
 			elif config.mediaportal.filter.value == "NewsDoku":
-				name = _("News&Documentary")
+				name = _("News & Documentary")
 			elif config.mediaportal.filter.value == "Music":
 				name = _("Music")
 			elif config.mediaportal.filter.value == "Sport":
@@ -3350,7 +3350,7 @@ class MPWall2(Screen, HelpableScreen):
 			useradd = ""
 		else:
 			useradd = _('User-additions')
-		rangelist = [[_('ALL'), 'all'], [_('Libraries'), 'Mediathek'], [_('Fun'), 'Fun'], [_('Music'), 'Music'], [_('Sports'), 'Sport'], [_('News&Documentary'), 'NewsDoku'], [xporn, 'Porn'], [useradd, 'User-additions']]
+		rangelist = [[_('ALL'), 'all'], [_('Libraries'), 'Mediathek'], [_('Tech & Fun'), 'Fun'], [_('Music'), 'Music'], [_('Sports'), 'Sport'], [_('News & Documentary'), 'NewsDoku'], [xporn, 'Porn'], [useradd, 'User-additions']]
 		self.session.openWithCallback(self.gotFilter, ChoiceBoxExt, keys=["0", "1", "2", "3", "4", "5", "6", "7"], title=_('Select Filter'), list = rangelist)
 
 	def gotFilter(self, filter):
@@ -3577,10 +3577,10 @@ class MPWallVTi(Screen, HelpableScreen):
 			"info"  : self.showPorn,
 			"0": boundFunction(self.gotFilter, (_('ALL'),"all")),
 			"1": boundFunction(self.gotFilter, (_('Libraries'),"Mediathek")),
-			"2": boundFunction(self.gotFilter, (_('Fun'),"Fun")),
+			"2": boundFunction(self.gotFilter, (_('Tech & Fun'),"Fun")),
 			"3": boundFunction(self.gotFilter, (_('Music'),"Music")),
 			"4": boundFunction(self.gotFilter, (_('Sports'),"Sport")),
-			"5": boundFunction(self.gotFilter, (_('News&Documentary'),"NewsDoku")),
+			"5": boundFunction(self.gotFilter, (_('News & Documentary'),"NewsDoku")),
 			"6": boundFunction(self.gotFilter, (_('Porn'),"Porn")),
 			"7": boundFunction(self.gotFilter, (_('User-additions'),"User-additions"))
 		}, -1)
@@ -3682,9 +3682,9 @@ class MPWallVTi(Screen, HelpableScreen):
 		elif config.mediaportal.filter.value == "User-additions":
 			name = _("User-additions")
 		elif config.mediaportal.filter.value == "Fun":
-			name = _("Fun")
+			name = _("Tech & Fun")
 		elif config.mediaportal.filter.value == "NewsDoku":
-			name = _("News&Documentary")
+			name = _("News & Documentary")
 		elif config.mediaportal.filter.value == "Music":
 			name = _("Music")
 		elif config.mediaportal.filter.value == "Sport":
@@ -3713,9 +3713,9 @@ class MPWallVTi(Screen, HelpableScreen):
 			elif config.mediaportal.filter.value == "User-additions":
 				name = _("User-additions")
 			elif config.mediaportal.filter.value == "Fun":
-				name = _("Fun")
+				name = _("Tech & Fun")
 			elif config.mediaportal.filter.value == "NewsDoku":
-				name = _("News&Documentary")
+				name = _("News & Documentary")
 			elif config.mediaportal.filter.value == "Music":
 				name = _("Music")
 			elif config.mediaportal.filter.value == "Sport":
@@ -4117,7 +4117,7 @@ class MPWallVTi(Screen, HelpableScreen):
 			useradd = ""
 		else:
 			useradd = _('User-additions')
-		rangelist = [[_('ALL'), 'all'], [_('Libraries'), 'Mediathek'], [_('Fun'), 'Fun'], [_('Music'), 'Music'], [_('Sports'), 'Sport'], [_('News&Documentary'), 'NewsDoku'], [xporn, 'Porn'], [useradd, 'User-additions']]
+		rangelist = [[_('ALL'), 'all'], [_('Libraries'), 'Mediathek'], [_('Tech & Fun'), 'Fun'], [_('Music'), 'Music'], [_('Sports'), 'Sport'], [_('News & Documentary'), 'NewsDoku'], [xporn, 'Porn'], [useradd, 'User-additions']]
 		self.session.openWithCallback(self.gotFilter, ChoiceBoxExt, keys=["0", "1", "2", "3", "4", "5", "6", "7"], title=_('Select Filter'), list = rangelist)
 
 	def gotFilter(self, filter):
@@ -4151,14 +4151,6 @@ def exit(session, result, lastservice):
 		elif config.mediaportal.ansicht.value == "wall_vti":
 			session.openWithCallback(exit, MPWallVTi, lastservice, config.mediaportal.filter.value)
 	else:
-		if config.mediaportal.hideporn_startup.value and config.mediaportal.showporn.value:
-			config.mediaportal.showporn.value = False
-			if config.mediaportal.filter.value == "Porn":
-				config.mediaportal.filter.value = "ALL"
-			config.mediaportal.showporn.save()
-			config.mediaportal.filter.save()
-			configfile.save()
-
 		try:
 			if mp_globals.animationfix:
 				getDesktop(0).setAnimationsEnabled(False)
@@ -4447,6 +4439,14 @@ def startMP(session):
 	#	def importFini(msg):
 	#		session.open(MessageBoxExt, msg, type = MessageBoxExt.TYPE_INFO, timeout=5)
 	#	mpepg.importEPGData().addCallback(importFini)
+
+	if config.mediaportal.hideporn_startup.value and config.mediaportal.showporn.value:
+		config.mediaportal.showporn.value = False
+		if config.mediaportal.filter.value == "Porn":
+			config.mediaportal.filter.value = "ALL"
+		config.mediaportal.showporn.save()
+		config.mediaportal.filter.save()
+		configfile.save()
 
 	if config.mediaportal.premiumize_use.value:
 		if not mp_globals.premium_yt_proxy_host:

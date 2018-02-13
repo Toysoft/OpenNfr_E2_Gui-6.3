@@ -47,7 +47,7 @@ class sTVGenreScreen(MPScreen):
 
 	def __init__(self, session):
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -65,7 +65,6 @@ class sTVGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.genreliste.append(("Aktuelles", "/de/aktuelles"))
 		self.genreliste.append(("Abenteuer", "/de/abenteuer"))
 		self.genreliste.append(("Dokumentarfilm", "/de/dokumentarfilm"))
@@ -88,7 +87,7 @@ class sTVids(MPScreen):
 	def __init__(self, session,name,url):
 		self.Link = url
 		self.Name = name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,

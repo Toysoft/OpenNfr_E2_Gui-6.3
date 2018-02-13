@@ -45,7 +45,7 @@ default_cover = "file://%s/pornrabbit.png" % (config.mediaportal.iconcachepath.v
 class pornrabbitGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -71,7 +71,6 @@ class pornrabbitGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "http://www.pornrabbit.com/page/categories/"
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -118,7 +117,7 @@ class pornrabbitFilmScreen(MPScreen, ThumbsHelper):
 		self.Link = Link
 		self.Name = Name
 		self.Count = Count
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

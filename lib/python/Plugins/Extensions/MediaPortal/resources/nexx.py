@@ -40,7 +40,8 @@ def getVideoUrl(id, downld):
 							if bw:
 								f = ('%s%s/%s_src_%s_%d.mp4' % (str(azure_progressive_base), str(azure_locator), id, str(ss[1]), bw), bw)
 								if not "_src_2560x" in f[0]:
-									streams.append(f)
+									if not "_src_3840x" in f[0]:
+										streams.append(f)
 			streams.sort(key=lambda x: x[1])
 			return streams[-1][0]
 		elif downld:

@@ -52,12 +52,12 @@ json_headers = {
 	}
 default_cover = "file://%s/redtube.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-ufAC = ''
+token = ''
 
 class redtubeGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -83,33 +83,33 @@ class redtubeGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "https://www.redtube.com/categories"
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		global ufAC
-		ufAC = re.search('page_params.ufAC =.*?"(.*?)";', data, re.S).group(1)
-		Cats = re.findall('class="video">.*?<a\shref="(.*?)"\stitle="(.*?)">.*?data-src="(.*?\.jpg).*?"', data, re.S)
+		global token
+		token = re.findall('page_params.token\s=\s"(.*?)";', data, re.S)[0]
+		Cats = re.findall('class="category_item_wrapper">.*?<a href="(.*?)".*?data-thumb_url="(.*?\.jpg).*?".*?alt="(.*?)"', data, re.S)
 		if Cats:
-			for (Url, Title, Image) in Cats:
+			for (Url, Image, Title) in Cats:
 				Url = "https://www.redtube.com" + Url
 				Title = Title.replace('&amp;','&')
 				if Image.startswith('//'):
 					Image = 'http:' + Image
 				self.genreliste.append((Title, Url, Image, True))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Longest", "https://www.redtube.com/longest?period=alltime", default_cover, False))
-			self.genreliste.insert(0, ("Most Favorited", "https://www.redtube.com/mostfavored?period=alltime", default_cover, False))
-			self.genreliste.insert(0, ("Most Viewed", "https://www.redtube.com/mostviewed?period=alltime", default_cover, False))
-			self.genreliste.insert(0, ("Top Rated", "https://www.redtube.com/top?period=alltime", default_cover, False))
-			self.genreliste.insert(0, ("Trending", "https://www.redtube.com/hot", default_cover, False))
-			self.genreliste.insert(0, ("Newest", "https://www.redtube.com/newest", default_cover, False))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover, True))
-			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
-			self.showInfos()
+		self.genreliste.insert(0, ("Recommended", "https://www.redtube.com/recommended", default_cover, True))
+		self.genreliste.insert(0, ("Longest", "https://www.redtube.com/longest?period=alltime", default_cover, False))
+		self.genreliste.insert(0, ("Most Favorited", "https://www.redtube.com/mostfavored?period=alltime", default_cover, False))
+		self.genreliste.insert(0, ("Most Viewed", "https://www.redtube.com/mostviewed?period=alltime", default_cover, False))
+		self.genreliste.insert(0, ("Top Rated", "https://www.redtube.com/top?period=alltime", default_cover, False))
+		self.genreliste.insert(0, ("Trending", "https://www.redtube.com/hot", default_cover, False))
+		self.genreliste.insert(0, ("Newest", "https://www.redtube.com/newest", default_cover, False))
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover, True))
+		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
+		self.ml.moveToIndex(0)
+		self.keyLocked = False
+		self.showInfos()
 
 	def showInfos(self):
 		Image = self['liste'].getCurrent()[0][2]
@@ -134,9 +134,8 @@ class redtubeGenreScreen(MPScreen):
 			self.session.open(redtubeFilmScreen, Link, Name, True)
 
 	def getSuggestions(self, text, max_res):
-		url = "https://www.redtube.com/searchsuggest?class=0&limit=10"
-		postdata = {'term': text, 'ufAC': ufAC}
-		d = twAgentGetPage(url, method='POST', postdata=urlencode(postdata), agent=agent, headers=json_headers, timeout=5)
+		url = "https://www.redtube.com/video/search_autocomplete?pornstars=true&token=%s&orientation=straight&q=%s&alt=0" % (token, text.replace(' ', '+'))
+		d = twAgentGetPage(url, agent=agent, headers=json_headers, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
 		d.addErrback(self.gotSuggestions, max_res, err=True)
 		return d
@@ -145,15 +144,11 @@ class redtubeGenreScreen(MPScreen):
 		list = []
 		if not err and type(suggestions) in (str, buffer):
 			suggestions = json.loads(suggestions)
-			for item in suggestions['data']['suggestions']:
-				try:
-					if item['type'] == 'video':
-						li = item['label']
-						list.append(str(li))
-						max_res -= 1
-						if not max_res: break
-				except:
-					pass
+			for item in suggestions['queries']:
+				li = item
+				list.append(str(li))
+				max_res -= 1
+				if not max_res: break
 		elif err:
 			printl(str(suggestions),self,'E')
 		return list
@@ -164,7 +159,7 @@ class redtubeFilmScreen(MPScreen, ThumbsHelper):
 		self.Link = Link
 		self.Name = Name
 		self.Sort = Sort
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -194,7 +189,7 @@ class redtubeFilmScreen(MPScreen, ThumbsHelper):
 		if not self.Sort:
 			self.sort = ''
 			self.sorttext = ''
-		elif re.match(".*?Search", self.Name):
+		elif (re.match(".*?Search", self.Name) or self.Name == "Recommended"):
 			self.sort = ''
 			self.sorttext = 'Most Relevant'
 		else:
@@ -213,6 +208,8 @@ class redtubeFilmScreen(MPScreen, ThumbsHelper):
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
 			url = 'https://www.redtube.com/%s?search=%s&page=%s' % (self.sort, self.Link, str(self.page))
+		elif self.Name == "Recommended":
+			url = "%s/%s?page=%s" % (self.Link, self.sort, str(self.page))
 		else:
 			if '?' in self.Link or '?' in self.sort:
 				delim = '&'
@@ -231,27 +228,15 @@ class redtubeFilmScreen(MPScreen, ThumbsHelper):
 		else:
 			self.lastpage = 1230
 		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		if "home_page_section_e" in data:
-			parse = re.search('home_page_section_e(.*?)home_page_section_f', data, re.S)
-			if parse:
-				data = parse.group(1)
-		Movies = re.findall('class="widget-video-holder">.*?<a\shref="(\/\d+)"\stitle="(.*?)"(?:\sclass="video-thumb|).*?video-duration.*?>(.*?)<.*?data-src="(.*?)".*?views">(.*?)</span>', data, re.S)
+		Movies = re.findall('class="video_block_wrapper">.*?<a\sclass="video_link".*?href="(\/\d+)".*?data-thumb_url\s=\s"(.*?)".*?duration">.*?(\d.*?)<div class="video_title">(.*?)</div.*?video_count">(.*?)views', data, re.S)
 		if Movies:
-			for (Url, Title, Runtime, Image, Views) in Movies:
+			for (Url, Image, Runtime, Title, Views) in Movies:
 				if Image.startswith('//'):
 					Image = 'http:' + Image
-				Views = Views.replace(',','').replace(' views','')
-				Runtime = Runtime.strip()
+				Views = Views.replace(',','').strip()
+				Runtime = stripAllTags(Runtime).strip()
+				Title = Title.strip()
 				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
-		else:
-			Movies = re.findall('class="widget-video-holder (?:videoPreviewBg|)">.*?<a\shref="(\/\d+)"\stitle="(.*?)"(?:\sclass="video-thumb|).*?data-src="(.*?)".*?video-duration.*?>(.*?)<.*?views">(.*?)</span>', data, re.S)
-			if Movies:
-				for (Url, Title, Image, Runtime, Views) in Movies:
-					if Image.startswith('//'):
-						Image = 'http:' + Image
-					Views = Views.replace(',','').replace(' views','')
-					Runtime = Runtime.strip()
-					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), '', None, '', ''))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -274,7 +259,7 @@ class redtubeFilmScreen(MPScreen, ThumbsHelper):
 			return
 		if not self.Sort:
 			return
-		if re.match(".*?Search", self.Name):
+		if (re.match(".*?Search", self.Name) or self.Name == "Recommended"):
 			rangelist = [['Newest', 'new'], ['Most Relevant',''], ['Most Viewed','mostviewed'], ['Top Rated','top'], ['Longest','longest']]
 		else:
 			rangelist = [['Newest', ''], ['Most Viewed','?sorting=mostviewed&period=alltime'], ['Most Favored','?sorting=mostfavored&period=alltime'], ['Top Rated','?sorting=rating&period=alltime'], ['Longest','?sorting=longest&period=alltime']]
@@ -294,9 +279,9 @@ class redtubeFilmScreen(MPScreen, ThumbsHelper):
 		getPage(Link).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('<source\ssrc="(.*?)"\stype="video/mp4">', data, re.S)
+		videoPage = re.findall('"quality":"(\d+)","videoUrl":"(http.*?)"', data, re.S)
 		if videoPage:
-			url = videoPage[-1]
+			url = videoPage[0][1]
 			url = url.replace('\/','/').replace('&amp;','&')
 			if url.startswith('//'):
 				url = 'http:' + url

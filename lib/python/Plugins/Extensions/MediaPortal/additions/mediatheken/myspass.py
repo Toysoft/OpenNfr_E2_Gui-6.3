@@ -43,7 +43,7 @@ default_cover = "file://%s/myspass.png" % (config.mediaportal.iconcachepath.valu
 class myspassGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -66,7 +66,6 @@ class myspassGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "http://www.myspass.de/ganze-folgen/"
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
@@ -106,7 +105,7 @@ class myspassStaffelListeScreen(MPScreen):
 	def __init__(self, session, myspassName, myspassUrl):
 		self.myspassName = myspassName
 		self.myspassUrl = myspassUrl
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -155,7 +154,7 @@ class myspassFolgenListeScreen(MPScreen):
 		self.season = season
 		self.seasonid = seasonid
 		self.data = data
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,

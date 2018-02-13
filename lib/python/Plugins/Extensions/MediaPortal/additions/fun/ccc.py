@@ -4,10 +4,12 @@ import os.path as os_path
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
+default_cover = "file://%s/ccc.png" % (config.mediaportal.iconcachepath.value + "logos")
+
 class CccOverviewScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"	: self.closeAll,
@@ -89,7 +91,7 @@ class CccOverviewScreen(MPScreen):
 class CccConferenceScreen(MPScreen):
 
 	def __init__(self, session, url, title, acronym):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"	: self.closeAll,
@@ -175,7 +177,6 @@ class CccConferenceScreen(MPScreen):
 		hqmp4_url = None
 		try:
 			event = json.loads(data)
-			print data
 			title     = event.get('title').encode('utf-8')
 			image_url = event.get('poster_url').encode('utf-8')
 			title     = event.get('title').encode('utf-8')

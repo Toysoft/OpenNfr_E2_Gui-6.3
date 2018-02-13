@@ -48,7 +48,7 @@ cam4Agent = "Mozilla/5.0 (iPhone; CPU iPhone OS 8_0_2 like Mac OS X) AppleWebKit
 class cam4GenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -73,7 +73,6 @@ class cam4GenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.genreData)
 
 	def genreData(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.genreliste.append(("Trending", ""))
 		self.genreliste.append(("Couple", ""))
 		self.genreliste.append(("USA", "&country=us"))
@@ -119,7 +118,7 @@ class cam4FilmScreen(MPScreen, ThumbsHelper):
 			self.filter = ""
 		else:
 			self.filter = config.mediaportal.cam4_filter.value
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {

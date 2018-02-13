@@ -44,7 +44,7 @@ default_cover = "file://%s/tubewolf.png" % (config.mediaportal.iconcachepath.val
 class tubewolfGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -65,7 +65,6 @@ class tubewolfGenreScreen(MPScreen):
 
 	def loadPage(self):
 		self.filmliste = []
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self['name'].setText(_('Please wait...'))
 		url = "http://www.tubewolf.com/categories/"
 		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
@@ -107,7 +106,7 @@ class tubewolfListScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

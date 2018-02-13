@@ -50,7 +50,7 @@ default_cover = "file://%s/extremetube.png" % (config.mediaportal.iconcachepath.
 class extremetubeGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -75,7 +75,6 @@ class extremetubeGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.keyLocked = True
 		url = "http://www.extremetube.com/video-categories"
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
@@ -148,7 +147,7 @@ class extremetubeFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -229,6 +228,8 @@ class extremetubeFilmScreen(MPScreen, ThumbsHelper):
 		if videoPage:
 			url = videoPage[-1]
 			url = url.replace('\/','/')
+			if url.startswith('//'):
+				url = "https:" + url
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]
-			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='extremetube')
+			self.session.open(SimplePlayer, [(Title, url.replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B'))], showPlaylist=False, ltype='extremetube')

@@ -50,7 +50,7 @@ default_cover = "file://%s/mydirtyhobby.png" % (config.mediaportal.iconcachepath
 class MDHGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -75,7 +75,6 @@ class MDHGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self['name'].setText(_("Please wait..."))
 		url = "http://stream-mydirtyhobby.biz"
 		getPage(url, agent=myagent, cookies=mdh_ck, headers={'Referer':'http://stream-mydirtyhobby.biz/'}).addCallback(self.checkData).addErrback(self.dataError)
@@ -143,7 +142,7 @@ class MDHFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

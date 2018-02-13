@@ -41,6 +41,8 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 ivhagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
 
+default_cover = "file://%s/ivhunter.png" % (config.mediaportal.iconcachepath.value + "logos")
+
 class ivhunterGenreScreen(MPScreen):
 
 	def __init__(self, session, mode):
@@ -50,9 +52,8 @@ class ivhunterGenreScreen(MPScreen):
 			self.portal = "IVHUNTER"
 			self.baseurl = "ivhunter.com"
 			self.delim = "+"
-			self.default_cover = "file://%s/ivhunter.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -72,7 +73,6 @@ class ivhunterGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		CoverHelper(self['coverArt']).getCover(self.default_cover)
 		self.keyLocked = True
 		url = "http://%s/" % self.baseurl
 		twAgentGetPage(url, agent=ivhagent).addCallback(self.genreData).addErrback(self.dataError)
@@ -121,7 +121,7 @@ class ivhunterFilmScreen(MPScreen, ThumbsHelper):
 		self.Name = Name
 		self.portal = portal
 		self.baseurl = baseurl
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -200,7 +200,7 @@ class ivhunterFilmScreen(MPScreen, ThumbsHelper):
 		self.loadPicQueued()
 
 	def showInfos(self):
-		CoverHelper(self['coverArt']).getCover(None)
+		CoverHelper(self['coverArt']).getCover(default_cover)
 		title = self['liste'].getCurrent()[0][0]
 		self['name'].setText(title)
 

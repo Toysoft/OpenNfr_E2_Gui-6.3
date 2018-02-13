@@ -47,7 +47,7 @@ default_cover = "file://%s/tvnow.png" % (config.mediaportal.iconcachepath.value 
 class tvnowFirstScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -73,7 +73,6 @@ class tvnowFirstScreen(MPScreen, ThumbsHelper):
 		self.onLayoutFinish.append(self.genreData)
 
 	def genreData(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.senderliste.append(("RTL", "rtl", default_cover))
 		self.senderliste.append(("VOX", "vox", default_cover))
 		self.senderliste.append(("RTL2", "rtl2", default_cover))
@@ -107,7 +106,7 @@ class tvnowSubGenreScreen(MPScreen, ThumbsHelper):
 		self.Link = Link
 		self.Name = Name
 		self.Image = Image
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -138,10 +137,10 @@ class tvnowSubGenreScreen(MPScreen, ThumbsHelper):
 		else:
 			cats = "%22serie%22,%22news%22"
 		url = BASE_URL + "formats?fields=title,seoUrl,icon,defaultImage169Logo,defaultImage169Format&filter=%7B%22Station%22:%22" + self.Link + "%22,%22Disabled%22:%220%22,%22CategoryId%22:%7B%22containsIn%22:%5B" + cats + "%5D%7D%7D&maxPerPage=500&page=1"
-		twAgentGetPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
+		getPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
 		if self.Link == "watchbox":
 			url = BASE_URL + "formats?fields=title,seoUrl,icon,defaultImage169Logo,defaultImage169Format&filter=%7B%22Station%22:%22" + self.Link + "%22,%22Disabled%22:%220%22,%22CategoryId%22:%7B%22containsIn%22:%5B" + cats + "%5D%7D%7D&maxPerPage=500&page=2"
-			twAgentGetPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
+			getPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		nowdata = json.loads(data)
@@ -180,7 +179,7 @@ class tvnowStaffelScreen(MPScreen):
 		self.Link = Link
 		self.Name = Name
 		self.Image = Image
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -205,7 +204,7 @@ class tvnowStaffelScreen(MPScreen):
 
 	def loadPage(self):
 		url = BASE_URL + "formats/seo?fields=formatTabs.*&name=" + self.Link + ".php"
-		twAgentGetPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
+		getPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		nowdata = json.loads(data)
@@ -242,7 +241,7 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 		self.Link = Link
 		self.Name = Name
 		self.Image = Image
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -269,12 +268,13 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
+		self['name'].setText(_('Please wait...'))
 		url = BASE_URL + "formatlists/" + self.Link + "?fields=*,formatTabPages.*,formatTabPages.container.*,formatTabPages.container.movies.format.*,formatTabPages.container.movies.pictures"
-		twAgentGetPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
+		getPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
 
 	def loadContainer(self, id):
 		url = BASE_URL + "containers/" + id + "/movies?fields=*,format.*,pictures&maxPerPage=500"
-		twAgentGetPage(url, agent=nowAgent).addCallback(self.parseContainer, id=True).addErrback(self.dataError)
+		getPage(url, agent=nowAgent).addCallback(self.parseContainer, id=True).addErrback(self.dataErrorContainer)
 
 	def parseData(self, data):
 		nowdata = json.loads(data)
@@ -305,6 +305,11 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 			self.parseContainer("", False)
 		except:
 			pass
+
+	def dataErrorContainer(self, error):
+		self.container -= 1
+		from Plugins.Extensions.MediaPortal.resources.debuglog import printlog as printl
+		printl(error,self,"E")
 
 	def parseContainer(self, data, id=False):
 		if id:

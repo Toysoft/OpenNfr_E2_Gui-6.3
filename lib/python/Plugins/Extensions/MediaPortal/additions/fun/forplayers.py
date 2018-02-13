@@ -48,7 +48,7 @@ default_cover = "file://%s/4players.png" % (config.mediaportal.iconcachepath.val
 class forPlayersGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -65,7 +65,6 @@ class forPlayersGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.selectionListe.append(("Aktuelle Videos", "1"))
 		self.selectionListe.append(("Meistgesehene Videos", "2"))
 		self.selectionListe.append(("Letzte Reviews", "3"))
@@ -92,7 +91,7 @@ class forPlayersVideoScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, selectionLink, searchData):
 		self.selectionLink = selectionLink
 		self.searchData = searchData
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -273,7 +272,7 @@ class forPlayersSearchListScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, videosListe):
 		self.searchVideoListe = videosListe
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

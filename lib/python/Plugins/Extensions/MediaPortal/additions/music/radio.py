@@ -71,7 +71,7 @@ class RadioGenreScreen(MPScreen):
 
 	def __init__(self, session):
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -91,7 +91,6 @@ class RadioGenreScreen(MPScreen):
 		self.onClose.append(self.restoreRadio)
 
 	def loadPage(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.genreliste = [
 			(_('Favorites'),None),
 			('Radio.de',"http://www.radio.de"),
@@ -133,7 +132,7 @@ class RadioSubGenreScreen(MPScreen):
 		self.genre = genre
 		self.url = url
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -152,7 +151,6 @@ class RadioSubGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.genreliste = [
 			(_('Local Stations'),self.url+"/info/account/getmostwantedbroadcastlists?sizeoflists=100",'localBroadcasts'),
 			(_('Top Stations'),self.url+"/info/account/getmostwantedbroadcastlists?sizeoflists=100",'topBroadcasts'),
@@ -185,7 +183,7 @@ class RadioSubValueGenreScreen(MPScreen):
 		self.genre = genre
 		self.url = url
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -204,7 +202,6 @@ class RadioSubValueGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.keyLocked = True
 		getPage(self.url, agent="XBMC").addCallback(self.loadPageData).addErrback(self.dataError)
 
@@ -231,7 +228,7 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 		self.value = value
 		self.sub = sub
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', widgets=('MP_widget_search',))
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', widgets=('MP_widget_search',), default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 		SearchHelper.__init__(self)
 
@@ -359,7 +356,7 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 class RadioPlaylist(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -384,7 +381,6 @@ class RadioPlaylist(MPScreen):
 		self.onLayoutFinish.append(self.loadStations)
 
 	def loadStations(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.playList = []
 		if not fileExists(config.mediaportal.watchlistpath.value+"mp_radio_playlist"):
 			open(config.mediaportal.watchlistpath.value+"mp_radio_playlist","w").close()

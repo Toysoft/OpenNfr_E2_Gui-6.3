@@ -46,7 +46,7 @@ default_cover = "file://%s/realitykings.png" % (config.mediaportal.iconcachepath
 class realitykingsGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -72,7 +72,6 @@ class realitykingsGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self['name'].setText(_('Please wait...'))
 		url = "http://www.realitykings.com/tour/categories/"
 		getPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
@@ -137,7 +136,7 @@ class realitykingsFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

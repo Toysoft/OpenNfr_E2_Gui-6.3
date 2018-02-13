@@ -74,7 +74,7 @@ class rnCalc:
 class pornhubGenreScreen(MPScreen, rnCalc):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -103,7 +103,6 @@ class pornhubGenreScreen(MPScreen, rnCalc):
 		self.onLayoutFinish.append(self.Login)
 
 	def Login(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		global nodejs
 		nodejs = True
 		ck.update({'lang':'en'})
@@ -294,7 +293,7 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper, rnCalc):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -455,7 +454,7 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper, rnCalc):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -612,7 +611,7 @@ class pornhubPornstarScreen(MPScreen, ThumbsHelper, rnCalc):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -752,7 +751,7 @@ class pornhubChannelScreen(MPScreen, ThumbsHelper, rnCalc):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -881,7 +880,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 		self.Link = Link
 		self.Name = Name
 		self.Count = Count
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

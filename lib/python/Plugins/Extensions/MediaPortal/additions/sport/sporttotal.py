@@ -45,7 +45,7 @@ class sporttotalGenreScreen(MPScreen):
 
 	def __init__(self, session):
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -64,7 +64,6 @@ class sporttotalGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self['name'].setText(_('Please wait...'))
 		url = "http://www.sporttotal.tv/live"
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)

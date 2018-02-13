@@ -39,19 +39,17 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-wn = "wrestlingnetwork.tv"
-
 class wrestlingnetworkGenreScreen(MPScreen):
 
 	def __init__(self, session, mode):
 		self.mode = mode
 
 		if self.mode == "watchwrestling":
-			self.portal = "watchwrestling.in"
+			self.portal = "Watch Wrestling In"
 			self.baseurl = "http://watchwrestling.in"
-		if self.mode == "wrestlingnetwork":
-			self.portal = "wrestlingnetwork.tv"
-			self.baseurl = "http://wrestlingnetwork.tv/"
+		if self.mode == "watchwrestlinguno":
+			self.portal = "Watch Wrestling Uno"
+			self.baseurl = "http://watchwrestling.uno"
 
 		MPScreen.__init__(self, session, skin='MP_PluginDescr')
 
@@ -78,18 +76,14 @@ class wrestlingnetworkGenreScreen(MPScreen):
 		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		if self.portal == wn:
-			raw = re.findall('Home</a></li>(.*?)</ul></div>	', data, re.S)
-		else:
-			raw = re.findall('id="main-nav">(.*?)</ul>', data, re.S)
+		raw = re.findall('id="main-nav">(.*?)</div>', data, re.S)
 		if raw:
 			parse = re.findall('<li.*?href="(.*?)">(.*?)</a>', raw[0], re.S)
 			for (url, title) in parse:
-				if not title.startswith('<i class'):
-					self.genreliste.append((decodeHtml(title), url))
+				self.genreliste.append((decodeHtml(title), url))
 			# remove duplicates
 			self.genreliste = list(set(self.genreliste))
-			self.genreliste.sort()
+			#self.genreliste.sort()
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.keyLocked = False
 			self.showInfos()
@@ -138,34 +132,21 @@ class wrestlingnetworkListeScreen(MPScreen):
 
 	def loadPage(self):
 		self.keyLocked = True
-		if self.portal == wn:
-			url = "%s/page/%s" % (self.Link ,str(self.page))
-		else:
-			url = "%spage/%s" % (self.Link ,str(self.page))
+		url = "%spage/%s" % (self.Link ,str(self.page))
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if self.portal == wn:
-			self.getLastPage(data, 'class=\'pagination\'>(.*?)</div>')
-			raw = re.findall('id="main"(.*?)id="sidebar"', data, re.S)
-			shows = re.findall('class="solar-featured-content".*?src="(.*?)".*?\shref="(.*?)">\s+(.*?)<', raw[0], re.S)
-			if shows:
-				self.filmliste = []
-				for (image, url, title) in shows:
-					title = title.strip()
-					self.filmliste.append((decodeHtml(title),url,image))
+		if re.search('<link rel="next"', data):
+			self.lastpage = self.page + 1
+			self['page'].setText(str(self.page) + ' + ')
 		else:
-			if re.search('<link rel="next"', data):
-				self.lastpage = self.page + 1
-				self['page'].setText(str(self.page) + ' + ')
-			else:
-				self['page'].setText(str(self.page))
-			raw = re.findall('id="main">(.*?)id="sidebar"', data, re.S)
-			shows = re.findall('clip-link.*?title="(.*?)" href="(.*?)".*?src="(.*?)"', raw[0], re.S)
-			if shows:
-				self.filmliste = []
-				for (title,url,image) in shows:
-					self.filmliste.append((decodeHtml(title),url,image))
+			self['page'].setText(str(self.page))
+		raw = re.findall('id="main">(.*?)id="sidebar"', data, re.S)
+		shows = re.findall('clip-link.*?title="(.*?)" href="(.*?)".*?src="(.*?)"', raw[0], re.S)
+		if shows:
+			self.filmliste = []
+			for (title,url,image) in shows:
+				self.filmliste.append((decodeHtml(title),url,image))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -207,42 +188,34 @@ class wrestlingnetworkPlayer(MPScreen):
 		self.onLayoutFinish.append(self.getVideo)
 
 	def getVideo(self):
-		url = self.Url
-		getPage(url).addCallback(self.getData).addErrback(self.dataError)
+		getPage(self.Url).addCallback(self.getData).addErrback(self.dataError)
 
 	def getData(self, data):
-		if self.portal == wn:
-			url = re.findall('href="(http://(www.|)wrestlingnetwork.(net|tv)/dailymotion-embed/.*?)">(.*?)</a>', data, re.S)
-			if url:
-				self.filmliste = []
-				for (url,dump,dump1,title) in url:
-					self.filmliste.append((decodeHtml(title),url))
-			else:
-				self.filmliste.append((_("Video deleted or there has been an error!"), None))
-			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
+		if re.match('.*?Link will added in Few Hours', data, re.S):
+			self.filmliste.append((_("Link will added in few Hours!"), None, False))
+			self.keyLocked = True
 		else:
-			if re.match('.*?Link will added in Few Hours', data, re.S):
-				self.filmliste.append((_("Link will added in few Hours!"), None))
-				self.keyLocked = True
+			vid = re.findall('href="(http[s]?://[^<>]*?)"\sclass="su-button.*?webkit-text-shadow:none">(.*?)</span>', data, re.S)
+			if vid:
+				for (url, title) in vid:
+					self.filmliste.append((decodeHtml(title), url, False))
 			else:
-				url = re.findall('href="(http[s]?://[^<>]*?)"\sclass="su-button.*?webkit-text-shadow:none">(.*?)</span>', data, re.S)
-				if url:
-					self.filmliste = []
-					for (url,title) in url:
-						self.filmliste.append((decodeHtml(title),url))
-						self.keyLocked = False
-				else:
-					self.filmliste.append((_("Video deleted or there has been an error!"), None))
-					self.keyLocked = False
-			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
-			self.ml.moveToIndex(0)
+				streams = re.findall('(http[s]?://(.*?)\/.*?)[\'|"|\&|<]', data, re.S)
+				if streams:
+					for (stream, hostername) in streams:
+						if isSupportedHoster(hostername, True):
+							hostername = hostername.replace('www.','').replace('embed.','').replace('play.','')
+							self.filmliste.append((hostername, stream, True))
+		self.keyLocked = False
+		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		url = self['liste'].getCurrent()[0][1]
+		host = self['liste'].getCurrent()[0][2]
+		if host:
+			get_stream_link(self.session).check_link(url, self.got_link)
 		if url:
 			getPage(url, headers={'Accept': 'text/html,application/xhtml+xml,application/xml','Referer': self.Url}).addCallback(self.getExtraData).addErrback(self.dataError)
 
@@ -254,9 +227,10 @@ class wrestlingnetworkPlayer(MPScreen):
 	def getStream(self, data):
 		data = data.replace("\\/", "/")
 		title = self['liste'].getCurrent()[0][0]
-		streamname = self.Name + " - " + title
+		title = self.Name + " - " + title
 		stream_url = re.findall('"(240|380|480|720)".*?url":"(http[s]?://www.dailymotion.com/cdn/.*?)"', data, re.S)
 		if stream_url:
-			self.session.open(SimplePlayer, [(streamname, stream_url[-1][1])], showPlaylist=False, ltype='wrestling', forceGST=True)
-		else:
-			message = self.session.open(MessageBoxExt, _("Video deleted or has an error!"), MessageBoxExt.TYPE_INFO, timeout=3)
+			self.session.open(SimplePlayer, [(title, stream_url[-1][1])], showPlaylist=False, ltype='wrestling', forceGST=True)
+
+	def got_link(self, stream_url):
+		self.session.open(SimplePlayer, [(self.Name, stream_url)], showPlaylist=False, ltype='wrestling')

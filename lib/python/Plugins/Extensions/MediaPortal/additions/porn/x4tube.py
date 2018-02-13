@@ -52,28 +52,29 @@ class fourtubeGenreScreen(MPScreen):
 	def __init__(self, session, mode):
 		self.mode = mode
 
+		global default_cover
 		if self.mode == "4tube":
 			self.portal = "4Tube.com"
 			self.baseurl = "www.4tube.com"
 			self.s = "s"
-			self.default_cover = "file://%s/4tube.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/4tube.png" % (config.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "fux":
 			self.portal = "fux.com"
 			self.baseurl = "www.fux.com"
 			self.s = ""
-			self.default_cover = "file://%s/fux.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/fux.png" % (config.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "porntube":
 			self.portal = "PornTube.com"
 			self.baseurl = "www.porntube.com"
 			self.s = "s"
-			self.default_cover = "file://%s/porntube.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/porntube.png" % (config.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "pornerbros":
 			self.portal = "PornerBros.com"
 			self.baseurl = "www.pornerbros.com"
 			self.s = "s"
-			self.default_cover = "file://%s/pornerbros.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pornerbros.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -98,7 +99,6 @@ class fourtubeGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(self.default_cover)
 		url = "http://%s/tag%s" % (self.baseurl, self.s)
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -114,14 +114,14 @@ class fourtubeGenreScreen(MPScreen):
 			for (Url, Title) in Cats:
 				Url = "http://" + self.baseurl + Url
 				Title = Title.title()
-				self.genreliste.append((Title, Url, self.default_cover))
+				self.genreliste.append((Title, Url, default_cover))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Websites", "http://%s/channel%s" % (self.baseurl, self.s), self.default_cover))
-			self.genreliste.insert(0, ("Pornstars", "http://%s/pornstar%s" % (self.baseurl, self.s), self.default_cover))
-			self.genreliste.insert(0, ("Highest Rating", "http://%s/video%s?sort=rating&time=month" % (self.baseurl, self.s), self.default_cover))
-			self.genreliste.insert(0, ("Most Viewed", "http://%s/video%s?sort=views&time=month" % (self.baseurl, self.s), self.default_cover))
-			self.genreliste.insert(0, ("Latest", "http://%s/video%s?sort=date" % (self.baseurl, self.s), self.default_cover))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", self.default_cover))
+			self.genreliste.insert(0, ("Websites", "http://%s/channel%s" % (self.baseurl, self.s), default_cover))
+			self.genreliste.insert(0, ("Pornstars", "http://%s/pornstar%s" % (self.baseurl, self.s), default_cover))
+			self.genreliste.insert(0, ("Highest Rating", "http://%s/video%s?sort=rating&time=month" % (self.baseurl, self.s), default_cover))
+			self.genreliste.insert(0, ("Most Viewed", "http://%s/video%s?sort=views&time=month" % (self.baseurl, self.s), default_cover))
+			self.genreliste.insert(0, ("Latest", "http://%s/video%s?sort=date" % (self.baseurl, self.s), default_cover))
+			self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.keyLocked = False
 		self.showInfos()
@@ -177,7 +177,7 @@ class fourtubeSitesScreen(MPScreen, ThumbsHelper):
 		self.Name = Name
 		self.portal = portal
 		self.baseurl = baseurl
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -265,7 +265,18 @@ class fourtubeFilmScreen(MPScreen, ThumbsHelper):
 		self.Name = Name
 		self.portal = portal
 		self.baseurl = baseurl
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+
+		global default_cover
+		if self.portal == "4Tube.com":
+			default_cover = "file://%s/4tube.png" % (config.mediaportal.iconcachepath.value + "logos")
+		if self.portal == "fux.com":
+			default_cover = "file://%s/fux.png" % (config.mediaportal.iconcachepath.value + "logos")
+		if self.portal == "PornTube.com":
+			default_cover = "file://%s/porntube.png" % (config.mediaportal.iconcachepath.value + "logos")
+		if self.portal == "PornerBros.com":
+			default_cover = "file://%s/pornerbros.png" % (config.mediaportal.iconcachepath.value + "logos")
+
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

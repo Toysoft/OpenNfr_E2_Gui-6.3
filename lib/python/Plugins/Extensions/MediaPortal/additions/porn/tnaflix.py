@@ -47,16 +47,17 @@ class TnAflixGenreScreen(MPScreen):
 	def __init__(self, session, mode):
 		self.mode = mode
 
+		global default_cover
 		if self.mode == "tnaflix":
 			self.portal = "TnAflix.com"
 			self.baseurl = "https://www.tnaflix.com"
-			self.default_cover = "file://%s/tnaflix.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/tnaflix.png" % (config.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "empflix":
 			self.portal = "Empflix.com"
 			self.baseurl = "https://www.empflix.com"
-			self.default_cover = "file://%s/empflix.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/empflix.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -80,7 +81,6 @@ class TnAflixGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		CoverHelper(self['coverArt']).getCover(self.default_cover)
 		url = self.baseurl
 		twAgentGetPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -126,7 +126,14 @@ class TnAflixFilmScreen(MPScreen, ThumbsHelper):
 		self.baseurl = baseurl
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+
+		global default_cover
+		if self.portal == "TnAflix.com":
+			default_cover = "file://%s/tnaflix.png" % (config.mediaportal.iconcachepath.value + "logos")
+		if self.portal == "Empflix.com":
+			default_cover = "file://%s/empflix.png" % (config.mediaportal.iconcachepath.value + "logos")
+
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

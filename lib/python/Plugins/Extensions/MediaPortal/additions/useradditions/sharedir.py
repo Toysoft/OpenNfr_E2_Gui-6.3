@@ -170,7 +170,7 @@ class sharedirMenueScreen(sharedirHelper, MPScreen):
 		self.sort = config.mediaportal.sharedir_sort.value
 		self.size = config.mediaportal.sharedir_size.value
 		self.type = config.mediaportal.sharedir_type.value
-		self['title'] = Label("ShareDir (BETA)")
+		self['title'] = Label("ShareDir")
 		self['ContentTitle'] = Label("%s" % self.Name)
 		self['F1'] = Label(config.mediaportal.sharedir_hoster.value.split(";")[0])
 		self['F4'] = Label(self.type)
@@ -444,7 +444,7 @@ class sharedirListScreen(sharedirHelper, MPScreen):
 		self.getLastPage(data, 'id="page_links"(.*?)</div>', '.*>\[{0,1}\s{0,1}(\d+)[\]{0,1}\s{0,1}|<]')
 		preparse = re.search('class="sp_header">(.*?)id="footer', data, re.S)
 		if preparse:
-			Movies = re.findall('class="big"\stitle="(.*?)"\shref="(.*?)".*?class="irow".*?<div>(.*?)</div>.*?extension:\s<b>(.*?)</b>.*?size:\s<b>(.*?)</div>.*?date:\s(.*?)</div>.*?class="info_in">(.*?)\/', preparse.group(1), re.S)
+			Movies = re.findall('class="big"\stitle="(.*?)"\shref="(.*?)".*?class="item_info"><div>(.*?)</div>.*?extension:\s<b>(.*?)</b></div><div><b>(.*?)</div>.*?class="rdonly">(.*?)</div>.*?class="item_src info_in">(.*?)<span>', preparse.group(1), re.S)
 			if Movies:
 				for Title, Url, Hostername, Ext, Size, Date, Source in Movies:
 					Url = "http://sharedir.com%s" % Url
@@ -464,7 +464,7 @@ class sharedirListScreen(sharedirHelper, MPScreen):
 		Size = self['liste'].getCurrent()[0][4]
 		Date = self['liste'].getCurrent()[0][5]
 		Source = self['liste'].getCurrent()[0][6]
-		Handlung = "Extension: %s    Date: %s    Size: %s    Hoster: %s    Source: %s\n%s" % (Ext, Date, Size, Hoster, Source, Title)
+		Handlung = "Extension: %s\nDate: %s\nSize: %s\nHoster: %s\nSource: %s\n" % (Ext, Date, Size, Hoster, Source)
 		self['name'].setText(Title)
 		self['handlung'].setText(Handlung)
 

@@ -51,7 +51,7 @@ beeg_salt = ''
 class beegGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -80,7 +80,6 @@ class beegGenreScreen(MPScreen):
 			self.onLayoutFinish.append(self.layoutFinished)
 
 	def getApiKeys(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "http://beeg.com/1000000"
 		twAgentGetPage(url, agent=IPhone5Agent, headers=MyHeaders).addCallback(self.getApiKeys2).addErrback(self.dataError)
 
@@ -102,7 +101,6 @@ class beegGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "http://beeg.com/api/v6/%s/index/main/0/mobile" % beeg_apikey
 		twAgentGetPage(url, agent=IPhone5Agent, headers=MyHeaders).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -153,7 +151,7 @@ class beegFilmScreen(MPScreen, ThumbsHelper):
 		self.Link = Link
 		self.Name = Name
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

@@ -53,7 +53,7 @@ default_cover = "file://%s/hotmovs.png" % (config.mediaportal.iconcachepath.valu
 class hotmovsGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -79,7 +79,6 @@ class hotmovsGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "http://hotmovs.com/categories/"
 		getPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -125,7 +124,7 @@ class hotmovsFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -180,7 +179,7 @@ class hotmovsFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</div>', '.*>((?:\d+.)\d+)<')
-		Movies = re.findall('data-video-id=.*?href="(.*?)".*?img\ssrc="(.*?)"\s{0,1}alt="(.*?)(?:"|,).*?class="thumbnail__info__right">(.*?)</div', data, re.S)
+		Movies = re.findall('data-video-id=.*?href="(.*?)".*?img.*?src="(.*?)"\s{0,1}alt="(.*?)(?:"|,).*?class="thumbnail__info__right">(.*?)</div', data, re.S)
 		if Movies:
 			for (Url, Image, Title, Runtime) in Movies:
 				if not Url.startswith('http'):

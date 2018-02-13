@@ -46,7 +46,7 @@ BASE_NAME = "The Adult Bay"
 class adultbayGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -66,7 +66,6 @@ class adultbayGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.genreData)
 
 	def genreData(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.filmliste.append(("--- Search ---", None))
 		self.filmliste.append(("Newest (Clips)", "http://adultbay.org/category/clips/"))
 		self.filmliste.append(("Newest (Movies)", "http://adultbay.org/category/movies/"))
@@ -102,7 +101,7 @@ class adultbaySubGenreScreen(MPScreen):
 
 	def __init__(self, session, Name):
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -147,7 +146,7 @@ class adultbayListScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -180,12 +179,12 @@ class adultbayListScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "http://adultbay.org/page/%s/?s=%s" % (str(self.page), self.Link)
+			url = "http://adultbay.org/?s=%s&paged=%s" % (self.Link, str(self.page))
 		else:
 			if self.page == 1:
 				url = self.Link
 			else:
-				url = self.Link + "page/" + str(self.page) + "/"
+				url = self.Link + "?paged=" + str(self.page)
 		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
@@ -199,21 +198,12 @@ class adultbayListScreen(MPScreen, ThumbsHelper):
 			self.filmliste.append(("Search is temporarily disabled...", None, None, None))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		else:
-			parse = re.search('class=\'wp-pagenavi\'>(.*?)</div>', data, re.S)
-			if parse:
-				self.getLastPage(data, 'class=\'wp-pagenavi\'>(.*?)</div>', '.*\/(\d+)\/')
-			else:
-				parse = re.search('class="pagination">.*?/page/(.*?)/.*?Older Posts', data, re.S)
-				if parse:
-					self.lastpage = int(parse.group(1))
-				else:
-					self.lastpage = 1
-				self['page'].setText("%s / %s" % (str(self.page), str(self.lastpage)))
-
+			self.getLastPage(data, '', "class='pgntn-page-pagination-intro'>Page.*?of\s(.*?)</div>")
 			raw = re.findall('class="post-\d+.*?<h2><a\shref="(.*?)">(.*?)</a.*?img\ssrc="(.*?)"', data, re.S)
 			if raw:
 				for (link, title, image) in raw:
-					self.filmliste.append((decodeHtml(title), link, image))
+					if title != "Premium download":
+						self.filmliste.append((decodeHtml(title), link, image))
 				self.ml.setList(map(self._defaultlistleft, self.filmliste))
 				self.ml.moveToIndex(0)
 			self.keyLocked = False
@@ -242,7 +232,7 @@ class StreamAuswahl(MPScreen):
 		self.Link = Link
 		self.Title = Title
 		self.Cover = Cover
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,

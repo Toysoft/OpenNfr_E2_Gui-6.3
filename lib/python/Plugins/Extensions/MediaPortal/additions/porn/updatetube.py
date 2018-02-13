@@ -44,28 +44,29 @@ class updatetubeGenreScreen(MPScreen):
 	def __init__(self, session, mode):
 		self.mode = mode
 
+		global default_cover
 		if self.mode == "updatetube":
 			self.portal = "UpdateTube.com"
 			self.baseurl = "www.updatetube.com"
-			self.default_cover = "file://%s/updatetube.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/updatetube.png" % (config.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "pinkrod":
 			self.portal = "Pinkrod.com"
 			self.baseurl = "www.pinkrod.com"
-			self.default_cover = "file://%s/pinkrod.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pinkrod.png" % (config.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "hotshame":
 			self.portal = "hotshame.com"
 			self.baseurl = "www.hotshame.com"
-			self.default_cover = "file://%s/hotshame.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/hotshame.png" % (config.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "thenewporn":
 			self.portal = "TheNewPorn.com"
 			self.baseurl = "www.thenewporn.com"
-			self.default_cover = "file://%s/thenewporn.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/thenewporn.png" % (config.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "pornsharing":
 			self.portal = "PornSharing.com"
 			self.baseurl = "www.pornsharing.com"
-			self.default_cover = "file://%s/pornsharing.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pornsharing.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -91,7 +92,6 @@ class updatetubeGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self['name'].setText(_('Please wait...'))
-		CoverHelper(self['coverArt']).getCover(self.default_cover)
 		self.keyLocked = True
 		url = "http://%s/categories/" % self.baseurl
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
@@ -110,10 +110,10 @@ class updatetubeGenreScreen(MPScreen):
 		else:
 			most = "most-popular"
 			rated = "top-rated"
-		self.genreliste.insert(0, ("Most Popular", "http://%s/%s" % (self.baseurl, most), self.default_cover))
-		self.genreliste.insert(0, ("Top Rated", "http://%s/%s" % (self.baseurl, rated), self.default_cover))
-		self.genreliste.insert(0, ("Newest", "http://%s" % self.baseurl, self.default_cover))
-		self.genreliste.insert(0, ("--- Search ---", "callSuchen", self.default_cover))
+		self.genreliste.insert(0, ("Most Popular", "http://%s/%s" % (self.baseurl, most), default_cover))
+		self.genreliste.insert(0, ("Top Rated", "http://%s/%s" % (self.baseurl, rated), default_cover))
+		self.genreliste.insert(0, ("Newest", "http://%s" % self.baseurl, default_cover))
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -150,7 +150,20 @@ class updatetubeFilmScreen(MPScreen, ThumbsHelper):
 		self.portal = portal
 		self.baseurl = baseurl
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+
+		global default_cover
+		if self.portal == "UpdateTube.com":
+			default_cover = "file://%s/updatetube.png" % (config.mediaportal.iconcachepath.value + "logos")
+		if self.portal == "Pinkrod.com":
+			default_cover = "file://%s/pinkrod.png" % (config.mediaportal.iconcachepath.value + "logos")
+		if self.portal == "hotshame.com":
+			default_cover = "file://%s/hotshame.png" % (config.mediaportal.iconcachepath.value + "logos")
+		if self.portal == "TheNewPorn.com":
+			default_cover = "file://%s/thenewporn.png" % (config.mediaportal.iconcachepath.value + "logos")
+		if self.portal == "PornSharing.com":
+			default_cover = "file://%s/pornsharing.png" % (config.mediaportal.iconcachepath.value + "logos")
+
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -201,7 +214,7 @@ class updatetubeFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, '(?:id="pgn">|class="pagination">)(.*?)</nav>', '.*\/(\d+)')
-		Movies = re.findall('class="(?:ic|item)".*?href="(.*?)"(?:\sclass="img"|).*?title="(.*?)"(?:\sclass="lnk"|)>.*?data-src="(.*?)"', data, re.S)
+		Movies = re.findall('class="(?:ic|item)".*?href="(.*?)"(?:\sclass="img"|).*?title="(.*?)"(?:\starget="_blank"|)(?:\sclass="lnk"|)>.*?data-src="(.*?)"', data, re.S)
 		if Movies:
 			for (Url, Title, Image) in Movies:
 				self.filmliste.append((decodeHtml(Title), Url, Image))

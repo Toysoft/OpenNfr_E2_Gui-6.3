@@ -47,7 +47,7 @@ ck = {}
 class teamskeetGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -72,7 +72,6 @@ class teamskeetGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self['name'].setText(_('Please wait...'))
 		url = "http://www.teamskeet.com/t1/updates/load?view=rating&page=1&fltrs[tags]=&fltrs[site]=ALL&fltrs[alpha]="
 		getPage(url, agent=myagent, cookies=ck, headers={'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest', 'Referer': 'http://www.teamskeet.com/t1/updates/?site=ts'}).addCallback(self.genreData).addErrback(self.dataError)
@@ -126,7 +125,7 @@ class teamskeetFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

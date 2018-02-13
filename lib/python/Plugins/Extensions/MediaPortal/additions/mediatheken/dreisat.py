@@ -46,7 +46,7 @@ default_cover = "file://%s/3sat.png" % (config.mediaportal.iconcachepath.value +
 class dreisatGenreScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -72,7 +72,6 @@ class dreisatGenreScreen(MPScreen, ThumbsHelper):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.filmliste = []
 		url = baseurl + "?mode=sendungenaz0"
 		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
@@ -133,7 +132,7 @@ class dreisatDateScreen(MPScreen):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -175,7 +174,7 @@ class dreisatListScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -267,9 +266,9 @@ class dreisatListScreen(MPScreen, ThumbsHelper):
 		getPage(url).addCallback(self.getDataStream).addErrback(self.dataError)
 
 	def getDataStream(self, data):
-		stream = re.findall('basetype="h264_aac_mp4.*?".*?<quality>veryhigh</quality>.*?<url>(http://[nrodl|rodl].*?zdf.de.*?.mp4)</url>', data, re.S)
+		stream = re.findall('basetype="h264_aac_mp4_http_na_na"(?:\sisDownload="false"|)>.<quality>veryhigh</quality>.<url>(http://[tvdl|nrodl|rodl].*?zdf.de.*?.mp4)</url>', data, re.S)
 		if stream:
-			url = stream[0].replace("http://rodl", "http://nrodl")
+			url = stream[0]
 			playlist = []
 			playlist.append((self.title, url))
 			self.session.open(SimplePlayer, playlist, showPlaylist=False, ltype='3sat')

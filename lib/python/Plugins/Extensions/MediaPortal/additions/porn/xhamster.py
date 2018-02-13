@@ -67,7 +67,7 @@ def writeFavSub():
 class xhamsterGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -111,7 +111,6 @@ class xhamsterGenreScreen(MPScreen):
 			pass
 
 	def layoutFinished(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = base_url + "/categories"
 		ck.update({'x_ndvkey':'s%3A8%3A%22bef3e026%22%3B'})
 		getPage(url, agent=xhAgent, cookies=ck).addCallback(self.genreData).addErrback(self.dataError)
@@ -196,7 +195,7 @@ class xhamsterSubscriptionsScreen(MPScreen):
 
 	def __init__(self, session, name):
 		self.Name = name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -321,7 +320,7 @@ class xhamsterPornstarsScreen(MPScreen):
 	def __init__(self, session, link, name):
 		self.Link = link
 		self.Name = name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -443,7 +442,7 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

@@ -43,7 +43,7 @@ default_cover = "file://%s/orf.png" % (config.mediaportal.iconcachepath.value + 
 class ORFGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -66,7 +66,6 @@ class ORFGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.genreliste = []
 		for c in xrange(26):
 			self.genreliste.append((chr(ord('A') + c), chr(ord('A') + c)))
@@ -84,7 +83,7 @@ class ORFSubGenreScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, streamGenreLink):
 		self.streamGenreLink = streamGenreLink
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -149,7 +148,7 @@ class ORFFilmeListeScreen(MPScreen):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name= Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -195,7 +194,7 @@ class ORFStreamListeScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link):
 		self.Link = Link
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

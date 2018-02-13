@@ -51,7 +51,7 @@ default_cover = "file://%s/hclips.png" % (config.mediaportal.iconcachepath.value
 class hclipsGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -77,7 +77,6 @@ class hclipsGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "https://www.hclips.com/categories/"
 		getPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -115,7 +114,7 @@ class hclipsGenreScreen(MPScreen):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
-			Link = callback
+			Link = self.suchString.replace(' ', '+')
 			self.session.open(hclipsFilmScreen, Link, Name)
 
 	def getSuggestions(self, text, max_res):
@@ -143,7 +142,7 @@ class hclipsFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -179,42 +178,19 @@ class hclipsFilmScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
-		if not re.search('Search', self.Name):
-			url = "%s%s/" % (self.Link, str(self.page))
+		if re.search('Search', self.Name):
+			url = "https://www.hclips.com/search/%s/?q=%s&p=0" % (str(self.page), self.Link)
 		else:
-			key = "AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY"
-			start = (self.page-1)*20
-			cx = "007041593788150376897:8pvxilcjx8e"
-			q = "%s%s" % (self.Link,"%20inurl%3A%2F")
-			url = "https://www.googleapis.com/customsearch/v1element?key=%s&num=20&hl=en&prettyPrint=false&cx=%s&q=%s&filter=0&start=%s"%(key,cx,q,start)
+			url = "%s%s/" % (self.Link, str(self.page))
 		twAgentGetPage(url, agent=agent, gzip_decoding=True).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		if not re.search('Search', self.Name):
-			self.getLastPage(data, 'class="pagination(.*?)</div>')
-			parse = re.search('class="thumb_holder">(.*?)class="heading"', data, re.S)
-			Movies = re.findall('<a\shref="(https://www.hclips.com/videos/.*?)"\sclass="thumb">.*?<img\ssrc="(.*?)".*?class="dur">(.*?)</span>.*?class="title">(.*?)</strong>.*?small_views">Views:\s(\d+)</span>.*?small_added-date">Added:\s(.*?)</span>', parse.group(1), re.S)
-			if Movies:
-				for (Url, Image, Runtime, Title, Views, Added) in Movies:
-					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, Added))
-		else:
-			if ('results' in data):
-				data = json.loads(data)
-				try: self.lastpage = data['cursor']['pages'][-1]['label']
-				except KeyError: lastpage = 1
-				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-				for e in data['results']:
-					Url = e['unescapedUrl'].encode('utf-8')
-					Title = e['titleNoFormatting'].split("|")[0].encode('utf-8')
-					Content = e.get('contentNoFormatting','None').encode('utf-8').replace("\\n","").replace("\n","")
-					try: Image = e['richSnippet']['cseImage']['src'].encode('utf-8')
-					except KeyError: Image = None
-					items = re.findall('Duration: (.*?)\sViews: (\d+)\s+Added:\s(.*?\s\w+\sago)', Content, re.S)
-					if items:
-						Runtime, Views, Added = items[0]
-					else:
-						Runtime, Views, Added = "", "", ""
-					self.filmliste.append((Title, Url, Image, Runtime, Views, Added))
+		self.getLastPage(data, 'class="pagination(.*?)</div>')
+		parse = re.search('class="thumb_holder">(.*?)class="heading"', data, re.S)
+		Movies = re.findall('<a\shref="(https://www.hclips.com/videos/.*?)"\sclass="thumb">.*?<img\ssrc="(.*?)".*?class="dur">(.*?)</span>.*?class="title">(.*?)</strong>.*?small_views">Views:\s(\d+)</span>.*?small_added-date">Added:\s(.*?)</span>', parse.group(1), re.S)
+		if Movies:
+			for (Url, Image, Runtime, Title, Views, Added) in Movies:
+				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, Added))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), None, None, None, None, None))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))

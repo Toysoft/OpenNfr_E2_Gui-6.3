@@ -46,7 +46,7 @@ base_url = 'https://www.watchbox.de'
 class watchboxGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -64,9 +64,7 @@ class watchboxGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.genreliste.append(('Neue Filme', '/filme/neu'))
-		#self.genreliste.append(('Neue Serien', '/serien/neu'))
 		self.genreliste.append(('Anime', '/anime/filme/neu'))
 		self.genreliste.append(('British', '/british/filme/neu'))
 		self.genreliste.append(('Science-Fiction', '/science-fiction/filme/neu'))
@@ -104,7 +102,7 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Name, Url):
 		self.Name = Name
 		self.Url = Url
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -122,11 +120,11 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 
 		self.keyLocked = True
 		self['title'] = Label("Watchbox")
-		self['ContentTitle'] = Label("Folgen:")
+		self['ContentTitle'] = Label("Filme:")
 		self['Page'] = Label(_("Page:"))
 
 		self.page = 0
-		self.lastpage = 10
+		self.lastpage = 999
 
 		self.folgenliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -144,6 +142,8 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 
 	def loadPageData(self, data):
 		self['page'].setText(str(self.page+1))
+		if not "js-pagination-more-button" in data:
+			self.lastpage = self.page
 		folgen = re.findall('class="grid__item">.*?href="(.*?)".*?format-type="(.*?)".*?img\s+src="(.*?)".*?alt="(.*?)"', data, re.S)
 		if folgen:
 			for (url, type, image, title) in folgen:
@@ -174,7 +174,7 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 		if stream_url:
 			url = stream_url.group(1)
 			getPage(url, agent=wbAgent).addCallback(self.loadplaylist, url).addErrback(self.dataError)
-		
+
 	def loadplaylist(self, data, baseurl):
 		videoPrio = int(config.mediaportal.videoquali_others.value)
 		if videoPrio == 2:
@@ -182,7 +182,7 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 		elif videoPrio == 1:
 			bw = 950000
 		else:
-			bw = 600000		
+			bw = 600000
 		self.bandwith_list = []
 		match_sec_m3u8=re.findall('BANDWIDTH=(\d+).*?\n(.*?m3u8)', data, re.S)
 		for each in match_sec_m3u8:

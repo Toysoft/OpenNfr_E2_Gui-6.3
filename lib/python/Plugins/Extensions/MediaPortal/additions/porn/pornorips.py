@@ -45,7 +45,7 @@ default_cover = "file://%s/pornorips.png" % (config.mediaportal.iconcachepath.va
 class pornoRipsGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -65,7 +65,6 @@ class pornoRipsGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.genreData)
 
 	def genreData(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.genreliste.append(("--- Search ---", None))
 		self.genreliste.append(("Newest (Clips)", "http://pornorips.com/category/clips/"))
 		self.genreliste.append(("Newest (Movies)", "http://pornorips.com/category/movies/"))
@@ -102,7 +101,7 @@ class pornoRipsSubGenreScreen(MPScreen):
 
 	def __init__(self, session, Name):
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -150,7 +149,7 @@ class pornoRipsFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -255,7 +254,7 @@ class pornoRipsStreamListeScreen(MPScreen):
 	def __init__(self, session, streamFilmLink, streamName):
 		self.streamFilmLink = streamFilmLink
 		self.streamName = streamName
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,

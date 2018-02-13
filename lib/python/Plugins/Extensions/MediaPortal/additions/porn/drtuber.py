@@ -55,7 +55,7 @@ class drtuberGenreScreen(MPScreen):
 
 	def __init__(self, session):
 		self.session = session
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		self.scope = 0
 		self.scopeText = ['Straight', 'Gays', 'Transsexual']
 
@@ -80,7 +80,6 @@ class drtuberGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "%s/categories" % BASE_URL
 		getPage(url, agent=dtAgent, cookies=ck).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -165,7 +164,7 @@ class drtuberFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

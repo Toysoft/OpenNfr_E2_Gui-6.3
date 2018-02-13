@@ -46,7 +46,7 @@ default_cover = "file://%s/digitalplayground.png" % (config.mediaportal.iconcach
 class digitalplaygroundGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -72,7 +72,6 @@ class digitalplaygroundGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		url = "http://www.digitalplayground.com/tags/"
 		getPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -135,7 +134,7 @@ class digitalplaygroundFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -182,7 +181,7 @@ class digitalplaygroundFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</nav>')
-		Movies = re.findall('box-card scene.*?<a\shref="(.*?)".*?img\ssrc=".*?".*?alt="(.*?)".*?data-srcset="(.*?)".*?class="subtitle">.*?>(.*?)</a>.*? <span class=""><span>(.*?)</span>.*?<span>(.*?)</span>.*?class="middle">(.*?)<', data, re.S)
+		Movies = re.findall('box-card scene.*?<a\shref="(.*?)".*?img\ssrc=".*?".*?alt="(.*?)".*?data-srcset="(.*?)".*?class="subtitle">.*?">(.*?)</a>.*? <span class=""><span>(.*?)</span>.*?<span>(.*?)</span>.*?class="middle">(.*?)<', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Collection, Runtime, Date, Views) in Movies:
 				Url = "http://www.digitalplayground.com" + Url
