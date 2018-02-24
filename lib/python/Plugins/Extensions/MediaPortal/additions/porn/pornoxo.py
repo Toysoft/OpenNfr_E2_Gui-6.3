@@ -38,6 +38,14 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
+
+json_headers = {
+	'Accept':'application/json',
+	'Accept-Language':'en,en-US;q=0.7,en;q=0.3',
+	'X-Requested-With':'XMLHttpRequest',
+	'Content-Type':'application/x-www-form-urlencoded',
+	}
 
 myagent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11'
 default_cover = "file://%s/pornoxo.png" % (config.mediaportal.iconcachepath.value + "logos")
@@ -85,7 +93,7 @@ class pornoxoGenreScreen(MPScreen):
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.keyLocked = False
-		
+
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '_')
@@ -93,12 +101,32 @@ class pornoxoGenreScreen(MPScreen):
 			Link = '%s' % (self.suchString)
 			self.session.open(pornoxoFilmScreen, Link, Name)
 
+	def getSuggestions(self, text, max_res):
+		url = "https://www.pornoxo.com/main-search.html?categoryValue=1&term=%s" % urllib.quote_plus(text)
+		d = twAgentGetPage(url, agent=myagent, headers=json_headers, timeout=5)
+		d.addCallback(self.gotSuggestions, max_res)
+		d.addErrback(self.gotSuggestions, max_res, err=True)
+		return d
+
+	def gotSuggestions(self, suggestions, max_res, err=False):
+		list = []
+		if not err and type(suggestions) in (str, buffer):
+			suggestions = json.loads(suggestions)
+			for item in suggestions["keyword"]:
+				li = item
+				list.append(str(li))
+				max_res -= 1
+				if not max_res: break
+		elif err:
+			printl(str(suggestions),self,'E')
+		return list
+
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		if Name == "--- Search ---":
-			self.suchen()
+			self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True, auto_text_init=False, suggest_func=self.getSuggestions)
 		else:
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(pornoxoFilmScreen, Link, Name)

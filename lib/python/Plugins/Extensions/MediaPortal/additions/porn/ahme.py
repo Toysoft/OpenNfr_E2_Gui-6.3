@@ -1,6 +1,15 @@
 ﻿# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
+
+agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+json_headers = {
+	'Accept':'application/json',
+	'Accept-Language':'en,en-US;q=0.7,en;q=0.3',
+	'X-Requested-With':'XMLHttpRequest',
+	'Content-Type':'application/x-www-form-urlencoded',
+	}
 
 class ahmeGenreScreen(MPScreen):
 
@@ -60,8 +69,7 @@ class ahmeGenreScreen(MPScreen):
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		if Name == "--- Search ---":
-			self.suchen()
-
+			self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True, auto_text_init=False, suggest_func=self.getSuggestions)
 		else:
 			Name = self['liste'].getCurrent()[0][0]
 			Link = self['liste'].getCurrent()[0][1]
@@ -74,6 +82,26 @@ class ahmeGenreScreen(MPScreen):
 			Link = 'http://www.ah-me.com/search/%s/' % (self.suchString)
 			self.session.open(ahmeFilmScreen, Link, Name)
 
+	def getSuggestions(self, text, max_res):
+		url = "http://www.ah-me.com/?area=autocomplete&o=straight&q=%s" % urllib.quote_plus(text)
+		d = twAgentGetPage(url, agent=agent, headers=json_headers, timeout=5)
+		d.addCallback(self.gotSuggestions, max_res)
+		d.addErrback(self.gotSuggestions, max_res, err=True)
+		return d
+
+	def gotSuggestions(self, suggestions, max_res, err=False):
+		list = []
+		if not err and type(suggestions) in (str, buffer):
+			suggestions = json.loads(suggestions)
+			for item in suggestions["suggestions"]:
+				li = item
+				list.append(str(li))
+				max_res -= 1
+				if not max_res: break
+		elif err:
+			printl(str(suggestions),self,'E')
+		return list
+		
 class ahmeFilmScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name):

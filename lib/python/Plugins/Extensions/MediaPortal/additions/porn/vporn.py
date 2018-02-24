@@ -39,6 +39,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.configlistext import ConfigListScreenExt
+from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 
 config.mediaportal.vporn_username = ConfigText(default="vpornUserName", fixed_size=False)
@@ -48,6 +49,12 @@ config.mediaportal.vporn_date = ConfigText(default="all time", fixed_size=False)
 
 vpagent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
 vpck = {}
+json_headers = {
+	'Accept':'application/json',
+	'Accept-Language':'en,en-US;q=0.7,en;q=0.3',
+	'X-Requested-With':'XMLHttpRequest',
+	'Content-Type':'application/x-www-form-urlencoded',
+	}
 
 default_cover = "file://%s/vporn.png" % (config.mediaportal.iconcachepath.value + "logos")
 
@@ -137,7 +144,7 @@ class vpornGenreScreen(MPScreen):
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		if Name == "--- Search ---":
-			self.suchen()
+			self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True, auto_text_init=False, suggest_func=self.getSuggestions)
 		else:
 			Link = self['liste'].getCurrent()[0][1]
 			Main = self['liste'].getCurrent()[0][3]
@@ -149,6 +156,26 @@ class vpornGenreScreen(MPScreen):
 			Name = "--- Search ---"
 			Link = '%s' % (self.suchString)
 			self.session.open(vpornFilmScreen, Link, Name, self.hd, self.date, False)
+
+	def getSuggestions(self, text, max_res):
+		url = "https://www.vporn.com/cgi-bin/suggest?q=%s" % urllib.quote_plus(text)
+		d = twAgentGetPage(url, agent=vpagent, headers=json_headers, timeout=5)
+		d.addCallback(self.gotSuggestions, max_res)
+		d.addErrback(self.gotSuggestions, max_res, err=True)
+		return d
+
+	def gotSuggestions(self, suggestions, max_res, err=False):
+		list = []
+		if not err and type(suggestions) in (str, buffer):
+			suggestions = json.loads(suggestions)
+			for item in suggestions:
+				li = item
+				list.append(str(li))
+				max_res -= 1
+				if not max_res: break
+		elif err:
+			printl(str(suggestions),self,'E')
+		return list
 
 	def keySetup(self):
 		pass
@@ -349,7 +376,7 @@ class vpornFilmScreen(MPScreen, ThumbsHelper):
 	def getVideoPage(self, data):
 		videoPage = re.findall('flashvars.videoUrl(?:Low|Low2|Medium|Medium2|HD|HD2)\s=\s"(http.*?.mp4)"', data, re.S)
 		if not videoPage:
-			videoPage = re.findall('flashvars.downloadUrl\s=\s"(http.*?.mp4)"', data, re.S)	
+			videoPage = re.findall('flashvars.downloadUrl\s=\s"(http.*?.mp4)"', data, re.S)
 		if videoPage:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]

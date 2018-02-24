@@ -64,10 +64,10 @@ class arteFirstScreen(MPScreen):
 
 
 	def genreData(self):
-		self.filmliste.append(("Neueste", "http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/ALL/ALL/-1/AIRDATE_DESC/0/0/DE_FR.json"))
-		self.filmliste.append(("Meistgesehen", "http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/ALL/ALL/-1/VIEWS/0/0/DE_FR.json"))
-		self.filmliste.append(("Letzte Chance", "http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/ALL/ALL/-1/LAST_CHANCE/0/0/DE_FR.json"))
-		self.filmliste.append(("Themen", "by_channel"))
+		#self.filmliste.append(("Neueste", "http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/ALL/ALL/-1/AIRDATE_DESC/0/0/DE_FR.json"))
+		#self.filmliste.append(("Meistgesehen", "http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/ALL/ALL/-1/VIEWS/0/0/DE_FR.json"))
+		#self.filmliste.append(("Letzte Chance", "http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/ALL/ALL/-1/LAST_CHANCE/0/0/DE_FR.json"))
+		#self.filmliste.append(("Themen", "by_channel"))
 		self.filmliste.append(("Datum", "by_date"))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
@@ -109,10 +109,10 @@ class arteSubGenreScreen(MPScreen):
 	def loadPage(self):
 		if self.Name == "Datum":
 			today = datetime.date.today()
-			for daynr in range(0,7):
+			for daynr in range(-21,22):
 				day1 = today -datetime.timedelta(days=daynr)
 				dateselect =  day1.strftime('%Y-%m-%d')
-				link = 'http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/ALL/ALL/-1/AIRDATE_DESC/0/0/DE_FR/%s.json' % dateselect
+				link = 'https://www.arte.tv/guide/api/api/pages/de/web/TV_GUIDE/?day=%s' % dateselect
 				self.filmliste.append((dateselect, link))
 		elif self.Name == "Themen":
 			link = 'http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/%s/ALL/-1/AIRDATE_DESC/0/0/DE_FR.json'
@@ -125,6 +125,7 @@ class arteSubGenreScreen(MPScreen):
 			self.filmliste.append(('Geschichte', link % 'HIS'))
 			self.filmliste.append(('Junior', link % 'JUN'))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
+		self.ml.moveToIndex(21)
 		self.keyLocked = False
 
 	def keyOK(self):
@@ -171,22 +172,16 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 		getPage(url, agent=std_headers, headers={'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'Referer': self.Link}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		try:
-			player = json.loads(data)
-			try:
-				if player.has_key('programDEList'):
-					for node in player["programDEList"]:
-						subtitle = node.get('STL', '')
-						if subtitle:
-							title = "%s - %s" % (node.get('TIT'), node.get('STL', ''))
-						else:
-							title = node.get('TIT')
-						handlung = "%s min\n%s" % (str(int(node['VDO'].get('videoDurationSeconds', ''))/60), node.get('DTW', ''))
-						self.filmliste.append((title.encode('utf-8'),node['VDO'].get('videoStreamUrl', '').encode('utf-8'),node['VDO'].get('programImage', '').encode('utf-8'),handlung.encode('utf-8')))
-			except:
-				pass
-		except:
-			pass
+		json_data = json.loads(data)
+		if json_data.has_key('zones'):
+			for node in json_data["zones"][1]["data"]:
+				if node['subtitle']:
+					title = "%s - %s" % (str(node['title']), str(node['subtitle']))
+				else:
+					title = str(node['title'])
+				handlung = "%s min\n%s" % (str(node['duration']/60), str(node['fullDescription']))
+				url = "https://api.arte.tv/api/player/v1/config/de/%s" % str(node['programId'])
+				self.filmliste.append((title, url, str(node['images']['landscape']['resolutions'][-1]['url']), handlung))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_("No videos found!"), '','','','',''))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -208,16 +203,20 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 			return
 		self.title = self['liste'].getCurrent()[0][0]
 		link = self['liste'].getCurrent()[0][1]
+		print link
 		getPage(link, headers={'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}).addCallback(self.getStream).addErrback(self.dataError)
 
 	def getStream(self, data):
-		streamSQ = re.findall('"HBBTV","VQU":"SQ","VMT":"mp4","VUR":"(.*?)"', data)
-		if streamSQ:
-			self.playStream(streamSQ[0])
+		json_data  = json.loads(data)
+		if json_data["videoJsonPlayer"].has_key('VSR'):
+			try:
+				url = str(json_data["videoJsonPlayer"]["VSR"]["HTTPS_SQ_1"]["url"])
+			except:
+				url = None
 		else:
-			streamEQ = re.findall('"HBBTV","VQU":"EQ","VMT":"mp4","VUR":"(.*?)"', data)
-			if streamEQ:
-				self.playStream(streamEQ[0])
-
-	def playStream(self, url):
-		self.session.open(SimplePlayer, [(self.title, url, self.ImageUrl)], showPlaylist=False, ltype='arte')
+			url = None
+		if url:
+			print url
+			self.session.open(SimplePlayer, [(self.title, url, self.ImageUrl)], showPlaylist=False, ltype='arte')
+		else:
+			self.session.open(MessageBoxExt, _("This video is not available."), MessageBoxExt.TYPE_INFO, timeout=5)

@@ -144,9 +144,9 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 		self['page'].setText(str(self.page+1))
 		if not "js-pagination-more-button" in data:
 			self.lastpage = self.page
-		folgen = re.findall('class="grid__item">.*?href="(.*?)".*?format-type="(.*?)".*?img\s+src="(.*?)".*?alt="(.*?)"', data, re.S)
+		folgen = re.findall('class="grid__item">.*?format-type="(.*?)".*?href="(.*?)".*?img\s+src="(.*?)".*?alt="(.*?)"', data, re.S)
 		if folgen:
-			for (url, type, image, title) in folgen:
+			for (type, url, image, title) in folgen:
 				if image.startswith('//'):
 					image = 'http:' + image
 				url = base_url + url
@@ -176,15 +176,19 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 			getPage(url, agent=wbAgent).addCallback(self.loadplaylist, url).addErrback(self.dataError)
 
 	def loadplaylist(self, data, baseurl):
-		videoPrio = int(config.mediaportal.videoquali_others.value)
-		if videoPrio == 2:
-			bw = 3000000
-		elif videoPrio == 1:
-			bw = 950000
-		else:
-			bw = 600000
 		self.bandwith_list = []
 		match_sec_m3u8=re.findall('BANDWIDTH=(\d+).*?\n(.*?m3u8)', data, re.S)
+		max = 0
+		for x in match_sec_m3u8:
+			if int(x[0]) > max:
+				max = int(x[0])
+		videoPrio = int(config.mediaportal.videoquali_others.value)
+		if videoPrio == 2:
+			bw = max
+		elif videoPrio == 1:
+			bw = max/2
+		else:
+			bw = max/3
 		for each in match_sec_m3u8:
 			bandwith,url = each
 			self.bandwith_list.append((int(bandwith),url))

@@ -220,7 +220,7 @@ class realgfpornFilmScreen(MPScreen, ThumbsHelper):
 		getPage(Link).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('file:\s"(.*?)"', data, re.S)
+		videoPage = re.findall("<source src='(.*?)' type='video/mp4'", data, re.S)
 		if videoPage:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]

@@ -83,6 +83,7 @@ class voyeurhitGenreScreen(MPScreen):
 		self.genreliste.insert(0, ("Most Popular", "http://www.voyeurhit.com/most-popular/", default_cover))
 		self.genreliste.insert(0, ("Top Rated", "http://voyeurhit.com/top-rated/", default_cover))
 		self.genreliste.insert(0, ("Most Recent", "http://voyeurhit.com/latest-updates/", default_cover))
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -97,7 +98,18 @@ class voyeurhitGenreScreen(MPScreen):
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		self.session.open(voyeurhitFilmScreen, Link, Name)
+		if Name == "--- Search ---":
+			self.suchen()
+		else:
+			Link = self['liste'].getCurrent()[0][1]
+			self.session.open(voyeurhitFilmScreen, Link, Name)
+
+	def SuchenCallback(self, callback = None, entry = None):
+		if callback is not None and len(callback):
+			Name = "--- Search ---"
+			self.suchString = callback
+			Link = self.suchString.replace(' ', '+')
+			self.session.open(voyeurhitFilmScreen, Link, Name)
 
 class voyeurhitFilmScreen(MPScreen, ThumbsHelper):
 
@@ -141,7 +153,10 @@ class voyeurhitFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		cat = self.Link
-		url = "%s%s/" % (self.Link, str(self.page))
+		if re.match(".*Search", self.Name):
+			url = "http://voyeurhit.com/search/%s/?q=%s" % (str(self.page), self.Link)
+		else:
+			url = "%s%s/" % (self.Link, str(self.page))
 		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):

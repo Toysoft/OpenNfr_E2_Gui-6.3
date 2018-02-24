@@ -43,7 +43,27 @@ default_cover = "file://%s/tubewolf.png" % (config.mediaportal.iconcachepath.val
 
 class tubewolfGenreScreen(MPScreen):
 
-	def __init__(self, session):
+	def __init__(self, session, mode):
+		self.mode = mode
+
+		global default_cover
+		if self.mode == "tubewolf":
+			self.portal = "TubeWolf.com"
+			self.baseurl = "http://www.tubewolf.com"
+			default_cover = "file://%s/tubewolf.png" % (config.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "alphaporno":
+			self.portal = "AlphaPorno.com"
+			self.baseurl = "http://www.alphaporno.com"
+			default_cover = "file://%s/alphaporno.png" % (config.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "zedporn":
+			self.portal = "ZedPorn.com"
+			self.baseurl = "http://zedporn.com"
+			default_cover = "file://%s/zedporn.png" % (config.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "crocotube":
+			self.portal = "CrocoTube.com"
+			self.baseurl = "http://crocotube.com"
+			default_cover = "file://%s/crocotube.png" % (config.mediaportal.iconcachepath.value + "logos")
+
 		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -52,7 +72,7 @@ class tubewolfGenreScreen(MPScreen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("TubeWolf.com")
+		self['title'] = Label(self.portal)
 		self['ContentTitle'] = Label("Genre:")
 
 		self.keyLocked = True
@@ -66,30 +86,30 @@ class tubewolfGenreScreen(MPScreen):
 	def loadPage(self):
 		self.filmliste = []
 		self['name'].setText(_('Please wait...'))
-		url = "http://www.tubewolf.com/categories/"
+		url = self.baseurl
 		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		parse = re.search('class="categories-list"(.*?)middle-box', data, re.S)
-		cat = re.findall('a\shref="(.*?)".*?alt="(.*?)"', parse.group(1), re.S)
+		parse = re.search('Categories<(.*?)class="(?:wrap|all|link_all_cat)"', data, re.S)
+		cat = re.findall('a\shref="(.*?)"\stitle="(.*?)"', parse.group(1), re.S)
 		if cat:
 			for (Url, Title) in cat:
 				self.filmliste.append((decodeHtml(Title), Url))
 			self.filmliste.sort()
-			self.filmliste.insert(0, ("Top Rated", "http://www.tubewolf.com/top-rated"))
-			self.filmliste.insert(0, ("Most Popular", "http://www.tubewolf.com/most-popular"))
-			self.filmliste.insert(0, ("Newest", "http://www.tubewolf.com/latest-updates"))
-			self.filmliste.insert(0, ("--- Search ---", "callSuchen", ""))
+			self.filmliste.insert(0, ("Top Rated", "%s/top-rated" % self.baseurl, default_cover))
+			self.filmliste.insert(0, ("Most Popular", "%s/most-popular" % self.baseurl, default_cover))
+			self.filmliste.insert(0, ("Newest", "%s/latest-updates" % self.baseurl, default_cover))
+			self.filmliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 			self.keyLocked = False
 		self['name'].setText('')
 
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
-			self.suchString = callback.replace(' ', '+')
-			Link = '?q=%s' % (self.suchString)
-			Name = self['liste'].getCurrent()[0][0]
-			self.session.open(tubewolfListScreen, Link, Name)
+			Name = "--- Search ---"
+			self.suchString = callback
+			Link = callback.replace(' ', '+')
+			self.session.open(tubewolfListScreen, Link, Name, self.portal, self.baseurl)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -99,13 +119,26 @@ class tubewolfGenreScreen(MPScreen):
 			self.suchen()
 		else:
 			Link = self['liste'].getCurrent()[0][1]
-			self.session.open(tubewolfListScreen, Link, Name)
+			self.session.open(tubewolfListScreen, Link, Name, self.portal, self.baseurl)
 
 class tubewolfListScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name):
+	def __init__(self, session, Link, Name, portal, baseurl):
 		self.Link = Link
 		self.Name = Name
+		self.portal = portal
+		self.baseurl = baseurl
+
+		global default_cover
+		if self.portal == "TubeWolf.com":
+			default_cover = "file://%s/tubewolf.png" % (config.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "AlphaPorno.com":
+			default_cover = "file://%s/alphaporno.png" % (config.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "ZedPorn.com":
+			default_cover = "file://%s/zedporn.png" % (config.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "CrocoTube.com":
+			default_cover = "file://%s/crocotube.png" % (config.mediaportal.iconcachepath.value + "logos")
+
 		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -123,7 +156,7 @@ class tubewolfListScreen(MPScreen, ThumbsHelper):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("TubeWolf.com")
+		self['title'] = Label(self.portal)
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['name'] = Label(_("Please wait..."))
 		self['F2'] = Label(_("Page"))
@@ -141,28 +174,28 @@ class tubewolfListScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "http://www.tubewolf.com/search/%s/%s" % (self.page, self.Link)
+			url = "%s/search/%s/?q=%s" % (self.baseurl, self.page, self.Link)
 		else:
 			url = self.Link + "/" + str(self.page) + "/"
 		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		self.getLastPage(data,'<li\sclass="active"(.*?)Next')
-		parse = re.search('class="video-list">(.*?)class="pagination">', data, re.S)
-		streams = parse.group(1).split('</div>')
-		if streams:
-			for item in streams:
-				Date = re.search('date">(.*?)</span>', item)
+		self.getLastPage(data, '"pagination(?:-list|)"(.*?)</ul>')
+		movies = re.findall('class="(?:video-|)thumb".*?href="(%s.*?)".*?class="(?:th|img-shadow|pic)".*?src="(.*?)"\salt="(.*?)".*?duration">(.*?)</span>(.*?(?:</li>|</em></p>|content="[0-9\-]+">))' % self.baseurl, data, re.S)
+		if movies:
+			for (Url, Image, Title, Duration, Added) in movies:
+				Date = re.search('"datePublished" content="(.*?)"', Added)
 				if Date:
-					Date = Date.group(1)
+					Added = Date.group(1)
 				else:
-					Date = ''
-				raw = re.findall('itemprop.*?href="(http://www.tubewolf.com/movies.*?)".*?title="(.*?)".*?class="th.*?src="(.*?)".*?class="duration">\s{0,2}(.*?)</span>', item, re.S)
-				if raw:
-					for (Link, Title, Image, Duration) in raw:
-						self.filmliste.append((decodeHtml(Title), Link, Image, Duration, Date))
+					Date = re.search('<p><span>(.*?)</span>', Added)
+					if Date:
+						Added = Date.group(1)
+					else:
+						Added = ''
+				self.filmliste.append((decodeHtml(Title), Url, Image, Duration, Added))
 		if len(self.filmliste) == 0:
-			self.filmliste.append((_('No videos found!'), '', '', '', ''))
+			self.filmliste.append((_('No videos found!'), None, None, '', ''))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -173,7 +206,11 @@ class tubewolfListScreen(MPScreen, ThumbsHelper):
 		Title = self['liste'].getCurrent()[0][0]
 		runtime = self['liste'].getCurrent()[0][3]
 		added = self['liste'].getCurrent()[0][4]
-		self['handlung'].setText("Runtime: %s\nAdded: %s" % (runtime, added))
+		if added != "":
+			added = "\nAdded: %s" % added
+		else:
+			added = ""
+		self['handlung'].setText("Runtime: %s%s" % (runtime, added))
 		self['name'].setText(Title)
 		coverUrl = self['liste'].getCurrent()[0][2]
 		CoverHelper(self['coverArt']).getCover(coverUrl)
@@ -186,6 +223,6 @@ class tubewolfListScreen(MPScreen, ThumbsHelper):
 
 	def getStreamData(self, data):
 		title = self['liste'].getCurrent()[0][0]
-		raw = re.findall("video_url:\s'(.*?)',", data, re.S)
+		raw = re.findall('file:\s"(.*?)",', data, re.S)
 		if raw:
 			self.session.open(SimplePlayer, [(title, raw[0])], showPlaylist=False, ltype='tubewolf')

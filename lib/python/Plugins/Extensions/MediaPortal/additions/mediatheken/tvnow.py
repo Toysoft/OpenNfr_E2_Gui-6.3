@@ -367,20 +367,23 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 		getPage(url, agent=nowAgent).addCallback(self.loadplaylist, url).addErrback(self.dataError)
 
 	def loadplaylist(self, data, baseurl):
-		videoPrio = int(config.mediaportal.videoquali_others.value)
-		if videoPrio == 2:
-			bw = 3000000
-		elif videoPrio == 1:
-			bw = 950000
-		else:
-			bw = 600000
 		self.bandwith_list = []
 		match_sec_m3u8=re.findall('BANDWIDTH=(\d+).*?\n(.*?m3u8)', data, re.S)
+		max = 0
+		for x in match_sec_m3u8:
+			if int(x[0]) > max:
+				max = int(x[0])
+		videoPrio = int(config.mediaportal.videoquali_others.value)
+		if videoPrio == 2:
+			bw = max
+		elif videoPrio == 1:
+			bw = max/2
+		else:
+			bw = max/3
 		for each in match_sec_m3u8:
 			bandwith,url = each
 			self.bandwith_list.append((int(bandwith),url))
 		_, best = min((abs(int(x[0]) - bw), x) for x in self.bandwith_list)
-
 		url = baseurl.replace('fairplay.m3u8', '') + best[1]
 		Name = self['liste'].getCurrent()[0][0]
 		mp_globals.player_agent = nowAgent

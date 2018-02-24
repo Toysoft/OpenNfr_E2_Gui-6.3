@@ -270,15 +270,19 @@ class chaturbateFilmScreen(MPScreen, ThumbsHelper):
 			self.session.open(MessageBoxExt, _("Cam is currently offline."), MessageBoxExt.TYPE_INFO)
 
 	def loadplaylist(self, data, baseurl):
-		videoPrio = int(config.mediaportal.videoquali_others.value)
-		if videoPrio == 2:
-			bw = 3000000
-		elif videoPrio == 1:
-			bw = 2000000
-		else:
-			bw = 1000000
 		self.bandwith_list = []
 		match_sec_m3u8=re.findall('BANDWIDTH=(\d+).*?\n(.*?m3u8)', data, re.S)
+		max = 0
+		for x in match_sec_m3u8:
+			if int(x[0]) > max:
+				max = int(x[0])
+		videoPrio = int(config.mediaportal.videoquali_others.value)
+		if videoPrio == 2:
+			bw = max
+		elif videoPrio == 1:
+			bw = max/2
+		else:
+			bw = max/3
 		for each in match_sec_m3u8:
 			bandwith,url = each
 			self.bandwith_list.append((int(bandwith),url))

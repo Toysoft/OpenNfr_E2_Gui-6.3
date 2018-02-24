@@ -181,9 +181,9 @@ class xhamsterGenreScreen(MPScreen):
 	def gotSuggestions(self, suggestions, max_res, err=False):
 		list = []
 		if not err and type(suggestions) in (str, buffer):
-			suggestions = re.findall('"(.*?)"', suggestions, re.S)
+			suggestions = json.loads(suggestions)
 			for item in suggestions:
-				li = stripAllTags(item)
+				li = item["plainText"]
 				list.append(str(li))
 				max_res -= 1
 				if not max_res: break

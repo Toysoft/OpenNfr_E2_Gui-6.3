@@ -189,7 +189,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018020801"))
+config.mediaportal.version = NoSave(ConfigText(default="2018022201"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.retries = ConfigSubsection()
@@ -4199,18 +4199,22 @@ def _stylemanager(mode):
 			skinScrollbar = False
 
 		if mode == 0:
-			skin_path = resolveFilename(SCOPE_CURRENT_SKIN) + "skin_user_colors.xml"
-			if not fileExists(skin_path):
-				skin_path = resolveFilename(SCOPE_CURRENT_SKIN) + "skin.xml"
+			skin_path = resolveFilename(SCOPE_CURRENT_SKIN) + "skin.xml"
+			skin_path_font = skin_path
+			skin_path_colors = resolveFilename(SCOPE_CURRENT_SKIN) + "skin_user_colors.xml"
+			if not fileExists(skin_path_colors):
+				skin_path_colors = skin_path
 			file_path = resolveFilename(SCOPE_SKIN)
 		else:
 			skin_path = mp_globals.pluginPath + mp_globals.skinsPath + "/" + mp_globals.currentskin + "/skin.xml"
 			if not fileExists(skin_path):
 				skin_path = mp_globals.pluginPath + mp_globals.skinsPath + mp_globals.skinFallback + "/skin.xml"
+			skin_path_font = skin_path
+			skin_path_colors = skin_path
 			file_path = mp_globals.pluginPath + "/"
 
 		if fileExists(skin_path):
-			conf = xml.etree.cElementTree.parse(skin_path)
+			conf = xml.etree.cElementTree.parse(skin_path_font)
 			for x in conf.getroot():
 				if x.tag == "fonts" and mode == 0:
 					fonts = x
@@ -4231,7 +4235,10 @@ def _stylemanager(mode):
 									if fileExists(skin_path):
 										resolved_font = skin_path
 								addFont(resolved_font, name, scale, True)
-				elif x.tag == "windowstylescrollbar":
+
+			conf = xml.etree.cElementTree.parse(skin_path_colors)
+			for x in conf.getroot():
+				if x.tag == "windowstylescrollbar":
 					if skinScrollbar:
 						windowstylescrollbar =  x
 						for x in windowstylescrollbar:
