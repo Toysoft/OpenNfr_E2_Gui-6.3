@@ -4,7 +4,7 @@ from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT
 def FindServiceControlEntryComponent(service, name):
 	res = [
 		(service, name),
-		(eListboxPythonMultiContent.TYPE_TEXT, 80, 5, 300, 50, 0, RT_HALIGN_LEFT, name)
+		(eListboxPythonMultiContent.TYPE_TEXT, 0, 5, 900, 50, 0, RT_HALIGN_LEFT, name)
 	]
 
 	return res
@@ -12,8 +12,8 @@ def FindServiceControlEntryComponent(service, name):
 class FindServiceControlListe(MenuList):
 	def __init__(self, list, enableWrapAround = False):
 		MenuList.__init__(self, list, enableWrapAround, eListboxPythonMultiContent)
-		self.l.setFont(0, gFont("Regular", 20))
-		self.l.setItemHeight(32)
+		self.l.setFont(0, gFont("Regular", 30))
+		self.l.setItemHeight(40)
 
 	def etoggleSelectedLock(self):
 		
