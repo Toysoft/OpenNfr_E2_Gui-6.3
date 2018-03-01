@@ -4,7 +4,7 @@ from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT
 def FindServiceControlEntryComponent(service, name):
 	res = [
 		(service, name),
-		(eListboxPythonMultiContent.TYPE_TEXT, 0, 5, 900, 50, 0, RT_HALIGN_LEFT, name)
+		(eListboxPythonMultiContent.TYPE_TEXT, 0, 3, 900, 50, 0, RT_HALIGN_LEFT, name)
 	]
 
 	return res
