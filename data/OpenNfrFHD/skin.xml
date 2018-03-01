@@ -10103,6 +10103,577 @@
     <ePixmap position="43,942" size="80,31" zPosition="10" pixmap="OpenNfrFHD/buttons/key_info.png" transparent="1" alphatest="blend" />
     <ePixmap position="903,942" size="80,31" zPosition="10" pixmap="OpenNfrFHD/buttons/key_menu.png" transparent="1" alphatest="blend" />
   </screen>
+  <screen name="InfopanelManagerScreen" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green-long.png" position="516,1004" size="405,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <widget source="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_green" render="Label" position="532,1017" size="373,34" zPosition="1" font="LCD; 28" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="Package Manager For NFR" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" transparent="1">
+      <convert type="TemplatedMultiContent">
+		{"template": [
+		MultiContentEntryText(pos = (120, 20), size = (700, 40), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (120, 60), size = (700, 30), font=1, flags = RT_HALIGN_LEFT, text = 2), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 10), size = (100, 100), png = 3), # index 4 is the pixmap
+		],
+		"fonts": [gFont("Regular", 30),gFont("Regular", 24)],
+		"itemHeight": 110
+		}
+		</convert>
+    </widget>
+  </screen>
+  <screen name="InstallTarGZ" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <widget source="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="Package Manager For NFR" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="1">
+      <convert type="TemplatedMultiContent">
+		{"template": [
+		MultiContentEntryText(pos = (70, 5), size = (800, 40), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (80, 34), size = (800, 30), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 10), size = (50, 50), png = 2), # index 4 is the pixmap
+		],
+		"fonts": [gFont("Regular", 30),gFont("Regular", 24)],
+		"itemHeight":70
+		}
+		</convert>
+    </widget>
+  </screen>
+  <screen name="InstallIpk" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <widget source="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="Package Manager For NFR" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="1">
+      <convert type="TemplatedMultiContent">
+		{"template": [
+		MultiContentEntryText(pos = (70, 5), size = (800, 40), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (80, 34), size = (800, 30), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 10), size = (50, 50), png = 2), # index 4 is the pixmap
+		],
+		"fonts": [gFont("Regular", 30),gFont("Regular", 24)],
+		"itemHeight":70
+		}
+		</convert>
+    </widget>
+  </screen>
+  <screen name="InstallZip" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <widget source="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="Package Manager For NFR" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="1">
+      <convert type="TemplatedMultiContent">
+		{"template": [
+		MultiContentEntryText(pos = (70, 5), size = (800, 40), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (80, 34), size = (800, 30), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 10), size = (50, 50), png = 2), # index 4 is the pixmap
+		],
+		"fonts": [gFont("Regular", 30),gFont("Regular", 24)],
+		"itemHeight":70
+		}
+		</convert>
+    </widget>
+  </screen>
+  <screen name="AdvInstallIpk" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <widget source="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="Package Manager For NFR" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="1">
+      <convert type="TemplatedMultiContent">
+		{"template": [
+		MultiContentEntryText(pos = (70, 5), size = (800, 40), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (80, 34), size = (800, 30), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 10), size = (50, 50), png = 2), # index 4 is the pixmap
+		],
+		"fonts": [gFont("Regular", 30),gFont("Regular", 24)],
+		"itemHeight":70
+		}
+		</convert>
+    </widget>
+  </screen>
+  <screen name="InstallRar" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <widget source="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="Package Manager For NFR" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="1">
+      <convert type="TemplatedMultiContent">
+		{"template": [
+		MultiContentEntryText(pos = (70, 5), size = (800, 40), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (80, 34), size = (800, 30), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 10), size = (50, 50), png = 2), # index 4 is the pixmap
+		],
+		"fonts": [gFont("Regular", 30),gFont("Regular", 24)],
+		"itemHeight":70
+		}
+		</convert>
+    </widget>
+  </screen>
+  <screen name="Net_test" position="center,center" size="1920,1080" title="Iperf-Net_test" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget source="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="Iperf-Net_test" position="74,50" size="720,45" font="LCD; 42" backgroundColor="grey" transparent="1" foregroundColor="grey" halign="center" />
+    <widget name="filedata" position="55,220" size="920,700" transparent="1" font="Regular; 30" />
+    <applet type="onLayoutFinish">
+        self["filedata"].instance.setItemHeight(40)
+    </applet>
+    <widget source="key_info" render="Label" position="764,941" zPosition="5" size="214,30" valign="center" halign="right" font="Regular; 28" transparent="1" shadowColor="black" shadowOffset="-1,-1" backgroundColor="goldenrod" foregroundColor="goldenrod" />
+    <ePixmap position="770,942" size="80,31" zPosition="10" pixmap="OpenNfrFHD/buttons/key_info.png" transparent="1" alphatest="blend" />
+    <eLabel text="=" position="842,941" size="10,30" font="Regular; 28" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+  </screen>
+  <screen name="ZapHistoryBrowser" position="center,center" size="1920,1080" title="Zap History Browser" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget source="Title" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="list" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="1" font="Regular; 30" />
+    <applet type="onLayoutFinish">
+        self["list"].instance.setItemHeight(40)
+    </applet>
+  </screen>
+  <screen name="AutoBouquetsMaker_ProvidersSetup" position="center,center" size="1920,1080" title="AutoBouqetsMakerSetup" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="AutoBouqetsMakerSetup" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="config" position="55,220" size="920,500" zPosition="1" scrollbarMode="showOnDemand" transparent="1" font="Regular; 30" />
+    <applet type="onLayoutFinish">
+        self["config"].instance.setItemHeight(40)
+    </applet>
+    <widget name="description" position="55,880" size="920,40" font="Regular; 24" halign="center" valign="bottom" transparent="1" zPosition="3" foregroundColor="goldenrod" backgroundColor="goldenrod" />
+    <widget name="pleasewait" position="55,220" size="920,500" font="Regular; 30" halign="center" valign="center" transparent="1" zPosition="2" foregroundColor="goldenrod" backgroundColor="goldenrod" />
+  </screen>
+  <screen name="AutoBouquetsMaker_Setup" position="center,center" size="1920,1080" title="AutoBouquetsMaker_Setup" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="AutoBouqetsMakerSetup" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="config" position="55,220" size="920,640" zPosition="1" scrollbarMode="showOnDemand" transparent="1" font="Regular; 30" />
+    <applet type="onLayoutFinish">
+        self["config"].instance.setItemHeight(40)
+    </applet>
+    <widget name="description" position="55,720" size="920,200" font="Regular; 24" halign="center" valign="bottom" transparent="1" zPosition="2" foregroundColor="goldenrod" backgroundColor="goldenrod" />
+    <widget name="pleasewait" position="55,220" size="920,500" font="Regular; 30" halign="center" valign="center" transparent="1" zPosition="2" foregroundColor="goldenrod" backgroundColor="goldenrod" />
+  </screen>
+  <screen name="AutoBouquetsMaker_Menu" position="center,center" size="1920,1080" title="AutoBouquetsMaker_Menu" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="AutoBouquetsMaker_Menu" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="list" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" transparent="1">
+      <convert type="TemplatedMultiContent">
+			{"template": [
+				MultiContentEntryPixmapAlphaTest(pos = (12, 4), size = (32, 32), png = 0),
+				MultiContentEntryText(pos = (58, 3), size = (800, 40), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 1),
+				],
+				"fonts": [gFont("Regular", 30)],
+				"itemHeight": 40
+			}
+		</convert>
+    </widget>
+    <eLabel position="55,705" zPosition="3" size="920,214" backgroundColor="unff000000" halign="center" />
+  </screen>
+  <screen name="AutoBouquetsMaker_About" position="center,center" size="1920,1080" title="AutoBouquetsMaker_About" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="AutoBouquetsMaker_About" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="about" position="55,220" size="920,700" font="Regular;26" transparent="1" />
+    <widget name="oealogo" position="415,784" size="200,135" zPosition="4" transparent="1" alphatest="blend" />
+  </screen>
+  <screen name="AutoBouquetsMaker_HideSections" position="center,center" size="1920,1080" title="AutoBouquetsMaker_HideSections" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="AutoBouquetsMaker_HideSections" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="list" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" transparent="1">
+      <convert type="TemplatedMultiContent">
+					{"template": [
+						MultiContentEntryPixmapAlphaTest(pos = (10, 8), size = (32, 32), png = 0),
+						MultiContentEntryText(pos = (47, 0), size = (400, 40), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 1),
+						MultiContentEntryText(pos = (450, 0), size = (400, 40), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 2),
+						],
+						"fonts": [gFont("Regular", 30)],
+						"itemHeight": 40
+					}
+				</convert>
+    </widget>
+  </screen>
+  <screen name="AutoBouquetsMaker_KeepBouquets" position="center,center" size="1920,1080" title="AutoBouquetsMaker_KeepBouquets" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="AutoBouquetsMaker_KeepBouquets" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="list" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" transparent="1">
+      <convert type="TemplatedMultiContent">
+					{"template": [
+						MultiContentEntryPixmapAlphaTest(pos = (10, 0), size = (32, 32), png = 0),
+						MultiContentEntryText(pos = (47, 0), size = (400, 30), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 1),
+						MultiContentEntryText(pos = (450, 0), size = (120, 30), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 2),
+						],
+						"fonts": [gFont("Regular", 22)],
+						"itemHeight": 30
+					}
+				</convert>
+    </widget>
+  </screen>
+  <screen name="AutoBouquetsMaker_Ordering" position="center,center" size="1920,1080" title="AutoBouquetsMaker_Ordering" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="AutoBouquetsMaker_Ordering" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="list" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" transparent="1">
+      <convert type="TemplatedMultiContent">
+					{"template": [
+						MultiContentEntryText(pos = (12, 1), size = (440, 32), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 1),
+						],
+						"fonts": [gFont("Regular", 22)],
+						"itemHeight": 30
+					}
+				</convert>
+    </widget>
+    <widget name="pleasewait" position="55,220" size="920,700" font="Regular;18" halign="center" valign="center" transparent="1" zPosition="1" />
+  </screen>
+  <screen name="AutoBouquetsMaker_Log" position="center,center" size="1920,1080" title="Backup Log" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="AutoBouquetsMaker_Log" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="list" position="55,220" size="920,696" zPosition="1" scrollbarMode="showOnDemand" transparent="1" font="Regular; 26" />
+  </screen>
+  <screen name="FindService" position="center,center" size="1920,1080" title="FindService" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="FindService" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="servicelist" position="55,220" size="920,680" zPosition="1" scrollbarMode="showOnDemand" transparent="1" />
+  </screen>
   <!-- TEST -->
   <screen name="CutListEditor" position="center,center" size="1920,1080" title="Cutlist editor" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back3.png" />
@@ -11437,456 +12008,6 @@
   <screen name="ChapterZap" position="100,500" size="280,60" title="Chapter">
     <widget name="chapter" position="35,15" size="110,25" font="Regular;23" />
     <widget name="number" position="145,15" size="80,25" halign="right" font="Regular;23" />
-  </screen>
-  <screen name="ZapHistoryBrowser" position="center,center" size="1920,1080" title="Zap History Browser" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="background" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="background" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <widget source="Title" render="Label" position="65,17" size="700,43" zPosition="1" halign="left" font="Regular; 35" backgroundColor="background" transparent="1" foregroundColor="cyan1" />
-    <ePixmap pixmap="skin_default/buttons/red.png" position="70,670" size="30,30" transparent="1" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/green.png" position="250,670" size="30,30" transparent="1" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/yellow.png" position="430,670" size="30,30" transparent="1" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/blue.png" position="610,670" size="30,30" transparent="1" alphatest="blend" />
-    <widget name="key_red" position="105,672" zPosition="1" size="140,25" font="Regular;20" valign="center" halign="center" backgroundColor="black" transparent="1" />
-    <widget name="key_green" position="285,672" zPosition="1" size="140,25" font="Regular;20" valign="center" halign="center" backgroundColor="black" transparent="1" />
-    <widget name="key_yellow" position="465,672" zPosition="1" size="140,25" font="Regular;20" valign="center" halign="center" backgroundColor="black" transparent="1" />
-    <widget name="key_blue" position="645,672" zPosition="1" size="140,25" font="Regular;20" valign="center" halign="center" backgroundColor="black" transparent="1" />
-    <widget name="list" position="65,98" size="710,540" scrollbarMode="showOnDemand" transparent="1" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="962,431" size="128,128" zPosition="2" pixmap="skin_default/icons/setup.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="AutoBouquetsMaker_ProvidersSetup" position="center,center" size="1920,1080" title="AutoBouqetsMakerSetup" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="380,670" size="30,30" alphatest="blend" />
-    <widget name="key_red" position="105,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget name="key_green" position="419,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="AutoBouqetsMakerSetup" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <widget name="config" position="65,98" size="715,400" scrollbarMode="showOnDemand" transparent="1" />
-    <widget name="description" position="65,585" size="715,50" font="Regular;18" halign="center" valign="bottom" transparent="1" zPosition="1" foregroundColor="cyan1" />
-    <widget name="pleasewait" position="65,98" size="715,400" font="Regular;18" halign="center" valign="center" transparent="1" zPosition="2" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-  </screen>
-  <screen name="AutoBouquetsMaker_Setup" position="center,center" size="1920,1080" title="AutoBouquetsMaker_Setup" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="380,670" size="30,30" alphatest="blend" />
-    <widget name="key_red" position="105,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget name="key_green" position="419,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="AutoBouquetsMaker_Setup" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <widget name="config" position="65,98" size="715,400" scrollbarMode="showOnDemand" transparent="1" />
-    <widget name="description" position="65,585" size="715,50" font="Regular;18" halign="center" valign="bottom" transparent="1" zPosition="1" foregroundColor="cyan1" />
-    <widget name="pleasewait" position="65,98" size="715,400" font="Regular;18" halign="center" valign="center" transparent="1" zPosition="2" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-  </screen>
-  <screen name="AutoBouquetsMaker_Menu" position="center,center" size="1920,1080" title="AutoBouquetsMaker_Menu" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="AutoBouquetsMaker_Menu" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget source="list" render="Listbox" position="65,98" size="715,500" scrollbarMode="showOnDemand" transparent="1">
-      <convert type="TemplatedMultiContent">
-			{"template": [
-				MultiContentEntryPixmapAlphaTest(pos = (12, 4), size = (32, 32), png = 0),
-				MultiContentEntryText(pos = (58, 5), size = (440, 38), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 1),
-				],
-				"fonts": [gFont("Regular", 22)],
-				"itemHeight": 40
-			}
-		</convert>
-    </widget>
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-  </screen>
-  <screen name="AutoBouquetsMaker_About" position="center,center" size="1920,1080" title="AutoBouquetsMaker_About" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <widget name="key_red" position="105,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="AutoBouquetsMaker_About" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget name="about" position="65,98" size="715,400" font="Regular;15" transparent="1" />
-    <widget name="oealogo" position="322,500" size="200,135" zPosition="4" transparent="1" alphatest="blend" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-  </screen>
-  <screen name="AutoBouquetsMaker_HideSections" position="center,center" size="1920,1080" title="AutoBouquetsMaker_HideSections" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="380,670" size="30,30" alphatest="blend" />
-    <widget name="key_red" position="105,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget name="key_green" position="419,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="AutoBouquetsMaker_HideSections" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget source="list" render="Listbox" position="65,98" size="715,450" scrollbarMode="showOnDemand" transparent="1">
-      <convert type="TemplatedMultiContent">
-					{"template": [
-						MultiContentEntryPixmapAlphaTest(pos = (10, 0), size = (32, 32), png = 0),
-						MultiContentEntryText(pos = (47, 0), size = (400, 30), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 1),
-						MultiContentEntryText(pos = (450, 0), size = (120, 30), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 2),
-						],
-						"fonts": [gFont("Regular", 22)],
-						"itemHeight": 30
-					}
-				</convert>
-    </widget>
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-  </screen>
-  <screen name="AutoBouquetsMaker_KeepBouquets" position="center,center" size="1920,1080" title="AutoBouquetsMaker_KeepBouquets" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="380,670" size="30,30" alphatest="blend" />
-    <widget name="key_red" position="105,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget name="key_green" position="419,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="AutoBouquetsMaker_KeepBouquets" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget source="list" render="Listbox" position="65,98" size="715,450" scrollbarMode="showOnDemand" transparent="1">
-      <convert type="TemplatedMultiContent">
-					{"template": [
-						MultiContentEntryPixmapAlphaTest(pos = (10, 0), size = (32, 32), png = 0),
-						MultiContentEntryText(pos = (47, 0), size = (400, 30), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 1),
-						MultiContentEntryText(pos = (450, 0), size = (120, 30), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 2),
-						],
-						"fonts": [gFont("Regular", 22)],
-						"itemHeight": 30
-					}
-				</convert>
-    </widget>
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-  </screen>
-  <screen name="AutoBouquetsMaker_Ordering" position="center,center" size="1920,1080" title="AutoBouquetsMaker_Ordering" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="380,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_yellow.png" position="706,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_blue.png" position="1025,670" size="30,30" alphatest="blend" />
-    <widget name="key_red" position="105,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget name="key_green" position="419,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget name="key_yellow" position="747,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget name="key_blue" position="1066,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="AutoBouquetsMaker_Ordering" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget source="list" render="Listbox" position="65,98" size="715,360" scrollbarMode="showOnDemand" transparent="1">
-      <convert type="TemplatedMultiContent">
-					{"template": [
-						MultiContentEntryText(pos = (12, 1), size = (440, 32), font=0, flags = RT_HALIGN_LEFT|RT_VALIGN_TOP, text = 1),
-						],
-						"fonts": [gFont("Regular", 22)],
-						"itemHeight": 30
-					}
-				</convert>
-    </widget>
-    <widget name="pleasewait" position="65,98" size="715,140" font="Regular;18" halign="center" valign="center" transparent="1" zPosition="1" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-  </screen>
-  <screen name="AutoBouquetsMaker_Log" position="center,center" size="1920,1080" title="Backup Log" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="AutoBouquetsMaker_Log" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget name="list" position="65,98" size="715,500" font="Regular;16" transparent="1" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-  </screen>
-  <screen name="InfopanelManagerScreen" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="380,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_yellow.png" position="851,670" size="30,30" alphatest="blend" />
-    <widget source="key_red" render="Label" position="105,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_green" render="Label" position="419,672" size="350,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_yellow" render="Label" position="891,672" size="200,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="Package Manager For NFR" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget source="menu" render="Listbox" position="65,98" size="715,440" transparent="1">
-      <convert type="TemplatedMultiContent">
-		{"template": [
-		MultiContentEntryText(pos = (120, 2), size = (580, 28), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
-		MultiContentEntryText(pos = (120, 32), size = (580, 18), font=1, flags = RT_HALIGN_LEFT, text = 2), # index 3 is the Description
-		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (100, 100), png = 3), # index 4 is the pixmap
-		],
-		"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
-		"itemHeight": 110
-		}
-		</convert>
-    </widget>
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-  </screen>
-  <screen name="InstallTarGZ" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="360,670" size="30,30" alphatest="blend" />
-    <widget source="key_red" render="Label" position="105,672" size="240,24" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_green" render="Label" position="395,672" size="270,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="Package Manager For NFR" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget source="menu" render="Listbox" position="65,98" size="715,540" scrollbarMode="showOnDemand" transparent="1">
-      <convert type="TemplatedMultiContent">
-		{"template": [
-		MultiContentEntryText(pos = (70, 2), size = (630, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
-		MultiContentEntryText(pos = (80, 29), size = (630, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
-		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (50, 50), png = 2), # index 4 is the pixmap
-		],
-		"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
-		"itemHeight": 60
-		}
-		</convert>
-    </widget>
-  </screen>
-  <screen name="InstallIpk" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="360,670" size="30,30" alphatest="blend" />
-    <widget source="key_red" render="Label" position="105,672" size="240,24" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_green" render="Label" position="395,672" size="270,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="Package Manager For NFR" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget source="menu" render="Listbox" position="65,98" size="715,540" scrollbarMode="showOnDemand" transparent="1">
-      <convert type="TemplatedMultiContent">
-		{"template": [
-		MultiContentEntryText(pos = (70, 2), size = (630, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
-		MultiContentEntryText(pos = (80, 29), size = (630, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
-		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (50, 50), png = 2), # index 4 is the pixmap
-		],
-		"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
-		"itemHeight": 60
-		}
-		</convert>
-    </widget>
-  </screen>
-  <screen name="InstallZip" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="360,670" size="30,30" alphatest="blend" />
-    <widget source="key_red" render="Label" position="105,672" size="240,24" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_green" render="Label" position="395,672" size="270,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="Package Manager For NFR" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget source="menu" render="Listbox" position="65,98" size="715,540" scrollbarMode="showOnDemand" transparent="1">
-      <convert type="TemplatedMultiContent">
-		{"template": [
-		MultiContentEntryText(pos = (70, 2), size = (630, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
-		MultiContentEntryText(pos = (80, 29), size = (630, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
-		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (50, 50), png = 2), # index 4 is the pixmap
-		],
-		"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
-		"itemHeight": 60
-		}
-                </convert>
-    </widget>
-  </screen>
-  <screen name="AdvInstallIpk" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="360,670" size="30,30" alphatest="blend" />
-    <widget source="key_red" render="Label" position="105,672" size="240,24" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_green" render="Label" position="395,672" size="270,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="Package Manager For NFR" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget source="menu" render="Listbox" position="65,98" size="715,540" scrollbarMode="showOnDemand" transparent="1">
-      <convert type="TemplatedMultiContent">
-		{"template": [
-		MultiContentEntryText(pos = (70, 2), size = (630, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
-		MultiContentEntryText(pos = (80, 29), size = (630, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
-		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (50, 50), png = 2), # index 4 is the pixmap
-		],
-		"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
-		"itemHeight": 60
-		}
-		</convert>
-    </widget>
-  </screen>
-  <screen name="InstallRar" position="center,center" size="1920,1080" title="Package Manager For NFR" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="360,670" size="30,30" alphatest="blend" />
-    <widget source="key_red" render="Label" position="105,672" size="240,24" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_green" render="Label" position="395,672" size="270,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="Package Manager For NFR" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget source="menu" render="Listbox" position="65,98" size="715,540" scrollbarMode="showOnDemand" transparent="1">
-      <convert type="TemplatedMultiContent">
-		{"template": [
-		MultiContentEntryText(pos = (70, 2), size = (630, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
-		MultiContentEntryText(pos = (80, 29), size = (630, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
-		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (50, 50), png = 2), # index 4 is the pixmap
-		],
-		"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
-		"itemHeight": 60
-		}
-		</convert>
-    </widget>
-  </screen>
-  <screen name="Net_test" position="center,center" size="1920,1080" title="Iperf-Net_test" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <ePixmap pixmap="skin_default/buttons/key_red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_green.png" position="291,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_yellow.png" position="511,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/key_blue.png" position="733,670" size="30,30" alphatest="blend" />
-    <widget source="key_red" render="Label" position="105,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_green" render="Label" position="330,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_yellow" render="Label" position="549,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <widget source="key_blue" render="Label" position="778,672" size="160,25" zPosition="1" font="Regular;22" halign="left" backgroundColor="black" transparent="1" />
-    <eLabel text="Iperf-Net_test" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="837,95" size="375,214" zPosition="0" alphatest="blend" transparent="1" />
-    <widget name="filedata" position="65,98" size="715,540" itemHeight="25" transparent="1" />
-    <widget source="key_info" render="Label" position="1009,674" zPosition="5" size="214,26" valign="center" halign="left" font="Regular; 22" transparent="1" shadowColor="black" shadowOffset="-1,-1" backgroundColor="backtop" />
-    <ePixmap position="972,672" size="30,30" pixmap="skin_default/buttons/key_info.png" alphatest="blend" zPosition="5" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-  </screen>
-  <screen name="FindService" position="center,center" size="1920,1080" title="FindService" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular; 26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="FindService" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-    <ePixmap position="950,430" size="150,150" pixmap="skin_default/menu/nfr.png" alphatest="blend" transparent="1" />
-    <ePixmap pixmap="skin_default/menu/opennfr_info.png" position="836,99" size="370,210" zPosition="0" alphatest="blend" transparent="1" />
-    <widget name="servicelist" position="65,98" size="715,540" itemHeight="30" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" zPosition="1" />
   </screen>
   <screen name="OscamInfoMenu" position="center,center" size="1920,1080" title="OscamInfoMenu" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
