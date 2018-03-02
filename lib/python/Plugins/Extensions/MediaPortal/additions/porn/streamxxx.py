@@ -74,6 +74,7 @@ class streamxxxGenreScreen(MPScreen):
 		self.genreliste.append(("Newest", "%s/" % BASE_URL))
 		self.genreliste.append(("Category", "Category"))
 		self.genreliste.append(("Networks", "Networks"))
+		self.genreliste.append(("Clips", "%s/category/clips/" % BASE_URL))
 		self.genreliste.append(("Movies", "%s/category/movies-xxx/" % BASE_URL))
 		self.genreliste.append(("International Movies", "%s/category/movies/international-movies/" % BASE_URL))
 		self.genreliste.append(("German Movies", "%s/category/international-movies/?s=german" % BASE_URL))

@@ -39,7 +39,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-BASE_URL = 'http://www.solarmovie.fm/'
+BASE_URL = 'http://www.solarmoviesc.com/'
 
 class solarMovieMain(MPScreen):
 

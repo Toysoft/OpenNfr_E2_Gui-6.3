@@ -66,8 +66,8 @@ class freeomovieGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.freeomovie.com/"
-		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
+		url = "https://www.freeomovie.com/"
+		twAgentGetPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('Categories</h3>(.*?)</div>', data, re.S)
@@ -78,7 +78,7 @@ class freeomovieGenreScreen(MPScreen):
 				if Title not in ["XXX Comics", "XXX Games"]:
 					self.genreliste.append((Title, Url))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Newest", "http://www.freeomovie.com/page/"))
+			self.genreliste.insert(0, ("Newest", "https://www.freeomovie.com/page/"))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.keyLocked = False
@@ -142,10 +142,10 @@ class freeomovieFilmListeScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		if re.match(".*?Search", self.genreName):
-			url = "http://www.freeomovie.com/page/%s/?s=%s" % (str(self.page),self.genreLink)
+			url = "https://www.freeomovie.com/page/%s/?s=%s" % (str(self.page),self.genreLink)
 		else:
 			url = "%s%s" % (self.genreLink,str(self.page))
-		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
+		twAgentGetPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
 		self.getLastPage(data, 'class=[\"|\']wp-pagenavi[\"|\']>(.*?)</div>')
@@ -166,7 +166,7 @@ class freeomovieFilmListeScreen(MPScreen, ThumbsHelper):
 		streamPic = self['liste'].getCurrent()[0][2]
 		self['name'].setText(streamTitle)
 		CoverHelper(self['coverArt']).getCover(streamPic)
-		getPage(streamUrl).addCallback(self.getDescription).addErrback(self.dataError)
+		twAgentGetPage(streamUrl).addCallback(self.getDescription).addErrback(self.dataError)
 
 	def getDescription(self, data):
 		ddDescription = re.search('name="description"\scontent="(.*?)"', data, re.S)
@@ -210,7 +210,7 @@ class freeomovieFilmAuswahlScreen(MPScreen):
 
 	def loadPage(self):
 		self.keyLocked = True
-		getPage(self.genreLink).addCallback(self.loadPageData).addErrback(self.dataError)
+		twAgentGetPage(self.genreLink).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
 		parse = re.search('class="videosection">(.*?)class="textsection">', data, re.S)

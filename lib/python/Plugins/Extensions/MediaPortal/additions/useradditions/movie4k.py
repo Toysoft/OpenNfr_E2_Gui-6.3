@@ -43,7 +43,7 @@ from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPag
 from Plugins.Extensions.MediaPortal.resources.pininputext import PinInputExt
 
 config.mediaportal.movie4klang2 = ConfigText(default="de", fixed_size=False)
-config.mediaportal.movie4kdomain3 = ConfigText(default="http://movie4k.me", fixed_size=False)
+config.mediaportal.movie4kdomain3 = ConfigText(default="https://movie4k.io", fixed_size=False)
 
 m4k = config.mediaportal.movie4kdomain3.value.replace('https://','').replace('http://','')
 m4k_url = "%s/" % config.mediaportal.movie4kdomain3.value
@@ -229,20 +229,26 @@ class m4kGenreScreen(MPScreen):
 			self.keyOK()
 
 	def keyDomain(self):
-		if self.domain == "https://movie4k.am":
+		if self.domain == "https://movie4k.io":
+			config.mediaportal.movie4kdomain3.value = "https://movie4k.am"
+		elif self.domain == "https://movie4k.am":
 			config.mediaportal.movie4kdomain3.value = "https://movie.to"
 		elif self.domain == "https://movie.to":
 			config.mediaportal.movie4kdomain3.value = "http://movie4k.pe"
 		elif self.domain == "http://movie4k.pe":
+			config.mediaportal.movie4kdomain3.value = "http://movie2k.cm"
+		elif self.domain == "http://movie2k.cm":
+			config.mediaportal.movie4kdomain3.value = "http://movie2k.nu"
+		elif self.domain == "http://movie2k.nu":
 			config.mediaportal.movie4kdomain3.value = "https://movie4k.tv"
 		elif self.domain == "https://movie4k.tv":
 			config.mediaportal.movie4kdomain3.value = "http://movie4k.me"
 		elif self.domain == "http://movie4k.me":
 			config.mediaportal.movie4kdomain3.value = "http://movie4k.org"
 		elif self.domain == "http://movie4k.org":
-			config.mediaportal.movie4kdomain3.value = "https://movie4k.am"
+			config.mediaportal.movie4kdomain3.value = "https://movie4k.io"
 		else:
-			config.mediaportal.movie4kdomain3.value = "http://movie4k.me"
+			config.mediaportal.movie4kdomain3.value = "http://movie4k.io"
 		config.mediaportal.movie4kdomain3.save()
 		configfile.save()
 		self.domain = config.mediaportal.movie4kdomain3.value
@@ -334,9 +340,10 @@ class m4kSucheAlleFilmeListeScreen(MPScreen):
 		self.deferreds.append(downloads)
 
 	def showHandlung(self, data):
-		filmdaten = re.findall('<div style="float:left">.*?<img src="(.*?)".*?<div class="moviedescription">(.*?)</div>', data, re.S)
+		filmdaten = re.findall('<div style="float:left">.*?<img src="http[s]?://movie(?:2k|4k)\.(?:\w+)(.*?)".*?<div class="moviedescription">(.*?)</div>', data, re.S)
 		if filmdaten:
 			streamPic, handlung = filmdaten[0]
+			streamPic = m4k_url + streamPic
 			CoverHelper(self['coverArt']).getCover(streamPic, agent=m4k_agent, cookieJar=m4k_cookies)
 			self['handlung'].setText(decodeHtml(handlung).strip())
 
@@ -430,9 +437,10 @@ class m4kKinoAlleFilmeListeScreen(MPScreen):
 			for image, teil_url, title in kino:
 				url = '%s%s' % (m4k_url, teil_url)
 				if self.preview == True:
-					imagelink = re.findall('coverPreview%s"\).hover\(.*?<img src=\'(.*?)\' alt' % image, data, re.S)
+					imagelink = re.findall('coverPreview%s"\).hover\(.*?<img src=\'http[s]?://movie(?:2k|4k)\.(?:\w+)(.*?)\' alt' % image, data, re.S)
 					if imagelink:
-						self.list.append((decodeHtml(title).strip(), url, imagelink[0]))
+						imagelink = m4k_url + imagelink[0]
+						self.list.append((decodeHtml(title).strip(), url, imagelink))
 					else:
 						self.list.append((decodeHtml(title).strip(), url, None))
 				else:
@@ -453,9 +461,10 @@ class m4kKinoAlleFilmeListeScreen(MPScreen):
 		self.deferreds.append(downloads)
 
 	def showHandlung(self, data):
-		filmdaten = re.findall('<div style="float:left">.*?<img src="(.*?)".*?<div class="moviedescription">(.*?)</div>', data, re.S)
+		filmdaten = re.findall('<div style="float:left">.*?<img src="http[s]?://movie(?:2k|4k)\.(?:\w+)(.*?)".*?<div class="moviedescription">(.*?)</div>', data, re.S)
 		if filmdaten:
 			streamPic, handlung = filmdaten[0]
+			streamPic = m4k_url + streamPic
 			CoverHelper(self['coverArt']).getCover(streamPic, agent=m4k_agent, cookieJar=m4k_cookies)
 			self['handlung'].setText(decodeHtml(handlung).strip())
 
@@ -528,9 +537,9 @@ class m4kupdateFilme(MPScreen):
 			self.deferreds.append(downloads)
 
 	def showHandlung(self, data):
-		image = re.search('<img\ssrc="(http[s]?.*?/thumbs/.*?movie4k-film.jpg)"\sborder=0', data, re.S)
+		image = re.search('<img\ssrc="http[s]?://movie(?:2k|4k)\.(?:\w+)(.*?/thumbs/.*?movie4k-film.jpg)"\sborder=0', data, re.S)
 		if image:
-			image = image.group(1)
+			image = m4k_url + image.group(1)
 			CoverHelper(self['coverArt']).getCover(image, agent=m4k_agent, cookieJar=m4k_cookies)
 		handlung = re.findall('<div class="moviedescription">(.*?)<', data, re.S)
 		if handlung:
@@ -580,12 +589,13 @@ class m4kFilme(MPScreen):
 
 	def loadPageData(self, data):
 		if self.streamGenreName == "Kinofilme":
-			kino = re.findall('<div style="float:left">.*?<a href="(.*?)"><img src="(.*?)" border=\"{0,1}0\"{0,1} style="width:105px;max-width:105px;max-height:160px;min-height:140px;" alt=".*?kostenlos" title="(.*?).kostenlos"></a>', data, re.S)
+			kino = re.findall('<div style="float:left">.*?<a href="(.*?)"><img src="http[s]?://movie(?:2k|4k)\.(?:\w+)(.*?)" border=\"{0,1}0\"{0,1} style="width:105px;max-width:105px;max-height:160px;min-height:140px;" alt=".*?kostenlos" title="(.*?).kostenlos"></a>', data, re.S)
 		else:
-			kino = re.findall('<div style="float: left;">.*?<a href="(.*?)"><img src="(.*?)" alt=".*?" title="(.*?)" border=\"{0,1}0\"{0,1} style="width:105px;max-width:105px;max-height:160px;min-height:140px;"></a>', data, re.S)
+			kino = re.findall('<div style="float: left;">.*?<a href="(.*?)"><img src="http[s]?://movie(?:2k|4k)\.(?:\w+)(.*?)" alt=".*?" title="(.*?)" border=\"{0,1}0\"{0,1} style="width:105px;max-width:105px;max-height:160px;min-height:140px;"></a>', data, re.S)
 		if kino:
 			for url,image,title in kino:
 				url = "%s%s" % (m4k_url, url)
+				image = m4k_url + image
 				self.list.append((decodeHtml(title), url, image))
 		if len(self.list) == 0:
 			self.list.append((_('No movies found!'), '', None))
@@ -676,7 +686,7 @@ class m4kStreamListeScreen(MPScreen):
 					h_name = h_name.split('.')[-2]
 					h_name = h_name.lower().replace('faststream', 'rapidvideo').replace('fastvideo', 'rapidvideo')
 					h_url = h_url.replace('faststream.in', 'rapidvideo.ws').replace('fastvideo.in', 'rapidvideo.ws')
-					if re.search('(streamin|porntube4k|pandamovie|plashporn|porntorpia)', h_name)or isSupportedHoster(h_name, True):
+					if re.search('(streamin|porntube4k|pandamovie|plashporn|porntorpia)', h_name) or isSupportedHoster(h_name, True):
 						self.list.append((h_name.capitalize(), h_url, ""))
 			if len(self.list) == 0:
 				self.list.append(("No supported streams found.", '', '', '', ''))
@@ -687,9 +697,9 @@ class m4kStreamListeScreen(MPScreen):
 			self['name'].setText(self.streamName)
 
 	def showInfosData(self, data):
-		image = re.search('<img\ssrc="(http[s]?.*?/thumbs/.*?movie4k-film.jpg)".*?class="moviedescription"', data, re.S)
+		image = re.search('<img\ssrc="http[s]?://movie(?:2k|4k)\.(?:\w+)(.*?/thumbs/.*?movie4k-film.jpg)".*?class="moviedescription"', data, re.S)
 		if image:
-			image = image.group(1)
+			image = m4k_url + image.group(1)
 		else:
 			image = None
 		CoverHelper(self['coverArt']).getCover(image, agent=m4k_agent, cookieJar=m4k_cookies)
@@ -915,9 +925,10 @@ class m4kXXXListeScreen(MPScreen):
 				title = title.strip(" ")
 
 				if self.preview == True:
-					imagelink = re.findall('%s"\).hover\(.*?<img src=\'(.*?)\' alt' % cover, data, re.S)
+					imagelink = re.findall('%s"\).hover\(.*?<img src=\'http[s]?://movie(?:2k|4k)\.(?:\w+)(.*?)\' alt' % cover, data, re.S)
 					if imagelink:
-						self.list.append((decodeHtml(title), url, imagelink[0]))
+						imagelink = m4k_url + imagelink[0]
+						self.list.append((decodeHtml(title), url, imagelink))
 					else:
 						self.list.append((decodeHtml(title), url, None))
 				else:
@@ -940,9 +951,9 @@ class m4kXXXListeScreen(MPScreen):
 	def showHandlung(self, data):
 		image = self['liste'].getCurrent()[0][2]
 		if not image:
-			image = re.search('<div style="float:left">.*?<img src="(.*?)".*?<div class="moviedescription">(.*?)</div>', data, re.S)
+			image = re.search('<div style="float:left">.*?<img src="http[s]?://movie(?:2k|4k)\.(?:\w+)(.*?)".*?<div class="moviedescription">(.*?)</div>', data, re.S)
 			if image:
-				image = image.group(1)
+				image = m4k_url + image.group(1)
 			else:
 				image = None
 		elif not image.startswith('http'):

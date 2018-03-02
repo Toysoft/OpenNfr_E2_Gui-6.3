@@ -69,7 +69,7 @@ class PornVortexxGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = 'http://pornvortexx.com/browse.html'
+		url = 'https://pornvortexx.com/browse.html'
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -80,10 +80,10 @@ class PornVortexxGenreScreen(MPScreen):
 				Title = title.replace(' ','').replace('\n','')
 				self.genreliste.append((Title, url, img))
 		self.genreliste.sort()
-		self.genreliste.insert(0, ("Most Popular (All Time)", "http://pornvortexx.com/topvideos.html?page=", default_cover))
-		self.genreliste.insert(0, ("Most Popular (Last 10 days)", "http://pornvortexx.com/topvideos.html?do=recent&page=", default_cover))
-		self.genreliste.insert(0, ("Top Rated", "http://pornvortexx.com/topvideos.html?do=rating&page=", default_cover))
-		self.genreliste.insert(0, ("Most Recent", "http://pornvortexx.com/newvideos.html?page=", default_cover))
+		self.genreliste.insert(0, ("Most Popular (All Time)", "https://pornvortexx.com/topvideos.html?page=", default_cover))
+		self.genreliste.insert(0, ("Most Popular (Last 10 days)", "https://pornvortexx.com/topvideos.html?do=recent&page=", default_cover))
+		self.genreliste.insert(0, ("Top Rated", "https://pornvortexx.com/topvideos.html?do=rating&page=", default_cover))
+		self.genreliste.insert(0, ("Most Recent", "https://pornvortexx.com/newvideos.html?page=", default_cover))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -156,7 +156,7 @@ class PornVortexxFilmScreen(MPScreen, ThumbsHelper):
 		if ('Most Recent' or 'Most Popular' or 'Top Rated') in self.Name:
 			url = "%s%s" % (self.Link, str(self.page))
 		elif re.match(".*?Search", self.Name):
-			url = "http://pornvortexx.com/search.php?keywords=%s&page=%s"  % (self.Link, str(self.page))
+			url = "https://pornvortexx.com/search.php?keywords=%s&page=%s"  % (self.Link, str(self.page))
 		else:
 			url = "%s%s-date.html" % (self.Link, str(self.page))
 		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
