@@ -400,8 +400,8 @@ class fmlcMenuList(GUIComponent, object):
 	def __init__(self):
 		GUIComponent.__init__(self)
 		self.l = eListboxPythonMultiContent()
-		self.l.setFont(0, gFont('Regular', 22))
-		self.l.setItemHeight(30)
+		self.l.setFont(0, gFont('Regular', 28))
+		self.l.setItemHeight(40)
 		self.l.setBuildFunc(self.buildList)
 
 	def buildList(self, entry):
@@ -411,12 +411,12 @@ class fmlcMenuList(GUIComponent, object):
 
 		if coverFound:
 			truePath = "/usr/share/enigma2/skin_default/extensions/cover_yes.png"
-			res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 10, 1, 25, 25, loadPNG(truePath)))
+			res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 10, 12, 25, 25, loadPNG(truePath)))
 		else:
 			falsePath = "/usr/share/enigma2/skin_default/extensions/cover_no.png"
-			res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 10, 1, 25, 25, loadPNG(falsePath)))
+			res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 10, 12, 25, 25, loadPNG(falsePath)))
 
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 1280, 30, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, str(name)))
+		res.append((eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 1280, 40, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, str(name)))
 		return res
 
 	def getCurrent(self):
