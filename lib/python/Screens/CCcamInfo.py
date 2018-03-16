@@ -415,8 +415,8 @@ menu_list = [
 
 #############################################################
 
-lock_on = loadPNG("/usr/share/enigma2/skin_default/icons/lock_on.png")
-lock_off = loadPNG("/usr/share/enigma2/skin_default/icons/lock_off.png")
+lock_on = loadPNG("/usr/share/enigma2/OpenNfrFHD/icons/lock_on.png")
+lock_off = loadPNG("/usr/share/enigma2/OpenNfrFHD/icons/lock_off.png")
 
 def getConfigNameAndContent(fileName):
 	try:
@@ -443,7 +443,7 @@ class CCcamList(MenuList):
 	    if getDesktop(0).size().width() == 1920:   	
 		    MenuList.__init__(self, list, False, eListboxPythonMultiContent)
 		    self.l.setItemHeight(40)
-		    self.l.setFont(0, gFont("Regular", 27))
+		    self.l.setFont(0, gFont("Regular", 28))
 	    else:
 		    MenuList.__init__(self, list, False, eListboxPythonMultiContent)
 		    self.l.setItemHeight(35)
@@ -453,7 +453,7 @@ class CCcamShareList(MenuList):
 	def __init__(self, list):
 	    if getDesktop(0).size().width() == 1920: 	
 		    MenuList.__init__(self, list, False, eListboxPythonMultiContent)
-		    self.l.setItemHeight(120)
+		    self.l.setItemHeight(100)
 		    self.l.setFont(0, gFont("Regular", 28))
 	    else:
 		    MenuList.__init__(self, list, False, eListboxPythonMultiContent)
@@ -465,7 +465,7 @@ class CCcamConfigList(MenuList):
 	    if getDesktop(0).size().width() == 1920:	
 		    MenuList.__init__(self, list, False, eListboxPythonMultiContent)
 		    self.l.setItemHeight(40)
-		    self.l.setFont(0, gFont("Regular", 27))
+		    self.l.setFont(0, gFont("Regular", 28))
 	    else:
 		    MenuList.__init__(self, list, False, eListboxPythonMultiContent)
 		    self.l.setItemHeight(30)
@@ -499,8 +499,8 @@ def CCcamListEntry(name, idx):
 	if getDesktop(0).size().width() == 1920:		
 	    png = resolveFilename(SCOPE_ACTIVE_SKIN, "buttons/key_%s.png" % str(idx))
 	    if fileExists(png):
-		    res.append(MultiContentEntryPixmapAlphaTest(pos=(0, 2), size=(35, 35), png=loadPNG(png)))
-	    res.append(MultiContentEntryText(pos=(60, 1), size=(500, 30), font=0, text=name))
+		    res.append(MultiContentEntryPixmapAlphaTest(pos=(0, 0), size=(80, 38), png=loadPNG(png)))
+	    res.append(MultiContentEntryText(pos=(120, 0), size=(900, 40), font=0, text=name))
 	    return res
 	else:
 	    png = resolveFilename(SCOPE_ACTIVE_SKIN, "buttons/key_%s.png" % str(idx))
@@ -520,12 +520,12 @@ def CCcamServerListEntry(name, color):
 def CCcamShareListEntry(hostname, type, caid, system, uphops, maxdown):
 	if getDesktop(0).size().width() == 1920:
 	    res = [(hostname, type, caid, system, uphops, maxdown),
-		   MultiContentEntryText(pos=(0, 0), size=(270, 32), font=0, text=hostname),
-		   MultiContentEntryText(pos=(250, 0), size=(270, 32), font=0, text=_("Type: ") + type, flags=RT_HALIGN_RIGHT),
-		   MultiContentEntryText(pos=(0, 32), size=(270, 32), font=0, text=_("CaID: ") + caid),
-		   MultiContentEntryText(pos=(250, 32), size=(270, 32), font=0, text=_("System: ") + system, flags=RT_HALIGN_RIGHT),
-		   MultiContentEntryText(pos=(0, 66), size=(270, 32), font=0, text=_("Uphops: ") + uphops),
-		   MultiContentEntryText(pos=(250, 66), size=(270, 32), font=0, text=_("Maxdown: ") + maxdown, flags=RT_HALIGN_RIGHT)]
+		   MultiContentEntryText(pos=(0, 0), size=(450, 32), font=0, text=hostname),
+		   MultiContentEntryText(pos=(450, 0), size=(450, 32), font=0, text=_("Type: ") + type, flags=RT_HALIGN_RIGHT),
+		   MultiContentEntryText(pos=(0, 32), size=(450, 32), font=0, text=_("CaID: ") + caid),
+		   MultiContentEntryText(pos=(450, 32), size=(450, 32), font=0, text=_("System: ") + system, flags=RT_HALIGN_RIGHT),
+		   MultiContentEntryText(pos=(0, 66), size=(450, 32), font=0, text=_("Uphops: ") + uphops),
+		   MultiContentEntryText(pos=(450, 66), size=(450, 32), font=0, text=_("Maxdown: ") + maxdown, flags=RT_HALIGN_RIGHT)]
 	    return res
 	else:
 	    res = [(hostname, type, caid, system, uphops, maxdown),
@@ -581,8 +581,8 @@ def CCcamMenuConfigListEntry(name, blacklisted):
 	else:
 		png = lock_on
 	if getDesktop(0).size().width() == 1920:
-		res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 5), size=(25, 25), png=png))
-		res.append(MultiContentEntryText(pos=(60, 0), size=(550, 30), font=0, text=name))
+		res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 7), size=(25, 25), png=png))
+		res.append(MultiContentEntryText(pos=(60, 4), size=(550, 40), font=0, text=name))
 		return res
 	else:
 		res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 2), size=(25, 25), png=png))
