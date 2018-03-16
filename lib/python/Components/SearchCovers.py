@@ -410,10 +410,10 @@ class fmlcMenuList(GUIComponent, object):
 		res = [ None ]
 
 		if coverFound:
-			truePath = "/usr/share/enigma2/skin_default/extensions/cover_yes.png"
+			truePath = "/usr/share/enigma2/OpenNfrFHD/extensions/cover_yes.png"
 			res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 10, 12, 25, 25, loadPNG(truePath)))
 		else:
-			falsePath = "/usr/share/enigma2/skin_default/extensions/cover_no.png"
+			falsePath = "/usr/share/enigma2/OpenNfrFHD/extensions/cover_no.png"
 			res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 10, 12, 25, 25, loadPNG(falsePath)))
 
 		res.append((eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 1280, 40, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, str(name)))
