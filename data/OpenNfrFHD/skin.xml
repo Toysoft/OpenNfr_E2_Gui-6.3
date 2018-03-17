@@ -5170,28 +5170,18 @@
                       </applet>
   </screen>
   <screen name="LogManagerViewLog" position="center,center" size="1920,1080" title="LogManagerViewLog" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
-    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/edit.png" />
     <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
       <convert type="ClockToText">Default</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
-    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
-    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
     <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
     <eLabel text="LogManagerViewLog" position="74,50" size="720,45" font="LCD; 42" backgroundColor="grey" transparent="1" foregroundColor="grey" halign="center" />
-    <widget name="list" position="55,220" size="920,700" font="Console;14" transparent="1" />
+    <widget name="list" position="55,220" size="1814,700" font="Regular;28" transparent="0" itemHeight="40" />
     <eLabel name="new eLabel" position="77,1017" size="255,34" font="LCD; 34" transparent="1" text="Abbrechen" backgroundColor="white" halign="center" valign="center" />
+    <ePixmap name="nfr" position="834,11" size="328,182" pixmap="OpenNfrFHD/menu/teiler1.png" alphatest="blend" />
   </screen>
   <screen name="LogManagerFb" position="center,center" size="1920,1080" title="LogManagerFb" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
@@ -5221,7 +5211,7 @@
     <widget name="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget name="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <eLabel text="LogManagerFb" position="74,50" size="720,45" font="LCD; 42" backgroundColor="grey" transparent="1" foregroundColor="grey" halign="center" />
-    <widget name="list" position="55,220" size="920,700" scrollbarMode="showOnDemand" transparent="1" />
+    <widget name="list" position="55,220" size="920,680" scrollbarMode="showOnDemand" transparent="1" />
   </screen>
   <screen name="LogManagerMenu" position="center,center" size="1920,1080" title="LogManagerMenu" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
@@ -10683,6 +10673,7 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <eLabel text="ClientInfo" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="Title" render="Label" position="55,212" size="1814,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
     <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
@@ -10691,9 +10682,10 @@
     <widget source="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget source="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget source="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
-    <widget name="output" position="55,220" size="1814,700" zPosition="1" scrollbarMode="showOnDemand" transparent="1" />
+    <widget name="output" position="55,286" size="1814,629" zPosition="1" scrollbarMode="showOnDemand" transparent="1" />
     <ePixmap name="nfr" position="834,11" size="328,182" pixmap="OpenNfrFHD/menu/teiler1.png" alphatest="blend" />
-    <eLabel name="new eLabel" position="0, 0" size="10, 10" />
+    <ePixmap name="selector" position="50,271" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
+    <ePixmap name="selector" position="941,271" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
   </screen>
   <screen name="OscamInfo" position="center,center" size="1920,1080" title="Client Info" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/edit.png" />
@@ -10715,6 +10707,7 @@
     <applet type="onLayoutFinish">
         self["output"].instance.setItemHeight(40)
     </applet>
+    <ePixmap name="nfr" position="834,11" size="328,182" pixmap="OpenNfrFHD/menu/teiler1.png" alphatest="blend" />
   </screen>
   <screen name="OscamInfoMenu" position="center,center" size="1920,1080" title="OscamInfoMenu" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
@@ -10882,6 +10875,372 @@
     </widget>
     <ePixmap name="nfr" position="834,11" size="328,182" pixmap="OpenNfrFHD/menu/teiler1.png" alphatest="blend" />
   </screen>
+  <screen name="CCcamInfoMain" position="center,center" size="1920,1080" title="CCcInfo Main Menu" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="CCcInfo Main Menu" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="menu" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="0" />
+  </screen>
+  <screen name="CCcamInfoServerMenu" position="center,center" size="1920,1080" title="CCcam Info" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="CCcInfo Info" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="info" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="0" font="Regular; 28" />
+  </screen>
+  <screen name="CCcamInfoInfoScreen" position="center,center" size="1920,1080" title="CCcInfo General Info" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="CCcInfo General Info" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="text" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="0" font="Regular; 28" />
+  </screen>
+  <screen name="CCcamInfoSubMenu" position="center,center" size="1920,1080" title="CCcInfo Clients" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="CCcInfo Clients" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="list" position="55,220" size="920,480" zPosition="1" scrollbarMode="showOnDemand" transparent="0" font="Regular; 28" />
+    <applet type="onLayoutFinish">
+        self["list"].instance.setItemHeight(40)
+    </applet>
+    <widget name="info" position="55,727" size="920,200" zPosition="1" scrollbarMode="showOnDemand" transparent="0" font="Regular; 28" />
+    <ePixmap name="selector" position="50,707" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
+  </screen>
+  <screen name="CCcamShareViewMenu" position="center,center" size="1920,1080" title="CCcInfo Sharing" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="CCcInfo Sharing" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="list" position="55,221" size="920,566" zPosition="1" scrollbarMode="showOnDemand" transparent="0" />
+    <ePixmap name="selector" position="50,790" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
+    <widget name="uphops" position="55,810" size="460,30" font="Regular; 28" backgroundColor="transpBlack" transparent="1" />
+    <widget name="cards" position="518,810" size="460,30" halign="right" font="Regular; 28" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" />
+    <widget name="providers" position="55,855" size="460,30" font="Regular; 28" backgroundColor="transpBlack" transparent="1" />
+    <widget name="reshare" position="518,855" size="460,30" halign="right" font="Regular; 28" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" />
+    <widget name="title" position="55,900" size="920,30" halign="left" font="Regular; 28" foregroundColor="goldenrod" backgroundColor="goldenrod" transparent="1" />
+  </screen>
+  <screen name="CCcamInfoShareInfo" position="center,center" size="1920,1080" title="CCcInfo Ext Sharing" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="CCcInfo Sharing Info" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="list" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="0" />
+  </screen>
+  <screen name="CCcamInfoEcmInfoSelection" position="center,center" size="1920,1080" title="CCcInfo ECM Info" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="CCcInfo ECM Info" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="list" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="0" font="Regular; 28" />
+    <applet type="onLayoutFinish">
+        self["list"].instance.setItemHeight(40)
+    </applet>
+  </screen>
+  <screen name="CCcamInfoMenuConfig" position="center,center" size="1920,1080" title="CCcInfo Menu Config" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="CCcInfo Menu Config" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="list" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="0" />
+  </screen>
+  <screen name="CCcamInfoRemoteBoxMenu" position="center,center" size="1920,1080" title="CCcInfo Remote Box" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="CCcInfo Remote Box" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="list" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="0" />
+  </screen>
+  <screen name="CCcamInfoConfigSwitcher" position="center,center" size="1920,1080" title="CCcInfo Switch Config" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <widget name="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="CCcInfo Switch Config" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="list" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="0" />
+  </screen>
+  <screen name="EcmInfoConfigMenu" position="center,center" size="1920,1080" title="CCcInfo ECM Info" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="CCcInfo ECM Info" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="config" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="0" />
+  </screen>
+  <screen name="CCcamInfoConfigMenu" position="center,center" size="1920,1080" title="Info" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <eLabel text="Info" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget name="config" position="55,220" size="920,700" zPosition="1" scrollbarMode="showOnDemand" transparent="0" />
+  </screen>
+  <screen name="EGCCcamConfigEdit" position="center,center" size="1920,1080" title="Edit CCcam.cfg Lines" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/edit.png" />
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
+    <eLabel font="LCD; 34" halign="center" position="77,1017" size="255,34" text="Hinzufügen" transparent="1" valign="center" zPosition="6" backgroundColor="white" />
+    <eLabel font="LCD; 34" halign="center" position="590,1017" size="255,34" text="Bearbeiten" transparent="1" valign="center" zPosition="6" backgroundColor="white" />
+    <eLabel font="LCD; 34" halign="center" position="1088,1017" size="255,34" text="Entfernen" transparent="1" valign="center" zPosition="6" backgroundColor="white" />
+    <eLabel font="LCD; 34" halign="center" position="1587,1017" size="255,34" text="Beenden" transparent="1" valign="center" zPosition="6" backgroundColor="white" />
+    <eLabel text="Edit CCcam.cfg Lines" position="74,50" size="720,45" font="LCD;42" backgroundColor="grey" transparent="1" foregroundColor="grey" halign="center" />
+    <widget source="statusbar" render="Label" position="55,215" size="1814,45" zPosition="1" transparent="1" font="LCD; 42" halign="center" valign="center" foregroundColor="goldenrod" backgroundColor="goldenrod" />
+    <widget name="menu" position="55,298" size="1814,622" scrollbarMode="showOnDemand" font="Regular; 28" />
+    <applet type="onLayoutFinish">
+        self["menu"].instance.setItemHeight(40)
+    </applet>
+    <ePixmap name="selector" position="50,273" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
+    <ePixmap name="selector" position="945,273" size="930,10" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
+    <ePixmap name="nfr" position="834,11" size="328,182" pixmap="OpenNfrFHD/menu/teiler1.png" alphatest="blend" />
+  </screen>
+  <screen name="EGCCcamEditAddLine" position="center,center" size="1920,1080" title="Edit CCcam.cfg Lines" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
+    <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
+    <eLabel font="LCD; 34" halign="center" position="77,1017" size="255,34" text="Speichern" transparent="1" valign="center" zPosition="6" backgroundColor="white" />
+    <eLabel font="LCD; 34" halign="center" position="590,1017" size="255,34" text="Abbrechen" transparent="1" valign="center" zPosition="6" backgroundColor="white" />
+    <eLabel text="Edit CCcam.cfg Lines" position="74,50" size="720,45" font="LCD;42" backgroundColor="grey" transparent="1" foregroundColor="grey" halign="center" />
+    <eLabel text="Press TXT Button to open VirtualKeyboard" position="55,885" size="920,45" font="LCD;42" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" halign="center" zPosition="2" />
+    <widget name="config" position="55,220" size="920,636" zPosition="1" scrollbarMode="showOnDemand" transparent="0" font="Regular; 28" />
+    <applet type="onLayoutFinish">
+        self["config"].instance.setItemHeight(40)
+    </applet>
+  </screen>
   <screen name="Screensaver" position="center,center" size="1920,1080" flags="wfNoBorder" transparent="1">
     <eLabel position="center,center" size="128,72" backgroundColor="backtop" zPosition="0" transparent="1" />
     <widget name="picture" pixmap="/usr/share/enigma2/distro-logo.png" position="center,center" size="500,500" alphatest="on" zPosition="1" transparent="1" />
@@ -10925,41 +11284,30 @@
     </applet>
   </screen>
   <screen name="FindMovieList" position="center,center" size="1920,1080" title=" " flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
-    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-    <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="LCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <widget source="session.Event_Now" render="Progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/edit.png" />
     <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
       <convert type="ClockToText">Default</convert>
     </widget>
     <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
-    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
-    <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
     <widget source="title" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-    <widget name="info" position="68,238" size="920,30" font="Regular;24" foregroundColor="cyan1" transparent="1" backgroundColor="cyan1" />
-    <widget name="path" position="67,289" size="920,30" font="Regular;24" foregroundColor="unf0b400" transparent="1" />
-    <widget name="found" position="53,837" size="920,22" font="Regular;20" transparent="1" zPosition="5" />
-    <widget name="notfound" position="54,872" size="920,22" font="Regular;20" transparent="1" zPosition="5" />
-    <widget name="error" position="54,902" size="920,22" font="Regular;20" transparent="1" zPosition="5" />
-    <widget name="list" position="55,335" size="655,490" zPosition="1" scrollbarMode="showOnDemand" transparent="1" font="Regular; 30" />
-    <applet type="onLayoutFinish">
-        self["list"].instance.setItemHeight(40)
-    </applet>
-    <widget name="cover" position="719,337" size="248,445" alphatest="blend" transparent="1" />
+    <widget name="info" position="74,138" size="790,45" font="LCD; 42" foregroundColor="goldenrod" transparent="1" backgroundColor="goldenrod" halign="center" />
+    <widget name="path" position="1166,138" size="711,45" font="LCD; 42" foregroundColor="grey" transparent="1" backgroundColor="grey" halign="center" />
+    <widget name="found" position="1342,758" size="530,40" font="Regular; 28" transparent="1" zPosition="5" halign="center" backgroundColor="white" />
+    <widget name="notfound" position="1342,818" size="530,40" font="Regular; 28" transparent="1" zPosition="5" halign="center" backgroundColor="white" />
+    <widget name="error" position="1342,878" size="530,40" font="Regular; 28" transparent="1" zPosition="5" halign="center" backgroundColor="white" />
+    <widget name="list" position="55,220" size="1253,680" zPosition="1" scrollbarMode="showOnDemand" transparent="0" />
+    <widget name="cover" position="1490,220" size="248,445" alphatest="blend" transparent="1" />
     <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/blue.png" position="1565,1000" size="300,76" alphatest="blend" />
     <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget name="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
+    <eLabel text="Find MovieList Covers" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <ePixmap name="nfr" position="834,11" size="328,182" pixmap="OpenNfrFHD/menu/teiler1.png" alphatest="blend" />
+    <ePixmap name="selector-quick" position="1310,209" size="40,722" zPosition="2" pixmap="OpenNfrFHD/menu/selector-quickmenu.png" alphatest="blend" />
   </screen>
   <screen name="FindMovieListScanPath" position="center,center" size="1920,1080" title=" " flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
@@ -10981,7 +11329,7 @@
     <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
     <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" zPosition="0" />
     <widget source="title" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-    <widget name="media" position="55,939" size="920,30" valign="top" font="Regular;22" transparent="1" />
+    <widget name="media" position="74,141" size="720,45" valign="center" font="LCD; 42" transparent="1" foregroundColor="goldenrod" backgroundColor="goldenrod" halign="center" />
     <widget name="folderlist" position="55,220" zPosition="1" size="920,700" scrollbarMode="showOnDemand" transparent="1" />
     <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
@@ -11960,326 +12308,6 @@
     <widget name="keyblue" position="975,672" size="240,24" zPosition="1" font="Regular;20" halign="left" backgroundColor="black" transparent="1" />
   </screen>
   <!-- CCcInfo Main Menu by Maggy -->
-  <screen name="CCcamInfoMain" position="center,center" size="1920,1080" title="CCcInfo Main Menu" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <ePixmap position="950,430" zPosition="2" size="150,150" pixmap="skin_default/menu/cinfo.png" alphatest="blend" transparent="1" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="CCcInfo Main Menu" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="menu" position="65,98" size="715,525" scrollbarMode="showOnDemand" backgroundColor="transpBlack" transparent="1" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="CCcamInfoServerMenu" position="center,center" size="1920,1080" title="CCcam Info" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="CCcInfo Info" position="66,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="info" position="65,98" size="710,540" font="Regular;20" foregroundColor="myblue" transparent="1" />
-    <ePixmap position="950,430" size="150,150" zPosition="2" pixmap="skin_default/menu/cinfo.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="CCcamInfoInfoScreen" position="center,center" size="1920,1080" title="CCcInfo General Info" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="CCcInfo Generel Info" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="text" position="65,98" size="715,540" zPosition="3" font="Regular;20" backgroundColor="transpBlack" transparent="1" />
-    <ePixmap position="950,430" size="150,150" zPosition="2" pixmap="skin_default/menu/cinfo.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="CCcamInfoSubMenu" position="center,center" size="1920,1080" title="CCcInfo Clients" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="CCcInfo Clients" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="list" position="65,98" size="710,250" scrollbarMode="showOnDemand" backgroundColor="transpBlack" transparent="1" />
-    <eLabel text="" position="70,360" size="700,2" font="Regular;14" backgroundColor="darkgrey" />
-    <widget name="info" position="70,375" size="700,250" font="Regular;20" foregroundColor="myblue" backgroundColor="transpBlack" transparent="1" />
-    <ePixmap position="950,430" size="150,150" zPosition="2" pixmap="skin_default/menu/cinfo.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="CCcamShareViewMenu" position="center,center" size="1920,1080" title="CCcInfo Sharing" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="CCcInfo Sharing" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="list" position="65,98" size="710,375" scrollbarMode="showOnDemand" backgroundColor="transpBlack" transparent="1" />
-    <eLabel text="" position="70,490" size="700,2" font="Regular;10" backgroundColor="foreground" />
-    <widget name="uphops" position="70,500" size="350,30" font="Regular; 22" backgroundColor="transpBlack" transparent="1" />
-    <widget name="cards" position="420,500" size="350,30" halign="right" font="Regular; 22" foregroundColor="myblue" backgroundColor="transpBlack" transparent="1" />
-    <widget name="providers" position="70,545" size="350,30" font="Regular; 22" backgroundColor="transpBlack" transparent="1" />
-    <widget name="reshare" position="420,545" size="350,30" halign="right" font="Regular; 22" foregroundColor="myblue" backgroundColor="transpBlack" transparent="1" />
-    <widget name="title" position="70,590" size="700,35" halign="left" font="Regular;22" foregroundColor="myblue" backgroundColor="transpBlack" transparent="1" />
-    <ePixmap position="950,430" size="150,150" zPosition="2" pixmap="skin_default/menu/cinfo.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="CCcamInfoShareInfo" position="center,center" size="1920,1080" title="CCcInfo Ext Sharing" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="CCcInfo Sharing Info" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="list" position="65,98" size="715,540" scrollbarMode="showOnDemand" backgroundColor="transpBlack" transparent="1" />
-    <ePixmap pixmap="skin_default/buttons/red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/green.png" position="270,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/yellow.png" position="470,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/blue.png" position="670,670" size="30,30" alphatest="blend" />
-    <widget name="key_red" position="105,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <widget name="key_green" position="305,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <widget name="key_yellow" position="505,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <widget name="key_blue" position="705,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <ePixmap position="950,430" size="150,150" zPosition="2" pixmap="skin_default/menu/cinfo.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="CCcamInfoEcmInfoSelection" position="center,center" size="1920,1080" title="CCcInfo ECM Info" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="CCcInfo ECM Info" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="list" position="65,98" size="715,540" scrollbarMode="showOnDemand" backgroundColor="transpBlack" transparent="1" />
-    <ePixmap position="950,430" size="150,150" zPosition="2" pixmap="skin_default/menu/cinfo.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="CCcamInfoMenuConfig" position="center,center" size="1920,1080" title="CCcInfo Menu Config" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="CCcInfo Menu Config" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="list" position="65,98" size="715,540" scrollbarMode="showOnDemand" backgroundColor="transpBlack" transparent="1" />
-    <ePixmap pixmap="skin_default/buttons/red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/green.png" position="270,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/yellow.png" position="470,670" size="30,30" alphatest="blend" />
-    <widget name="key_red" position="105,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <widget name="key_green" position="305,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <widget name="key_yellow" position="505,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <ePixmap position="950,430" size="150,150" zPosition="2" pixmap="skin_default/menu/cinfo.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="CCcamInfoRemoteBoxMenu" position="center,center" size="1920,1080" title="CCcInfo Remote Box" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="CCcInfo Remote Box" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="list" position="65,98" size="715,540" scrollbarMode="showOnDemand" backgroundColor="transpBlack" transparent="1" />
-    <ePixmap pixmap="skin_default/buttons/red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/green.png" position="270,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/yellow.png" position="470,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/blue.png" position="670,670" size="30,30" alphatest="blend" />
-    <widget name="key_red" position="105,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <widget name="key_green" position="305,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <widget name="key_yellow" position="505,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <widget name="key_blue" position="705,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <ePixmap position="950,430" size="150,150" zPosition="2" pixmap="skin_default/menu/cinfo.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="CCcamInfoConfigSwitcher" position="center,center" size="1920,1080" title="CCcInfo Switch Config" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="CCcInfo Switch Config" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="list" position="65,98" size="715,540" scrollbarMode="showOnDemand" backgroundColor="transpBlack" transparent="1" />
-    <ePixmap pixmap="skin_default/buttons/red.png" position="70,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/green.png" position="270,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/yellow.png" position="470,670" size="30,30" alphatest="blend" />
-    <ePixmap pixmap="skin_default/buttons/blue.png" position="670,670" size="30,30" alphatest="blend" />
-    <widget name="key_red" position="105,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <widget name="key_green" position="305,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <widget name="key_yellow" position="505,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <widget name="key_blue" position="705,672" zPosition="2" size="160,25" font="Regular;20" valign="center" halign="center" backgroundColor="background" transparent="1" />
-    <ePixmap position="950,430" size="150,150" zPosition="2" pixmap="skin_default/menu/cinfo.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="EcmInfoConfigMenu" position="center,center" size="1920,1080" title="CCcInfo ECM Info" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="CCcInfo ECM Info" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="config" position="65,98" size="715,540" scrollbarMode="showOnDemand" backgroundColor="transpBlack" transparent="1" />
-    <ePixmap position="950,430" size="150,150" zPosition="2" pixmap="skin_default/menu/cinfo.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
-  <screen name="CCcamInfoConfigMenu" position="center,center" size="1920,1080" title="Info" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back1.png" />
-    <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
-    <widget source="session.VideoPicture" render="Pig" position="837,95" size="375,214" zPosition="-8" />
-    <widget source="global.CurrentTime" render="Label" position="1125,12" size="100,28" font="Regular;26" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Default</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="905,37" size="320,25" font="Regular;20" halign="right" backgroundColor="backtop" transparent="1" foregroundColor="cyan1">
-      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-    </widget>
-    <eLabel text="Info" position="65,17" size="720,43" font="Regular;35" backgroundColor="backtop" transparent="1" foregroundColor="cyan1" />
-    <widget source="session.CurrentService" render="Label" position="845,361" size="360,34" zPosition="2" font="Regular; 24" halign="center" noWrap="1" transparent="1" foregroundColor="cyan1" backgroundColor="background">
-      <convert type="ServiceName">Name</convert>
-    </widget>
-    <ePixmap position="826,353" size="400,48" zPosition="0" pixmap="skin_default/menu/service_bg.png" transparent="1" alphatest="blend" />
-    <ePixmap position="835,332" size="380,9" zPosition="2" pixmap="skin_default/menu/tlb.png" transparent="1" alphatest="blend" />
-    <widget source="session.Event_Now" render="Progress" pixmap="skin_default/menu/tl.png" position="838,335" size="373,3" zPosition="3" transparent="1">
-      <convert type="EventTime">Progress</convert>
-    </widget>
-    <widget name="config" position="65,98" size="715,540" scrollbarMode="showOnDemand" backgroundColor="transpBlack" transparent="1" />
-    <ePixmap position="950,430" size="150,150" zPosition="2" pixmap="skin_default/menu/cinfo.png" transparent="1" alphatest="blend" />
-    <ePixmap position="848,596" zPosition="2" size="350,44" pixmap="skin_default/icons/db.png" transparent="1" alphatest="blend" />
-  </screen>
   <screen name="LogoManagerConfigScreen" title="LogoManager Setup" position="center,center" size="1920,1080" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/back2b.png" />
     <eLabel position="837,95" zPosition="3" size="375,214" backgroundColor="unff000000" />
