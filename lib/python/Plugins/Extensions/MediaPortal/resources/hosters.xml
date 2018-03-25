@@ -19,7 +19,6 @@
 <hoster>letitbit.net</hoster><regex>letitbit.net</regex>
 <hoster>uploadable</hoster><regex>uploadable.ch</regex>
 <hoster>bigfile</hoster><regex>bigfile.to</regex>
-<hoster>uploadrocket</hoster><regex>uploadrocket.net</regex>
 <hoster>oboom</hoster><regex>oboom.com</regex>
 <hoster>extmatrix</hoster><regex>extmatrix.com</regex>
 <hoster>mediafire</hoster><regex>mediafire.com</regex>
@@ -74,7 +73,6 @@
 <hoster>googleusercontent.com</hoster><regex>googleusercontent.com</regex>
 <hoster>rapidvideo.com</hoster><regex>rapidvideo.com</regex>
 <hoster>rapidvideo.ws</hoster><regex>rapidvideo.ws</regex>
-<hoster>powerwatch</hoster><regex>powerwatch.pw</regex>
 <hoster>vid.gg</hoster><regex>vid.gg</regex>
 <hoster>vidgg</hoster><regex>vidgg.to</regex>
 <hoster>thevideo</hoster><regex>thevideo.me</regex>

@@ -11,31 +11,6 @@ BASE_URL = "https://www.zdf.de"
 NoC = "Keine abspielbaren Inhalte verfügbar"
 bildchen = "file://%s/zdf.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-def soap(data,flag):
-	data = re.sub('itemprop="image" content=""','',data,flags=re.S)
-	data = re.sub('<footer.*?</html>','',data,flags=re.S)
-	if "<article" in data:
-		data = "<article" + re.sub('!DOCTYPE html>.*?\<article','',data,flags=re.S)
-	else:
-		return
-	if flag == "Stream":
-		try:
-			data = re.sub('<div class="img-container x-large-8 x-column">','<source class="m-16-9" data-srcset="/static~Trash">',data, flags=re.S)
-		except:
-			pass
-	data = data.split("</article>")
-	y = 0
-	for x in data:
-		x = x.split("<article")
-		if len(x) == 2:
-			x = "<article"+x[1]
-		else:
-			x = "<article"+x[0]
-		z = ("%03d") % y
-		with open(config.mediaportal.storagepath.value + "zdf"+z+".soap", "w") as f:
-			f.write(x+"</article>")
-		y += 1
-
 class ZDFGenreScreen(MPScreen):
 
 	def __init__(self, session):
@@ -63,11 +38,6 @@ class ZDFGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		from os import listdir								# If crashed before...
-		if fileExists(config.mediaportal.storagepath.value):				# ...clean up...
-			for i in listdir(config.mediaportal.storagepath.value):			# ...to prevent...
-				if "zdf" in i and ".soap" in i:					# ...the next...
-					os.remove(config.mediaportal.storagepath.value+i)	# ...crash...
 		self.keyLocked = True
 		self.loadPageData()
 
@@ -131,7 +101,7 @@ class ZDFGenreScreen(MPScreen):
 			global suchCache
 			suchCache = callbackStr
 			genreName = "Suche... ' %s '" % suchCache
-			streamLink = "%s/suche?q=%s&from=&to=&sender=alle+Sender&attrs=" % (BASE_URL,callbackStr)
+			streamLink = "%s/suche?q=%s&from=&to=&sender=alle+Sender&attrs=" % (BASE_URL,callbackStr.replace(' ', '+'))
 			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,AdT,bildchen)
 		else:
 			return
@@ -345,7 +315,6 @@ class ZDFPostSelect(MPScreen, ThumbsHelper):
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		soap(data,"Post")
 		if int(self.gF) > 5:	# ZDF, ZDFneo, ZDFinfo, ZDFtivi
 			self.genreliste = []
 			treffer = re.findall('<div class="image">.*?<img src="(.*?)" title="(.*?)".*?<div class="text">.*?<a href=".*?<a href=".*?">(.*?)<.*?a href=".*?">(.*?) B.*?</div>', data, re.S)
@@ -365,12 +334,10 @@ class ZDFPostSelect(MPScreen, ThumbsHelper):
 
 		else:
 			self.genreliste = []
-			tmp = sorted(glob.glob(config.mediaportal.storagepath.value + "*.soap"))
-			if tmp:
-				for x in tmp:
-					with open(x, 'r') as f:
-						data = f.read()
-					os.remove(x)
+			articles = re.findall('(<article.*?</article>)', data, re.S)
+			if articles:
+				for article in articles:
+					data = re.sub('itemprop="image" content=""','',article,flags=re.S)
 					folgen = re.findall('picture class.*?data-srcset="(.*?)~.*?itemprop=\"genre\">(.*?)<.*?m-border\">(.*?) .*?data-plusbar-title=\"(.*?)\".*?data-plusbar-url=\"(.*?)\"', data, re.S)
 					if folgen:
 						for (image,genre,anzahl,title,url) in folgen:
@@ -469,18 +436,15 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 			self.lastpage = 1
 		self['page'].setText(str(self.page)+' / '+str(self.lastpage))
 
-		soap(data,"Stream")
-
 		self.filmliste = []
 		typ,image,title,info,assetId,sender,sendung,dur = "","","","","","","",""
 		if self.gF == "3": # Sendung verpasst?
 			self['page'].setText('1 / 1')
 			genre = ""
-			tmp = sorted(glob.glob(config.mediaportal.storagepath.value + "*.soap"))
-			for x in tmp:
-				with open(x, 'r') as f:
-					data = f.read()
-				os.remove(x)
+			articles = re.findall('(<article.*?</article>)', data, re.S)
+			for article in articles:
+				data = re.sub('<div class="img-container x-large-8 x-column">','<source class="m-16-9" data-srcset="/static~Trash">',article, flags=re.S)
+				data = re.sub('itemprop="image" content=""','',data,flags=re.S)
 				treffer = re.findall('<article.*?itemprop=\"image\" content=\"(.*?)\".*?\"teaser-label\".*?</span>(.*?)<strong>(.*?)<.*?title=\"(.*?)\".*?teaser-info.*?>(.*?)<.*?data-plusbar-id=\"(.*?)\".*?data-plusbar-path=\"(.*?)\"', data, re.S)
 				if treffer:
 					for (image,airtime,clock,title,dur,assetId,assetPath) in treffer:
@@ -527,16 +491,15 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 					info = decodeHtml(info)
 					airtime = airtime.split(" +")[0]
 					title = decodeHtml(title)
-					dur = int(dur)
-					self.dur = str(int(dur/60))+" min"
+					m, s = divmod(int(dur), 60)
+					self.dur = "%02d:%02d" % (m, s)
 					handlung = "Kanal: Podcast"+"\nClip-Datum: "+airtime+"\nDauer: "+self.dur+"\n\n"+info
 					self.filmliste.append((title,streamLink,handlung,image,title,''))
 		else:
-			tmp = sorted(glob.glob(config.mediaportal.storagepath.value + "*.soap"))
-			for x in tmp:
-				with open(x, 'r') as f:
-					data = f.read()
-				os.remove(x)
+			articles = re.findall('(<article.*?</article>)', data, re.S)
+			for article in articles:
+				data = re.sub('<div class="img-container x-large-8 x-column">','<source class="m-16-9" data-srcset="/static~Trash">',article, flags=re.S)
+				data = re.sub('itemprop="image" content=""','',data,flags=re.S)
 				if not "<article" in data:
 					continue
 				airtimedata = None

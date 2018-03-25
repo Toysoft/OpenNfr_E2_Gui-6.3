@@ -78,6 +78,7 @@ class eroprofileGenreScreen(MPScreen):
 		self.genreliste.append(("Bisexual", "18"))
 		self.genreliste.append(("Black / Ebony", "20"))
 		self.genreliste.append(("Celeb", "23"))
+		self.genreliste.append(("Dogging", "33"))
 		self.genreliste.append(("Facial / Cum", "24"))
 		self.genreliste.append(("Fetish / Kinky", "10"))
 		self.genreliste.append(("Fucking / Sucking", "26"))
@@ -88,7 +89,9 @@ class eroprofileGenreScreen(MPScreen):
 		self.genreliste.append(("Lingerie / Panties", "30"))
 		self.genreliste.append(("Nudist / Voyeur / Public", "16"))
 		self.genreliste.append(("Other / Cartoon", "28"))
+		self.genreliste.append(("Pregnant", "32"))
 		self.genreliste.append(("Shemale / TS", "9"))
+		self.genreliste.append(("Squirting", "34"))
 		self.genreliste.append(("Swingers / Gangbang", "8"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.ml.moveToIndex(0)
@@ -154,16 +157,18 @@ class eroprofileFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if self.ID == "popular":
-			url = 'http://www.eroprofile.com/m/videos/popular?niche=13.14.12.19.27.25.5.11.18.20.23.24.10.26.17.7.15.6.30.16.28.9.8&pnum=%s' % str(self.page)
-		elif (self.ID == "" or self.ID == "home"):
-			url = 'http://www.eroprofile.com/m/videos/home?niche=13.14.12.19.27.25.5.11.18.20.23.24.10.26.17.7.15.6.30.16.28.9.8&text=%s&pnum=%s' % (self.SearchString, str(self.page))
+			url = 'http://www.eroprofile.com/m/videos/popular?niche=13.14.12.19.27.25.5.11.18.20.23.24.10.26.17.7.15.6.30.16.28.9.8.32.33.34&pnum=%s' % str(self.page)
+		elif self.ID == "home":
+			url = 'http://www.eroprofile.com/m/videos/search?niche=13.14.12.19.27.25.5.11.18.20.23.24.10.26.17.7.15.6.30.16.28.9.8.32.33.34&pnum=%s' % str(self.page)
+		elif self.ID == "":
+			url = 'http://www.eroprofile.com/m/videos/search?niche=13.14.12.19.27.25.5.11.18.20.23.24.10.26.17.7.15.6.30.16.28.9.8.32.33.34&text=%s&pnum=%s' % (self.SearchString, str(self.page))
 		else:
 			url = 'http://www.eroprofile.com/m/videos/search?niche=%s&pnum=%s' % (self.ID, str(self.page))
 		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'id="divVideoListPageNav">(.*?)</div>','.*pnum=(\d+)')
-		Movies = re.findall('class="video">.*?<a\shref="(.*?)"><img\ssrc="(.*?)".*?class="videoDur">(.*?)</div>.*?(?:class="videoTtl">|class="videoTtl"\stitle=")(.*?)(?:</div|")', data, re.S)
+		Movies = re.findall('class="video">.*?<a\shref="(.*?)"(?:\sclass="exopu"|)><img\ssrc="(.*?)".*?class="videoDur">(.*?)</div>.*?(?:class="videoTtl">|class="videoTtl"\stitle=")(.*?)(?:</div|")', data, re.S)
 		if Movies:
 			for (Url, Image, Runtime, Title) in Movies:
 				if Image.startswith('//'):

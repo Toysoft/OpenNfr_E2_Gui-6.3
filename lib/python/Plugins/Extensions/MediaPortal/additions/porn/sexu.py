@@ -186,9 +186,14 @@ class sexuFilmScreen(MPScreen, ThumbsHelper):
 		getPage(Link).addCallback(self.getVideoData).addErrback(self.dataError)
 
 	def getVideoData(self, data):
-		url = re.findall('file":"(.*?\.mp4)"', data, re.S)
-		if url:
+		stream_urls = re.findall('"src":"(.*?)","quality":"(\d+)p",', data)
+		if stream_urls:
+			res = 0
+			for stream in stream_urls:
+				if int(stream[1]) > res:
+					link = stream[0]
+					res = int(stream[1])
 			title = self['liste'].getCurrent()[0][0]
 			headers = '&Referer=http://sexu.com/'
-			url = url[-1] + '#User-Agent='+agent+headers
-			self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='sexu')
+			link = link + '#User-Agent='+agent+headers
+			self.session.open(SimplePlayer, [(title, link)], showPlaylist=False, ltype='sexu')

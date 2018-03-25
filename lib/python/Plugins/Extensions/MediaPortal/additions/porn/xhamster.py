@@ -493,7 +493,7 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 		else:
 			self['name'].setText(_('Please wait...'))
 			if re.match(".*?Search", self.Name):
-				url = "http://xhamster.com/search.php?new=&q=%s&qcat=video&page=%s" % (self.Link, str(self.page))
+				url = "http://xhamster.com/search?q=%s&qcat=video&page=%s" % (self.Link, str(self.page))
 				if self.hd:
 					ck.update({'video_search_form':"%7b%22categories%22%3a%7b%22straight%22%3atrue%2c%22gay%22%3afalse%2c%22shemale%22%3afalse%7d%2c%22quality%22%3a%22hd%22%7d"})
 				else:

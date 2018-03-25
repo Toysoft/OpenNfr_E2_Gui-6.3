@@ -58,7 +58,7 @@ else:
 import urlparse
 import thread
 
-BASE_URL = "https://serienstream.to"
+BASE_URL = "https://s.to"
 ss_cookies = CookieJar()
 ss_ck = {}
 ss_agent = ''
@@ -267,7 +267,7 @@ class ssSerien(MPScreen, SearchHelper):
 			self.loadPageData(data)
 
 	def loadPageData(self, data):
-		serien = re.findall('<li>.*?<a href="/serie/stream/(.*?)".*?title=".*?Stream anschauen">(.*?)</a>.*?</li>', data, re.S)
+		serien = re.findall('<li>.*?<a\s(?:data-alternative-title=""\s|)href="/serie/stream/(.*?)".*?title=".*?Stream anschauen">(.*?)</a>.*?</li>', data, re.S)
 		if serien:
 			for (id, serie) in serien:
 				url = BASE_URL + "/serie/stream/%s" % id
@@ -306,7 +306,7 @@ class ssSerien(MPScreen, SearchHelper):
 			self.setCoverUrl(data)
 
 	def setCoverUrl(self, data):
-		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://serienstream.to/public/img/cover/.*?)"', data, re.S)
+		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://s.to/public/img/cover/.*?)"', data, re.S)
 		if cover:
 			self.cover = cover[0]
 			CoverHelper(self['coverArt']).getCover(self.cover, agent=ss_agent, cookieJar=ss_cookies)
@@ -444,7 +444,7 @@ class ssNeueEpisoden(MPScreen):
 			self.setCoverUrl(data)
 
 	def setCoverUrl(self, data):
-		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://serienstream.to/public/img/cover/.*?)"', data, re.S)
+		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://s.to/public/img/cover/.*?)"', data, re.S)
 		if cover:
 			self.cover = cover[0]
 			CoverHelper(self['coverArt']).getCover(self.cover, agent=ss_agent, cookieJar=ss_cookies)
@@ -520,7 +520,7 @@ class ssWatchlist(MPScreen):
 			self.setCoverUrl(data)
 
 	def setCoverUrl(self, data):
-		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://serienstream.to/public/img/cover/.*?)"', data, re.S)
+		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://s.to/public/img/cover/.*?)"', data, re.S)
 		if cover:
 			self.cover = cover[0]
 			CoverHelper(self['coverArt']).getCover(self.cover, agent=ss_agent, cookieJar=ss_cookies)

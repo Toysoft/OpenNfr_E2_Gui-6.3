@@ -181,7 +181,7 @@ class realgfpornFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</div>')
-		Movies = re.findall('class="video-spot">.*?<a\shref="http[s]?://www.realgfporn.com/videos(.*?)".*?<img\s.*?src="(.*?)".*?alt="(.*?)".*?post-duration">(.*?)</b>.*?post-views">(.*?)</b>', data, re.S)
+		Movies = re.findall('class="video-spot.*?<a\shref="http[s]?://www.realgfporn.com/videos(.*?)".*?<img\s.*?src="(.*?)".*?alt="(.*?)".*?post-duration">(.*?)</b>.*?post-views">(.*?)</b>', data, re.S)
 		if Movies:
 			for (Url, Image, Title, Runtime, Views) in Movies:
 				Image = Image.replace(' ','%20')

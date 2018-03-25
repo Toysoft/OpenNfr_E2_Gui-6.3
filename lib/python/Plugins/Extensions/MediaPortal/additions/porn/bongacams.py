@@ -205,7 +205,7 @@ class bongacamsFilmScreen(MPScreen, ThumbsHelper):
 		getPage(url, agent=bongacamsAgent, cookies=ck).addCallback(self.getStream).addErrback(self.dataError)
 
 	def getStream(self, data):
-		amf = re.search('.*?MobileChatService\(\'\/(.*?)\'\+\$', data, re.S).group(1)
+		amf = re.search('.*?directServiceUrl\s=\s\'\/(.*?)\'\+\$', data, re.S).group(1)
 		url = BASEURL + amf + str(random.randint(2100000, 3200000))
 		getPage(url, agent=bongacamsAgent, cookies=ck, method='POST', postdata='method=getRoomData&args%5B%5D='+self.username+'&args%5B%5D=false', headers=json_headers).addCallback(self.play_stream).addErrback(self.dataError)
 

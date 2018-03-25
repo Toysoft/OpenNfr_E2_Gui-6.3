@@ -38,6 +38,7 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 
 default_cover = "file://%s/gigatv.png" % (config.mediaportal.iconcachepath.value + "logos")
 
@@ -153,11 +154,10 @@ class gigatvFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination">(.*?)</ul>', '.*(?:>|\s+)(\d+)(?:<|)')
-		Movies = re.findall('\/embed\/(\d+).*?<article\sclass=.*?smallimg">.*?hgroup>.*?<a\shref=".*?>(.*?)</a>.*?img\s(?:data-pagespeed-lazy-|)src="(http[s]?://static.giga.de/.*?)"\salt=', data, re.S|re.I)
+		Movies = re.findall('<article\sclass=.*?<img title="(.*?)".*?src="(https://static.giga.de/.*?)".*?<a\shref="(.*?)"', data, re.S|re.I)
 		if Movies:
-			for (ID, Title, Image) in Movies:
-				Title = Title.replace('<b>','').replace('</b>','')
-				self.filmliste.append((decodeHtml(Title), Image, ID))
+			for (Title, Image, Url) in Movies:
+				self.filmliste.append((decodeHtml(Title).strip(), Image, Url))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.ml.moveToIndex(0)
 			self.keyLocked = False
@@ -173,13 +173,25 @@ class gigatvFilmScreen(MPScreen, ThumbsHelper):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		ID = self['liste'].getCurrent()[0][2]
-		url = "http://videos.giga.de/embed/%s" % ID
-		self.keyLocked = True
-		getPage(url).addCallback(self.getVideoPage).addErrback(self.dataError)
+		url = self['liste'].getCurrent()[0][2]
+		getPage(url).addCallback(self.getID).addErrback(self.dataError)
+
+	def getID(self, data):
+		ID = re.findall('\/embed\/(\d+)', data, re.S)
+		if ID:
+			url = "http://videos.giga.de/embed/%s" % ID[0]
+			self.keyLocked = True
+			getPage(url).addCallback(self.getVideoPage).addErrback(self.dataError)
+		else:
+			yt = re.findall('www.youtube.com/(v|embed)/(.*?)\?.*?"', data, re.S)
+			if yt:
+				title = self['liste'].getCurrent()[0][0]
+				self.session.open(YoutubePlayer,[(title, yt[0][1], None)],playAll= False,showPlaylist=False,showCover=False)
+			else:
+				message = self.session.open(MessageBoxExt, _("This video is not available."), MessageBoxExt.TYPE_INFO, timeout=5)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('file.":."(http://lx\d+.spieletips.de/\d+(?:_v\d+|)/(?:1080|720|480|360)+p.mp4)."', data, re.S)
+		videoPage = re.findall('src.":."(http://lx\d+.spieletips.de/\d+(?:_v\d+|)/(?:1080|720|480|360)+p.mp4)."', data, re.S)
 		if videoPage:
 			url = videoPage[0]
 			self.play(url)

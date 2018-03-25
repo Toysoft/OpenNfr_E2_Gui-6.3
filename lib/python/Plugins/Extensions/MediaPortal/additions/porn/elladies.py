@@ -93,7 +93,7 @@ class elladiesFilmScreen(MPScreen, ThumbsHelper):
 		self['title'] = Label("El-Ladies.com")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
-		self['F3'] = Label("HD")
+		self['F3'] = Label("Filter")
 
 		self['Page'] = Label(_("Page:"))
 		self.keyLocked = True
@@ -101,8 +101,6 @@ class elladiesFilmScreen(MPScreen, ThumbsHelper):
 		self.lastpage = 1
 		self.suchString = ''
 		self.HD = 0
-		self.HDText = ['Off','On']
-		self['title'].setText('El-Ladies.com (HD: ' + self.HDText[self.HD] + ')')
 
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -143,14 +141,17 @@ class elladiesFilmScreen(MPScreen, ThumbsHelper):
 		title = re.search('<title>(.*?)</title>', data, re.S)
 		self['name'].setText(decodeHtml(title.group(1)))
 		handlung = re.search('name="description"\scontent="(.*?)"\s/>', data, re.S)
-		self['handlung'].setText(decodeHtml(handlung.group(1)))
+		if self.HD == 0:
+			filter = "All"
+		else:
+			filter = "HD"
+		self['handlung'].setText(decodeHtml(handlung.group(1))+"\n\nFilter: "+filter)
 
 	def keyHD(self):
 		if self.HD == 1:
 			self.HD = 0
 		else:
 			self.HD = 1
-		self['title'].setText('El-Ladies.com (HD: ' + self.HDText[self.HD] + ')')
 		self.loadPage()
 
 	def keyOK(self):

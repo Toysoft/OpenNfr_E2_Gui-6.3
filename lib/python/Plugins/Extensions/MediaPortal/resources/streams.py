@@ -369,15 +369,6 @@ class get_stream_link:
 				else:
 					self.only_premium()
 
-			elif re.search('uploadrocket.net', data, re.S):
-				link = data
-				if config.mediaportal.realdebrid_use.value and not self.fallback:
-					self.rdb = 1
-					self.prz = 0
-					self.callPremium(link)
-				else:
-					self.only_premium()
-
 			elif re.search('oboom.com', data, re.S):
 				link = data
 				if config.mediaportal.realdebrid_use.value and not self.fallback:
@@ -488,7 +479,7 @@ class get_stream_link:
 					self.callPremium(link)
 				else:
 					self.only_premium()
-					
+
 			elif re.search('kink.com', data, re.S):
 				link = data
 				if config.mediaportal.premiumize_use.value and not self.fallback:
@@ -550,9 +541,9 @@ class get_stream_link:
 
 			elif re.search('videoweed.es', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if config.mediaportal.realdebrid_use.value and not self.fallback:
 					self.rdb = 1
-					self.prz = 1
+					self.prz = 0
 					self.callPremium(link)
 				else:
 					ID = re.search('http://(www\.|embed\.|)videoweed.es/(?:mobile/video\.php\?id=|video/|file/|embed\.php\?.*?v=)([0-9a-z]+)', link)
@@ -562,9 +553,9 @@ class get_stream_link:
 
 			elif re.search('novamov.com', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if config.mediaportal.realdebrid_use.value and not self.fallback:
 					self.rdb = 1
-					self.prz = 1
+					self.prz = 0
 					self.callPremium(link)
 				else:
 					ID = re.search('http://(www\.|embed\.|)novamov.com/(?:mobile/video\.php\?id=|video/|file/|embed\.php\?.*?v=)([0-9a-z]+)', link)
@@ -586,18 +577,18 @@ class get_stream_link:
 
 			elif re.search('auroravid.to', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if config.mediaportal.realdebrid_use.value and not self.fallback:
 					self.rdb = 1
-					self.prz = 1
+					self.prz = 0
 					self.callPremium(link)
 				else:
 					self.only_premium()
 
 			elif re.search('bitvid.sx', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if config.mediaportal.realdebrid_use.value and not self.fallback:
 					self.rdb = 1
-					self.prz = 1
+					self.prz = 0
 					self.callPremium(link)
 				else:
 					self.only_premium()
@@ -640,7 +631,7 @@ class get_stream_link:
 							'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.137 Safari/537.36',
 							'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 							'Accept-Language': 'en-US,en;q=0.5',
-							#'Accept-Encoding': 'gzip, deflate, br', 
+							#'Accept-Encoding': 'gzip, deflate, br',
 							'Connection': 'keep-alive',
 							'Upgrade-Insecure-Requests': '1',
 							'Cookie': ''}
@@ -672,14 +663,9 @@ class get_stream_link:
 
 			elif re.search('http://youwatch.org', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
-					self.rdb = 1
-					self.prz = 0
-					self.callPremium(link)
-				else:
-					id = link.split('org/')
-					url = "http://youwatch.org/embed-%s.html" % id[1]
-					getPage(url).addCallback(self.youwatch).addErrback(self.errorload)
+				id = link.split('org/')
+				url = "http://youwatch.org/embed-%s.html" % id[1]
+				getPage(url).addCallback(self.youwatch).addErrback(self.errorload)
 
 			elif re.search('allmyvideos.net', data, re.S):
 				link = data
@@ -695,12 +681,7 @@ class get_stream_link:
 
 			elif re.search('promptfile.com', data, re.S):
 				link = data
-				if config.mediaportal.realdebrid_use.value and not self.fallback:
-					self.rdb = 1
-					self.prz = 0
-					self.callPremium(link)
-				else:
-					twAgentGetPage(link, agent=None, headers=std_headers).addCallback(self.promptfile, link).addErrback(self.errorload)
+				twAgentGetPage(link, agent=None, headers=std_headers).addCallback(self.promptfile, link).addErrback(self.errorload)
 
 			elif re.search("http://shared.sx", data, re.S):
 				link = data
@@ -764,30 +745,19 @@ class get_stream_link:
 					id = data.split('/')[1]
 					if id:
 						link = "http://streamin.to/embed-%s-640x360.html" % id
-				if config.mediaportal.realdebrid_use.value and not self.fallback:
-					link = data
-					self.rdb = 1
-					self.prz = 0
-					self.callPremium(link)
-				else:
-					spezialagent = 'Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/BuildID) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36'
-					getPage(link, cookies=ck, agent=spezialagent).addCallback(self.streamin).addErrback(self.errorload)
+				spezialagent = 'Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/BuildID) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36'
+				getPage(link, cookies=ck, agent=spezialagent).addCallback(self.streamin).addErrback(self.errorload)
 
 			elif re.search("vivo.sx", data, re.S):
 				link = data.replace('http:','https:')
-				if config.mediaportal.premiumize_use.value and not self.fallback:
-					self.rdb = 0
-					self.prz = 1
-					self.callPremium(link)
+				if mp_globals.isDreamOS or not mp_globals.requests:
+					twAgentGetPage(link).addCallback(self.vivo, link).addErrback(self.errorload)
 				else:
-					if mp_globals.isDreamOS or not mp_globals.requests:
-						twAgentGetPage(link).addCallback(self.vivo, link).addErrback(self.errorload)
+					data = self.grabpage(link)
+					if data == "error":
+						message = self.session.open(MessageBoxExt, _("Mandatory Python module python-requests is missing!"), MessageBoxExt.TYPE_ERROR)
 					else:
-						data = self.grabpage(link)
-						if data == "error":
-							message = self.session.open(MessageBoxExt, _("Mandatory Python module python-requests is missing!"), MessageBoxExt.TYPE_ERROR)
-						else:
-							self.vivo(data, link)
+						self.vivo(data, link)
 
 			elif re.search('bestreams\.net/', data, re.S):
 				link = data

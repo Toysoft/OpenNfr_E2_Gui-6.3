@@ -99,31 +99,41 @@ class fourtubeGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://%s/tag%s" % (self.baseurl, self.s)
-		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
+		url = "https://%s/tag%s" % (self.baseurl, self.s)
+		getPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('categories_page">(.*?)class="footer">', data, re.S)
-		Cats = re.findall(' class="thumb-link" href="(.*?)".*?class="thumb-title">(.*?)</.*?img data-original="(.*?)"', parse.group(1), re.S)
-		if Cats:
-			for (Url, Title, Image) in Cats:
-				self.genreliste.append((Title, Url, Image))
-		parse = re.search('All\scategories(.*?)</div', data, re.S)
-		Cats = re.findall('<li><a\shref=".*?(\/tag.*?)"\stitle="(.*?)\ssex\smovies', parse.group(1), re.S)
-		if Cats:
-			for (Url, Title) in Cats:
-				Url = "http://" + self.baseurl + Url
-				Title = Title.title()
+		if self.portal == "PornTube.com":
+			data = re.search(".*?window.INITIALSTATE = '(.*?)'", data, re.S).group(1)
+			import base64
+			data = urllib.unquote(base64.b64decode(data))
+			json_data = json.loads(data)
+			for item in json_data["page"]["embedded"]["topTags"]:
+				Url = "https://" + self.baseurl + "/tags/" + str(item["slug"])
+				Title = str(item["name"]).title()
 				self.genreliste.append((Title, Url, default_cover))
-			self.genreliste.sort()
-			self.genreliste.insert(0, ("Websites", "http://%s/channel%s" % (self.baseurl, self.s), default_cover))
-			self.genreliste.insert(0, ("Pornstars", "http://%s/pornstar%s" % (self.baseurl, self.s), default_cover))
-			self.genreliste.insert(0, ("Highest Rating", "http://%s/video%s?sort=rating&time=month" % (self.baseurl, self.s), default_cover))
-			self.genreliste.insert(0, ("Most Viewed", "http://%s/video%s?sort=views&time=month" % (self.baseurl, self.s), default_cover))
-			self.genreliste.insert(0, ("Latest", "http://%s/video%s?sort=date" % (self.baseurl, self.s), default_cover))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
-			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-			self.keyLocked = False
+		else:
+			parse = re.search('categories_page">(.*?)class="footer">', data, re.S)
+			Cats = re.findall(' class="thumb-link" href="(.*?)".*?class="thumb-title">(.*?)</.*?img data-original="(.*?)"', parse.group(1), re.S)
+			if Cats:
+				for (Url, Title, Image) in Cats:
+					self.genreliste.append((Title, Url, Image))
+			parse = re.search('All\scategories(.*?)</div', data, re.S)
+			Cats = re.findall('<li><a\shref=".*?(\/tag.*?)"\stitle="(.*?)\ssex\smovies', parse.group(1), re.S)
+			if Cats:
+				for (Url, Title) in Cats:
+					Url = "https://" + self.baseurl + Url
+					Title = Title.title()
+					self.genreliste.append((Title, Url, default_cover))
+		self.genreliste.sort()
+		self.genreliste.insert(0, ("Channels", "https://%s/channel%s" % (self.baseurl, self.s), default_cover))
+		self.genreliste.insert(0, ("Pornstars", "https://%s/pornstar%s" % (self.baseurl, self.s), default_cover))
+		self.genreliste.insert(0, ("Highest Rating", "https://%s/video%s?sort=rating&time=month" % (self.baseurl, self.s), default_cover))
+		self.genreliste.insert(0, ("Most Viewed", "https://%s/video%s?sort=views&time=month" % (self.baseurl, self.s), default_cover))
+		self.genreliste.insert(0, ("Latest", "https://%s/video%s?sort=date" % (self.baseurl, self.s), default_cover))
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
+		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
+		self.keyLocked = False
 		self.showInfos()
 
 	def showInfos(self):
@@ -136,7 +146,7 @@ class fourtubeGenreScreen(MPScreen):
 		Name = self['liste'].getCurrent()[0][0]
 		if Name == "--- Search ---":
 			self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True, auto_text_init=False, suggest_func=self.getSuggestions)
-		elif Name == "Websites" or Name == "Pornstars":
+		elif Name == "Channels" or Name == "Pornstars":
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(fourtubeSitesScreen, Link, Name, self.portal, self.baseurl)
 		else:
@@ -151,7 +161,10 @@ class fourtubeGenreScreen(MPScreen):
 			self.session.open(fourtubeFilmScreen, Link, Name, self.portal, self.baseurl)
 
 	def getSuggestions(self, text, max_res):
-		url = "http://%s/search_suggestions_remote?q=%s&type=related" % (self.baseurl, urllib.quote_plus(text))
+		if self.portal == "PornTube.com":
+			url = "https://%s/api/search/suggestions?q=%s&orientation=straight" % (self.baseurl, urllib.quote_plus(text))
+		else:
+			url = "https://%s/search_suggestions_remote?q=%s&type=related" % (self.baseurl, urllib.quote_plus(text))
 		d = twAgentGetPage(url, agent=agent, headers=headers, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
 		d.addErrback(self.gotSuggestions, max_res, err=True)
@@ -203,7 +216,10 @@ class fourtubeSitesScreen(MPScreen, ThumbsHelper):
 		self['Page'] = Label(_("Page:"))
 		self.keyLocked = True
 		self.page = 1
-		self.sort = 'likes'
+		if self.portal == "PornTube.com" and self.Name == "Channels":
+			self.sort = 'subscribers'
+		else:
+			self.sort = 'likes'
 
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -216,18 +232,39 @@ class fourtubeSitesScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		url = "%s?sort=%s&p=%s" % (self.Link, self.sort, str(self.page))
-		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
+		getPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		self.getLastPage(data, '', 'maxPage\s=\s(\d+);')
-		Movies = re.findall('link"\shref="(.*?)"\stitle="(.*?)".*?original="(.*?)"', data, re.S)
-		if Movies:
-			for (Url, Title, Image) in Movies:
-				self.filmliste.append((decodeHtml(Title), Url, Image))
-			self.ml.setList(map(self._defaultlistleft, self.filmliste))
-			self.ml.moveToIndex(0)
-			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage)
-			self.showInfos()
+		if self.portal == "PornTube.com":
+			data = re.search(".*?window.INITIALSTATE = '(.*?)'", data, re.S).group(1)
+			import base64
+			data = urllib.unquote(base64.b64decode(data))
+			json_data = json.loads(data)
+			if json_data["page"].has_key('pornstars'):
+				node = json_data["page"]["pornstars"]
+				type = "pornstars"
+			elif json_data["page"].has_key('channels'):
+				node = json_data["page"]["channels"]
+				type = "channels"
+			self.lastpage = node["pages"]
+			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+			for item in node["_embedded"]["items"]:
+				Url = "https://" + self.baseurl + "/" + type + "/" + str(item["slug"])
+				Title = str(item["name"])
+				Image = str(item["thumbUrl"])
+				self.filmliste.append((Title, Url, Image))
+		else:
+			self.getLastPage(data, '', 'maxPage\s=\s(\d+);')
+			Movies = re.findall('link"\shref="(.*?)"\stitle="(.*?)".*?original="(.*?)"', data, re.S)
+			if Movies:
+				for (Url, Title, Image) in Movies:
+					self.filmliste.append((decodeHtml(Title), Url, Image))
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('No pornstars found!'), None, None))
+		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		self.ml.moveToIndex(0)
+		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage)
+		self.showInfos()
 		self.keyLocked = False
 
 	def keySort(self):
@@ -236,7 +273,10 @@ class fourtubeSitesScreen(MPScreen, ThumbsHelper):
 		if self.Name == 'Pornstars':
 			rangelist = [['Likes', 'likes'], ['Popularity','popularity'], ['Twitter','twitter'], ['Videos','videos'], ['Name','name'], ['Date','date'], ['Subscribers','subscribers']]
 		else:
-			rangelist = [['Likes', 'likes'], ['Videos','videos'], ['Name','name'], ['Date','date'], ['Subscribers','subscribers']]
+			if self.portal == "PornTube.com":
+				rangelist = [['Videos','video'], ['Name','name'], ['Date','date'], ['Subscribers','subscribers']]
+			else:
+				rangelist = [['Likes', 'likes'], ['Videos','videos'], ['Name','name'], ['Date','date'], ['Subscribers','subscribers']]
 		self.session.openWithCallback(self.keySortAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
 
 	def keySortAction(self, result):
@@ -319,7 +359,7 @@ class fourtubeFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "http://%s/search?q=%s&p=%s" % (self.baseurl, self.Link, str(self.page))
+			url = "https://%s/search?q=%s&p=%s" % (self.baseurl, self.Link, str(self.page))
 		else:
 			sortpart = re.findall('^(.*?)\?sort=(.*?)(\&.*?|)$', self.Link)
 			if sortpart:
@@ -328,27 +368,40 @@ class fourtubeFilmScreen(MPScreen, ThumbsHelper):
 				self.filter = sortpart[0][2]
 			url = "%s?sort=%s%s&p=%s" % (self.Link, self.sort, self.filter, str(self.page))
 		if not re.match('http[s]?://', url):
-			url = "http://%s%s" % (self.baseurl, url)
-		getPage(url).addCallback(self.loadData).addErrback(self.novideofound).addErrback(self.dataError)
-
-	def novideofound(self, error):
-		if error.value.status == '404':
-			self.filmliste.append((_('No videos found!'), '', '', ''))
-			self.ml.setList(map(self._defaultlistleft, self.filmliste))
-			self.showInfos()
-			self.keyLocked = False
-		raise error
+			url = "https://%s%s" % (self.baseurl, url)
+		getPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		self.getLastPage(data, '', 'maxPage\s=\s(\d+);')
-		Movies = re.findall('button><a\shref="(.*?)".*?title="(.*?)".*?original="(.*?.jpeg)".*?(duration-top\">|icon-timer\"><\/i>)(.*?)<', data, re.S)
-		if Movies:
-			for (Url, Title, Image, dummy, Runtime) in Movies:
-				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime))
-			self.ml.setList(map(self._defaultlistleft, self.filmliste))
-			self.ml.moveToIndex(0)
-			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
-			self.showInfos()
+		if self.portal == "PornTube.com":
+			data = re.search(".*?window.INITIALSTATE = '(.*?)'", data, re.S).group(1)
+			import base64
+			data = urllib.unquote(base64.b64decode(data))
+			json_data = json.loads(data)
+			if json_data["page"]["embedded"].has_key('videos'):
+				node = json_data["page"]["embedded"]
+			else:
+				node = json_data["page"]
+			self.lastpage = node["videos"]["pages"]
+			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+			for item in node["videos"]["_embedded"]["items"]:
+				Url = "https://" + self.baseurl + "/api/videos/" + str(item["uuid"]) + "?ssr=false&slug=" + str(item["slug"]) + "&orientation="
+				Title = str(item["title"])
+				Image = str(item["thumbnailsList"][0])
+				m, s = divmod(item['durationInSeconds'], 60)
+				Runtime = "%02d:%02d" % (m, s)
+				self.filmliste.append((Title, Url, Image, Runtime))
+		else:
+			self.getLastPage(data, '', 'maxPage\s=\s(\d+);')
+			Movies = re.findall('button><a\shref="(.*?)".*?title="(.*?)".*?original="(.*?.jpeg)".*?(duration-top\">|icon-timer\"><\/i>)(.*?)<', data, re.S)
+			if Movies:
+				for (Url, Title, Image, dummy, Runtime) in Movies:
+					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime))
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('No videos found!'), None, None))
+		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		self.ml.moveToIndex(0)
+		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
+		self.showInfos()
 		self.keyLocked = False
 
 	def showInfos(self):
@@ -386,18 +439,29 @@ class fourtubeFilmScreen(MPScreen, ThumbsHelper):
 			return
 		Link = self['liste'].getCurrent()[0][1]
 		self.keyLocked = True
-		if not re.match('http://', Link):
-			Link = "http://%s%s" % (self.baseurl, Link)
-		getPage(Link).addCallback(self.getVideoID).addErrback(self.dataError)
+		if not re.match('http[s]?://', Link):
+			Link = "https://%s%s" % (self.baseurl, Link)
+		getPage(Link, agent=agent).addCallback(self.getVideoID).addErrback(self.dataError)
 
 	def getVideoID(self, data):
-		videoID = re.findall('data-id="(\d+)"\sdata-name=.*?data-quality="(\d+)"', data, re.S)
-		if videoID:
+		if self.portal == "PornTube.com":
+			json_data = json.loads(data)
+			videoID = json_data["video"]["mediaId"]
 			info = {}
 			res = ''
-			for x in videoID:
-				res += x[1] + "+"
+			for item in json_data["video"]["encodings"]:
+				res += str(item["height"]) + "+"
 			res.strip('+')
+			posturl = "https://tkn.kodicdn.com/%s/desktop/%s" % (videoID, res)
+			getPage(posturl, agent=std_headers, method='POST', postdata=info, headers={'Origin':'%s' % self.baseurl, 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoUrl).addErrback(self.dataError)
+		else:
+			videoID = re.findall('data-id="(\d+)"\sdata-name=.*?data-quality="(\d+)"', data, re.S)
+			if videoID:
+				info = {}
+				res = ''
+				for x in videoID:
+					res += x[1] + "+"
+				res.strip('+')
 			posturl = "https://tkn.kodicdn.com/%s/desktop/%s" % (videoID[-1][0], res)
 			getPage(posturl, agent=std_headers, method='POST', postdata=info, headers={'Origin':'%s' % self.baseurl, 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoUrl).addErrback(self.dataError)
 

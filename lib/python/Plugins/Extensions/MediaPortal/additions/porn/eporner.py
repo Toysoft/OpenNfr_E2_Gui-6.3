@@ -166,8 +166,8 @@ class epornerFilmScreen(MPScreen, ThumbsHelper):
 
 		self['Page'] = Label(_("Page:"))
 		self.keyLocked = True
-		self.page = 0
-		self.lastpage = 0
+		self.page = 1
+		self.lastpage = 1
 
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -186,14 +186,10 @@ class epornerFilmScreen(MPScreen, ThumbsHelper):
 		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		lastp = re.search('class="numlist2">.*?of\s(.*?[0-9])\s', data, re.S)
-		if lastp:
-			lastp = round((float(lastp.group(1).replace(',','')) / 51) + 0.5)
-			self.lastpage = int(lastp)
-		else:
-			self.lastpage = 0
-		self['page'].setText(str(self.page+1) + ' / ' + str(self.lastpage))
-		Movies = re.findall('class="mb.*?>\s*<a\shref="(.*?)"\stitle="(.*?)".*?src="(.*?)".*?"mbtim">(.*?)</div>.*?"mbvie">(.*?)</div>', data, re.S)
+		self.getLastPage(data, 'class="numlist2">(.*?)title=\'Next page\'')
+		if "<h2>Recent HD Porn Videos</h2>" in data:
+			data = re.search('<h2>Recent HD Porn Videos</h2>(.*?)</html>', data, re.S).group(1)
+		Movies = re.findall('class="mb".*?>\s+<a\shref="(.*?)"\stitle="(.*?)".*?src="(.*?)".*?"mbtim">(.*?)</div>.*?"mbvie">(.*?)</div>', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Runtime, Views) in Movies:
 				Views = Views.replace(',','')
@@ -201,7 +197,7 @@ class epornerFilmScreen(MPScreen, ThumbsHelper):
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.ml.moveToIndex(0)
 			self.keyLocked = False
-			self.th_ThumbsQuery(self.filmliste,0,1,2,3,None,self.page+1,self.lastpage, mode=1, pagefix=-1)
+			self.th_ThumbsQuery(self.filmliste,0,1,2,3,None,self.page,self.lastpage, mode=1)
 			self.showInfos()
 
 	def showInfos(self):
@@ -212,36 +208,6 @@ class epornerFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(title)
 		self['handlung'].setText("Runtime: %s\nViews: %s" % (runtime, views))
 		CoverHelper(self['coverArt']).getCover(coverUrl)
-
-	def keyPageNumber(self):
-		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoardExt, title = (_("Enter page number")), text = str(self.page+1), is_dialog=True)
-
-	def callbackkeyPageNumber(self, answer):
-		if answer is not None:
-			answer = re.findall('\d+', answer)
-		else:
-			return
-		if answer:
-			if int(answer[0])-1 < self.lastpage:
-				self.page = int(answer[0])-1
-				self.loadPage()
-			else:
-				self.page = self.lastpage-1
-				self.loadPage()
-
-	def keyPageDown(self):
-		if self.keyLocked:
-			return
-		if not self.page < 1:
-			self.page -= 1
-			self.loadPage()
-
-	def keyPageUp(self):
-		if self.keyLocked:
-			return
-		if self.page+1 < self.lastpage:
-			self.page += 1
-			self.loadPage()
 
 	def keyOK(self):
 		if self.keyLocked:

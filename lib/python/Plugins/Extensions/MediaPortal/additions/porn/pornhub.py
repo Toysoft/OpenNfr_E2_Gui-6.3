@@ -110,7 +110,7 @@ class pornhubGenreScreen(MPScreen, rnCalc):
 		getPage(url, agent=phAgent, cookies=ck).addCallback(self.Login2).addErrback(self.dataError)
 
 	def Login2(self, data):
-		parse = re.findall('name="redirect"\svalue="(.*?)".*?id="token"\svalue="(.*?)"', data, re.S)
+		parse = re.findall('name="redirect"\svalue="(.*?)".*?name="token"\svalue="(.*?)"', data, re.S)
 		if parse:
 			global token
 			token = str(parse[0][1])

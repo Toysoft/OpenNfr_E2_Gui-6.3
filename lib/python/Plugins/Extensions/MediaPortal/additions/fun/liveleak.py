@@ -126,6 +126,8 @@ class LiveLeakClips(MPScreen, ThumbsHelper):
 			self.feedliste = []
 			for (title,url,desc,image) in rssfeed:
 				if not re.match('LiveLeak.com Rss Feed', title, re.S|re.I):
+					if image.startswith('//'):
+						image = "https:" + image
 					self.feedliste.append((decodeHtml(title),url,image,decodeHtml(desc.strip())))
 			self.ml.setList(map(self._defaultlistleft, self.feedliste))
 			self.ml.moveToIndex(0)

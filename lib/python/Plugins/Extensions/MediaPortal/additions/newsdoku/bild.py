@@ -39,7 +39,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-baseurl = "http://www.bild.de"
+baseurl = "https://www.bild.de"
 
 class bildFirstScreen(MPScreen):
 
@@ -132,7 +132,7 @@ class bildSecondScreen(MPScreen, ThumbsHelper):
 
 	def loadPage(self):
 		self.filmliste = []
-		getPage(self.link).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(self.link).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		videos =  re.findall('video-id.*?data-video-json="(.*?)".*?class="kicker">(.*?)</span>.*?class="headline">(.*?)</span>', data, re.S)
@@ -153,7 +153,7 @@ class bildSecondScreen(MPScreen, ThumbsHelper):
 		title = self['liste'].getCurrent()[0][0]
 		self['name'].setText(title)
 		jsonurl = self['liste'].getCurrent()[0][1]
-		getPage(jsonurl).addCallback(self.showInfos2).addErrback(self.dataError)
+		twAgentGetPage(jsonurl).addCallback(self.showInfos2).addErrback(self.dataError)
 
 	def showInfos2(self, data):
 		parse = re.findall('description":\s"(.*?)",.*?poster":\s"(.*?)".*?src":"(.*?.mp4)"', data, re.S)
