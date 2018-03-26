@@ -93,7 +93,6 @@ class foxxFilmScreen(MPScreen):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		url = BASE_URL + self.Link + "/page/" + str(self.page)
-		print url
 		getPage(url, agent=fx_agent, cookies=fx_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
@@ -128,7 +127,25 @@ class foxxFilmScreen(MPScreen):
 			getPage(url, agent=fx_agent, cookies=fx_cookies).addCallback(self.gotStream).addErrback(self.dataError)
 
 	def gotStream(self, data):
-		streams = re.findall('"file":"(.*?)","label":"(\d+)', data, re.S)
+		try:
+			import execjs
+			node = execjs.get("Node")
+		except:
+			printl('nodejs not found',self,'E')
+			self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
+			return
+		decoder = "decrypt=function(s) {"\
+			"var e={},i,b=0,c,x,l=0,a,r='',w=String.fromCharCode,L=s.length;"\
+			"var A='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';"\
+			"for(i=0;i<64;i++){e[A.charAt(i)]=i;}"\
+			"for(x=0;x<L;x++){"\
+			"	c=e[s.charAt(x)];b=(b<<6)+c;l+=6;"\
+			"	while(l>=8){((a=(b>>>(l-=8))&0xff)||(x<(L-2)))&&(r+=w(a));}}"\
+			"return r;};"
+		video_url = re.findall('var jbdaskgs\s=.\'(.*?)\'\s;', data, re.S)
+		js = decoder + "\n" + 'video_url=decrypt(\''+video_url[0]+'\');' + "return video_url;"
+		urls = str(node.exec_(js))
+		streams = re.findall('"file":"(.*?)","label":"(\d+)', urls, re.S)
 		if streams:
 			res = 0
 			for stream in streams:

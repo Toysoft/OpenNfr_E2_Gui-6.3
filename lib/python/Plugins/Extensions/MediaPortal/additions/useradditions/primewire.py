@@ -16,7 +16,7 @@ class PrimeWireGenreScreen(MPScreen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("PrimeWire.ag")
+		self['title'] = Label("PrimeWire")
 		self['ContentTitle'] = Label("Genre:")
 		self.keyLocked = True
 		self.suchString = ''
@@ -29,7 +29,7 @@ class PrimeWireGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.primewire.ag/"
+		url = "http://www.primewire.is/"
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -37,14 +37,14 @@ class PrimeWireGenreScreen(MPScreen):
 		Cats = re.findall('<a\shref="(.*?)">(.*?)</a>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
-				Url = "http://www.primewire.ag" + Url + "&page="
+				Url = "http://www.primewire.is" + Url + "&page="
 				self.genreliste.append((Title, Url))
 			self.genreliste.sort()
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
-			self.genreliste.insert(1, ("Featured Movies", "http://www.primewire.ag/index.php?sort=featured&page="))
-			self.genreliste.insert(2, ("Popular Movies", "http://www.primewire.ag/index.php?sort=views&page="))
-			self.genreliste.insert(3, ("Top Rated Movies", "http://www.primewire.ag/index.php?sort=ratings&page="))
-			self.genreliste.insert(4, ("Newly Released Movies", "http://www.primewire.ag/index.php?sort=release&page="))
+			self.genreliste.insert(1, ("Featured Movies", "http://www.primewire.is/index.php?sort=featured&page="))
+			self.genreliste.insert(2, ("Popular Movies", "http://www.primewire.is/index.php?sort=views&page="))
+			self.genreliste.insert(3, ("Top Rated Movies", "http://www.primewire.is/index.php?sort=ratings&page="))
+			self.genreliste.insert(4, ("Newly Released Movies", "http://www.primewire.is/index.php?sort=release&page="))
 			self.genreliste.insert(5, ("TV Shows", ""))
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.ml.moveToIndex(0)
@@ -67,7 +67,7 @@ class PrimeWireGenreScreen(MPScreen):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			auswahl = "--- Search ---"
-			url = "http://www.primewire.ag/?search_keywords=%s&search_section=1&page=" % self.suchString
+			url = "http://www.primewire.is/?search_keywords=%s&search_section=1&page=" % self.suchString
 			self.session.open(PrimeWireFilmlisteScreen, url, auswahl)
 
 class PrimeWireTVshowsScreen(MPScreen):
@@ -81,7 +81,7 @@ class PrimeWireTVshowsScreen(MPScreen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("PrimeWire.ag")
+		self['title'] = Label("PrimeWire")
 		self['ContentTitle'] = Label("TV Shows Genre:")
 		self.keyLocked = True
 		self.suchString = ''
@@ -94,7 +94,7 @@ class PrimeWireTVshowsScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.primewire.ag/?tv"
+		url = "http://www.primewire.is/?tv"
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -102,10 +102,10 @@ class PrimeWireTVshowsScreen(MPScreen):
 		Cats = re.findall('<a\shref="(.*?)">(.*?)</a>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
-				Url = "http://www.primewire.ag/?tv&genre=" + Url + "&page="
+				Url = "http://www.primewire.is/?tv&genre=" + Url + "&page="
 				self.genreliste.append((Title, Url))
 		self.genreliste.sort()
-		self.genreliste.insert(0, ("Popular TV Shows", "http://www.primewire.ag/?tv=&sort=views&page="))
+		self.genreliste.insert(0, ("Popular TV Shows", "http://www.primewire.is/?tv=&sort=views&page="))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -142,7 +142,7 @@ class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 			"blue" : self.keySort
 		}, -1)
 
-		self['title'] = Label("PrimeWire.ag")
+		self['title'] = Label("PrimeWire")
 		self['ContentTitle'] = Label("Genre: %s" % self.Genre)
 		self['Page'] = Label(_("Page:"))
 		self['F2'] = Label(_("Page"))
@@ -181,7 +181,7 @@ class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 		chMovies = re.findall('<div\sclass="index_item\sindex_item_ie">.*?<a\shref="(.*?)"\stitle="Watch.(.*?)"><img\ssrc="(.*?)"', data, re.S)
 		if chMovies:
 			for (chUrl,chTitle,chImage) in chMovies:
-				chUrl = "http://www.primewire.ag" + chUrl
+				chUrl = "http://www.primewire.is" + chUrl
 				chImage = "http:"+chImage
 				self.streamList.append((decodeHtml(chTitle),chUrl,chImage))
 		if len(self.streamList) == 0:
@@ -259,7 +259,7 @@ class PrimeWireEpisodeScreen(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("PrimeWire.ag")
+		self['title'] = Label("PrimeWire")
 		self['ContentTitle'] = Label("Episoden: %s" % self.Name)
 
 		self.streamList = []
@@ -291,7 +291,7 @@ class PrimeWireEpisodeScreen(MPScreen):
 				else:
 					episode = "E"+str(episodes[0][1])
 				Title = "%s%s - %s" % (season, episode, title)
-				url = "http://www.primewire.ag" + url
+				url = "http://www.primewire.is" + url
 				self.streamList.append((decodeHtml(Title),url))
 			self.ml.setList(map(self._defaultlistleft, self.streamList))
 			self.keyLocked = False
@@ -338,7 +338,7 @@ class PrimeWireStreamsScreen(MPScreen):
 			"cancel": self.keyCancel,
 		}, -1)
 
-		self['title'] = Label("PrimeWire.ag")
+		self['title'] = Label("PrimeWire")
 		self['ContentTitle'] = Label("Streams: %s" % self.Name)
 
 		self.tw_agent_hlp = TwAgentHelper()
