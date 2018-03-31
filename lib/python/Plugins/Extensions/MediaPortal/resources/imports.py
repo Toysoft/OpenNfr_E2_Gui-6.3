@@ -218,7 +218,7 @@ def decodeHtml(text):
 	text = text.replace('&egrave;','è')
 	text = text.replace('&Yacute;','Ý')
 	text = text.replace('&yacute;','ý')
-	#don't ask thy but only works if we do it twice
+	#don't ask why but only works if we do it twice
 	text = text.replace('&amp;','&')
 	text = text.replace('&amp;','&')
 	text = text.replace('&quot;','\"')
@@ -227,6 +227,7 @@ def decodeHtml(text):
 	text = text.replace('&apos;',"'")
 	text = text.replace('\u0027',"'")
 	text = text.replace('&acute;','\'')
+	text = text.replace('&eacute;','é')
 	text = text.replace('&comma;',',')
 	text = text.replace('&commat;','@')
 	text = text.replace('&period;','.')

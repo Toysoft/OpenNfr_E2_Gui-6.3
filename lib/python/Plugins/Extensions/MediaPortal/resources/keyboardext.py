@@ -48,10 +48,7 @@ class VirtualKeyBoardExt(Screen, NumericalTextInput, HelpableScreen):
 		self.auto_text_init = auto_text_init
 
 		self.suggest_func = suggest_func if config.mediaportal.ena_suggestions.value else None
-		if mp_globals.currentskin == "original":
-			self.DEFAULT_LM = 10	# default Left-Margin "original"
-		else:
-			self.DEFAULT_LM = 0	# default Left-Margin
+		self.DEFAULT_LM = 0
 		self.ml2 = MenuList([], enableWrapAround=False, content=eListboxPythonMultiContent)
 		self["suggestionlist"] = self.ml2
 		self.suggestionsListEnabled = False
@@ -761,8 +758,13 @@ class VirtualKeyBoardExt(Screen, NumericalTextInput, HelpableScreen):
 				x += 45
 			count += 1
 			if height is not None:
-				if (mp_globals.currentskin == "clean_fhd"):
+				if mp_globals.currentskin == "clean_fhd":
 					self.ml.l.setFont(0, gFont('mediaportal_clean', height - 15))
+				elif mp_globals.currentskin == "clean_hd":
+					self.ml.l.setFont(0, gFont('mediaportal_clean', height - 9))
 				else:
-					self.ml.l.setFont(0, gFont(mp_globals.font, height - 15))
+					if mp_globals.videomode == 2:
+						self.ml.l.setFont(0, gFont(mp_globals.font, height - 15))
+					else:
+						self.ml.l.setFont(0, gFont(mp_globals.font, height - 9))
 		return res

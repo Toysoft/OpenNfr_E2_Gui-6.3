@@ -152,14 +152,14 @@ class ShowThumbscreen(MPScreen):
 				fontsize = 25
 				textsize = 30
 			else:
-				self.picX = 260
-				self.picY = 150
-				self.spaceX = 15
-				self.spaceY = 30
+				self.picX = 233
+				self.picY = 133
+				self.spaceX = 37
+				self.spaceY = 43
 				xoffset = 80
-				yoffset = 50
-				fontsize = 16
-				textsize = 18
+				yoffset = 103
+				fontsize = 17
+				textsize = 20
 			self.coverframe = 'pic_frame_mode1_%s.png' % config.mediaportal.selektor.value
 
 		else:
@@ -173,23 +173,25 @@ class ShowThumbscreen(MPScreen):
 				fontsize = 25
 				textsize = 30
 			else:
-				self.picX = 180
-				self.picY = 230
-				self.spaceX = 6
-				self.spaceY = 40
-				xoffset = 30
-				yoffset = 50
-				fontsize = 16
-				textsize = 18
+				self.picX = 160
+				self.picY = 220
+				self.spaceX = 27
+				self.spaceY = 43
+				xoffset = 70
+				yoffset = 103
+				fontsize = 17
+				textsize = 20
 			self.coverframe = 'pic_frame_%s.png' % config.mediaportal.selektor.value
 
 		# Thumbs Geometrie, groesse und Anzahl berechnen
 		if mp_globals.videomode == 2:
 			size_w = 1700
 			size_h = 850
+			thumboffset = 15
 		else:
-			size_w = 1175
-			size_h = 620
+			size_w = 1133
+			size_h = 566
+			thumboffset = 10
 		self.thumbsX = size_w / (self.spaceX + self.picX)  # thumbnails in X
 		self.thumbsY = size_h / (self.spaceY + self.picY)  # thumbnails in Y
 		self.thumbsC = self.thumbsX * self.thumbsY  # all thumbnails
@@ -207,14 +209,14 @@ class ShowThumbscreen(MPScreen):
 			absY = yoffset + self.spaceY + (posY * (self.spaceY + self.picY))
 			self.positionlist.append((absX, absY))  # Postition der Thumbs speichern um spaeter das Movingimage darzustellen
 			skincontent += "<widget source=\"label" + str(x) + "\" render=\"Label\" position=\"" + str(absX + 2) + "," + str(absY + self.picY - 2) + "\" size=\"" + str(self.picX - 2) + "," + str(textsize * 2) + "\" font=\"" + mp_globals.font + ";" + str(fontsize) + "\" zPosition=\"3\" transparent=\"1\" valign=\"top\" halign=\"center\" foregroundColor=\"" + mp_globals.ThumbViewTextForeground + "\" />"
-			skincontent += "<widget name=\"thumb" + str(x) + "\" position=\"" + str(absX + 5) + "," + str(absY + 5) + "\" size=\"" + str(self.picX - 10) + "," + str(self.picY - 10) + "\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
+			skincontent += "<widget name=\"thumb" + str(x) + "\" position=\"" + str(absX + thumboffset) + "," + str(absY + thumboffset) + "\" size=\"" + str(self.picX - 2 * thumboffset) + "," + str(self.picY - 2 * thumboffset) + "\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 
 		# Load Skin XML
 		MPScreen.__init__(self, session, skin='MP_Thumbs')
 
 		# Skin komlett aufbauen
 		self.skin_dump = self.skin
-		self.skin_dump += "<widget name=\"frame\" position=\"" + str(absX + 5) + "," + str(absY + 5) + "\" size=\"" + str(self.picX) + "," + str(self.picY) + "\" zPosition=\"1\" transparent=\"0\" alphatest=\"blend\" />"
+		self.skin_dump += "<widget name=\"frame\" position=\"" + str(absX) + "," + str(absY) + "\" size=\"" + str(self.picX) + "," + str(self.picY) + "\" zPosition=\"1\" transparent=\"0\" alphatest=\"blend\" />"
 		self.skin_dump += skincontent
 		self.skin_dump += "</screen>"
 		self.skin = self.skin_dump

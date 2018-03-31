@@ -1804,14 +1804,19 @@ class SimplePlayerMenu(Screen):
 			self.liste.append((_('Advanced Audio Settings'), 6))
 		self.liste.append((_('Mainmenu'), 7))
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.ml.l.setFont(0, gFont(mp_globals.font, mp_globals.fontsize))
-		self.ml.l.setItemHeight(mp_globals.fontsize + 2 * mp_globals.sizefactor)
-		self.ml.setList(map(self.menulistentry, self.liste))
 		self['menu'] = self.ml
+
+		self.onLayoutFinish.append(self.setmenu)
+
+	def setmenu(self):
+		self.width = self['menu'].instance.size().width()
+		self.height = self['menu'].l.getItemSize().height()
+		self.ml.l.setFont(0, gFont(mp_globals.font, self.height - 2 * mp_globals.sizefactor))
+		self.ml.setList(map(self.menulistentry, self.liste))
 
 	def menulistentry(self, entry):
 		return [entry,
-			(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 1000, mp_globals.fontsize + 2 * mp_globals.sizefactor, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+			(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, self.width, self.height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 			]
 
 	def openConfig(self):

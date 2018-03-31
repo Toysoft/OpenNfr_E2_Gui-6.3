@@ -852,9 +852,9 @@ lib/python/Plugins/Extensions/MediaPortal/resources/sepg/Makefile
 lib/python/Plugins/Extensions/MediaPortal/resources/cfscrape/Makefile
 lib/python/Plugins/Extensions/MediaPortal/resources/iso3166/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_720/Makefile
-lib/python/Plugins/Extensions/MediaPortal/skins_720/original/Makefile
-lib/python/Plugins/Extensions/MediaPortal/skins_720/original/images/Makefile
-lib/python/Plugins/Extensions/MediaPortal/skins_720/original/simpleplayer/Makefile
+lib/python/Plugins/Extensions/MediaPortal/skins_720/clean_fhd/Makefile
+lib/python/Plugins/Extensions/MediaPortal/skins_720/clean_fhd/images/Makefile
+lib/python/Plugins/Extensions/MediaPortal/skins_720/clean_fhd/simpleplayer/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/clean_fhd/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/clean_fhd/simpleplayer/Makefile

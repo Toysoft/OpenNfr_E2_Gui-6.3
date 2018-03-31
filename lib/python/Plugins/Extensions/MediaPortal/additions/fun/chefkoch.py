@@ -142,17 +142,20 @@ class chefvids(MPScreen):
 		CoverHelper(self['coverArt']).getCover(pic)
 		getPage(link).addCallback(self.showInfos2).addErrback(self.dataError)
 
-	def showInfos2(self,data):
+	def showInfos2(self, data):
 		self.desc = re.findall('itemprop="description" content="(.*?)"', data, re.S)
-		self.runtime = re.findall('L.*?nge: <strong>(.*?)</strong>,', data, re.S)
+		self.runtime = re.findall('L.*?nge: <strong>(.*?)</strong>', data, re.S)
 		self.vid = re.findall('contentUrl" content="(.*?)"(?:\s/)>', data, re.S)
-		d = "Länge: %s\n%s" % (self.runtime[0],(decodeHtml(self.desc[0])))
+		if self.desc and self.runtime and self.vid:
+			d = "Länge: %s\n%s" % (self.runtime[0],(decodeHtml(self.desc[0])))
+		else:
+			d = ""
 		self['handlung'].setText(d)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		if self.vid:
-			self.vid = self.vid[0]
+			self.vid = self.vid[0].replace('https','http')
 			name = self['liste'].getCurrent()[0][0]
 			self.session.open(SimplePlayer, [(name, str(self.vid))], cover=False, showPlaylist=False, ltype='chefkoch', useResume=False)

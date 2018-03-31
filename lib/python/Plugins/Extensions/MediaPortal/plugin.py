@@ -189,7 +189,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018032401"))
+config.mediaportal.version = NoSave(ConfigText(default="2018033001"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.retries = ConfigSubsection()
@@ -230,8 +230,8 @@ else:
 	for skin in os.listdir("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/"):
 		if os.path.isdir(os.path.join("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/", skin)):
 			skins.append(skin)
-	config.mediaportal.skin2 = ConfigSelection(default = "original", choices = skins)
-	mp_globals.skinFallback = "/original"
+	config.mediaportal.skin2 = ConfigSelection(default = "clean_hd", choices = skins)
+	mp_globals.skinFallback = "/clean_hd"
 
 config.mediaportal.skin = NoSave(ConfigText(default=config.mediaportal.skin2.value))
 
@@ -244,7 +244,10 @@ elif mp_globals.videomode == 2 and mp_globals.fakeScale:
 elif mp_globals.videomode == 2 and not mp_globals.isDreamOS:
 	config.mediaportal.ansicht = ConfigSelection(default = "liste", choices = [("liste", _("List"))])
 else:
-	config.mediaportal.ansicht = ConfigSelection(default = "wall", choices = [("wall", _("Wall")), ("liste", _("List"))])
+	if mp_globals.isVTi:
+		config.mediaportal.ansicht = ConfigSelection(default = "wall_vti", choices = [("wall_vti", _("Wall VTi")), ("wall", _("Wall")), ("liste", _("List"))])
+	else:
+		config.mediaportal.ansicht = ConfigSelection(default = "wall", choices = [("wall", _("Wall")), ("liste", _("List"))])
 config.mediaportal.wallmode = ConfigSelection(default = "color", choices = [("color", _("Color")),("bw", _("Black&White")),("color_zoom", _("Color (Zoom)")),("bw_zoom", _("Black&White (Zoom)"))])
 config.mediaportal.wall2mode = ConfigSelection(default = "color", choices = [("color", _("Color")),("bw", _("Black&White"))])
 config.mediaportal.selektor = ConfigSelection(default = "white", choices = [("blue", _("Blue")),("green", _("Green")),("red", _("Red")),("turkis", _("Aqua")),("white", _("White"))])
@@ -547,7 +550,7 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			for skin in os.listdir("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/"):
 				if os.path.isdir(os.path.join("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/", skin)):
 					skins.append(skin)
-			config.mediaportal.skin2.setChoices(skins, "original")
+			config.mediaportal.skin2.setChoices(skins, "clean_hd")
 
 		self._getConfig()
 
@@ -1754,11 +1757,9 @@ class MPWall(Screen, HelpableScreen):
 
 				for x in range(1,self.counting_pages+1):
 					if mp_globals.videomode == 2:
-						normal = 960
-					elif mp_globals.currentskin == "original":
-						normal = 650
+						normal = 985
 					else:
-						normal = 669
+						normal = 655
 					skincontent += "<widget name=\"page_empty" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"26,26\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					skincontent += "<widget name=\"page_sel" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"26,26\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					start_pagebar += 30
@@ -2735,8 +2736,8 @@ class MPWall2(Screen, HelpableScreen):
 			screenwidth = 1920
 			screenheight = 1080
 		else:
-			self.perpage = 40
-			pageiconwidth = 26
+			self.perpage = 48
+			pageiconwidth = 24
 			pageicondist = 4
 			screenwidth = 1280
 			screenheight = 720
@@ -2768,11 +2769,10 @@ class MPWall2(Screen, HelpableScreen):
 				start_pagebar = int(screenwidth / 2 - pagebar_size / 2)
 
 				for x in range(1,self.counting_pages+1):
-					normal = screenheight - 2 * pageiconwidth
-					if mp_globals.currentskin == "original":
-						normal = normal - 20
 					if mp_globals.videomode == 2:
-						normal = normal - 30
+						normal = 985
+					else:
+						normal = 655
 					skincontent += "<widget name=\"page_empty" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"" + str(pageiconwidth) + "," + str(pageiconwidth) + "\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					skincontent += "<widget name=\"page_sel" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"" + str(pageiconwidth) + "," + str(pageiconwidth) + "\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					start_pagebar += pageiconwidth + pageicondist
@@ -3508,13 +3508,13 @@ class MPWallVTi(Screen, HelpableScreen):
 		if mp_globals.videomode == 2:
 			self.perpage = 35
 			pageiconwidth = 36
-			pageicondist = 20
+			pageicondist = 8
 			screenwidth = 1920
 			screenheight = 1080
 		else:
-			self.perpage = 21
-			pageiconwidth = 26
-			pageicondist = 20
+			self.perpage = 35
+			pageiconwidth = 24
+			pageicondist = 4
 			screenwidth = 1280
 			screenheight = 720
 
@@ -3542,11 +3542,10 @@ class MPWallVTi(Screen, HelpableScreen):
 				start_pagebar = int(screenwidth / 2 - pagebar_size / 2)
 
 				for x in range(1,self.counting_pages+1):
-					normal = screenheight - 2 * pageiconwidth
-					if mp_globals.currentskin == "original":
-						normal = normal - 20
 					if mp_globals.videomode == 2:
-						normal = normal - 30
+						normal = 985
+					else:
+						normal = 655
 					skincontent += "<widget name=\"page_empty" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"" + str(pageiconwidth) + "," + str(pageiconwidth) + "\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					skincontent += "<widget name=\"page_sel" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"" + str(pageiconwidth) + "," + str(pageiconwidth) + "\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					start_pagebar += pageiconwidth + pageicondist

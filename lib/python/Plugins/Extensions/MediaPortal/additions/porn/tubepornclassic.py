@@ -190,10 +190,36 @@ class tubepornclassicFilmScreen(MPScreen, ThumbsHelper):
 		getPage(Link, agent=tcAgent, headers={'Cookie': 'language=en'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('video_url="(.*?)";', data, re.S)
-		if videoPage:
-			self.keyLocked = False
-			Title = self['liste'].getCurrent()[0][0]
-			mp_globals.player_agent = tcAgent
-			url = videoPage[-1]
-			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='tubepornclassics')
+		try:
+			import execjs
+			node = execjs.get("Node")
+		except:
+			printl('nodejs not found',self,'E')
+			self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
+			return
+		decoder = "decrypt=function(_0xf4bdx6) {"\
+			"var _0xf4bdx7 = '',"\
+			"    _0xf4bdx8 = 0;"\
+			"/[^\u0410\u0412\u0421\u0415\u041cA-Za-z0-9\.\,\~]/g ['exec'](_0xf4bdx6) && console['log']('error decoding url');"\
+			"_0xf4bdx6 = _0xf4bdx6['replace'](/[^\u0410\u0412\u0421\u0415\u041cA-Za-z0-9\.\,\~]/g, '');"\
+			"do {"\
+			"var _0xf4bdx9 = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
+			"_0xf4bdxa = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
+			"_0xf4bdxb = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
+			"_0xf4bdxc = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
+			"_0xf4bdx9 = _0xf4bdx9 << 2 | _0xf4bdxa >> 4,"\
+			"_0xf4bdxa = (_0xf4bdxa & 15) << 4 | _0xf4bdxb >> 2,"\
+			"_0xf4bdxd = (_0xf4bdxb & 3) << 6 | _0xf4bdxc,"\
+			"_0xf4bdx7 = _0xf4bdx7 + String['fromCharCode'](_0xf4bdx9);"\
+			"64 != _0xf4bdxb && (_0xf4bdx7 += String['fromCharCode'](_0xf4bdxa));"\
+			"64 != _0xf4bdxc && (_0xf4bdx7 += String['fromCharCode'](_0xf4bdxd))"\
+			"} while (_0xf4bdx8 < _0xf4bdx6['length']);;"\
+			"return unescape(_0xf4bdx7)"\
+			"};"
+		video_url = re.findall('var video_url=(.*?);', data, re.S)
+		js = decoder + "\n" + 'video_url=decrypt('+video_url[0]+');' + "return video_url;"
+		url = str(node.exec_(js))
+		url = url.replace('https','http')
+		self.keyLocked = False
+		Title = self['liste'].getCurrent()[0][0]
+		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='tubepornclassics')
