@@ -852,12 +852,12 @@ lib/python/Plugins/Extensions/MediaPortal/resources/sepg/Makefile
 lib/python/Plugins/Extensions/MediaPortal/resources/cfscrape/Makefile
 lib/python/Plugins/Extensions/MediaPortal/resources/iso3166/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_720/Makefile
-lib/python/Plugins/Extensions/MediaPortal/skins_720/clean_fhd/Makefile
-lib/python/Plugins/Extensions/MediaPortal/skins_720/clean_fhd/images/Makefile
-lib/python/Plugins/Extensions/MediaPortal/skins_720/clean_fhd/simpleplayer/Makefile
+lib/python/Plugins/Extensions/MediaPortal/skins_720/clean_hd/Makefile
+lib/python/Plugins/Extensions/MediaPortal/skins_720/clean_hd/images/Makefile
+lib/python/Plugins/Extensions/MediaPortal/skins_720/clean_hd/simpleplayer/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/clean_fhd/Makefile
-lib/python/Plugins/Extensions/MediaPortal/skins_1080/clean_fhd/simpleplayer/Makefile
+lib/python/Plugins/Extensions/MediaPortal/skins_108skins_7200/clean_fhd/simpleplayer/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/clean_fhd/images/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/NFR_MP_FHD/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/NFR_MP_FHD/simpleplayer/Makefile
