@@ -17,7 +17,11 @@ class MTVdeLink:
 		self.imgurl = imgurl
 		if token.startswith('http'):
 			token = self.getToken(token)
-		url = "http://media-utils.mtvnservices.com/services/MediaGenerator/mgid:arc:video:mtv.de:%s?accountOverride=esperanto.mtvi.com&acceptMethods=hls" % token
+		if config.mediaportal.mtvquality.value == "SD":
+			quality = "phttp"
+		else:
+			quality = "hls"
+		url = "http://media-utils.mtvnservices.com/services/MediaGenerator/mgid:arc:video:mtv.de:%s?accountOverride=esperanto.mtvi.com&acceptMethods=%s" % (token, quality)
 		getPage(url, timeout=15).addCallback(self._parseData).addErrback(cb_err)
 
 	def getToken(self, url):
@@ -31,7 +35,14 @@ class MTVdeLink:
 		if hlsurl:
 			videourl = hlsurl[-1].replace('&amp;','&')
 		else:
-			self._errback(_('No URL found!'))
-			videourl = None
+			if "geo_block" in data:
+				self._errback(_('Sorry, this video is not available in your region.'))
+				videourl = None
+			if "not_found" in data:
+				self._errback(_('Sorry, this video is not found or no longer available due to date or rights restrictions.'))
+				videourl = None
+			else:
+				self._errback(_('No URL found!'))
+				videourl = None
 
 		self._callback(self.title, videourl, imgurl=self.imgurl, artist=self.artist)

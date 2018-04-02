@@ -26,6 +26,7 @@ font = ""
 videomode = 1
 fontsize = 23
 sizefactor = 1
+pagebar_posy = 655
 hls_proxy_port = 0
 ThumbViewTextForeground = '#00ffffff'
 bsp = None

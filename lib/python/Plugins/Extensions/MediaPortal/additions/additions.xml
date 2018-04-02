@@ -5,7 +5,7 @@
 		<plugin type="mod" modfile="sport.sporttotal" confopt="showsporttotal" default="True" confcat="sport" gz="0" name="sporttotal.tv" icon="sporttotal" filter="Sport" screen="sporttotalGenreScreen" param1="" param2=""/>-->
 		<plugin type="mod" modfile="sport.pokerstars" confopt="showpokerstars" default="True" confcat="sport" gz="0" name="Pokerstars.tv" icon="pokerstars" filter="Sport" screen="pokerGenreScreen" param1="" param2=""/>
 		<!--music section-->
-		<plugin type="mod" modfile="music.mtvdecharts" confopt="showMTVdeCharts" default="True" confcat="music" gz="0" name="MTV.de Charts" icon="mtvdecharts" filter="Music" screen="MTVdeChartsGenreScreen" param1="" param2=""/>
+		<plugin type="mod" modfile="music.mtvdecharts" confopt="showMTVdeCharts" default="True" confcat="music" gz="0" name="MTV Charts" icon="mtvdecharts" filter="Music" screen="MTVdeChartsGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="music.radio" confopt="showradio" default="True" confcat="music" gz="0" name="Radio" icon="radio" filter="Music" screen="RadioGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="music.jukebox" confopt="showJBTO" default="True" confcat="music" gz="0" name="JUKEBOX" icon="jukebox" filter="Music" screen="show_JBTO_Genre" param1="" param2=""/>
 		<!--newsdoku section-->

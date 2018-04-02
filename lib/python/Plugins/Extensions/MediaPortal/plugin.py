@@ -67,6 +67,7 @@ if desktopSize.width() == 1920:
 	mp_globals.videomode = 2
 	mp_globals.fontsize = 30
 	mp_globals.sizefactor = 3
+	mp_globals.pagebar_posy = 985
 
 try:
 	from enigma import eMediaDatabase
@@ -189,7 +190,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018033001"))
+config.mediaportal.version = NoSave(ConfigText(default="2018040101"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.retries = ConfigSubsection()
@@ -229,7 +230,8 @@ else:
 	mp_globals.skinsPath = "/skins_720"
 	for skin in os.listdir("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/"):
 		if os.path.isdir(os.path.join("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/", skin)):
-			skins.append(skin)
+			if skin != "original":
+				skins.append(skin)
 	config.mediaportal.skin2 = ConfigSelection(default = "clean_hd", choices = skins)
 	mp_globals.skinFallback = "/clean_hd"
 
@@ -1756,10 +1758,7 @@ class MPWall(Screen, HelpableScreen):
 				start_pagebar = int(screenwidth / 2 - pagebar_size / 2)
 
 				for x in range(1,self.counting_pages+1):
-					if mp_globals.videomode == 2:
-						normal = 985
-					else:
-						normal = 655
+					normal = mp_globals.pagebar_posy
 					skincontent += "<widget name=\"page_empty" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"26,26\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					skincontent += "<widget name=\"page_sel" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"26,26\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					start_pagebar += 30
@@ -2769,10 +2768,7 @@ class MPWall2(Screen, HelpableScreen):
 				start_pagebar = int(screenwidth / 2 - pagebar_size / 2)
 
 				for x in range(1,self.counting_pages+1):
-					if mp_globals.videomode == 2:
-						normal = 985
-					else:
-						normal = 655
+					normal = mp_globals.pagebar_posy
 					skincontent += "<widget name=\"page_empty" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"" + str(pageiconwidth) + "," + str(pageiconwidth) + "\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					skincontent += "<widget name=\"page_sel" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"" + str(pageiconwidth) + "," + str(pageiconwidth) + "\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					start_pagebar += pageiconwidth + pageicondist
@@ -3542,10 +3538,7 @@ class MPWallVTi(Screen, HelpableScreen):
 				start_pagebar = int(screenwidth / 2 - pagebar_size / 2)
 
 				for x in range(1,self.counting_pages+1):
-					if mp_globals.videomode == 2:
-						normal = 985
-					else:
-						normal = 655
+					normal = mp_globals.pagebar_posy
 					skincontent += "<widget name=\"page_empty" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"" + str(pageiconwidth) + "," + str(pageiconwidth) + "\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					skincontent += "<widget name=\"page_sel" + str(x) + "\" position=\"" + str(start_pagebar) + "," + str(normal) + "\" size=\"" + str(pageiconwidth) + "," + str(pageiconwidth) + "\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 					start_pagebar += pageiconwidth + pageicondist
@@ -4139,6 +4132,7 @@ def exit(session, result, lastservice):
 				CheckPremiumize(session).premiumizeProxyConfig(False)
 
 		mp_globals.currentskin = config.mediaportal.skin2.value
+		mp_globals.font = 'mediaportal'
 		_stylemanager(1)
 
 		if config.mediaportal.ansicht.value == "liste":
@@ -4350,11 +4344,13 @@ def _stylemanager(mode):
 							colorType = x.get("name")
 							exec("mp_globals." + x.get("name") + "=\"" + x.get("color") + "\"")
 						elif x.tag == "overridefont":
-							exec("mp_globals.font=\"" + x.get("font") + "\"")
+							mp_globals.font = x.get("font")
 						elif x.tag == "overridefontsize":
 							mp_globals.fontsize = int(x.get("value"))
 						elif x.tag == "overridesizefactor":
 							mp_globals.sizefactor = int(x.get("value"))
+						elif x.tag == "pagebar_posy":
+							mp_globals.pagebar_posy = int(x.get("value"))
 
 			stylemgr.setStyle(0, styleskinned)
 			try:

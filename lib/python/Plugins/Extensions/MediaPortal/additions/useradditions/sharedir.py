@@ -187,11 +187,11 @@ class sharedirMenueScreen(sharedirHelper, MPScreen):
 
 	def getHosters(self):
 		self.cancelSetValue()
-		url = "http://sharedir.com"
+		url = "https://sharedir.com/index.php?s=check"
 		getPage(url).addCallback(self.loadHosters).addErrback(self.dataError)
 
 	def loadHosters(self, data):
-		hosterdata = re.findall('<input\stype="checkbox"\sname="dh_\d+"\sid="dh_\d+"\svalue="(\d+)".*?<label\sfor="dh_\d+">(.*?)</label>', data, re.S)
+		hosterdata = re.findall('<input\stype="checkbox"(?:\sclass="styled"|)\sname="dho_\d+"\sid="dho_\d+"\svalue="(\d+)".*?<label\sfor="dho_\d+".*?>(.*?)</label>', data, re.S)
 		if hosterdata:
 			for (id, hostername) in hosterdata:
 				if isSupportedHoster(hostername, True):
@@ -436,18 +436,18 @@ class sharedirListScreen(sharedirHelper, MPScreen):
 			ftype = "4"
 		for items in self.deferreds:
 			items.cancel()
-		dsUrl = "http://sharedir.com/index.php?s=%s&start=%s&ftype=%s&stype=%s" % (Url, self.page, ftype, self.hoster)
-		d = self.ds.run(getPage, dsUrl, agent=std_headers, timeout=5).addCallback(self.loadPageData).addErrback(self.dataError)
+		dsUrl = "https://sharedir.com/index.php?s=%s&start=%s&ftype=%s&stype=%s" % (Url, self.page, ftype, self.hoster)
+		d = self.ds.run(getPage, dsUrl, agent=std_headers, timeout=15).addCallback(self.loadPageData).addErrback(self.dataError)
 		self.deferreds.append(d)
 
 	def loadPageData(self, data):
 		self.getLastPage(data, 'id="page_links"(.*?)</div>', '.*>\[{0,1}\s{0,1}(\d+)[\]{0,1}\s{0,1}|<]')
-		preparse = re.search('class="sp_header">(.*?)id="footer', data, re.S)
+		preparse = re.search('class="main_srch">(.*?)id="footer', data, re.S)
 		if preparse:
-			Movies = re.findall('class="big"\stitle="(.*?)"\shref="(.*?)".*?class="item_info"><div>(.*?)</div>.*?extension:\s<b>(.*?)</b></div><div><b>(.*?)</div>.*?class="rdonly">(.*?)</div>.*?class="item_src info_in">(.*?)<span>', preparse.group(1), re.S)
+			Movies = re.findall('class="big"\stitle="(.*?)"\shref="(.*?)".*?class="item_info"><div>(.*?)</div>.*?extension:\s<b>(.*?)</b></div><div><b>(.*?)</div>.*?class="(?:item_date |)rdonly">(.*?)</div>.*?class="item_src info_in">(.*?)<span>', preparse.group(1), re.S)
 			if Movies:
 				for Title, Url, Hostername, Ext, Size, Date, Source in Movies:
-					Url = "http://sharedir.com%s" % Url
+					Url = "https://sharedir.com%s" % Url
 					if isSupportedHoster(Hostername, True):
 						Size = stripAllTags(Size).strip()
 						self.filmliste.append((decodeHtml(Title), Url, Hostername, Ext, Size, Date, Source.strip("www.")))
@@ -487,7 +487,7 @@ class sharedirListScreen(sharedirHelper, MPScreen):
 	def noVideoError(self, error):
 		try:
 			if error.value.status == '404':
-				message = self.session.open(MessageBoxExt, _("No link found."), MessageBoxExt.TYPE_INFO, timeout=3)
+				message = self.session.open(MessageBoxExt, _("No link found."), MessageBoxExt.TYPE_INFO, timeout=5)
 		except:
 			pass
 		self.keyLocked = False

@@ -26,9 +26,9 @@ class watchseriesGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		self.genreliste = [('Series',"http://%s/letters/" % ws_url),
-							('Newest Episodes Added',"http://%s/latest" % ws_url),
-							('Popular Episodes Added This Week',"http://%s/new" % ws_url)]
+		self.genreliste = [('Series',"https://%s/letters/" % ws_url),
+							('Newest Episodes Added',"https://%s/latest" % ws_url),
+							('Popular Episodes Added This Week',"https://%s/new" % ws_url)]
 
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -109,7 +109,7 @@ class watchseriesSeriesLetterScreen(MPScreen):
 	def loadPage(self):
 		abc = ["09","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 		for letter in abc:
-			url = "http://%s/letters/%s" % (ws_url, letter)
+			url = "https://%s/letters/%s" % (ws_url, letter)
 			self.genreliste.append((letter, url))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -153,7 +153,7 @@ class watchseriesSeriesScreen(MPScreen, ThumbsHelper):
 		twAgentGetPage(self.streamGenreLink).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		series = re.findall('<li><a href="(http://%s/serie/.*?)" title="(.*?)">.*?</li>' % ws_url, data, re.S)
+		series = re.findall('<li><a href="(http[s]?://%s/serie/.*?)" title="(.*?)">.*?</li>' % ws_url, data, re.S)
 		if series:
 			self.filmliste = []
 			for (url,title) in series:
@@ -217,7 +217,7 @@ class watchseriesEpisodeListeScreen(MPScreen):
 	def loadPageData(self, data):
 		parse = re.search('<ul class="listings(.*)class="sp-leader-bottom">', data, re.S)
 		if parse:
-			eps = re.findall('content="(http://%s/episode/.*?)"\s{0,1}/>.*?itemprop="name"\s{0,1}>(?:Episode\s\d+|)(?:&nbsp;){0,10}(.*?)<' % ws_url, parse.group(1), re.S)
+			eps = re.findall('content="(http[s]?://%s/episode/.*?)"\s{0,1}/>.*?itemprop="name"\s{0,1}>(?:Episode\s\d+|)(?:&nbsp;){0,10}(.*?)<' % ws_url, parse.group(1), re.S)
 			if eps:
 				self.filmliste = []
 				for (url, title) in eps:

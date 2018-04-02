@@ -454,19 +454,19 @@ class SKTO_Streams(MPScreen):
 	def parseData(self, data):
 		self['name'].setText(self.filmName)
 
-		infos = 'Länge:\t%s\t' % self.infos[2]
+		infos = 'Views:\t%s\n' % self.infos[1]
+
+		infos += 'Länge:\t%s\n' % self.infos[2]
+
+		infos += 'IMDb:\t%s\n' % self.infos[3]
+
+		infos += 'Uploaded:\t%s\n' % self.infos[4]
 
 		m = re.search('<h2>Voice over:</h2>(.*?)</',data, re.S)
 		if m:
-			infos += 'Sprache:\t%s' % m.group(1).strip()
+			infos += 'Sprache:\t%s\n' % m.group(1).strip()
 		else:
-			infos += 'Sprache:\tN/A'
-
-		infos += '\nIMDb:\t%s\t' % self.infos[3]
-
-		infos += 'Views:\t%s\n' % self.infos[1]
-
-		infos += 'Uploaded:\t%s\n' % self.infos[4]
+			infos += 'Sprache:\tN/A\n'
 
 		m = re.search('\s{60}<p>(.*?)</p>',data,re.S)
 		if m:
@@ -536,19 +536,12 @@ class SKTO_Streams(MPScreen):
 		if self.keyLocked:
 			return
 		streamLink = self['liste'].getCurrent()[0][1]
-		twAgentGetPage(streamLink, cookieJar=glob_cookies).addCallback(self.getLinkData).addErrback(self.streamError)
-
-	def getLinkData(self, data):
-		hoster = self['liste'].getCurrent()[0][0].replace(".", " ").split(" ")[0]
-		parse = re.search('title="%s.*?href="(watch.*?)"' % hoster, data, re.S|re.I)
-		if parse:
-			url = BASE_URL2 + "/" + parse.group(1)
-			twAgentGetPage(url, cookieJar=glob_cookies, addlocation=True, followRedirect=True).addCallback(self.getLink).addErrback(self.streamError)
-		else:
-			self.got_link(None)
+		twAgentGetPage(streamLink, cookieJar=glob_cookies, addlocation=True, followRedirect=True).addCallback(self.getLink).addErrback(self.streamError)
 
 	def getLink(self, result):
 		data, location = result
+		if " " in location:
+			location = location.split(' ')[1]
 		if location and not BASE_URL in location and not BASE_URL2 in location:
 			streamLink = location
 		else:

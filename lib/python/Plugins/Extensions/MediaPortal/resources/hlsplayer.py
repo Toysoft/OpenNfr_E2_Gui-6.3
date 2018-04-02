@@ -39,6 +39,8 @@ from messageboxext import MessageBoxExt
 from utopialink import UtopiaLink
 from httpplayer import GSTPlayer
 
+from twagenthelper import twAgentGetPage
+
 class HLSControler:
 
 	def __init__(self, fetcher=None):
@@ -49,10 +51,13 @@ class HLSControler:
 		self._player_sequence = None
 		self._n_segments_keep = None
 		self.checkTimer = eTimer()
+		self.hangTimer = eTimer()
 		if mp_globals.isDreamOS:
 			self.checkTimer_conn = self.checkTimer.timeout.connect(self.checkPlaying)
+			self.hangTimer_conn = self.hangTimer.timeout.connect(self.hangcheck)
 		else:
 			self.checkTimer.callback.append(self.checkPlaying)
+			self.hangTimer.callback.append(self.hangcheck)
 
 	def set_player(self, player):
 		self.player = player
@@ -69,6 +74,7 @@ class HLSControler:
 			self.player.play()
 
 	def start(self):
+		self.hangTimer.start(1000, False)
 		if self.fetcher:
 			d = self.fetcher.start()
 			d.addCallback(self._start)
@@ -87,10 +93,14 @@ class HLSControler:
 	def clientFinished(self, result, err=False):
 		self._check_playing = True
 		self.player.stop()
+		self.hangTimer.stop()
 		self.checkTimer.start(3000, True)
 
 	def on_player_about_to_play(self):
 		self._check_playing = False
+
+	def hangcheck(self):
+		twAgentGetPage('http://127.0.0.1', timeout=1)
 
 	def checkPlaying(self):
 		if self._check_playing:

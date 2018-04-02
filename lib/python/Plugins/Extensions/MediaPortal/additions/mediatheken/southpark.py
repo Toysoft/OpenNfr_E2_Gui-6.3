@@ -40,6 +40,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
 config.mediaportal.southparklang = ConfigText(default="de", fixed_size=False)
+config.mediaportal.southparkquality = ConfigText(default="HD", fixed_size=False)
 
 class SouthparkGenreScreen(MPScreen):
 
@@ -50,13 +51,16 @@ class SouthparkGenreScreen(MPScreen):
 			"0"		: self.closeAll,
 			"ok"	: self.keyOK,
 			"cancel": self.keyCancel,
+			"yellow": self.keyQuality,
 			"blue"	: self.keyLocale
 		}, -1)
 
 		self.locale = config.mediaportal.southparklang.value
+		self.quality = config.mediaportal.southparkquality.value
 
 		self['title'] = Label("Southpark.de")
 		self['ContentTitle'] = Label("Genre:")
+		self['F3'] = Label(self.quality)
 		self['F4'] = Label(self.locale)
 
 		self.keyLocked = True
@@ -99,6 +103,19 @@ class SouthparkGenreScreen(MPScreen):
 		config.mediaportal.southparklang.save()
 		configfile.save()
 		self['F4'].setText(self.locale)
+		self.loadPage()
+
+	def keyQuality(self):
+		if self.quality == "SD":
+			self.quality = "HD"
+			config.mediaportal.southparkquality.value = "HD"
+		elif self.quality == "HD":
+			self.quality = "SD"
+			config.mediaportal.southparkquality.value = "SD"
+
+		config.mediaportal.southparkquality.save()
+		configfile.save()
+		self['F3'].setText(self.quality)
 		self.loadPage()
 
 class SouthparkListScreen(MPScreen, ThumbsHelper):
@@ -229,7 +246,11 @@ class SouthparkAktScreen(MPScreen):
 			for title, id in xmls:
 				if not re.match(".*?Intro\sHD", title):
 					x += 1
-					url = "http://www.southpark.de/feeds/video-player/mediagen?uri=mgid:arc:episode:southpark.de:%s&suppressRegisterBeacon=true&suppressRegisterBeacon=true&acceptMethods=hls%s" % (id, self.lang)
+					if config.mediaportal.southparkquality.value == "SD":
+						quality = "phttp"
+					else:
+						quality = "hls"
+					url = "http://www.southpark.de/feeds/video-player/mediagen?uri=mgid:arc:episode:southpark.de:%s&suppressRegisterBeacon=true&suppressRegisterBeacon=true&acceptMethods=%s%s" % (id, quality, self.lang)
 					Titel = self.Name + " - Teil " + str(x)
 					self.filmliste.append((Titel, url, self.Link))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -250,7 +271,7 @@ class SouthparkAktScreen(MPScreen):
 			return
 		self.keyLocked = True
 		self.link = self['liste'].getCurrent()[0][1]
-		if config.mediaportal.use_hls_proxy.value:
+		if config.mediaportal.use_hls_proxy.value or config.mediaportal.southparkquality.value == "SD":
 			getPage(self.link).addCallback(self.StartStream).addErrback(self.dataError)
 		else:
 			message = self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO, timeout=5)

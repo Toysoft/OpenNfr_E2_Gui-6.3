@@ -162,10 +162,7 @@ class MPScreen(Screen, HelpableScreen):
 
 		self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
 
-		if mp_globals.currentskin == "original":
-			self.DEFAULT_LM = 20	# default Left-Margin "original"
-		else:
-			self.DEFAULT_LM = 0		# default Left-Margin
+		self.DEFAULT_LM = 0
 
 		Screen.__init__(self, session, parent)
 		screenList.append((self, ret_args))
