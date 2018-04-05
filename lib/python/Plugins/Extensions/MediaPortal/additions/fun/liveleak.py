@@ -62,18 +62,8 @@ class LiveLeakScreen(MPScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		self.genreliste.append(("Featured Items", "https://www.liveleak.com/rss?featured=1&page="))
-		self.genreliste.append(("Upcoming Items", "https://www.liveleak.com/rss?upcoming=1&page="))
-		self.genreliste.append(("Recent Items (All)", "https://www.liveleak.com/rss?selection=all&page="))
-		self.genreliste.append(("Recent Items (Popular)", "https://www.liveleak.com/rss?selection=popular&page="))
-		self.genreliste.append(("Top (Today)", "https://www.liveleak.com/rss?rank_by=day&page="))
-		self.genreliste.append(("Top (Week)", "https://www.liveleak.com/rss?rank_by=week&page="))
-		self.genreliste.append(("Top (Month)", "https://www.liveleak.com/rss?rank_by=month&page="))
-		self.genreliste.append(("Top (All)", "https://www.liveleak.com/rss?rank_by=all_time&page="))
-		self.genreliste.append(("Must See", "https://www.liveleak.com/rss?channel_token=9ee_1303244161&page="))
-		self.genreliste.append(("Yoursay", "https://www.liveleak.com/rss?channel_token=1b3_1302956579&page="))
-		self.genreliste.append(("News", "https://www.liveleak.com/rss?channel_token=04c_1302956196&page="))
-		self.genreliste.append(("Entertainment", "https://www.liveleak.com/rss?channel_token=51a_1302956523&page="))
+		self.genreliste.append(("Featured", "https://www.liveleak.com/rss?featured=1&page="))
+		self.genreliste.append(("Upcoming", "https://www.liveleak.com/rss?upcoming=1&page="))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 
 	def keyOK(self):
@@ -128,7 +118,7 @@ class LiveLeakClips(MPScreen, ThumbsHelper):
 				if not re.match('LiveLeak.com Rss Feed', title, re.S|re.I):
 					if image.startswith('//'):
 						image = "https:" + image
-					self.feedliste.append((decodeHtml(title),url,image,decodeHtml(desc.strip())))
+					self.feedliste.append((decodeHtml(title).strip(),url,image,decodeHtml(desc.strip())))
 			self.ml.setList(map(self._defaultlistleft, self.feedliste))
 			self.ml.moveToIndex(0)
 			self.keyLocked = False
@@ -159,3 +149,5 @@ class LiveLeakClips(MPScreen, ThumbsHelper):
 			videoPage = re.findall('//www.youtube.com/(v|embed)/(.*?)\?.*?"', data, re.S)
 			if videoPage:
 				self.session.open(YoutubePlayer,[(title, videoPage[0][1], None)],playAll= False,showPlaylist=False,showCover=False)
+			else:
+				self.session.open(MessageBoxExt, _("No videos found!"), MessageBoxExt.TYPE_INFO, timeout=3)

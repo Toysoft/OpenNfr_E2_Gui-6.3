@@ -143,9 +143,9 @@ class get_stream_link:
 				s = requests.session()
 				url = urlparse.urlparse(pageurl)
 				if method == 'GET':
-					page = s.get(url.geturl())
+					page = s.get(url.geturl(), timeout=15)
 				elif method == 'POST':
-					page = s.post(url.geturl(), data=postdata)
+					page = s.post(url.geturl(), data=postdata, timeout=15)
 				return page.content
 			except:
 				return "error"
@@ -809,12 +809,15 @@ class get_stream_link:
 				if "googleusercontent.com" in link:
 					import requests
 					s = requests.session()
-					page = s.head(link, allow_redirects=False)
-					link = page.headers['Location']
-					self.google_ck = requests.utils.dict_from_cookiejar(s.cookies)
-					headers = '&Cookie=%s' % ','.join(['%s=%s' % (key, urllib.quote_plus(self.google_ck[key])) for key in self.google_ck])
-					url = link.replace("\u003d","=").replace("\u0026","&") + '#User-Agent='+mp_globals.player_agent+headers
-					self._callback(url)
+					try:
+						page = s.head(link, allow_redirects=False, timeout=15)
+						link = page.headers['Location']
+						self.google_ck = requests.utils.dict_from_cookiejar(s.cookies)
+						headers = '&Cookie=%s' % ','.join(['%s=%s' % (key, urllib.quote_plus(self.google_ck[key])) for key in self.google_ck])
+						url = link.replace("\u003d","=").replace("\u0026","&") + '#User-Agent='+mp_globals.player_agent+headers
+						self._callback(url)
+					except:
+						pass
 				else:
 					getPage(link, agent=mp_globals.player_agent, cookies=self.google_ck).addCallback(self.google).addErrback(self.errorload)
 

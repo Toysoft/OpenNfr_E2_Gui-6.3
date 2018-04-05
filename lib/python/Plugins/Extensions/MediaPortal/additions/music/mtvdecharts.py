@@ -69,36 +69,72 @@ class MTVdeChartsGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		self.genreliste = [('MTV.DE Hitlist Germany - Top100',"http://www.mtv.de/charts/c6mc86/single-top-100"),
-				('MTV.DE Single Midweek Charts',"http://www.mtv.de/charts/n91ory/midweek-single-top-100"),
-				('MTV.DE Single Top20',"http://www.mtv.de/charts/bcgxiq/single-top-20"),
-				('MTV.DE Dance Charts',"http://www.mtv.de/charts/2ny5w9/dance-charts"),
-				('MTV.DE Single Trending',"http://www.mtv.de/charts/9gtiy5/single-trending"),
-				('MTV.DE Streaming Charts',"http://www.mtv.de/charts/h4oi23/top100-music-streaming"),
-				('MTV.DE Deutschsprachige Single Charts Top15',"http://www.mtv.de/charts/jlyhaa/top-15-deutschsprachige-single-charts"),
-				('MTV.DE Download Charts',"http://www.mtv.de/charts/pcbqpc/downloads-charts-single"),
-				('MTV.DE Most Watched Videos on MTV',"http://www.mtv.de/charts/n2aau3/most-watched-videos"),
-				#('MTV.DE Most Wanted 90\'s',"http://www.mtv.de/charts/xlad55/most-wanted-90"),
-				#('MTV.DE Most Wanted 2000\'s',"http://www.mtv.de/charts/h5hl40/most-wanted-2000"),
-				('MTV.DE Top100 Jahrescharts 2017',"http://www.mtv.de/charts/czzmta/top-100-jahrescharts-2017"),
-				('MTV.DE Top100 Jahrescharts 2016',"http://www.mtv.de/charts/yrk67s/top-100-jahrescharts-2016"),
-				('MTV.DE Top100 Jahrescharts 2015',"http://www.mtv.de/charts/4z2jri/top-100-jahrescharts-2015"),
-				('MTV.DE Top100 Jahrescharts 2014',"http://www.mtv.de/charts/ns9mkd/top-100-jahrescharts-2014"),
-				('MTV.CO.UK Single Top40','http://www.mtv.co.uk/music/charts/the-official-uk-top-40-singles-chart'),
-				('MTV.CO.UK Urban Charts','http://www.mtv.co.uk/music/charts/the-official-uk-urban-chart'),
-				('MTV.CO.UK This Week\'s OMG','http://www.mtv.co.uk/music/charts/this-weeks-top-20'),
-				('MTV.CO.UK Download Charts','http://www.mtv.co.uk/music/charts/the-official-uk-top-20-download-chart'),
-				('MTV.CO.UK Official Trending Charts','http://www.mtv.co.uk/music/charts/the-official-trending-chart'),
-				('MTV.CO.UK Official Charts Update','http://www.mtv.co.uk/music/charts/the-official-chart-update'),
-				('MTV.CO.UK Official UK Audio Streaming Charts','http://www.mtv.co.uk/music/charts/the-official-uk-audio-streaming-chart-top-20'),
-				('MTV.CH Videocharts',"http://www.mtv.ch/charts/206-mtv-ch-videocharts"),
-				('MTV.PL Poland Top30',"http://www.mtv.pl/notowania/253-mtv-ty-wybierasz"),
-				('MTV.PL Poland Club Charts',"http://www.mtv.pl/notowania/254-mtv-club-chart"),
-				('MTV.DK Denmark Top5',"http://www.mtv.dk/hitlister/24-top-5-musikvideoer"),
-				('MTV.SE Sweden Top5',"http://www.mtv.se/charts/23-top-5-musikvideor"),
-				('MTV.NO Norway Most Clicked',"http://www.mtv.no/charts/195-mtv-norway-most-clicked")]
+		self.genreliste = [('MTV.de\tHitlist Germany - Top100',"http://www.mtv.de/charts/c6mc86/single-top-100"),
+				('MTV.de\tSingle Midweek Charts',"http://www.mtv.de/charts/n91ory/midweek-single-top-100"),
+				('MTV.de\tSingle Top20',"http://www.mtv.de/charts/bcgxiq/single-top-20"),
+				('MTV.de\tDance Charts',"http://www.mtv.de/charts/2ny5w9/dance-charts"),
+				('MTV.de\tSingle Trending',"http://www.mtv.de/charts/9gtiy5/single-trending"),
+				('MTV.de\tStreaming Charts',"http://www.mtv.de/charts/h4oi23/top100-music-streaming"),
+				('MTV.de\tDeutschsprachige Single Charts Top15',"http://www.mtv.de/charts/jlyhaa/top-15-deutschsprachige-single-charts"),
+				('MTV.de\tDownload Charts',"http://www.mtv.de/charts/pcbqpc/downloads-charts-single"),
+				('MTV.de\tMost Watched Videos on MTV',"http://www.mtv.de/charts/n2aau3/most-watched-videos"),
+				('MTV.de\tTop100 Jahrescharts 2017',"http://www.mtv.de/charts/czzmta/top-100-jahrescharts-2017"),
+				('MTV.de\tTop100 Jahrescharts 2016',"http://www.mtv.de/charts/yrk67s/top-100-jahrescharts-2016"),
+				('MTV.de\tTop100 Jahrescharts 2015',"http://www.mtv.de/charts/4z2jri/top-100-jahrescharts-2015"),
+				('MTV.de\tTop100 Jahrescharts 2014',"http://www.mtv.de/charts/ns9mkd/top-100-jahrescharts-2014"),
+				('MTV.ch\tVideocharts',"http://www.mtv.ch/charts/206-mtv-ch-videocharts"),
+				('MTV.co.uk\tSingle Top40','http://www.mtv.co.uk/music/charts/the-official-uk-top-40-singles-chart'),
+				('MTV.co.uk\tUrban Charts','http://www.mtv.co.uk/music/charts/the-official-uk-urban-chart'),
+				('MTV.co.uk\tThis Week\'s OMG','http://www.mtv.co.uk/music/charts/this-weeks-top-20'),
+				('MTV.co.uk\tDownload Charts','http://www.mtv.co.uk/music/charts/the-official-uk-top-20-download-chart'),
+				('MTV.co.uk\tOfficial Trending Charts','http://www.mtv.co.uk/music/charts/the-official-trending-chart'),
+				('MTV.co.uk\tOfficial Charts Update','http://www.mtv.co.uk/music/charts/the-official-chart-update'),
+				('MTV.co.uk\tOfficial UK Audio Streaming Charts','http://www.mtv.co.uk/music/charts/the-official-uk-audio-streaming-chart-top-20'),
+				('MTV.it\tEuro Top20 Charts','http://classifiche.mtv.it/euro-top-20/c22lpa'),
+				('MTV.it\tHitlist Italia - Single','http://classifiche.mtv.it/hitlist-italia-classifica-singoli/cgmo2j'),
+				('MTV.it\tHitlist Italia - Album','http://classifiche.mtv.it/hitlist-italia-classifica-album/s8x0tp'),
+				('MTV.it\tUK Charts','http://classifiche.mtv.it/classifica-musica-inglese/d901ei'),
+				('MTV.it\tUSA Charts','http://classifiche.mtv.it/classifica-musica-americana/a6i0r1'),
+				('MTV.it\tMost Viewed Video Ranking','http://classifiche.mtv.it/mtv-it-classifica-mtv-video/4cadoe'),
+				('MTV.it\tMost Beautiful Songs To Download','http://classifiche.mtv.it/imtv-chart/xrbmn1'),
+				('MTV.it\tDance Top10','http://classifiche.mtv.it/mtv-dance-top-ten-musica-dance/0w1hcj'),
+				('MTV.it\tHits Top10','http://classifiche.mtv.it/mtv-hits-top-ten-video-canzoni-del-momento/kao1ot'),
+				('MTV.it\tRock Top10','http://classifiche.mtv.it/mtv-rocks-classifica-rock-top-ten/5qu1no'),
+				('MTV.it\tHip Hop R&B Top10','http://classifiche.mtv.it/mtv-dance-top-ten-musica-hip-hop-r-and-b/rou2ne'),
+				('MTV.it\tTop30 Girl Power','http://classifiche.mtv.it/classifica-musica-pop-top-50-women-in-pop/yvxcp1'),
+				('MTV.it\tTop30 Love Songs','http://classifiche.mtv.it/classifica-love-chart-canzoni-d-amore/y5qjc6'),
+				('MTV.it\tTop10 2018','http://classifiche.mtv.it/hit-parade-2018/n1atw0'),
+				('MTV.it\tTop50 2017','http://classifiche.mtv.it/hit-parade-2017/bb4i30'),
+				('MTV.it\tTop50 2016','http://classifiche.mtv.it/hit-parade-2016/35zwc8'),
+				('MTV.it\tTop50 2015','http://classifiche.mtv.it/hit-parade-2015/2wlkc9'),
+				('MTV.it\tTop50 2014','http://classifiche.mtv.it/hit-parade-2014/0zervo'),
+				('MTV.it\tTop50 2013','http://classifiche.mtv.it/hit-parade-2013/6who91'),
+				('MTV.it\tTop50 2012','http://classifiche.mtv.it/hit-parade-2012/1mlhqb'),
+				('MTV.it\tTop50 2011','http://classifiche.mtv.it/hit-parade-2011/ya6ref'),
+				('MTV.it\tTop10 2010','http://classifiche.mtv.it/hit-parade-2010/2mt14y'),
+				('MTV.it\tTop10 2009','http://classifiche.mtv.it/hit-parade-2009/4h7fxu'),
+				('MTV.it\tTop10 2008','http://classifiche.mtv.it/hit-parade-2008/z1h4r0'),
+				('MTV.it\tTop10 2007','http://classifiche.mtv.it/hit-parade-2007/n2v9fe'),
+				('MTV.it\tTop10 2006','http://classifiche.mtv.it/hit-parade-2006/av2tzm'),
+				('MTV.it\tTop10 2005','http://classifiche.mtv.it/hit-parade-2005/l2tki8'),
+				('MTV.it\tTop10 2004','http://classifiche.mtv.it/hit-parade-2004/ndf2ek'),
+				('MTV.it\tTop10 2003','http://classifiche.mtv.it/hit-parade-2003/i4bwnu'),
+				('MTV.it\tTop10 2002','http://classifiche.mtv.it/hit-parade-2002/dad9pj'),
+				('MTV.it\tTop10 2001','http://classifiche.mtv.it/hit-parade-2001/47uxjg'),
+				('MTV.it\tTop10 2000','http://classifiche.mtv.it/hit-parade-2000/u8c07q'),
+				('MTV.it\tTop10 1999','http://classifiche.mtv.it/hit-parade-1999/trb9pq'),
+				('MTV.it\tTop10 1998','http://classifiche.mtv.it/hit-parade-1998/hdrshc'),
+				('MTV.it\tTop10 1997','http://classifiche.mtv.it/hit-parade-1997/otnog5'),
+				('MTV.it\tTop10 1996','http://classifiche.mtv.it/hit-parade-1996/ske1sc'),
+				('MTV.it\tTop50 90s','http://classifiche.mtv.it/classifica-musica-anni-90-mtv-classic/njr5z7'),
+				('MTV.it\tTop50 80s','http://classifiche.mtv.it/top-50-classifica-musica-anni-80-2012/p6stm9'),
+				('MTV.pl\tPoland Top30',"http://www.mtv.pl/notowania/253-mtv-ty-wybierasz"),
+				('MTV.pl\tPoland Club Charts',"http://www.mtv.pl/notowania/254-mtv-club-chart"),
+				('MTVasia.com\tChart Attack','http://www.mtvasia.com/charts/jc1t6v/chart-attack'),
+				('MTVasia.com\tThe Most Streamed Singles','http://www.mtvasia.com/charts/5m6qmd/now-streaming'),
+				('MTV.no\tNorway Most Clicked',"http://www.mtv.no/charts/195-mtv-norway-most-clicked")]
 
-		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
+		self.ml.setList(map(self._defaultlistleft, self.genreliste))
 		self.keyLocked = False
 
 	def keyOK(self):
@@ -140,7 +176,7 @@ class MTVdeChartsSongListeScreen(MPScreen):
 
 		self.keyLocked = True
 		self['title'] = Label("MTV Charts")
-		self['ContentTitle'] = Label("Charts: %s" % self.genreName)
+		self['ContentTitle'] = Label("Charts: %s" % self.genreName.replace('\t',' '))
 
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -157,10 +193,15 @@ class MTVdeChartsSongListeScreen(MPScreen):
 			url = self.json_url + "/" + str(self.page)
 		else:
 			url = self.genreLink
-		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
+		headers = {
+			'Accept':'*/*',
+			'Accept-Encoding':'deflate',
+			'Accept-Language':'de,en-US;q=0.7,en;q=0.3',
+			}
+		twAgentGetPage(url, headers=headers).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if "MTV.DE" in self.genreName:
+		if ("MTV.de" in self.genreName) or ("MTVasia.com" in self.genreName):
 			if not self.json_url:
 				jsonurl = re.findall('class="module intl_m327" data-tfstatic="true" data-tffeed="(.*?)"', data, re.S)
 				if jsonurl:
@@ -180,7 +221,10 @@ class MTVdeChartsSongListeScreen(MPScreen):
 							artist = str(item["shortTitle"])
 						image = str(item["images"][0]["url"])
 
-						vidtitle = pos + ". " + artist + " - " + title
+						if "MTV.de" in self.genreName:
+							vidtitle = pos + ". " + artist + " - " + title
+						else:
+							vidtitle = pos + ". " + title
 						self.filmliste.append((vidtitle,videourl,image))
 				if "nextPageURL" in data:
 					self.page += 1
@@ -189,30 +233,50 @@ class MTVdeChartsSongListeScreen(MPScreen):
 					self.ml.setList(map(self._defaultlistleft, self.filmliste))
 					self.showInfos()
 					self.keyLocked = False
-		elif "MTV.CO.UK" in self.genreName:
+		elif "MTV.co.uk" in self.genreName:
 			entity = re.findall('entity_uuid" content="(.*?)"', data, re.S)
 			parse = re.findall('jQuery.extend\(Drupal.settings,\s(.*?)\);', data, re.S)
 			if parse and entity:
 				import requests
-				s = requests.session()
-				url = "http://media.mtvnservices.com/pmt/e1/access/index.html?uri=mgid:noah:video:mtv.co.uk:%s&configtype=edge" % entity[0]
-				page = s.get(url)
-				playlist = page.content
-				json_pl = json.loads(playlist)
-				json_data = json.loads(parse[0], "utf-8")
-				items = json_data[u"vimn_videoplayer"].keys()[0]
-				from collections import OrderedDict
-				for key, value in json_data[u"vimn_videoplayer"][items][u"playlist_items"].iteritems():
-					if value.has_key('playlist_item_index'):
-						index = int(value["playlist_item_index"])
-						pos = str(int(key)+1)
-						title = str(value["title"])
-						artist = str(value["subtitle"])
-						image = str(value["parsely_data"]["metadata"]["image_url"])
-						videourl = str(json_pl["feed"]["items"][index]["guid"].split(':')[-1])
-						vidtitle = pos + ". " + artist + " - " + title
-						self.filmliste.append((vidtitle,videourl,image,int(pos)))
-						self.filmliste.sort(key=lambda t : t[3])
+				try:
+					s = requests.session()
+					url = "http://media.mtvnservices.com/pmt/e1/access/index.html?uri=mgid:noah:video:mtv.co.uk:%s&configtype=edge" % entity[0]
+					page = s.get(url, timeout=15)
+					playlist = page.content
+					json_pl = json.loads(playlist)
+					json_data = json.loads(parse[0], "utf-8")
+					items = json_data[u"vimn_videoplayer"].keys()[0]
+					from collections import OrderedDict
+					for key, value in json_data[u"vimn_videoplayer"][items][u"playlist_items"].iteritems():
+						if value.has_key('playlist_item_index'):
+							index = int(value["playlist_item_index"])
+							pos = str(int(key)+1)
+							title = str(value["title"])
+							artist = str(value["subtitle"])
+							image = str(value["parsely_data"]["metadata"]["image_url"])
+							videourl = str(json_pl["feed"]["items"][index]["guid"].split(':')[-1])
+							vidtitle = pos + ". " + artist + " - " + title
+							self.filmliste.append((vidtitle,videourl,image,int(pos)))
+							self.filmliste.sort(key=lambda t : t[3])
+					self.ml.setList(map(self._defaultlistleft, self.filmliste))
+					self.showInfos()
+					self.keyLocked = False
+				except:
+					pass
+		elif "MTV.it" in self.genreName:
+			preparse = re.findall('class="inner-charts">(.*?)</html>', data, re.S)[0]
+			parse = re.findall('<li\s{0,1}>.*?href="(.*?)".*?<em>#(\d+)</em>.*?img\ssrc="(.*?mtv.it\:(.*?)\?.*?)(?:\&amp;width|\").*?alt="(.*?)"(.*?</div)', preparse, re.S)
+			if parse:
+				for (videourl,pos,image,token,title,artistdata) in parse:
+					image = image.replace('&amp;','&')
+					videourl = "http://classifiche.mtv.it" + videourl + "&token=" + token
+					artist = re.findall('<span>(.*?)</span>', artistdata, re.S)
+					if artist:
+						artist = artist[0]
+						title = pos + ". " + artist + " - " + title
+					else:
+						title = pos + ". " + title
+					self.filmliste.append((decodeHtml(title).replace('\\"','"').replace('\\\\','\\'),videourl,image))
 				self.ml.setList(map(self._defaultlistleft, self.filmliste))
 				self.showInfos()
 				self.keyLocked = False
@@ -227,7 +291,8 @@ class MTVdeChartsSongListeScreen(MPScreen):
 							for (artist,title,type,token,image_id) in track:
 								image = "http://images.mtvnn.com/%s/306x172" % image_id.replace('"','')
 								title = str(pos) + ". " + artist + " - " + title
-								self.filmliste.append((decodeHtml(title).replace('\\"','"').replace('\\\\','\\'),token,image))
+								if len(token)>6:
+									self.filmliste.append((decodeHtml(title).replace('\\"','"').replace('\\\\','\\'),token,image))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.showInfos()
 			self.keyLocked = False

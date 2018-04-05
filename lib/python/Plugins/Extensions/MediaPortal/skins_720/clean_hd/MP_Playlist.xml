@@ -14,10 +14,10 @@
   <eLabel name="bg_player" position="853,360" size="419,226" zPosition="-1" backgroundColor="#20000000" />
   <eLabel name="bg_mode" position="853,593" size="419,86" zPosition="-1" backgroundColor="#20000000" />
   <eLabel name="bg_down" position="6,686" size="1266,26" zPosition="-1" backgroundColor="#20000000" />
-  <eLabel name="button red" position="10,712" size="243,1" backgroundColor="#00f23d21" zPosition="1" />
-  <eLabel name="button green" position="256,712" size="243,1" backgroundColor="#0031a500" zPosition="1" />
-  <eLabel name="button yellow" position="503,712" size="243,1" backgroundColor="#00e5b243" zPosition="1" />
-  <eLabel name="button blue" position="750,712" size="243,1" backgroundColor="#000064c7" zPosition="1" />
+  <eLabel name="button red" position="10,711" size="243,1" backgroundColor="#00f23d21" zPosition="1" />
+  <eLabel name="button green" position="256,711" size="243,1" backgroundColor="#0031a500" zPosition="1" />
+  <eLabel name="button yellow" position="503,711" size="243,1" backgroundColor="#00e5b243" zPosition="1" />
+  <eLabel name="button blue" position="750,711" size="243,1" backgroundColor="#000064c7" zPosition="1" />
   <!-- select screen -->
   <widget alphatest="on" name="coverArt" pixmap="~/clean_hd/images/no_coverArt.png" position="860,80" size="406,266" />
   <widget backgroundColor="#20000000" font="mediaportal;20" name="artist" position="860,366" size="406,60" transparent="1" valign="center" halign="center" />

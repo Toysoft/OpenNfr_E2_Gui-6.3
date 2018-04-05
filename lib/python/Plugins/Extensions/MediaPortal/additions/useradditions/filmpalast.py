@@ -56,9 +56,9 @@ def fp_grabpage(pageurl, method='GET', postdata={}, headers={}):
 			s = requests.session()
 			url = urlparse.urlparse(pageurl)
 			if method == 'GET':
-				page = s.get(url.geturl())
+				page = s.get(url.geturl(), timeout=15)
 			elif method == 'POST':
-				page = s.post(url.geturl(), data=postdata, headers=headers)
+				page = s.post(url.geturl(), data=postdata, headers=headers, timeout=15)
 			return page.content
 		except:
 			pass

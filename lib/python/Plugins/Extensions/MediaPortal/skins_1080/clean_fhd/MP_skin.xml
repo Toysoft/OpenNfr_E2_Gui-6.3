@@ -55,7 +55,9 @@
     </listboxcontent>
 	<mediaportal>
 		<color color="#00ffffff" name="ThumbViewTextForeground" />
+		<color color="#20000000" name="ThumbViewTextBackground" />
 		<pagebar_posy value="985" />
+		<sp_seekbar_factor value="10.92" />
 		<!--<overridefont font="Regular" />-->
 		<!--<overridefontsize value="30" />-->
 		<!--<overridesizefactor value="3" />-->

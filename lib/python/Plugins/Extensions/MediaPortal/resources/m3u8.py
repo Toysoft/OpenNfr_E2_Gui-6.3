@@ -153,8 +153,11 @@ class M3U8(object):
 							self._iv = l[j+a+5:].strip().decode("hex")
 						url = urlparse.urljoin(self.url, self._key_url)
 						opener = requests.session()
-						response = opener.get(url, cookies=self._cookies, headers=self._headers)
-						self._key = response.content
+						try:
+							response = opener.get(url, cookies=self._cookies, headers=self._headers, timeout=15)
+							self._key = response.content
+						except:
+							printl("No Encryption Key-URI found",self,'E')
 					else:
 						printl("No Encryption Key-URI found",self,'E')
 				else:

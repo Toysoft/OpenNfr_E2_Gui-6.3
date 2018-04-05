@@ -6,6 +6,7 @@ from Tools.BoundFunction import boundFunction
 import Queue
 import threading
 from coverhelper import CoverHelper
+from messageboxext import MessageBoxExt
 
 screenList = []
 
@@ -114,11 +115,13 @@ class SearchHelper:
 class MPSetupScreen(Screen):
 
 	def __init__(self, session, parent=None, skin=None, default_cover=None, *ret_args):
+		self.skinmsg = ''
 		if skin:
 			self.skin_path = mp_globals.pluginPath + mp_globals.skinsPath
 			path = "%s/%s/%s.xml" % (self.skin_path, mp_globals.currentskin, skin)
 			if not fileExists(path):
 				path = self.skin_path + mp_globals.skinFallback + "/%s.xml" % skin
+				self.skinmsg = skin
 			with open(path, "r") as f:
 				self.skin = f.read()
 				f.close()
@@ -128,17 +131,25 @@ class MPSetupScreen(Screen):
 		Screen.__init__(self, session, parent)
 		screenList.append((self, ret_args))
 
+		self.onFirstExecBegin.append(self.skinMessage)
+
+	def skinMessage(self):
+		if self.skinmsg != '':
+			self.session.open(MessageBoxExt, _("Mandatory skin file %s is missing!" % self.skinmsg), MessageBoxExt.TYPE_ERROR)
+
 class MPScreen(Screen, HelpableScreen):
 
 	DEFAULT_LM = 0
 
 	def __init__(self, session, parent=None, skin=None, widgets=None, default_cover=None, *ret_args):
 		self.default_cover = default_cover
+		self.skinmsg = ''
 		if skin:
 			self.skin_path = mp_globals.pluginPath + mp_globals.skinsPath
 			path = "%s/%s/%s.xml" % (self.skin_path, mp_globals.currentskin, skin)
 			if not fileExists(path):
 				path = self.skin_path + mp_globals.skinFallback + "/%s.xml" % skin
+				self.skinmsg = skin
 			with open(path, "r") as f:
 				self.skin = f.read()
 				f.close()
@@ -154,6 +165,7 @@ class MPScreen(Screen, HelpableScreen):
 					path = "%s/%s/%s.xml" % (self.skin_path, mp_globals.currentskin, wf)
 					if not fileExists(path):
 						path = self.skin_path + mp_globals.skinFallback + "/%s.xml" % wf
+						self.skinmsg = wf
 					f = open(path, "r")
 					for widget in f:
 						self.skin += widget
@@ -217,6 +229,11 @@ class MPScreen(Screen, HelpableScreen):
 			self.onLayoutFinish.append(self._animation)
 
 		self.onLayoutFinish.append(self.loadDefaultCover)
+		self.onFirstExecBegin.append(self.skinMessage)
+
+	def skinMessage(self):
+		if self.skinmsg != '':
+			self.session.open(MessageBoxExt, _("Mandatory skin file %s is missing!" % self.skinmsg), MessageBoxExt.TYPE_ERROR)
 
 	def loadDefaultCover(self):
 		CoverHelper(self['coverArt']).getCover(self.default_cover)
@@ -518,6 +535,7 @@ class MPScreen(Screen, HelpableScreen):
 			i -= 1
 
 ####### defaults
+
 	def _defaultlistleft(self, entry):
 		width = self['liste'].instance.size().width()
 		height = self['liste'].l.getItemSize().height()
@@ -591,6 +609,38 @@ class MPScreen(Screen, HelpableScreen):
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, width, height, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0], premiumFarbe))
 		else:
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, width, height, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0]))
+		return res
+
+	def MPLog(self, entry):
+		width = self['mplog'].instance.size().width()
+		height = self['mplog'].l.getItemSize().height()
+		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
+		res = [entry]
+		res.append((eListboxPythonMultiContent.TYPE_TEXT, self.DEFAULT_LM, 0, width - 2 * self.DEFAULT_LM, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]))
+		return res
+
+	def MPSort(self, entry):
+		width = self['liste'].instance.size().width()
+		height = self['liste'].l.getItemSize().height()
+		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
+		res = [entry]
+
+		skin_path = mp_globals.pluginPath + mp_globals.skinsPath
+
+		path = "%s/%s/images/select.png" % (skin_path, mp_globals.currentskin)
+		if not fileExists(path):
+			path = "%s/%s/images/select.png" % (skin_path, mp_globals.skinFallback)
+			if not fileExists(path):
+				path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/select.png"
+
+		select = LoadPixmap(path)
+		pwidth = select.size().width()
+		pheight = select.size().height()
+		vpos = round(float((height-pheight)/2))
+		if self.selected and entry[0] == self.last_plugin_name:
+			res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 25, vpos, pwidth, pheight, select))
+		res.append((eListboxPythonMultiContent.TYPE_TEXT, pwidth+50+self.langoffset, 0, width, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]))
+
 		return res
 ##################
 

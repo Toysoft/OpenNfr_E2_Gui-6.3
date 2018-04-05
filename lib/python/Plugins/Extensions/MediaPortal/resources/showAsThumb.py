@@ -208,7 +208,7 @@ class ShowThumbscreen(MPScreen):
 			absX = xoffset + self.spaceX + (posX * (self.spaceX + self.picX))
 			absY = yoffset + self.spaceY + (posY * (self.spaceY + self.picY))
 			self.positionlist.append((absX, absY))  # Postition der Thumbs speichern um spaeter das Movingimage darzustellen
-			skincontent += "<widget source=\"label" + str(x) + "\" render=\"Label\" position=\"" + str(absX + 2) + "," + str(absY + self.picY - 2) + "\" size=\"" + str(self.picX - 2) + "," + str(textsize * 2) + "\" font=\"" + mp_globals.font + ";" + str(fontsize) + "\" zPosition=\"3\" transparent=\"1\" valign=\"top\" halign=\"center\" foregroundColor=\"" + mp_globals.ThumbViewTextForeground + "\" />"
+			skincontent += "<widget source=\"label" + str(x) + "\" render=\"Label\" position=\"" + str(absX + 2) + "," + str(absY + self.picY - 2) + "\" size=\"" + str(self.picX - 2) + "," + str(textsize * 2) + "\" font=\"" + mp_globals.font + ";" + str(fontsize) + "\" zPosition=\"3\" transparent=\"1\" valign=\"top\" halign=\"center\" foregroundColor=\"" + mp_globals.ThumbViewTextForeground + "\" backgroundColor=\"" + mp_globals.ThumbViewTextBackground + "\" />"
 			skincontent += "<widget name=\"thumb" + str(x) + "\" position=\"" + str(absX + thumboffset) + "," + str(absY + thumboffset) + "\" size=\"" + str(self.picX - 2 * thumboffset) + "," + str(self.picY - 2 * thumboffset) + "\" zPosition=\"2\" transparent=\"1\" alphatest=\"blend\" />"
 
 		# Load Skin XML

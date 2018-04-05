@@ -72,7 +72,7 @@ def ss_grabpage(pageurl):
 			s = requests.session()
 			url = urlparse.urlparse(pageurl)
 			headers = {'User-Agent': ss_agent}
-			page = s.get(url.geturl(), cookies=ss_cookies, headers=headers)
+			page = s.get(url.geturl(), cookies=ss_cookies, headers=headers, timeout=15)
 			return page.content
 		except:
 			pass

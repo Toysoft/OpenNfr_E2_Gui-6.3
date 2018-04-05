@@ -186,7 +186,7 @@ class hclipsFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</div>')
-		parse = re.search('class="thumb_holder">(.*?)class="heading"', data, re.S)
+		parse = re.search('class="thumb_holder">(.*?)class="footer', data, re.S)
 		Movies = re.findall('<a\shref="(https://www.hclips.com/videos/.*?)"\sclass="thumb">.*?<img\ssrc="(.*?)".*?class="dur">(.*?)</span>.*?class="title">(.*?)</strong>.*?small_views">Views:\s(\d+)</span>.*?small_added-date">Added:\s(.*?)</span>', parse.group(1), re.S)
 		if Movies:
 			for (Url, Image, Runtime, Title, Views, Added) in Movies:

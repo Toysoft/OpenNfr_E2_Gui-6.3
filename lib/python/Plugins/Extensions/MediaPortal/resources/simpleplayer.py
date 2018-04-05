@@ -306,11 +306,7 @@ class SimpleSeekHelper:
 
 	def __updateCursor(self):
 		if self.length:
-			if mp_globals.videomode == 2:
-				factor = 10.85
-			else:
-				factor = 6.86
-			x = seekbuttonpos.x() + int(factor * self.percent)
+			x = seekbuttonpos.x() + int(mp_globals.sp_seekbar_factor * self.percent)
 			self["seekbarcursor"].moveTo(x, seekbuttonpos.y(), 1)
 			self["seekbarcursor"].startMoving()
 			pts = int(float(self.length[1]) / 100.0 * self.percent)
@@ -661,7 +657,7 @@ class SimplePlaylist(MPScreen):
 
 	def showPlaylist(self):
 		if self.listTitle:
-			self['title'].setText(self.listTitle)
+			self['title'].setText(self.listTitle.replace('\t',' '))
 		else:
 			self['title'].setText("%s Playlist-%02d" % (self.plType, config.mediaportal.sp_pl_number.value))
 
@@ -1074,7 +1070,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 				self.pl_event.genEvent()
 
 		printl(str(error),self,"E")
-		self.session.openWithCallback(self.dataError2, MessageBoxExt, str(error), MessageBoxExt.TYPE_INFO, timeout=5)
+		self.session.openWithCallback(self.dataError2, MessageBoxExt, str(error), MessageBoxExt.TYPE_INFO, timeout=2)
 
 	def dataError2(self, res):
 		self.keyPlayNextLocked = False

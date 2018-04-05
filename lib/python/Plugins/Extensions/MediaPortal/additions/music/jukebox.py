@@ -302,7 +302,10 @@ class JBTO_ListScreen(MPScreen, ThumbsHelper):
 				artist = str(entry.get('name',''))
 				tracks = None
 				album_name = ''
-				img = str(entry.get('image_small'))
+				if entry.has_key('image_large'):
+					img = str(entry.get('image_large'))
+				else:
+					img = str(entry.get('image_small'))
 				self.liste.append((artist, tracks, img, '', album_name))
 			self.liste.sort()
 		if self.liste:

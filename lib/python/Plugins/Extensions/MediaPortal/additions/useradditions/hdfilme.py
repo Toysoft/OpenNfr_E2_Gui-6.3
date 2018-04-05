@@ -68,7 +68,7 @@ def hf_grabpage(pageurl):
 			s = requests.session()
 			url = urlparse.urlparse(pageurl)
 			headers = {'User-Agent': hf_agent}
-			page = s.get(url.geturl(), cookies=hf_cookies, headers=headers)
+			page = s.get(url.geturl(), cookies=hf_cookies, headers=headers, timeout=15)
 			return page.content
 		except:
 			pass
@@ -112,13 +112,16 @@ class hdfilmeMain(MPScreen):
 				hf_ck, hf_agent = cfscrape.get_tokens(BASE_URL)
 				requests.cookies.cookiejar_from_dict(hf_ck, cookiejar=hf_cookies)
 			else:
-				s = requests.session()
-				url = urlparse.urlparse(BASE_URL)
-				headers = {'user-agent': hf_agent}
-				page = s.get(url.geturl(), cookies=hf_cookies, headers=headers)
-				if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
-					hf_ck, hf_agent = cfscrape.get_tokens(BASE_URL)
-					requests.cookies.cookiejar_from_dict(hf_ck, cookiejar=hf_cookies)
+				try:
+					s = requests.session()
+					url = urlparse.urlparse(BASE_URL)
+					headers = {'user-agent': hf_agent}
+					page = s.get(url.geturl(), cookies=hf_cookies, headers=headers)
+					if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
+						hf_ck, hf_agent = cfscrape.get_tokens(BASE_URL)
+						requests.cookies.cookiejar_from_dict(hf_ck, cookiejar=hf_cookies)
+				except:
+					pass
 			self.keyLocked = False
 			reactor.callFromThread(self.getPage)
 		else:

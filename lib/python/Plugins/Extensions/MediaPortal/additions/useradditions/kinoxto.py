@@ -101,13 +101,16 @@ class kxGenre(MPScreen):
 				kx_ck, kx_agent = cfscrape.get_tokens(kx_url)
 				requests.cookies.cookiejar_from_dict(kx_ck, cookiejar=kx_cookies)
 			else:
-				s = requests.session()
-				url = urlparse.urlparse(kx_url)
-				headers = {'user-agent': kx_agent}
-				page = s.get(url.geturl(), cookies=kx_cookies, headers=headers, allow_redirects=False)
-				if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
-					kx_ck, kx_agent = cfscrape.get_tokens(kx_url)
-					requests.cookies.cookiejar_from_dict(kx_ck, cookiejar=kx_cookies)
+				try:
+					s = requests.session()
+					url = urlparse.urlparse(kx_url)
+					headers = {'user-agent': kx_agent}
+					page = s.get(url.geturl(), cookies=kx_cookies, headers=headers, timeout=15, allow_redirects=False)
+					if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
+						kx_ck, kx_agent = cfscrape.get_tokens(kx_url)
+						requests.cookies.cookiejar_from_dict(kx_ck, cookiejar=kx_cookies)
+				except:
+					pass
 			self.keyLocked = False
 			reactor.callFromThread(self.getGenres)
 		else:

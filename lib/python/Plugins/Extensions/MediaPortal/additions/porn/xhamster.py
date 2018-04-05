@@ -261,8 +261,11 @@ class xhamsterSubscriptionsScreen(MPScreen):
 			pic = re.findall('class="xh-avatar largest" src="(.*?)"', data, re.S)
 			if pic:
 				import requests
-				r = requests.head(pic[0])
-				size = int(r.headers['content-length'])
+				try:
+					r = requests.head(pic[0], timeout=15)
+					size = int(r.headers['content-length'])
+				except:
+					size = 100000
 				if size < 100000:
 					pic = pic[0]
 				else:

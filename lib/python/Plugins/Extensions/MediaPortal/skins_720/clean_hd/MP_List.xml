@@ -18,10 +18,10 @@
   <eLabel name="bg_name" position="6,73" size="626,60" zPosition="-1" backgroundColor="#20000000" />
   <eLabel name="bg_list" position="6,140" size="626,539" zPosition="-1" backgroundColor="#20000000" />
   <eLabel name="bg_down" position="6,686" size="1266,26" zPosition="-1" backgroundColor="#20000000" />
-  <eLabel name="button red" position="10,712" size="243,1" backgroundColor="#00f23d21" zPosition="1" />
-  <eLabel name="button green" position="256,712" size="243,1" backgroundColor="#0031a500" zPosition="1" />
-  <eLabel name="button yellow" position="503,712" size="243,1" backgroundColor="#00e5b243" zPosition="1" />
-  <eLabel name="button blue" position="750,712" size="243,1" backgroundColor="#000064c7" zPosition="1" />
+  <eLabel name="button red" position="10,711" size="243,1" backgroundColor="#00f23d21" zPosition="1" />
+  <eLabel name="button green" position="256,711" size="243,1" backgroundColor="#0031a500" zPosition="1" />
+  <eLabel name="button yellow" position="503,711" size="243,1" backgroundColor="#00e5b243" zPosition="1" />
+  <eLabel name="button blue" position="750,711" size="243,1" backgroundColor="#000064c7" zPosition="1" />
   <eLabel name="button bouquet" position="1053,690" size="40,18" backgroundColor="#00000000" text="BOUQ" font="mediaportal; 10" foregroundColor="#00ffffff" halign="center" valign="center" shadowColor="#00000000" shadowOffset="-3,-3" zPosition="1" />
   <eLabel name="button info" position="1107,690" size="40,18" backgroundColor="#00000000" text="INFO" font="mediaportal; 10" foregroundColor="#00ffffff" halign="center" valign="center" shadowColor="#00000000" shadowOffset="-3,-3" zPosition="1" />
   <eLabel name="button help" position="1160,690" size="40,18" backgroundColor="#00000000" text="HELP" font="mediaportal; 10" foregroundColor="#00ffffff" halign="center" valign="center" shadowColor="#00000000" shadowOffset="-3,-3" zPosition="1" />

@@ -48,21 +48,27 @@ def check_playlist(url):
 	import requests
 	servers = []
 	if url.lower().endswith('.m3u'):
-		s = requests.session()
-		page = s.get(url)
-		data = page.content
-		servers = [
-			l for l in data.splitlines()
-			if l.strip() and not l.strip().startswith('#')
-		]
+		try:
+			s = requests.session()
+			page = s.get(url, timeout=15)
+			data = page.content
+			servers = [
+				l for l in data.splitlines()
+				if l.strip() and not l.strip().startswith('#')
+			]
+		except:
+			pass
 	elif url.lower().endswith('.pls'):
-		s = requests.session()
-		page = s.get(url)
-		data = page.content
-		servers = [
-			l.split('=')[1] for l in data.splitlines()
-			if l.lower().startswith('file')
-		]
+		try:
+			s = requests.session()
+			page = s.get(url, timeout=15)
+			data = page.content
+			servers = [
+				l.split('=')[1] for l in data.splitlines()
+				if l.lower().startswith('file')
+			]
+		except:
+			pass
 	if servers:
 		return random.choice(servers)
 	return url

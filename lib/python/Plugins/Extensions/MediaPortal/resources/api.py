@@ -191,7 +191,7 @@ class ForPlayersApi(object):
         s = requests.session()
         headers = {'User-Agent': USER_AGENT}
         try:
-            page = s.get(url, headers=headers)
+            page = s.get(url, headers=headers, timeout=15)
             json_data = json.loads(page.content)
             return json_data
         except:

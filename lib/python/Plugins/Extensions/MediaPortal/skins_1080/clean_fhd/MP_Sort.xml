@@ -16,8 +16,8 @@
   <eLabel name="button yellow" position="755,1068" size="365,2" backgroundColor="#00e5b243" zPosition="1" />
   <eLabel name="button blue" position="1125,1068" size="365,2" backgroundColor="#000064c7" zPosition="1" />
   <!-- select screen -->
-  <widget name="config2" position="20,240" size="1880,770" backgroundColor="#20000000" scrollbarMode="showOnDemand" transparent="1" foregroundColorSelected="#ffffff" />
-  <eLabel text="User Plugin Sortierung" position="20,120" size="1880,90" transparent="1" font="mediaportal_clean;50" backgroundColor="#20000000" valign="center" halign="center" zPosition="0" />
+  <widget name="liste" position="20,240" size="1880,770" backgroundColor="#20000000" scrollbarMode="showOnDemand" transparent="1" foregroundColorSelected="#ffffff" itemHeight="35" />
+  <widget name="title" position="20,120" size="1880,90" transparent="1" font="mediaportal_clean;50" backgroundColor="#20000000" valign="center" halign="center" zPosition="0" />
   <!--    <widget name="F1" position="15,1030" size="365,40" transparent="1" font="mediaportal; 25" backgroundColor="#20000000" valign="center" halign="center" zPosition="1" />
     <widget name="F2" position="385,1030" size="365,40" transparent="1" font="mediaportal; 25" backgroundColor="#20000000" valign="center" halign="center" zPosition="1" />
     <widget name="F3" position="755,1030" size="365,40" transparent="1" font="mediaportal; 25" backgroundColor="#20000000" valign="center" halign="center" zPosition="1" />

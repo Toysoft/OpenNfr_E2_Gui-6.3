@@ -161,7 +161,7 @@ def grabpage(pageurl, method='GET', postdata={}):
 			url = urlparse.urlparse(pageurl)
 			if method == 'GET':
 				headers = {'User-Agent': agent}
-				page = s.get(url.geturl(), headers=headers)
+				page = s.get(url.geturl(), headers=headers, timeout=15)
 			return page.content
 		except:
 			return None
@@ -190,8 +190,10 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018040101"))
+config.mediaportal.version = NoSave(ConfigText(default="2018040401"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
+
+config.mediaportal.skinfail = ConfigYesNo(default = False)
 
 config.mediaportal.retries = ConfigSubsection()
 
@@ -1459,29 +1461,18 @@ class MPList(Screen, HelpableScreen):
 					auswahl = self['liste'].getCurrent()[0][0]
 					self['name'].setText(auswahl)
 
-class MPpluginSort(Screen):
+class MPSort(MPScreen):
 
 	def __init__(self, session):
-
-		self.skin_path = mp_globals.pluginPath + mp_globals.skinsPath
-
-		path = "%s/%s/MP_Sort.xml" % (self.skin_path, mp_globals.currentskin)
-		if not fileExists(path):
-			path = self.skin_path + mp_globals.skinFallback + "/MP_Sort.xml"
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
+		MPScreen.__init__(self, session, skin='MP_Sort')
 
 		self["hidePig"] = Boolean()
 		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
 
-		Screen.__init__(self, session)
-
+		self['title'] = Label(_("Userdefined Plugin sorting"))
 		self.list = []
-		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont(mp_globals.font, mp_globals.fontsize))
-		self.chooseMenuList.l.setItemHeight(mp_globals.fontsize + 2 * mp_globals.sizefactor)
-		self["config2"] = self.chooseMenuList
+		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self["liste"] = self.ml
 		self.selected = False
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -1489,25 +1480,25 @@ class MPpluginSort(Screen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self.readconfig()
+		self.onLayoutFinish.append(self.readconfig)
 
 	def select(self):
 		if not self.selected:
-			self.last_newidx = self["config2"].getSelectedIndex()
-			self.last_plugin_name = self["config2"].getCurrent()[0][0]
-			self.last_plugin_pic = self["config2"].getCurrent()[0][1]
-			self.last_plugin_genre = self["config2"].getCurrent()[0][2]
-			self.last_plugin_hits = self["config2"].getCurrent()[0][3]
-			self.last_plugin_msort = self["config2"].getCurrent()[0][4]
+			self.last_newidx = self["liste"].getSelectedIndex()
+			self.last_plugin_name = self["liste"].getCurrent()[0][0]
+			self.last_plugin_pic = self["liste"].getCurrent()[0][1]
+			self.last_plugin_genre = self["liste"].getCurrent()[0][2]
+			self.last_plugin_hits = self["liste"].getCurrent()[0][3]
+			self.last_plugin_msort = self["liste"].getCurrent()[0][4]
 			self.selected = True
 			self.readconfig()
 		else:
-			self.now_newidx = self["config2"].getSelectedIndex()
-			self.now_plugin_name = self["config2"].getCurrent()[0][0]
-			self.now_plugin_pic = self["config2"].getCurrent()[0][1]
-			self.now_plugin_genre = self["config2"].getCurrent()[0][2]
-			self.now_plugin_hits = self["config2"].getCurrent()[0][3]
-			self.now_plugin_msort = self["config2"].getCurrent()[0][4]
+			self.now_newidx = self["liste"].getSelectedIndex()
+			self.now_plugin_name = self["liste"].getCurrent()[0][0]
+			self.now_plugin_pic = self["liste"].getCurrent()[0][1]
+			self.now_plugin_genre = self["liste"].getCurrent()[0][2]
+			self.now_plugin_hits = self["liste"].getCurrent()[0][3]
+			self.now_plugin_msort = self["liste"].getCurrent()[0][4]
 
 			count_move = 0
 			config_tmp = open("/etc/enigma2/mp_pluginliste.tmp" , "w")
@@ -1537,27 +1528,15 @@ class MPpluginSort(Screen):
 				if config.mediaportal.filter.value != "ALL":
 					if genre == config.mediaportal.filter.value:
 						self.config_list_select.append((name, pic, genre, hits, msort))
-						self.config_list.append(self.show_menu(name, pic, genre, hits, msort))
+						self.config_list.append((name, pic, genre, hits, msort))
 				else:
 					self.config_list_select.append((name, pic, genre, hits, msort))
-					self.config_list.append(self.show_menu(name, pic, genre, hits, msort))
+					self.config_list.append((name, pic, genre, hits, msort))
 
-		self.config_list.sort(key=lambda x: int(x[0][4]))
+		self.config_list.sort(key=lambda x: int(x[4]))
 		self.config_list_select.sort(key=lambda x: int(x[4]))
-		self.chooseMenuList.setList(self.config_list)
+		self.ml.setList(map(self.MPSort, self.config_list))
 		config_read.close()
-
-	def show_menu(self, name, pic, genre, hits, msort):
-		res = [(name, pic, genre, hits, msort)]
-		if mp_globals.videomode == 2:
-			res.append(MultiContentEntryText(pos=(80, 0), size=(500, 30), font=0, text=name, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
-			if self.selected and name == self.last_plugin_name:
-				res.append(MultiContentEntryPixmapAlphaBlend(pos=(45, 3), size=(24, 24), png=loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/select.png")))
-		else:
-			res.append(MultiContentEntryText(pos=(80, 0), size=(500, 23), font=0, text=name, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
-			if self.selected and name == self.last_plugin_name:
-				res.append(MultiContentEntryPixmapAlphaBlend(pos=(45, 2), size=(21, 21), png=loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/select.png")))
-		return res
 
 	def keyCancel(self):
 		config.mediaportal.sortplugins.value = "user"
@@ -1891,7 +1870,7 @@ class MPWall(Screen, HelpableScreen):
 
 	def manuelleSortierung(self):
 		if config.mediaportal.filter.value == 'ALL':
-			self.session.openWithCallback(self.restart, MPpluginSort)
+			self.session.openWithCallback(self.restart, MPSort)
 		else:
 			self.session.open(MessageBoxExt, _('Ordering is only possible with filter "ALL".'), MessageBoxExt.TYPE_INFO, timeout=3)
 
@@ -2867,7 +2846,7 @@ class MPWall2(Screen, HelpableScreen):
 
 	def manuelleSortierung(self):
 		if config.mediaportal.filter.value == 'ALL':
-			self.session.openWithCallback(self.restart, MPpluginSort)
+			self.session.openWithCallback(self.restart, MPSort)
 		else:
 			self.session.open(MessageBoxExt, _('Ordering is only possible with filter "ALL".'), MessageBoxExt.TYPE_INFO, timeout=3)
 
@@ -3638,7 +3617,7 @@ class MPWallVTi(Screen, HelpableScreen):
 
 	def manuelleSortierung(self):
 		if config.mediaportal.filter.value == 'ALL':
-			self.session.openWithCallback(self.restart, MPpluginSort)
+			self.session.openWithCallback(self.restart, MPSort)
 		else:
 			self.session.open(MessageBoxExt, _('Ordering is only possible with filter "ALL".'), MessageBoxExt.TYPE_INFO, timeout=3)
 
@@ -4150,8 +4129,15 @@ def exit(session, result, lastservice):
 				mp_globals.animationfix = False
 		except:
 			pass
+
 		session.nav.playService(lastservice)
+
+		config.mediaportal.skinfail.value = False
+		config.mediaportal.skinfail.save()
+		configfile.save()
+
 		_stylemanager(0)
+
 		reactor.callLater(1, export_lru_caches)
 		reactor.callLater(5, clearTmpBuffer)
 		watcher.stop()
@@ -4160,15 +4146,20 @@ def exit(session, result, lastservice):
 			del lc_stats
 
 def _stylemanager(mode):
+	raisemsg = ''
 	desktopSize = getDesktop(0).size()
 	if desktopSize.height() == 1080:
 		mp_globals.videomode = 2
 		mp_globals.fontsize = 30
 		mp_globals.sizefactor = 3
+		mp_globals.pagebar_posy = 985
+		mp_globals.sp_seekbar_factor = 10.92
 	else:
 		mp_globals.videomode = 1
 		mp_globals.fontsize = 23
 		mp_globals.sizefactor = 1
+		mp_globals.pagebar_posy = 655
+		mp_globals.sp_seekbar_factor = 7.28
 	try:
 		from enigma import eWindowStyleManager, eWindowStyleSkinned, eSize, eListboxPythonStringContent, eListboxPythonConfigContent
 		try:
@@ -4199,9 +4190,16 @@ def _stylemanager(mode):
 				skin_path_colors = skin_path
 			file_path = resolveFilename(SCOPE_SKIN)
 		else:
-			skin_path = mp_globals.pluginPath + mp_globals.skinsPath + "/" + mp_globals.currentskin + "/skin.xml"
+			skin_path = mp_globals.pluginPath + mp_globals.skinsPath + "/" + mp_globals.currentskin + "/MP_skin.xml"
 			if not fileExists(skin_path):
-				skin_path = mp_globals.pluginPath + mp_globals.skinsPath + mp_globals.skinFallback + "/skin.xml"
+				skin_path = mp_globals.pluginPath + mp_globals.skinsPath + "/" + mp_globals.currentskin + "/skin.xml"
+				if not fileExists(skin_path):
+					config.mediaportal.skin2.value = ''
+					config.mediaportal.skin2.save()
+					configfile.save()
+					raisemsg = "Missing MP_skin.xml, this file is mandatory!"
+				else:
+					printl('Obsolete file skin.xml, please use filename MP_skin.xml!','','E')
 			skin_path_font = skin_path
 			skin_path_colors = skin_path
 			file_path = mp_globals.pluginPath + "/"
@@ -4351,17 +4349,20 @@ def _stylemanager(mode):
 							mp_globals.sizefactor = int(x.get("value"))
 						elif x.tag == "pagebar_posy":
 							mp_globals.pagebar_posy = int(x.get("value"))
-
+						elif x.tag == "sp_seekbar_factor":
+							mp_globals.sp_seekbar_factor = float(x.get("value"))
 			stylemgr.setStyle(0, styleskinned)
 			try:
 				stylemgr.setStyle(4, stylescrollbar)
 			except:
 				pass
 		else:
-			printl('Missing MP skin.xml this file is mandatory!','','E')
+			pass
 	except:
-		printl('Fatal skin.xml error!','','E')
-		pass
+		printl('Fatal MP_skin.xml error!','','E')
+
+	if raisemsg != '':
+		raise Exception(raisemsg)
 
 def _hosters():
 	hosters_file = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/hosters.xml"
@@ -4427,6 +4428,15 @@ def startMP(session):
 	addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "mediaportal1.ttf", "mediaportal", 100, False)
 	addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "mediaportal_clean.ttf", "mediaportal_clean", 100, False)
 	addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "unifont.otf", "Replacement", 100, True)
+
+	if config.mediaportal.skinfail.value:
+		config.mediaportal.skin2.value = ''
+		config.mediaportal.skin2.save()
+	else:
+		config.mediaportal.skinfail.value = True
+		config.mediaportal.skinfail.save()
+	configfile.save()
+
 	mp_globals.currentskin = config.mediaportal.skin2.value
 	_stylemanager(1)
 

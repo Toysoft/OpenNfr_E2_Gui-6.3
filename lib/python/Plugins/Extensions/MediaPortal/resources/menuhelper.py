@@ -75,7 +75,7 @@ class MenuHelper(MPScreen):
 				import requests
 				s = requests.session()
 				headers = {'User-Agent': agent}
-				page = s.get(url, cookies=self.mh_cookieJar, headers=headers)
+				page = s.get(url, cookies=self.mh_cookieJar, headers=headers, timeout=15)
 				return self.mh_parseCategorys(page.content)
 			except:
 				return twAgentGetPage(url, agent=agent, cookieJar=self.mh_cookieJar, headers=headers, addlocation=addlocation, timeout=(10,30)).addCallback(self.mh_parseCategorys).addErrback(self.mh_dataError)

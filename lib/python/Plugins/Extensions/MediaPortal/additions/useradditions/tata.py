@@ -30,7 +30,7 @@ def tat_grabpage(pageurl):
 			s = requests.session()
 			url = urlparse.urlparse(pageurl)
 			headers = {'User-Agent': tat_agent}
-			page = s.get(url.geturl(), cookies=tat_cookies, headers=headers)
+			page = s.get(url.geturl(), cookies=tat_cookies, headers=headers, timeout=15)
 			return page.content
 		except:
 			pass
@@ -74,13 +74,16 @@ class tataMain(MPScreen):
 				tat_ck, tat_agent = cfscrape.get_tokens(BASE_URL)
 				requests.cookies.cookiejar_from_dict(tat_ck, cookiejar=tat_cookies)
 			else:
-				s = requests.session()
-				url = urlparse.urlparse(BASE_URL)
-				headers = {'user-agent': tat_agent}
-				page = s.get(url.geturl(), cookies=tat_cookies, headers=headers, allow_redirects=False)
-				if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
-					tat_ck, tat_agent = cfscrape.get_tokens(BASE_URL)
-					requests.cookies.cookiejar_from_dict(tat_ck, cookiejar=tat_cookies)
+				try:
+					s = requests.session()
+					url = urlparse.urlparse(BASE_URL)
+					headers = {'user-agent': tat_agent}
+					page = s.get(url.geturl(), cookies=tat_cookies, headers=headers, timeout=15, allow_redirects=False)
+					if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
+						tat_ck, tat_agent = cfscrape.get_tokens(BASE_URL)
+						requests.cookies.cookiejar_from_dict(tat_ck, cookiejar=tat_cookies)
+				except:
+					pass
 			self.keyLocked = False
 			reactor.callFromThread(self.getPage)
 		else:

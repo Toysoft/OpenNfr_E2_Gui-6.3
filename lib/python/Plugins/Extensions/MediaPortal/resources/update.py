@@ -98,39 +98,26 @@ class checkupdate:
 		else:
 			return
 
-class MPUpdateScreen(Screen):
+class MPUpdateScreen(MPScreen):
 
 	def __init__(self, session, updateurl, html):
+		MPScreen.__init__(self, session, skin='MP_Update')
 		self.session = session
 		self.updateurl = updateurl
 		self.html = html
 
-		self.skin_path = mp_globals.pluginPath + mp_globals.skinsPath
-		path = "%s/%s/MP_Update.xml" % (self.skin_path, mp_globals.currentskin)
-		if not fileExists(path):
-			path = self.skin_path + mp_globals.skinFallback + "/MP_Update.xml"
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-
-		self.ml = MenuList([])
+		self.ml = MenuList([], enableWrapAround=False, content=eListboxPythonMultiContent)
 		self['mplog'] = self.ml
 		self.list = []
 
-		Screen.__init__(self, session)
 		self['title'] = Label("MediaPortal Update")
 		self.setTitle("MediaPortal Update")
 
 		self.onLayoutFinish.append(self.__onLayoutFinished)
 
 	def __onLayoutFinished(self):
-		height = self['mplog'].l.getItemSize().height()
-		try:
-			self.ml.l.setFont(gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
-		except:
-			pass
-		self.list.append(_("Starting update, please wait..."))
-		self.ml.setList(self.list)
+		self.list.append((_("Starting update, please wait..."),))
+		self.ml.setList(map(self.MPLog, self.list))
 		self.ml.moveToIndex(len(self.list)-1)
 		self.ml.selectionEnabled(False)
 		self.startPluginUpdate()
@@ -179,8 +166,13 @@ class MPUpdateScreen(Screen):
 		self.close()
 
 	def mplog(self,str):
-		self.list.append(str)
-		self.ml.setList(self.list)
+		if "\n" in str:
+			lines = str.split('\n')
+			for line in lines:
+				self.list.append((line,))
+		else:
+			self.list.append((str,))
+		self.ml.setList(map(self.MPLog, self.list))
 		self.ml.moveToIndex(len(self.list)-1)
 		self.ml.selectionEnabled(False)
 		self.writeToLog(str)

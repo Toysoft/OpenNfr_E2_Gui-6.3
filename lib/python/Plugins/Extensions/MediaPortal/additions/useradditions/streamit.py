@@ -38,12 +38,12 @@ def sit_grabpage(pageurl, method='GET', postdata={}):
 			url = urlparse.urlparse(pageurl)
 			headers = {'User-Agent': sit_agent}
 			if method == 'GET':
-				page = s.get(url.geturl(), cookies=sit_cookies, headers=headers)
+				page = s.get(url.geturl(), cookies=sit_cookies, headers=headers, timeout=15)
 			elif method == 'POST':
-				page = s.post(url.geturl(), data=postdata, cookies=sit_cookies, headers=headers)
+				page = s.post(url.geturl(), data=postdata, cookies=sit_cookies, headers=headers, timeout=15)
 			return page.content
 		except:
-			pass
+			return ''
 
 class showstreamitGenre(MenuHelper):
 
@@ -97,13 +97,16 @@ class showstreamitGenre(MenuHelper):
 				sit_ck, sit_agent = cfscrape.get_tokens(BASE_URL)
 				requests.cookies.cookiejar_from_dict(sit_ck, cookiejar=sit_cookies)
 			else:
-				s = requests.session()
-				url = urlparse.urlparse(BASE_URL)
-				headers = {'user-agent': sit_agent}
-				page = s.get(url.geturl(), cookies=sit_cookies, headers=headers)
-				if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
-					sit_ck, sit_agent = cfscrape.get_tokens(BASE_URL)
-					requests.cookies.cookiejar_from_dict(sit_ck, cookiejar=sit_cookies)
+				try:
+					s = requests.session()
+					url = urlparse.urlparse(BASE_URL)
+					headers = {'user-agent': sit_agent}
+					page = s.get(url.geturl(), cookies=sit_cookies, headers=headers, timeout=15)
+					if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
+						sit_ck, sit_agent = cfscrape.get_tokens(BASE_URL)
+						requests.cookies.cookiejar_from_dict(sit_ck, cookiejar=sit_cookies)
+				except:
+					pass
 			reactor.callFromThread(self.mh_initMenu)
 		else:
 			reactor.callFromThread(self.mh_errorMenu)
