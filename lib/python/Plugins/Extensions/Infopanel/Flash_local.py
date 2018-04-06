@@ -39,7 +39,7 @@ if distro.lower() == "opennfr":
 if getBrandOEM() == "fulan":
 	feedurl_nfr = 'http://dev.nachtfalke.biz/nfr/feeds/%s/images' %ImageVersion
 else:
-	feedurl_nfr = 'http://dev.nachtfalke.biz/nfr/feeds/%s/images' %ImageVersion
+	feedurl_nfr = 'http://dev.nachtfalke.biz/nfr/feeds/6.2/images'
 	
 imagePath = '/media/hdd/images'
 flashPath = '/media/hdd/images/flash'
