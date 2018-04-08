@@ -154,7 +154,7 @@ class M3U8(object):
 						url = urlparse.urljoin(self.url, self._key_url)
 						opener = requests.session()
 						try:
-							response = opener.get(url, cookies=self._cookies, headers=self._headers, timeout=15)
+							response = opener.get(url, cookies=self._cookies, headers=self._headers, timeout=30)
 							self._key = response.content
 						except:
 							printl("No Encryption Key-URI found",self,'E')

@@ -637,7 +637,7 @@ class get_stream_link:
 							'Cookie': ''}
 					url = "https://www.flashx.tv/embed.php?c="+id.group(3)
 					print url
-					getPage(url, headers=headers).addCallback(self.flashx, id.group(3)).addErrback(self.errorload)
+					twAgentGetPage(url, headers=headers).addCallback(self.flashx, id.group(3)).addErrback(self.errorload)
 
 			elif re.search('userporn.com', data, re.S):
 				link = data
@@ -782,7 +782,7 @@ class get_stream_link:
 
 			elif re.search('vidoza\.net/', data, re.S):
 				link = data.replace('https','http')
-				getPage(link).addCallback(self.vidoza).addErrback(self.errorload)
+				twAgentGetPage(link).addCallback(self.vidoza).addErrback(self.errorload)
 
 			elif re.search('vidspot\.net/', data, re.S):
 				if re.search('vidspot\.net/embed', data, re.S):
@@ -887,7 +887,7 @@ class get_stream_link:
 						if id:
 							link = "https://thevideo.me/embed-%s-640x360.html" % id[0]
 							print link
-							getPage(link, agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36').addCallback(self.thevideome).addErrback(self.errorload)
+							twAgentGetPage(link, agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36').addCallback(self.thevideome).addErrback(self.errorload)
 
 			elif re.search('exashare\.com', data, re.S):
 				if re.search('exashare\.com/embed-', data, re.S):
@@ -977,7 +977,7 @@ class get_stream_link:
 			elif re.search('streamango\.com|streamcherry\.com', data, re.S):
 				link = data.replace('https','http')
 				spezialagent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
-				getPage(link, agent=spezialagent).addCallback(self.streamango).addErrback(self.errorload)
+				twAgentGetPage(link, agent=spezialagent).addCallback(self.streamango).addErrback(self.errorload)
 
 			else:
 				message = self.session.open(MessageBoxExt, _("No supported Stream Hoster, try another one!"), MessageBoxExt.TYPE_INFO, timeout=5)
