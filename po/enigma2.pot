@@ -13472,3 +13472,7 @@ msgstr ""
 
 msgid "Do you really want to use selected Device for Spinner?\n"
 msgstr ""
+
+msgid "When enabled, the receiver will select an AC3+ track (when available)."
+msgstr ""
+
