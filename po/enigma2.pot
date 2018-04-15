@@ -13476,3 +13476,32 @@ msgstr ""
 msgid "When enabled, the receiver will select an AC3+ track (when available)."
 msgstr ""
 
+msgid "will take about 1-4 minutes for this system"
+msgstr ""
+
+msgid "Create:"
+msgstr ""
+
+msgid "there is a problem with this device, please reformat and try again."
+msgstr ""
+
+msgid "Are you ready to create a backup image ?"
+msgstr ""
+
+msgid "Your %s %s is about to run a full image backup, this can take about 6 minutes to complete,\ndo you want to allow this?"
+msgstr ""
+
+msgid "Enough Retries, delaying till next schedule."
+msgstr ""
+
+msgid "No USB-Device found for fullbackup !!\n\n\n"
+msgstr ""
+
+msgid "To back-up directly to the USB-stick, the USB-stick MUST\n"
+msgstr ""
+
+msgid "contain a file with the name: \n\n"
+msgstr ""
+
+msgid "backupstick or backupstick.txt"
+msgstr ""

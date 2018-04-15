@@ -13573,3 +13573,36 @@ msgstr "Spinner verschieben nach: "
 
 msgid "Do you really want to use selected Device for Spinner?\n"
 msgstr "Willst du wirklich das ausgewählte Laufwerk für den Spinner verwenden?\n"
+
+msgid "When enabled, the receiver will select an AC3+ track (when available)."
+msgstr "Wenn diese Option aktiviert ist, wählt der Receiver eine AC3 + -Spur (sofern verfügbar)."
+
+msgid "will take about 1-4 minutes for this system"
+msgstr "zwischen 1-4 minuten für dieses system"
+
+msgid "Create:"
+msgstr "Erstelle:"
+
+msgid "there is a problem with this device, please reformat and try again."
+msgstr "Es gibt ein Problem mit diesem Gerät. Bitte formatieren Sie es erneut und versuchen Sie es erneut."
+
+msgid "Are you ready to create a backup image ?"
+msgstr "Sind Sie bereit, ein Backup-Image zu erstellen?"
+
+msgid "Your %s %s is about to run a full image backup, this can take about 6 minutes to complete,\ndo you want to allow this?"
+msgstr "Ihr% s% s ist dabei, eine vollständige Imagesicherung auszuführen. Dies kann etwa 6 Minuten dauern. \ NWollen Sie dies zulassen?"
+
+msgid "Enough Retries, delaying till next schedule."
+msgstr "Genug Wiederholungen, Verzögerung bis zum nächsten Zeitplan."
+
+msgid "No USB-Device found for fullbackup !!\n\n\n"
+msgstr "Kein USB-Gerät für Fullbackup gefunden !!\n\n\n"
+
+msgid "To back-up directly to the USB-stick, the USB-stick MUST\n"
+msgstr "Um direkt auf den USB-Stick zu sichern, MUSS der USB-Stick\n"
+
+msgid "contain a file with the name: \n\n"
+msgstr "eine Datei mit dem Namen:\n\n"
+
+msgid "backupstick or backupstick.txt"
+msgstr "backupstick or backupstick.txt enthalten"
