@@ -13476,10 +13476,10 @@ msgstr ""
 msgid "When enabled, the receiver will select an AC3+ track (when available)."
 msgstr ""
 
-msgid "will take about 1-4 minutes for this system"
+msgid "will take about 1-4 minutes for this system\n"
 msgstr ""
 
-msgid "Create:"
+msgid "Create: %s\n"
 msgstr ""
 
 msgid "there is a problem with this device, please reformat and try again."
@@ -13504,4 +13504,73 @@ msgid "contain a file with the name: \n\n"
 msgstr ""
 
 msgid "backupstick or backupstick.txt"
+msgstr ""
+
+msgid "You can select with yellow the OnlineFlash Image\n or select Recovery to create a USB Disk Image for clean Install."
+msgstr ""
+
+msgid "Quick Launch Menu"
+msgstr ""
+
+msgid "Quick Launch Menu"
+msgstr ""
+
+msgid "Hard Drive Setup"
+msgstr ""
+
+msgid "Select HDD"
+msgstr ""
+
+msgid "Harddisk Setup"
+msgstr ""
+
+msgid "Harddisk Drive Setup"
+msgstr ""
+
+msgid "Harddisk Mountpoint Browser"
+msgstr ""
+
+msgid "Harddisk Wait"
+msgstr ""
+
+msgid "Hard Drive Info"
+msgstr ""
+
+msgid "Hard Drive Mount"
+msgstr ""
+
+msgid "Hard Drive Partitions"
+msgstr ""
+
+msgid "HddFastRemove"
+msgstr ""
+
+msgid "Select M3U File from /etc/enigma2 to add into TV Bouquet"
+msgstr ""
+
+msgid "CIselectMainMenu"
+msgstr ""
+
+msgid "CIconfigMenu"
+msgstr ""
+
+msgid "easyCIconfigMenu"
+msgstr ""
+
+msgid "CAidSelect"
+msgstr ""
+
+msgid "myProviderSelection"
+msgstr ""
+
+msgid "myChannelSelection"
+msgstr ""
+
+msgid "Skin Selector"
+msgstr ""
+
+msgid "VideoEnhancementSetup"
+msgstr ""
+
+msgid "VideoEnhancementPreview"
 msgstr ""

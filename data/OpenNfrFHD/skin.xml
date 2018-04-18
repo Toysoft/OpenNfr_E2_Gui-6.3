@@ -3934,7 +3934,7 @@
     <widget source="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget source="key_yellow" render="Label" position="1088,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget source="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
-    <eLabel text="Choose your Skin" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <eLabel text="Skin Selector" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
     <widget name="SkinList" position="55,220" size="920,600" font="Regular; 30" itemHeight="40" scrollbarMode="showOnDemand" backgroundColor="background" transparent="1" />
     <widget name="Preview" position="1054,208" size="805,500" alphatest="blend" zPosition="3" />
     <widget source="introduction" render="Label" position="55,863" size="920,60" font="LCD; 30" halign="center" backgroundColor="goldenrod" transparent="1" foregroundColor="goldenrod" />
@@ -4009,7 +4009,7 @@
     <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
     <ePixmap name="progressback" position="1046,813" size="821,55" pixmap="OpenNfrFHD/menu/progressbackmenu.png" />
   </screen>
-  <screen name="QuickMenu" position="center,center" size="1920,1080" backgroundColor="black" title="Ouick Launch Menu" flags="wfNoBorder">
+  <screen name="QuickMenu" position="center,center" size="1920,1080" backgroundColor="black" title="Quick Launch Menu" flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
@@ -4035,7 +4035,7 @@
     <widget name="key_blue" render="Label" position="1587,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget name="list" position="55,220" size="450,700" backgroundColor="black" itemHeight="70" transparent="2" selectionPixmap="OpenNfrFHD/menu/selquick.png" />
     <widget name="sublist" position="530,220" size="450,700" backgroundColor="black" itemHeight="70" transparent="1" selectionPixmap="OpenNfrFHD/menu/selquick.png" />
-    <eLabel text="Ouick Launch Menu" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <eLabel text="Quick Launch Menu" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
     <ePixmap name="selector-quick" position="498,209" size="40,722" zPosition="2" pixmap="OpenNfrFHD/menu/selector-quickmenu.png" />
     <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
     <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
@@ -4636,7 +4636,7 @@
     <widget name="bild" position="55,220" zPosition="1" size="920,200" alphatest="blend" transparent="1" halign="center" />
     <widget name="list" position="55,440" size="920,485" zPosition="1" scrollbarMode="showOnDemand" transparent="1" itemHeight="40" font="Regular; 30" />
     <widget name="text" position="55,939" size="920,30" font="Regular; 28" transparent="1" foregroundColor="goldenrod" halign="center" backgroundColor="goldenrod" />
-    <widget source="Title" render="Label" position="74,50" size="720,45" font="LCD; 42" transparent="1" foregroundColor="grey" backgroundColor="grey" halign="center" />
+    <eLabel text="SpinnerSelection" render="Label" position="74,50" size="720,45" font="LCD; 42" transparent="1" foregroundColor="grey" backgroundColor="grey" halign="center" />
     <ePixmap pixmap="OpenNfrFHD/buttons/red.png" position="55,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
     <ePixmap pixmap="OpenNfrFHD/buttons/yellow.png" position="1066,1000" size="300,76" alphatest="blend" />

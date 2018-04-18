@@ -11700,13 +11700,6 @@ msgstr "Nur %s %s Aufnahmen können gebrannt werden!"
 msgid "You can remove this plugin."
 msgstr "Du kannst diese Erweiterung deinstallieren."
 
-msgid ""
-"You can select with yellow the OnlineFlash Image\n"
-" or select Recovery to create a USB Disk Image for clean Install."
-msgstr ""
-"Mit Gelb den OnlineFlash Bereich auswählen\n"
-" oder wähle Recovery um ein USB Disk Image zur Installation zu erstellen."
-
 msgid "You cannot delete this!"
 msgstr "Löschen nicht möglich!"
 
@@ -13574,11 +13567,11 @@ msgstr "Willst du wirklich das ausgewählte Laufwerk für den Spinner verwenden?
 msgid "When enabled, the receiver will select an AC3+ track (when available)."
 msgstr "Wenn diese Option aktiviert ist, wählt der Receiver eine AC3 + -Spur (sofern verfügbar)."
 
-msgid "will take about 1-4 minutes for this system"
-msgstr "zwischen 1-4 minuten für dieses system"
+msgid "will take about 1-4 minutes for this system\n"
+msgstr "zwischen 1-4 minuten für dieses system\n"
 
-msgid "Create:"
-msgstr "Erstelle:"
+msgid "Create: %s\n"
+msgstr "Erstelle: %s\n"
 
 msgid "there is a problem with this device, please reformat and try again."
 msgstr "Es gibt ein Problem mit diesem Gerät. Bitte formatieren Sie es erneut und versuchen Sie es erneut."
@@ -13603,3 +13596,60 @@ msgstr "eine Datei mit dem Namen: \n\n"
 
 msgid "backupstick or backupstick.txt"
 msgstr "backupstick or backupstick.txt enthalten"
+
+msgid "You can select with yellow the OnlineFlash Image\n or select Recovery to create a USB Disk Image for clean Install."
+msgstr "Sie können das OnlineFlash-Image mit gelb auswählen\n oder Recovery auswählen, um ein USB-Disk-Image für eine saubere Installation zu erstellen."
+
+msgid "Quick Launch Menu"
+msgstr "Schnellstartmenü"
+
+msgid "Hard Drive Setup"
+msgstr "Festplattenlaufwerk-Setup"
+
+msgid "Harddisk Drive Setup"
+msgstr "Festplattenlaufwerk-Setup"
+
+msgid "Harddisk Mountpoint Browser"
+msgstr "Festplattenlaufwerk Mountpunkt Browser"
+
+msgid "Harddisk Wait"
+msgstr "Warten auf Festplatte"
+
+msgid "Hard Drive Info"
+msgstr "Festplattenlaufwerk-Information"
+
+msgid "Hard Drive Mount"
+msgstr "Festplattenlaufwerk-Mount"
+
+msgid "Hard Drive Partitions"
+msgstr "Festplattenpartitionen"
+
+msgid "Select M3U File from /etc/enigma2 to add into TV Bouquet"
+msgstr "Wähle eine M3U-Datei von /etc/enigma2 aus"
+
+msgid "CIselectMainMenu"
+msgstr "CI AuswahlMenü"
+
+msgid "CIconfigMenu"
+msgstr "CI SetupMenü"
+
+msgid "easyCIconfigMenu"
+msgstr "einfaches CI AuswahlMenü"
+
+msgid "CAidSelect"
+msgstr "CAid Auswahl"
+
+msgid "myProviderSelection"
+msgstr "MeineProviderauswahl"
+
+msgid "myChannelSelection"
+msgstr "MeineSenderauswahl"
+
+msgid "Skin Selector"
+msgstr "Wähle Deinen Skin"
+
+msgid "VideoEnhancement Settings"
+msgstr "Videoverstärkungs Einstellung"
+
+msgid "VideoEnhancementPreview"
+msgstr "VideoverstärkungsVorschau"
