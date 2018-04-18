@@ -38,7 +38,7 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
+from Plugins.Extensions.MediaPortal.resources.txxxcrypt import txxxcrypt
 
 tcAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
 
@@ -48,7 +48,7 @@ default_cover = "file://%s/tubepornclassic.png" % (config.mediaportal.iconcachep
 class tubepornclassicGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -105,12 +105,12 @@ class tubepornclassicGenreScreen(MPScreen):
 			Link = callback.replace(' ', '%20')
 			self.session.open(tubepornclassicFilmScreen, Link, Name)
 
-class tubepornclassicFilmScreen(MPScreen, ThumbsHelper):
+class tubepornclassicFilmScreen(MPScreen, ThumbsHelper, txxxcrypt):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -153,11 +153,12 @@ class tubepornclassicFilmScreen(MPScreen, ThumbsHelper):
 		getPage(url, agent=tcAgent, headers={'Cookie': 'language=en'}).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		data = data.replace('http://tubepornclassic.com/videos', 'http://de.tubepornclassic.com/videos')
+		data = data.replace('https://tubepornclassic.com/videos', 'https://de.tubepornclassic.com/videos')
 		self.getLastPage(data, 'class="pagination"(.*?)</div>', '.*>\s{0,80}(\d+)\s{0,80}<')
-		Movies = re.findall('class="item.*?<a\shref="(https?://tubepornclassic.com/videos/.*?)"\stitle="(.*?)".*?class="thumb.*?src="(.*?)".*?class="duration">(.*?)</div.*?class="added">(.*?)</div.*?class="views ico ico-eye">(.*?)</div', data, re.S)
+		Movies = re.findall('class="item.*?<a\shref="(https?://de.tubepornclassic.com/videos/.*?)".*?class="thumb.*?src="(.*?)".*?\s+alt="(.*?)".*?class="duration">(.*?)</div.*?class="added">(.*?)</div.*?class="views ico ico-eye">(.*?)</div', data, re.S)
 		if Movies:
-			for (Url, Title, Image, Runtime, Added, Views) in Movies:
+			for (Url, Image, Title, Runtime, Added, Views) in Movies:
+				Image = Image.replace('/1.jpg','/15.jpg')
 				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views.replace(' ',''), stripAllTags(Added)))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), None, None, None, None, None))
@@ -189,37 +190,7 @@ class tubepornclassicFilmScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		getPage(Link, agent=tcAgent, headers={'Cookie': 'language=en'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
-	def getVideoPage(self, data):
-		try:
-			import execjs
-			node = execjs.get("Node")
-		except:
-			printl('nodejs not found',self,'E')
-			self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
-			return
-		decoder = "decrypt=function(_0xf4bdx6) {"\
-			"var _0xf4bdx7 = '',"\
-			"    _0xf4bdx8 = 0;"\
-			"/[^\u0410\u0412\u0421\u0415\u041cA-Za-z0-9\.\,\~]/g ['exec'](_0xf4bdx6) && console['log']('error decoding url');"\
-			"_0xf4bdx6 = _0xf4bdx6['replace'](/[^\u0410\u0412\u0421\u0415\u041cA-Za-z0-9\.\,\~]/g, '');"\
-			"do {"\
-			"var _0xf4bdx9 = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
-			"_0xf4bdxa = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
-			"_0xf4bdxb = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
-			"_0xf4bdxc = '\u0410\u0412\u0421D\u0415FGHIJKL\u041CNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~' ['indexOf'](_0xf4bdx6['charAt'](_0xf4bdx8++)),"\
-			"_0xf4bdx9 = _0xf4bdx9 << 2 | _0xf4bdxa >> 4,"\
-			"_0xf4bdxa = (_0xf4bdxa & 15) << 4 | _0xf4bdxb >> 2,"\
-			"_0xf4bdxd = (_0xf4bdxb & 3) << 6 | _0xf4bdxc,"\
-			"_0xf4bdx7 = _0xf4bdx7 + String['fromCharCode'](_0xf4bdx9);"\
-			"64 != _0xf4bdxb && (_0xf4bdx7 += String['fromCharCode'](_0xf4bdxa));"\
-			"64 != _0xf4bdxc && (_0xf4bdx7 += String['fromCharCode'](_0xf4bdxd))"\
-			"} while (_0xf4bdx8 < _0xf4bdx6['length']);;"\
-			"return unescape(_0xf4bdx7)"\
-			"};"
-		video_url = re.findall('var video_url=(.*?);', data, re.S)
-		js = decoder + "\n" + 'video_url=decrypt('+video_url[0]+');' + "return video_url;"
-		url = str(node.exec_(js))
-		url = url.replace('https','http')
+	def playVideo(self, url):
 		self.keyLocked = False
 		Title = self['liste'].getCurrent()[0][0]
 		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='tubepornclassics')

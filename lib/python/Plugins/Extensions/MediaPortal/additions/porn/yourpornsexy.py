@@ -53,7 +53,7 @@ uid = ''
 class YourPornSexyGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -157,7 +157,7 @@ class YourPornSexyPornstarsScreen(MPScreen):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -219,7 +219,7 @@ class YourPornSexyTrendsScreen(MPScreen):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -258,10 +258,10 @@ class YourPornSexyTrendsScreen(MPScreen):
 
 	def loadData(self, data):
 		self.getLastPage(data, '', 'ctrl_el.*>(\d+)</div')
-		Cats = re.findall('<td><a\shref=[\'|"]/(.*?).html[\'|"]\stitle=[\'|"].*?[\'|"]>(.*?)</a></td><td>(\d+)</td><td>(\d+)</td>', data , re.S)
+		Cats = re.findall('title=\'.*?\'>(.*?)</a></td><td>(\d+)</td><td\sstyle=\'color:#.{6}\'>.{0,1}\d+</td><td>(\d+)</td>', data , re.S)
 		if Cats:
-			for (Url, Title, Frequency, Results) in Cats:
-				self.genreliste.append((Title, Url, Frequency, Results))
+			for (Title, Frequency, Results) in Cats:
+				self.genreliste.append((Title, Title, Frequency, Results))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -285,7 +285,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -417,4 +417,4 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 			if url.startswith('//'):
 				url = "http:" + url
 			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='yourpornsexy')
-		self.keyLocked = False
+		self.keyLocked = Fals

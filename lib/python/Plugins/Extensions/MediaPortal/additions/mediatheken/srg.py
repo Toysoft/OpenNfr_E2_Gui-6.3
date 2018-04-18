@@ -45,7 +45,7 @@ default_cover = "file://%s/srg.png" % (config.mediaportal.iconcachepath.value + 
 class SRGGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -86,7 +86,7 @@ class SRGListScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, channel):
 		self.channel = channel
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -161,7 +161,7 @@ class SRGFilmeListeScreen(MPScreen, ThumbsHelper):
 		self.streamGenreLink = streamGenreLink
 		self.serie = serie
 		self.channel = channel
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -262,7 +262,7 @@ class SRGStreamScreen(MPScreen):
 		self.staffel = staffel
 		self.urlid = urlid
 		self.channel = channel
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,

@@ -130,7 +130,7 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.genreLink = genreLink
 		self.genreName = genreName
 		self.imgLink = imgLink
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -450,7 +450,7 @@ class DDLMEStreams(MPScreen):
 		self.filmName = filmName
 		self.imageUrl = imageLink
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"green" 	: self.keyTrailer,

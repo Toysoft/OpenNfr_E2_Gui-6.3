@@ -46,7 +46,7 @@ base_url = 'https://www.watchbox.de'
 class watchboxGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -102,7 +102,7 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Name, Url):
 		self.Name = Name
 		self.Url = Url
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

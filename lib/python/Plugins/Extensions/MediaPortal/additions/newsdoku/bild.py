@@ -44,7 +44,7 @@ baseurl = "https://www.bild.de"
 class bildFirstScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -109,7 +109,7 @@ class bildSecondScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, link, name):
 		self.link = link
 		self.name = name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,

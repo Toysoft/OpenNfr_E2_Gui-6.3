@@ -8,7 +8,7 @@ from debuglog import printlog as printl
 MDEBUG = False
 
 class MenuHelper(MPScreen):
-	def __init__(self, session, menuMaxLevel, genreMenu, baseUrl, genreBase, menuListentry, skin_name='MP_PluginDescr', red_label=True, widgets_files=None, cookieJar=None):
+	def __init__(self, session, menuMaxLevel, genreMenu, baseUrl, genreBase, menuListentry, skin_name='MP_Plugin', red_label=True, widgets_files=None, cookieJar=None):
 
 		self.mh_cookieJar = cookieJar
 

@@ -44,7 +44,7 @@ default_cover = "file://%s/faapy.png" % (config.mediaportal.iconcachepath.value 
 class faapyGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -118,7 +118,7 @@ class faapyChannelsScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -191,7 +191,7 @@ class faapyFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

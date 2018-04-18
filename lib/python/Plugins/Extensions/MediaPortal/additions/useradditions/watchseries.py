@@ -7,7 +7,7 @@ ws_url = "dwatchseries.to"
 class watchseriesGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -46,7 +46,7 @@ class watchseriesNewSeriesScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -88,7 +88,7 @@ class watchseriesSeriesLetterScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -124,7 +124,7 @@ class watchseriesSeriesScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -191,7 +191,7 @@ class watchseriesEpisodeListeScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -254,7 +254,7 @@ class watchseriesStreamListeScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,

@@ -5,7 +5,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 class focusGenre(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -52,7 +52,7 @@ class focus(MPScreen, ThumbsHelper):
 	def __init__(self, session, streamGenreLink, Name):
 		self.streamGenreLink = streamGenreLink
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

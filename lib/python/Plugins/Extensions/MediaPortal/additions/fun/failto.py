@@ -45,7 +45,7 @@ default_cover = "file://%s/fail.png" % (config.mediaportal.iconcachepath.value +
 class failScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

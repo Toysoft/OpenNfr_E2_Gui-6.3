@@ -7,7 +7,7 @@ BASE_URL = 'http://search.el-ladies.com'
 class elladiesGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -72,7 +72,7 @@ class elladiesFilmScreen(MPScreen, ThumbsHelper):
 		self.SearchString = SearchString
 		self.CatID = CatID
 		self.Name = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

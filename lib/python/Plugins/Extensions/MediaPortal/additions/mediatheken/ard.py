@@ -52,7 +52,7 @@ ardPic = "file://%s/ard.png" % (config.mediaportal.iconcachepath.value + "logos"
 class ARDGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -126,7 +126,7 @@ class ARDPreSelect(MPScreen):
 	def __init__(self,session,genreName,genreFlag):
 		self.gN = genreName
 		self.gF = genreFlag
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -287,7 +287,7 @@ class ARDPreSelectSender(MPScreen):
 		self.gF = genreFlag
 		self.sender = sender
 		self.such = such
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -355,7 +355,7 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 		self.auswahl = auswahl
 		self.gN = genreName
 		self.gF = genreFlag
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -462,7 +462,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		self.streamLink = streamLink
 		self.gN = genreName
 		self.gF = genreFlag
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

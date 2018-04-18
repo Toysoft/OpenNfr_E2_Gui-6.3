@@ -9,7 +9,7 @@ fx_cookies = {}
 class foxxGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -61,7 +61,7 @@ class foxxFilmScreen(MPScreen):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

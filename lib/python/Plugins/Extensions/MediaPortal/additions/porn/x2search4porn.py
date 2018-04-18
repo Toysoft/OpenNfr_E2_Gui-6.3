@@ -60,7 +60,7 @@ class toSearchForPorn(MPScreen, SearchHelper):
 
 	def __init__(self, session):
 		self.skin_path = mp_globals.pluginPath + mp_globals.skinsPath
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', widgets=('MP_widget_search',), default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', widgets=('MP_widget_search',), default_cover=default_cover)
 		SearchHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -182,7 +182,7 @@ class toSearchForPornBrowse(MPScreen):
 
 	def __init__(self, session, suchString):
 		self.suchString = suchString
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

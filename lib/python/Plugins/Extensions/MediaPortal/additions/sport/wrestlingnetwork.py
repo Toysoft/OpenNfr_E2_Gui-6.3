@@ -51,7 +51,7 @@ class wrestlingnetworkGenreScreen(MPScreen):
 			self.portal = "Watch Wrestling Uno"
 			self.baseurl = "http://watchwrestling.uno"
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -102,7 +102,7 @@ class wrestlingnetworkListeScreen(MPScreen):
 		self.Link = Link
 		self.Name = Name
 		self.portal = portal
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -169,7 +169,7 @@ class wrestlingnetworkPlayer(MPScreen):
 		self.Name = Name
 		self.Url = Url
 		self.portal = portal
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,

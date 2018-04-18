@@ -378,7 +378,7 @@ class youtubeGenreScreen(MenuHelper):
 			else:
 				self.subCatUserChannels.append(None)
 
-		MenuHelper.__init__(self, session, 2, None, "", "", self._defaultlistcenter, 'MP_PluginDescr', widgets_files=('MP_widget_youtube',))
+		MenuHelper.__init__(self, session, 2, None, "", "", self._defaultlistcenter, 'MP_Plugin', widgets_files=('MP_widget_youtube',))
 
 		self["yt_actions"] = ActionMap(["MP_Actions"], {
 			"yellow": self.keyYellow,
@@ -762,7 +762,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		self.genreName = stvGenre
 		self.headers = std_headers
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self.favoGenre = self.genreName.startswith(_('Favorites'))

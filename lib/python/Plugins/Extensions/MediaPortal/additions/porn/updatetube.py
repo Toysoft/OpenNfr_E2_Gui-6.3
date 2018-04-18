@@ -66,7 +66,7 @@ class updatetubeGenreScreen(MPScreen):
 			self.baseurl = "www.pornsharing.com"
 			default_cover = "file://%s/pornsharing.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -163,7 +163,7 @@ class updatetubeFilmScreen(MPScreen, ThumbsHelper):
 		if self.portal == "PornSharing.com":
 			default_cover = "file://%s/pornsharing.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

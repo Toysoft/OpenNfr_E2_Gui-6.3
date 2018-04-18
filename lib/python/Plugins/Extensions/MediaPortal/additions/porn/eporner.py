@@ -50,7 +50,7 @@ default_cover = "file://%s/eporner.png" % (config.mediaportal.iconcachepath.valu
 class epornerGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -143,7 +143,7 @@ class epornerFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, CatLink, Name):
 		self.CatLink = CatLink
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

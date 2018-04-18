@@ -63,7 +63,7 @@ class pinflixGenreScreen(MPScreen):
 			self.baseurl = "www.pornrox.com"
 			default_cover = "file://%s/pornrox.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -142,7 +142,7 @@ class pinflixSitesScreen(MPScreen, ThumbsHelper):
 		self.Name = Name
 		self.portal = portal
 		self.baseurl = baseurl
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -251,7 +251,7 @@ class pinflixFilmScreen(MPScreen, ThumbsHelper):
 		elif self.portal == "Pornrox.com":
 			default_cover = "file://%s/pornrox.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

@@ -66,7 +66,7 @@ def fp_grabpage(pageurl, method='GET', postdata={}, headers={}):
 class filmPalastMain(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -150,7 +150,7 @@ class filmPalastSerieParsing(MPScreen, ThumbsHelper):
 	def __init__(self, session, genre, url):
 		self.genre = genre
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -217,7 +217,7 @@ class filmPalastEpisodenParsing(MPScreen, ThumbsHelper):
 	def __init__(self, session, genre, url):
 		self.genre = genre
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -284,7 +284,7 @@ class filmPalastParsing(MPScreen, ThumbsHelper):
 	def __init__(self, session, genre, url):
 		self.genre = genre
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -363,7 +363,7 @@ class filmPalastStreams(MPScreen):
 		self.stream_name = stream_name
 		self.url = url
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,

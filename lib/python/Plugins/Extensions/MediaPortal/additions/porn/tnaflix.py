@@ -57,7 +57,7 @@ class TnAflixGenreScreen(MPScreen):
 			self.baseurl = "https://www.empflix.com"
 			default_cover = "file://%s/empflix.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -133,7 +133,7 @@ class TnAflixFilmScreen(MPScreen, ThumbsHelper):
 		if self.portal == "Empflix.com":
 			default_cover = "file://%s/empflix.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -208,7 +208,7 @@ class TnAflixFilmScreen(MPScreen, ThumbsHelper):
 			url = 'https://cdn-fck.empflix.com/empflix/%s-1.fid?key=%s&VID=%s&nomp4=1&catID=0&rollover=1&startThumb=31&embed=0&utm_source=0&multiview=0&premium=1&country=0user=0&vip=1&cd=0&ref=0&alpha' % (vk, nk, vid)
 		else:
 			url = 'https://cdn-fck.tnaflix.com/tnaflix/%s.fid?key=%s&VID=%s&nomp4=1&catID=0&rollover=1&startThumb=31&embed=0&utm_source=0&multiview=0&premium=1&country=0user=0&vip=1&cd=0&ref=0&alpha' % (vk, nk, vid)
-		twAgentGetPage(url).addCallback(self.getVideoPage).addErrback(self.dataError)
+		twAgentGetPage(url, timeout=30).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
 		url = re.findall('<videoLink>.*?//(.*?)(?:]]>|</videoLink>)', data, re.S)

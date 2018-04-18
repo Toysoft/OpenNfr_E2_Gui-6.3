@@ -45,7 +45,7 @@ myagent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firef
 class moviefapGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -112,7 +112,7 @@ class moviefapFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -188,7 +188,7 @@ class moviefapFilmScreen(MPScreen, ThumbsHelper):
 		if not xml:
 			xml = re.findall('name="config".*?//(.*?)"', data, re.S)
 		url = "http://" + xml[0]
-		twAgentGetPage(url).addCallback(self.getVideoPage).addErrback(self.dataError)
+		twAgentGetPage(url, timeout=30).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
 		url = re.findall('<videoLink>.*?//(.*?)(?:]]>|</videoLink>)', data, re.S)

@@ -79,7 +79,7 @@ class sevenFirstScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
 		getlogos()
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -147,7 +147,7 @@ class sevenGenreScreen(MPScreen):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -200,7 +200,7 @@ class sevenSubGenreScreen(MPScreen, ThumbsHelper):
 		self.Link = Link
 		self.Name = Name
 		self.TopLink = TopLink
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -263,7 +263,7 @@ class sevenStreamScreen(MPScreen):
 		self.Link = Link
 		self.Name = Name
 		self.Image = Image
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,

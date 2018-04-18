@@ -9,7 +9,7 @@ default_cover = "file://%s/javbraze.png" % (config.mediaportal.iconcachepath.val
 class javbrazeGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -85,7 +85,7 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 		self.Link = Link
 		self.Name = Name
 		self.Cat = Cat
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

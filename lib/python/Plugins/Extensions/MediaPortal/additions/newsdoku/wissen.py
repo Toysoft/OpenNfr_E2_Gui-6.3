@@ -5,7 +5,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 class wissenListeScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

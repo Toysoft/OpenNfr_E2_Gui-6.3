@@ -44,7 +44,7 @@ from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPag
 class germanytvChannelScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -87,7 +87,7 @@ class germanytvGenreScreen(MPScreen):
 	def __init__(self, session, baseurl, name):
 		self.baseurl = baseurl
 		self.name = name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -144,7 +144,7 @@ class germanytvListScreen(MPScreen):
 		self.genreName = stvGenre
 		self.name = name
 		self.baseurl = baseurl
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"	: self.closeAll,

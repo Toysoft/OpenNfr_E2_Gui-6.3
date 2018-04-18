@@ -36,7 +36,6 @@ import simpleplayer
 from simpleplayer import SimplePlayer
 from debuglog import printlog as printl
 from messageboxext import MessageBoxExt
-from utopialink import UtopiaLink
 from httpplayer import GSTPlayer
 
 from twagenthelper import twAgentGetPage

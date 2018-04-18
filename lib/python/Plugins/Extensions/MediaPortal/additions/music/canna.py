@@ -7,7 +7,7 @@ class cannaGenreScreen(MPScreen):
 
 	def __init__(self, session):
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -66,7 +66,7 @@ class cannaGenreScreen(MPScreen):
 class cannaPlaylist(MPScreen):
 
 	def __init__(self, session, genreName):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		self.genreName = genreName
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -140,7 +140,7 @@ class cannaMusicListeScreen(MPScreen):
 		self.genreLink = genreLink
 		self.genreName = genreName
 		self.type = type
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -238,7 +238,7 @@ class cannaJahreScreen(MPScreen):
 		self.genreLink = genreLink
 		self.genreName = genreName
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,

@@ -80,7 +80,7 @@ def ss_grabpage(pageurl):
 class ssMain(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -217,7 +217,7 @@ class ssSetupScreen(MPSetupScreen, ConfigListScreenExt):
 class ssSerien(MPScreen, SearchHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', widgets=('MP_widget_search',))
+		MPScreen.__init__(self, session, skin='MP_Plugin', widgets=('MP_widget_search',))
 		SearchHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -339,7 +339,7 @@ class ssSerien(MPScreen, SearchHelper):
 class ssNeueEpisoden(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
 			"0" : self.closeAll,
@@ -455,7 +455,7 @@ class ssNeueEpisoden(MPScreen):
 class ssWatchlist(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -559,7 +559,7 @@ class ssStaffeln(MPScreen):
 		self.Url = Url
 		self.Title = Title
 		self.cover = Cover
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -622,7 +622,7 @@ class ssEpisoden(MPScreen):
 		self.Staffel = Staffel
 		self.Title = Title
 		self.cover = Cover
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -722,7 +722,7 @@ class ssStreams(MPScreen):
 		self.cover = cover
 		self.Title = title
 		self.episode = episode
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,

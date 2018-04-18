@@ -105,7 +105,7 @@ class DS_FilmListeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, genreLink, genreName):
 		self.genreLink = genreLink
 		self.genreName = genreName
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {

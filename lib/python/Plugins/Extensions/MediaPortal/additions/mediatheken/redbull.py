@@ -63,7 +63,7 @@ class RBtvGenreScreen(MPScreen):
 		self.level = level
 		self.image = image
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,

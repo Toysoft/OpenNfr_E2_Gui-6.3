@@ -42,7 +42,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 class e2world(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -81,7 +81,7 @@ class e2worldMain(MPScreen):
 	def __init__(self, session, Link, Name):
 		self.link = Link
 		self.name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -110,7 +110,7 @@ class e2worldMain(MPScreen):
 		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		videos = re.findall('<item>.*?<title>(.*?)</title>.*?<link>(.*?)</link>.*?<enclosure\surl="(.*?)"\slength.*?<itunes:summary>(.*?)</itunes:summary><itunes:image\shref="(.*?)"\s/>', data, re.S)
+		videos = re.findall('<item>.*?<title>(.*?)</title>.*?<link>(.*?)</link>.*?<enclosure\surl="(.*?)"\slength.*?<itunes:summary>(.*?)</itunes:summary>.*?<itunes:image\shref="(.*?)"\s/>', data, re.S)
 		if videos:
 			for (title,url,stream,handlung,pic) in videos:
 				self.streamList.append((decodeHtml(title),url,handlung,stream,pic))

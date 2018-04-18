@@ -43,7 +43,7 @@ from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 class cczwei(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,

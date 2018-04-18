@@ -39,6 +39,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
+from Plugins.Extensions.MediaPortal.resources.txxxcrypt import txxxcrypt
 
 agent='Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0'
 json_headers = {
@@ -52,7 +53,7 @@ default_cover = "file://%s/txxx.png" % (config.mediaportal.iconcachepath.value +
 class txxxGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -138,12 +139,12 @@ class txxxGenreScreen(MPScreen):
 			printl(str(suggestions),self,'E')
 		return list
 
-class txxxFilmScreen(MPScreen, ThumbsHelper):
+class txxxFilmScreen(MPScreen, ThumbsHelper, txxxcrypt):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -218,28 +219,7 @@ class txxxFilmScreen(MPScreen, ThumbsHelper):
 			self.keyLocked = True
 			getPage(Link, agent=agent).addCallback(self.getVideoPage).addErrback(self.dataError)
 
-	def getVideoPage(self, data):
-		videoPage = re.findall('class="download-link".*?href="(.*?)"\sid="download_link"', data, re.S)
-		if videoPage:
-			url = videoPage[-1]
-		else:
-			try:
-				import execjs
-				node = execjs.get("Node")
-			except:
-				printl('nodejs not found',self,'E')
-				self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
-				return
-			decstring = re.findall('sources\[\d\]={type:\'mp4\',file:([a-zA-Z0-9]+)\(', data, re.S)
-			decoder = re.findall('(%s=function.*?};)' % decstring[0], data, re.S)
-			if decoder:
-				video_url = re.findall('(var video_url.*?;)', data, re.S)
-				js = decoder[0] + "\n" + video_url[0] + "\n" + "vidurl = (%s(video_url));" % decstring[0] + "\n" + "return vidurl;"
-			else:
-				decoder = re.findall('(var (_0x[A-Za-z0-9]+)=.*?)var (?:m3u8|video)_url', data, re.S)
-				video_url = re.findall('(var video_url.*?;)', data, re.S)
-				js = decoder[0][0].replace('window[%s[1]]' % decoder[0][1],'%s[1]' % decoder[0][1])  + "\n" + video_url[0] + "\n" + "vidurl = (%s[1](video_url));" % decoder[0][1] + "\n" + "return vidurl;"
-			url = str(node.exec_(js))
+	def playVideo(self, url):
 		self.keyLocked = False
 		Title = self['liste'].getCurrent()[0][0]
 		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='txxx')

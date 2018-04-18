@@ -45,7 +45,7 @@ default_cover = "file://%s/gigatv.png" % (config.mediaportal.iconcachepath.value
 class gigatvGenreScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -109,7 +109,7 @@ class gigatvFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, CatLink, Name):
 		self.CatLink = CatLink
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

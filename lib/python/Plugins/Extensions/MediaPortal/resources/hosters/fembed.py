@@ -2,11 +2,10 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-def letwatch(self, data):
-	stream_url = None
-	stream_url = re.findall('sources:\s.{file:"(.*?)"', data)
+def fembed(self, data):
+	json_data = json.loads(data)
+	stream_url = re.findall('file":"(.*?)"', json_data["data"])
 	if stream_url:
-		stream_url = stream_url[0]
-		self._callback(stream_url)
+		self._callback(str(stream_url[-1]).replace('\/','/'))
 	else:
 		self.stream_not_found()

@@ -46,7 +46,7 @@ class pokerGenreScreen(MPScreen):
 
 	def __init__(self, session):
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -100,7 +100,7 @@ class subnav(MPScreen):
 	def __init__(self, session,name,url):
 		self.url = url
 		self.name = name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -150,7 +150,7 @@ class vids(MPScreen):
 	def __init__(self, session,name,url):
 		self.url = url
 		self.name = name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,

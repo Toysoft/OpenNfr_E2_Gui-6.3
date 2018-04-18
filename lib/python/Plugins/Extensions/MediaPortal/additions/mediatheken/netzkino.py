@@ -43,7 +43,7 @@ default_cover = "file://%s/netzkino.png" % (config.mediaportal.iconcachepath.val
 class netzKinoGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -89,7 +89,7 @@ class netzKinoFilmeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, genreID, Name):
 		self.genreID = genreID
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

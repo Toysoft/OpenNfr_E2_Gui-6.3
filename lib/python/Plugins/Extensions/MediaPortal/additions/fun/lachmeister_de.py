@@ -42,7 +42,7 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, genreLink, genreName):
 		self.genreLink = genreLink
 		self.genreName = genreName
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -141,11 +141,11 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 					t = re.search('"teaser__description".*?>(.*?)</div>', m.group(1), re.S)
 					if t:
 						vid = ''
-						desc = decodeHtml2(t.group(1))
+						desc = decodeHtml(t.group(1))
 					else:
 						desc = None
 						vid = ''
-					self.dokusListe.append((decodeHtml2(d.group(3)), d.group(1), d.group(2), desc, vid))
+					self.dokusListe.append((decodeHtml(d.group(3)), d.group(1), d.group(2), desc, vid))
 			else:
 				break
 

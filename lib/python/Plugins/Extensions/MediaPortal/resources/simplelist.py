@@ -144,7 +144,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["hidePig"] = Boolean()
 		self["hidePig"].setBoolean(config.mediaportal.minitv.value)

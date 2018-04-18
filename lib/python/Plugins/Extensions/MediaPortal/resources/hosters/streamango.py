@@ -22,7 +22,7 @@ def streamango(self, data):
 				self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
 			if url:
 				if url.startswith('//'):
-					url = 'http:' + url
+					url = 'https:' + url
 				self._callback(url)
 			else:
 				self.stream_not_found()

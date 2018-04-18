@@ -9,7 +9,7 @@ default_cover = "file://%s/javhd.png" % (config.mediaportal.iconcachepath.value 
 class javhdGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -85,7 +85,7 @@ class javhdFilmScreen(MPScreen, ThumbsHelper):
 		self.Link = Link
 		self.Name = Name
 		self.Cat = Cat
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -182,7 +182,7 @@ class javhdFilmScreen(MPScreen, ThumbsHelper):
 			if streams:
 				for (stream, hostername) in streams:
 					if isSupportedHoster(hostername, True):
-						url = stream.replace('&amp;','&').replace('&#038;','&')
+						url = stream.replace('&amp;','&').replace('&#038;','&').strip()
 						get_stream_link(self.session).check_link(url, self.got_link)
 		self.keyLocked = False
 

@@ -15,7 +15,7 @@ class ZDFGenreScreen(MPScreen):
 
 	def __init__(self, session):
 		self.keyLocked = True
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -113,7 +113,7 @@ class ZDFPreSelect(MPScreen):
 		self.gN = genreName
 		self.gF = genreFlag
 		self.pP = prePic
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -285,7 +285,7 @@ class ZDFPostSelect(MPScreen, ThumbsHelper):
 		self.pP = prePic
 		self.anzahl = anzahl
 		self.streamLink = streamLink
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -389,7 +389,7 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 		self.anzahl = anzahl
 		self.sendung = sendung
 		self.image = image
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

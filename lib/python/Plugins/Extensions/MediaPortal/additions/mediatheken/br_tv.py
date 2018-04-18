@@ -8,7 +8,7 @@ mainLink = "http://www.br.de/mediathek/video"
 class BRGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -74,7 +74,7 @@ class BRDateScreen(MPScreen):
 		self.url = url
 		self.gN = genreName
 		self.gF = genreFlag
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -133,7 +133,7 @@ class BRPreSelect(MPScreen):
 	def __init__(self,session,genreName,genreFlag):
 		self.gN = genreName
 		self.gF = genreFlag
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -179,7 +179,7 @@ class BRPostSelect(MPScreen, ThumbsHelper):
 		self.gN = genreName
 		self.gF = genreFlag
 		self.mF = mediaFlag
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -259,7 +259,7 @@ class BRStreamScreen(MPScreen, ThumbsHelper):
 		self.gN = genreName
 		self.gF = genreFlag
 		self.datum = datum
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

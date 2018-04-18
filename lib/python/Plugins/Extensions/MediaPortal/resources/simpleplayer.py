@@ -87,9 +87,6 @@ class M3U8Player:
 				pass
 
 	def _getM3U8Video(self, title, url, **kwargs):
-		from utopialink import UtopiaLink
-		from atvlink import ATVLink
-
 		if self._check_cache:
 			if not os.path.isdir(config.mediaportal.storagepath.value):
 				self.session.open(MessageBoxExt, _("You've to check Your HLS-PLayer Cachepath-Setting in MP-Setup:\n") + config.mediaportal.storagepath.value, MessageBoxExt.TYPE_ERROR)
@@ -97,13 +94,7 @@ class M3U8Player:
 				return
 			else:
 				self._check_cache = False
-		us = url.split('-stream-')
-		if len(us) > 1 and us[0] in ('atv', 'aspor', 'ahaber', 'atvavrupa', 'minikacocuk', 'minikago'):
-			ATVLink().getATVStream(us[0]).addCallback(lambda url: self._playM3U8(title, url, **kwargs)).addErrback(self.dataError)
-		elif url.startswith('utopia-stream-nl'):
-			UtopiaLink().getNTStream('nl').addCallback(lambda url: self._playM3U8(title, url, **kwargs)).addErrback(self.dataError)
-		else:
-			self._playM3U8(title, url, **kwargs)
+		self._playM3U8(title, url, **kwargs)
 
 	def _playM3U8(self, title, url, **kwargs):
 		def getProxyConfig(url):
@@ -249,8 +240,8 @@ class SimpleSeekHelper:
 
 	def initSeek(self):
 		global seekbuttonpos
-		if not seekbuttonpos:
-			seekbuttonpos = self["seekbarcursor"].instance.position()
+		#if not seekbuttonpos:
+		seekbuttonpos = self["seekbarcursor"].instance.position()
 		self.percent = 0.0
 		self.length = None
 		self.cursorShown = False

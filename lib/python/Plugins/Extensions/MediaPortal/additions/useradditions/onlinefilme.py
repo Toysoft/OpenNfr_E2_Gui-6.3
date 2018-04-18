@@ -109,7 +109,7 @@ class SKTO_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.genreName = genreName
 		self.searchForm = searchForm
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -424,7 +424,7 @@ class SKTO_Streams(MPScreen):
 		self.imageUrl = imageLink
 		self.infos = infos
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"green" 	: self.keyTrailer,

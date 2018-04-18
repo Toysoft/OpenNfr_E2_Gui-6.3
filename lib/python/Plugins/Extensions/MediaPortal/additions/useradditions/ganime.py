@@ -6,7 +6,7 @@ import base64
 class gAnimeMain(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -51,7 +51,7 @@ class gAnimeParsing(MPScreen, ThumbsHelper):
 	def __init__(self, session, genre, url):
 		self.genre = genre
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -122,7 +122,7 @@ class gAnimeFolgen(MPScreen):
 		self.stream_name = stream_name
 		self.url = url
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -171,7 +171,7 @@ class gAnimeStreams(MPScreen):
 		self.stream_name = stream_name
 		self.streams = streams
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,

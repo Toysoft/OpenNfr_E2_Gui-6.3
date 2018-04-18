@@ -190,7 +190,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018040801"))
+config.mediaportal.version = NoSave(ConfigText(default="2018041501"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.skinfail = ConfigYesNo(default = False)
@@ -421,6 +421,10 @@ class CheckPathes:
 			config.mediaportal.iconcachepath.save()
 			configfile.save()
 		elif "/usr/lib/enigma2/" in config.mediaportal.iconcachepath.value:
+			config.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
+			config.mediaportal.iconcachepath.save()
+			configfile.save()
+		elif "/var/volatile/" in config.mediaportal.iconcachepath.value:
 			config.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
 			config.mediaportal.iconcachepath.save()
 			configfile.save()
@@ -4365,7 +4369,7 @@ def _stylemanager(mode):
 		raise Exception(raisemsg)
 
 def _hosters():
-	hosters_file = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/hosters.xml"
+	hosters_file = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/hosters/hosters.xml"
 	open_hosters = open(hosters_file)
 	data = open_hosters.read()
 	open_hosters.close()

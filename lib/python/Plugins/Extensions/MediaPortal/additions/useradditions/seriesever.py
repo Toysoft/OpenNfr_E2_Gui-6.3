@@ -47,7 +47,7 @@ BASE_URL = 'http://seriesever.net'
 class serieseverMain(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -94,7 +94,7 @@ class serieseverParsing(MPScreen, ThumbsHelper):
 	def __init__(self, session, genre, url):
 		self.genre = genre
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -198,7 +198,7 @@ class serieseverParsing(MPScreen, ThumbsHelper):
 class serieseverWatchlist(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -278,7 +278,7 @@ class showStaffeln(MPScreen):
 	def __init__(self, session, stream_name, url):
 		self.stream_name = stream_name
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -347,7 +347,7 @@ class showStreams(MPScreen):
 	def __init__(self, session, stream_name, url):
 		self.stream_name = stream_name
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,

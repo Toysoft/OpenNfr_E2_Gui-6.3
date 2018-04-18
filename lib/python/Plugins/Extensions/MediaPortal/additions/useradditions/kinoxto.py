@@ -65,7 +65,7 @@ kx_agent = ''
 class kxGenre(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -176,7 +176,7 @@ class kxKino(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -237,7 +237,7 @@ class kxNeuesteKino(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -308,7 +308,7 @@ class kxNeuesteOnline(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -381,7 +381,7 @@ class kxABC(MPScreen):
 	def __init__(self, session, kxGotLink, name):
 		self.kxGotLink = kxGotLink
 		self.Name = name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -424,7 +424,7 @@ class kxABCpage(MPScreen, ThumbsHelper):
 	def __init__(self, session, letter, name):
 		self.letter = letter
 		self.Name = name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -530,7 +530,7 @@ class kxNeueste(MPScreen, ThumbsHelper):
 	def __init__(self, session, kxGotLink, name):
 		self.kxGotLink = kxGotLink
 		self.Name = name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -604,7 +604,7 @@ class kxEpisoden(MPScreen):
 	def __init__(self, session, url, stream_name):
 		self.url = url
 		self.stream_name = stream_name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -713,7 +713,7 @@ class kxEpisoden(MPScreen):
 class kxWatchlist(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -787,7 +787,7 @@ class kxStreams(MPScreen):
 		self.kxGotLink = kxGotLink
 		self.stream_name = stream_name
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -924,7 +924,7 @@ class kxParts(MPScreen):
 	def __init__(self, session, parts, stream_name):
 		self.parts = parts
 		self.stream_name = stream_name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -978,7 +978,7 @@ class kxSucheScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, searchURL, searchData):
 		self.kxGotLink = searchURL + searchData
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

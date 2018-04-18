@@ -38,7 +38,7 @@ def tat_grabpage(pageurl):
 class tataMain(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -139,7 +139,7 @@ class tataParsing(MPScreen):
 	def __init__(self, session, genre, url):
 		self.genre = genre
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,

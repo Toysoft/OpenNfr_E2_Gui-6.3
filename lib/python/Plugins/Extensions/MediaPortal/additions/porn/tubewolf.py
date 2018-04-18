@@ -64,7 +64,7 @@ class tubewolfGenreScreen(MPScreen):
 			self.baseurl = "http://crocotube.com"
 			default_cover = "file://%s/crocotube.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -139,7 +139,7 @@ class tubewolfListScreen(MPScreen, ThumbsHelper):
 		elif self.portal == "CrocoTube.com":
 			default_cover = "file://%s/crocotube.png" % (config.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {

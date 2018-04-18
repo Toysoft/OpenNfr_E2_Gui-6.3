@@ -74,7 +74,7 @@ class rnCalc:
 class pornhubGenreScreen(MPScreen, rnCalc):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -293,7 +293,7 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper, rnCalc):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -351,7 +351,7 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper, rnCalc):
 			preparse = re.search('class="sectionWrapper(.*?)class="pagination3"', data, re.S)
 			if not preparse:
 				preparse = re.search('class="sectionWrapper(.*?)id="profileInformation"', data, re.S)
-			Cats = re.findall('class="playlist-videos">.*?class="number"><span>(.*?)</span>.*?src="(.*?jpg)".*?href="(/view_video.php.*?)".*?class="viewPlaylistLink"\shref="(.*?)".*?class="title"\stitle="(.*?)"', preparse.group(1), re.S)
+			Cats = re.findall('class="playlist-videos">.*?class="number"><span>(.*?)</span>.*?src="(.*?jpg)".*?href="(/view_video.php.*?)".*?class="viewPlaylistLink\s{0,1}"\shref="(.*?)".*?class="title\s{0,1}"\stitle="(.*?)"', preparse.group(1), re.S)
 			if Cats:
 				for Videos, Image, PlayUrl, Url, Title in Cats:
 					Url = base_url + Url
@@ -454,7 +454,7 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper, rnCalc):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -611,7 +611,7 @@ class pornhubPornstarScreen(MPScreen, ThumbsHelper, rnCalc):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -751,7 +751,7 @@ class pornhubChannelScreen(MPScreen, ThumbsHelper, rnCalc):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -880,7 +880,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 		self.Link = Link
 		self.Name = Name
 		self.Count = Count
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', default_cover=default_cover)
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -1037,14 +1037,13 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 		views = self['liste'].getCurrent()[0][4]
 		added = self['liste'].getCurrent()[0][5]
 		self['handlung'].setText("Runtime: %s\nViews: %s\nAdded: %s" % (runtime, views, added))
-		if phLoggedIn:
-			self.url = self['liste'].getCurrent()[0][1]
-			if self.url:
-				self.lock = True
-				self['F1'].setText('')
-				self['F3'].setText('')
-				self['F4'].setText('')
-				self.infoTimer.start(5000, True)
+		self.url = self['liste'].getCurrent()[0][1]
+		if self.url:
+			self.lock = True
+			self['F1'].setText('')
+			self['F3'].setText('')
+			self['F4'].setText('')
+			self.infoTimer.start(2000, True)
 
 	def getInfos2(self):
 		getPage(self.url, agent=phAgent, cookies=ck).addCallback(self.showInfos2).addErrback(self.dataError)
@@ -1078,22 +1077,22 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 					self.suburl = base_url + subparse[0][0].replace('&amp;','&')
 					self.unsuburl = base_url + subparse[0][1].replace('&amp;','&')
 					self.subscribed = str(subparse[0][2])
-			if self.subscribed == "1":
+			if self.subscribed == "1" and phLoggedIn:
 				submsg = "\n" + usertype + ": " + username + " - Subscribed"
 				self['F1'].setText(_("Unsubscribe"))
-			elif self.subscribed == "0":
+			elif self.subscribed == "0" and phLoggedIn:
 				submsg = "\n" + usertype + ": " + username
 				self['F1'].setText(_("Subscribe"))
 			else:
 				submsg = ""
 				self['F1'].setText("")
-			if self.favourited == "1":
+			if self.favourited == "1" and phLoggedIn:
 				if self.Name == "Favourite Videos":
 					favmsg = ""
 				else:
 					favmsg = "\nFavourited"
 				self['F4'].setText(_("Remove Favourite"))
-			elif self.favourited == "0":
+			elif self.favourited == "0" and phLoggedIn:
 				favmsg = ""
 				self['F4'].setText(_("Add Favourite"))
 			else:
@@ -1144,9 +1143,8 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 			return
 		if self.id == '':
 			return
-		if phLoggedIn:
-			RelatedUrl = base_url + "/video/relateds?ajax=1&id=%s&num_per_page=10&page=" % self.id
-			self.session.open(pornhubFilmScreen, RelatedUrl, "Related")
+		RelatedUrl = base_url + "/video/relateds?ajax=1&id=%s&num_per_page=10&page=" % self.id
+		self.session.open(pornhubFilmScreen, RelatedUrl, "Related")
 
 	def keySubscribe(self):
 		if self.keyLocked:

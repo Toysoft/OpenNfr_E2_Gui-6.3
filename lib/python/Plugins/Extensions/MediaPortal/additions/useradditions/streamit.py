@@ -133,7 +133,7 @@ class streamitFilmListeScreen(MPScreen, ThumbsHelper):
 		self.seriesImg = series_img
 		self.seasonData = season_data
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr', widgets=('MP_widget_rating',))
+		MPScreen.__init__(self, session, skin='MP_Plugin', widgets=('MP_widget_rating',))
 		ThumbsHelper.__init__(self)
 
 		self["hdpic"] = Pixmap()
@@ -480,7 +480,7 @@ class streamitStreams(MPScreen):
 		self.postData = post_data
 		self.postUrl = post_url
 
-		MPScreen.__init__(self, session, skin='MP_PluginDescr')
+		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"green" 	: self.keyTrailer,
