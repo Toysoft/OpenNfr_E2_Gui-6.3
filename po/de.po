@@ -11438,9 +11438,6 @@ msgstr "Wenn aktiviert benutzt der Receiver die Untertitel die schon früher ben
 msgid "When enabled, the receiver will select an AC3 track (when available)."
 msgstr "Wenn auf 'Ja' gestellt so wird AC3 Ton benutzt wenn verfügbar."
 
-msgid "When enabled, the receiver will select an AC3+ track (when available)."
-msgstr "Wenn auf 'Ja' gestellt, wird die %s %s AC3+ Ton benutzen (wenn verfügbar)."
-
 msgid "When enabled, timeshift starts automatically in background after specified time."
 msgstr "Wenn aktiviert, startet Timeshift automatisch nach der vorgegebenen Zeit."
 
