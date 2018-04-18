@@ -13587,7 +13587,7 @@ msgid "Are you ready to create a backup image ?"
 msgstr "Sind Sie bereit, ein Backup-Image zu erstellen?"
 
 msgid "Your %s %s is about to run a full image backup, this can take about 6 minutes to complete,\ndo you want to allow this?"
-msgstr "Ihr% s% s ist dabei, eine vollständige Imagesicherung auszuführen. Dies kann etwa 6 Minuten dauern. \ NWollen Sie dies zulassen?"
+msgstr "Ihr % s% s ist dabei, eine vollständige Imagesicherung auszuführen. Dies kann etwa 6 Minuten dauern.\n Wollen Sie dies zulassen?"
 
 msgid "Enough Retries, delaying till next schedule."
 msgstr "Genug Wiederholungen, Verzögerung bis zum nächsten Zeitplan."
@@ -13599,7 +13599,7 @@ msgid "To back-up directly to the USB-stick, the USB-stick MUST\n"
 msgstr "Um direkt auf den USB-Stick zu sichern, MUSS der USB-Stick\n"
 
 msgid "contain a file with the name: \n\n"
-msgstr "eine Datei mit dem Namen:\n\n"
+msgstr "eine Datei mit dem Namen: \n\n"
 
 msgid "backupstick or backupstick.txt"
 msgstr "backupstick or backupstick.txt enthalten"
