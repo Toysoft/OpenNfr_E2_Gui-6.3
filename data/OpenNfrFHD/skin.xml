@@ -1845,9 +1845,9 @@
     <widget name="network" position="55,141" size="790,45" font="LCD;35" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" halign="center" valign="center" />
     <widget name="transponder" position="1150,141" size="720,45" font="LCD;35" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" halign="center" valign="center" />
     <widget name="scan_state" position="1078,746" size="755,45" zPosition="2" font="LCD; 38" backgroundColor="goldenrod" foregroundColor="goldenrod" transparent="1" halign="center" valign="center" />
-    <widget name="pass" position="55,220" size="920,25" font="Regular; 24" backgroundColor="white" transparent="1" halign="center" valign="center" />
+    <widget name="pass" position="55,215" size="920,40" font="Regular; 28" backgroundColor="white" transparent="1" halign="center" valign="center" />
     <widget name="scan_progress" pixmap="OpenNfrFHD/menu/progress.png" position="1064,831" size="784,17" zPosition="3" transparent="1" />
-    <widget name="servicelist" position="55,270" size="920,655" itemHeight="30" font="Regular; 28" selectionDisabled="1" transparent="1" halign="center" valign="center" />
+    <widget name="servicelist" position="55,270" size="920,630" itemHeight="30" font="Regular; 28" selectionDisabled="1" transparent="1" halign="center" valign="center" />
     <ePixmap name="selector" position="51,253" size="930,10" font="Regular; 24" pixmap="OpenNfrFHD/menu/selector.png" zPosition="1" />
     <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
     <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
@@ -11534,22 +11534,22 @@
     <widget name="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget name="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="LCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
   </screen>
-<screen name="CutListEditor" position="center,center" size="1920,1080" title="Cutlist editor" flags="wfNoBorder">
-  <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
-  <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
-  <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
-  <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
-  <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
-  <ePixmap name="senderback" position="1042,819" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
-  <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
-    <convert type="ClockToText">Default</convert>
-  </widget>
-  <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
-    <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-  </widget>
-  <eLabel text="Cutlist editor" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-  <widget source="cutlist" render="Listbox" position="55,220" size="920,700" zPosition="3" scrollbarMode="showOnDemand" itemHeight="28">
-    <convert type="TemplatedMultiContent">
+  <screen name="CutListEditor" position="center,center" size="1920,1080" title="Cutlist editor" flags="wfNoBorder">
+    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
+    <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
+    <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
+    <ePixmap name="tvback" position="1039,193" size="835,535" pixmap="OpenNfrFHD/menu/tvbackmenu.png" />
+    <ePixmap name="senderback" position="1042,729" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <ePixmap name="senderback" position="1042,819" size="828,80" pixmap="OpenNfrFHD/menu/sendernameback.png" />
+    <widget source="global.CurrentTime" render="Label" position="1690,42" size="150,60" font="LCD; 55" halign="right" foregroundColor="white" backgroundColor="white" transparent="1">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1166,50" size="550,45" font="LCD; 42" halign="right" foregroundColor="grey" backgroundColor="grey" transparent="1">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <eLabel text="Cutlist editor" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
+    <widget source="cutlist" render="Listbox" position="55,220" size="920,700" zPosition="3" scrollbarMode="showOnDemand" itemHeight="28">
+      <convert type="TemplatedMultiContent">
 				{"template": [
 						MultiContentEntryText(pos=(0,4), size=(280, 22), text = 1, flags = RT_HALIGN_CENTER, backcolor = MultiContentTemplateColor(3)),
 						MultiContentEntryText(pos=(280,4), size=(100, 22), text = 2, flags = RT_HALIGN_CENTER, backcolor = MultiContentTemplateColor(3))
@@ -11558,17 +11558,17 @@
 				 "itemHeight": 30
 				}
 			</convert>
-  </widget>
-  <eLabel position="55,220" size="920,700" zPosition="2" backgroundColor="background" />
-  <eLabel position="55,220" size="920,700" zPosition="1" backgroundColor="white" />
-  <widget source="session.CurrentService" render="Label" position="1076,753" size="760,40" font="Regular; 28" halign="center" valign="center" backgroundColor="white" transparent="1" zPosition="1">
-    <convert type="ServiceName">Name</convert>
-  </widget>
-  <widget source="session.CurrentService" render="Label" position="1076,843" size="760,40" font="Regular; 28" halign="center" valign="center" backgroundColor="white" transparent="1" zPosition="1">
-    <convert type="ServicePosition">Position,Detailed</convert>
-  </widget>
-  <ePixmap pixmap="skin_default/mp_buttons.png" position="1321,917" size="260,32" alphatest="blend" />
-</screen>
+    </widget>
+    <eLabel position="55,220" size="920,700" zPosition="2" backgroundColor="background" />
+    <eLabel position="55,220" size="920,700" zPosition="1" backgroundColor="white" />
+    <widget source="session.CurrentService" render="Label" position="1076,753" size="760,40" font="Regular; 28" halign="center" valign="center" backgroundColor="white" transparent="1" zPosition="1">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <widget source="session.CurrentService" render="Label" position="1076,843" size="760,40" font="Regular; 28" halign="center" valign="center" backgroundColor="white" transparent="1" zPosition="1">
+      <convert type="ServicePosition">Position,Detailed</convert>
+    </widget>
+    <ePixmap pixmap="skin_default/mp_buttons.png" position="1321,917" size="260,32" alphatest="blend" />
+  </screen>
   <screen name="MovieTagEditor" position="center,center" size="1920,1080" title="edit tags..." flags="wfNoBorder">
     <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="OpenNfrFHD/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />

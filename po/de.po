@@ -13653,3 +13653,51 @@ msgstr "Videoverstärkungs Einstellung"
 
 msgid "VideoEnhancementPreview"
 msgstr "VideoverstärkungsVorschau"
+
+msgid "Enable auto cable scan"
+msgstr "Auto Kabelscan aktivieren"
+
+msgid "Press OK to reload the plugins!\nPress EXIT to cancel!"
+msgstr "Drücke OK, um die Plugins neu zu laden!\nDrücke EXIT, um abzubrechen!"
+
+msgid "OpenNFRWizard_PluginReLoad is loading Plugins"
+msgstr "OpenNFRWizard_PluginReLoad lädt Plugins"
+
+msgid "The plugins were reloaded successfully!"
+msgstr "Die Plugins wurden erfolgreich neu geladen!"
+
+msgid "Edit your config"
+msgstr "Bearbeite deine Konfiguration"
+
+msgid "Edit your Cam config"
+msgstr "Bearbeite deine Cam-Konfiguration"
+
+msgid "VideoEnhancementSetup"
+msgstr "Videoverstärkungs-Setup"
+
+msgid "Check disk terminated with success"
+msgstr "Festplatte erfolgreich geprüft"
+
+msgid "Error checking disk. The disk may be damaged"
+msgstr "Fehler beim Überprüfen der Festplatte. Die Festplatte ist möglicherweise beschädigt"
+
+msgid "Format terminated with success"
+msgstr "Festplatte erfolgreich formatiert"
+
+msgid "Cannot format current drive.\nA record in progress, timeshit or some external tools (like samba and nfsd) may cause this problem.\nPlease stop this actions/applications and try again"
+msgstr "Das aktuelle Laufwerk kann nicht formatiert werden.\nEin laufender Eintrag, Timeshit oder einige externe Tools (wie Samba und NFSD) können dieses Problem verursachen.\nBitte stoppen Sie diese Aktionen/Anwendungen und versuchen Sie es erneut"
+
+msgid "Error formatting disk. The disk may be damaged"
+msgstr "Fehler beim formatieren der Festplatte. Die Festplatte ist möglicherweise beschädigt"
+
+msgid "Move Plugins back to flash?"
+msgstr "Plugins in den Flash verschieben?"
+
+msgid "EPG Import Sources"
+msgstr "EPG-Import Quellen"
+
+msgid "Ignore services list"
+msgstr "Ignoriere die Liste dieser Anbieter"
+
+msgid "EPG Import Configuration"
+msgstr "EPG Import Einstellungen"

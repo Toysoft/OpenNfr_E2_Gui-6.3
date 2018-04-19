@@ -13574,3 +13574,51 @@ msgstr ""
 
 msgid "VideoEnhancementPreview"
 msgstr ""
+
+msgid "Enable auto cable scan"
+msgstr ""
+
+msgid "Press OK to reload the plugins!\nPress EXIT to cancel!"
+msgstr ""
+
+msgid "OpenNFRWizard_PluginReLoad is loading Plugins"
+msgstr ""
+
+msgid "The plugins were reloaded successfully!"
+msgstr ""
+
+msgid "Edit your config"
+msgstr ""
+
+msgid "Edit your Cam config"
+msgstr ""
+
+msgid "VideoEnhancementSetup"
+msgstr ""
+
+msgid "Check disk terminated with success"
+msgstr ""
+
+msgid "Error checking disk. The disk may be damaged"
+msgstr ""
+
+msgid "Format terminated with success"
+msgstr ""
+
+msgid "Cannot format current drive.\nA record in progress, timeshit or some external tools (like samba and nfsd) may cause this problem.\nPlease stop this actions/applications and try again"
+msgstr ""
+
+msgid "Error formatting disk. The disk may be damaged"
+msgstr ""
+
+msgid "Move Plugins back to flash?"
+msgstr ""
+
+msgid "EPG Import Sources"
+msgstr ""
+
+msgid "Ignore services list"
+msgstr ""
+
+msgid "EPG Import Configuration"
+msgstr ""
