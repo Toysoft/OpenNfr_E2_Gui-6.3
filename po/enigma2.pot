@@ -13622,3 +13622,78 @@ msgstr ""
 
 msgid "EPG Import Configuration"
 msgstr ""
+
+msgid "MountEdit"
+msgstr ""
+
+msgid "MountView"
+msgstr ""
+
+msgid "UserManager"
+msgstr ""
+
+msgid "Number of rows to display"
+msgstr ""
+
+msgid "Use the extended List"
+msgstr ""
+
+msgid "Update delay for Events in List. Scrolling in List is faster with higher delay, specialy on big Lists !"
+msgstr ""
+
+msgid "Select the player which will be used for Enigma2 playback."
+msgstr ""
+
+msgid "Select sink which you want to use."
+msgstr ""
+
+msgid "Turn on the embedded subtitles support."
+msgstr ""
+
+msgid "Set buffer size in kilobytes."
+msgstr ""
+
+msgid "Set buffer duration in seconds."
+msgstr ""
+
+msgid "Automatically turn on subtitles if available."
+msgstr ""
+
+msgid "Turn on explorer to retrieve different quality streams from HLS variant playlist and select them via subservices."
+msgstr ""
+
+msgid "Turn on auto-selection of streams according to set Connection speed."
+msgstr ""
+
+msgid "Set connection speed in kb/s, according to which you want to have streams auto-selected"
+msgstr ""
+
+msgid "Turn on AAC software decoding."
+msgstr ""
+
+msgid "Turn on EAC3 software decoding."
+msgstr ""
+
+msgid "Turn on AC3 software decoding."
+msgstr ""
+
+msgid "Turn on DTS software decoding."
+msgstr ""
+
+msgid "Turn on MP3 software decoding."
+msgstr ""
+
+msgid "Turn on WMA1, WMA2, WMA/PRO software decoding."
+msgstr ""
+
+msgid "Turn on downmix to stereo, when software decoding is in use"
+msgstr ""
+
+msgid "Software decoder use LPCM for injection (otherwise wav PCM will be used)"
+msgstr ""
+
+msgid "Set which RTMP protocol implementation will be used for playback of RTMP streams"
+msgstr ""
+
+msgid "Download_openNFRskin"
+msgstr ""
