@@ -106,7 +106,7 @@ class kxGenre(MPScreen):
 					url = urlparse.urlparse(kx_url)
 					headers = {'user-agent': kx_agent}
 					page = s.get(url.geturl(), cookies=kx_cookies, headers=headers, timeout=15, allow_redirects=False)
-					if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
+					if page.status_code == 503 and page.headers.get("Server", "").startswith("cloudflare") and b"jschl_vc" in page.content and b"jschl_answer" in page.content:
 						kx_ck, kx_agent = cfscrape.get_tokens(kx_url)
 						requests.cookies.cookiejar_from_dict(kx_ck, cookiejar=kx_cookies)
 				except:

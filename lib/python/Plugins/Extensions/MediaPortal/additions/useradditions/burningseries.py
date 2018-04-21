@@ -41,47 +41,6 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 BASE_URL = "https://bs.to"
 
-def decodeJson(text):
-	text = text.replace('\u00b2','²')
-	text = text.replace('\u00e4','ä')
-	text = text.replace('\u00c4','Ä')
-	text = text.replace('\u00f6','ö')
-	text = text.replace('\u00d6','Ö')
-	text = text.replace('\u00fc','ü')
-	text = text.replace('\u00dc','Ü')
-	text = text.replace('\u00df','ß')
-	text = text.replace('\u0027',"'")
-	text = text.replace('\u00a0',' ')
-	text = text.replace('\u00b4','\'')
-	text = text.replace('\u003d','=')
-	text = text.replace('\u0026','&')
-	text = text.replace('\u2013',"–")
-	text = text.replace('\u014d','ō')
-	text = text.replace('\u016b','ū')
-	text = text.replace('\u201a','\"')
-	text = text.replace('\u2018','\"')
-	text = text.replace('\u201e','\"')
-	text = text.replace('\u201c','\"')
-	text = text.replace('\u201d','\'')
-	text = text.replace('\u2019','’')
-	text = text.replace('\u2019s','’')
-	text = text.replace('\u2606','*')
-	text = text.replace('\u266a','♪')
-	text = text.replace('\u00e0','à')
-	text = text.replace('\u00d7','×')
-	text = text.replace('\u00e7','ç')
-	text = text.replace('\u00e8','é')
-	text = text.replace('\u00e9','é')
-	text = text.replace('\u00f2','ò')
-	text = text.replace('\u00f4','ô')
-	text = text.replace('\u00c1','Á')
-	text = text.replace('\u00c6','Æ')
-	text = text.replace('\u00e1','á')
-	text = text.replace('\u00b0','°')
-	text = text.replace('\u00e6','æ')
-	text = text.replace('\u2026','...')
-	return text
-
 class bsMain(MPScreen):
 
 	def __init__(self, session):
@@ -177,12 +136,14 @@ class bsSerien(MPScreen, SearchHelper):
 			self.loadPageQueued(headers={'User-Agent':'bs.android', 'BS-Token':bstoken})
 
 	def loadPageData(self, data):
+		data = re.search('.*?({.*})', data, re.S).group(1)
+		data = data.replace('\r\n1000\r\n', '').replace('\r\n2000\r\n', '').replace('\r\n3000\r\n', '').replace('\r\n4000\r\n', '').replace('\r\n\r\n2FF\r\n', '').replace('\r\n2FF\r\n', '').replace('\r\n\r\nD67\r\n', '').replace('\r\nD67\r\n', '').replace('\r\n0\r\n\r\nE94\r\n', '')
 		serien = re.findall('series":"(.*?)","id":"(.*?)"', data, re.S)
 		if serien:
 			for (Title, ID) in serien:
 				serie = ID
 				cover = BASE_URL + "/public/img/cover/" + ID + ".jpg"
-				self.streamList.append((decodeJson(Title.replace('\/','/')),serie, cover, ID))
+				self.streamList.append((decodeHtml(Title.replace('\/','/')),serie, cover, ID))
 			self.ml.setList(map(self._defaultlistleft, self.streamList))
 			self.keyLocked = False
 			self.loadPicQueued()
@@ -274,7 +235,7 @@ class bsWatchlist(MPScreen):
 			self.showInfos()
 
 	def convertPlaylist(self, seriesdata, rawData):
-		seriesdata = decodeJson(seriesdata)
+		seriesdata = decodeHtml(seriesdata)
 		try:
 			writeTmp = open(self.wl_path,"w")
 			for m in re.finditer('"(.*?)" "(.*?)"', rawData):
@@ -373,7 +334,7 @@ class bsStaffeln(MPScreen):
 	def parseData(self, data):
 		desc = re.search('description":"(.*?)","', data, re.S)
 		if desc:
-			self['handlung'].setText(decodeJson(desc.group(1).replace('\\"','"')))
+			self['handlung'].setText(decodeHtml(desc.group(1).replace('\\"','"')))
 		else:
 			self['handlung'].setText(_("No further information available!"))
 		ID = re.search('"id":"(.*?)"', data, re.S)
@@ -482,17 +443,17 @@ class bsEpisoden(MPScreen):
 				if TitleDE == "":
 					Flag = "EN"
 					Episode = Staffel + epiID1 + " - " + TitleEN
-					check = (decodeJson(self.Title)) + " - " + Staffel + epiID1 + " - " + (decodeJson(TitleEN))
+					check = (decodeHtml(self.Title)) + " - " + Staffel + epiID1 + " - " + (decodeHtml(TitleEN))
 				else:
 					Flag = "DE"
 					Episode = Staffel + epiID1 + " - "  + TitleDE
-					check = (decodeJson(self.Title)) + " - " + Staffel + epiID1 + " - " + (decodeJson(TitleDE))
+					check = (decodeHtml(self.Title)) + " - " + Staffel + epiID1 + " - " + (decodeHtml(TitleDE))
 				checkname = check
 				checkname2 = check.replace('ä','ae').replace('ö','oe').replace('ü','ue').replace('Ä','Ae').replace('Ö','Oe').replace('Ü','Ue')
 				if (checkname in self.watched_liste) or (checkname2 in self.watched_liste):
-					self.streamList.append((decodeJson(Episode),epiID,True,Flag))
+					self.streamList.append((decodeHtml(Episode),epiID,True,Flag))
 				else:
-					self.streamList.append((decodeJson(Episode),epiID,False,Flag))
+					self.streamList.append((decodeHtml(Episode),epiID,False,Flag))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No episodes found!'), None, False))
 		else:
@@ -514,7 +475,7 @@ class bsEpisoden(MPScreen):
 	def callInfos(self, data):
 		desc = re.search('description":"(.*?)","', data, re.S)
 		if desc:
-			self['handlung'].setText(decodeJson(desc.group(1).replace('\\"','"')))
+			self['handlung'].setText(decodeHtml(desc.group(1).replace('\\"','"')))
 		else:
 			self['handlung'].setText(_("No further information available!"))
 
@@ -568,7 +529,7 @@ class bsStreams(MPScreen):
 	def parseData(self, data):
 		desc = re.search('description":"(.*?)","', data, re.S)
 		if desc:
-			self['handlung'].setText(decodeJson(desc.group(1).replace('\\"','"')))
+			self['handlung'].setText(decodeHtml(desc.group(1).replace('\\"','"')))
 		else:
 			self['handlung'].setText(_("No further information available!"))
 		streams =  re.findall('"hoster":"(.*?)","id":"(.*?)"', data, re.S)

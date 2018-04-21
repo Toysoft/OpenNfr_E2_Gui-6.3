@@ -134,7 +134,7 @@ class m4kGenreScreen(MPScreen):
 					url = urlparse.urlparse(m4k_url)
 					headers = {'user-agent': m4k_agent}
 					page = s.get(url.geturl(), cookies=m4k_cookies, headers=headers, timeout=15, allow_redirects=False)
-					if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
+					if page.status_code == 503 and page.headers.get("Server", "").startswith("cloudflare") and b"jschl_vc" in page.content and b"jschl_answer" in page.content:
 						m4k_ck, m4k_agent = cfscrape.get_tokens(m4k_url)
 						requests.cookies.cookiejar_from_dict(m4k_ck, cookiejar=m4k_cookies)
 				except:

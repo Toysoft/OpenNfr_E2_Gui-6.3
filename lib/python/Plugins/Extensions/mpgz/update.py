@@ -149,7 +149,8 @@ class MPUpdateScreen(MPScreen):
 		if "\n" in str:
 			lines = str.split('\n')
 			for line in lines:
-				self.list.append((line,))
+				if line != "":
+					self.list.append((line,))
 		else:
 			self.list.append((str,))
 		self.ml.setList(map(self.MPLog, self.list))

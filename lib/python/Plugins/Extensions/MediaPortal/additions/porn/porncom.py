@@ -685,7 +685,8 @@ class porncomFilmScreen(MPScreen, ThumbsHelper):
 				else:
 					Runtime = "-"
 				Url = "https://www.porn.com" + Url
-				Image = Image.replace('/tags/', '/promo/crop/').replace('122.jpg','promo_15.jpg')
+				Image = Image.replace('/tags/', '/promo/crop/')
+				Image = re.sub(r'/\d+.jpg', "/promo_15.jpg", Image)
 				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), "", None, None, None))

@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from debuglog import printlog as printl
@@ -324,7 +324,6 @@ class SimpleSeekHelper:
 	def seekOK(self):
 		if self.length:
 			seekpos = float(self.length[1]) / 100.0 * self.percent
-			#if self.ltype == 'myspass':
 			if self.isMySpass:
 				self.myspass_ofs = seekpos
 				self.doMySpassSeekTo(seekpos)
@@ -345,7 +344,7 @@ class SimpleSeekHelper:
 			self.percent = 100.0
 
 	def numberKeySeek(self, val):
-		if self.ltype == 'dmax.de' or self.dash:
+		if self.dash:
 			return
 		if self.length:
 			length = float(self.length[1])
@@ -1080,26 +1079,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			printl(_('No URL found!'),self,"E")
 		elif url.startswith('#SERVICE'):
 			self._initStream(title, url, **kwargs)
-		elif url.rfind('#oklitv-stream#') > 0:
-			try:
-				from oklitvlink import OkliTVLink
-			except:
-				print "SP OKLIVETV extension is missing"
-			else:
-				us = url.split('#oklitv-stream#')
-				url = us[0]
-				d = twAgentGetPage(url, timeout=10, agent="Mozilla/5.0 (Windows NT 6.1; rv:40.0) Gecko/20100101 Firefox/40.0").addCallback(OkliTVLink(self.session).getStream)
-				if us[-1].endswith('#force-hlsp#'):
-					d.addCallback(lambda url: self._getM3U8Video(title, url, **kwargs)).addErrback(self.dataError)
-				else:
-					d.addCallback(lambda url: self._initStream(title, url, **kwargs)).addErrback(self.dataError)
-		elif url.endswith('#filmon-stream#'):
-			try:
-				from oklitvlink import FilmOnLink
-			except:
-				print "SP FILMON extension is missing"
-			else:
-				FilmOnLink(self.session).getStream(url.split('#filmon-stream#')[0]).addCallback(lambda url: self._initStream(title, url, **kwargs)).addErrback(self.dataError)
 		elif self.youtubelive:
 			self._initStream(title, url, **kwargs)
 		elif config.mediaportal.use_hls_proxy.value and not self.forceGST and ('.m3u8' in url or 'm3u8-aapl' in url):
@@ -1316,8 +1295,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self.playRandom(config.mediaportal.sp_on_movie_stop.value)
 
 	def seekFwd(self):
-		if self.ltype == 'dmax.de':
-			return
 		if self.isTSVideo:
 			InfoBarSeek.seekFwd(self)
 		elif self.seekBarShown and not self.seekBarLocked and not self.dash:
@@ -1328,8 +1305,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self.playNextStream(config.mediaportal.sp_on_movie_stop.value)
 
 	def seekBack(self):
-		if self.ltype == 'dmax.de':
-			return
 		if self.isTSVideo:
 			InfoBarSeek.seekBack(self)
 		elif self.seekBarShown and not self.seekBarLocked and not self.dash:
@@ -1645,12 +1620,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self['spcoverfg'].show()
 			self['noCover'].hide()
 			self.coverBGisHidden = False
-
-	#def lockShow(self):
-	#	pass
-
-	#def unlockShow(self):
-	#	pass
 
 	def configSaver(self):
 		self.scrSaver = config.mediaportal.sp_scrsaver.value

@@ -1,44 +1,30 @@
 ﻿# -*- coding: utf-8 -*-
-###############################################################################################
-#
-#    MediaPortal for Dreambox OS
-#
-#    Coded by MediaPortal Team (c) 2013-2018
-#
-#  This plugin is open source but it is NOT free software.
-#
-#  This plugin may only be distributed to and executed on hardware which
-#  is licensed by Dream Property GmbH. This includes commercial distribution.
-#  In other words:
-#  It's NOT allowed to distribute any parts of this plugin or its source code in ANY way
-#  to hardware which is NOT licensed by Dream Property GmbH.
-#  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
-#  on hardware which is NOT licensed by Dream Property GmbH.
-#
-#  This applies to the source code as a whole as well as to parts of it, unless
-#  explicitely stated otherwise.
-#
-#  If you want to use or modify the code or parts of it,
-#  you have to keep OUR license and inform us about the modifications, but it may NOT be
-#  commercially distributed other than under the conditions noted above.
-#
-#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
-#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
-#
-#  As an exception regarding modifcations, you are NOT permitted to remove
-#  any copy protections implemented in this plugin or change them for means of disabling
-#  or working around the copy protections, unless the change has been explicitly permitted
-#  by the original authors. Also decompiling and modification of the closed source
-#  parts is NOT permitted.
-#
-#  Advertising with this plugin is NOT allowed.
-#  For other uses, permission from the authors is necessary.
-#
-###############################################################################################
-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 default_cover = "file://%s/freeomovie.png" % (config.mediaportal.iconcachepath.value + "logos")
+
+try:
+	from Plugins.Extensions.MediaPortal.resources import cfscrape
+except:
+	cfscrapeModule = False
+else:
+	cfscrapeModule = True
+
+try:
+	import requests
+except:
+	requestsModule = False
+else:
+	requestsModule = True
+
+import urlparse
+import thread
+
+free_cookies = CookieJar()
+free_ck = {}
+free_agent = ''
+
+BASE_URL = "https://www.freeomovie.com"
 
 class freeomovieGenreScreen(MPScreen):
 
@@ -66,8 +52,39 @@ class freeomovieGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "https://www.freeomovie.com/"
-		twAgentGetPage(url).addCallback(self.genreData).addErrback(self.dataError)
+		thread.start_new_thread(self.get_tokens,("GetTokens",))
+
+	def get_tokens(self, threadName):
+		if requestsModule and cfscrapeModule:
+			printl("Calling thread: %s" % threadName,self,'A')
+			global free_ck
+			global free_agent
+			if free_ck == {} or free_agent == '':
+				free_ck, free_agent = cfscrape.get_tokens(BASE_URL)
+				requests.cookies.cookiejar_from_dict(free_ck, cookiejar=free_cookies)
+			else:
+				try:
+					s = requests.session()
+					url = urlparse.urlparse(BASE_URL)
+					headers = {'user-agent': free_agent}
+					page = s.get(url.geturl(), cookies=free_cookies, headers=headers, timeout=15, allow_redirects=False)
+					if page.status_code == 503 and page.headers.get("Server", "").startswith("cloudflare") and b"jschl_vc" in page.content and b"jschl_answer" in page.content:
+						free_ck, free_agent = cfscrape.get_tokens(BASE_URL)
+						requests.cookies.cookiejar_from_dict(free_ck, cookiejar=free_cookies)
+				except:
+					pass
+			self.keyLocked = False
+			reactor.callFromThread(self.getGenres)
+		else:
+			reactor.callFromThread(self.free_error)
+
+	def free_error(self):
+		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or python-pyexecjs and nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
+		self.keyCancel()
+
+	def getGenres(self):
+		url = BASE_URL
+		twAgentGetPage(url, agent=free_agent, cookieJar=free_cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('Categories</h3>(.*?)</div>', data, re.S)
@@ -145,7 +162,7 @@ class freeomovieFilmListeScreen(MPScreen, ThumbsHelper):
 			url = "https://www.freeomovie.com/page/%s/?s=%s" % (str(self.page),self.genreLink)
 		else:
 			url = "%s%s" % (self.genreLink,str(self.page))
-		twAgentGetPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=free_agent, cookieJar=free_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
 		self.getLastPage(data, 'class=[\"|\']wp-pagenavi[\"|\']>(.*?)</div>')
@@ -166,7 +183,7 @@ class freeomovieFilmListeScreen(MPScreen, ThumbsHelper):
 		streamPic = self['liste'].getCurrent()[0][2]
 		self['name'].setText(streamTitle)
 		CoverHelper(self['coverArt']).getCover(streamPic)
-		twAgentGetPage(streamUrl).addCallback(self.getDescription).addErrback(self.dataError)
+		twAgentGetPage(streamUrl, agent=free_agent, cookieJar=free_cookies).addCallback(self.getDescription).addErrback(self.dataError)
 
 	def getDescription(self, data):
 		ddDescription = re.search('name="description"\scontent="(.*?)"', data, re.S)
@@ -210,7 +227,7 @@ class freeomovieFilmAuswahlScreen(MPScreen):
 
 	def loadPage(self):
 		self.keyLocked = True
-		twAgentGetPage(self.genreLink).addCallback(self.loadPageData).addErrback(self.dataError)
+		twAgentGetPage(self.genreLink, agent=free_agent, cookieJar=free_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
 		parse = re.search('class="videosection">(.*?)class="textsection">', data, re.S)

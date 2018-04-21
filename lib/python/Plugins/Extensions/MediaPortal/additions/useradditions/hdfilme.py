@@ -117,7 +117,7 @@ class hdfilmeMain(MPScreen):
 					url = urlparse.urlparse(BASE_URL)
 					headers = {'user-agent': hf_agent}
 					page = s.get(url.geturl(), cookies=hf_cookies, headers=headers)
-					if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
+					if page.status_code == 503 and page.headers.get("Server", "").startswith("cloudflare") and b"jschl_vc" in page.content and b"jschl_answer" in page.content:
 						hf_ck, hf_agent = cfscrape.get_tokens(BASE_URL)
 						requests.cookies.cookiejar_from_dict(hf_ck, cookiejar=hf_cookies)
 				except:

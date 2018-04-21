@@ -140,13 +140,16 @@ class ssMain(MPScreen):
 				ss_ck, ss_agent = cfscrape.get_tokens(BASE_URL)
 				requests.cookies.cookiejar_from_dict(ss_ck, cookiejar=ss_cookies)
 			else:
-				s = requests.session()
-				url = urlparse.urlparse(BASE_URL)
-				headers = {'user-agent': ss_agent}
-				page = s.get(url.geturl(), cookies=ss_cookies, headers=headers)
-				if page.status_code == 503 and page.headers.get("Server") == "cloudflare-nginx":
-					ss_ck, ss_agent = cfscrape.get_tokens(BASE_URL)
-					requests.cookies.cookiejar_from_dict(ss_ck, cookiejar=ss_cookies)
+				try:
+					s = requests.session()
+					url = urlparse.urlparse(BASE_URL)
+					headers = {'user-agent': ss_agent}
+					page = s.get(url.geturl(), cookies=ss_cookies, headers=headers)
+					if page.status_code == 503 and page.headers.get("Server", "").startswith("cloudflare") and b"jschl_vc" in page.content and b"jschl_answer" in page.content:
+						ss_ck, ss_agent = cfscrape.get_tokens(BASE_URL)
+						requests.cookies.cookiejar_from_dict(ss_ck, cookiejar=ss_cookies)
+				except:
+					pass
 			self.keyLocked = False
 			if self.username != "ssEmail" and self.password != "ssPassword":
 				self.Login()
@@ -267,7 +270,7 @@ class ssSerien(MPScreen, SearchHelper):
 			self.loadPageData(data)
 
 	def loadPageData(self, data):
-		serien = re.findall('<li>.*?<a\s(?:data-alternative-title=""\s|)href="/serie/stream/(.*?)".*?title=".*?Stream anschauen">(.*?)</a>.*?</li>', data, re.S)
+		serien = re.findall('<li>.*?<a\s(?:data-alternative-title=".*?"\s|)href="/serie/stream/(.*?)".*?title=".*?Stream anschauen">(.*?)</a>.*?</li>', data, re.S)
 		if serien:
 			for (id, serie) in serien:
 				url = BASE_URL + "/serie/stream/%s" % id

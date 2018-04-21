@@ -181,10 +181,28 @@ def testWebConnection():
 def decodeHtml(text):
 	import HTMLParser
 	h = HTMLParser.HTMLParser()
-	text = h.unescape(text).encode('utf-8')
-	text = h.unescape(text).encode('utf-8')
-	text = text.decode('unicode-escape').decode('utf-8').encode('latin1')
-	return text
+	# We have to repeat this multiple times (fixes e.g. broken Liveleak encodings)
+	try:
+		text = h.unescape(text).encode('utf-8')
+		text = h.unescape(text).encode('utf-8')
+		text = h.unescape(text).encode('utf-8')
+	except:
+		text = text.decode('latin1').encode('utf-8')
+	# Replace only \uxxxx
+	if re.search('\\u[0-9a-fA-F]{4}', text, re.S):
+		endpos = len(text)
+		pos = 0
+		out = ''
+		while pos < endpos:
+			if text[pos] == "\\" and text[pos+1] == "u" and re.match('[0-9a-fA-F]{4}', text[pos+2:pos+6], re.S):
+				dec = text[pos:pos+6].decode('unicode-escape').encode('utf-8')
+				out += dec
+				pos += 6
+			else:
+				out += text[pos]
+				pos += 1
+	else: out = text
+	return out
 
 def stripAllTags(html):
 	cleanr = re.compile('<.*?>')

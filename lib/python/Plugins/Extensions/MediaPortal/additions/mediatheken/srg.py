@@ -331,19 +331,23 @@ class SRGStreamScreen(MPScreen):
 			self.session.open(SimplePlayer, [(self.serie, url)], showPlaylist=False, ltype='srg')
 
 	def loadplaylist(self, data):
-		bandwith_list = []
-		match_sec_m3u8=re.findall('BANDWIDTH=(\d+).*?\n(.*?m3u8)', data, re.S)
-		videoPrio = int(config.mediaportal.videoquali_others.value)
-		if videoPrio == 2:
-			bw = int(match_sec_m3u8[-2][0])
-		elif videoPrio == 1:
-			bw = int(match_sec_m3u8[-2][0])/2
-		else:
-			bw = int(match_sec_m3u8[-2][0])/3
-		for each in match_sec_m3u8:
-			bandwith,url = each
-			bandwith_list.append((int(bandwith),url))
-		_, best = min((abs(int(x[0]) - bw), x) for x in bandwith_list)
-		url = best[1]
+		try:
+			bandwith_list = []
+			match_sec_m3u8=re.findall('BANDWIDTH=(\d+).*?\n(.*?m3u8)', data, re.S)
+			videoPrio = int(config.mediaportal.videoquali_others.value)
+			if videoPrio == 2:
+				bw = int(match_sec_m3u8[-2][0])
+			elif videoPrio == 1:
+				bw = int(match_sec_m3u8[-2][0])/2
+			else:
+				bw = int(match_sec_m3u8[-2][0])/3
+			for each in match_sec_m3u8:
+				bandwith,url = each
+				bandwith_list.append((int(bandwith),url))
+			_, best = min((abs(int(x[0]) - bw), x) for x in bandwith_list)
+			url = best[1]
 
-		self.session.open(SimplePlayer, [(self.serie, url)], showPlaylist=False, ltype='srg', forceGST=True)
+			self.session.open(SimplePlayer, [(self.serie, url)], showPlaylist=False, ltype='srg', forceGST=True)
+		except:
+			url = self['liste'].getCurrent()[0][1].replace("srfvodhd-vh.akamaihd", "hdvodsrforigin-f.akamaihd")
+			twAgentGetPage(url, gzip_decoding=True).addCallback(self.loadplaylist).addErrback(self.dataError)
