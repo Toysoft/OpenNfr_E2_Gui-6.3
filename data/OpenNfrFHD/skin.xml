@@ -1347,9 +1347,9 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <widget source="title" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1">
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" backgroundPixmap="OpenNfrFHD/menu/sel-red.png" selectionPixmap="OpenNfrFHD/menu/sel-green.png">>
       <convert type="TemplatedMultiContent">
-				{"template": [ MultiContentEntryText(pos = (50, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
+				{"template": [ MultiContentEntryText(pos = (200, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
 				"fonts": [gFont("LCD", 36)],
 				"itemHeight": 50
 				}
@@ -1376,9 +1376,9 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <widget source="title" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1">
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" backgroundPixmap="OpenNfrFHD/menu/sel-red.png" selectionPixmap="OpenNfrFHD/menu/sel-green.png">
       <convert type="TemplatedMultiContent">
-				{"template": [ MultiContentEntryText(pos = (50, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
+				{"template": [ MultiContentEntryText(pos = (200, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
 				"fonts": [gFont("LCD", 36)],
 				"itemHeight": 50
 				}
@@ -1405,9 +1405,9 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <widget source="title" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1">
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" backgroundPixmap="OpenNfrFHD/menu/sel-red.png" selectionPixmap="OpenNfrFHD/menu/sel-green.png">
       <convert type="TemplatedMultiContent">
-				{"template": [ MultiContentEntryText(pos = (50, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
+				{"template": [ MultiContentEntryText(pos = (200, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
 				"fonts": [gFont("LCD", 36)],
 				"itemHeight": 50
 				}
@@ -1434,9 +1434,9 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <widget source="title" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1">
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" backgroundPixmap="OpenNfrFHD/menu/sel-red.png" selectionPixmap="OpenNfrFHD/menu/sel-green.png">
       <convert type="TemplatedMultiContent">
-				{"template": [ MultiContentEntryText(pos = (50, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
+				{"template": [ MultiContentEntryText(pos = (200, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
 				"fonts": [gFont("LCD", 36)],
 				"itemHeight": 50
 				}
@@ -1463,9 +1463,9 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <widget source="title" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1">
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" backgroundPixmap="OpenNfrFHD/menu/sel-red.png" selectionPixmap="OpenNfrFHD/menu/sel-green.png">
       <convert type="TemplatedMultiContent">
-				{"template": [ MultiContentEntryText(pos = (50, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
+				{"template": [ MultiContentEntryText(pos = (200, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
 				"fonts": [gFont("LCD", 36)],
 				"itemHeight": 50
 				}
@@ -1492,9 +1492,9 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <widget source="title" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1">
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" backgroundPixmap="OpenNfrFHD/menu/sel-red.png" selectionPixmap="OpenNfrFHD/menu/sel-green.png">
       <convert type="TemplatedMultiContent">
-				{"template": [ MultiContentEntryText(pos = (50, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
+				{"template": [ MultiContentEntryText(pos = (200, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
 				"fonts": [gFont("LCD", 36)],
 				"itemHeight": 50
 				}
@@ -1521,9 +1521,9 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <widget source="title" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1">
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" backgroundPixmap="OpenNfrFHD/menu/sel-red.png" selectionPixmap="OpenNfrFHD/menu/sel-green.png">
       <convert type="TemplatedMultiContent">
-				{"template": [ MultiContentEntryText(pos = (50, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
+				{"template": [ MultiContentEntryText(pos = (200, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
 				"fonts": [gFont("LCD", 36)],
 				"itemHeight": 50
 				}
@@ -1562,9 +1562,9 @@
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
     <widget source="title" render="Label" position="74,50" size="720,45" font="LCD; 42" foregroundColor="grey" backgroundColor="grey" transparent="1" halign="center" />
-    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1">
+    <widget source="menu" render="Listbox" position="55,220" size="920,700" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" backgroundPixmap="OpenNfrFHD/menu/sel-red.png" selectionPixmap="OpenNfrFHD/menu/sel-green.png">
       <convert type="TemplatedMultiContent">
-				{"template": [ MultiContentEntryText(pos = (50, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
+				{"template": [ MultiContentEntryText(pos = (200, 3), size = (780, 40), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER, text = 0) ],
 				"fonts": [gFont("LCD", 36)],
 				"itemHeight": 50
 				}
