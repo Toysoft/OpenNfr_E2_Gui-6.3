@@ -63,7 +63,3 @@ if HAVE_BWLCD128
 SUBDIRS += vfd128
 endif
 
-if GB7252
-SUBDIRS += OpenNfrFHD
-endif
-
