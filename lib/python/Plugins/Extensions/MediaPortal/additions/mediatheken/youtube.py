@@ -1224,7 +1224,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 						if m:
 							desc += 'von ' + decodeHtml(m.group(1)) + ' · ' + m.group(2).replace('</li>', ' ').replace('<li>', '· ') + '\n'
 
-					m = re.search('dir="ltr">(.+?)</div>', entry)
+					m = re.search('class="yt-lockup-description.*?dir="ltr">(.*?)</div>', entry)
 
 					if (shelf_item or list_item_cont) and not desc and not m:
 						m = re.search('shelf-description.*?">(.+?)</div>', entry)
@@ -1284,6 +1284,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 			self.lastCover = stvImage
 			stvImage = stvImage.replace('s240-c-k', 's900-c-k').replace('s100-c-k', 's900-c-k').replace('s88-c-k', 's900-c-k')
 			stvImage = stvImage.replace('s240-nd-c', 's900-nd-c').replace('s100-nd-c', 's900-nd-c').replace('s88-nd-c', 's900-nd-c')
+			stvImage = stvImage.replace('s240-mo-c', 's900-mo-c').replace('s100-mo-c', 's900-mo-c').replace('s88-mo-c', 's900-mo-c')
 			self.coverHelper.getCover(stvImage)
 
 	def youtubeErr(self, error):

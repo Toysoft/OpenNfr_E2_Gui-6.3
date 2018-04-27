@@ -7,7 +7,7 @@ from Plugins.Extensions.MediaPortal.resources.youtubelink import YoutubeLink
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
-FVCDE_Version = "FUNNY-VIDEOCLIPS.DE"
+FVCDE_Version = "Funny Videoclips"
 
 FVCDE_siteEncoding = 'utf-8'
 
@@ -22,7 +22,7 @@ class show_FVCDE_Genre(MenuHelper):
 		self.onLayoutFinish.append(self.mh_initMenu)
 
 	def mh_parseData(self, data):
-		entrys = [('', 'Die neuesten Videos')]
+		entrys = []
 		menu = re.search('class="widget-title widgettitle">Lustige Videos</h4>(.*?)</ul>', data, re.S)
 		if menu:
 			entrys += re.findall('<li.*?href="(.*?)"\s*>(.*?)</a>', menu.group(1))
@@ -90,7 +90,6 @@ class FVCDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.dokusListe = []
 		self.page = 0
 		self.pages = 0;
-		self.newVids = 'Die neuesten Videos' in self.genreName
 
 		self.setGenreStrTitle()
 
@@ -134,34 +133,22 @@ class FVCDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		a = 0
 		l = len(data)
 		while a < l:
-			if self.newVids:
-				m = re.search('<article class="post-(.*?)</div></div>', data[a:], re.S)
-				if m:
-					a += m.end()
-					d = re.search('<img.*?src="(.*?)".*?class="entry-header.*?href="(.*?)">(.*?)</a', m.group(1), re.S)
-					if d:
-						t = re.search('<p>(.*?)</p>', m.group(1))
-						if t:
-							desc = stripAllTags(decodeHtml(t.group(1))).strip()
-						else:
-							desc = None
-						self.dokusListe.append((decodeHtml(d.group(3)), d.group(2), d.group(1), desc))
-				else:
-					break
+			m = re.search('<article class="post-(.*?)</div></div>', data[a:], re.S)
+			if m:
+				a += m.end()
+				d = re.search('href="(.*?)">(.*?)</a.*?<img.*?src="(.*?)".*?', m.group(1), re.S)
+				if d:
+					t = re.search('<p>(.*?)</p>', m.group(1))
+					if t:
+						desc = stripAllTags(decodeHtml(t.group(1))).strip()
+					else:
+						desc = None
+					image = d.group(3)
+					if image.startswith('/'):
+						image = 'http://www.funny-videoclips.de' + image
+					self.dokusListe.append((decodeHtml(d.group(2)), d.group(1), image, desc))
 			else:
-				m = re.search('<article class="post-(.*?)</div></div>', data[a:], re.S)
-				if m:
-					a += m.end()
-					d = re.search('class="entry-header.*?href="(.*?)"\srel="bookmark">(.*?)</a.*?<img\ssrc="(.*?)"', m.group(1), re.S)
-					if d:
-						t = re.search('class="entry-content".*?/>(.*?)</p>', m.group(1), re.S)
-						if t:
-							desc = stripAllTags(decodeHtml(t.group(1))).strip()
-						else:
-							desc = None
-						self.dokusListe.append((decodeHtml(d.group(2)), d.group(1), d.group(3), desc))
-				else:
-					break
+				break
 
 		if self.dokusListe:
 			if not self.page:

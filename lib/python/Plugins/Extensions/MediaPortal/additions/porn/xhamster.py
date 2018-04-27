@@ -536,7 +536,7 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 			if 'video-thumb__date-added' in data:
 				parse = re.search('video-thumb__date-added(.*?)</html>', data, re.S)
 			else:
-				parse = re.search('class="iframe-container"(.*?)</html>', data, re.S)
+				parse = re.search('class="iframe-container(.*?)</html>', data, re.S)
 				if not parse:
 					parse = re.search('class="category-title"(.*?)</html>', data, re.S)
 			if parse:

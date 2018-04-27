@@ -70,12 +70,12 @@ class myspassGenreScreen(MPScreen):
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		ganze = re.findall('class="myspassTeaser _seasonId seasonlistItem.*?<a\shref="(/shows/.*?)".*?\s(?:data-original|img\ssrc)="(.*?\.jpg)".*?alt="(.*?)"', data, re.S)
+		ganze = re.findall('<a\shref="(/shows/.*?)".*?data-src="(.*?\.jpg)".*?alt="(.*?)"', data, re.S)
 		if ganze:
 			self.genreliste = []
 			for (link, image, name) in ganze:
-				link = "http://www.myspass.de%s" % link
-				image = "http://www.myspass.de%s" % image
+				link = "http://www.myspass.de" + link
+				image = "http://www.myspass.de" + image
 				self.genreliste.append((decodeHtml(name), link, image))
 			# remove duplicates
 			self.genreliste = list(set(self.genreliste))
@@ -127,14 +127,22 @@ class myspassStaffelListeScreen(MPScreen):
 		getPage(self.myspassUrl).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		self.data = data
-		parse = re.search('data-category="full_episode".*?data-target="#episodes_season__category_">(.*?)</ul>', data, re.S)
-		if parse:
-			staffeln = re.findall('data-query=".*?.*?formatId=(\d+).*?seasonId=(\d+)&amp(.*?)data-target.*?>\t{0,5}\s{0,15}(.*?)</li', parse.group(1), re.S)
-			if staffeln:
-				self.staffelliste = []
-				for (formatid, seasonid, pages, name) in staffeln:
-					self.staffelliste.append((decodeHtml(name).strip(), seasonid))
+		parse = re.search('has-season-selector"(.*)class="videoPanel__dropdown-placeholder', data, re.S)
+		staffeln = re.findall('data-remote-args="&seasonId=(\d+).*?formatId=(\d+)&category=(full_episode|clip)".*?>(.*?)</option', parse.group(1), re.S)
+		if staffeln:
+			self.staffelliste = []
+			for (seasonid, formatid, type, name) in staffeln:
+				title = decodeHtml(name).strip()
+				if type == "clip":
+					title = title + " (Clips)"
+					sort = "z"
+				else:
+					title = title + " (Ganze Folgen)"
+					sort = "a"
+				self.staffelliste.append((title, formatid, seasonid, type, sort))
+			# remove duplicates
+			self.staffelliste = list(set(self.staffelliste))
+			self.staffelliste.sort(key=lambda t : (t[4], t[0].lower()))
 		if len(self.staffelliste) == 0:
 			self.staffelliste.append((_('No seasons found!'), None))
 		self.ml.setList(map(self._defaultlistleft, self.staffelliste))
@@ -144,16 +152,19 @@ class myspassStaffelListeScreen(MPScreen):
 		if self.keyLocked:
 			return
 		season = self['liste'].getCurrent()[0][0]
-		seasonid = self['liste'].getCurrent()[0][1]
+		formatid = self['liste'].getCurrent()[0][1]
+		seasonid = self['liste'].getCurrent()[0][2]
+		type = self['liste'].getCurrent()[0][3]
 		if seasonid:
-			self.session.open(myspassFolgenListeScreen, season, seasonid, self.data)
+			self.session.open(myspassFolgenListeScreen, season, formatid, seasonid, type)
 
 class myspassFolgenListeScreen(MPScreen):
 
-	def __init__(self, session, season, seasonid, data):
+	def __init__(self, session, season, formatid, seasonid, type):
 		self.season = season
+		self.formatid = formatid
 		self.seasonid = seasonid
-		self.data = data
+		self.type = type
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -174,17 +185,22 @@ class myspassFolgenListeScreen(MPScreen):
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 
-		self.onLayoutFinish.append(self.loadPageData)
+		self.onLayoutFinish.append(self.loadPage)
 
-	def loadPageData(self):
-		data = re.search('.*?div class="full_episode_seasonlist full_episode_seasonId%s" data-view="list(.*?)</tbody>' % self.seasonid, self.data, re.S).group(1)
-		folgen = re.findall('data-href=".*?--\/(\d+)\/"\s+title="(.*?)".*?<b>(.*?)</b></td><td>(.*?)</td><td>.*?\s+(\d+:\d+(?::\d+|))\s+', data, re.S|re.I)
+	def loadPage(self):
+		url = "http://www.myspass.de/frontend/php/ajax.php?query=bob&seasonId=%s&formatId=%s&category=%s" % (self.seasonid, self.formatid, self.type)
+		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
+
+	def loadPageData(self, data):
+		folgen = re.findall('href=".*?--\/(\d+)\/".*?class="title">(.*?)<small.*?lass="subTitle">(.*?)</.*?class="desc">(.*?)</', data, re.S)
 		if folgen:
-			for (id, description, episode, title, runtime) in folgen:
+			for (id, title, meta, desc) in folgen:
 				link = "http://www.myspass.de/includes/apps/video/getvideometadataxml.php?id=%s" % id
 				image = "http://www.myspass.de/myspass/media/images/videos/%s/%s_640x360.jpg" % (id[-2:], id)
-				title = "Episode " + episode + " - " + decodeHtml(title)
-				self.folgenliste.append((title, link, image, description, runtime))
+				episode = re.search("(Folge.*?\|.*?)\|", meta, re.S).group(1).strip().replace(' | ', ' - ')
+				runtime = re.search(".*\|(.*?)$", meta, re.S).group(1).strip()
+				title = episode + " - " + decodeHtml(title)
+				self.folgenliste.append((title, link, image, desc, runtime))
 			self.ml.setList(map(self._defaultlistleft, self.folgenliste))
 			self.keyLocked = False
 			self.showInfos()

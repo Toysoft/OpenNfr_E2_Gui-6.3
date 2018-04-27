@@ -50,6 +50,12 @@ json_headers = {
 	'Content-Type':'application/x-www-form-urlencoded',
 	}
 default_cover = "file://%s/xvideos.png" % (config.mediaportal.iconcachepath.value + "logos")
+headers = {
+	'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+	'Accept-Encoding':'deflate, br',
+	'Accept-Language':'en-US,en;q=0.9',
+	'Host':'www.xvideos.com'
+	}
 
 class xvideosGenreScreen(MPScreen):
 
@@ -80,7 +86,7 @@ class xvideosGenreScreen(MPScreen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		self.url = "https://www.xvideos.com/porn"
-		twAgentGetPage(self.url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
+		twAgentGetPage(self.url, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		Cats = re.findall('class="dyn.*?href="/c/(.*?)">(.*?)</a', data, re.S)
@@ -198,7 +204,7 @@ class xvideosPornstarsScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		url = self.Link.replace('$$PAGE$$', str(self.page-1)).replace('$$AGE$$', self.age)
-		twAgentGetPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		lastp = re.search('label">.*?Top\s(.*?)\spornstars', data, re.S)
@@ -330,8 +336,9 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			self.counter = 2
 			self.url2 = url.replace('$$PORNSTAR$$', 'best')
 			url = url.replace('$$PORNSTAR$$', 'pornstar')
-			twAgentGetPage(self.url2, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
-		twAgentGetPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
+			twAgentGetPage(self.url2, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
+		print url
+		twAgentGetPage(url, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		self.keyword_list = []
@@ -360,7 +367,7 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 		else:
 			lastp = re.search('class="sub">\((.*?)\sresults\)</span>', data, re.S)
 			if lastp:
-				lastp = lastp.group(1).replace(',','')
+				lastp = lastp.group(1).replace(',','').replace('+','')
 				lastp = round((float(lastp) / 24) + 0.5)
 				self.lastpage = int(lastp)
 				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
@@ -455,7 +462,7 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 		if self.keyLocked:
 			return
 		Link = self['liste'].getCurrent()[0][1]
-		twAgentGetPage(Link, agent=agent).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(Link, agent=agent, headers=headers).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		match = re.findall("setVideo(?:UrlLow|UrlHigh|HLS)\('(.*?)'\);", data)

@@ -188,6 +188,7 @@ class CoverSearchHelper:
 			self.cb_searchCover(None)
 
 	def cb_searchCover(self, jdata, fallback=''):
+		largeCover = config.mediaportal.sp_radio_largecover.value
 		import json
 		try:
 			jdata = json.loads(jdata)
@@ -195,10 +196,12 @@ class CoverSearchHelper:
 			url = url.replace('100x100', '300x300')
 			self.hasGoogleCoverArt = True
 		except:
+			if largeCover:
+				fallback = 'file://' + mp_globals.pluginPath + '/images/none.png'
 			url = fallback
 
 		if not self.hasEmbeddedCoverArt:
-			self.showCover(url, self.cb_coverDownloaded)
+			self.showCover(url, self.cb_coverDownloaded, largeCover=largeCover)
 		else:
 			self._evEmbeddedCoverArt()
 
@@ -900,8 +903,10 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		self['dwnld_progressbar'] = self.progrObj
 		# load default cover
 		self['Cover'] = Pixmap()
+		self['BgCover'] = Pixmap()
 		self['noCover'] = Pixmap()
 		self._Cover = CoverHelper(self['Cover'], nc_callback=self.hideSPCover)
+		self._BgCover = CoverHelper(self['BgCover'])
 		self.coverBGisHidden = False
 		self.cover2 = False
 		self.searchTitle = None
@@ -970,9 +975,9 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 				if " - " in sTitle:
 					if " | " in sTitle:
 						sTitle = sTitle.split(' | ')[0]
-				if "www." in sTitle:
+				if "www\." in sTitle:
 					sTitle = ''
-				print sTitle
+				printl(sTitle,self,"I")
 				self.searchCover(sTitle, fallback=self.playList[self.playIdx][2])
 				InfoBarShowHide.lockShow(self)
 
@@ -1579,7 +1584,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		else:
 			self.session.open(MessageBoxExt, _("Error!"), MessageBoxExt.TYPE_INFO, timeout=5)
 
-	def showCover(self, cover, download_cb=None):
+	def showCover(self, cover, download_cb=None, largeCover=False):
 		if config.mediaportal.sp_infobar_cover_off.value:
 			self.hideSPCover()
 			self['Cover'].hide()
@@ -1587,7 +1592,11 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			return
 		if self.coverBGisHidden:
 			self.showSPCover()
-		self._Cover.getCover(cover, download_cb=download_cb)
+		if largeCover and self.playerMode == 'RADIO':
+			if cover:
+				self._BgCover.getCover(cover.replace('300x300','800x800'))
+		else:
+			self._Cover.getCover(cover, download_cb=download_cb)
 
 	def showIcon(self):
 		self['dwnld_progressbar'].setValue(0)
@@ -1706,6 +1715,7 @@ class SimpleConfig(Screen, ConfigListScreenExt):
 		self.list.append(getConfigListEntry(_('Global playlist number:'), config.mediaportal.sp_pl_number))
 		self.list.append(getConfigListEntry(_('Playmode:'), config.mediaportal.sp_playmode))
 		self.list.append(getConfigListEntry(_('Screensaver:'), config.mediaportal.sp_scrsaver))
+		self.list.append(getConfigListEntry(_('Big cover in radio mode:'), config.mediaportal.sp_radio_largecover))
 		self.list.append(getConfigListEntry(_('Highest resolution for playback (only YouTube):'), config.mediaportal.youtubeprio))
 		self.list.append(getConfigListEntry(_('Videoquality:'), config.mediaportal.videoquali_others))
 		self.list.append(getConfigListEntry(_('Save resume cache in flash memory:'), config.mediaportal.sp_save_resumecache))

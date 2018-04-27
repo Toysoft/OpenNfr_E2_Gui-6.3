@@ -323,11 +323,13 @@ class vpornFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pages">(.*?)</div>')
-		Movies = re.findall('thumbsArr\[.*?class="thumb">.*?<a\s{1,2}href="(.*?)".*?class="time">(.*?)</span>.*?<img\ssrc="(.*?)"\salt="(.*?)".*?alt="Views">(\d+)', data, re.S)
+		Movies = re.findall('thumbsArr\[.*?<a\s{1,2}href="(.*?)".*?class="time">(.*?)</span>.*?<img\ssrc="(.*?)"\salt="(.*?)".*?alt="Views">(\d+)', data, re.S)
 		if Movies:
 			for (Url, Runtime, Image, Title, Views) in Movies:
 				Runtime = stripAllTags(Runtime).strip()
 				Views = Views.replace(",","")
+				if Url.startswith('//'):
+					Url = "https:" + Url
 				self.filmliste.append((decodeHtml(Title).strip(), Url, Image, Runtime, Views))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_("No videos found!"), None, None, None, None))
@@ -374,11 +376,9 @@ class vpornFilmScreen(MPScreen, ThumbsHelper):
 			getPage(url, agent=vpagent, cookies=vpck, timeout=30).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('flashvars.videoUrl(?:Low|Low2|Medium|Medium2|HD|HD2)\s=\s"(http.*?.mp4)"', data, re.S)
-		if not videoPage:
-			videoPage = re.findall('flashvars.downloadUrl\s=\s"(http.*?.mp4)"', data, re.S)
+		videoPage = re.findall('source\ssrc="(.*?)"', data, re.S)
 		if videoPage:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]
-			url = videoPage[-1].replace('https://','http://')
+			url = videoPage[0].replace('https://','http://')
 			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='vporn')

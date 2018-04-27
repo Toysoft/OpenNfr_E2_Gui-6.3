@@ -82,7 +82,6 @@ class MTVdeChartsGenreScreen(MPScreen):
 				('MTV.de\tTop100 Jahrescharts 2016',"http://www.mtv.de/charts/yrk67s/top-100-jahrescharts-2016"),
 				('MTV.de\tTop100 Jahrescharts 2015',"http://www.mtv.de/charts/4z2jri/top-100-jahrescharts-2015"),
 				('MTV.de\tTop100 Jahrescharts 2014',"http://www.mtv.de/charts/ns9mkd/top-100-jahrescharts-2014"),
-				('MTV.ch\tVideocharts',"http://www.mtv.ch/charts/206-mtv-ch-videocharts"),
 				('MTV.co.uk\tSingle Top40','http://www.mtv.co.uk/music/charts/the-official-uk-top-40-singles-chart'),
 				('MTV.co.uk\tUrban Charts','http://www.mtv.co.uk/music/charts/the-official-uk-urban-chart'),
 				('MTV.co.uk\tThis Week\'s OMG','http://www.mtv.co.uk/music/charts/this-weeks-top-20'),

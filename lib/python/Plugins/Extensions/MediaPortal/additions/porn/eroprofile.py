@@ -168,7 +168,7 @@ class eroprofileFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'id="divVideoListPageNav">(.*?)</div>','.*pnum=(\d+)')
-		Movies = re.findall('class="video">.*?<a\shref="(.*?)"(?:\sclass="exopu"|)><img\ssrc="(.*?)".*?class="videoDur">(.*?)</div>.*?(?:class="videoTtl">|class="videoTtl"\stitle=")(.*?)(?:</div|")', data, re.S)
+		Movies = re.findall('class="video">.*?<a\shref="(.*?)"(?:\sclass="videoLnk exopu"|)><img\ssrc="(.*?)".*?class="videoDur">(.*?)</div>.*?(?:class="videoTtl">|class="videoTtl"\stitle=")(.*?)(?:</div|")', data, re.S)
 		if Movies:
 			for (Url, Image, Runtime, Title) in Movies:
 				if Image.startswith('//'):

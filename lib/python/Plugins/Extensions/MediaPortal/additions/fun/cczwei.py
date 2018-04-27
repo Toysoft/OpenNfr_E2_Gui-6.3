@@ -66,7 +66,7 @@ class cczwei(MPScreen):
 
 	def parseData(self, data):
 		parse = re.search('class="block"><h4>Videosendungen(.*)', data, re.S)
-		videos = re.findall('class="blockchen">.*?:\sFolge\s(\d+)(.*?)(?:Youtube|H.264|H264).*?(?:</a>|</a><br>)(.*?)<ul', parse.group(1), re.S)
+		videos = re.findall('class="blockchen">.*?:\sFolge\s(\d+)(.*?)(?:Youtube|H.264|H264).*?(?:</a>|</a><br>)(.*?)</ul', parse.group(1), re.S)
 		if videos:
 			for (folge, urldata, title) in videos:
 				url = re.search('.*?href="https://(?:youtu.be/|www.youtube.com/watch\?v=)(.*?)"', urldata, re.S)
@@ -76,7 +76,7 @@ class cczwei(MPScreen):
 					url = re.search('.*?href="(.*?)"', urldata, re.S)
 					url = url.group(1)
 				title = title.replace('\r\n<br>',', ').replace('   ','').replace('Youtube, HD 1080p','').replace('<br>',', ').strip().strip(', ').strip(',')
-				title = "Folge %s - %s" % (folge, stripAllTags(title.replace(', , , ','').replace(', , ','').replace(', ','')))
+				title = "Folge %s - %s" % (folge, stripAllTags(title.replace(', , , ','').replace(', , ','').replace('mehr</a>','')))
 				self.streamList.append((decodeHtml(title), url.strip()))
 			self.ml.setList(map(self._defaultlistleft, self.streamList))
 			self.keyLocked = False
@@ -87,7 +87,4 @@ class cczwei(MPScreen):
 			return
 		url = self['liste'].getCurrent()[0][1]
 		Title = self['liste'].getCurrent()[0][0]
-		if "speedpartner.de" in url:
-			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='cczwei')
-		else:
-			self.session.open(YoutubePlayer,[(Title, url, None)],playAll= False,showPlaylist=False,showCover=False)
+		self.session.open(YoutubePlayer,[(Title, url, None)],playAll= False,showPlaylist=False,showCover=False)

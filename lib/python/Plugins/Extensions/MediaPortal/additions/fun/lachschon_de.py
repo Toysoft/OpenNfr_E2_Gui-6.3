@@ -259,12 +259,6 @@ class LSDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.updateP = 1
 		CoverHelper(self['coverArt'], self.ShowCoverFileExit).getCover(streamPic)
 
-	def getHandlung(self, desc):
-		if desc == None:
-			self['handlung'].setText(_("No further information available!"))
-			return
-		self.setHandlung(desc)
-
 	def setHandlung(self, data):
 		self['handlung'].setText(data)
 
@@ -282,7 +276,6 @@ class LSDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		if not self.eventP.is_set():
 			self.eventP.set()
 		desc = self['liste'].getCurrent()[0][3]
-		self.getHandlung(desc)
 		self.loadPic()
 
 	def keyOK(self):

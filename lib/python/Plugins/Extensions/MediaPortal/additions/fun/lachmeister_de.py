@@ -7,9 +7,7 @@ from Plugins.Extensions.MediaPortal.resources.youtubelink import YoutubeLink
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
-LMDE_Version = "Lachmeister.de"
-
-LMDE_siteEncoding = 'ISO-8859-1'
+LMDE_Version = "Lachmeister"
 
 class show_LMDE_Genre(MenuHelper):
 
@@ -151,12 +149,12 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 
 		if self.dokusListe:
 			if not self.page:
-				m = re.search('>Seite 1 \(von (\d+)\):', data)
-				if m:
-					self.pages = int(m.group(1))
-				else:
-					self.pages = 1
 				self.page = 1
+			m = re.findall('link-white">(\d+)</a>', data)
+			if m:
+				self.pages = int(m[-1])
+			else:
+				self.pages = 1
 
 			self['page'].setText("%d / %d" % (self.page,self.pages))
 
@@ -195,7 +193,7 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.setHandlung(desc)
 
 	def setHandlung(self, data):
-		self['handlung'].setText(decodeHtml(data))
+		self['handlung'].setText(decodeHtml(stripAllTags(data)).strip())
 
 	def ShowCoverFileExit(self):
 		self.updateP = 0;

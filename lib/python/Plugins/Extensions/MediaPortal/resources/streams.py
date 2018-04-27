@@ -655,12 +655,13 @@ class get_stream_link:
 					getPage(link, agent=mp_globals.player_agent, cookies=self.google_ck).addCallback(self.google).addErrback(self.errorload)
 
 			elif re.search('rapidvideo\.com', data, re.S):
+				link = data.replace('rapidvideo.com/e/', 'rapidvideo.com/v/')
 				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
-					self.callPremium(data)
+					self.callPremium(link)
 				else:
-					id = re.findall('rapidvideo\.com/v/(.*?)$', data)
+					id = re.findall('rapidvideo\.com/v/(.*?)$', link)
 					if id:
 						link = "http://rapidvideo.com/embed/%s" % id[0]
 					getPage(link).addCallback(self.rapidvideocom).addErrback(self.errorload)
