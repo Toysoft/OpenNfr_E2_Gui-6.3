@@ -66,25 +66,30 @@ class myspassGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
+		self.genreliste = []
+		self.count = 2
 		url = "http://www.myspass.de/ganze-folgen/"
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
+		url2 = "http://www.myspass.de/sendungen-a-bis-z/"
+		getPage(url2).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		ganze = re.findall('<a\shref="(/shows/.*?)".*?data-src="(.*?\.jpg)".*?alt="(.*?)"', data, re.S)
+		self.count -= 1
+		ganze = re.findall('<a\shref="(/shows/.*?)".*?(?:data-src|src)="(/wp-content/.*?\.jpg)".*?alt="(.*?)"', data, re.S)
 		if ganze:
-			self.genreliste = []
 			for (link, image, name) in ganze:
 				link = "http://www.myspass.de" + link
 				image = "http://www.myspass.de" + image
 				self.genreliste.append((decodeHtml(name), link, image))
+		if self.count == 0:
 			# remove duplicates
 			self.genreliste = list(set(self.genreliste))
 			self.genreliste.sort(key=lambda t : t[0].lower())
-		if len(self.genreliste) == 0:
-			self.genreliste.append((_("No shows found!"), None, None))
-		self.ml.setList(map(self._defaultlistleft, self.genreliste))
-		self.keyLocked = False
-		self.showInfos()
+			if len(self.genreliste) == 0:
+				self.genreliste.append((_("No shows found!"), None, None))
+			self.ml.setList(map(self._defaultlistleft, self.genreliste))
+			self.keyLocked = False
+			self.showInfos()
 
 	def showInfos(self):
 		Image = self['liste'].getCurrent()[0][2]
@@ -128,23 +133,24 @@ class myspassStaffelListeScreen(MPScreen):
 
 	def loadPageData(self, data):
 		parse = re.search('has-season-selector"(.*)class="videoPanel__dropdown-placeholder', data, re.S)
-		staffeln = re.findall('data-remote-args="&seasonId=(\d+).*?formatId=(\d+)&category=(full_episode|clip)".*?>(.*?)</option', parse.group(1), re.S)
-		if staffeln:
-			self.staffelliste = []
-			for (seasonid, formatid, type, name) in staffeln:
-				title = decodeHtml(name).strip()
-				if type == "clip":
-					title = title + " (Clips)"
-					sort = "z"
-				else:
-					title = title + " (Ganze Folgen)"
-					sort = "a"
-				self.staffelliste.append((title, formatid, seasonid, type, sort))
-			# remove duplicates
-			self.staffelliste = list(set(self.staffelliste))
-			self.staffelliste.sort(key=lambda t : (t[4], t[0].lower()))
+		if parse:
+			staffeln = re.findall('data-remote-args="&seasonId=(\d+).*?formatId=(\d+)&category=(full_episode|clip)".*?>(.*?)</option', parse.group(1), re.S)
+			if staffeln:
+				self.staffelliste = []
+				for (seasonid, formatid, type, name) in staffeln:
+					title = decodeHtml(name).strip()
+					if type == "clip":
+						title = title + " (Clips)"
+						sort = "z"
+					else:
+						title = title + " (Ganze Folgen)"
+						sort = "a"
+					self.staffelliste.append((title, formatid, seasonid, type, sort))
+				# remove duplicates
+				self.staffelliste = list(set(self.staffelliste))
+				self.staffelliste.sort(key=lambda t : (t[4], t[0].lower()))
 		if len(self.staffelliste) == 0:
-			self.staffelliste.append((_('No seasons found!'), None))
+			self.staffelliste.append((_('No seasons found!'), None, None, None, None))
 		self.ml.setList(map(self._defaultlistleft, self.staffelliste))
 		self.keyLocked = False
 
@@ -199,7 +205,7 @@ class myspassFolgenListeScreen(MPScreen):
 				image = "http://www.myspass.de/myspass/media/images/videos/%s/%s_640x360.jpg" % (id[-2:], id)
 				episode = re.search("(Folge.*?\|.*?)\|", meta, re.S).group(1).strip().replace(' | ', ' - ')
 				runtime = re.search(".*\|(.*?)$", meta, re.S).group(1).strip()
-				title = episode + " - " + decodeHtml(title)
+				title = episode + " - " + decodeHtml(stripAllTags(title))
 				self.folgenliste.append((title, link, image, desc, runtime))
 			self.ml.setList(map(self._defaultlistleft, self.folgenliste))
 			self.keyLocked = False

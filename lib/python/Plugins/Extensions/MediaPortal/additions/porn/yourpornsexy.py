@@ -417,4 +417,4 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 			if url.startswith('//'):
 				url = "http:" + url
 			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='yourpornsexy')
-		self.keyLocked = Fals
+		self.keyLocked = False

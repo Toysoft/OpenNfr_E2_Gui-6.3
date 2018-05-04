@@ -111,6 +111,8 @@ except:
 		def __init__(self):
 			mp_globals.stateinfo = False
 
+from RadioVisualization import RadioVisualization
+			
 from mp_globals import std_headers
 from streams import isSupportedHoster, get_stream_link
 from mpscreen import MPScreen, MPSetupScreen, SearchHelper

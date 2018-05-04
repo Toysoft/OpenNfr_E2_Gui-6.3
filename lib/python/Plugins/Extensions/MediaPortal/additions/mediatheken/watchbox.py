@@ -123,7 +123,7 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 		self['ContentTitle'] = Label("Filme:")
 		self['Page'] = Label(_("Page:"))
 
-		self.page = 0
+		self.page = 1
 		self.lastpage = 999
 
 		self.folgenliste = []
@@ -134,17 +134,14 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 
 	def loadPage(self):
 		self.folgenliste = []
-		if self.page == 0:
-			url = base_url + self.Url
-		else:
-			url = base_url + "%s/?page=%s" % (self.Url, str(self.page))
+		url = base_url + "%s/?page=%s" % (self.Url, str(self.page))
 		twAgentGetPage(url, agent=wbAgent).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		self['page'].setText(str(self.page+1))
+		self['page'].setText(str(self.page))
 		if not "js-pagination-more-button" in data:
 			self.lastpage = self.page
-		folgen = re.findall('class="grid__item">.*?format-type="(.*?)".*?href="(.*?)".*?img\s+src="(.*?)".*?alt="(.*?)"', data, re.S)
+		folgen = re.findall('class="grid__item".*?format-type="(.*?)".*?href="(.*?)".*?img\s+src="(.*?)".*?alt="(.*?)"', data, re.S)
 		if folgen:
 			for (type, url, image, title) in folgen:
 				if image.startswith('//'):
@@ -155,7 +152,7 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 			self.ml.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()
-			self.th_ThumbsQuery(self.folgenliste, 0, 1, 2, None, None, self.page+1, self.lastpage+1, mode=1, pagefix=-1)
+			self.th_ThumbsQuery(self.folgenliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
 
 	def showInfos(self):
 		title = self['liste'].getCurrent()[0][0]
@@ -170,9 +167,9 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 		twAgentGetPage(url, agent=wbAgent).addCallback(self.get_link).addErrback(self.dataError)
 
 	def get_link(self, data):
-		stream_url = re.search('hls: \'(.*?\.m3u8)\',', data, re.S)
+		stream_url = re.search('hls":"(.*?\.m3u8)",', data, re.S)
 		if stream_url:
-			url = stream_url.group(1)
+			url = stream_url.group(1).replace('\/','/')
 			getPage(url, agent=wbAgent).addCallback(self.loadplaylist, url).addErrback(self.dataError)
 
 	def loadplaylist(self, data, baseurl):
@@ -198,17 +195,3 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 		title = self['liste'].getCurrent()[0][0]
 		mp_globals.player_agent = wbAgent
 		self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='watchbox', forceGST=True)
-
-	def keyPageDown(self):
-		if self.keyLocked:
-			return
-		if not self.page < 1:
-			self.page -= 1
-			self.loadPage()
-
-	def keyPageUp(self):
-		if self.keyLocked:
-			return
-		if self.page < self.lastpage:
-			self.page += 1
-			self.loadPage()

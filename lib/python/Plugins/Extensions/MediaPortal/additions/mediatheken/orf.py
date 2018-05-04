@@ -228,9 +228,9 @@ class ORFStreamListeScreen(MPScreen, ThumbsHelper):
 		if folgen:
 			self.streamliste = []
 			for (title, desc, image, urls) in folgen[:-1]:
-				url = re.search('"quality":"Q8C","quality_string":"sehr hoch \(HD\)","src":"(http://apasfpd.apa.at.*?.mp4)",', urls, re.S)
+				url = re.search('"quality":"Q8C","quality_string":"Sehr hoch","src":"(http://apasfpd.apa.at.*?.mp4)",', urls, re.S)
 				if not url:
-					url = re.search('"quality":"Q6A","quality_string":"hoch","src":"(http://apasfpd.apa.at.*?.mp4)",', urls, re.S)
+					url = re.search('"quality":"Q6A","quality_string":"Hoch","src":"(http://apasfpd.apa.at.*?.mp4)",', urls, re.S)
 				title = title.replace('\\"','"')
 				if desc == "null":
 					desc = ""

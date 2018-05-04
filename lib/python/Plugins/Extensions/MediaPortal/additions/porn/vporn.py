@@ -376,9 +376,15 @@ class vpornFilmScreen(MPScreen, ThumbsHelper):
 			getPage(url, agent=vpagent, cookies=vpck, timeout=30).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('source\ssrc="(.*?)"', data, re.S)
+		url = None
+		videoPage = re.findall('initDownload\(\'(.*?)\'\)', data, re.S)
 		if videoPage:
+			url = videoPage[-1].replace('https://','http://')
+		else:
+			videoPage = re.findall('source\ssrc="(http.*?)"', data, re.S)
+			if videoPage:
+				url = videoPage[0].replace('https://','http://')
+		if url:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]
-			url = videoPage[0].replace('https://','http://')
 			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='vporn')

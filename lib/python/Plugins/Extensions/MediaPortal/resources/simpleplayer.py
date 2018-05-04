@@ -168,7 +168,7 @@ class CoverSearchHelper:
 		title = re.sub(' - folge \d+|^hd_|dts_|ac3_|_premium|kinofassung|_full_|hd_plus|\(.*?\)', '', title, flags=re.I)
 		return title.replace("_"," ")
 
-	def searchCover(self, title, fallback=''):
+	def searchCover(self, title, fallback='', retry=False):
 		if not fallback:
 			fallback = ''
 		if not self.searchCoverSupp or not title: return
@@ -181,14 +181,18 @@ class CoverSearchHelper:
 				media = 'music'
 			else:
 				media = 'movie'
-			title = self.cleanTitle(title, False)
-			url = "https://itunes.apple.com/search?term=%s&limit=1&media=%s" % (urllib.quote_plus(title), media)
-			getPage(url, timeout=10).addCallback(self.cb_searchCover, fallback).addErrback(self.searchDataError)
+			if title != 'none':
+				title = self.cleanTitle(title, False)
+				url = "https://itunes.apple.com/search?term=%s&limit=1&media=%s" % (urllib.quote_plus(title), media)
+				getPage(url, timeout=10).addCallback(self.cb_searchCover, fallback, retry, title).addErrback(self.searchDataError)
+			else:
+				self.cb_searchCover('', fallback)
 		else:
 			self.cb_searchCover(None)
 
-	def cb_searchCover(self, jdata, fallback=''):
+	def cb_searchCover(self, jdata, fallback='', retry=False, title=''):
 		largeCover = config.mediaportal.sp_radio_largecover.value
+		url = None
 		import json
 		try:
 			jdata = json.loads(jdata)
@@ -196,9 +200,27 @@ class CoverSearchHelper:
 			url = url.replace('100x100', '300x300')
 			self.hasGoogleCoverArt = True
 		except:
-			if largeCover:
-				fallback = 'file://' + mp_globals.pluginPath + '/images/none.png'
-			url = fallback
+			if not retry:
+				x = 0
+				if re.search('.*?(feat\.{0,1}\s|ft\.{0,1}\s)', title, re.I) and not retry:
+					x += 1
+					title = re.sub('(.*?)(?:feat\.{0,1}\s|FEAT\.{0,1}\s|Feat.{0,1}\s|ft\.{0,1}\s|FT\.{0,1}\s).*?(?::|\s)(-{0,1}\s.*?)$', r'\1\2', title)
+				if "," in title:
+					x += 1
+					title = title.replace(',',' ')
+
+				if x>0:
+					printl(title,self,"I")
+					self.searchCover(title, fallback=fallback, retry=True)
+					return
+				else:
+					if largeCover:
+						fallback = 'file://' + mp_globals.pluginPath + '/images/none.png'
+					url = fallback
+			else:
+				if largeCover:
+					fallback = 'file://' + mp_globals.pluginPath + '/images/none.png'
+				url = fallback
 
 		if not self.hasEmbeddedCoverArt:
 			self.showCover(url, self.cb_coverDownloaded, largeCover=largeCover)
@@ -228,10 +250,16 @@ class SimpleSeekHelper:
 		self["seekbartime"] = Label()
 		self["seekbartime"].hide()
 		self.cursorTimer = eTimer()
+		self.BgCoverShow = eTimer()
+		self.BgCoverHide = eTimer()
 		if mp_globals.isDreamOS:
 			self.cursorTimer_conn = self.cursorTimer.timeout.connect(self.__updateCursor)
+			self.BgCoverShow_conn = self.BgCoverShow.timeout.connect(self.__BgCoverShow)
+			self.BgCoverHide_conn = self.BgCoverHide.timeout.connect(self.__BgCoverHide)
 		else:
 			self.cursorTimer.callback.append(self.__updateCursor)
+			self.BgCoverShow.callback.append(self.__BgCoverShow)
+			self.BgCoverHide.callback.append(self.__BgCoverHide)
 		self.cursorShown = False
 		self.seekBarShown = False
 		self.seekBarLocked = False
@@ -282,11 +310,25 @@ class SimpleSeekHelper:
 						self["seekbartime"].show()
 						self.cursorTimer.start(200, False)
 
+	def __BgCoverShow(self):
+		self.RadioBg['BgCover'].show()
+		InfoBarShowHide.lockShow(self)
+
+	def __BgCoverHide(self):
+		self.RadioBg['BgCover'].hide()
+		self.RadioBg.setProperties()
+		self.RadioBg.hideControls()
+		InfoBarShowHide.unlockShow(self)
+
 	def __seekBarShown(self):
 		self.seekBarShown = True
+		if self.playerMode == "RADIO":
+			self.BgCoverShow.start(300, 1)
 
 	def __seekBarHide(self):
 		self.seekBarShown = False
+		if self.playerMode == "RADIO":
+			self.BgCoverHide.start(300, 1)
 
 	def toggleShow(self):
 		if self.seekBarLocked:
@@ -460,14 +502,12 @@ class SimplePlayerResume:
 		self.eof_resume = False
 		self.use_sp_resume = config.mediaportal.sp_on_movie_start.value != "start"
 		self.posTrackerTimer = eTimer()
-		if mp_globals.isDreamOS:
-			self.posTrackerTimer_conn = self.posTrackerTimer.timeout.connect(self.savePlayPosition)
-		else:
-			self.posTrackerTimer.callback.append(self.savePlayPosition)
 		self.eofResumeTimer = eTimer()
 		if mp_globals.isDreamOS:
+			self.posTrackerTimer_conn = self.posTrackerTimer.timeout.connect(self.savePlayPosition)
 			self.eofResumeTimer_conn = self.eofResumeTimer.timeout.connect(self.resetEOFResumeFlag)
 		else:
+			self.posTrackerTimer.callback.append(self.savePlayPosition)
 			self.eofResumeTimer.callback.append(self.resetEOFResumeFlag)
 		self.eofResumeFlag = False
 		self.lruKey = ""
@@ -709,6 +749,233 @@ class SimplePlaylist(MPScreen):
 
 		self["playmode"].setText(_(self.playMode[0].capitalize()))
 
+class RadioBackground(Screen, RadioVisualization):
+	def __init__(self, session, playerMode):
+		Screen.__init__(self, session)
+		RadioVisualization.__init__(self)
+
+		self['BgCover'] = Pixmap()
+		self['background'] = Label()
+		self['screenSaver'] = Pixmap()
+		self['screenSaverBg'] = Label()
+		self.playerMode = playerMode
+
+		if mp_globals.videomode == 2:
+			self.skin = '''<screen backgroundColor="transparent" flags="wfNoBorder" name="RadioBackground" position="0,0" size="1920,1080" zPosition="-1">
+					<widget name="background" position="0,0" size="1920,1080" transparent="0" backgroundColor="#00202020" />
+					<widget name="screenSaverBg" position="0,0" size="1920,1080" transparent="0" backgroundColor="#00000000" zPosition="1" />
+					<widget name="screenSaver" position="0,0" size="2635,1482" zPosition="2" />
+					<widget alphatest="on" name="BgCover" position="648,10" size="800,800" zPosition="3" />
+					<widget name="progress_0" zPosition="4" position="20,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_1" zPosition="4" position="58,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_2" zPosition="4" position="96,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_3" zPosition="4" position="134,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_4" zPosition="4" position="172,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_5" zPosition="4" position="210,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_6" zPosition="4" position="248,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_7" zPosition="4" position="286,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_8" zPosition="4" position="324,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_9" zPosition="4" position="362,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_10" zPosition="4" position="400,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_11" zPosition="4" position="438,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_12" zPosition="4" position="476,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_13" zPosition="4" position="514,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_14" zPosition="4" position="552,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="progress_15" zPosition="4" position="590,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
+					<widget name="top_0" position="20,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_1" position="58,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_2" position="96,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_3" position="134,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_4" position="172,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_5" position="210,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_6" position="248,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_7" position="286,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_8" position="324,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_9" position="362,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_10" position="400,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_11" position="438,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_12" position="476,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_13" position="514,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_14" position="552,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					<widget name="top_15" position="590,492" zPosition="6" size="38,8" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-1080.png" />
+					</screen>'''
+		else:
+			self.skin = '''<screen backgroundColor="transparent" flags="wfNoBorder" name="RadioBackground" position="0,0" size="1280,720" zPosition="-1">
+					<widget name="background" position="0,0" size="1280,720" transparent="0" backgroundColor="#00202020" />
+					<widget name="screenSaverBg" position="0,0" size="1280,720" transparent="0" backgroundColor="#00000000" zPosition="1" />
+					<widget name="screenSaver" position="0,0" size="1757,988" zPosition="2" />
+					<widget alphatest="on" name="BgCover" position="430,6" size="534,534" zPosition="3" />
+					<widget name="progress_0" zPosition="4" position="15,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_1" zPosition="4" position="40,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_2" zPosition="4" position="65,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_3" zPosition="4" position="90,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_4" zPosition="4" position="115,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_5" zPosition="4" position="140,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_6" zPosition="4" position="165,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_7" zPosition="4" position="190,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_8" zPosition="4" position="215,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_9" zPosition="4" position="240,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_10" zPosition="4" position="265,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_11" zPosition="4" position="290,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_12" zPosition="4" position="315,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_13" zPosition="4" position="340,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_14" zPosition="4" position="365,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="progress_15" zPosition="4" position="390,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
+					<widget name="top_0" position="15,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_1" position="40,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_2" position="65,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_3" position="90,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_4" position="115,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_5" position="140,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_6" position="165,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_7" position="190,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_8" position="215,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_9" position="240,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_10" position="265,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_11" position="290,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_12" position="315,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_13" position="340,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_14" position="365,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					<widget name="top_15" position="390,325" zPosition="6" size="25,5" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green_top-720.png" />
+					</screen>'''
+
+		self.fadeouttimer = eTimer()
+		self.changetimer = eTimer()
+		if mp_globals.isDreamOS:
+			self.fadeouttimer_conn = self.fadeouttimer.timeout.connect(self.initCallNewPicture)
+			self.changetimer_conn = self.changetimer.timeout.connect(self.changetimerAppend)
+		else:
+			self.fadeouttimer.callback.append(self.initCallNewPicture)
+			self.changetimer.callback.append(self.changetimerAppend)
+		self.onLayoutFinish.append(self.startRun)
+
+	def startRun(self):
+		self.setProperties()
+		self.hideControls()
+		self['background'].show()
+		self['screenSaverBg'].hide()
+
+		if self.playerMode == "RADIO":
+			try:
+				self['screenSaver'].instance.setShowHideAnimation("mp_quick_fade")
+				self['BgCover'].instance.setShowHideAnimation(config.mediaportal.animation_coverart.value)
+			except:
+				pass
+			if config.mediaportal.sp_radio_bgsaver.value:
+				if mp_globals.videomode == 2:
+					self.res_x = 1920
+					self.res_y = 1080
+					self.offset1 = 400
+					self.offset2 = 226
+					self.offset3 = 715
+				else:
+					self.res_x = 1280
+					self.res_y = 720
+					self.offset1 = 266
+					self.offset2 = 150
+					self.offset3 = 476
+				self['screenSaverBg'].show()
+				self['background'].hide()
+				self.initCallNewPicture()
+
+	def changetimerAppend(self):
+		self.mc+=1
+		if self.mc == self.offset1:
+			self['screenSaver'].hide()
+			self.fadeouttimer.start(200, 1)
+		else:
+			self.changetimer.start(40, 1)
+			self.function()
+
+	def getAnimationStyle(self):
+		if mp_globals.isDreamOS:
+			return random.choice(('zoom_in', 'zoom_out', 'move_from_left_top_to_right_bottom', 'move_zoomed_left_to_right', 'move_zoomed_right_to_left', 'move_from_right_top_to_left_bottom', 'move_from_left_bottom_to_right_top', 'move_from_right_bottom_to_left_top'))
+		else:
+			return random.choice(('move_from_left_top_to_right_bottom', 'move_zoomed_left_to_right', 'move_zoomed_right_to_left', 'move_from_right_top_to_left_bottom', 'move_from_left_bottom_to_right_top', 'move_from_right_bottom_to_left_top'))
+
+	def initCallNewPicture(self):
+		if len(config.mediaportal.sp_radio_bgsaver_keywords.value)>0:
+			keywords = "/?" + config.mediaportal.sp_radio_bgsaver_keywords.value
+		else:
+			keywords = ""
+		CoverHelper(self['screenSaver']).getCover("https://source.unsplash.com/random/1920x1080%s" % keywords, screensaver=True)
+		self.mc=0
+		self.ken_burns = self.getAnimationStyle()
+		self.setNewPicture()
+
+	def setNewPicture(self):
+		if self.ken_burns=='zoom_in':
+			size_x, size_Y=self.res_x, self.res_y
+			pos_x, pos_y=0, 0
+			self.function=(self.zoom_in)
+
+		elif self.ken_burns=='zoom_out':
+			size_x, size_Y=self.res_x+(self.offset1+2)*1.778, self.res_y+(self.offset1+2)
+			pos_x, pos_y=0, 0
+			self.function=(self.zoom_out)
+
+		elif self.ken_burns=='move_from_left_top_to_right_bottom':
+			size_x, size_Y=self.res_x+(self.offset1+2)*1.778, self.res_y+(self.offset1+2)
+			pos_x, pos_y=0, 0
+			self.function=(self.move_from_left_top_to_right_bottom)
+
+		elif self.ken_burns=='move_from_right_top_to_left_bottom':
+			size_x, size_Y=self.res_x+(self.offset1+2)*1.778, self.res_y+(self.offset1+2)
+			pos_x, pos_y=-(self.offset1+2)*1.778, 0
+			self.function=(self.move_from_right_top_to_left_bottom)
+
+		elif self.ken_burns=='move_from_left_bottom_to_right_top':
+			size_x, size_Y=self.res_x+(self.offset1+2)*1.778, self.res_y+(self.offset1+2)
+			pos_x, pos_y=0, -(self.offset1+2)
+			self.function = (self.move_from_left_bottom_to_right_top)
+
+		elif self.ken_burns=='move_from_right_bottom_to_left_top':
+			size_x, size_Y=self.res_x+(self.offset1+2)*1.778, self.res_y+(self.offset1+2)
+			pos_x, pos_y=-self.offset3, -(self.offset1+2)
+			self.function=(self.move_from_right_bottom_to_left_top)
+
+		elif self.ken_burns=='move_zoomed_left_to_right':
+			self.offset_y=random.randrange(self.offset2-1)*-1
+			size_x, size_Y=self.res_x+(self.offset1+2), self.res_y+self.offset2
+			pos_x, pos_y=0, self.offset_y
+			self.function=(self.move_zoomed_left_to_right)
+
+		elif self.ken_burns=='move_zoomed_right_to_left':
+			self.offset_y=random.randrange(self.offset2-1)*-1
+			size_x, size_Y=self.res_x+(self.offset1+2), self.res_y+self.offset2
+			pos_x, pos_y=-(self.offset1+2), self.offset_y
+			self.function=(self.move_zoomed_right_to_left)
+
+		self['screenSaver'].resize(size_x, size_Y)
+		self['screenSaver'].setPosition(pos_x, pos_y)
+		self.mc+=1
+		self.changetimer.start(40, 1)
+
+	def zoom_in(self):
+		self['screenSaver'].resize(self.res_x+int(self.mc*1.78), self.res_y+self.mc)
+
+	def zoom_out(self):
+		v=(self.offset1+2)-self.mc
+		self['screenSaver'].resize(self.res_x+int(v*1.78), self.res_y+v)
+
+	def move_from_left_top_to_right_bottom(self):
+		self['screenSaver'].setPosition(0-int(self.mc*1.78), 0-self.mc)
+
+	def move_from_left_bottom_to_right_top(self):
+		self['screenSaver'].setPosition(0-int(self.mc*1.78), -(self.offset1+2)+self.mc)
+
+	def move_from_right_bottom_to_left_top(self):
+		self['screenSaver'].setPosition(-self.offset3+int(self.mc*1.78), -(self.offset1+2)+self.mc)
+
+	def move_from_right_top_to_left_bottom(self):
+		self['screenSaver'].setPosition(-self.offset3+int(self.mc*1.78), 0-self.mc)
+
+	def move_zoomed_left_to_right(self):
+		self['screenSaver'].setPosition(0-self.mc, self.offset_y)
+
+	def move_zoomed_right_to_left(self):
+		self['screenSaver'].setPosition(-(self.offset1+2)+self.mc, self.offset_y)
+
 class SimplePlayerPVRState(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
@@ -764,7 +1031,7 @@ class SimplePlayerInfoBarStateInfo(Screen):
 	def current(self):
 		return (self["state"].text, self["message"].text)
 
-class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, SimplePlayerResume, InfoBarMenu, InfoBarBase, InfoBarSeek, InfoBarNotifications, InfoBarServiceNotifications, InfoBarPVRState, InfoBarShowHide, InfoBarAudioSelection, InfoBarSubtitleSupport, InfoBarSimpleEventView, InfoBarServiceErrorPopupSupport, InfoBarGstreamerErrorPopupSupport):
+class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, SimplePlayerResume, InfoBarMenu, InfoBarBase, InfoBarSeek, InfoBarNotifications, InfoBarServiceNotifications, InfoBarPVRState, InfoBarShowHide, InfoBarAudioSelection, InfoBarSubtitleSupport, InfoBarSimpleEventView, InfoBarServiceErrorPopupSupport, InfoBarGstreamerErrorPopupSupport, RadioVisualization):
 
 	ALLOW_SUSPEND = True
 	ctr = 0
@@ -773,6 +1040,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 		if playerMode == 'RADIO':
 			googleCoverSupp = True
+			RadioVisualization.__init__(self, val=False)
 
 		if (self.__class__.ctr + 1) > 1:
 			printl('[SP]: only 1 instance allowed',self,"E")
@@ -847,6 +1115,14 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		except:
 			pass
 
+		if mp_globals.isDreamOS:
+			self.RadioBg = self.session.instantiateDialog(RadioBackground,playerMode,zPosition=-10)
+		else:
+			self.RadioBg = self.session.instantiateDialog(RadioBackground,playerMode)
+		if playerMode == 'RADIO':
+			self.RadioBg.show()
+			self._BgCover = CoverHelper(self.RadioBg['BgCover'])
+
 		self.allowPiP = False
 		InfoBarSeek.__init__(self)
 		InfoBarPVRState.__init__(self, screen=SimplePlayerPVRState, force_show=True)
@@ -903,10 +1179,10 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		self['dwnld_progressbar'] = self.progrObj
 		# load default cover
 		self['Cover'] = Pixmap()
-		self['BgCover'] = Pixmap()
 		self['noCover'] = Pixmap()
+		self['title'] = Label()
+
 		self._Cover = CoverHelper(self['Cover'], nc_callback=self.hideSPCover)
-		self._BgCover = CoverHelper(self['BgCover'])
 		self.coverBGisHidden = False
 		self.cover2 = False
 		self.searchTitle = None
@@ -923,6 +1199,11 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 		self.SaverTimer = eTimer()
 		if mp_globals.isDreamOS:
+			self.visuCleanerTimer = eTimer()
+			from enigma import eMusicPlayer
+			self.musicPlayer = eMusicPlayer(self.BANDS)
+			self.musicPlayer_conn = self.musicPlayer.callback.connect(self.musicPlayerCallBack)
+			self.visuCleanerTimer_conn = self.visuCleanerTimer.timeout.connect(self.visuCleanerTimerCallback)
 			self.SaverTimer_conn = self.SaverTimer.timeout.connect(self.openSaver)
 		else:
 			self.SaverTimer.callback.append(self.openSaver)
@@ -967,19 +1248,28 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 					iPlayableService.evUpdatedInfo: self.__evUpdatedInfo
 				})
 
+	def cleanTitleRadio(self, sTitle):
+		if " - " in sTitle:
+			if " | " in sTitle:
+				sTitle = sTitle.split(' | ')[0]
+		if "www." in sTitle:
+			sTitle = ''
+		if re.match("Jetzt l.{2}uft \"", sTitle):
+			sTitle = re.sub('Jetzt\sl.{2}uft\s\"(.*?)\s{0,1}"\svon(\s.*?)', r'\1\2', sTitle)
+		if "jetzt bei MDR" in sTitle:
+			sTitle = re.sub('(.*?)\svon(\s.*?)jetzt bei MDR.*?$', r'\1\2', sTitle)
+		if len(sTitle)>5 and not self.playList[self.playIdx][0].lower() in sTitle.lower():
+			printl(sTitle,self,"I")
+			self.searchCover(sTitle, fallback=self.playList[self.playIdx][2])
+		else:
+			self.searchCover('none', fallback=self.playList[self.playIdx][2])
+
 	def __evUpdatedInfo(self):
 		if self.playerMode == 'RADIO':
 			currPlay=self.session.nav.getCurrentService()
 			if currPlay is not None:
 				sTitle=currPlay.info().getInfoString(iServiceInformation.sTagTitle)
-				if " - " in sTitle:
-					if " | " in sTitle:
-						sTitle = sTitle.split(' | ')[0]
-				if "www\." in sTitle:
-					sTitle = ''
-				printl(sTitle,self,"I")
-				self.searchCover(sTitle, fallback=self.playList[self.playIdx][2])
-				InfoBarShowHide.lockShow(self)
+				self.cleanTitleRadio(sTitle)
 
 	def __evAudioDecodeError(self):
 		from enigma import iServiceInformation
@@ -1181,44 +1471,48 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		self._playing = False
 		self.isTSVideo = False
 		def playService(url):
-			self.dash = False
-			if url == 'cancelled': return
-			if not self._playing:
-				self._playing = True
-				if url.startswith('#SERVICE'):
-					url = url[8:].strip()
-					sref = eServiceReference(url)
-				else:
-					if url.endswith('.ts'):
-						sref = eServiceReference(0x0001, 0, unquote(url))
-						self.isTSVideo = True
+			if mp_globals.isDreamOS and self.playerMode == 'RADIO' and config.mediaportal.sp_radio_visualization.value:
+				self.visuCleanerTimer.start(1000)
+				self.musicPlayer.play(url)
+			else:
+				self.dash = False
+				if url == 'cancelled': return
+				if not self._playing:
+					self._playing = True
+					if url.startswith('#SERVICE'):
+						url = url[8:].strip()
+						sref = eServiceReference(url)
 					else:
-						if not '/?url=' in url:
-							url = unquote(url)
-						if self.youtubelive:
-							sref = eServiceReference(0x0001, 0, url)
+						if url.endswith('.ts'):
+							sref = eServiceReference(0x0001, 0, unquote(url))
+							self.isTSVideo = True
 						else:
-							if mp_globals.isDreamOS:
-								sref = eServiceReference(0x1001, 0, url)
-								if suburi:
-									try:
-										sref.setSuburi(suburi)
-										self.dash = True
-									except:
-										pass
+							if not '/?url=' in url:
+								url = unquote(url)
+							if self.youtubelive:
+								sref = eServiceReference(0x0001, 0, url)
 							else:
-								if suburi:
-									url = url + "&suburi=" + suburi
-									self.dash = True
-								sref = eServiceReference(0x1001, 0, url)
-					sref.setName(video_title)
+								if mp_globals.isDreamOS:
+									sref = eServiceReference(0x1001, 0, url)
+									if suburi:
+										try:
+											sref.setSuburi(suburi)
+											self.dash = True
+										except:
+											pass
+								else:
+									if suburi:
+										url = url + "&suburi=" + suburi
+										self.dash = True
+									sref = eServiceReference(0x1001, 0, url)
+						sref.setName(video_title)
 
-				self.session.nav.playService(sref)
-				if self.pl_open:
-					self.playlistQ.put(self.pl_status)
-					self.pl_event.genEvent()
+					self.session.nav.playService(sref)
+					if self.pl_open:
+						self.playlistQ.put(self.pl_status)
+						self.pl_event.genEvent()
 
-				#self.initPlayPositionTracker(self.lru_key)
+					#self.initPlayPositionTracker(self.lru_key)
 
 		self.keyPlayNextLocked = False
 		if buffering:
@@ -1233,6 +1527,37 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 				self.downloader.stop()
 				clearTmpBuffer()
 			playService(url)
+
+	def visuCleanerTimerCallback(self):
+		self.visuCleanerTimer.stop()
+		if self.needCleanup() == True:
+			code = 0
+			v = (-80,) * self.BANDS
+			self.musicPlayerCallBack(code,v,True)
+
+	def musicPlayerCallBack(self, code = None, v = None, cleanup = False):
+		if self.visuCleanerTimer.isActive():
+			self.visuCleanerTimer.stop()
+		if code == 0 and len(v) > 0:
+			if self.seekBarShown:
+				self.RadioBg.setValues(v)
+		elif code == 1:
+			cleanup = True
+			if (len(v[0]) !=0):
+				if len(v[1]) != 0:
+					sTitle = "%s - %s" % (v[0],v[1])
+				else:
+					sTitle = v[0]
+				self.cleanTitleRadio(sTitle)
+				sTitle = sTitle + " (" + self.playList[self.playIdx][0] + ")"
+			else:
+				sTitle = self.playList[self.playIdx][0]
+			self["title"].setText(sTitle)
+		else:
+			cleanup = True
+
+		if cleanup == True:
+			self.visuCleanerTimer.start(100)
 
 	def playPrevStream(self, value):
 		if self.keyPlayNextLocked:
@@ -1393,6 +1718,10 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 						self.setSeekState(self.SEEK_STATE_PLAY)
 
 	def playExit(self):
+		if self.playerMode == 'RADIO':
+			self.session.deleteDialog(self.RadioBg)
+			self.RadioBg = None
+
 		self.__class__.ctr -= 1
 		self.SaverTimer.stop()
 		del self.SaverTimer
@@ -1594,7 +1923,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self.showSPCover()
 		if largeCover and self.playerMode == 'RADIO':
 			if cover:
-				self._BgCover.getCover(cover.replace('300x300','800x800'))
+				self._BgCover.getCover(cover.replace('300x300','800x800'), bgcover=True)
 		else:
 			self._Cover.getCover(cover, download_cb=download_cb)
 
@@ -1715,7 +2044,6 @@ class SimpleConfig(Screen, ConfigListScreenExt):
 		self.list.append(getConfigListEntry(_('Global playlist number:'), config.mediaportal.sp_pl_number))
 		self.list.append(getConfigListEntry(_('Playmode:'), config.mediaportal.sp_playmode))
 		self.list.append(getConfigListEntry(_('Screensaver:'), config.mediaportal.sp_scrsaver))
-		self.list.append(getConfigListEntry(_('Big cover in radio mode:'), config.mediaportal.sp_radio_largecover))
 		self.list.append(getConfigListEntry(_('Highest resolution for playback (only YouTube):'), config.mediaportal.youtubeprio))
 		self.list.append(getConfigListEntry(_('Videoquality:'), config.mediaportal.videoquali_others))
 		self.list.append(getConfigListEntry(_('Save resume cache in flash memory:'), config.mediaportal.sp_save_resumecache))
@@ -1725,6 +2053,10 @@ class SimpleConfig(Screen, ConfigListScreenExt):
 		self.list.append(getConfigListEntry(_('Seekbar sensibility:'), config.mediaportal.sp_seekbar_sensibility))
 		self.list.append(getConfigListEntry(_('Infobar cover always off:'), config.mediaportal.sp_infobar_cover_off))
 		self.list.append(getConfigListEntry(_('Use SP number seek:'), config.mediaportal.sp_use_number_seek))
+		self.list.append(getConfigListEntry(_('Radio big cover:'), config.mediaportal.sp_radio_largecover))
+		self.list.append(getConfigListEntry(_('Radio visualization:'), config.mediaportal.sp_radio_visualization))
+		self.list.append(getConfigListEntry(_('Radio screensaver:'), config.mediaportal.sp_radio_bgsaver))
+		self.list.append(getConfigListEntry(_('Radio screensaver keywords (comma separated):'), config.mediaportal.sp_radio_bgsaver_keywords))
 		ConfigListScreenExt.__init__(self, self.list)
 		self['setupActions'] = ActionMap(['SetupActions'],
 		{

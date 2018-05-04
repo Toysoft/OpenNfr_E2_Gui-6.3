@@ -473,7 +473,7 @@ class DDLMEStreams(MPScreen):
 
 	def loadPage(self):
 		streamUrl = self.filmUrl
-		twAgentGetPage(streamUrl).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(streamUrl, agent=None, headers=std_headers).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		mdesc = re.search('class=\'detailCover\'.*?>(.*?)<br><br>', data, re.S)

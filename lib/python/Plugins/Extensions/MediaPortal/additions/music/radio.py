@@ -292,9 +292,12 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 			if self.sub != '':
 				jsondata = jsondata[self.sub]
 			for each in jsondata:
-				self.streamList.append((str(each['name']).strip(), str(each['id']), str(each['pictureBaseURL'])+"c175.png"))
+				if str(each['broadcastType']) == "1":
+					self.streamList.append((str(each['name']).strip(), str(each['id']), str(each['pictureBaseURL'])+"c175.png"))
 		if self.sub == '':
 			self.streamList.sort(key=lambda t : t[0].lower())
+		if len(self.streamList) == 0:
+			self.streamList.append((_('No stations found!'), None, None))
 		self.ml.setList(map(self._defaultlistleft, self.streamList))
 		self.keyLocked = False
 		self.th_ThumbsQuery(self.streamList, 0, 1, 2, None, None, 1, 1, mode=0)
@@ -303,14 +306,14 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 	def showInfos(self):
 		self['name'].setText(self['liste'].getCurrent()[0][0])
 		stationId = self['liste'].getCurrent()[0][1]
-		url = base_url + "/info/broadcast/getbroadcastembedded?broadcast=%s" % stationId
-		getPage(url, agent="XBMC").addCallback(self.getInfos).addErrback(self.dataError)
+		if stationId:
+			url = base_url + "/info/broadcast/getbroadcastembedded?broadcast=%s" % stationId
+			getPage(url, agent="XBMC").addCallback(self.getInfos).addErrback(self.dataError)
 
 	def keyOK(self):
-		exist = self['liste'].getCurrent()
-		if self.keyLocked or exist == None:
-			return
 		stationId = self['liste'].getCurrent()[0][1]
+		if self.keyLocked or not stationId:
+			return
 		url = base_url + "/info/broadcast/getbroadcastembedded?broadcast=%s" % stationId
 		getPage(url, agent="XBMC").addCallback(self.getStreamURL).addErrback(self.dataError)
 
@@ -343,17 +346,16 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 		self.session.open(SimplePlayer, [(stationName, url, stationCover)], showPlaylist=False, ltype='radio', playerMode='RADIO', cover=True)
 
 	def keyAdd(self):
-		exist = self['liste'].getCurrent()
-		if self.keyLocked or exist == None:
-			return
 		stationName = self['liste'].getCurrent()[0][0]
-		stationLink = self['liste'].getCurrent()[0][1]
+		stationId = self['liste'].getCurrent()[0][1]
+		if self.keyLocked or not stationId:
+			return
 		fn = config.mediaportal.watchlistpath.value+"mp_radio_playlist"
 		if not fileExists(fn):
 			open(fn,"w").close()
 		try:
 			writePlaylist = open(fn, "a")
-			writePlaylist.write('"%s" "%s"\n' % (stationName, stationLink))
+			writePlaylist.write('"%s" "%s"\n' % (stationName, stationId))
 			writePlaylist.close()
 			message = self.session.open(MessageBoxExt, _("Selection was added to the favorites."), MessageBoxExt.TYPE_INFO, timeout=3)
 		except:
@@ -398,8 +400,8 @@ class RadioPlaylist(MPScreen):
 			for rawData in readStations.readlines():
 				data = re.findall('"(.*?)" "(.*?)"', rawData, re.S)
 				if data:
-					(stationName, stationLink) = data[0]
-					self.playList.append((stationName, stationLink))
+					(stationName, stationId) = data[0]
+					self.playList.append((stationName, stationId))
 			self.playList.sort()
 			readStations.close()
 		if len(self.playList) == 0:
@@ -465,8 +467,8 @@ class RadioPlaylist(MPScreen):
 			f1 = open(fn, 'w')
 			while j < l:
 				if j != i:
-					(stationName, stationLink) = self.playList[j]
-					f1.write('"%s" "%s"\n' % (stationName, stationLink))
+					(stationName, stationId) = self.playList[j]
+					f1.write('"%s" "%s"\n' % (stationName, stationId))
 				j += 1
 			f1.close()
 			self.loadStations()

@@ -190,7 +190,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018042401"))
+config.mediaportal.version = NoSave(ConfigText(default="2018050401"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.skinfail = ConfigYesNo(default = False)
@@ -295,6 +295,9 @@ config.mediaportal.sp_use_yt_with_proxy = ConfigSelection(default = "no", choice
 config.mediaportal.sp_on_movie_start = ConfigSelection(default = "start", choices = [("start", _("Start from the beginning")), ("ask", _("Ask user")), ("resume", _("Resume from last position"))])
 config.mediaportal.sp_save_resumecache = ConfigYesNo(default = False)
 config.mediaportal.sp_radio_largecover = ConfigYesNo(default = True)
+config.mediaportal.sp_radio_visualization = ConfigYesNo(default = False)
+config.mediaportal.sp_radio_bgsaver = ConfigYesNo(default = True)
+config.mediaportal.sp_radio_bgsaver_keywords = ConfigText(default="music", fixed_size=False)
 config.mediaportal.yt_proxy_username = ConfigText(default="user!", fixed_size=False)
 config.mediaportal.yt_proxy_password = ConfigPassword(default="pass!", fixed_size=False)
 config.mediaportal.yt_proxy_host = ConfigText(default = "example_proxy.com!", fixed_size = False)
@@ -897,6 +900,8 @@ class MPList(Screen, HelpableScreen):
 			config.mediaportal.restorelastservice.value = "2"
 			config.mediaportal.restorelastservice.save()
 			configfile.save()
+			session.nav.stopService()
+			session.nav.playService(lastservice)
 			session.nav.stopService()
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -1783,6 +1788,8 @@ class MPWall(Screen, HelpableScreen):
 			config.mediaportal.restorelastservice.value = "2"
 			config.mediaportal.restorelastservice.save()
 			configfile.save()
+			session.nav.stopService()
+			session.nav.playService(lastservice)
 			session.nav.stopService()
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -2774,6 +2781,8 @@ class MPWall2(Screen, HelpableScreen):
 			config.mediaportal.restorelastservice.save()
 			configfile.save()
 			session.nav.stopService()
+			session.nav.playService(lastservice)
+			session.nav.stopService()
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"up"    : self.keyUp,
@@ -3543,6 +3552,8 @@ class MPWallVTi(Screen, HelpableScreen):
 			config.mediaportal.restorelastservice.value = "2"
 			config.mediaportal.restorelastservice.save()
 			configfile.save()
+			session.nav.stopService()
+			session.nav.playService(lastservice)
 			session.nav.stopService()
 
 		self["actions"] = ActionMap(["MP_Actions"], {

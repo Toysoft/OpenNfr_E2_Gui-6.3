@@ -97,9 +97,9 @@ class foxxFilmScreen(MPScreen):
 
 	def parseData(self, data):
 		self.getLastPage(data, '', ">Seite.*?von\s(\d+)</span")
-		filme = re.findall('class="poster">.<a href="(http://foxx.to/film/.*?-Stream)"><img class="lazy" data-original="(.*?)" width="185" height="278" alt="(.*?)"></a>', data, re.S)
+		filme = re.findall('class="poster">.<img\ssrc="(.*?)"\salt="(.*?)".*?<a\shref="(http://foxx.to/film/.*?-Stream)">', data, re.S)
 		if filme:
-			for (url, image, title) in filme:
+			for (image, title, url) in filme:
 				self.filmliste.append((decodeHtml(title), url, image))
 			if len(self.filmliste) == 0:
 				self.filmliste.append((_('No videos found!'), '', None))

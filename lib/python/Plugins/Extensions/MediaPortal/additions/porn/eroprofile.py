@@ -201,9 +201,9 @@ class eroprofileFilmScreen(MPScreen, ThumbsHelper):
 			getPage(url).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('file:\'(.*?)\'', data, re.S)
+		videoPage = re.findall('source src="(.*?)"', data, re.S)
 		if videoPage:
-			for url in videoPage:
-				self.keyLocked = False
-				Title = self['liste'].getCurrent()[0][0]
-				self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='eroprofile')
+			url = videoPage[0].replace('&amp;','&')
+			self.keyLocked = False
+			Title = self['liste'].getCurrent()[0][0]
+			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='eroprofile')

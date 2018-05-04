@@ -1,21 +1,16 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from twagenthelper import twDownloadPage
 
+glob_screensaver_num = 0
 glob_icon_num = 0
 glob_last_cover = [None, None]
 
 class CoverHelper:
 
-	COVER_PIC_PATH = "/tmp/.Icon%d.jpg"
-	NO_COVER_PIC_PATH = "/images/no_coverArt.png"
-
 	def __init__(self, cover, callback=None, nc_callback=None):
 		self._cover = cover
 		self.picload = ePicLoad()
-		self._no_picPath = "%s%s/%s%s" % (mp_globals.pluginPath, mp_globals.skinsPath, mp_globals.currentskin, self.NO_COVER_PIC_PATH)
-		if not fileExists(self._no_picPath):
-			self._no_picPath = "%s%s%s%s" % (mp_globals.pluginPath, mp_globals.skinsPath, mp_globals.skinFallback, self.NO_COVER_PIC_PATH)
 		self._callback = callback
 		self._nc_callback = nc_callback
 		self.downloadPath = None
@@ -25,7 +20,7 @@ class CoverHelper:
 	def downloadPage(self, url, path, agent=None, cookieJar=None):
 		if not agent:
 			agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
-		return twDownloadPage(url, path, timeout=15, agent=agent, cookieJar=cookieJar)
+		return twDownloadPage(url, path, timeout=20, agent=agent, cookieJar=cookieJar)
 
 	def closeFile(self, result, f):
 		f.close()
@@ -37,21 +32,41 @@ class CoverHelper:
 		else:
 			return data
 
-	def getCover(self, url, download_cb=None, agent=None, cookieJar=None):
+	def getCover(self, url, download_cb=None, agent=None, cookieJar=None, screensaver=False, bgcover=False):
+		self.bgcover = bgcover
+		self.screensaver = screensaver
+		if self.screensaver:
+			self.COVER_PIC_PATH = "/tmp/.Screensaver%d.jpg"
+			self.NO_COVER_PIC_PATH = "/images/none.png"
+			self._no_picPath = "%s%s" % (mp_globals.pluginPath, self.NO_COVER_PIC_PATH)
+		else:
+			self.COVER_PIC_PATH = "/tmp/.Icon%d.jpg"
+			if self.bgcover:
+				self.NO_COVER_PIC_PATH = "/images/none.png"
+			else:
+				self.NO_COVER_PIC_PATH = "/images/no_coverArt.png"
+			self._no_picPath = "%s%s/%s%s" % (mp_globals.pluginPath, mp_globals.skinsPath, mp_globals.currentskin, self.NO_COVER_PIC_PATH)
+			if not fileExists(self._no_picPath):
+				self._no_picPath = "%s%s%s%s" % (mp_globals.pluginPath, mp_globals.skinsPath, mp_globals.skinFallback, self.NO_COVER_PIC_PATH)
+		global glob_screensaver_num
 		global glob_icon_num
 		global glob_last_cover
 		self.logofix = False
 		if url:
 			if url.startswith('http'):
-				if glob_last_cover[0] == url and glob_last_cover[1]:
+				if glob_last_cover[0] == url and glob_last_cover[1] and not self.screensaver:
 					self.showCoverFile(glob_last_cover[1])
 					if download_cb:
 						download_cb(glob_last_cover[1])
 				else:
-					glob_icon_num = (glob_icon_num + 1) % 2
-					glob_last_cover[0] = url
-					glob_last_cover[1] = None
-					self.downloadPath = self.COVER_PIC_PATH % glob_icon_num
+					if self.screensaver:
+						glob_screensaver_num = (glob_screensaver_num + 1) % 2
+						self.downloadPath = self.COVER_PIC_PATH % glob_screensaver_num
+					else:
+						glob_icon_num = (glob_icon_num + 1) % 2
+						glob_last_cover[0] = url
+						glob_last_cover[1] = None
+						self.downloadPath = self.COVER_PIC_PATH % glob_icon_num
 					d = self.downloadPage(url, self.downloadPath, agent=agent, cookieJar=cookieJar)
 					d.addCallback(self.showCover)
 					if download_cb:
@@ -85,7 +100,8 @@ class CoverHelper:
 			return self.dataErrorP(picfile)
 		else:
 			self.showCoverFile(picfile)
-		glob_last_cover[1] = picfile
+		if not self.screensaver:
+			glob_last_cover[1] = picfile
 		return picfile
 
 	def showCoverNone(self):
@@ -139,7 +155,8 @@ class CoverHelper:
 					self.showCoverNone()
 				else:
 					self._cover.instance.setPixmap(ptr)
-					self._cover.show()
+					if not self.bgcover:
+						self._cover.show()
 				return
 
 		self.showCoverNone()
