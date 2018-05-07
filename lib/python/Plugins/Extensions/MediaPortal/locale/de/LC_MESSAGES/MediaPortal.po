@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MediaPortal\n"
-"POT-Creation-Date: 2018-05-03 18:42+0200\n"
-"PO-Revision-Date: 2018-05-03 18:45+0200\n"
+"POT-Creation-Date: 2018-05-06 15:53+0200\n"
+"PO-Revision-Date: 2018-05-06 15:54+0200\n"
 "Last-Translator: dhwz <dhwz@gmx.net>\n"
 "Language-Team: MediaPortal Team\n"
 "Language: de_DE\n"
@@ -32,7 +32,7 @@ msgstr "Alben:"
 msgid "Delete"
 msgstr "Löschen"
 
-#: mpgz/src/additions/music/canna.py:108 src/resources/simpleplayer.py:1807
+#: mpgz/src/additions/music/canna.py:108 src/resources/simpleplayer.py:1801
 msgid "No entries in the playlist available!"
 msgstr "Keine Einträge in der Playlist vorhanden!"
 
@@ -186,7 +186,8 @@ msgstr "Seite"
 #: src/additions/mediatheken/ard.py:376 src/additions/mediatheken/ard.py:495
 #: src/additions/mediatheken/br_tv.py:281
 #: src/additions/mediatheken/dreisat.py:197
-#: src/additions/mediatheken/srg.py:189
+#: src/additions/mediatheken/funk.py:93 src/additions/mediatheken/funk.py:177
+#: src/additions/mediatheken/funk.py:278 src/additions/mediatheken/srg.py:189
 #: src/additions/mediatheken/videogold_de.py:80
 #: src/additions/mediatheken/watchbox.py:124
 #: src/additions/mediatheken/youtube.py:819
@@ -660,6 +661,7 @@ msgstr "Episoden Auswahl"
 #: mpgz/src/additions/useradditions/watchseries.py:238
 #: mpgz/src/additions/useradditions/watchseriesonline.py:165
 #: mpgz/src/additions/useradditions/watchseriesonline.py:325
+#: src/additions/mediatheken/funk.py:331
 #: src/additions/mediatheken/southpark.py:171
 msgid "No episodes found!"
 msgstr "Keine Episoden gefunden!"
@@ -723,7 +725,8 @@ msgstr "Entschuldigung, Stream URL kann nicht extrahiert werden."
 #: src/additions/mediatheken/arte.py:56 src/additions/mediatheken/arte.py:100
 #: src/additions/mediatheken/arte.py:159
 #: src/additions/mediatheken/dreisat.py:145
-#: src/additions/mediatheken/funk.py:103 src/additions/mediatheken/funk.py:176
+#: src/additions/mediatheken/funk.py:69 src/additions/mediatheken/funk.py:153
+#: src/additions/mediatheken/funk.py:254
 #: src/additions/mediatheken/netzkino.py:108
 #: src/additions/mediatheken/orf.py:212 src/additions/mediatheken/seventv.py:98
 #: src/additions/mediatheken/seventv.py:134
@@ -1017,7 +1020,7 @@ msgstr "Genre:"
 msgid "Runtime:"
 msgstr "Laufzeit:"
 
-#: src/additions/mediatheken/funk.py:262
+#: src/additions/mediatheken/funk.py:361
 #: src/additions/mediatheken/southpark.py:277
 #: src/additions/music/mtvdecharts.py:312 src/resources/simplelist.py:601
 #: src/resources/simplelist.py:605
@@ -1902,7 +1905,7 @@ msgstr "Film am Ende pausieren"
 
 #: src/plugin.py:294 src/plugin.py:309 src/resources/simplelist.py:623
 #: src/resources/simplelist.py:800 src/resources/simplelist.py:824
-#: src/resources/simpleplayer.py:1657 src/resources/simpleplayer.py:1663
+#: src/resources/simpleplayer.py:1651 src/resources/simpleplayer.py:1657
 msgid "No"
 msgstr "Nein"
 
@@ -1913,6 +1916,18 @@ msgstr "Starte vom Anfang"
 #: src/plugin.py:295
 msgid "Resume from last position"
 msgstr "Von letzter Position fortsetzen"
+
+#: src/plugin.py:297
+msgid "large"
+msgstr "Groß"
+
+#: src/plugin.py:297
+msgid "small"
+msgstr "Klein"
+
+#: src/plugin.py:297
+msgid "off"
+msgstr "Aus"
 
 #: src/plugin.py:325
 msgid "Yellow"
@@ -2078,7 +2093,7 @@ msgstr "Temporäres Cacheverzeichnis:"
 msgid "Icon Cachepath:"
 msgstr "Icon Cacheverzeichnis:"
 
-#: src/plugin.py:654 src/resources/simpleplayer.py:2048
+#: src/plugin.py:654 src/resources/simpleplayer.py:2042
 msgid "Videoquality:"
 msgstr "Videoqualität:"
 
@@ -2365,7 +2380,7 @@ msgid "Ordering is only possible with filter \"ALL\"."
 msgstr "Sortieren ist nur mit dem Filter \"ALLE\" möglich."
 
 #: src/resources/cannalink.py:24 src/resources/eightieslink.py:48
-#: src/resources/mtvdelink.py:65 src/resources/simpleplayer.py:1374
+#: src/resources/mtvdelink.py:65 src/resources/simpleplayer.py:1368
 msgid "No URL found!"
 msgstr "Keine URL gefunden!"
 
@@ -2389,6 +2404,16 @@ msgstr "Stream startet in 6 Sek."
 #: src/resources/hosters/openload.py:22
 msgid "IP address not authorized. Visit https://openload.co/pair"
 msgstr "IP Adresse nicht autorisiert. Besuche https://openload.co/pair"
+
+#: src/resources/imports.py:31 src/resources/messageboxext.py:66
+#: src/resources/messageboxext.py:68
+msgid "no"
+msgstr "Nein"
+
+#: src/resources/imports.py:31 src/resources/messageboxext.py:66
+#: src/resources/messageboxext.py:68
+msgid "yes"
+msgstr "Ja"
 
 #: src/resources/keyboardext.py:84
 msgid "Move cursor left"
@@ -2457,14 +2482,6 @@ msgstr "Wähle Vorschlagsliste"
 #: src/resources/menuhelper.py:142
 msgid "No menudata found!"
 msgstr "Keine Menüdaten gefunden!"
-
-#: src/resources/messageboxext.py:66 src/resources/messageboxext.py:68
-msgid "yes"
-msgstr "Ja"
-
-#: src/resources/messageboxext.py:66 src/resources/messageboxext.py:68
-msgid "no"
-msgstr "Nein"
 
 #: src/resources/mpscreen.py:18
 msgid "Search char."
@@ -2633,8 +2650,8 @@ msgid "Can't download playlist"
 msgstr "Kann Playlist nicht downloaden"
 
 #: src/resources/simplelist.py:622 src/resources/simplelist.py:799
-#: src/resources/simplelist.py:823 src/resources/simpleplayer.py:1655
-#: src/resources/simpleplayer.py:1662
+#: src/resources/simplelist.py:823 src/resources/simpleplayer.py:1649
+#: src/resources/simpleplayer.py:1656
 msgid "Yes"
 msgstr "Ja"
 
@@ -2741,148 +2758,148 @@ msgstr "zum Player"
 msgid "Playmode"
 msgstr "Abspielmodus"
 
-#: src/resources/simpleplayer.py:1281 src/resources/simpleplayer.py:1290
+#: src/resources/simpleplayer.py:1275 src/resources/simpleplayer.py:1284
 #, python-format
 msgid "This STB can't decode %s streams!"
 msgstr "Diese STB kann %s Streams nicht wiedergeben!"
 
-#: src/resources/simpleplayer.py:1310
+#: src/resources/simpleplayer.py:1304
 #, python-format
 msgid "Streaming error: %s"
 msgstr "Streaming Fehler: %s"
 
-#: src/resources/simpleplayer.py:1656
+#: src/resources/simpleplayer.py:1650
 #, python-format
 msgid "Yes & Add Service to global Playlist-%02d"
 msgstr "Ja & Service zur globalen Playlist-%02d hinzufügen"
 
-#: src/resources/simpleplayer.py:1658 src/resources/simpleplayer.py:1664
+#: src/resources/simpleplayer.py:1652 src/resources/simpleplayer.py:1658
 msgid "No, but start over from the beginning"
 msgstr "Nein, aber von Anfang an neu beginnen"
 
-#: src/resources/simpleplayer.py:1667
+#: src/resources/simpleplayer.py:1661
 msgid "Stop playing this movie?"
 msgstr "Wiedergabe dieses Films stoppen?"
 
-#: src/resources/simpleplayer.py:1890
+#: src/resources/simpleplayer.py:1884
 msgid "Error: Service may be added only from the local playlist"
 msgstr "Fehler: Service darf nur von der lokalen Playlist hinzugefügt werden"
 
-#: src/resources/simpleplayer.py:1904
+#: src/resources/simpleplayer.py:1898
 msgid "Error: URL is not persistent!"
 msgstr "Fehler: URL ist nicht persistent!"
 
-#: src/resources/simpleplayer.py:1910
+#: src/resources/simpleplayer.py:1904
 msgid "Added entry"
 msgstr "Eintrag hinzugefügt"
 
-#: src/resources/simpleplayer.py:1912
+#: src/resources/simpleplayer.py:1906
 msgid "Entry already exists"
 msgstr "Eintrag schon vorhanden"
 
-#: src/resources/simpleplayer.py:1914
+#: src/resources/simpleplayer.py:1908
 msgid "Error!"
 msgstr "Fehler!"
 
-#: src/resources/simpleplayer.py:2041 src/resources/simpleplayer.py:2042
+#: src/resources/simpleplayer.py:2035 src/resources/simpleplayer.py:2036
 msgid "SimplePlayer Configuration"
 msgstr "SimplePlayer Konfiguration"
 
-#: src/resources/simpleplayer.py:2044
+#: src/resources/simpleplayer.py:2038
 msgid "Global playlist number:"
 msgstr "Globale Playlist-Nummer:"
 
-#: src/resources/simpleplayer.py:2045
+#: src/resources/simpleplayer.py:2039
 msgid "Playmode:"
 msgstr "Abspielmodus:"
 
-#: src/resources/simpleplayer.py:2046
+#: src/resources/simpleplayer.py:2040
 msgid "Screensaver:"
 msgstr "Bildschirmschoner:"
 
-#: src/resources/simpleplayer.py:2047
+#: src/resources/simpleplayer.py:2041
 msgid "Highest resolution for playback (only YouTube):"
 msgstr "Höchste Auflösung für die Wiedergabe (nur YouTube):"
 
-#: src/resources/simpleplayer.py:2049
+#: src/resources/simpleplayer.py:2043
 msgid "Save resume cache in flash memory:"
 msgstr "Speichere Wiederaufnahme-Cache im Flashspeicher:"
 
-#: src/resources/simpleplayer.py:2050
+#: src/resources/simpleplayer.py:2044
 msgid "Behavior on movie start:"
 msgstr "Verhalten bei Filmstart:"
 
-#: src/resources/simpleplayer.py:2051
+#: src/resources/simpleplayer.py:2045
 msgid "Behavior on movie stop:"
 msgstr "Verhalten bei Filmstopp:"
 
-#: src/resources/simpleplayer.py:2052
+#: src/resources/simpleplayer.py:2046
 msgid "Behavior on movie end:"
 msgstr "Verhalten bei Filmende:"
 
-#: src/resources/simpleplayer.py:2053
+#: src/resources/simpleplayer.py:2047
 msgid "Seekbar sensibility:"
 msgstr "Suchleistenempfindlichkeit:"
 
-#: src/resources/simpleplayer.py:2054
+#: src/resources/simpleplayer.py:2048
 msgid "Infobar cover always off:"
 msgstr "Infobar-Coveranzeige immer aus:"
 
-#: src/resources/simpleplayer.py:2055
+#: src/resources/simpleplayer.py:2049
 msgid "Use SP number seek:"
 msgstr "Verwende SP Nummernsuche:"
 
-#: src/resources/simpleplayer.py:2056
-msgid "Radio big cover:"
-msgstr "Großes Radio Cover:"
+#: src/resources/simpleplayer.py:2050
+msgid "Radio cover:"
+msgstr "Radio-Cover:"
 
-#: src/resources/simpleplayer.py:2057
+#: src/resources/simpleplayer.py:2051
 msgid "Radio visualization:"
-msgstr "Radio Visualisierung:"
+msgstr "Radio-Visualisierung:"
 
-#: src/resources/simpleplayer.py:2058
+#: src/resources/simpleplayer.py:2052
 msgid "Radio screensaver:"
 msgstr "Radio-Bildschirmschoner:"
 
-#: src/resources/simpleplayer.py:2059
-msgid "Radio screensaver keywords (comma separated):"
-msgstr "Schlüsselwörter für Radio-Bildschirmschoner (Komma getrennt):"
+#: src/resources/simpleplayer.py:2053
+msgid "Radio screensaver keywords:"
+msgstr "Schlüsselwörter für den Radio-Bildschirmschoner:"
 
-#: src/resources/simpleplayer.py:2080 src/resources/simpleplayer.py:2081
+#: src/resources/simpleplayer.py:2074 src/resources/simpleplayer.py:2075
 msgid "SimplePlayer Menu"
 msgstr "SimplePlayer Menü"
 
-#: src/resources/simpleplayer.py:2091
+#: src/resources/simpleplayer.py:2085
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#: src/resources/simpleplayer.py:2094
+#: src/resources/simpleplayer.py:2088
 #, python-format
 msgid "Add service to global playlist-%02d"
 msgstr "Füge Service zu globaler Playlist-%02d hinzu"
 
-#: src/resources/simpleplayer.py:2096
+#: src/resources/simpleplayer.py:2090
 #, python-format
 msgid "Open global playlist-%02d"
 msgstr "Öffne globale Playlist-%02d"
 
-#: src/resources/simpleplayer.py:2098
+#: src/resources/simpleplayer.py:2092
 msgid "Open local playlist"
 msgstr "Öffne lokale Playlist"
 
-#: src/resources/simpleplayer.py:2100
+#: src/resources/simpleplayer.py:2094
 msgid "A/V Settings"
 msgstr "A/V Einstellungen"
 
-#: src/resources/simpleplayer.py:2102
+#: src/resources/simpleplayer.py:2096
 msgid "Advanced Audio Settings"
 msgstr "Erweiterte Audioeinstellungen"
 
-#: src/resources/simpleplayer.py:2103
+#: src/resources/simpleplayer.py:2097
 msgid "Mainmenu"
 msgstr "Hauptmenü"
 
-#: src/resources/simpleplayer.py:2168
+#: src/resources/simpleplayer.py:2162
 #, python-format
 msgid ""
 "The directory path does not end with '/':\n"
@@ -2891,7 +2908,7 @@ msgstr ""
 "Der Verzeichnispfad endet nicht mit '/':\n"
 "%s"
 
-#: src/resources/simpleplayer.py:2169
+#: src/resources/simpleplayer.py:2163
 #, python-format
 msgid ""
 "File with the same name exists in the directory path:\n"
@@ -2900,7 +2917,7 @@ msgstr ""
 "Datei mit gleichen Namen im Verzeichnispfad vorhanden:\n"
 "%s"
 
-#: src/resources/simpleplayer.py:2170
+#: src/resources/simpleplayer.py:2164
 #, python-format
 msgid ""
 "The missing directory:\n"
@@ -2909,7 +2926,7 @@ msgstr ""
 "Das fehlende Verzeichnis:\n"
 "%s konnte nicht angelegt werden!"
 
-#: src/resources/simpleplayer.py:2171
+#: src/resources/simpleplayer.py:2165
 #, python-format
 msgid ""
 "The directory path:\n"
@@ -2918,7 +2935,7 @@ msgstr ""
 "Der Verzeichnispfad:\n"
 "%s ist nicht vorhanden!"
 
-#: src/resources/simpleplayer.py:2172
+#: src/resources/simpleplayer.py:2166
 #, python-format
 msgid ""
 "There exists already a directory with this name:\n"
@@ -2927,7 +2944,7 @@ msgstr ""
 "Es existiert schon ein Verzeichnis mit diesem Namen:\n"
 "%s"
 
-#: src/resources/simpleplayer.py:2173
+#: src/resources/simpleplayer.py:2167
 #, python-format
 msgid ""
 "The path is OK, the file name was not specified:\n"
@@ -2936,7 +2953,7 @@ msgstr ""
 "Der Pfad ist i.O., der Dateiname wurde nicht angegeben:\n"
 "%s"
 
-#: src/resources/simpleplayer.py:2174
+#: src/resources/simpleplayer.py:2168
 #, python-format
 msgid ""
 "The directory path and file name is OK:\n"
@@ -2945,11 +2962,11 @@ msgstr ""
 "Der Verzeichnispfad & Dateiname ist i.O.:\n"
 "%s"
 
-#: src/resources/simpleplayer.py:2175
+#: src/resources/simpleplayer.py:2169
 msgid "The directory path is not specified!"
 msgstr "Der Verzeichnispfad wurde nicht angegeben!"
 
-#: src/resources/simpleplayer.py:2176
+#: src/resources/simpleplayer.py:2170
 #, python-format
 msgid ""
 "Symbolic link with the same name in the directory path:\n"
@@ -2958,7 +2975,7 @@ msgstr ""
 "Symbolischer Link mit gleichen Namen im Verzeichnispfad:\n"
 "%s vorhanden!"
 
-#: src/resources/simpleplayer.py:2177
+#: src/resources/simpleplayer.py:2171
 #, python-format
 msgid ""
 "The directory path does not begin with '/':\n"
@@ -3110,6 +3127,9 @@ msgstr ""
 #: src/resources/update.py:158
 msgid "MediaPortal update failed! Check the update log carefully!"
 msgstr "MediaPortal Update fehlgeschlagen! Überprüfe das Updatelog sorgfältig!"
+
+#~ msgid "Radio screensaver keywords (comma separated):"
+#~ msgstr "Schlüsselwörter für Radio-Bildschirmschoner (Komma getrennt):"
 
 #~ msgid "Big cover in radio mode:"
 #~ msgstr "Großes Cover im Radiomodus:"

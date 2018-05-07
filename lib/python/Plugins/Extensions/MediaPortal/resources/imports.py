@@ -1,4 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
+from Plugins.Extensions.MediaPortal.plugin import _
+
 from enigma import gFont, addFont, eTimer, eConsoleAppContainer, ePicLoad, loadPNG, getDesktop, eServiceReference, iPlayableService, eListboxPythonMultiContent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, eListbox, gPixmapPtr, getPrevAsciiCode, eBackgroundFileEraser
 
 from Plugins.Plugin import PluginDescriptor
@@ -24,7 +26,13 @@ from sepg import log
 from Components.ActionMap import NumberActionMap, ActionMap, HelpableActionMap
 from Components.AVSwitch import AVSwitch
 from Components.Button import Button
-from Components.config import config, ConfigInteger, ConfigSelection, getConfigListEntry, ConfigText, ConfigDirectory, ConfigYesNo, configfile, ConfigSelection, ConfigSubsection, ConfigPIN, NoSave, ConfigNothing, ConfigIP
+from Components.config import config, ConfigInteger, ConfigSelection, getConfigListEntry, ConfigText, ConfigDirectory, ConfigBoolean, configfile, ConfigSelection, ConfigSubsection, ConfigPIN, NoSave, ConfigNothing, ConfigIP
+
+yes_no_descriptions = {False: _("no"), True: _("yes")}
+class ConfigYesNo(ConfigBoolean):
+        def __init__(self, default = False):
+                ConfigBoolean.__init__(self, default = default, descriptions = yes_no_descriptions)
+
 try:
 	from Components.config import ConfigPassword
 except ImportError:

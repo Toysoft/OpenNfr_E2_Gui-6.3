@@ -190,7 +190,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018050401"))
+config.mediaportal.version = NoSave(ConfigText(default="2018050601"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.skinfail = ConfigYesNo(default = False)
@@ -218,7 +218,6 @@ config.mediaportal.ena_suggestions = ConfigYesNo(default = True)
 
 config.mediaportal.animation_coverart = ConfigSelection(default = "mp_crossfade_fast", choices = [("mp_crossfade_fast", _("Crossfade (fast)")),("mp_crossfade_slow", _("Crossfade (slow)"))])
 config.mediaportal.animation_label = ConfigSelection(default = "mp_crossfade_fast", choices = [("mp_crossfade_fast", _("Crossfade (fast)")),("mp_crossfade_slow", _("Crossfade (slow)"))])
-config.mediaportal.animation_simpleplayer = ConfigSelection(default = "mp_crossfade_slow", choices = [("mp_player_animation", _("Slide from bottom")),("mp_crossfade_slow", _("Crossfade"))])
 
 skins = []
 if mp_globals.videomode == 2:
@@ -294,7 +293,7 @@ config.mediaportal.sp_pl_number = ConfigInteger(default = 1, limits = (1,99))
 config.mediaportal.sp_use_yt_with_proxy = ConfigSelection(default = "no", choices = [("no", _("No")), ("prz", "with Premiumize"), ("rdb", "with Real-Debrid"), ("proxy", "with a HTTP Proxy")])
 config.mediaportal.sp_on_movie_start = ConfigSelection(default = "start", choices = [("start", _("Start from the beginning")), ("ask", _("Ask user")), ("resume", _("Resume from last position"))])
 config.mediaportal.sp_save_resumecache = ConfigYesNo(default = False)
-config.mediaportal.sp_radio_largecover = ConfigYesNo(default = True)
+config.mediaportal.sp_radio_cover = ConfigSelection(default = "large", choices = [("large", _("large")), ("small", _("small")), ("off", _("off"))])
 config.mediaportal.sp_radio_visualization = ConfigYesNo(default = False)
 config.mediaportal.sp_radio_bgsaver = ConfigYesNo(default = True)
 config.mediaportal.sp_radio_bgsaver_keywords = ConfigText(default="music", fixed_size=False)
@@ -625,7 +624,6 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		if mp_globals.animations:
 			self.configlist.append(getConfigListEntry(_("Coverart animation")+":", config.mediaportal.animation_coverart, False))
 			self.configlist.append(getConfigListEntry(_("Label animation")+":", config.mediaportal.animation_label, False))
-			self.configlist.append(getConfigListEntry(_("SimplePlayer animation")+":", config.mediaportal.animation_simpleplayer, False))
 		self._spacer()
 		self.configlist.append(getConfigListEntry(_("YOUTH PROTECTION"), ))
 		self._separator()

@@ -191,7 +191,7 @@ class CoverSearchHelper:
 			self.cb_searchCover(None)
 
 	def cb_searchCover(self, jdata, fallback='', retry=False, title=''):
-		largeCover = config.mediaportal.sp_radio_largecover.value
+		CoverSize = config.mediaportal.sp_radio_cover.value
 		url = None
 		import json
 		try:
@@ -214,16 +214,16 @@ class CoverSearchHelper:
 					self.searchCover(title, fallback=fallback, retry=True)
 					return
 				else:
-					if largeCover:
+					if CoverSize == "large":
 						fallback = 'file://' + mp_globals.pluginPath + '/images/none.png'
 					url = fallback
 			else:
-				if largeCover:
+				if CoverSize == "large":
 					fallback = 'file://' + mp_globals.pluginPath + '/images/none.png'
 				url = fallback
 
 		if not self.hasEmbeddedCoverArt:
-			self.showCover(url, self.cb_coverDownloaded, largeCover=largeCover)
+			self.showCover(url, self.cb_coverDownloaded, CoverSize=CoverSize)
 		else:
 			self._evEmbeddedCoverArt()
 
@@ -311,10 +311,12 @@ class SimpleSeekHelper:
 						self.cursorTimer.start(200, False)
 
 	def __BgCoverShow(self):
+		self.RadioBg['background'].show()
 		self.RadioBg['BgCover'].show()
 		InfoBarShowHide.lockShow(self)
 
 	def __BgCoverHide(self):
+		self.RadioBg['background'].hide()
 		self.RadioBg['BgCover'].hide()
 		self.RadioBg.setProperties()
 		self.RadioBg.hideControls()
@@ -323,12 +325,12 @@ class SimpleSeekHelper:
 	def __seekBarShown(self):
 		self.seekBarShown = True
 		if self.playerMode == "RADIO":
-			self.BgCoverShow.start(300, 1)
+			self.BgCoverShow.start(200, 1)
 
 	def __seekBarHide(self):
 		self.seekBarShown = False
 		if self.playerMode == "RADIO":
-			self.BgCoverHide.start(300, 1)
+			self.BgCoverHide.start(200, 1)
 
 	def toggleShow(self):
 		if self.seekBarLocked:
@@ -764,8 +766,8 @@ class RadioBackground(Screen, RadioVisualization):
 			self.skin = '''<screen backgroundColor="transparent" flags="wfNoBorder" name="RadioBackground" position="0,0" size="1920,1080" zPosition="-1">
 					<widget name="background" position="0,0" size="1920,1080" transparent="0" backgroundColor="#00202020" />
 					<widget name="screenSaverBg" position="0,0" size="1920,1080" transparent="0" backgroundColor="#00000000" zPosition="1" />
-					<widget name="screenSaver" position="0,0" size="2635,1482" zPosition="2" />
-					<widget alphatest="on" name="BgCover" position="648,10" size="800,800" zPosition="3" />
+					<widget name="screenSaver" position="0,0" size="1920,1080" zPosition="2" />
+					<widget alphatest="blend" name="BgCover" position="648,10" size="800,800" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="3" />
 					<widget name="progress_0" zPosition="4" position="20,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
 					<widget name="progress_1" zPosition="4" position="58,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
 					<widget name="progress_2" zPosition="4" position="96,500" size="38,300" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-1080.png" />
@@ -803,8 +805,8 @@ class RadioBackground(Screen, RadioVisualization):
 			self.skin = '''<screen backgroundColor="transparent" flags="wfNoBorder" name="RadioBackground" position="0,0" size="1280,720" zPosition="-1">
 					<widget name="background" position="0,0" size="1280,720" transparent="0" backgroundColor="#00202020" />
 					<widget name="screenSaverBg" position="0,0" size="1280,720" transparent="0" backgroundColor="#00000000" zPosition="1" />
-					<widget name="screenSaver" position="0,0" size="1757,988" zPosition="2" />
-					<widget alphatest="on" name="BgCover" position="430,6" size="534,534" zPosition="3" />
+					<widget name="screenSaver" position="0,0" size="1280,720" zPosition="2" />
+					<widget alphatest="blend" name="BgCover" position="430,6" size="534,534" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="3" />
 					<widget name="progress_0" zPosition="4" position="15,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
 					<widget name="progress_1" zPosition="4" position="40,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
 					<widget name="progress_2" zPosition="4" position="65,330" size="25,200" transparent="1" orientation="orBottomToTop" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_green-720.png" />
@@ -854,33 +856,30 @@ class RadioBackground(Screen, RadioVisualization):
 		self.hideControls()
 		self['background'].show()
 		self['screenSaverBg'].hide()
+		self['screenSaver'].hide()
 
 		if self.playerMode == "RADIO":
 			try:
 				self['screenSaver'].instance.setShowHideAnimation("mp_quick_fade")
-				self['BgCover'].instance.setShowHideAnimation(config.mediaportal.animation_coverart.value)
+				self['BgCover'].instance.setShowHideAnimation("mp_quick_fade")
 			except:
 				pass
 			if config.mediaportal.sp_radio_bgsaver.value:
 				if mp_globals.videomode == 2:
 					self.res_x = 1920
 					self.res_y = 1080
-					self.offset1 = 400
-					self.offset2 = 226
-					self.offset3 = 715
+					self.offset = 400
 				else:
 					self.res_x = 1280
 					self.res_y = 720
-					self.offset1 = 266
-					self.offset2 = 150
-					self.offset3 = 476
+					self.offset = 266
 				self['screenSaverBg'].show()
 				self['background'].hide()
 				self.initCallNewPicture()
 
 	def changetimerAppend(self):
-		self.mc+=1
-		if self.mc == self.offset1:
+		self.val += 1
+		if self.val == self.offset:
 			self['screenSaver'].hide()
 			self.fadeouttimer.start(200, 1)
 		else:
@@ -895,86 +894,83 @@ class RadioBackground(Screen, RadioVisualization):
 
 	def initCallNewPicture(self):
 		if len(config.mediaportal.sp_radio_bgsaver_keywords.value)>0:
-			keywords = "/?" + config.mediaportal.sp_radio_bgsaver_keywords.value
+			keywords = "/?" + urllib.quote_plus(config.mediaportal.sp_radio_bgsaver_keywords.value)
 		else:
 			keywords = ""
 		CoverHelper(self['screenSaver']).getCover("https://source.unsplash.com/random/1920x1080%s" % keywords, screensaver=True)
-		self.mc=0
+		self.val = 0
 		self.ken_burns = self.getAnimationStyle()
-		self.setNewPicture()
 
-	def setNewPicture(self):
-		if self.ken_burns=='zoom_in':
-			size_x, size_Y=self.res_x, self.res_y
-			pos_x, pos_y=0, 0
-			self.function=(self.zoom_in)
+		if self.ken_burns == 'zoom_in':
+			size_x, size_Y = self.res_x, self.res_y
+			pos_x, pos_y = 0, 0
+			self.function = self.zoom_in
 
-		elif self.ken_burns=='zoom_out':
-			size_x, size_Y=self.res_x+(self.offset1+2)*1.778, self.res_y+(self.offset1+2)
-			pos_x, pos_y=0, 0
-			self.function=(self.zoom_out)
+		elif self.ken_burns == 'zoom_out':
+			size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
+			pos_x, pos_y = 0, 0
+			self.function = self.zoom_out
 
-		elif self.ken_burns=='move_from_left_top_to_right_bottom':
-			size_x, size_Y=self.res_x+(self.offset1+2)*1.778, self.res_y+(self.offset1+2)
-			pos_x, pos_y=0, 0
-			self.function=(self.move_from_left_top_to_right_bottom)
+		elif self.ken_burns == 'move_from_left_top_to_right_bottom':
+			size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
+			pos_x, pos_y = 0, 0
+			self.function = self.move_from_left_top_to_right_bottom
 
-		elif self.ken_burns=='move_from_right_top_to_left_bottom':
-			size_x, size_Y=self.res_x+(self.offset1+2)*1.778, self.res_y+(self.offset1+2)
-			pos_x, pos_y=-(self.offset1+2)*1.778, 0
-			self.function=(self.move_from_right_top_to_left_bottom)
+		elif self.ken_burns == 'move_from_right_top_to_left_bottom':
+			size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
+			pos_x, pos_y = -int(self.offset*1.7778), 0
+			self.function = self.move_from_right_top_to_left_bottom
 
-		elif self.ken_burns=='move_from_left_bottom_to_right_top':
-			size_x, size_Y=self.res_x+(self.offset1+2)*1.778, self.res_y+(self.offset1+2)
-			pos_x, pos_y=0, -(self.offset1+2)
-			self.function = (self.move_from_left_bottom_to_right_top)
+		elif self.ken_burns == 'move_from_left_bottom_to_right_top':
+			size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
+			pos_x, pos_y = 0, -self.offset
+			self.function = self.move_from_left_bottom_to_right_top
 
-		elif self.ken_burns=='move_from_right_bottom_to_left_top':
-			size_x, size_Y=self.res_x+(self.offset1+2)*1.778, self.res_y+(self.offset1+2)
-			pos_x, pos_y=-self.offset3, -(self.offset1+2)
-			self.function=(self.move_from_right_bottom_to_left_top)
+		elif self.ken_burns == 'move_from_right_bottom_to_left_top':
+			size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
+			pos_x, pos_y = -int(self.offset*1.7778), -self.offset
+			self.function = self.move_from_right_bottom_to_left_top
 
-		elif self.ken_burns=='move_zoomed_left_to_right':
-			self.offset_y=random.randrange(self.offset2-1)*-1
-			size_x, size_Y=self.res_x+(self.offset1+2), self.res_y+self.offset2
-			pos_x, pos_y=0, self.offset_y
-			self.function=(self.move_zoomed_left_to_right)
+		elif self.ken_burns == 'move_zoomed_left_to_right':
+			self.offset_y = -(random.randrange(int(self.offset/1.7778)))
+			size_x, size_Y = self.res_x+self.offset, self.res_y+int(self.offset/1.7778)
+			pos_x, pos_y = 0, self.offset_y
+			self.function = self.move_zoomed_left_to_right
 
-		elif self.ken_burns=='move_zoomed_right_to_left':
-			self.offset_y=random.randrange(self.offset2-1)*-1
-			size_x, size_Y=self.res_x+(self.offset1+2), self.res_y+self.offset2
-			pos_x, pos_y=-(self.offset1+2), self.offset_y
-			self.function=(self.move_zoomed_right_to_left)
+		elif self.ken_burns == 'move_zoomed_right_to_left':
+			self.offset_y = -(random.randrange(int(self.offset/1.7778)))
+			size_x, size_Y = self.res_x+self.offset, self.res_y+int(self.offset/1.7778)
+			pos_x, pos_y = -self.offset, self.offset_y
+			self.function = self.move_zoomed_right_to_left
 
-		self['screenSaver'].resize(size_x, size_Y)
-		self['screenSaver'].setPosition(pos_x, pos_y)
-		self.mc+=1
+		self['screenSaver'].instance.resize(eSize(size_x, size_Y))
+		self['screenSaver'].instance.move(ePoint(pos_x, pos_y))
+		self.val += 1
 		self.changetimer.start(40, 1)
 
 	def zoom_in(self):
-		self['screenSaver'].resize(self.res_x+int(self.mc*1.78), self.res_y+self.mc)
+		self['screenSaver'].instance.resize(eSize(self.res_x+int(self.val*1.7778), self.res_y+self.val))
 
 	def zoom_out(self):
-		v=(self.offset1+2)-self.mc
-		self['screenSaver'].resize(self.res_x+int(v*1.78), self.res_y+v)
+		self['screenSaver'].instance.resize(eSize(self.res_x+int((self.offset-self.val)*1.7778), self.res_y+self.offset-self.val))
 
 	def move_from_left_top_to_right_bottom(self):
-		self['screenSaver'].setPosition(0-int(self.mc*1.78), 0-self.mc)
+		self['screenSaver'].instance.move(ePoint(-int(self.val*1.7778), -self.val))
 
 	def move_from_left_bottom_to_right_top(self):
-		self['screenSaver'].setPosition(0-int(self.mc*1.78), -(self.offset1+2)+self.mc)
+		self['screenSaver'].instance.move(ePoint(-int(self.val*1.7778), -self.offset+self.val))
 
 	def move_from_right_bottom_to_left_top(self):
-		self['screenSaver'].setPosition(-self.offset3+int(self.mc*1.78), -(self.offset1+2)+self.mc)
+		self['screenSaver'].instance.move(ePoint(-int(self.offset*1.7778)+int(self.val*1.7778), -self.offset+self.val))
 
 	def move_from_right_top_to_left_bottom(self):
-		self['screenSaver'].setPosition(-self.offset3+int(self.mc*1.78), 0-self.mc)
+		self['screenSaver'].instance.move(ePoint(-int(self.offset*1.7778)+int(self.val*1.7778), -self.val))
 
 	def move_zoomed_left_to_right(self):
-		self['screenSaver'].setPosition(0-self.mc, self.offset_y)
+		self['screenSaver'].instance.move(ePoint(-self.val, self.offset_y))
 
 	def move_zoomed_right_to_left(self):
-		self['screenSaver'].setPosition(-(self.offset1+2)+self.mc, self.offset_y)
+		self['screenSaver'].instance.move(ePoint(-self.offset+self.val, self.offset_y))
 
 class SimplePlayerPVRState(Screen):
 	def __init__(self, session):
@@ -1913,7 +1909,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		else:
 			self.session.open(MessageBoxExt, _("Error!"), MessageBoxExt.TYPE_INFO, timeout=5)
 
-	def showCover(self, cover, download_cb=None, largeCover=False):
+	def showCover(self, cover, download_cb=None, CoverSize="small"):
 		if config.mediaportal.sp_infobar_cover_off.value:
 			self.hideSPCover()
 			self['Cover'].hide()
@@ -1921,10 +1917,10 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			return
 		if self.coverBGisHidden:
 			self.showSPCover()
-		if largeCover and self.playerMode == 'RADIO':
+		if CoverSize == "large" and self.playerMode == 'RADIO':
 			if cover:
 				self._BgCover.getCover(cover.replace('300x300','800x800'), bgcover=True)
-		else:
+		elif (CoverSize == "small" and self.playerMode == 'RADIO') or self.playerMode != 'RADIO':
 			self._Cover.getCover(cover, download_cb=download_cb)
 
 	def showIcon(self):
@@ -1940,8 +1936,8 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 	def _animation(self):
 		try:
-			self.setShowHideAnimation(config.mediaportal.animation_simpleplayer.value)
-			self['Cover'].instance.setShowHideAnimation(config.mediaportal.animation_coverart.value)
+			self.setShowHideAnimation("mp_quick_fade")
+			self['Cover'].instance.setShowHideAnimation("mp_quick_fade")
 		except:
 			pass
 
@@ -2053,10 +2049,10 @@ class SimpleConfig(Screen, ConfigListScreenExt):
 		self.list.append(getConfigListEntry(_('Seekbar sensibility:'), config.mediaportal.sp_seekbar_sensibility))
 		self.list.append(getConfigListEntry(_('Infobar cover always off:'), config.mediaportal.sp_infobar_cover_off))
 		self.list.append(getConfigListEntry(_('Use SP number seek:'), config.mediaportal.sp_use_number_seek))
-		self.list.append(getConfigListEntry(_('Radio big cover:'), config.mediaportal.sp_radio_largecover))
+		self.list.append(getConfigListEntry(_('Radio cover:'), config.mediaportal.sp_radio_cover))
 		self.list.append(getConfigListEntry(_('Radio visualization:'), config.mediaportal.sp_radio_visualization))
 		self.list.append(getConfigListEntry(_('Radio screensaver:'), config.mediaportal.sp_radio_bgsaver))
-		self.list.append(getConfigListEntry(_('Radio screensaver keywords (comma separated):'), config.mediaportal.sp_radio_bgsaver_keywords))
+		self.list.append(getConfigListEntry(_('Radio screensaver keywords:'), config.mediaportal.sp_radio_bgsaver_keywords))
 		ConfigListScreenExt.__init__(self, self.list)
 		self['setupActions'] = ActionMap(['SetupActions'],
 		{

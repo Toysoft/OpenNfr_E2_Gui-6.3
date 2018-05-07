@@ -169,7 +169,7 @@ class MPUpdateScreen(MPScreen):
 		if "\n" in str:
 			lines = str.split('\n')
 			for line in lines:
-				if line != "":
+				if line != "" and not "porn" in line:
 					self.list.append((line,))
 		else:
 			self.list.append((str,))

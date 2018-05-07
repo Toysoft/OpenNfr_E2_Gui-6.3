@@ -2,7 +2,7 @@
 import json
 import requests
 
-operations = {'byid':'2835669fdcfe2d07351d633353bf87a8'}
+operations = {'byid':'f058a27469d8b709c3b9db648cae47c2'}
 cid = '114994613565243649'
 channelId = '741'
 origin = 'https://www.funk.net'
@@ -27,6 +27,8 @@ def getVideoUrl(id, downld):
 			else:
 				return
 		azure_progressive_base = get_cdn_shield_base('Prog', '-d')
+		if not azure_progressive_base and not j['result']['protectiondata'].has_key('tokenHLS'):
+			azure_progressive_base = get_cdn_shield_base()
 		if azure_progressive_base:
 			azure_file_distribution = stream_data.get('azureFileDistribution')
 			streams = []

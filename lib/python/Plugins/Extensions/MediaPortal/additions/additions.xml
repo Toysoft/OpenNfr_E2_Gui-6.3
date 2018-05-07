@@ -42,7 +42,7 @@
 		<plugin type="mod" modfile="mediatheken.arte" confopt="showArte" default="True" confcat="mediatheken" gz="0" name="arte Mediathek" icon="arte" filter="Mediathek" screen="arteFirstScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.atv" confopt="showatv" default="True" confcat="mediatheken" gz="0" name="ATV Mediathek" icon="atv" filter="Mediathek" screen="atvGenreScreen" param1="" param2=""/>
 		<!--<plugin type="mod" modfile="mediatheken.br_tv" confopt="showBRTV" default="True" confcat="mediatheken" gz="0" name="BR Mediathek" icon="brtv" filter="Mediathek" screen="BRGenreScreen" param1="" param2=""/>-->
-		<!--<plugin type="mod" modfile="mediatheken.funk" confopt="showFUNK" default="True" confcat="mediatheken" gz="0" name="FUNK" icon="funk" filter="Mediathek" screen="funkGenreScreen" param1="" param2=""/>-->
+		<plugin type="mod" modfile="mediatheken.funk" confopt="showFUNK" default="True" confcat="mediatheken" gz="0" name="FUNK" icon="funk" filter="Mediathek" screen="funkGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.kindertube" confopt="showkindertube" default="True" confcat="mediatheken" gz="0" name="KinderTube" icon="kindertube" filter="Mediathek" screen="kindertubeMain" param1="" param2="" kids="1"/>
 		<plugin type="mod" modfile="mediatheken.myspass" confopt="showmyspass" default="True" confcat="mediatheken" gz="0" name="MySpass" icon="myspass" filter="Mediathek" screen="myspassGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.netzkino" confopt="showNetzKino" default="True" confcat="mediatheken" gz="0" name="NetzKino" icon="netzkino" filter="Mediathek" screen="netzKinoGenreScreen" param1="" param2=""/>
