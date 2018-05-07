@@ -41,7 +41,7 @@ def FileEntryComponent(name, absolute = None, isDir = False):
     if getDesktop(0).size().width() == 1920:
 	res = [(absolute, isDir), (eListboxPythonMultiContent.TYPE_TEXT, 45, 4, 900, 40, 0, RT_HALIGN_LEFT, name)]
 	if isDir:
-		png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "extensions/directory.png"))
+		png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_ACTIVE_SKIN, "extensions/directory.png"))
 	else:
 		extension = name.split('.')
 		extension = extension[-1].lower()
@@ -57,7 +57,7 @@ def FileEntryComponent(name, absolute = None, isDir = False):
     if getDesktop(0).size().width() == 1280:
 	res = [(absolute, isDir), (eListboxPythonMultiContent.TYPE_TEXT, 35, 1, 470, 20, 0, RT_HALIGN_LEFT, name)]
 	if isDir:
-		png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "extensions/directory.png"))
+		png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_ACTIVE_SKIN, "extensions/directory.png"))
 	else:
 		extension = name.split('.')
 		extension = extension[-1].lower()
@@ -295,7 +295,7 @@ def MultiFileSelectEntryComponent(name, absolute = None, isDir = False, selected
         else:
 	    res = [(absolute, isDir, selected, name), (eListboxPythonMultiContent.TYPE_TEXT, 60, 1, 470, 20, 0, RT_HALIGN_LEFT, name)]
 	if isDir:
-		png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "extensions/directory.png"))
+		png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_ACTIVE_SKIN, "extensions/directory.png"))
 	else:
 		extension = name.split('.')
 		extension = extension[-1].lower()
@@ -310,9 +310,9 @@ def MultiFileSelectEntryComponent(name, absolute = None, isDir = False, selected
 			res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 30, 2, 20, 20, png))		
 	if not name.startswith('<'):
 		if selected:
-			icon = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "icons/lock_on.png"))
+			icon = LoadPixmap(cached=True, path=resolveFilename(SCOPE_ACTIVE_SKIN, "icons/lock_on.png"))
 		else:
-			icon = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "icons/lock_off.png"))
+			icon = LoadPixmap(cached=True, path=resolveFilename(SCOPE_ACTIVE_SKIN, "icons/lock_off.png"))
 		if getDesktop(0).size().width() == 1920:
 			res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 2, 7, 25, 25, icon))
 		else:
