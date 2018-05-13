@@ -1,8 +1,4 @@
 <animations>
-	<animation key="mp_player_animation" title="MP Player Animation" duration="1000" internal="">
-		<position val="2.0" animateY="" interpolate="decelerate"/>
-		<position_hide val="2.0" animateY="" interpolate="accelerate"/>
-	</animation>
 	<animation key="mp_crossfade_fast" title="MP crossfade fast" duration="100" interpolate="linear" internal="">
 		<alpha val="0.5" />
 	</animation>
@@ -12,5 +8,9 @@
         <animation key="mp_quick_fade" title="MP Quick fade" duration="200" interpolate="linear" internal="">
                 <alpha val="0.0" interpolate="decelerate" factor="1.75"/>
                 <alpha_hide val="0.0" interpolate="accelerate" factor="1.75"/>
+        </animation>
+        <animation key="mp_screensaver" title="MP Screensaver fade" duration="500" interpolate="linear" internal="">
+                <alpha val="0.0" />
+                <alpha_hide val="0.0" />
         </animation>
 </animations>

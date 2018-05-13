@@ -230,7 +230,7 @@ class freeomovieFilmAuswahlScreen(MPScreen):
 		twAgentGetPage(self.genreLink, agent=free_agent, cookieJar=free_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		parse = re.search('class="videosection">(.*?)class="textsection">', data, re.S)
+		parse = re.search('class="videosection(.*?)class="textsection', data, re.S)
 		streams = re.findall('(http[s]?://(.*?)\/.*?)[\'|"|\&|<]', parse.group(1) , re.S)
 		if streams:
 			for (stream, hostername) in streams:

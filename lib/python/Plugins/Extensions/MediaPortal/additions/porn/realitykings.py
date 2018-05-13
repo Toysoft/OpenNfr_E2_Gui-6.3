@@ -73,17 +73,17 @@ class realitykingsGenreScreen(MPScreen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
-		url = "http://www.realitykings.com/tour/categories/"
+		url = "https://www.realitykings.com/tour/categories/"
 		getPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		Cats = re.findall('card-thumb.*?href="(.*?)".*?img\ssrc="(.*?)".*?alt="(.*?)\sPorn Videos"', data, re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
-				Url = 'http://www.realitykings.com%s' % Url
+				Url = 'https://www.realitykings.com%s' % Url
 				self.cats.append(Title)
 				self.genreliste.append((decodeHtml(Title), Url, Image))
-		url = "http://www.realitykings.com/tour/category/view/75/anal/"
+		url = "https://www.realitykings.com/tour/category/view/75/anal/"
 		getPage(url, agent=myagent).addCallback(self.genreData2).addErrback(self.dataError)
 
 	def genreData2(self, data):
@@ -92,13 +92,13 @@ class realitykingsGenreScreen(MPScreen):
 			Cats = re.findall('<li><a\shref="(.*?)".*?title="(.*?)"', parse.group(1), re.S)
 			if Cats:
 				for (Url, Title) in Cats:
-					Url = 'http://www.realitykings.com%s' % Url
+					Url = 'https://www.realitykings.com%s' % Url
 					if Title not in self.cats:
 						self.genreliste.append((decodeHtml(Title), Url, default_cover))
 				self.genreliste.sort()
-		self.genreliste.insert(0, ("Most Viewed", 'http://www.realitykings.com/tour/videos/all-sites/all-categories/all-time/most-viewed/', default_cover))
-		self.genreliste.insert(0, ("Top Rated", 'http://www.realitykings.com/tour/videos/all-sites/all-categories/all-time/top-rated/', default_cover))
-		self.genreliste.insert(0, ("Release Date", 'http://www.realitykings.com/tour/videos/all-sites/all-categories/all-time/recent/', default_cover))
+		self.genreliste.insert(0, ("Most Viewed", 'https://www.realitykings.com/tour/videos/all-sites/all-categories/all-time/most-viewed/', default_cover))
+		self.genreliste.insert(0, ("Top Rated", 'https://www.realitykings.com/tour/videos/all-sites/all-categories/all-time/top-rated/', default_cover))
+		self.genreliste.insert(0, ("Release Date", 'https://www.realitykings.com/tour/videos/all-sites/all-categories/all-time/recent/', default_cover))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.ml.moveToIndex(0)
@@ -173,7 +173,7 @@ class realitykingsFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "http://www.realitykings.com/tour/search/videos/%s/%s/" % (self.Link, str(self.page))
+			url = "https://www.realitykings.com/tour/search/videos/%s/%s/" % (self.Link, str(self.page))
 		else:
 			if self.page == 1:
 				url = self.Link
@@ -183,10 +183,10 @@ class realitykingsFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, '<ul class="pagination">(.*?)</nav>', '.*[>|/](\d+)[<|/]')
-		Movies = re.findall('card--release".*?href="(.*?)"\stitle="(.*?)".*?srcMobile:.\'(.*?)\'.*?__meta.*?title="(.*?)".*?meta-date">(.*?)</span', data, re.S)
+		Movies = re.findall('card--release".*?href="(.*?)"\s{1,15}title="(.*?)".*?srcMobile:.\'(.*?)\'.*?__meta.*?title="(.*?)".*?meta-date">(.*?)</span', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Collection, Date) in Movies:
-				Url = "http://www.realitykings.com" + Url
+				Url = "https://www.realitykings.com" + Url
 				self.filmliste.append((decodeHtml(Title), Url, Image, Date, Collection))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), '', None, ''))

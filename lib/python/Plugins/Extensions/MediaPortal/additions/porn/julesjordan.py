@@ -80,7 +80,6 @@ class julesjordanGenreScreen(MPScreen):
 		if Cats:
 			for (Url, Title, Image) in Cats:
 				Url = Url + "_%s_d.html"
-				Image = 'http://www.julesjordan.com' + Image
 				self.genreliste.append((decodeHtml(Title), Url, Image))
 			self.genreliste.sort()
 		self.genreliste.insert(0, ("Pornstars", 'https://www.julesjordan.com/trial/models/models_%s.html', default_cover))
@@ -170,7 +169,6 @@ class julesjordanPornstarsScreen(MPScreen, ThumbsHelper):
 		Pornstars = re.findall('class="update_details">.*?\t<a\shref="(.*?)">(.*?)</a>.*?src0(?:_1x|)="(.*?)"', data, re.S)
 		if Pornstars:
 			for (Url, Title, Image) in Pornstars:
-				Image = 'http://www.julesjordan.com' + Image
 				self.filmliste.append((decodeHtml(Title), Url, Image))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No pornstars found!'), None, None))
@@ -248,7 +246,6 @@ class julesjordanFilmScreen(MPScreen, ThumbsHelper):
 		Movies = re.findall('Thumbnail -->.*?href="(.*?)".*?src0(?:_1x|)="(.*?)".*?">(.*?)</a>.*?(\d+&nbsp;min).*?<!-- Date -->(.*?\d{4})', data, re.S)
 		if Movies:
 			for (Url, Image, Title, Runtime, Date) in Movies:
-				Image = 'http://www.julesjordan.com' + Image
 				Date = Date.strip()
 				Runtime = Runtime.replace('&nbsp;',' ')
 				self.filmliste.append((decodeHtml(Title), Url, Image, Date, Runtime))

@@ -97,7 +97,7 @@ class foxxFilmScreen(MPScreen):
 
 	def parseData(self, data):
 		self.getLastPage(data, '', ">Seite.*?von\s(\d+)</span")
-		filme = re.findall('class="poster">.<img\ssrc="(.*?)"\salt="(.*?)".*?<a\shref="(http://foxx.to/film/.*?-Stream)">', data, re.S)
+		filme = re.findall('class="poster">.{0,1}<img\ssrc="(.*?)"\salt="(.*?)".*?<a\shref="(http://foxx.to/film/.*?-Stream)">', data, re.S)
 		if filme:
 			for (image, title, url) in filme:
 				self.filmliste.append((decodeHtml(title), url, image))
@@ -146,12 +146,18 @@ class foxxFilmScreen(MPScreen):
 		js = decoder + "\n" + 'video_url=decrypt(\''+video_url[0]+'\');' + "return video_url;"
 		urls = str(node.exec_(js))
 		streams = re.findall('"file":"(.*?)","label":"(\d+)', urls, re.S)
+		stream_url = None
 		if streams:
 			res = 0
 			for stream in streams:
 				if int(stream[1]) > res:
 					res = int(stream[1])
 					stream_url = str(stream[0])
+		else:
+			streams = re.findall('"file":"(.*?)"', urls, re.S)
+			if streams:
+				stream_url = streams[0]
+		if stream_url:
 			Title = self['liste'].getCurrent()[0][0]
 			Image = self['liste'].getCurrent()[0][2]
 			self.session.open(SimplePlayer, [(Title, stream_url, Image)], cover=True, showPlaylist=False, ltype='foxx.to')

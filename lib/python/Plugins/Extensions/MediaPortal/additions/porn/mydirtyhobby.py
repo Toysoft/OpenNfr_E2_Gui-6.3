@@ -76,22 +76,22 @@ class MDHGenreScreen(MPScreen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		self['name'].setText(_("Please wait..."))
-		url = "https://stream.mydirtyhobby.to"
-		twAgentGetPage(url, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'https://stream.mydirtyhobby.to/'}).addCallback(self.checkData).addErrback(self.dataError)
+		url = "http://stream-mdh.se"
+		twAgentGetPage(url, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'http://stream-mdh.se/'}, timeout=30).addCallback(self.checkData).addErrback(self.dataError)
 
 	def checkData(self, data):
 		if "XMLHttpRequest" in data:
 			parse = re.findall('GET","(.*?)".*?"(.*?)"', data, re.S)
-			url = "https://stream.mydirtyhobby.to" + parse[0][0] + str(random.randint(1400,1800)) + parse[0][1]
+			url = "http://stream-mdh.se" + parse[0][0] + str(random.randint(1400,1800)) + parse[0][1]
 			DelayedFunction(4000, self.getJs, url)
 		elif 'class="g-recaptcha"' in data:
 			self['name'].setText('')
-			self.session.open(MessageBoxExt, _("Google reCAPTCHA detected, please verify your current IP by\naccessing the website 'https://stream.mydirtyhobby.to' with your browser."), MessageBoxExt.TYPE_INFO)
+			self.session.open(MessageBoxExt, _("Google reCAPTCHA detected, please verify your current IP by\naccessing the website 'http://stream-mdh.se' with your browser."), MessageBoxExt.TYPE_INFO)
 		else:
 			self.genreData(data)
 
 	def getJs(self, url):
-		twAgentGetPage(url, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'https://stream.mydirtyhobby.to/'}).addCallback(self.getJs2).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'http://stream-mdh.se'}, timeout=30).addCallback(self.getJs2).addErrback(self.dataError)
 
 	def getJs2(self, data):
 		try:
@@ -110,15 +110,15 @@ class MDHGenreScreen(MPScreen):
 		mdh_ck = requests.utils.dict_from_cookiejar(mdh_cookies)
 		mdh_ck.update({'BLAZINGFAST-WEB-PROTECT':str(result)})
 		requests.cookies.cookiejar_from_dict(mdh_ck, cookiejar=mdh_cookies)
-		url = "https://stream.mydirtyhobby.to/empty"
-		twAgentGetPage(url, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'https://stream.mydirtyhobby.to/'}).addCallback(self.genreData).addErrback(self.genreData)
+		url = "http://stream-mdh.se/empty"
+		twAgentGetPage(url, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'http://stream-mdh.se/'}, timeout=30).addCallback(self.genreData).addErrback(self.genreData)
 
 	def genreData(self, data=None):
 		self['name'].setText('')
-		self.genreliste.insert(0, ("Most Commented", "https://stream.mydirtyhobby.to/channel/video/general?page=%s&filter=comments"))
-		self.genreliste.insert(0, ("Most Viewed", "https://stream.mydirtyhobby.to/channel/video/general?page=%s&filter=views"))
-		self.genreliste.insert(0, ("Most Popular", "https://stream.mydirtyhobby.to/channel/video/general?page=%s&filter=likes"))
-		self.genreliste.insert(0, ("Newest", "https://stream.mydirtyhobby.to/channel/video/general?page=%s&filter=date"))
+		self.genreliste.insert(0, ("Most Commented", "http://stream-mdh.se/channel/video/general?page=%s&filter=comments"))
+		self.genreliste.insert(0, ("Most Viewed", "http://stream-mdh.se/channel/video/general?page=%s&filter=views"))
+		self.genreliste.insert(0, ("Most Popular", "http://stream-mdh.se/channel/video/general?page=%s&filter=likes"))
+		self.genreliste.insert(0, ("Newest", "http://stream-mdh.se/channel/video/general?page=%s&filter=date"))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -182,10 +182,10 @@ class MDHFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://stream.mydirtyhobby.to/search/%s?page=%s" % (self.Link, str(self.page))
+			url = "http://stream-mdh.se/search/%s?page=%s" % (self.Link, str(self.page))
 		else:
 			url = self.Link % str(self.page)
-		twAgentGetPage(url, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'https://stream.mydirtyhobby.to/'}).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'http://stream-mdh.se/'}, timeout=30).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pager">(.*?)</div>', '.*[>|=](\d+)[<|&|"]')
@@ -218,12 +218,12 @@ class MDHFilmScreen(MPScreen, ThumbsHelper):
 			return
 		Link = self['liste'].getCurrent()[0][1]
 		self.keyLocked = True
-		twAgentGetPage(Link, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'https://stream.mydirtyhobby.to/'}).addCallback(self.getVideoUrl).addErrback(self.dataError)
+		twAgentGetPage(Link, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'http://stream-mdh.se/'}, timeout=30).addCallback(self.getVideoUrl).addErrback(self.dataError)
 
 	def getVideoUrl(self, data):
 		url = re.findall("iframe\ssrc='(.*?)'", data, re.S|re.I)
 		if url:
-			twAgentGetPage(url[0], agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'https://stream.mydirtyhobby.to/'}).addCallback(self.getVideoUrl2).addErrback(self.dataError)
+			twAgentGetPage(url[0], agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'http://stream-mdh.se/'}, timeout=30).addCallback(self.getVideoUrl2).addErrback(self.dataError)
 		else:
 			self.keyLocked = False
 

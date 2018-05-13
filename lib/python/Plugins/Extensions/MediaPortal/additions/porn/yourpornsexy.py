@@ -40,7 +40,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 
-myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'
+myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36'
 json_headers = {
 	'Accept':'application/json',
 	'Accept-Language':'de,en-US;q=0.7,en;q=0.3',
@@ -82,12 +82,12 @@ class YourPornSexyGenreScreen(MPScreen):
 		twAgentGetPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		usss = re.findall('usss\[0\] = "(.*?)";', data, re.S)
+		usss = re.findall('usss\[\'id\'\] = "(.*?)";', data, re.S)
 		if usss:
 			global uid
 			uid = usss[0]
-		parse = re.search('<span>Popular HashTags</span>(.*?)<div class="spacer" style="clear: both;">', data, re.S)
-		Cats = re.findall('<a\shref=[\'|"](/blog/.*?)[\'|"].*?<span>#(.*?)</span>', parse.group(1), re.S)
+		parse = re.search('<span>Popular HashTags</span>(.*?)<div class=\'fbd\'', data, re.S)
+		Cats = re.findall('<a(?:\sclass=\'tdn\'|)\shref=[\'|"](/blog/.*?)[\'|"].*?<span(?:\sclass=\'htag_el_tag\'|)>#(.*?)</span>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
 				Url = "http://yourporn.sexy" + Url.replace('/0.html','/%s.html')
@@ -95,16 +95,16 @@ class YourPornSexyGenreScreen(MPScreen):
 				self.genreliste.append((Title, Url))
 			self.genreliste.sort()
 		self.genreliste.insert(0, ("Trends", "http://yourporn.sexy/searches/%s.html"))
-		self.genreliste.insert(0, ("Orgasmic", "http://yourporn.sexy/orgasm/"))
+		self.genreliste.insert(0, ("Orgasmic", "http://yourporn.sexy/orgasm/%s"))
 		self.genreliste.insert(0, ("Pornstars", "http://yourporn.sexy/pornstars/%s.html"))
-		self.genreliste.insert(0, ("Top Viewed (All Time)", "http://yourporn.sexy/popular/top-viewed.html?p=all"))
-		self.genreliste.insert(0, ("Top Viewed (Monthly)", "http://yourporn.sexy/popular/top-viewed.html?p=month"))
-		self.genreliste.insert(0, ("Top Viewed (Weekly)", "http://yourporn.sexy/popular/top-viewed.html?p=week"))
-		self.genreliste.insert(0, ("Top Viewed (Daily)", "http://yourporn.sexy/popular/top-viewed.html?p=day"))
-		self.genreliste.insert(0, ("Top Rated (All Time)", "http://yourporn.sexy/popular/top-rated.html?p=all"))
-		self.genreliste.insert(0, ("Top Rated (Monthly)", "http://yourporn.sexy/popular/top-rated.html?p=month"))
-		self.genreliste.insert(0, ("Top Rated (Weekly)", "http://yourporn.sexy/popular/top-rated.html?p=week"))
-		self.genreliste.insert(0, ("Top Rated (Daily)", "http://yourporn.sexy/popular/top-rated.html?p=day"))
+		self.genreliste.insert(0, ("Top Viewed (All Time)", "http://yourporn.sexy/popular/top-viewed.html/%s?p=all"))
+		self.genreliste.insert(0, ("Top Viewed (Monthly)", "http://yourporn.sexy/popular/top-viewed.html/%s?p=month"))
+		self.genreliste.insert(0, ("Top Viewed (Weekly)", "http://yourporn.sexy/popular/top-viewed.html/%s?p=week"))
+		self.genreliste.insert(0, ("Top Viewed (Daily)", "http://yourporn.sexy/popular/top-viewed.html/%s?p=day"))
+		self.genreliste.insert(0, ("Top Rated (All Time)", "http://yourporn.sexy/popular/top-rated.html/%s?p=all"))
+		self.genreliste.insert(0, ("Top Rated (Monthly)", "http://yourporn.sexy/popular/top-rated.html/%s?p=month"))
+		self.genreliste.insert(0, ("Top Rated (Weekly)", "http://yourporn.sexy/popular/top-rated.html/%s?p=week"))
+		self.genreliste.insert(0, ("Top Rated (Daily)", "http://yourporn.sexy/popular/top-rated.html/%s?p=day"))
 		self.genreliste.insert(0, ("Newest", "http://yourporn.sexy/blog/all/%s.html?fl=all&sm=latest"))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
@@ -132,8 +132,8 @@ class YourPornSexyGenreScreen(MPScreen):
 			self.session.open(YourPornSexyFilmScreen, Link, Name)
 
 	def getSuggestions(self, text, max_res):
-		url = "http://yourporn.sexy/php/livesearch2.php"
-		postdata = {'key': text.replace(' ','-'), 'c':'livesearch', 'uid': uid}
+		url = "http://yourporn.sexy/php/livesearch.php"
+		postdata = {'key': text.replace(' ','-'), 'c':'livesearch3', 'uid': uid}
 		d = getPage(url, method='POST', postdata=urlencode(postdata), agent=myagent, headers=json_headers, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
 		d.addErrback(self.gotSuggestions, max_res, err=True)
@@ -193,12 +193,12 @@ class YourPornSexyPornstarsScreen(MPScreen):
 		self['name'].setText(_('Please wait...'))
 		self.genreliste = []
 		url = self.Link.replace('%s', alfa[self.page-1])
-		print url
-		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self['page'].setText(str(self.page) + '/' +str(self.lastpage))
-		Cats = re.findall("<a href='/(.*?).html' title='.*?PornStar Page'><div class='ps_el'>(.*?)</div></a>", data , re.S)
+		preparse = re.search('.*?pstars_container(.*?)d="center_control"', data, re.S)
+		Cats = re.findall("<a href='/(.*?).html' title='.*?PornStar Page'><div class='ps_el'>(.*?)</div></a>", preparse.group(1) , re.S)
 		if Cats:
 			for (Url, Title) in Cats:
 				self.genreliste.append((Title, Url))
@@ -323,65 +323,67 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 		self.filmliste = []
 		if self.Name == "Newest":
 			count = 20
+		elif self.Name == "Orgasmic":
+			count = 30
+		elif (re.match(".*?Top Rated", self.Name) or re.match(".*?Top Viewed", self.Name)):
+			count = 30
 		else:
 			count = 20
 		if re.match(".*?Search", self.Name) or self.Name == "Trends" or self.Name == "Pornstars":
 			url = "https://yourporn.sexy/%s.html?page=%s" % (self.Link, str((self.page-1)*30))
-			getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
-		elif (re.match(".*?Top Rated", self.Name) or re.match(".*?Top Viewed", self.Name) or self.Name == "Orgasmic") and self.page>1:
-			if re.match(".*?Rated", self.Name):
-				mode = 'rating'
-			elif re.match(".*?Viewed", self.Name):
-				mode = 'views'
-			else:
-				mode = 'orgasmic'
-			if re.match(".*?Monthly", self.Name):
-				period = 'month'
-			elif re.match(".*?Weekly", self.Name):
-				period = 'week'
-			elif re.match(".*?Daily", self.Name):
-				period = 'day'
-			else:
-				period = 'all'
-			urldata = {
-				'popular_mode' : mode,
-				'popular_source' : 'blogs',
-				'popular_off' : str(((self.page-2)*6)+12),
-				'period' : period
-				}
-			url = 'http://yourporn.sexy/php/popular_append.php'
-			getPage(url, agent=myagent, method='POST', postdata=urlencode(urldata), headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
+			twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 		else:
 			url = self.Link.replace('%s', str((self.page-1)*count))
 			twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, '', 'ctrl_el.*>(\d+)</div')
-		if re.match(".*?Top Rated", self.Name) or re.match(".*?Top Viewed", self.Name) or self.Name == "Orgasmic":
-			self.lastpage = 999
-			self['page'].setText(str(self.page))
 		prep = data
 		if re.search("</head>(.*?)<span>Other Results</span>", data, re.S):
 			preparse = re.search('</head>(.*?)<span>Other Results</span>', data, re.S)
 			if preparse:
 				prep = preparse.group(1)
-		Movies = re.findall("vid_container.*?<img.*?\ssrc='(.*?.jpg)'.*?a\shref='(.*?\.html.*?)'\sclass='tdn'.*?title='(.*?)'(.*?\sviews)", prep, re.S)
-		if Movies:
-			for (Image, Url, Title, RuntimeAddedViews) in Movies:
-				if ("mini_post_player_img" in RuntimeAddedViews) or ("maxi_post_player_img" in RuntimeAddedViews):
-					av = re.findall("class='duration_small.*?'>(.*?)</span.*?>([\d|Hour].*?ago|Yesterday|Last month|Last year)\s<strong>.{0,3}</strong>\s(\d+)\sviews", RuntimeAddedViews, re.S)
-					if av:
-						Runtime = av[0][0]
-						Added = av[0][1]
-						Views = av[0][2]
-					else:
-						Runtime = "-"
-						Added = "-"
-						Views = "-"
-					Url = "http://yourporn.sexy" + Url
-					if Image.startswith('//'):
-						Image = "http:" + Image
-					self.filmliste.append((decodeHtml(Title), Url, Image, Views, Runtime, Added))
+		if re.search("class='main_content'(.*?)id='center_control'", data, re.S):
+			preparse = re.search("class='main_content'(.*?)id='center_control'", data, re.S)
+			if preparse:
+				prep = preparse.group(1)
+		Videos = re.findall('class=\'pes_author_div(.*?)(?:tm_playlist_hl|small_post_control)', prep, re.S)
+		if Videos:
+			for Video in Videos:
+				Movie = re.findall("src='(.*?.jpg)'.*?class='duration_small'.*?'>(.*?)</span></div></div><div class='post_control'><a class='tdn post_time' href='(.*?\.html.*?)'\stitle='(.*?)'>(.*?\sviews)", Video, re.S)
+				if Movie:
+					for (Image, Runtime, Url, Title, AddedViews) in Movie:
+						if "post_control_time" in AddedViews:
+							av = re.findall("class='post_control_time'><span>([\d|Hour].*?ago|Yesterday|Last month|Last year)\s{0,1}</span><strong>.{0,3}</strong>\s{0,1}(\d+)\sviews", AddedViews, re.S)
+							if av:
+								Added = av[0][0]
+								Views = av[0][1]
+							else:
+								Added = "-"
+								Views = "-"
+							Url = "http://yourporn.sexy" + Url
+							if Image.startswith('//'):
+								Image = "http:" + Image
+							self.filmliste.append((decodeHtml(Title), Url, Image, Views, Runtime, Added))
+
+
+				else:
+					Movie = re.findall("href='(/post.*?\.html.*?)'.*?src='(.*?)'.*?class='duration_small'.*?'>(.*?)<.*?title='(.*?)'(.*?\sviews)", Video, re.S)
+					if Movie:
+						for (Url, Image, Runtime, Title, AddedViews) in Movie:
+							if "post_control_time" in AddedViews:
+								av = re.findall("class='post_control_time'><span>([\d|Hour].*?ago|Yesterday|Last month|Last year)\s{0,1}</span><strong>.{0,3}</strong>\s{0,1}(\d+)\sviews", AddedViews, re.S)
+								if av:
+									Added = av[0][0]
+									Views = av[0][1]
+								else:
+									Added = "-"
+									Views = "-"
+								Url = "http://yourporn.sexy" + Url
+								if Image.startswith('//'):
+									Image = "http:" + Image
+								self.filmliste.append((decodeHtml(Title), Url, Image, Views, Runtime, Added))
+
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), '', None, '', '', ''))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -408,12 +410,10 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 		twAgentGetPage(Link, agent=myagent).addCallback(self.getVideoUrl).addErrback(self.dataError)
 
 	def getVideoUrl(self, data):
-		videoUrl = re.findall('<source\ssrc="(.*?)"\stype="video/mp4">', data, re.S)
-		if not videoUrl:
-			videoUrl = re.findall('<video.*?src=[\'|"](.*?.mp4)[\'|"]', data, re.S)
+		videoUrl = re.findall('data-vnfo=\'\{"[0-9a-f]+":"(.*?)"\}\'', data, re.S)
 		if videoUrl:
 			Title = self['liste'].getCurrent()[0][0]
-			url = videoUrl[-1]
+			url = videoUrl[-1].replace('\/','/')
 			if url.startswith('//'):
 				url = "http:" + url
 			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='yourpornsexy')

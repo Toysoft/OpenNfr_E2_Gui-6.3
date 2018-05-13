@@ -474,9 +474,7 @@ class SimpleSeekHelper:
 		self.numberKeySeek(int(config.seek.selfdefined_79.value))
 
 	def moveSkinUp(self):
-		if self.seekBarShown and not self.seekBarLocked:
-			self.initSeek()
-		if self.seekBarLocked:
+		if self.seekBarShown and self.playerMode != "RADIO":
 			orgpos = self.instance.position()
 			orgheight = self.instance.size().height()
 			self.skinYPos = orgpos.y()
@@ -485,11 +483,8 @@ class SimpleSeekHelper:
 				self.instance.move(ePoint(orgpos.x(), self.skinYPos))
 
 	def moveSkinDown(self):
-		if self.seekBarShown and not self.seekBarLocked:
-			self.initSeek()
-		if self.seekBarLocked:
+		if self.seekBarShown and self.playerMode != "RADIO":
 			orgpos = self.instance.position()
-			orgheight = self.instance.size().height()
 			desktopSize = getDesktop(0).size()
 			self.skinYPos = orgpos.y()
 			if self.skinYPos <= desktopSize.height():
@@ -860,11 +855,12 @@ class RadioBackground(Screen, RadioVisualization):
 
 		if self.playerMode == "RADIO":
 			try:
-				self['screenSaver'].instance.setShowHideAnimation("mp_quick_fade")
+				self['screenSaver'].instance.setShowHideAnimation("mp_screensaver")
 				self['BgCover'].instance.setShowHideAnimation("mp_quick_fade")
 			except:
 				pass
-			if config.mediaportal.sp_radio_bgsaver.value:
+			self.mode = config.mediaportal.sp_radio_bgsaver.value
+			if self.mode != "0":
 				if mp_globals.videomode == 2:
 					self.res_x = 1920
 					self.res_y = 1080
@@ -875,16 +871,24 @@ class RadioBackground(Screen, RadioVisualization):
 					self.offset = 266
 				self['screenSaverBg'].show()
 				self['background'].hide()
-				self.initCallNewPicture()
+				if self.mode != "3":
+					self.initCallNewPicture()
+
+	def getTimestamp(self):
+		return int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
 
 	def changetimerAppend(self):
-		self.val += 1
+		timetest = self.getTimestamp() - self.timestamp
+		if timetest >= 40:
+			self.val += 1
+			self.timestamp = self.getTimestamp()
 		if self.val == self.offset:
 			self['screenSaver'].hide()
-			self.fadeouttimer.start(200, 1)
+			self.fadeouttimer.start(500, 1)
 		else:
-			self.changetimer.start(40, 1)
-			self.function()
+			self.changetimer.start(5, 1)
+			if self.mode == "1":
+				self.function()
 
 	def getAnimationStyle(self):
 		if mp_globals.isDreamOS:
@@ -893,60 +897,63 @@ class RadioBackground(Screen, RadioVisualization):
 			return random.choice(('move_from_left_top_to_right_bottom', 'move_zoomed_left_to_right', 'move_zoomed_right_to_left', 'move_from_right_top_to_left_bottom', 'move_from_left_bottom_to_right_top', 'move_from_right_bottom_to_left_top'))
 
 	def initCallNewPicture(self):
+		self.timestamp = self.getTimestamp()
 		if len(config.mediaportal.sp_radio_bgsaver_keywords.value)>0:
 			keywords = "/?" + urllib.quote_plus(config.mediaportal.sp_radio_bgsaver_keywords.value)
 		else:
 			keywords = ""
-		CoverHelper(self['screenSaver']).getCover("https://source.unsplash.com/random/1920x1080%s" % keywords, screensaver=True)
+		CoverHelper(self['screenSaver']).getCover("https://source.unsplash.com/1920x1080%s" % keywords, screensaver=True)
 		self.val = 0
-		self.ken_burns = self.getAnimationStyle()
 
-		if self.ken_burns == 'zoom_in':
-			size_x, size_Y = self.res_x, self.res_y
-			pos_x, pos_y = 0, 0
-			self.function = self.zoom_in
+		if self.mode == "1":
+			self.ken_burns = self.getAnimationStyle()
 
-		elif self.ken_burns == 'zoom_out':
-			size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
-			pos_x, pos_y = 0, 0
-			self.function = self.zoom_out
+			if self.ken_burns == 'zoom_in':
+				size_x, size_Y = self.res_x, self.res_y
+				pos_x, pos_y = 0, 0
+				self.function = self.zoom_in
 
-		elif self.ken_burns == 'move_from_left_top_to_right_bottom':
-			size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
-			pos_x, pos_y = 0, 0
-			self.function = self.move_from_left_top_to_right_bottom
+			elif self.ken_burns == 'zoom_out':
+				size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
+				pos_x, pos_y = 0, 0
+				self.function = self.zoom_out
 
-		elif self.ken_burns == 'move_from_right_top_to_left_bottom':
-			size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
-			pos_x, pos_y = -int(self.offset*1.7778), 0
-			self.function = self.move_from_right_top_to_left_bottom
+			elif self.ken_burns == 'move_from_left_top_to_right_bottom':
+				size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
+				pos_x, pos_y = 0, 0
+				self.function = self.move_from_left_top_to_right_bottom
 
-		elif self.ken_burns == 'move_from_left_bottom_to_right_top':
-			size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
-			pos_x, pos_y = 0, -self.offset
-			self.function = self.move_from_left_bottom_to_right_top
+			elif self.ken_burns == 'move_from_right_top_to_left_bottom':
+				size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
+				pos_x, pos_y = -int(self.offset*1.7778), 0
+				self.function = self.move_from_right_top_to_left_bottom
 
-		elif self.ken_burns == 'move_from_right_bottom_to_left_top':
-			size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
-			pos_x, pos_y = -int(self.offset*1.7778), -self.offset
-			self.function = self.move_from_right_bottom_to_left_top
+			elif self.ken_burns == 'move_from_left_bottom_to_right_top':
+				size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
+				pos_x, pos_y = 0, -self.offset
+				self.function = self.move_from_left_bottom_to_right_top
 
-		elif self.ken_burns == 'move_zoomed_left_to_right':
-			self.offset_y = -(random.randrange(int(self.offset/1.7778)))
-			size_x, size_Y = self.res_x+self.offset, self.res_y+int(self.offset/1.7778)
-			pos_x, pos_y = 0, self.offset_y
-			self.function = self.move_zoomed_left_to_right
+			elif self.ken_burns == 'move_from_right_bottom_to_left_top':
+				size_x, size_Y = self.res_x+int(self.offset*1.7778), self.res_y+self.offset
+				pos_x, pos_y = -int(self.offset*1.7778), -self.offset
+				self.function = self.move_from_right_bottom_to_left_top
 
-		elif self.ken_burns == 'move_zoomed_right_to_left':
-			self.offset_y = -(random.randrange(int(self.offset/1.7778)))
-			size_x, size_Y = self.res_x+self.offset, self.res_y+int(self.offset/1.7778)
-			pos_x, pos_y = -self.offset, self.offset_y
-			self.function = self.move_zoomed_right_to_left
+			elif self.ken_burns == 'move_zoomed_left_to_right':
+				self.offset_y = -(random.randrange(int(self.offset/1.7778)))
+				size_x, size_Y = self.res_x+self.offset, self.res_y+int(self.offset/1.7778)
+				pos_x, pos_y = 0, self.offset_y
+				self.function = self.move_zoomed_left_to_right
 
-		self['screenSaver'].instance.resize(eSize(size_x, size_Y))
-		self['screenSaver'].instance.move(ePoint(pos_x, pos_y))
-		self.val += 1
-		self.changetimer.start(40, 1)
+			elif self.ken_burns == 'move_zoomed_right_to_left':
+				self.offset_y = -(random.randrange(int(self.offset/1.7778)))
+				size_x, size_Y = self.res_x+self.offset, self.res_y+int(self.offset/1.7778)
+				pos_x, pos_y = -self.offset, self.offset_y
+				self.function = self.move_zoomed_right_to_left
+
+			self['screenSaver'].instance.resize(eSize(size_x, size_Y))
+			self['screenSaver'].instance.move(ePoint(pos_x, pos_y))
+
+		self.changetimerAppend()
 
 	def zoom_in(self):
 		self['screenSaver'].instance.resize(eSize(self.res_x+int(self.val*1.7778), self.res_y+self.val))
@@ -1121,7 +1128,8 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 		self.allowPiP = False
 		InfoBarSeek.__init__(self)
-		InfoBarPVRState.__init__(self, screen=SimplePlayerPVRState, force_show=True)
+		if not (mp_globals.isDreamOS and playerMode == 'RADIO' and config.mediaportal.sp_radio_visualization.value):
+			InfoBarPVRState.__init__(self, screen=SimplePlayerPVRState, force_show=True)
 
 		self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
 		if config.mediaportal.restorelastservice.value == "1" and not config.mediaportal.backgroundtv.value:
@@ -1469,6 +1477,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		def playService(url):
 			if mp_globals.isDreamOS and self.playerMode == 'RADIO' and config.mediaportal.sp_radio_visualization.value:
 				self.visuCleanerTimer.start(1000)
+				self.session.nav.stopService()
 				self.musicPlayer.play(url)
 			else:
 				self.dash = False

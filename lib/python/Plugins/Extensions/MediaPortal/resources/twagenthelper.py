@@ -418,7 +418,7 @@ class TwAgentHelper(object):
 	DEBUG_HEADER = False
 	_Agent = TwAgent
 
-	def __init__(self, p_user=None, p_pass=None, proxy_url=None,  gzip_decoding=True, followRedirect=True, use_tls=False, cookieJar=None, redirectLimit=20, headers=None, timeout=10, pool=None):
+	def __init__(self, p_user=None, p_pass=None, proxy_url=None,  gzip_decoding=True, followRedirect=True, use_tls=False, cookieJar=None, redirectLimit=20, headers=None, timeout=30, pool=None):
 		d_print( "Twisted Agent in use", __TW_VER__)
 		self.headers = headers.copy() if headers else {}
 		self.proxy_url = proxy_url

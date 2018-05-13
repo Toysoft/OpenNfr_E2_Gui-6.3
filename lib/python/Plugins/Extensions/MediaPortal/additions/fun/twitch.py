@@ -185,7 +185,7 @@ class twitchChannels(MPScreen):
 		if self.keyLocked or self['liste'].getCurrent() == None:
 			return
 		self.channelName = self['liste'].getCurrent()[0][1]
-		url = "http://api.twitch.tv/api/channels/" + self.channelName + "/access_token"
+		url = "https://api.twitch.tv/api/channels/" + self.channelName + "/access_token"
 		getPage(url, headers=headers).addCallback(self.parseAccessToken).addErrback(self.dataError)
 
 	def parseAccessToken(self, data):

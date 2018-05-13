@@ -72,7 +72,7 @@ class germanytvChannelScreen(MPScreen):
 		self.genreliste.append(('Fashionguide-TV', 'http://www.fashionguide-tv.tv.grid-tv.com'))
 		self.genreliste.append(('Fly-HDTV', 'http://www.fly-hdtv.tv.grid-tv.com'))
 		self.genreliste.append(('Auto-TV', 'http://www.auto-tv.tv.grid-tv.com'))
-		self.genreliste.append(('FineArts-TV', 'http://www.finearts-hdtv.tv.grid-tv.com'))
+		#self.genreliste.append(('FineArts-TV', 'http://www.finearts-hdtv.tv.grid-tv.com'))
 		self.genreliste.append(('Rechtsberater-TV', 'http://www.rechtsberater-tv.tv.grid-tv.com'))
 		self.genreliste.sort()
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))

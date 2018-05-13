@@ -820,46 +820,6 @@ class MPScreen(Screen, HelpableScreen):
 		return res
 ##################
 
-####### movie2k
-	def movie2kStreamListEntry(self, entry):
-		width = self['liste'].instance.size().width()
-		height = self['liste'].l.getItemSize().height()
-		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
-		res = [entry]
-		if (config.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz, entry[2], re.S|re.I)) or (config.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb, entry[2], re.S|re.I)):
-			premiumFarbe = int(config.mediaportal.premium_color.value, 0)
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 150, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1], premiumFarbe))
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 160, 0, 250, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2], premiumFarbe))
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, width - 500, 0, 500, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3], premiumFarbe))
-		else:
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 150, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]))
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 160, 0, 250, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]))
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, width - 500, 0, 500, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3]))
-		return res
-
-####### streamit
-	def streamitFilmListEntry(self, entry):
-		width = self['liste'].instance.size().width()
-		height = self['liste'].l.getItemSize().height()
-		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
-		res = [entry]
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, self.DEFAULT_LM, 0, width - 210 - 2 * self.DEFAULT_LM, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]))
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, width - 200 - 2 * self.DEFAULT_LM, 0, 200, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3]))
-		return res
-
-	def streamitStreamListEntry(self, entry):
-		width = self['liste'].instance.size().width()
-		height = self['liste'].l.getItemSize().height()
-		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
-		res = [entry]
-		if (config.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz, entry[0], re.S|re.I)) or (config.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb, entry[0], re.S|re.I)):
-			premiumFarbe = int(config.mediaportal.premium_color.value, 0)
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, width, height, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0]+entry[2]+entry[3], premiumFarbe))
-		else:
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, width, height, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0]+entry[2]+entry[3]))
-		return res
-##################
-
 ####### topimdb
 	def timdbEntry(self, entry):
 		width = self['liste'].instance.size().width()
@@ -933,62 +893,6 @@ class MPScreen(Screen, HelpableScreen):
 		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
 		res = [entry]
 		res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, width, height * 2, 0, RT_HALIGN_LEFT, entry[0]+entry[1]))
-		return res
-##################
-
-####### animeworld
-	def awListEntry3(self, entry):
-		width = self['liste'].instance.size().width()
-		height = self['liste'].l.getItemSize().height()
-		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
-		res = [entry]
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 100, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]))
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, 110, 0, width - 110, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]))
-		return res
-##################
-
-####### musicstreamcc
-	def show_MSCC_GenreListEntry(self, entry):
-		width = self['liste'].instance.size().width()
-		height = self['liste'].l.getItemSize().height()
-		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
-		res = [entry]
-
-		if entry[2] == 1:
-			icon_name = "musicfolder.png"
-		elif entry[2] == 2:
-			icon_name = "musiccd.png"
-
-		skin_path = mp_globals.pluginPath + mp_globals.skinsPath
-
-		path = "%s/%s/images/%s" % (skin_path, mp_globals.currentskin, icon_name)
-		if not fileExists(path):
-			path = "%s/%s/images/%s" % (skin_path, mp_globals.skinFallback, icon_name)
-			if not fileExists(path):
-				path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s" % icon_name
-
-		icon = LoadPixmap(path)
-		pwidth = icon.size().width()
-		pheight = icon.size().height()
-		vpos = round(float((height-pheight)/2))
-		res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 25, vpos, pwidth, pheight, icon))
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, pwidth+50, 0, width, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]))
-		return res
-
-	def show_MSCC_GenreListEntry2(self, entry):
-		width = self['liste'].instance.size().width()
-		height = self['liste'].l.getItemSize().height()
-		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
-		res = [entry]
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, width, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]))
-		return res
-
-	def show_MSCC_ListEntry(self, entry):
-		width = self['liste'].instance.size().width()
-		height = self['liste'].l.getItemSize().height()
-		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
-		res = [entry]
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, self.DEFAULT_LM, 0, width - 2 * self.DEFAULT_LM, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]+entry[1]))
 		return res
 ##################
 
