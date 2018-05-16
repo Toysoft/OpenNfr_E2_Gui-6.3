@@ -190,7 +190,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018051001"))
+config.mediaportal.version = NoSave(ConfigText(default="2018051401"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.skinfail = ConfigYesNo(default = False)
@@ -332,7 +332,7 @@ config.mediaportal.simplelist_gcoversupp = ConfigYesNo(default = True)
 # Radio
 config.mediaportal.is_radio = ConfigYesNo(default=False)
 
-mp_globals.bsp = bsdcd(bsdcd(bsdcd(decrypt('Sz/1Vnx8fHysl9jsO32INqWDtQEsyyDPYlBc56P675cPRhMtaLEseb91C9KBEFa3EZ+PMz9EDz6zBc8t9jzgepxFy3B/XABw6bVPLEDyQJ7AUhDMlMtawA==', CONFIG, 256))))
+mp_globals.bsp = bsdcd(bsdcd(bsdcd(decrypt('4bb1Wtzc3NyT8nw+AI3hYvbEIQBESnieenhZiTdgwmp2jdYDGj6zREKyQchZ9UL7fo5wA3je9Bq8BbDG8s4FdPAMtWRRUIhaiydveD3TbOPePc5oI+37hw==', CONFIG, 256))))
 mp_globals.yt_a = bsdcd(bsdcd(bsdcd(decrypt('kj8yV97e3t4fDPdo3ca07O6kKsuY9oZkvUqpBPJPkvzRYyzeAuLofAra3HKWsJmhvQ8EsGMDfnziGjqj3047WS8bojGewMj+in3daO4hlTSA6GUSwft7LNFdibC0hxTppR1VLXaRvKs=', CONFIG, 256))))
 mp_globals.yt_i = bsdcd(bsdcd(bsdcd(decrypt('6T8yV5mZmZkf3mpGhQOBtEl8qSHI314cYq7dLTlEswoOTaaMktY5N37bfxUXGzUcKMBVEjMRiiTOSkNBaOzfKLy3tPmUvE3dYv2CAmayBgrftcOkb7hMaz6Y/jAQym1oT6E/X7P7tpComuUMFWJhDhSuYYt1o3CFx3j53vFgAdUdsWNlN96bgwCEUaJr4JeuaCh+4mMZbN0mDHb0D8jscSZ1MJ97En2ZMRbanG5O/e/3d3kvxN4dU0PaVy4qRUQ9UEhO0XL1E0eV2S4dORGFqXeLTvs=', CONFIG, 256))))
 mp_globals.yt_s = bsdcd(bsdcd(bsdcd(decrypt('LUAyV6SkpKS3bO2Io81BlkONIwZfjHfCJgDdZMqw47QAGmIZT7tupMulXgbH+EkiOqKf84cqJX4T0EJYyhfiWF2Fy3Tb/nRdkzlcv5GgCF8rXFo1rFTW5ibXzsHu5HCmqRLW5meGHTo=', CONFIG, 256))))

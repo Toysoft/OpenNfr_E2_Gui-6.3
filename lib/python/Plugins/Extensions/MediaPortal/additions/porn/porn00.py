@@ -262,7 +262,7 @@ class porn00FilmAuswahlScreen(MPScreen):
 		elif hoster == 'porn00 pornaq':
 			twAgentGetPage(url, agent=myagent).addCallback(self.porn00pornaqData).addErrback(self.dataError)
 		elif hoster == 'porn00 direct':
-			twAgentGetPage(url, agent=myagent).addCallback(self.porn00directData).addErrback(self.dataError)
+			twAgentGetPage(url, agent=myagent).addCallback(self.porn00directData, url).addErrback(self.dataError)
 		elif hoster == 'porn00 wankz':
 			twAgentGetPage(url, agent=myagent).addCallback(self.porn00wankzData).addErrback(self.dataError)
 		else:
@@ -283,19 +283,19 @@ class porn00FilmAuswahlScreen(MPScreen):
 		else:
 			message = self.session.open(MessageBoxExt, _("Broken URL parsing, please report to the developers."), MessageBoxExt.TYPE_INFO, timeout=3)
 
-	def porn00directData(self,data):
+	def porn00directData(self,data, pageurl):
 		link = re.findall('file:\s*["|\'](http.*?)["|\']', data)
-		if link:
-			self.got_link(link[-1])
-			return
-		else:
+		if not link:
 			link = re.findall('var\szu\s=\s["|\'](http.*?)["|\']', data)
 			if not link:
 				link = re.findall('var\sro\s=\s["|\'](http.*?)["|\']', data)
-			if link:
-				self.got_link(link[-1])
-				return
-		message = self.session.open(MessageBoxExt, _("Broken URL parsing, please report to the developers."), MessageBoxExt.TYPE_INFO, timeout=3)
+		if link:
+			mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+			headers = '&Referer=' + pageurl
+			url = link[-1] + '#User-Agent='+mp_globals.player_agent+headers
+			self.got_link(url)
+		else:
+			message = self.session.open(MessageBoxExt, _("Broken URL parsing, please report to the developers."), MessageBoxExt.TYPE_INFO, timeout=3)
 
 	def got_link(self, stream_url):
 		title = self.genreName

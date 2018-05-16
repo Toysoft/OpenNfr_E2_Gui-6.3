@@ -120,7 +120,7 @@ except:
 			mp_globals.stateinfo = False
 
 from RadioVisualization import RadioVisualization
-			
+
 from mp_globals import std_headers
 from streams import isSupportedHoster, get_stream_link
 from mpscreen import MPScreen, MPSetupScreen, SearchHelper
@@ -170,7 +170,7 @@ def bstkn(url):
 		import hmac, base64
 		urlpart = urlpart.group(1)
 		datelong = int(round(time()))
-		public_key = base64.b64decode('UGdmTGEzY0dOWTVuRE4zaXNpYnp1R3NvbVNXc3BqQXM=')
+		public_key = base64.b64decode('d0dST3hNNVFZbGpudkFCT1BSeUhvWXNQOHNBMW1oVkw=')
 		resultD = mp_globals.bsp
 		myurlpart = '%s/%s' % (datelong, urlpart)
 		myHmac = hmac.new(resultD, myurlpart,digestmod=hashlib.sha256).hexdigest()

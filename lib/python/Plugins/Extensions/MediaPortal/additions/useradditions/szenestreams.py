@@ -18,7 +18,7 @@ class SzeneStreamsGenreScreen(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("Szene-Streamz.com")
+		self['title'] = Label("Szene-Streamz")
 		self['ContentTitle'] = Label(_("Genre Selection"))
 
 		self.keyLocked = True
@@ -31,18 +31,18 @@ class SzeneStreamsGenreScreen(MPScreen):
 	def layoutFinished(self):
 		self.genreliste.append(("Kinofilme", "http://szene-streamz.com/publ/aktuelle_kinofilme/1-"))
 		self.genreliste.append(("Last Added", "http://szene-streamz.com/publ/0-"))
-		self.genreliste.append(("720p", "http://szene-streamz.com/publ/720p/26-"))
+		self.genreliste.append(("720p / 1080p", "http://szene-streamz.com/publ/720p_1080p/26-"))
 		self.genreliste.append(("Action", "http://szene-streamz.com/publ/action/2-"))
 		self.genreliste.append(("Abenteuer", "http://szene-streamz.com/publ/abenteuer/3-"))
 		self.genreliste.append(("Asia", "http://szene-streamz.com/publ/asia/4-"))
 		self.genreliste.append(("Bollywood", "http://szene-streamz.com/publ/bollywood/5-"))
 		self.genreliste.append(("Biografie", "http://szene-streamz.com/publ/biografie/6-"))
 		self.genreliste.append(("Drama / Romantik", "http://szene-streamz.com/publ/drama_romantik/8-"))
-		self.genreliste.append(("Doku", "http://szene-streamz.com/publ/dokus_shows/9-"))
+		self.genreliste.append(("Dokus / Shows", "http://szene-streamz.com/publ/dokus_shows/9-"))
 		self.genreliste.append(("Familie", "http://szene-streamz.com/publ/familie/11-"))
 		self.genreliste.append(("Geschichte", "http://szene-streamz.com/publ/geschichte/12-"))
-		self.genreliste.append(("HDRiP", "http://szene-streamz.com/publ/hd/13-"))
-		self.genreliste.append(("Horror", "http://szene-streamz.com/publ/horror/14-"))
+		self.genreliste.append(("HD", "http://szene-streamz.com/publ/hd/13-"))
+		self.genreliste.append(("Horror", "http://szene-streamz.com/publ/horror_streams/14-"))
 		self.genreliste.append(("History", "http://szene-streamz.com/publ/history/15-"))
 		self.genreliste.append(("Komoedie", "http://szene-streamz.com/publ/komodie/16-"))
 		self.genreliste.append(("Krieg", "http://szene-streamz.com/publ/krieg/17-"))
@@ -83,7 +83,7 @@ class SzeneStreamsFilmeListeScreen(MPScreen, ThumbsHelper):
 			"prevBouquet" : self.keyPageDown
 		}, -1)
 
-		self['title'] = Label("Szene-Streamz.com")
+		self['title'] = Label("Szene-Streamz")
 		self['ContentTitle'] = Label(self.streamGenreName)
 
 		self['Page'] = Label(_("Page:"))
@@ -119,7 +119,7 @@ class SzeneStreamsFilmeListeScreen(MPScreen, ThumbsHelper):
 				if not re.match('http:', url):
 					image = 'http://szene-streamz.com' + image
 					url = 'http://szene-streamz.com' + url
-				self.filmliste.append((decodeHtml(title), url, image, h))
+				self.filmliste.append((decodeHtml(title), url, image, h.strip()))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.keyLocked = False
 			self.th_ThumbsQuery(self.filmliste,0,1,2,None,None, self.page, self.lastpage)
@@ -161,7 +161,7 @@ class SzeneStreamsStreamListeScreen(MPScreen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("Szene-Streamz.com")
+		self['title'] = Label("Szene-Streamz")
 		self['ContentTitle'] = Label(_("Stream Selection"))
 		self['name'] = Label(self.streamName)
 

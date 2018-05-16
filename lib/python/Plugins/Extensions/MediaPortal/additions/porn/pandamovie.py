@@ -136,6 +136,14 @@ class pandamovieListScreen(MPScreen, ThumbsHelper):
 				lastp = round((float(lastp) / 18) + 0.5)
 				self.lastpage = int(lastp)
 				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+		elif "adult/director" in self.Link:
+			lastp = re.search('- Page \d+ of (\d+) -', data, re.S)
+			if lastp:
+				lastp = lastp.group(1)
+				self.lastpage = int(lastp)
+			else:
+				self.lastpage = self.page + 1
+			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		else:
 			self.getLastPage(data, '', "class='pages'>.*?of\s(.*?)<")
 		preparse = re.search('(class="h1catname.*?$)', data, re.S)

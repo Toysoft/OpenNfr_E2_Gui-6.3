@@ -121,6 +121,8 @@ class ssMain(MPScreen):
 	def Login3(self, data):
 		if '/home/logout' in data:
 			self.loggedin = True
+			self.keyLocked = False
+			self.showInfos()
 
 	def layoutFinished(self):
 		self.keyLocked = True
@@ -150,9 +152,10 @@ class ssMain(MPScreen):
 						requests.cookies.cookiejar_from_dict(ss_ck, cookiejar=ss_cookies)
 				except:
 					pass
-			self.keyLocked = False
 			if self.username != "ssEmail" and self.password != "ssPassword":
 				self.Login()
+			else:
+				self.keyLocked = False
 			reactor.callFromThread(self.showInfos)
 		else:
 			reactor.callFromThread(self.ss_error)
@@ -411,7 +414,7 @@ class ssNeueEpisoden(MPScreen):
 			self.streamList.append((_('No episodes found!'), None))
 		else:
 			self.keyLocked = False
-		self.ml.setList(map(self._defaultlistcenter, self.streamList))
+		self.ml.setList(map(self._defaultlistleft, self.streamList))
 		self.loadPicQueued()
 
 	def keyOK(self):
@@ -589,13 +592,17 @@ class ssStaffeln(MPScreen):
 			self.parseData(data)
 
 	def parseData(self, data):
+		self.descr = re.search('data-full-description="(.*?)">', data, re.S)
 		parse = re.findall('<div class="hosterSiteDirectNav" id="stream">(.*?)<div class="cf"></div>', data, re.S)
 		if parse:
-			staffeln = re.findall('<a\s.*?href="(/serie/stream/.*?/staffel-(\d+))"', parse[0], re.S)
+			staffeln = re.findall('<a\s.*?href="(/serie/stream/.*?/(?:staffel-(\d+)|filme))"', parse[0], re.S)
 			if staffeln:
 				for url, staffel in staffeln:
 					url = BASE_URL + url
-					self.streamList.append((_("Season")+" "+staffel, url, staffel))
+					if url.endswith('filme'):
+						self.streamList.append((_("Movies"), url, "0"))
+					else:
+						self.streamList.append((_("Season")+" "+staffel, url, staffel))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No seasons found!'), None))
 		self.ml.setList(map(self._defaultlistcenter, self.streamList))
@@ -607,6 +614,8 @@ class ssStaffeln(MPScreen):
 		if self.keyLocked or exist == None:
 			return
 		title = self['liste'].getCurrent()[0][0]
+		if self.descr:
+			self['handlung'].setText(stripAllTags(decodeHtml(self.descr.group(1))).strip())
 		CoverHelper(self['coverArt']).getCover(self.cover, agent=ss_agent, cookieJar=ss_cookies)
 		self['name'].setText(self.Title)
 
@@ -616,6 +625,7 @@ class ssStaffeln(MPScreen):
 			return
 		staffel = self['liste'].getCurrent()[0][2]
 		url = self['liste'].getCurrent()[0][1]
+		print url
 		self.session.open(ssEpisoden, url, staffel, self.Title, self.cover)
 
 class ssEpisoden(MPScreen):
@@ -672,39 +682,52 @@ class ssEpisoden(MPScreen):
 				self.updates_read.close()
 		parse = re.search('class="pageTitle">(.*?)id="footer">', data, re.S)
 		if parse:
-			episoden = re.findall('Folge\s(\d+).*?class="seasonEpisodeTitle">.*?href="(.*?)".*?<strong>(.*?)</strong>.*?<span>(.*?)</span>', parse.group(1), re.S)
-		if episoden:
-			for episode, url, title_de, title_en in episoden:
-				if int(self.Staffel) < 10:
-					staffel = "S0"+str(self.Staffel)
-				else:
-					staffel = "S"+str(self.Staffel)
-				if int(episode) < 10:
-					episode = "E0"+str(episode)
-				else:
-					episode = "E"+str(episode)
-				if title_de == "":
-					title = title_en.strip()
-					Flag = "EN"
-					check = (decodeHtml(self.Title)) + " - " + staffel + episode + " - " + (decodeHtml(title_en.strip()))
-				else:
-					title = title_de.strip()
-					Flag = "DE"
-					check = (decodeHtml(self.Title)) + " - " + staffel + episode + " - " + (decodeHtml(title_de.strip()))
-				episodenName = staffel + episode + " - " + title
-				checkname = check
-				checkname2 = check.replace('ä','ae').replace('ö','oe').replace('ü','ue').replace('Ä','Ae').replace('Ö','Oe').replace('Ü','Ue')
-				url = BASE_URL + url
-				if (checkname in self.watched_liste) or (checkname2 in self.watched_liste):
-					self.streamList.append((decodeHtml(episodenName), url, True, Flag))
-				else:
-					self.streamList.append((decodeHtml(episodenName), url, False, Flag))
+			episoden = re.findall('(?:Folge|Film)\s(\d+).*?class="seasonEpisodeTitle">.*?href="(.*?)".*?<strong>(.*?)</strong>.*?<span>(.*?)</span>', parse.group(1), re.S)
+			if episoden:
+				for episode, url, title_de, title_en in episoden:
+					if int(self.Staffel) < 10:
+						staffel = "S0"+str(self.Staffel)
+					else:
+						staffel = "S"+str(self.Staffel)
+					if int(episode) < 10:
+						episode = "E0"+str(episode)
+					else:
+						episode = "E"+str(episode)
+					if title_de == "":
+						title = title_en.strip()
+						Flag = "EN"
+						check = (decodeHtml(self.Title)) + " - " + staffel + episode + " - " + (decodeHtml(title_en.strip()))
+					else:
+						title = title_de.strip()
+						Flag = "DE"
+						check = (decodeHtml(self.Title)) + " - " + staffel + episode + " - " + (decodeHtml(title_de.strip()))
+					episodenName = staffel + episode + " - " + title
+					checkname = check
+					checkname2 = check.replace('ä','ae').replace('ö','oe').replace('ü','ue').replace('Ä','Ae').replace('Ö','Oe').replace('Ü','Ue')
+					url = BASE_URL + url
+					if (checkname in self.watched_liste) or (checkname2 in self.watched_liste):
+						self.streamList.append((decodeHtml(episodenName), url, True, Flag))
+					else:
+						self.streamList.append((decodeHtml(episodenName), url, False, Flag))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No episodes found!'), None, False, None))
 		else:
 			self.keyLocked = False
 		self.ml.setList(map(self._defaultlistleftmarked, self.streamList))
 		CoverHelper(self['coverArt']).getCover(self.cover, agent=ss_agent, cookieJar=ss_cookies)
+		self.showInfos()
+
+	def showInfos(self):
+		title = self['liste'].getCurrent()[0][0]
+		url = self['liste'].getCurrent()[0][1]
+		self['name'].setText(title)
+		if url:
+			twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.showInfos2).addErrback(self.dataError)
+
+	def showInfos2(self, data):
+		descr = re.search('class="descriptionSpoiler">(.*?)</p>', data, re.S)
+		if descr:
+			self['handlung'].setText(stripAllTags(decodeHtml(descr.group(1))).strip())
 
 	def keyOK(self):
 		exist = self['liste'].getCurrent()
@@ -752,7 +775,7 @@ class ssStreams(MPScreen):
 			self.parseData(data)
 
 	def parseData(self, data):
-		streams = re.findall('episodeLink.*?data-lang-key="(.*?)".*?<a href="(.*?)" target="_blank">.*?<i class="icon\s(.*?)"', data, re.S)
+		streams = re.findall('episodeLink.*?data-lang-key="(.*?)".*?data-link-target="(.*?)">.*?<i class="icon\s(.*?)"', data, re.S)
 		if streams:
 			for (language, url, hoster) in streams:
 				if isSupportedHoster(hoster, True):

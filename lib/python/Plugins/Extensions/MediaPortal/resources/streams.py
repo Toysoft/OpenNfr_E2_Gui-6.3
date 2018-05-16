@@ -81,6 +81,7 @@ class get_stream_link:
 	from hosters.epornik import epornik
 	from hosters.exashare import exashare
 	from hosters.fembed import fembed
+	from hosters.filebebo import filebebo
 	from hosters.flashx import flashx
 	from hosters.flyflv import flyflv, flyflvData
 	from hosters.google import google
@@ -101,6 +102,7 @@ class get_stream_link:
 	from hosters.vidoza import vidoza
 	from hosters.vidspot import vidspot
 	from hosters.vidto import vidto
+	from hosters.vidup import vidup, vidup_thief
 	from hosters.vidwoot import vidwoot
 	from hosters.vidzi import vidzi
 	from hosters.vivo import vivo
@@ -485,9 +487,18 @@ class get_stream_link:
 				link = data
 				getPage(link).addCallback(self.bitshare).addErrback(self.errorload)
 
-			elif re.search('epornik.com/', data, re.S):
+			elif re.search('epornik.com', data, re.S):
 				link = data
 				getPage(link).addCallback(self.epornik).addErrback(self.errorload)
+
+			elif re.search('filebebo.com', data, re.S):
+				link = data
+				twAgentGetPage(link).addCallback(self.filebebo).addErrback(self.errorload)
+
+			elif re.search('vidup.tv', data, re.S):
+				link = data
+				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+				twAgentGetPage(link, agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36').addCallback(self.vidup).addErrback(self.errorload)
 
 			elif re.search('fembed.com', data, re.S):
 				link = 'http://www.fembed.com/api/source/' + data.split('/v/')[-1]
@@ -679,11 +690,11 @@ class get_stream_link:
 					link = "https://api.openload.co/1/streaming/get?file=" + id.group(1)
 					getPage(link).addCallback(self.openloadApi, id.group(1)).addErrback(self.errorload)
 
-			elif re.search('thevideo\.me', data, re.S):
+			elif re.search('thevideo\.me|thevideo\.cc', data, re.S):
 				print data
 				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
-					if (re.search('thevideo\.me/embed-', data, re.S) or re.search('640x360.html', data, re.S)):
-						id = re.findall('thevideo\.me/(?:embed-|)(.*?)(?:\.html|-\d+x\d+\.html)', data)
+					if (re.search('thevideo(\.me|\.cc)/embed-', data, re.S) or re.search('640x360.html', data, re.S)):
+						id = re.findall('thevideo(?:\.me|\.cc)/(?:embed-|)(.*?)(?:\.html|-\d+x\d+\.html)', data)
 						if id:
 							link = "https://www.thevideo.me/%s" % id[0]
 					else:
@@ -692,8 +703,8 @@ class get_stream_link:
 					self.prz = 1
 					self.callPremium(link)
 				else:
-					if (re.search('thevideo\.me/embed-', data, re.S) or re.search('640x360.html', data, re.S)):
-						id = re.findall('thevideo\.me/(?:embed-|)(.*?)(?:\.html|-\d+x\d+\.html)', data)
+					if (re.search('thevideo(\.me|\.cc)/embed-', data, re.S) or re.search('640x360.html', data, re.S)):
+						id = re.findall('thevideo(?:\.me|\.cc)/(?:embed-|)(.*?)(?:\.html|-\d+x\d+\.html)', data)
 						if id:
 							link = "https://thevideo.me/embed-%s-640x360.html" % id[0]
 							print link
