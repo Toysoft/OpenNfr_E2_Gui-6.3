@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MediaPortal\n"
-"POT-Creation-Date: 2018-05-10 14:13+0200\n"
-"PO-Revision-Date: 2018-05-10 14:13+0200\n"
+"POT-Creation-Date: 2018-05-14 21:37+0200\n"
+"PO-Revision-Date: 2018-05-14 21:38+0200\n"
 "Last-Translator: dhwz <dhwz@gmx.net>\n"
 "Language-Team: MediaPortal Team\n"
 "Language: de_DE\n"
@@ -69,6 +69,7 @@ msgstr ""
 #: mpgz/src/additions/porn/javbraze.py:107 mpgz/src/additions/porn/javhd.py:107
 #: mpgz/src/additions/porn/justporn.py:126 mpgz/src/additions/porn/lfporn.py:90
 #: mpgz/src/additions/porn/mydirtyhobby.py:167
+#: mpgz/src/additions/porn/pandamovie.py:110
 #: mpgz/src/additions/porn/paradisehill.py:137
 #: mpgz/src/additions/porn/porn00.py:126
 #: mpgz/src/additions/porn/pornfromczech.py:126
@@ -143,6 +144,7 @@ msgstr "Seite"
 #: mpgz/src/additions/porn/javbraze.py:109 mpgz/src/additions/porn/javhd.py:109
 #: mpgz/src/additions/porn/justporn.py:128 mpgz/src/additions/porn/lfporn.py:92
 #: mpgz/src/additions/porn/mydirtyhobby.py:169
+#: mpgz/src/additions/porn/pandamovie.py:112
 #: mpgz/src/additions/porn/paradisehill.py:139
 #: mpgz/src/additions/porn/porn00.py:128
 #: mpgz/src/additions/porn/pornfromczech.py:128
@@ -173,6 +175,7 @@ msgstr "Seite"
 #: mpgz/src/additions/useradditions/primewire.py:147
 #: mpgz/src/additions/useradditions/sharedir.py:392
 #: mpgz/src/additions/useradditions/solarmovie.py:131
+#: mpgz/src/additions/useradditions/szenestreams.py:89
 #: mpgz/src/additions/useradditions/tata.py:157
 #: mpgz/src/additions/useradditions/topimdb.py:31
 #: src/additions/fun/failto.py:69 src/additions/fun/forplayers.py:115
@@ -244,6 +247,7 @@ msgstr "Seite:"
 #: mpgz/src/additions/porn/javbraze.py:148 mpgz/src/additions/porn/javhd.py:148
 #: mpgz/src/additions/porn/justporn.py:155
 #: mpgz/src/additions/porn/lfporn.py:123
+#: mpgz/src/additions/porn/pandamovie.py:157
 #: mpgz/src/additions/porn/paradisehill.py:174
 #: mpgz/src/additions/porn/porn00.py:158
 #: mpgz/src/additions/porn/pornfromczech.py:156
@@ -286,6 +290,7 @@ msgstr "Keine Filme gefunden!"
 #: mpgz/src/additions/porn/ivhunter.py:198
 #: mpgz/src/additions/porn/justporn.py:216
 #: mpgz/src/additions/porn/lfporn.py:185
+#: mpgz/src/additions/porn/pandamovie.py:217
 #: mpgz/src/additions/porn/pornfromczech.py:222
 #: mpgz/src/additions/porn/pornorips.py:261
 #: mpgz/src/additions/porn/pornrewind.py:204
@@ -304,7 +309,8 @@ msgstr "Keine Filme gefunden!"
 #: mpgz/src/additions/useradditions/onlinefilme.py:520
 #: mpgz/src/additions/useradditions/primewire.py:366
 #: mpgz/src/additions/useradditions/primewire.py:370
-#: mpgz/src/additions/useradditions/serienstream.py:767
+#: mpgz/src/additions/useradditions/serienstream.py:771
+#: mpgz/src/additions/useradditions/szenestreams.py:190
 #: mpgz/src/additions/useradditions/watchseries.py:293
 #: mpgz/src/additions/useradditions/watchseriesonline.py:377
 #: src/additions/porn/pornrabbit.py:212
@@ -331,6 +337,9 @@ msgstr ""
 #: mpgz/src/additions/porn/lfporn.py:105
 #: mpgz/src/additions/porn/mydirtyhobby.py:78
 #: mpgz/src/additions/porn/mydirtyhobby.py:182
+#: mpgz/src/additions/porn/pandamovie.py:20
+#: mpgz/src/additions/porn/pandamovie.py:122
+#: mpgz/src/additions/porn/pandamovie.py:193
 #: mpgz/src/additions/porn/paradisehill.py:149
 #: mpgz/src/additions/porn/porn00.py:141
 #: mpgz/src/additions/porn/pornfromczech.py:141
@@ -497,7 +506,8 @@ msgstr ""
 #: mpgz/src/additions/porn/mydirtyhobby.py:102
 #: mpgz/src/additions/porn/pornfromczech.py:243
 #: mpgz/src/additions/useradditions/foxx.py:135 src/additions/porn/beeg.py:232
-#: src/resources/hosters/streamango.py:22 src/resources/txxxcrypt.py:13
+#: src/resources/hosters/streamango.py:22 src/resources/hosters/vidup.py:22
+#: src/resources/txxxcrypt.py:13
 msgid "This plugin requires packages python-pyexecjs and nodejs."
 msgstr "Dieses Plugin benötigt die Pakete python-pyexecjs und nodejs."
 
@@ -537,7 +547,7 @@ msgstr "Keine Videos gefunden!"
 #: mpgz/src/additions/porn/porn00.py:298
 #: mpgz/src/additions/useradditions/burningseries.py:615
 #: mpgz/src/additions/useradditions/filmpalast.py:425
-#: mpgz/src/additions/useradditions/serienstream.py:801
+#: mpgz/src/additions/useradditions/serienstream.py:805
 #: src/additions/porn/beeg.py:98 src/additions/porn/beeg.py:125
 msgid "Broken URL parsing, please report to the developers."
 msgstr "Defektes URL Parsing, bitte an die Entwickler melden."
@@ -640,7 +650,7 @@ msgid "Season Selection"
 msgstr "Staffel Auswahl"
 
 #: mpgz/src/additions/useradditions/burningseries.py:357
-#: mpgz/src/additions/useradditions/serienstream.py:600
+#: mpgz/src/additions/useradditions/serienstream.py:603
 #: src/additions/mediatheken/myspass.py:153
 msgid "No seasons found!"
 msgstr "Keine Staffeln gefunden!"
@@ -649,7 +659,7 @@ msgstr "Keine Staffeln gefunden!"
 #: mpgz/src/additions/useradditions/filmpalast.py:235
 #: mpgz/src/additions/useradditions/ganime.py:134
 #: mpgz/src/additions/useradditions/kinoxto.py:620
-#: mpgz/src/additions/useradditions/serienstream.py:641
+#: mpgz/src/additions/useradditions/serienstream.py:645
 #: mpgz/src/additions/useradditions/watchseriesonline.py:283
 msgid "Episode Selection"
 msgstr "Episoden Auswahl"
@@ -657,7 +667,7 @@ msgstr "Episoden Auswahl"
 #: mpgz/src/additions/useradditions/burningseries.py:458
 #: mpgz/src/additions/useradditions/kinoxto.py:692
 #: mpgz/src/additions/useradditions/serienstream.py:411
-#: mpgz/src/additions/useradditions/serienstream.py:703
+#: mpgz/src/additions/useradditions/serienstream.py:707
 #: mpgz/src/additions/useradditions/watchseries.py:238
 #: mpgz/src/additions/useradditions/watchseriesonline.py:165
 #: mpgz/src/additions/useradditions/watchseriesonline.py:325
@@ -675,16 +685,17 @@ msgstr "Keine Episoden gefunden!"
 #: mpgz/src/additions/useradditions/kinoxto.py:799
 #: mpgz/src/additions/useradditions/movie4k.py:650
 #: mpgz/src/additions/useradditions/onlinefilme.py:437
-#: mpgz/src/additions/useradditions/serienstream.py:737
-#: mpgz/src/additions/useradditions/serienstream.py:738
+#: mpgz/src/additions/useradditions/serienstream.py:741
+#: mpgz/src/additions/useradditions/serienstream.py:742
 #: mpgz/src/additions/useradditions/seriesever.py:359
+#: mpgz/src/additions/useradditions/szenestreams.py:165
 #: mpgz/src/additions/useradditions/watchseriesonline.py:356
 #: mpgz/src/additions/useradditions/watchseriesonline.py:357
 msgid "Stream Selection"
 msgstr "Stream Auswahl"
 
 #: mpgz/src/additions/useradditions/burningseries.py:602
-#: mpgz/src/additions/useradditions/serienstream.py:795
+#: mpgz/src/additions/useradditions/serienstream.py:799
 msgid ""
 "Sorry this video is currently captcha protected, please try again later."
 msgstr ""
@@ -707,6 +718,7 @@ msgstr "Keine Filme/Serien gefunden!"
 #: mpgz/src/additions/useradditions/ganime.py:22
 #: mpgz/src/additions/useradditions/kinoxto.py:81
 #: mpgz/src/additions/useradditions/seriesever.py:63
+#: mpgz/src/additions/useradditions/szenestreams.py:22
 #: src/additions/mediatheken/kindertube.py:61
 msgid "Genre Selection"
 msgstr "Genre Auswahl"
@@ -784,7 +796,7 @@ msgstr "PIN eingeben"
 #: mpgz/src/additions/useradditions/seriesever.py:432
 #: mpgz/src/additions/useradditions/seriesever.py:441
 #: mpgz/src/additions/useradditions/seriesever.py:448
-#: src/additions/mediatheken/kindertube.py:228 src/resources/streams.py:772
+#: src/additions/mediatheken/kindertube.py:228 src/resources/streams.py:783
 msgid "Stream not found, try another Stream Hoster."
 msgstr "Stream nicht gefunden, versuche einen anderen Stream Hoster."
 
@@ -864,7 +876,11 @@ msgstr "Email:"
 msgid "No shows found!"
 msgstr "Keine Serien gefunden!"
 
-#: mpgz/src/additions/useradditions/serienstream.py:598
+#: mpgz/src/additions/useradditions/serienstream.py:599
+msgid "Movies"
+msgstr "Filme"
+
+#: mpgz/src/additions/useradditions/serienstream.py:601
 msgid "Season"
 msgstr "Staffel"
 
@@ -1954,7 +1970,7 @@ msgstr "premiumize.me ist nicht aktiviert."
 msgid "premiumize.me failed."
 msgstr "premiumize.me fehlgeschlagen."
 
-#: src/plugin.py:503 src/resources/streams.py:181
+#: src/plugin.py:503 src/resources/streams.py:183
 msgid "premiumize: Login failed."
 msgstr "premiumize: Login fehlgeschlagen."
 
@@ -2985,55 +3001,55 @@ msgstr ""
 "Der Verzeichnispfad beginnt nicht mit '/':\n"
 "%s"
 
-#: src/resources/streams.py:179
+#: src/resources/streams.py:181
 msgid "premiumize: No valid link."
 msgstr "premiumize: Ungültiger Link."
 
-#: src/resources/streams.py:183
+#: src/resources/streams.py:185
 msgid "premiumize: You are no Premium-User."
 msgstr "premiumize: Du bist kein Premium-User."
 
-#: src/resources/streams.py:185
+#: src/resources/streams.py:187
 msgid "premiumize: No Access."
 msgstr "premiumize: Kein Zugriff."
 
-#: src/resources/streams.py:187
+#: src/resources/streams.py:189
 msgid "premiumize: File not found."
 msgstr "premiumize: Datei nicht gefunden."
 
-#: src/resources/streams.py:189
+#: src/resources/streams.py:191
 msgid "premiumize: Hoster currently not available."
 msgstr "premiumize: Hoster momentan nicht verfügbar."
 
-#: src/resources/streams.py:191
+#: src/resources/streams.py:193
 msgid "premiumize: Unknown technical error."
 msgstr "premiumize: Unbekannter technischer Fehler."
 
-#: src/resources/streams.py:193
+#: src/resources/streams.py:195
 msgid "premiumize: Temporary technical error."
 msgstr "premiumize: Temporärer technischer Fehler."
 
-#: src/resources/streams.py:195
+#: src/resources/streams.py:197
 msgid "premiumize: Fair use limit exhausted."
 msgstr "premiumize: Fair Use Limit ausgschöpft."
 
-#: src/resources/streams.py:591 src/resources/streams.py:756
+#: src/resources/streams.py:602 src/resources/streams.py:767
 msgid "Mandatory Python module python-requests is missing!"
 msgstr "Zwingend erforderliches Python-Modul python-requests fehlt!"
 
-#: src/resources/streams.py:766
+#: src/resources/streams.py:777
 msgid "No supported Stream Hoster, try another one!"
 msgstr "Kein unterstützter Stream Hoster, versuche einen anderen!"
 
-#: src/resources/streams.py:768
+#: src/resources/streams.py:779
 msgid "Invalid Stream link, try another Stream Hoster!"
 msgstr "Ungültiger Stream Link, versuche eine anderen Stream Hoster!"
 
-#: src/resources/streams.py:776
+#: src/resources/streams.py:787
 msgid "This hoster is only working with enabled Premium support."
 msgstr "Dieser Hoster funktioniert nur mit aktivierter Premium-Unterstützung."
 
-#: src/resources/streams.py:778
+#: src/resources/streams.py:789
 msgid ""
 "This Stream link is currently not available via Premium, try another Stream "
 "Hoster."
@@ -3041,15 +3057,15 @@ msgstr ""
 "Dieser Stream ist aktuell nicht über Premium verfügbar, versuche einen "
 "anderen Stream Hoster."
 
-#: src/resources/streams.py:782
+#: src/resources/streams.py:793
 msgid "Unknown error, check MP logfile."
 msgstr "Unbekannter Fehler, MP Logfile überprüfen."
 
-#: src/resources/streams.py:807
+#: src/resources/streams.py:818
 msgid "Stream starts in 10 sec."
 msgstr "Stream startet in 10 sek."
 
-#: src/resources/streams.py:820
+#: src/resources/streams.py:831
 msgid "This video is encoding now. Please check back later."
 msgstr "Das Video wird gerade encoded. Bitte später nochmal versuchen."
 

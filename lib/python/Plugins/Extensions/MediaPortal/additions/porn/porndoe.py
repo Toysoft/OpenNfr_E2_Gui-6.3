@@ -100,7 +100,7 @@ class porndoeGenreScreen(MPScreen):
 
 	def showInfos(self):
 		Image = self['liste'].getCurrent()[0][2]
-		CoverHelper(self['coverArt']).getCover(Image)
+		CoverHelper(self['coverArt']).getCover(Image, agent=agent, headers={'Referer':'https://www.porndoe.com'})
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -182,7 +182,7 @@ class porndoeFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="paginator"(.*?)</ul>', '.*(?:page=|<span>)(\d+)(?:"|</span>)')
-		Movies = re.findall(' data-title="(.*?)".*?href="(.*?)".*?data-src="(.*?)".*?class="item-stat right duration".*?txt">(.*?)</span.*?class="item-stat date".*?txt">(.*?)</span.*?class="item-stat views".*?txt">(.*?)</span', data, re.S)
+		Movies = re.findall('data-title="(.*?)".*?href="(.*?)".*?data-src="(.*?)".*?class="item-stat right duration".*?txt">(.*?)</span.*?class="item-stat date".*?txt">(.*?)</span.*?class="item-stat views".*?txt">(.*?)</span', data, re.S)
 		if Movies:
 			for (Title, Url, Image, Runtime, Added, Views) in Movies:
 				Url = "https://www.porndoe.com" + Url
@@ -207,7 +207,7 @@ class porndoeFilmScreen(MPScreen, ThumbsHelper):
 		added = self['liste'].getCurrent()[0][5]
 		self['name'].setText(title)
 		self['handlung'].setText("%s: %s\nRuntime: %s\nViews: %s\nAdded: %s" % (_("Sort order"),self.sorttext,runtime, views, added))
-		CoverHelper(self['coverArt']).getCover(pic)
+		CoverHelper(self['coverArt']).getCover(pic, agent=agent, headers={'Referer':'https://www.porndoe.com'})
 
 	def keySort(self):
 		if self.keyLocked:
@@ -236,6 +236,10 @@ class porndoeFilmScreen(MPScreen, ThumbsHelper):
 			url = videoPage[-1][0]
 			if url.startswith('//'):
 				url = 'http:' + url
+			url = url.replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B')
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]
-			self.session.open(SimplePlayer, [(Title, url.replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B'))], showPlaylist=False, ltype='porndoe')
+			headers = '&Referer=' + self['liste'].getCurrent()[0][1]
+			url = url + '#User-Agent='+agent+headers
+			mp_globals.player_agent = agent
+			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='porndoe')

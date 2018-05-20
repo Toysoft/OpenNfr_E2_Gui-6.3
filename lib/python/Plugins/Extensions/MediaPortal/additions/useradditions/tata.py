@@ -230,7 +230,9 @@ class tataParsing(MPScreen):
 		stream = re.findall('playinfo":"(.*?)"', data, re.S)
 		if stream:
 			url = stream[-1].replace('\/','/').replace('embed.html','index.m3u8').replace('&autoplay=false', '')
-			url = url + '#User-Agent='+tat_agent
+			headers = '&Referer=' + stream[-1].replace('\/','/').replace('&','%2526')
+			url = url + '#User-Agent='+tat_agent+headers
+			mp_globals.player_agent = tat_agent
 			self.session.open(SimplePlayer, [(title, url, cover)], showPlaylist=False, ltype='tata', cover=True, forceGST=True)
 		else:
 			self.session.open(MessageBoxExt, _("Sorry, can't extract a stream url."), MessageBoxExt.TYPE_INFO, timeout=5)

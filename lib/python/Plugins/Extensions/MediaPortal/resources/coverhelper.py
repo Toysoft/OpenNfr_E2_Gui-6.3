@@ -17,10 +17,10 @@ class CoverHelper:
 		self.err_nocover = True
 		self.logofix = False
 
-	def downloadPage(self, url, path, agent=None, cookieJar=None):
+	def downloadPage(self, url, path, agent=None, cookieJar=None, headers=None):
 		if not agent:
 			agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
-		return twDownloadPage(url, path, timeout=20, agent=agent, cookieJar=cookieJar)
+		return twDownloadPage(url, path, timeout=20, agent=agent, cookieJar=cookieJar, headers=headers)
 
 	def closeFile(self, result, f):
 		f.close()
@@ -32,7 +32,7 @@ class CoverHelper:
 		else:
 			return data
 
-	def getCover(self, url, download_cb=None, agent=None, cookieJar=None, screensaver=False, bgcover=False):
+	def getCover(self, url, download_cb=None, agent=None, cookieJar=None, screensaver=False, bgcover=False, headers=None):
 		self.bgcover = bgcover
 		self.screensaver = screensaver
 		if self.screensaver:
@@ -67,7 +67,7 @@ class CoverHelper:
 						glob_last_cover[0] = url
 						glob_last_cover[1] = None
 						self.downloadPath = self.COVER_PIC_PATH % glob_icon_num
-					d = self.downloadPage(url, self.downloadPath, agent=agent, cookieJar=cookieJar)
+					d = self.downloadPage(url, self.downloadPath, agent=agent, cookieJar=cookieJar, headers=headers)
 					d.addCallback(self.showCover)
 					if download_cb:
 						d.addCallback(self.cb_getCover, download_cb)

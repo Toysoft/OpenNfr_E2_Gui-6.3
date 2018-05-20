@@ -124,6 +124,8 @@ class funkGenreScreen(MPScreen):
 		CoverHelper(self['coverArt']).getCover(Image)
 
 	def keyOK(self):
+		if self.keyLocked:
+			return
 		Name = self['liste'].getCurrent()[0][0]
 		url = self['liste'].getCurrent()[0][2]
 		self.session.open(funkSeasonsScreen, url, Name)

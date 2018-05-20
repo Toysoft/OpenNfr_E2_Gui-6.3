@@ -205,7 +205,7 @@ class tubebangFilmAuswahlScreen(MPScreen):
 		getPage(self.genreLink, agent=myagent).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		streams = re.findall('iframe\ssrc=[\'|"](http[s]?://(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
+		streams = re.findall('(?:value|src)=[\'|"](http[s]?://(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
 		if streams:
 			for (stream, hostername) in streams:
 				if isSupportedHoster(hostername, True):

@@ -58,6 +58,7 @@ json_headers = {
 	'Accept-Language':'en,en-US;q=0.7,en;q=0.3',
 	'X-Requested-With':'XMLHttpRequest',
 	'Content-Type':'application/x-www-form-urlencoded',
+	'Referer':base_url
 	}
 
 default_cover = "file://%s/pornhub.png" % (config.mediaportal.iconcachepath.value + "logos")
@@ -1046,7 +1047,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 			self.infoTimer.start(2000, True)
 
 	def getInfos2(self):
-		getPage(self.url, agent=phAgent, cookies=ck).addCallback(self.showInfos2).addErrback(self.dataError)
+		getPage(self.url, agent=phAgent, cookies=ck, headers={'Referer':base_url}).addCallback(self.showInfos2).addErrback(self.dataError)
 
 	def showInfos2(self, data):
 		if 'class="recaptchaContent"' in data and nodejs:

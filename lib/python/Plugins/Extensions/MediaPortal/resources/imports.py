@@ -180,12 +180,14 @@ def bstkn(url):
 	else:
 		return None
 
-def testWebConnection():
-	import requests
+def testWebConnection(host="8.8.8.8", port=53, timeout=3):
+	import socket
+
 	try:
-		response = requests.get("http://www.google.de", timeout=5)
+		socket.setdefaulttimeout(timeout)
+		socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
 		return True
-	except requests.ConnectionError:
+	except Exception as ex:
 		return False
 
 def decodeHtml(text):

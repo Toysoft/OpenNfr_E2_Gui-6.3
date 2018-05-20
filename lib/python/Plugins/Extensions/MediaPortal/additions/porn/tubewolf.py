@@ -223,6 +223,6 @@ class tubewolfListScreen(MPScreen, ThumbsHelper):
 
 	def getStreamData(self, data):
 		title = self['liste'].getCurrent()[0][0]
-		raw = re.findall('file:\s"(.*?)",', data, re.S)
+		raw = re.findall('file:\s"(.*?get_file.*?)",', data, re.S)
 		if raw:
-			self.session.open(SimplePlayer, [(title, raw[0])], showPlaylist=False, ltype='tubewolf')
+			self.session.open(SimplePlayer, [(title, raw[-1])], showPlaylist=False, ltype='tubewolf')

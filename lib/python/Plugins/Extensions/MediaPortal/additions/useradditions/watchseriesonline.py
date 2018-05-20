@@ -156,7 +156,7 @@ class wsoNewEpisodes(MPScreen):
 		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		newEpisodes = re.findall('href="(https://(?:watchseries-online.be|wseries.org)/episode/.*?)".*?</span>(.*?)</a>.</li>', data)
+		newEpisodes = re.findall('href="(https://(?:watchseries-online.be|wseries.org)/episode/.*?)".*?>(.*?)</a>.</li>', data)
 		if newEpisodes:
 			for url, episodeName in newEpisodes:
 				url = url.replace('wseries.org','watchseries-online.be')
