@@ -409,10 +409,10 @@ class CreateQuadPipChannelEntry(ChannelSelectionBase):
 class QuadPiPChannelSelection(Screen, HelpableScreen):
 	skin = """
 		<screen position="%s,%s" size="%d,%d">
-			<ePixmap pixmap="skin_default/buttons/red.png" position="%d,%d" size="140,40" alphatest="on" />
-			<ePixmap pixmap="skin_default/buttons/green.png" position="%d,%d" size="140,40" alphatest="on" />
-			<ePixmap pixmap="skin_default/buttons/yellow.png" position="%d,%d" size="140,40" alphatest="on" />
-			<ePixmap pixmap="skin_default/buttons/blue.png" position="%d,%d" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/key_red.png" position="%d,%d" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/key_green.png" position="%d,%d" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/key_yellow.png" position="%d,%d" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/key_blue.png" position="%d,%d" size="140,40" alphatest="on" />
 			<widget name="key_red" position="%d,%d" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#9f1313" transparent="1" />
 			<widget name="key_green" position="%d,%d" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#1f771f" transparent="1" />
 			<widget name="key_yellow" position="%d,%d" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#a08500" transparent="1" />
@@ -443,7 +443,7 @@ class QuadPiPChannelSelection(Screen, HelpableScreen):
 		dw = self.session.desktop.size().width()
 		dh = self.session.desktop.size().height()
 		pw, ph = {1080:("center", "center"), 720:("center", "center"), 576:("center", "20%")}.get(dh, ("center", "center"))
-		(sw, sh) = {1080:(dw/3, dh/2), 720:(int(dw/2), int(dh/1.5)), 576:(int(dw/1.3), int(dh/1.5))}.get(dh, (28, 24))
+		(sw, sh) = {1080:(dw/1.5, dh/1.5), 720:(int(dw/2), int(dh/1.5)), 576:(int(dw/1.3), int(dh/1.5))}.get(dh, (28, 24))
 		button_margin = 5
 		button_h = 40
 		list_y = 40+button_margin*3
