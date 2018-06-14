@@ -77,6 +77,7 @@ class get_stream_link:
 	# hosters
 	from hosters.bestreams import bestreams, bestreamsCalllater, bestreamsPostData
 	from hosters.bitshare import bitshare, bitshare_start
+	from hosters.clipwatching import clipwatching
 	from hosters.datoporn import datoporn
 	from hosters.epornik import epornik
 	from hosters.exashare import exashare
@@ -269,15 +270,6 @@ class get_stream_link:
 				if config.mediaportal.realdebrid_use.value and not self.fallback:
 					self.rdb = 1
 					self.prz = 0
-					self.callPremium(link)
-				else:
-					self.only_premium()
-
-			elif re.search('depfile.com', data, re.S):
-				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
-					self.rdb = 1
-					self.prz = 1
 					self.callPremium(link)
 				else:
 					self.only_premium()
@@ -495,6 +487,10 @@ class get_stream_link:
 				link = data
 				twAgentGetPage(link).addCallback(self.filebebo).addErrback(self.errorload)
 
+			elif re.search('clipwatching.com', data, re.S):
+				link = data
+				twAgentGetPage(link).addCallback(self.clipwatching).addErrback(self.errorload)
+				
 			elif re.search('vidup.tv', data, re.S):
 				link = data
 				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'

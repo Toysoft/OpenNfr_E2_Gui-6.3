@@ -78,7 +78,7 @@ class hclipsGenreScreen(MPScreen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		url = "https://www.hclips.com/categories/"
-		getPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('class="thumb_holder(.*?)class="cat-text">', data, re.S)
@@ -219,7 +219,7 @@ class hclipsFilmScreen(MPScreen, ThumbsHelper, txxxcrypt):
 		if Link == None:
 			return
 		self.keyLocked = True
-		getPage(Link, agent=agent).addCallback(self.getVideoPage).addErrback(self.dataError)
+		twAgentGetPage(Link, agent=agent).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def playVideo(self, url):
 		self.keyLocked = False

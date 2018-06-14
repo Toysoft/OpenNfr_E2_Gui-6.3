@@ -33,6 +33,7 @@ class txxxcrypt:
 			"};"
 		video_url = re.findall('var video_url=(.*?);', data, re.S)
 		hash = re.findall('video_url\+\=\"\|\|/get_file/(\d+/[a-f0-9]+)/', data, re.S)
+		hash2 = re.findall('video_url\+\=\"\|\|/get_file/(\d+/[a-f0-9]+)/\|\|(.*?)\|\|(.*?)";', data, re.S)
 		js = decoder + "\n" + 'video_url=decrypt('+video_url[0]+');' + "return video_url;"
 		url = str(node.exec_(js))
 		if hash:
@@ -40,5 +41,7 @@ class txxxcrypt:
 			tokenurl = url.split('get_file/')[1]
 			tokenurl = tokenurl.replace(tokenurl.split('/')[0]+'/'+tokenurl.split('/')[1],hash[0])
 			url = mainurl + "get_file/" + tokenurl
+		if hash2:
+			url = url + '&lip=' + hash2[0][1] +'&lt=' + hash2[0][2]
 		url = url.replace('https','http')
 		self.playVideo(url)

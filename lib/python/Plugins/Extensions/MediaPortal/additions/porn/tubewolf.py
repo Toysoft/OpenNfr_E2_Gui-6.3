@@ -49,19 +49,19 @@ class tubewolfGenreScreen(MPScreen):
 		global default_cover
 		if self.mode == "tubewolf":
 			self.portal = "TubeWolf.com"
-			self.baseurl = "http://www.tubewolf.com"
+			self.baseurl = "https://www.tubewolf.com"
 			default_cover = "file://%s/tubewolf.png" % (config.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "alphaporno":
 			self.portal = "AlphaPorno.com"
-			self.baseurl = "http://www.alphaporno.com"
+			self.baseurl = "https://www.alphaporno.com"
 			default_cover = "file://%s/alphaporno.png" % (config.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "zedporn":
 			self.portal = "ZedPorn.com"
-			self.baseurl = "http://zedporn.com"
+			self.baseurl = "https://zedporn.com"
 			default_cover = "file://%s/zedporn.png" % (config.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "crocotube":
 			self.portal = "CrocoTube.com"
-			self.baseurl = "http://crocotube.com"
+			self.baseurl = "https://crocotube.com"
 			default_cover = "file://%s/crocotube.png" % (config.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
@@ -193,6 +193,8 @@ class tubewolfListScreen(MPScreen, ThumbsHelper):
 						Added = Date.group(1)
 					else:
 						Added = ''
+				if Image.startswith('//'):
+					Image = "https:" + Image
 				self.filmliste.append((decodeHtml(Title), Url, Image, Duration, Added))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), None, None, '', ''))

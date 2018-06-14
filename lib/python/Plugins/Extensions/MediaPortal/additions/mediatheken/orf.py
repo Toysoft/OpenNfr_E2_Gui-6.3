@@ -228,15 +228,15 @@ class ORFStreamListeScreen(MPScreen, ThumbsHelper):
 		if folgen:
 			self.streamliste = []
 			for (title, desc, image, urls) in folgen[:-1]:
-				url = re.search('"quality":"Q8C","quality_string":"Sehr hoch","src":"(http://apasfpd.apa.at.*?.mp4)",', urls, re.S)
+				url = re.search('"quality":"Q8C","quality_string":"Sehr hoch","src":"(http[s]?://apasfpd.apa.at.*?.mp4)",', urls, re.S)
 				if not url:
-					url = re.search('"quality":"Q6A","quality_string":"Hoch","src":"(http://apasfpd.apa.at.*?.mp4)",', urls, re.S)
+					url = re.search('"quality":"Q6A","quality_string":"Hoch","src":"(http[s]?://apasfpd.apa.at.*?.mp4)",', urls, re.S)
 				title = title.replace('\\"','"')
 				if desc == "null":
 					desc = ""
 				else:
 					desc = desc.strip('"')
-				self.streamliste.append((decodeHtml(title),url.group(1).replace('\/','/'),image.replace('\/','/'),desc))
+				self.streamliste.append((decodeHtml(title),url.group(1).replace('\/','/').replace('https','http'),image.replace('\/','/'),desc))
 			self.ml.setList(map(self._defaultlistleft, self.streamliste))
 			self.keyLocked = False
 			self.th_ThumbsQuery(self.streamliste, 0, 1, 2, None, None, 1, 1, mode=1)

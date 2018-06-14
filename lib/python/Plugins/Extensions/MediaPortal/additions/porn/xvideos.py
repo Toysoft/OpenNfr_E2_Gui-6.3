@@ -85,7 +85,7 @@ class xvideosGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		self.url = "https://www.xvideos.com/porn"
+		self.url = "https://www.xvideos.com/lang"
 		twAgentGetPage(self.url, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -94,7 +94,7 @@ class xvideosGenreScreen(MPScreen):
 			for (Url, Title) in Cats:
 				Url = "https://www.xvideos.com/c/$$AGE$$$$PAGE$$/" + Url
 				self.filmliste.append((Title, Url, default_cover, False))
-		Cats = re.findall('li><a href="/porn/(.*?)"\stitle="(.*?)"', data, re.S)
+		Cats = re.findall('li><a href="/lang/(.*?)"\stitle="(.*?)"', data, re.S)
 		if Cats:
 			for (Url, Title) in Cats:
 				Url = "https://www.xvideos.com/porn/" + Url + "/$$PAGE$$"

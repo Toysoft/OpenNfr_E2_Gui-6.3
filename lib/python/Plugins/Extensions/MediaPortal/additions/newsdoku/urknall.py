@@ -125,7 +125,7 @@ class UrknallFilmListeScreen(MPScreen, ThumbsHelper):
 			getPage(url).addCallback(self.getlink).addErrback(self.dataError)
 
 	def getlink(self, data):
-		parse = re.findall('www.youtube.com/(v|embed)/(.*?)\?.*?"', data, re.S)
+		parse = re.findall('www.*?(?:-nocookie|-gdprlock|)(?:.com|)/(v|embed)/(.*?)"', data, re.S)
 		if parse:
 			title = self['liste'].getCurrent()[0][0]
 			self.session.open(YoutubePlayer,[(title, parse[0][1], None)],playAll= False,showPlaylist=False,showCover=False)

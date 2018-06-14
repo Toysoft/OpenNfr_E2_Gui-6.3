@@ -178,7 +178,12 @@ class youtubeUrl(object):
   def parseVInfo(self, videoinfo, watch_url):
 	flashvars = self.extractFlashVars(videoinfo, 0)
 	if not flashvars.has_key(u"url_encoded_fmt_stream_map"):
-		self.checkFlashvars(flashvars, videoinfo, True)
+		playerUrl = re.search('.*src="(.*?)"\s+name="player/base"', videoinfo, re.S)
+		if playerUrl:
+			playerUrl = playerUrl.group(1).replace('\/','/')
+		else:
+			playerUrl = None
+		self.checkFlashvars(flashvars, videoinfo, True, playerUrl=playerUrl)
 	else:
 		links = {}
 		audio = {}
@@ -262,7 +267,7 @@ class youtubeUrl(object):
 			self.error = "[YoutubeURL] Error: no video url found"
 			self.errReturn(self.video_url)
 
-  def parseVInfo2(self, videoinfo):
+  def parseVInfo2(self, videoinfo, playerUrl=None):
 	flashvars = parse_qs(videoinfo)
 	if not flashvars.has_key(u"url_encoded_fmt_stream_map"):
 		if 'hlsvp=' in videoinfo:
@@ -289,6 +294,8 @@ class youtubeUrl(object):
 								fmturl = value
 							elif key == 'sig':
 								fmtsig = value
+							elif key == 's' and playerUrl != None:
+								fmtsig = decryptor.decryptSignature(value, playerUrl)
 
 					if fmtid != "" and fmturl != "" and self.VIDEO_FMT_PRIORITY_MAP.has_key(fmtid):
 						video_fmt_map[self.VIDEO_FMT_PRIORITY_MAP[fmtid]] = { 'fmtid': fmtid, 'fmturl': unquote_plus(fmturl), 'fmtsig': fmtsig }
@@ -314,12 +321,12 @@ class youtubeUrl(object):
 			else:
 				self.video_url = "%s" %(best_video['fmturl'].split(';')[0])
 			#self.__callBack(self.video_url)
-			self.callBack(self.video_url)
+			self.callBack(str(self.video_url))
 		else:
 			self.error = "[YoutubeURL] Error: no video url found"
 			self.errReturn(self.video_url)
 
-  def checkFlashvars(self, flashvars, videoinfo, get_info2=False):
+  def checkFlashvars(self, flashvars, videoinfo, get_info2=False, playerUrl=None):
 	# Attempt to see if YouTube has issued an error message
 	if not flashvars.has_key(u"reason"):
 		from imports import decodeHtml
@@ -355,7 +362,7 @@ class youtubeUrl(object):
 			el = '&el=embedded'
 			info_url = ('https://www.youtube.com/get_video_info?video_id=%s%s&ps=default&eurl=&gl=US&hl=en' % (self.video_id, el))
 			self.error = "[YoutubeURL] Error: Unable to retrieve videoinfo page:\n%s\n" % info_url
-			self.yt_dwnld_agent.getWebPage(info_url).addCallback(self.parseVInfo2).addErrback(self.dataError)
+			self.yt_dwnld_agent.getWebPage(info_url).addCallback(self.parseVInfo2, playerUrl).addErrback(self.dataError)
 			return
 	else:
 		from imports import stripAllTags

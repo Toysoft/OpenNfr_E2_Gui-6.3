@@ -112,7 +112,7 @@ class arteSubGenreScreen(MPScreen):
 			for daynr in range(-21,22):
 				day1 = today -datetime.timedelta(days=daynr)
 				dateselect =  day1.strftime('%Y-%m-%d')
-				link = 'https://www.arte.tv/guide/api/api/pages/de/web/TV_GUIDE/?day=%s' % dateselect
+				link = 'https://www.arte.tv/guide/api/api/pages/de/TV_GUIDE/?day=%s' % dateselect
 				self.filmliste.append((dateselect, link))
 		elif self.Name == "Themen":
 			link = 'http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/%s/ALL/-1/AIRDATE_DESC/0/0/DE_FR.json'
@@ -180,7 +180,7 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 				else:
 					title = str(node['title'])
 				m, s = divmod(node['duration'], 60)
-				Runtime = _("Runtime:") + " %02d:%02d" % (m, s)				
+				Runtime = _("Runtime:") + " %02d:%02d" % (m, s)
 				handlung = "%s\n%s" % (Runtime, str(node['fullDescription']))
 				url = "https://api.arte.tv/api/player/v1/config/de/%s" % str(node['programId'])
 				self.filmliste.append((title, url, str(node['images']['landscape']['resolutions'][-1]['url']), handlung))

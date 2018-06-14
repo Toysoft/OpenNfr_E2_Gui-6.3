@@ -67,26 +67,21 @@ class beegGenreScreen(MPScreen):
 		self['ContentTitle'] = Label("Genre:")
 		self.keyLocked = True
 		self.suchString = ''
-		self.tags = 'popular'
-		self.looplock = False
 
 		self.genreliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 
-		if beeg_salt == '' or beeg_apikey == '':
-			self.onLayoutFinish.append(self.getApiKeys)
-		else:
-			self.onLayoutFinish.append(self.layoutFinished)
+		self.onLayoutFinish.append(self.getApiKeys)
 
 	def getApiKeys(self):
-		url = "http://beeg.com/1000000"
+		url = "https://beeg.com/"
 		twAgentGetPage(url, agent=IPhone5Agent, headers=MyHeaders).addCallback(self.getApiKeys2).addErrback(self.dataError)
 
 	def getApiKeys2(self, data):
 		cpl = re.findall('<script[^>]+src=["\']((?:/static|(?:https?:)?//static\.beeg\.com)/cpl/\d+\.js.*?)["\']', data, re.S)[0]
 		if cpl.startswith('/static'):
-			cpl = 'http://beeg.com' + cpl
+			cpl = 'https://beeg.com' + cpl
 		twAgentGetPage(cpl, agent=IPhone5Agent, headers=MyHeaders).addCallback(self.getApiKeys3).addErrback(self.dataError)
 
 	def getApiKeys3(self, data):
@@ -101,24 +96,22 @@ class beegGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://beeg.com/api/v6/%s/index/main/0/mobile" % beeg_apikey
+		url = "https://beeg.com/api/v6/%s/index/main/0/mobile" % beeg_apikey
 		twAgentGetPage(url, agent=IPhone5Agent, headers=MyHeaders).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('"%s":\[(.*?)\]' % self.tags, data, re.S)
+		parse = re.search('"tags":\[(.*?)\]', data, re.S)
 		if parse:
-			Cats = re.findall('"(.*?)"', parse.group(1), re.S)
+			Cats = re.findall('"tag":"(.*?)"', parse.group(1), re.S)
 			if Cats:
 				for Title in Cats:
-					Url = 'http://beeg.com/api/v6/%s/index/tag/$PAGE$/mobile?tag=%s' % (beeg_apikey, Title)
+					Url = 'https://beeg.com/api/v6/%s/index/tag/$PAGE$/mobile?tag=%s' % (beeg_apikey, Title)
 					Title = Title.title()
 					self.genreliste.append((Title, Url))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Longest", "http://beeg.com/api/v6/%s/index/tag/$PAGE$/mobile?tag=long%svideos" % (beeg_apikey, "%20")))
-			self.genreliste.insert(0, ("Newest", "http://beeg.com/api/v6/%s/index/main/$PAGE$/mobile" % beeg_apikey))
-			if self.tags == 'popular':
-				self.genreliste.insert(0, ("- Show all Tags -", ""))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
+			self.genreliste.insert(0, ("Longest", "https://beeg.com/api/v6/%s/index/tag/$PAGE$/mobile?tag=long%svideos" % (beeg_apikey, "%20")))
+			self.genreliste.insert(0, ("Newest", "https://beeg.com/api/v6/%s/index/main/$PAGE$/mobile" % beeg_apikey))
+			#self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.keyLocked = False
 		else:
@@ -128,11 +121,7 @@ class beegGenreScreen(MPScreen):
 		if self.keyLocked:
 			return
 		Name = self['liste'].getCurrent()[0][0]
-		if Name == "- Show all Tags -":
-			self.tags = 'nonpopular'
-			self.genreliste = []
-			self.layoutFinished()
-		elif Name == "--- Search ---":
+		if Name == "--- Search ---":
 			self.suchen()
 		else:
 			Link = self['liste'].getCurrent()[0][1]
@@ -189,7 +178,7 @@ class beegFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*Search", self.Name):
-			url = 'http://beeg.com/api/v6/%s/index/search/$PAGE$/mobile?query=%s' % (beeg_apikey, self.Link)
+			url = 'https://beeg.com/api/v6/%s/index/search/$PAGE$/mobile?query=%s' % (beeg_apikey, self.Link)
 			url = url.replace('$PAGE$', '%s' % str(self.page-1))
 		else:
 			url = self.Link.replace('$PAGE$', '%s' % str(self.page-1))
@@ -200,8 +189,8 @@ class beegFilmScreen(MPScreen, ThumbsHelper):
 		Videos = re.findall('\{"title":"(.*?)","id":"(.*?)"', data, re.S)
 		if Videos:
 			for (Title, VideoId) in Videos:
-				Url = 'http://beeg.com/api/v6/%s/video/%s' % (beeg_apikey, VideoId)
-				Image = 'http://img.beeg.com/800x450/%s.jpg' % VideoId
+				Url = 'https://beeg.com/api/v6/%s/video/%s' % (beeg_apikey, VideoId)
+				Image = 'https://img.beeg.com/800x450/%s.jpg' % VideoId
 				self.filmliste.append((decodeHtml(Title), Url, Image))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), '', None))
