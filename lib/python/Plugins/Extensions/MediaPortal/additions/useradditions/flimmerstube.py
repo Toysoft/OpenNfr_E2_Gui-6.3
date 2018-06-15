@@ -174,6 +174,35 @@ class flimmerstubeFilmScreen(MPScreen):
 		if ytUrl:
 			Title = self['liste'].getCurrent()[0][0]
 			self.session.open(YoutubePlayer,[(Title, ytUrl[0][1], None)],playAll= False,showPlaylist=False,showCover=False)
+			self.keyLocked = False
 		else:
-			self.session.open(MessageBoxExt, _('No supported streams found!'), MessageBoxExt.TYPE_INFO, timeout=5)
+			data = data.replace('\\"', '"')
+			dmUrl = re.findall('<iframe.*?src="(http[s]?://www.dailymotion.com/embed/video/.*?)"', data, re.S)
+			if dmUrl:
+				getPage(dmUrl[0]).addCallback(self.getDailymotionStream).addErrback(self.dataError)
+			elif "veohFlashPlayer" in data:
+				veohId = re.search('.*permalinkId=(.*?)\s{0,1}&player', data, re.S)
+				if veohId:
+					url = "http://www.veoh.com/api/findByPermalink?permalink=" + veohId.group(1)
+					getPage(url).addCallback(self.getVeohStream).addErrback(self.dataError)
+				else:
+					self.session.open(MessageBoxExt, _('No supported streams found!'), MessageBoxExt.TYPE_INFO, timeout=5)
+					self.keyLocked = False
+			else:
+				self.session.open(MessageBoxExt, _('No supported streams found!'), MessageBoxExt.TYPE_INFO, timeout=5)
+				self.keyLocked = False
+
+	def getDailymotionStream(self, data):
+		data = data.replace("\\/", "/")
+		Title = self['liste'].getCurrent()[0][0]
+		stream_url = re.findall('"(240|380|480|720)".*?url":"(http[s]?://www.dailymotion.com/cdn/.*?)"', data, re.S)
+		if stream_url:
+			self.session.open(SimplePlayer, [(Title, stream_url[-1][1])], showPlaylist=False, ltype='flimmerstube', forceGST=True)
+		self.keyLocked = False
+
+	def getVeohStream(self, data):
+		Title = self['liste'].getCurrent()[0][0]
+		stream_url = re.findall('fullPreviewHash.*?="(.*?)"', data, re.S)
+		if stream_url:
+			self.session.open(SimplePlayer, [(Title, stream_url[-1])], showPlaylist=False, ltype='flimmerstube')
 		self.keyLocked = False
