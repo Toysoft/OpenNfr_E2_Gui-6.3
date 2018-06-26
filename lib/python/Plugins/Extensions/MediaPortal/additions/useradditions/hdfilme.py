@@ -1,41 +1,4 @@
 ﻿# -*- coding: utf-8 -*-
-###############################################################################################
-#
-#    MediaPortal for Dreambox OS
-#
-#    Coded by MediaPortal Team (c) 2013-2018
-#
-#  This plugin is open source but it is NOT free software.
-#
-#  This plugin may only be distributed to and executed on hardware which
-#  is licensed by Dream Property GmbH. This includes commercial distribution.
-#  In other words:
-#  It's NOT allowed to distribute any parts of this plugin or its source code in ANY way
-#  to hardware which is NOT licensed by Dream Property GmbH.
-#  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
-#  on hardware which is NOT licensed by Dream Property GmbH.
-#
-#  This applies to the source code as a whole as well as to parts of it, unless
-#  explicitely stated otherwise.
-#
-#  If you want to use or modify the code or parts of it,
-#  you have to keep OUR license and inform us about the modifications, but it may NOT be
-#  commercially distributed other than under the conditions noted above.
-#
-#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
-#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
-#
-#  As an exception regarding modifcations, you are NOT permitted to remove
-#  any copy protections implemented in this plugin or change them for means of disabling
-#  or working around the copy protections, unless the change has been explicitly permitted
-#  by the original authors. Also decompiling and modification of the closed source
-#  parts is NOT permitted.
-#
-#  Advertising with this plugin is NOT allowed.
-#  For other uses, permission from the authors is necessary.
-#
-###############################################################################################
-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
@@ -61,17 +24,6 @@ hf_cookies = CookieJar()
 hf_ck = {}
 hf_agent = ''
 BASE_URL = 'http://hdfilme.tv'
-
-def hf_grabpage(pageurl):
-	if requestsModule:
-		try:
-			s = requests.session()
-			url = urlparse.urlparse(pageurl)
-			headers = {'User-Agent': hf_agent}
-			page = s.get(url.geturl(), cookies=hf_cookies, headers=headers, timeout=15)
-			return page.content
-		except:
-			pass
 
 class hdfilmeMain(MPScreen):
 
@@ -132,10 +84,10 @@ class hdfilmeMain(MPScreen):
 		self.keyCancel()
 
 	def getPage(self):
-		data = hf_grabpage('%s/movie-movies' % BASE_URL)
-		self.loadPage(data)
+		twAgentGetPage('%s/movie-movies' % BASE_URL, agent=hf_agent, cookieJar=hf_cookies).addCallback(self.loadPage).addErrback(self.dataError)
 
 	def loadPage(self, data):
+		print str(data)
 		self.keyLocked = True
 		parse = re.search('>Genre</option>(.*?)</select>', data, re.S)
 		if parse:
@@ -206,8 +158,7 @@ class hdfilmeParsing(MPScreen, ThumbsHelper):
 	def loadPage(self):
 		self.streamList = []
 		url = self.url+str(self.page)
-		data = hf_grabpage(url)
-		self.parseData(data)
+		twAgentGetPage(url, agent=hf_agent, cookieJar=hf_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		self.getLastPage(data, '', '</i>\s*Seite.*?/\s*(\d+)')
@@ -290,11 +241,10 @@ class hdfilmeStreams(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		data = hf_grabpage(self.url)
-		self.parseData(data)
+		twAgentGetPage(self.url, agent=hf_agent, cookieJar=hf_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		m = re.search('<a class="btn.*?href="(.*?)">Trailer\s{0,1}[</a>|<i]', data)
+		m = re.search('<a class="btn.*?href="(.*?)">.{0,1}Trailer\s{0,1}[</a>|<i]', data, re.S)
 		if m:
 			self.trailer = m.group(1)
 			self['F2'].setText('Trailer')
@@ -337,8 +287,7 @@ class hdfilmeStreams(MPScreen):
 		if self.keyLocked or exist == None:
 			return
 		link = self['liste'].getCurrent()[0][1]
-		data = hf_grabpage(link)
-		self.getStreamUrl(data)
+		twAgentGetPage(link, agent=hf_agent, cookieJar=hf_cookies).addCallback(self.getStreamUrl).addErrback(self.dataError)
 
 	def makeTitle(self):
 		episode = self['liste'].getCurrent()[0][2]
@@ -352,8 +301,7 @@ class hdfilmeStreams(MPScreen):
 		parse = re.findall('initPlayer\(\s+\"(\d+)\",\s+\"(\d+)\",', data, re.S)
 		if parse:
 			url = BASE_URL + "/movie/getlink/"+str(parse[0][0])+"/"+str(parse[0][1])
-			data = hf_grabpage(url)
-			self.extractStreams(data)
+			twAgentGetPage(url, agent=hf_agent, cookieJar=hf_cookies).addCallback(self.extractStreams).addErrback(self.dataError)
 
 	def extractStreams(self, data, videoPrio=2):
 		try:
@@ -402,8 +350,7 @@ class hdfilmeStreams(MPScreen):
 
 	def keyTrailer(self):
 		if self.trailer:
-			data = hf_grabpage(self.trailer)
-			self.playTrailer(data)
+			twAgentGetPage(self.trailer, agent=hf_agent, cookieJar=hf_cookies).addCallback(self.playTrailer).addErrback(self.dataError)
 
 	def playTrailer(self, data):
 		from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer

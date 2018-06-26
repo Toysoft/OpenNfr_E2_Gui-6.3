@@ -3,7 +3,6 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import TwAgentHelper
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
-import base64
 
 class PrimeWireGenreScreen(MPScreen):
 
@@ -29,23 +28,22 @@ class PrimeWireGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.primewire.is/"
+		url = "http://www.primewire.ac/"
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('class="opener-menu-genre">(.*)class="opener-menu-section', data, re.S)
-		Cats = re.findall('<a\shref="(.*?)">(.*?)</a>', parse.group(1), re.S)
+		Cats = re.findall('<a\shref="(.*?)".*?>(.*?)</a>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
-				Url = "http://www.primewire.is" + Url + "&page="
+				Url = "http://www.primewire.ac" + Url + "&page="
 				self.genreliste.append((Title, Url))
 			self.genreliste.sort()
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
-			self.genreliste.insert(1, ("Featured Movies", "http://www.primewire.is/index.php?sort=featured&page="))
-			self.genreliste.insert(2, ("Popular Movies", "http://www.primewire.is/index.php?sort=views&page="))
-			self.genreliste.insert(3, ("Top Rated Movies", "http://www.primewire.is/index.php?sort=ratings&page="))
-			self.genreliste.insert(4, ("Newly Released Movies", "http://www.primewire.is/index.php?sort=release&page="))
-			self.genreliste.insert(5, ("TV Shows", ""))
+			self.genreliste.insert(1, ("Featured Movies", "http://www.primewire.ac/index.php?sort=featured&page="))
+			self.genreliste.insert(2, ("Popular Movies", "http://www.primewire.ac/index.php?sort=views&page="))
+			self.genreliste.insert(3, ("Top Rated Movies", "http://www.primewire.ac/index.php?sort=ratings&page="))
+			self.genreliste.insert(4, ("Newly Released Movies", "http://www.primewire.ac/index.php?sort=release&page="))
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.ml.moveToIndex(0)
 			self.keyLocked = False
@@ -58,8 +56,6 @@ class PrimeWireGenreScreen(MPScreen):
 		url = self['liste'].getCurrent()[0][1]
 		if auswahl == "--- Search ---":
 			self.suchen()
-		elif auswahl == "TV Shows":
-			self.session.open(PrimeWireTVshowsScreen)
 		else:
 			self.session.open(PrimeWireFilmlisteScreen, url, auswahl)
 
@@ -67,56 +63,8 @@ class PrimeWireGenreScreen(MPScreen):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			auswahl = "--- Search ---"
-			url = "http://www.primewire.is/?search_keywords=%s&search_section=1&page=" % self.suchString
+			url = "http://www.primewire.ac/?search_keywords=%s&search_section=1&page=" % self.suchString
 			self.session.open(PrimeWireFilmlisteScreen, url, auswahl)
-
-class PrimeWireTVshowsScreen(MPScreen):
-
-	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
-
-		self["actions"] = ActionMap(["MP_Actions"], {
-			"ok"    : self.keyOK,
-			"0": self.closeAll,
-			"cancel": self.keyCancel
-		}, -1)
-
-		self['title'] = Label("PrimeWire")
-		self['ContentTitle'] = Label("TV Shows Genre:")
-		self.keyLocked = True
-		self.suchString = ''
-
-		self.genreliste = []
-		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self['liste'] = self.ml
-
-		self.onLayoutFinish.append(self.layoutFinished)
-
-	def layoutFinished(self):
-		self.keyLocked = True
-		url = "http://www.primewire.is/?tv"
-		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
-
-	def genreData(self, data):
-		parse = re.search('class="opener-menu-genre">(.*)class="opener-menu-section', data, re.S)
-		Cats = re.findall('<a\shref="(.*?)">(.*?)</a>', parse.group(1), re.S)
-		if Cats:
-			for (Url, Title) in Cats:
-				Url = "http://www.primewire.is/?tv&genre=" + Url + "&page="
-				self.genreliste.append((Title, Url))
-		self.genreliste.sort()
-		self.genreliste.insert(0, ("Popular TV Shows", "http://www.primewire.is/?tv=&sort=views&page="))
-		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-		self.ml.moveToIndex(0)
-		self.keyLocked = False
-
-	def keyOK(self):
-		exist = self['liste'].getCurrent()
-		if self.keyLocked or exist == None:
-			return
-		auswahl = self['liste'].getCurrent()[0][0]
-		url = self['liste'].getCurrent()[0][1]
-		self.session.open(PrimeWireFilmlisteScreen, url, 'TV Shows %s' % auswahl )
 
 class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 
@@ -178,11 +126,11 @@ class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 		else:
 			self.lastpage = 999
 		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		chMovies = re.findall('<div\sclass="index_item\sindex_item_ie">.*?<a\shref="(.*?)"\stitle="Watch.(.*?)"><img\ssrc="(.*?)"', data, re.S)
+		chMovies = re.findall('<div\sclass="index_item\sindex_item_ie">.*?<a\shref="(.*?)"\stitle="(.*?)"><img\ssrc="(.*?)"', data, re.S)
 		if chMovies:
 			for (chUrl,chTitle,chImage) in chMovies:
-				chUrl = "http://www.primewire.is" + chUrl
-				chImage = "http:"+chImage
+				chUrl = "http://www.primewire.ac/" + chUrl
+				chImage = "http://www.primewire.ac" + chImage
 				self.streamList.append((decodeHtml(chTitle),chUrl,chImage))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No videos found!'), '', None))
@@ -209,12 +157,9 @@ class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 		exist = self['liste'].getCurrent()
 		if self.keyLocked or exist == None:
 			return
-		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		if re.match('TV Shows', self.Genre):
-			self.session.open(PrimeWireEpisodeScreen, Link, Name)
-		else:
-			self.session.open(PrimeWireStreamsScreen, Link, Name, self.image, self.handlung)
+		Name = self['liste'].getCurrent()[0][0]
+		self.session.open(PrimeWireStreamsScreen, Link, Name, self.image, self.handlung)
 
 	def keySort(self):
 		if self.keyLocked or re.match(".*?Popular TV Shows|--- Search ---", self.Genre):
@@ -241,87 +186,6 @@ class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 			self.filter = result[1]
 			self.page = 1
 			self.loadPage()
-
-class PrimeWireEpisodeScreen(MPScreen):
-
-	def __init__(self, session, Link, Name):
-		self.Link = Link
-		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
-
-		self["actions"] = ActionMap(["MP_Actions"], {
-			"ok"    : self.keyOK,
-			"0": self.closeAll,
-			"cancel": self.keyCancel,
-			"up" : self.keyUp,
-			"down" : self.keyDown,
-			"right" : self.keyRight,
-			"left" : self.keyLeft
-		}, -1)
-
-		self['title'] = Label("PrimeWire")
-		self['ContentTitle'] = Label("Episoden: %s" % self.Name)
-
-		self.streamList = []
-		self.handlung = ""
-		self.image = None
-		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self['liste'] = self.ml
-
-		self.keyLocked = True
-		self.onLayoutFinish.append(self.loadPage)
-
-	def loadPage(self):
-		self.streamList = []
-		getPage(self.Link).addCallback(self.parseData).addErrback(self.dataError)
-
-	def parseData(self, data):
-		parse = re.search('class="choose_tabs">(.*?)class="download_link">', data, re.S)
-		if parse:
-			episoden = re.findall('class="tv_episode_item.*?">.*?<a\shref="(.*?)">.*?episode_name">\s{0,2}-\s{0,2}(.*?)</span', parse.group(1), re.S|re.I)
-		if episoden:
-			for (url,title) in episoden:
-				episodes = re.findall('season-(.*?)-episode-(.*?)$', url, re.S)
-				if int(episodes[0][0]) < 10:
-					season = "S0"+str(episodes[0][0])
-				else:
-					season = "S"+str(episodes[0][0])
-				if int(episodes[0][1]) < 10:
-					episode = "E0"+str(episodes[0][1])
-				else:
-					episode = "E"+str(episodes[0][1])
-				Title = "%s%s - %s" % (season, episode, title)
-				url = "http://www.primewire.is" + url
-				self.streamList.append((decodeHtml(Title),url))
-			self.ml.setList(map(self._defaultlistleft, self.streamList))
-			self.keyLocked = False
-			self.showInfos()
-
-	def showInfos(self):
-		url = self['liste'].getCurrent()[0][1]
-		getPage(url, agent=std_headers).addCallback(self.showInfos2).addErrback(self.dataError)
-
-	def showInfos2(self, data):
-		Image = re.search('og:image"\scontent="(.*?)"', data, re.S)
-		Handlung = re.search('display:block;">(.*?)</p></td>', data, re.S)
-		if Handlung:
-			self.handlung = Handlung.group(1).strip()
-		else:
-			self.handlung = ""
-		if Image:
-			self.image = Image.group(1)
-		else:
-			self.image = None
-		self['handlung'].setText(decodeHtml(self.handlung))
-		CoverHelper(self['coverArt']).getCover(self.image)
-
-	def keyOK(self):
-		exist = self['liste'].getCurrent()
-		if self.keyLocked or exist == None:
-			return
-		Name = self['liste'].getCurrent()[0][0]
-		Link = self['liste'].getCurrent()[0][1]
-		self.session.open(PrimeWireStreamsScreen, Link, Name, self.image, self.handlung)
 
 class PrimeWireStreamsScreen(MPScreen):
 
@@ -353,14 +217,11 @@ class PrimeWireStreamsScreen(MPScreen):
 		getPage(self.Link).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		isSerie = re.search('<div class="tv_container">', data, re.S)
-		if isSerie:
-			self.session.open(PrimeWireEpisodeScreen, self.Link, self.Name)
-			self.close()
-		streams = re.findall('<a href="/gohere.php\?title=.*?&url=(.*?)&domain=.*?document.writeln\(\'([^<].*?)\'\)', data, re.S)
+		streams = re.findall('<a href="(/stream/.*?\.html)".*?version_host">(.*?)</', data, re.S)
 		if streams:
 			for (Url, StreamHoster) in streams:
 				if isSupportedHoster(StreamHoster, True):
+					Url = "http://www.primewire.ac" + Url
 					self.streamList.append((StreamHoster, Url))
 			if len(self.streamList) == 0:
 				self.streamList.append((_('No supported streams found!'), None))
@@ -377,8 +238,12 @@ class PrimeWireStreamsScreen(MPScreen):
 		if self.keyLocked or exist == None:
 			return
 		url = self['liste'].getCurrent()[0][1]
-		url = base64.b64decode(url)
-		get_stream_link(self.session).check_link(url, self.got_link)
+		getPage(url).addCallback(self.getStream).addErrback(self.dataError)
+
+	def getStream(self, data):
+		streams = re.findall('data-href="(.*?)"', data, re.S)
+		if streams:
+			get_stream_link(self.session).check_link(streams[0], self.got_link)
 
 	def got_link(self, stream_url):
 		self.session.open(SimplePlayer, [(self.Name, stream_url, self.image)], showPlaylist=False, ltype='primewire', cover=True)

@@ -2,7 +2,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-ws_url = "dwatchseries.to"
+ws_url = "www1.swatchseries.to"
 
 class watchseriesGenreScreen(MPScreen):
 
