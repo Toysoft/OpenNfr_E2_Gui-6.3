@@ -40,7 +40,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 
-myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36'
+myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
 json_headers = {
 	'Accept':'application/json',
 	'Accept-Language':'de,en-US;q=0.7,en;q=0.3',
@@ -49,6 +49,8 @@ json_headers = {
 	}
 
 uid = ''
+
+yps_cookies = CookieJar()
 
 class YourPornSexyGenreScreen(MPScreen):
 
@@ -79,7 +81,7 @@ class YourPornSexyGenreScreen(MPScreen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		url = "http://yourporn.sexy"
-		twAgentGetPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent, cookieJar=yps_cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		usss = re.findall('usss\[\'id\'\] = "(.*?)";', data, re.S)
@@ -193,7 +195,7 @@ class YourPornSexyPornstarsScreen(MPScreen):
 		self['name'].setText(_('Please wait...'))
 		self.genreliste = []
 		url = self.Link.replace('%s', alfa[self.page-1])
-		twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent, cookieJar=yps_cookies).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self['page'].setText(str(self.page) + '/' +str(self.lastpage))
@@ -254,7 +256,7 @@ class YourPornSexyTrendsScreen(MPScreen):
 		self['name'].setText(_('Please wait...'))
 		self.genreliste = []
 		url = self.Link.replace('%s', str((self.page-1)*150))
-		twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent, cookieJar=yps_cookies).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, '', 'ctrl_el.*>(\d+)</div')
@@ -310,6 +312,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self.page = 1
 		self.lastpage = 1
+		self.tw_agent_hlp = TwAgentHelper()
 
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -331,10 +334,10 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 			count = 20
 		if re.match(".*?Search", self.Name) or self.Name == "Trends" or self.Name == "Pornstars":
 			url = "https://yourporn.sexy/%s.html?page=%s" % (self.Link, str((self.page-1)*30))
-			twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+			twAgentGetPage(url, agent=myagent, cookieJar=yps_cookies).addCallback(self.loadData).addErrback(self.dataError)
 		else:
 			url = self.Link.replace('%s', str((self.page-1)*count))
-			twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+			twAgentGetPage(url, agent=myagent, cookieJar=yps_cookies).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, '', 'ctrl_el.*>(\d+)</div')
@@ -407,14 +410,18 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 			return
 		Link = self['liste'].getCurrent()[0][1]
 		self.keyLocked = True
-		twAgentGetPage(Link, agent=myagent).addCallback(self.getVideoUrl).addErrback(self.dataError)
+		twAgentGetPage(Link, agent=myagent, cookieJar=yps_cookies).addCallback(self.getVideoUrl).addErrback(self.dataError)
 
 	def getVideoUrl(self, data):
 		videoUrl = re.findall('data-vnfo=\'\{"[0-9a-f]+":"(.*?)"\}\'', data, re.S)
 		if videoUrl:
-			Title = self['liste'].getCurrent()[0][0]
 			url = videoUrl[-1].replace('\/','/')
-			if url.startswith('//'):
-				url = "http:" + url
-			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='yourpornsexy')
+			url = 'https://yourporn.sexy' + url
+			self.tw_agent_hlp.getRedirectedUrl(url).addCallback(self.getStream).addErrback(self.dataError)
+
+	def getStream(self, url):
+		Title = self['liste'].getCurrent()[0][0]
+		if url.startswith('//'):
+			url = "http:" + url
+		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='yourpornsexy')
 		self.keyLocked = False

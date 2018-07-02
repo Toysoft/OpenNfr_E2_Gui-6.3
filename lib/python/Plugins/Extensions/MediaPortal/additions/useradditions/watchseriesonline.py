@@ -86,11 +86,9 @@ class wsoIndex(MPScreen, SearchHelper):
 	def parseData(self, data):
 		parse = re.search('<div class="ddmcc"><ul>.<p class="sep" id="goto\_\#">((.|\s)*?)<div style="clear:both;"></div>', data, re.S)
 		if parse:
-			series = re.findall('<li><a\shref="(https://(?:watchseries-online.be|watchseries-online.pl|wseries.org)/category/.*?)">(.*?)</a></li>', parse.group(1), re.S)
+			series = re.findall('<li><a\shref="(https://(?:ww1.watchseries-online.be|watchseries-online.be)/category/.*?)">(.*?)</a></li>', parse.group(1), re.S)
 			if series:
 				for (url, serie) in series:
-					url = url.replace('wseries.org','watchseries-online.be')
-					url = url.replace('watchseries-online.pl','watchseries-online.be')
 					self.streamList.append((decodeHtml(serie), url))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No shows found!'), None))
@@ -152,14 +150,13 @@ class wsoNewEpisodes(MPScreen):
 
 	def loadPage(self):
 		self.streamList = []
-		url = "https://watchseries-online.be/last-350-episodes"
+		url = "https://ww1.watchseries-online.be/last-350-episodes"
 		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		newEpisodes = re.findall('href="(https://(?:watchseries-online.be|wseries.org)/episode/.*?)".*?>(.*?)</a>.</li>', data)
+		newEpisodes = re.findall('href="(https://(?:ww1.watchseries-online.be|watchseries-online.be)/episode/.*?)".*?>(.*?)</a>.</li>', data)
 		if newEpisodes:
 			for url, episodeName in newEpisodes:
-				url = url.replace('wseries.org','watchseries-online.be')
 				self.streamList.append((decodeHtml(episodeName), url))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No episodes found!'), None))
@@ -310,10 +307,9 @@ class wsoEpisodes(MPScreen):
 				self.updates_read.close()
 		parse = re.search('<div id="episode-list">(.*?)</footer>', data, re.S)
 		if parse:
-			episodes = re.findall('<li.*?<a\shref=[\"|\'](https://(?:watchseries-online.be|wseries.org)/.*?)[\"|\'].*?</span>(.*?)</a>', parse.group(1), re.S)
+			episodes = re.findall('<li.*?<a\shref=[\"|\'](https://(?:ww1.watchseries-online.be|watchseries-online.be)/.*?)[\"|\'].*?</span>(.*?)</a>', parse.group(1), re.S)
 			if episodes:
 				for url, title in episodes:
-					url = url.replace('wseries.org','watchseries-online.be')
 					title=title.strip()
 					checkname = (decodeHtml(self.Title)) + " - " + (decodeHtml(title.strip()))
 					checkname2 = checkname.replace('ä','ae').replace('ö','oe').replace('ü','ue').replace('Ä','Ae').replace('Ö','Oe').replace('Ü','Ue')
