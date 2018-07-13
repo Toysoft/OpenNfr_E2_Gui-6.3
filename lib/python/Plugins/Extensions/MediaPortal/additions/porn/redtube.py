@@ -228,7 +228,7 @@ class redtubeFilmScreen(MPScreen, ThumbsHelper):
 		else:
 			self.lastpage = 1230
 		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		Movies = re.findall('class="video_block_wrapper">.*?<a\sclass="video_link.*?href="(\/\d+)".*?data-thumb_url\s=\s"(.*?)".*?duration">.*?(\d.*?)<div class="video_title"\s{0,1}(?:title=".*?"|)>(.*?)</div.*?video_count">(.*?)views', data, re.S)
+		Movies = re.findall('class="video_block_wrapper">.*?<a\sclass="video_link.*?href="(\/\d+)".*?data-thumb_url\s{0,1}=\s{0,1}"(.*?)".*?duration">.*?(\d.*?)<div.*?a\stitle="(.*?)".*?video_count">(.*?)views', data, re.S)
 		if Movies:
 			for (Url, Image, Runtime, Title, Views) in Movies:
 				if Image.startswith('//'):

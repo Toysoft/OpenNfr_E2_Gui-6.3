@@ -41,11 +41,11 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 default_cover = "file://%s/funk.png" % (config.mediaportal.iconcachepath.value + "logos")
 
 headers = {
-	'Authorization':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnROYW1lIjoiY3VyYXRpb24tdG9vbC12Mi4wIiwic2NvcGUiOiJzdGF0aWMtY29udGVudC1hcGksY3VyYXRpb24tc2VydmljZSxzZWFyY2gtYXBpIn0.SGCC1IXHLtZYoo8PvRKlU2gXH1su8YSu47sB3S4iXBI',
+	'Authorization':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnROYW1lIjoid2ViYXBwLXYzMSIsInNjb3BlIjoic3RhdGljLWNvbnRlbnQtYXBpLGN1cmF0aW9uLWFwaSxuZXh4LWNvbnRlbnQtYXBpLXYzMSx3ZWJhcHAtYXBpIn0.mbuG9wS9Yf5q6PqgR4fiaRFIagiHk9JhwoKES7ksVX4',
 	'Accept-Encoding':'gzip',
 }
 
-BASE_URL = 'https://www.funk.net/api/v3.0'
+BASE_URL = 'https://www.funk.net/api/v3.1'
 
 class funkGenreScreen(MPScreen):
 
@@ -87,12 +87,12 @@ class funkGenreScreen(MPScreen):
 
 	def genreData(self, data):
 		json_data = json.loads(data)
-		if json_data.has_key('pagingMeta'):
-			if int(json_data["pagingMeta"]["totalPages"])>1:
-				self.lastpage = int(json_data["pagingMeta"]["totalPages"])
+		if json_data.has_key('page'):
+			if int(json_data["page"]["totalPages"])>1:
+				self.lastpage = int(json_data["page"]["totalPages"])
 				self['Page'].setText(_("Page:"))
 				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		for item in json_data["result"]:
+		for item in json_data["_embedded"]["channelModels"]:
 			if item.has_key('imageUrlOrigin') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlOrigin"]:
 				image = str(item["imageUrlOrigin"])
 			elif item.has_key('imageUrlLandscape') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlLandscape"]:
@@ -108,7 +108,7 @@ class funkGenreScreen(MPScreen):
 				descr = decodeHtml(str(item["description"]))
 			else:
 				descr = ""
-			url = BASE_URL + "/content/playlists/filter/?channelId=" + str(item["alias"]) + "&secondarySort=alias,ASC"
+			url = BASE_URL + "/webapp/playlists/byChannelAlias/" + str(item["alias"]) + "?sort=language,ASC"
 			self.filmliste.append((title, image, url, descr))
 		self.filmliste.sort(key=lambda t : t[0].lower())
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -129,7 +129,6 @@ class funkGenreScreen(MPScreen):
 		Name = self['liste'].getCurrent()[0][0]
 		url = self['liste'].getCurrent()[0][2]
 		self.session.open(funkSeasonsScreen, url, Name)
-
 
 class funkSeasonsScreen(MPScreen):
 
@@ -173,31 +172,31 @@ class funkSeasonsScreen(MPScreen):
 
 	def genreData(self, data):
 		json_data = json.loads(data)
-		if json_data.has_key('pagingMeta'):
-			if int(json_data["pagingMeta"]["totalPages"])>1:
-				self.lastpage = int(json_data["pagingMeta"]["totalPages"])
+		if json_data.has_key('page'):
+			if int(json_data["page"]["totalPages"])>1:
+				self.lastpage = int(json_data["page"]["totalPages"])
 				self['Page'].setText(_("Page:"))
 				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		if not json_data["result"]:
-			if json_data["parentResult"].has_key('imageUrlOrigin') and not "8415ad90686d2c75aca239372903a45e" in json_data["parentResult"]["imageUrlOrigin"]:
-				image = str(json_data["parentResult"]["imageUrlOrigin"])
-			elif json_data["parentResult"].has_key('imageUrlLandscape') and not "8415ad90686d2c75aca239372903a45e" in json_data["parentResult"]["imageUrlLandscape"]:
-				image = str(json_data["parentResult"]["imageUrlLandscape"])
-			elif json_data["parentResult"].has_key('imageUrlPortrait') and not "8415ad90686d2c75aca239372903a45e" in json_data["parentResult"]["imageUrlPortrait"]:
-				image = str(json_data["parentResult"]["imageUrlPortrait"])
-			elif json_data["parentResult"].has_key('imageUrlSquare') and not "8415ad90686d2c75aca239372903a45e" in json_data["parentResult"]["imageUrlSquare"]:
-				image = str(json_data["parentResult"]["imageUrlSquare"])
+		if not json_data.has_key('_embedded'):
+			if json_data["parent"].has_key('imageUrlOrigin') and not "8415ad90686d2c75aca239372903a45e" in json_data["parent"]["imageUrlOrigin"]:
+				image = str(json_data["parent"]["imageUrlOrigin"])
+			elif json_data["parent"].has_key('imageUrlLandscape') and not "8415ad90686d2c75aca239372903a45e" in json_data["parent"]["imageUrlLandscape"]:
+				image = str(json_data["parent"]["imageUrlLandscape"])
+			elif json_data["parent"].has_key('imageUrlPortrait') and not "8415ad90686d2c75aca239372903a45e" in json_data["parent"]["imageUrlPortrait"]:
+				image = str(json_data["parent"]["imageUrlPortrait"])
+			elif json_data["parent"].has_key('imageUrlSquare') and not "8415ad90686d2c75aca239372903a45e" in json_data["parent"]["imageUrlSquare"]:
+				image = str(json_data["parent"]["imageUrlSquare"])
 			else:
 				image = None
-			title = str(json_data["parentResult"]["title"])
-			if json_data["parentResult"].has_key('description'):
-				descr = decodeHtml(str(json_data["parentResult"]["description"]))
+			title = str(json_data["parent"]["title"])
+			if json_data["parent"].has_key('description'):
+				descr = decodeHtml(str(json_data["parent"]["description"]))
 			else:
 				descr = ""
-			url = BASE_URL + "/content/videos/filter?channelId=" + str(json_data["parentResult"]["alias"]) + "&size=100"
+			url = BASE_URL + "/webapp/videos/byChannelAlias/" + str(json_data["parent"]["alias"]) + "?filterFsk=false&sort=creationDate,desc&size=100"
 			self.filmliste.append((title, image, url, descr))
 		else:
-			for item in json_data["result"]:
+			for item in json_data["_embedded"]["playlistList"]:
 				if item.has_key('imageUrlOrigin') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlOrigin"]:
 					image = str(item["imageUrlOrigin"])
 				elif item.has_key('imageUrlLandscape') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlLandscape"]:
@@ -213,7 +212,7 @@ class funkSeasonsScreen(MPScreen):
 					descr = decodeHtml(str(item["description"]))
 				else:
 					descr = ""
-				url = BASE_URL + "/content/playlists/" + str(item["alias"]) + "/videos/?size=100&secondarySort=episodeNr,ASC"
+				url = BASE_URL + "/webapp/videos/byPlaylistAlias/" + str(item["alias"]) + "?filterFsk=false&size=100&sort=episodeNr,ASC"
 				self.filmliste.append((title, image, url, descr))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.keyLocked = False
@@ -274,13 +273,13 @@ class funkEpisodesScreen(MPScreen):
 
 	def genreData(self, data):
 		json_data = json.loads(data)
-		if json_data.has_key('pagingMeta'):
-			if int(json_data["pagingMeta"]["totalPages"])>1:
-				self.lastpage = int(json_data["pagingMeta"]["totalPages"])
+		if json_data.has_key('page'):
+			if int(json_data["page"]["totalPages"])>1:
+				self.lastpage = int(json_data["page"]["totalPages"])
 				self['Page'].setText(_("Page:"))
 				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		try:
-			for item in json_data["result"]:
+			for item in json_data["_embedded"]["videoList"]:
 				if item.has_key('imageUrlOrigin') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlOrigin"]:
 					image = str(item["imageUrlOrigin"])
 				elif item.has_key('imageUrlLandscape') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlLandscape"]:

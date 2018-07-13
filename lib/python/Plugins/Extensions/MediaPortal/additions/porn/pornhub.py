@@ -198,7 +198,7 @@ class pornhubGenreScreen(MPScreen, rnCalc):
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		if Name == "--- Search ---":
-			self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True, auto_text_init=False, suggest_func=self.getSuggestions)
+			self.suchen()
 		elif re.match(".*Subscriptions", Name):
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(pornhubSubscriptionsScreen, Link, Name)
@@ -222,26 +222,6 @@ class pornhubGenreScreen(MPScreen, rnCalc):
 			self.suchString = callback
 			Link = base_url + '/video/search?search=%s&page=' % self.suchString.replace(' ', '+')
 			self.session.open(pornhubFilmScreen, Link, Name)
-
-	def getSuggestions(self, text, max_res):
-		url = base_url + "/video/search_autocomplete?pornstars=true&token=%s&orientation=straight&alt=0&q=%s" % (token, urllib.quote_plus(text))
-		d = twAgentGetPage(url, agent=phAgent, headers=json_headers, timeout=5)
-		d.addCallback(self.gotSuggestions, max_res)
-		d.addErrback(self.gotSuggestions, max_res, err=True)
-		return d
-
-	def gotSuggestions(self, suggestions, max_res, err=False):
-		list = []
-		if not err and type(suggestions) in (str, buffer):
-			suggestions = json.loads(suggestions)
-			for item in suggestions['queries']:
-				li = item
-				list.append(str(li))
-				max_res -= 1
-				if not max_res: break
-		elif err:
-			printl(str(suggestions),self,'E')
-		return list
 
 	def keySetup(self):
 		if mp_globals.isDreamOS:

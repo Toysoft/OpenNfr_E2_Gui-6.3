@@ -84,7 +84,7 @@ class tube8GenreScreen(MPScreen):
 
 	def genreData(self, data):
 		parse = re.search('categories-subnav-box(.*?)</div>', data,re.S)
-		Cats = re.findall('a\shref="(http[s]?://www.tube8.com/cat/.*?)">.*?class="category-thumb">.*?data-thumb="(.*?)".*?</span>(.*?)</a>', parse.group(1), re.S)
+		Cats = re.findall('a\shref="(http[s]?://www.tube8.com/cat/.*?)">.*?class="category-thumb">.*?data-thumb="(.*?)".*?class="category-name">(.*?)</span>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
 				Url = Url + "page/"
@@ -223,7 +223,7 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 					Views = str(node["attributes"]["stats"]["views"])
 					self.filmliste.append((Title, Url, Image, Runtime, Views))
 		else:
-			Movies = re.findall('id="video_.*?a\shref="(.*?)".*?src="(http[s]?://.*?\.jpg)".*?title="(.*?)".*?video_duration">(.*?)</div>.*?video_views">(.*?)\sviews', data, re.S)
+			Movies = re.findall('id="video_.*?a\shref="(.*?)".*?data-thumb="(http[s]?://.*?\.jpg)".*?title="(.*?)".*?video_duration">(.*?)</div>.*?video_views">(.*?)\sviews', data, re.S)
 			if Movies:
 				for (Url, Image, Title, Runtime, Views) in Movies:
 					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views.strip()))

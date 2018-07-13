@@ -179,8 +179,11 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 					title = "%s - %s" % (str(node['title']), str(node['subtitle']))
 				else:
 					title = str(node['title'])
-				m, s = divmod(node['duration'], 60)
-				Runtime = _("Runtime:") + " %02d:%02d" % (m, s)
+				if node['duration']:
+					m, s = divmod(node['duration'], 60)
+					Runtime = _("Runtime:") + " %02d:%02d" % (m, s)
+				else:
+					Runtime = _("Runtime:") + " --:--"
 				handlung = "%s\n%s" % (Runtime, str(node['fullDescription']))
 				url = "https://api.arte.tv/api/player/v1/config/de/%s" % str(node['programId'])
 				self.filmliste.append((title, url, str(node['images']['landscape']['resolutions'][-1]['url']), handlung))

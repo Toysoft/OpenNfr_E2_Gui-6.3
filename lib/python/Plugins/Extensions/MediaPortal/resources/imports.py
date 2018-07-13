@@ -150,7 +150,7 @@ def getUserAgent():
 
 def getUpdateUrl():
 	updateurls = [
-		'http://master.dl.sourceforge.net/project/e2-mediaportal/version.txt',
+		'http://e2-mediaportal.sourceforge.net/version.txt',
 		'http://dhwz.github.io/e2-mediaportal/version.txt',
 		'http://dhwz.gitlab.io/pages/version.txt'
 	]

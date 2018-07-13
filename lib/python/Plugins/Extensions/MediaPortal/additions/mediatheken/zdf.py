@@ -682,6 +682,7 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 		c = b[0]
 		c = c.replace("1496k","3296k")
 		c = c.replace("p13v13","p15v13")
+		c = c.replace("p13v14","p15v14")
 		url = str(c).replace("https","http")
 		if '.f4m' in url:
 			b = []

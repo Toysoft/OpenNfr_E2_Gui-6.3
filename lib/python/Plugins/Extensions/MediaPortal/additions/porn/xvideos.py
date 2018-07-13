@@ -101,7 +101,7 @@ class xvideosGenreScreen(MPScreen):
 				self.filmliste.append((Title, Url, default_cover, False))
 		self.filmliste.sort()
 
-		self.filmliste.insert(0, ("Pornstars", "https://www.xvideos.com/pornstars/$$AGE$$$$PAGE$$", default_cover, False))
+		self.filmliste.insert(0, ("Pornstars", "https://www.xvideos.com/pornstars-index/$$AGE$$$$PAGE$$", default_cover, False))
 		self.filmliste.insert(0, ("100% Verified", "https://www.xvideos.com/verified/videos/$$PAGE$$", default_cover, False))
 		self.filmliste.insert(0, ("Newest", "https://www.xvideos.com/new/$$PAGE$$", default_cover, False))
 		self.filmliste.insert(0, ("--- Search ---", "callSuchen", default_cover, True))
@@ -219,7 +219,7 @@ class xvideosPornstarsScreen(MPScreen, ThumbsHelper):
 		Movies = re.findall('class="thumb"><a href="(.*?)">.*?<img src="(.*?)".*?class="flag(.*?)</p></div>', data, re.S)
 		if Movies:
 			for (Url, Image, Meta) in Movies:
-				Title = re.findall('class="profile-name"><a href=".*?">(.*?)</a>', Meta, re.S)
+				Title = re.findall('class="profile-name">.*?<a href=".*?">(.*?)</a>', Meta, re.S)
 				if Title:
 					Title = Title[0]
 				else:

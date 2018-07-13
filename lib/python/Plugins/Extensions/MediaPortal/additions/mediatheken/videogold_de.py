@@ -217,9 +217,7 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 			if 'p' == m2.group(1):
 				url = 'gdata.youtube.com/feeds/api/playlists/PL'+dhVideoId+'?'
 		else:
-			m2 = re.search('youtu.*?/(.*?)</p>', data)
-			if not m2:
-				m2 = re.search('//youtu.be/(.*?)"', data)
+			m2 = re.search('//youtu.be/(.*?)"', data)
 			if m2:
 				dhVideoId = m2.group(1)
 		if m2:
@@ -228,6 +226,7 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 				url = 'gdata.youtube.com/feeds/api/playlists/PL'+dhVideoId+'?'
 				self.session.open(YT_ListScreen, url, dhTitle, title="videogold")
 			else:
+				print dhVideoId
 				self.session.open(
 					YoutubePlayer,
 					[(dhTitle, dhVideoId, None)],
