@@ -167,10 +167,14 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 		twAgentGetPage(url, agent=wbAgent).addCallback(self.get_link).addErrback(self.dataError)
 
 	def get_link(self, data):
-		stream_url = re.search('hls":"(.*?\.m3u8)",', data, re.S)
-		if stream_url:
-			url = stream_url.group(1).replace('\/','/')
-			getPage(url, agent=wbAgent).addCallback(self.loadplaylist, url).addErrback(self.dataError)
+		data = data.replace('&quot;', '"')
+		if '"drm":{"userToken"' in data:
+			message = self.session.open(MessageBoxExt, _("This movie can't be played it's protected with DRM."), MessageBoxExt.TYPE_INFO, timeout=5)
+		else:
+			stream_url = re.search('hls":"(.*?\.m3u8)",', data, re.S)
+			if stream_url:
+				url = stream_url.group(1).replace('\/','/')
+				getPage(url, agent=wbAgent).addCallback(self.loadplaylist, url).addErrback(self.dataError)
 
 	def loadplaylist(self, data, baseurl):
 		self.bandwith_list = []

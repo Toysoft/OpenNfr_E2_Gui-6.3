@@ -215,12 +215,13 @@ class HeiseTvListScreen(MPScreen, ThumbsHelper):
 		getPage(url).addCallback(self.getVid).addErrback(self.dataError)
 
 	def getVid(self, data):
-		m = re.findall('\["wid"\]\s+=\s"_(.*?)";.*?\["entry_id"\]\s+=\s"(.*?)";', data, re.S)
-		if m:
-			url = "https://cdnapisec.kaltura.com/p/%s/sp/%s00/playManifest/entryId/%s/format/applehttp/protocol/https/a.m3u8" % (m[0][0], m[0][0], m[0][1])
-			getPage(url, agent=heiseAgent).addCallback(self.loadplaylist, m[0][0], m[0][1]).addErrback(self.dataError)
+		entryid = re.findall('entry-id="(.*?)"', data, re.S)
+		if entryid:
+			partnerid = "2238431"
+			url = "https://cdnapisec.kaltura.com/p/%s/sp/%s00/playManifest/entryId/%s/format/applehttp/protocol/https/a.m3u8" % (partnerid, partnerid, entryid[0])
+			getPage(url, agent=heiseAgent).addCallback(self.loadplaylist, partnerid, entryid[0]).addErrback(self.dataError)
 
-	def loadplaylist(self, data, wid, entry_id):
+	def loadplaylist(self, data, partnerid, entry_id):
 		self.bandwith_list = []
 		match_sec_m3u8=re.findall('BANDWIDTH=(.*?),.*?RESOLUTION=(.*?).*?https://.*?flavorId\/(.*?)\/.*?.m3u8', data, re.S)
 		max = 0
@@ -238,7 +239,7 @@ class HeiseTvListScreen(MPScreen, ThumbsHelper):
 			bandwith,resolution,url = each
 			self.bandwith_list.append((int(bandwith),url))
 		_, best = min((abs(int(x[0]) - bw), x) for x in self.bandwith_list)
-		url = "https://cdnapisec.kaltura.com/p/%s/sp/%s00/playManifest/entryId/%s/flavorIds/%s/" % (wid, wid, entry_id ,best[1])
+		url = "https://cdnapisec.kaltura.com/p/%s/sp/%s00/playManifest/entryId/%s/flavorIds/%s/" % (partnerid, partnerid, entry_id, best[1])
 		getPage(url, agent=heiseAgent).addCallback(self.getVideo).addErrback(self.dataError)
 
 	def getVideo(self, data):

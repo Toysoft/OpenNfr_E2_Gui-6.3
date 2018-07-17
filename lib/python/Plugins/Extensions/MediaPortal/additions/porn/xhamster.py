@@ -121,7 +121,7 @@ class xhamsterGenreScreen(MPScreen):
 		if Cats:
 			for (Url, Title) in Cats:
 				Title = Title.strip(' ')
-				self.genreliste.append((Title, Url))
+				self.genreliste.append((decodeHtml(Title), Url))
 		self.genreliste.sort()
 		self.genreliste.insert(0, (400 * "—", None))
 		self.genreliste.insert(0, ("Subscriptions", 'subs'))

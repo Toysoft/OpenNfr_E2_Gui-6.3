@@ -29,7 +29,7 @@ class pandamovieGenreScreen(MPScreen):
 
 	def loadPage(self):
 		self.filmliste = []
-		url = "https://pandamovie.co/adult/"
+		url = "https://pandamovie.pw/adult/"
 		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
@@ -46,18 +46,18 @@ class pandamovieGenreScreen(MPScreen):
 		if self.mode == "Genres":
 			self.filmliste.insert(0, ("Years", "Years", None))
 			self.filmliste.insert(0, ("Studios", "Studios", None))
-			self.filmliste.insert(0, ("HD", "https://pandamovie.co/adult/watch-hd-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Most Popular (All Time)", "https://pandamovie.co/adult/popular-movies/page/", None))
-			self.filmliste.insert(0, ("Most Popular (Monthly)", "https://pandamovie.co/adult/popular-movies-in-last-30-days/page/", None))
-			self.filmliste.insert(0, ("Most Popular (Weekly)", "https://pandamovie.co/adult/popular-movies-last-7-days/page/", None))
-			self.filmliste.insert(0, ("Most Popular (Daily)", "https://pandamovie.co/adult/popular-movies-in-last-24-hours/page/", None))
-			self.filmliste.insert(0, ("Featured", "https://pandamovie.co/adult/watch-featured-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Clips & Scenes", "https://pandamovie.co/adult/watch-clips-scenes-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Japanese Movies", "https://pandamovie.co/adult/watch-japanese-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Italian Movies", "https://pandamovie.co/adult/watch-italian-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Spanish Movies", "https://pandamovie.co/adult/watch-spanish-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("German Movies", "https://pandamovie.co/adult/watch-german-porns-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Newest Movies", "https://pandamovie.co/adult/list-movies/page/", None))
+			self.filmliste.insert(0, ("HD", "https://pandamovie.pw/adult/watch-hd-movies-online-free/page/", None))
+			self.filmliste.insert(0, ("Most Popular (All Time)", "https://pandamovie.pw/adult/popular-movies/page/", None))
+			self.filmliste.insert(0, ("Most Popular (Monthly)", "https://pandamovie.pw/adult/popular-movies-in-last-30-days/page/", None))
+			self.filmliste.insert(0, ("Most Popular (Weekly)", "https://pandamovie.pw/adult/popular-movies-last-7-days/page/", None))
+			self.filmliste.insert(0, ("Most Popular (Daily)", "https://pandamovie.pw/adult/popular-movies-in-last-24-hours/page/", None))
+			self.filmliste.insert(0, ("Featured", "https://pandamovie.pw/adult/watch-featured-movies-online-free/page/", None))
+			self.filmliste.insert(0, ("Clips & Scenes", "https://pandamovie.pw/adult/watch-clips-scenes-porn-movies-online-free/page/", None))
+			self.filmliste.insert(0, ("Japanese Movies", "https://pandamovie.pw/adult/watch-japanese-porn-movies-online-free/page/", None))
+			self.filmliste.insert(0, ("Italian Movies", "https://pandamovie.pw/adult/watch-italian-porn-movies-online-free/page/", None))
+			self.filmliste.insert(0, ("Spanish Movies", "https://pandamovie.pw/adult/watch-spanish-porn-movies-online-free/page/", None))
+			self.filmliste.insert(0, ("German Movies", "https://pandamovie.pw/adult/watch-german-porns-movies-online-free/page/", None))
+			self.filmliste.insert(0, ("Newest Movies", "https://pandamovie.pw/adult/list-movies/page/", None))
 			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
@@ -123,7 +123,7 @@ class pandamovieListScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://pandamovie.co/adult/page/%s?s=%s" % (str(self.page), self.Link)
+			url = "https://pandamovie.pw/adult/page/%s?s=%s" % (str(self.page), self.Link)
 		else:
 			url = self.Link + str(self.page)
 		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
@@ -205,7 +205,8 @@ class StreamAuswahl(MPScreen):
 		twAgentGetPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		streams = re.findall('href=[\'|"](http[s]?://(?!(pandamovie.\w+|pandanetwork.\w+))(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
+		parse = re.search('div id="pettabs">(.*?)</div', data, re.S)
+		streams = re.findall('href=[\'|"](http[s]?://(?!(pandamovie.\w+|pandanetwork.\w+))(.*?)\/.*?)[\'|"|\&|<]', parse.group(1), re.S|re.I)
 		if streams:
 			for (stream, dummy, hostername) in streams:
 				if isSupportedHoster(hostername, True):

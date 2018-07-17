@@ -82,7 +82,6 @@ class get_stream_link:
 	from hosters.epornik import epornik
 	from hosters.exashare import exashare
 	from hosters.fembed import fembed
-	from hosters.filebebo import filebebo
 	from hosters.flashx import flashx
 	from hosters.flyflv import flyflv, flyflvData
 	from hosters.google import google
@@ -482,10 +481,6 @@ class get_stream_link:
 			elif re.search('epornik.com', data, re.S):
 				link = data
 				getPage(link).addCallback(self.epornik).addErrback(self.errorload)
-
-			elif re.search('filebebo.com', data, re.S):
-				link = data
-				twAgentGetPage(link).addCallback(self.filebebo).addErrback(self.errorload)
 
 			elif re.search('clipwatching.com', data, re.S):
 				link = data

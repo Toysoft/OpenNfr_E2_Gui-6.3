@@ -241,8 +241,8 @@ class m4kGenreScreen(MPScreen):
 		elif self.domain == "http://movie4k.pe":
 			config.mediaportal.movie4kdomain3.value = "http://movie2k.cm"
 		elif self.domain == "http://movie2k.cm":
-			config.mediaportal.movie4kdomain3.value = "http://movie2k.nu"
-		elif self.domain == "http://movie2k.nu":
+			config.mediaportal.movie4kdomain3.value = "http://movie4k.sh"
+		elif self.domain == "http://movie4k.sh":
 			config.mediaportal.movie4kdomain3.value = "https://movie4k.tv"
 		elif self.domain == "https://movie4k.tv":
 			config.mediaportal.movie4kdomain3.value = "http://movie4k.me"

@@ -14,7 +14,7 @@ class ivhunterGenreScreen(MPScreen):
 
 		if self.mode == "ivhunter":
 			self.portal = "IVHUNTER"
-			self.baseurl = "ivhunter.com"
+			self.baseurl = "javdos.com"
 			self.delim = "+"
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)

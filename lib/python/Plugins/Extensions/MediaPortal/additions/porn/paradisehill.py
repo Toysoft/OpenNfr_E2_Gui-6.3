@@ -66,51 +66,49 @@ class paradisehillGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://en.paradisehill.cc/porn"
+		url = "http://en.paradisehill.cc/categories/"
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('<h2>Categories</h2>(.*?)<script type="', data, re.S)
-		Cat = re.findall('\shref="(.*?)"\stitle="(.*?)".*?Films:(.*?)<', parse.group(1), re.S)
+		parse = re.search('<div id="w0" class="content">(.*?)<script type="', data, re.S)
+		Cat = re.findall('class="item".*?href="(.*?)".*?itemprop="name"><span>(.*?)</span>', parse.group(1), re.S)
 		if Cat:
-			for (Url, Title, Count) in Cat:
-				Url = Url + "?page="
-				self.genreliste.append((Title, Url, Count))
+			for (Url, Title) in Cat:
+				Url = Url + "&page="
+				self.genreliste.append((Title, Url))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Popular (All Time)", "/popular/?page=", None))
-			self.genreliste.insert(0, ("Popular (Monthly)", "/popular/?filter=month&page=", None))
-			self.genreliste.insert(0, ("Popular (Weekly)", "/popular/?filter=week&page=", None))
-			self.genreliste.insert(0, ("Popular (Daily)", "/popular/?filter=day&page=", None))
-			self.genreliste.insert(0, ("Newest", "/porn/?page=", None))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
-			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-			self.keyLocked = False
+		self.genreliste.insert(0, ("Popular (All Time)", "/popular/?filter=all&sort=by_likes&page="))
+		self.genreliste.insert(0, ("Popular (Year)", "/popular/?filter=year&sort=by_likes&page="))
+		self.genreliste.insert(0, ("Popular (Monthly)", "/popular/?filter=month&sort=by_likes&page="))
+		self.genreliste.insert(0, ("Popular (Weekly)", "/popular/?filter=week&sort=by_likes&page="))
+		self.genreliste.insert(0, ("Popular (Daily)", "/popular/?filter=day&sort=by_likes&page="))
+		self.genreliste.insert(0, ("Newest", "/all/?sort=created_at&page="))
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
+		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
+		self.keyLocked = False
 
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			paradisehillUrl = '%s' % (self.suchString)
 			paradisehillGenre = "--- Search ---"
-			count = None
-			self.session.open(paradisehillFilmListeScreen, paradisehillUrl, paradisehillGenre, count)
+			self.session.open(paradisehillFilmListeScreen, paradisehillUrl, paradisehillGenre)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		paradisehillGenre = self['liste'].getCurrent()[0][0]
 		paradisehillUrl = self['liste'].getCurrent()[0][1]
-		count = self['liste'].getCurrent()[0][2]
 		if paradisehillGenre == "--- Search ---":
 			self.suchen()
 		else:
-			self.session.open(paradisehillFilmListeScreen, paradisehillUrl, paradisehillGenre, count)
+			self.session.open(paradisehillFilmListeScreen, paradisehillUrl, paradisehillGenre)
 
 class paradisehillFilmListeScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, genreLink, genreName, count):
+	def __init__(self, session, genreLink, genreName):
 		self.genreLink = genreLink
 		self.genreName = genreName
-		self.count = count
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -149,27 +147,22 @@ class paradisehillFilmListeScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		if re.match(".*?Search", self.genreName):
 			if self.page == 1:
-				url = "http://en.paradisehill.cc/search_results/?search=%s" % self.genreLink
+				url = "http://en.paradisehill.cc/search/?pattern=%s&what=1" % self.genreLink
 			else:
-				url = "http://en.paradisehill.cc/search_results/?search=%s&page=%s" % (self.genreLink,str(self.page))
+				url = "http://en.paradisehill.cc/search/?pattern=%s&what=1&page=%s" % (self.genreLink,str(self.page))
 		else:
 			url = "http://en.paradisehill.cc%s%s" % (self.genreLink,str(self.page))
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if self.count and self.count != 'None':
-			self.lastpage = int(round((float(self.count) / 24) + 0.5))
-			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		else:
-			self.getLastPage(data, 'class="pagination(.*?)</div>' , '.*page=(\d+)">')
-		parse = re.search('class="row new-collect(.*?)class="pagination', data, re.S)
-		if parse:
-			movies = re.findall('bci(-title|)-link" href="(.*?)".*?bci-title">(.*?)<.*?img["]? src="(.*?)"', parse.group(1), re.S)
-			if movies:
-				self.filmliste = []
-				for (x,url,title,image) in movies:
-					image = "http://en.paradisehill.cc%s" % image
-					self.filmliste.append((decodeHtml(title),url,image))
+		self.getLastPage(data, 'class="pagination(.*?)</div>' , '.*page=(\d+)"')
+		movies = re.findall('list-film-item.*?href="(.*?)".*?temprop="name">(.*?)</.*?</span>.*?img\ssrc="(.*?)"', data, re.S)
+		if movies:
+			self.filmliste = []
+			for (url,title,image) in movies:
+				url = "http://en.paradisehill.cc%s" % url
+				image = "http://en.paradisehill.cc%s" % image
+				self.filmliste.append((decodeHtml(title), url, image))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), None, None))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -191,7 +184,6 @@ class paradisehillFilmListeScreen(MPScreen, ThumbsHelper):
 		title = self['liste'].getCurrent()[0][0]
 		url = self['liste'].getCurrent()[0][1]
 		image = self['liste'].getCurrent()[0][2]
-		url = "http://en.paradisehill.cc%s" % url
 		self.session.open(paradisehillFilmAuswahlScreen, title, url, image)
 
 class paradisehillFilmAuswahlScreen(MPScreen):
@@ -223,16 +215,16 @@ class paradisehillFilmAuswahlScreen(MPScreen):
 		getPage(self.genreLink).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		parse = re.search('films=(.*?)\];', data, re.S)
+		parse = re.search('class="fp-playlist">(.*?)</div>', data, re.S)
 		if parse:
-			streams = re.findall('sources.*?src":"(.*?)"', parse.group(1), re.S)
+			streams = re.findall('href="(.*?)">', parse.group(1), re.S)
 		if len(streams) > 1:
 			for i in range(0,len(streams),1):
 				videoname = self.genreName + ' (Part ' + str(i+1) + ')'
-				self.filmliste.append((videoname, streams[i].replace('\/','/')))
+				self.filmliste.append((videoname, streams[i]))
 		elif len(streams) == 1:
 			videoname = self.genreName
-			self.filmliste.append((videoname, streams[0].replace('\/','/')))
+			self.filmliste.append((videoname, streams[0]))
 		else:
 			self.filmliste.append(("No streams found!",None))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))

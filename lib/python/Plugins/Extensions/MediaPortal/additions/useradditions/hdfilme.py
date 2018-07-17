@@ -87,7 +87,6 @@ class hdfilmeMain(MPScreen):
 		twAgentGetPage('%s/movie-movies' % BASE_URL, agent=hf_agent, cookieJar=hf_cookies).addCallback(self.loadPage).addErrback(self.dataError)
 
 	def loadPage(self, data):
-		print str(data)
 		self.keyLocked = True
 		parse = re.search('>Genre</option>(.*?)</select>', data, re.S)
 		if parse:

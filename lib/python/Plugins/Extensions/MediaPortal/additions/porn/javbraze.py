@@ -34,24 +34,24 @@ class javbrazeGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://javbraze.com/categories/"
-		getPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
+		url = "https://javbraze.com/categories/"
+		twAgentGetPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		Cats = re.findall('class="category".*?href="(.*?)".*?img\ssrc="(.*?)".*?title">(.*?)</div', data, re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
-				Url = 'http://javbraze.com/' + Url
-				Image = 'http://javbraze.com/' + Image
+				Url = 'https://javbraze.com/' + Url
+				Image = 'https://javbraze.com/' + Image
 				self.genreliste.append((Title, Url, Image, True))
 		self.genreliste.sort()
-		self.genreliste.insert(0, ("Being Watched", "http://javbraze.com/watched/", default_cover, False))
-		self.genreliste.insert(0, ("Longest", "http://javbraze.com/longest/", default_cover, False))
-		self.genreliste.insert(0, ("Most Downloaded", "http://javbraze.com/downloaded/", default_cover, False))
-		self.genreliste.insert(0, ("Most Discussed", "http://javbraze.com/discussed/", default_cover, False))
-		self.genreliste.insert(0, ("Top Rated", "http://javbraze.com/rated/", default_cover, False))
-		self.genreliste.insert(0, ("Most Popular", "http://javbraze.com/popular/", default_cover, False))
-		self.genreliste.insert(0, ("Most Recent", "http://javbraze.com/recent/", default_cover, False))
+		self.genreliste.insert(0, ("Being Watched", "https://javbraze.com/watched/", default_cover, False))
+		self.genreliste.insert(0, ("Longest", "https://javbraze.com/longest/", default_cover, False))
+		self.genreliste.insert(0, ("Most Downloaded", "https://javbraze.com/downloaded/", default_cover, False))
+		self.genreliste.insert(0, ("Most Discussed", "https://javbraze.com/discussed/", default_cover, False))
+		self.genreliste.insert(0, ("Top Rated", "https://javbraze.com/rated/", default_cover, False))
+		self.genreliste.insert(0, ("Most Popular", "https://javbraze.com/popular/", default_cover, False))
+		self.genreliste.insert(0, ("Most Recent", "https://javbraze.com/recent/", default_cover, False))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover, False))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -122,7 +122,7 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "http://javbraze.com/search/video/?s=%s&page=%s" % (self.Link, str(self.page))
+			url = "https://javbraze.com/search/video/?s=%s&page=%s" % (self.Link, str(self.page))
 		else:
 			if self.page > 1:
 				if self.Cat:
@@ -132,15 +132,14 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 				url = self.Link + cat + str(self.page) + "/"
 			else:
 				url = self.Link
-		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</ul>')
 		Movies = re.findall('class="video".*?href="(.*?)"\stitle="(.*?)".*?img\ssrc="(.*?)".*?class="time-video.*?>(.*?)</span.*?class="video-view.*?>(.*?)\sviews', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Runtime, Views) in Movies:
-				Url = "http://javbraze.com" + Url
-				Image = "http://javbraze.com" + Image
+				Url = "https://javbraze.com" + Url
 				Runtime = Runtime.strip()
 				Views = Views.strip()
 				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
@@ -169,13 +168,13 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 		image = self['liste'].getCurrent()[0][2]
 		if url:
 			self.keyLocked = True
-			getPage(url, agent=myagent).addCallback(self.loadStream).addErrback(self.dataError)
+			twAgentGetPage(url, agent=myagent).addCallback(self.loadStream).addErrback(self.dataError)
 
 	def loadStream(self, data):
 		streams = re.findall('src="(/modules/video/player/config2.php\?id=\d+)"', data, re.S)
 		if streams:
-			url = "http://javbraze.com" + streams[0]
-			getPage(url, agent=myagent).addCallback(self.get_link).addErrback(self.dataError)
+			url = "https://javbraze.com" + streams[0]
+			twAgentGetPage(url, agent=myagent).addCallback(self.get_link).addErrback(self.dataError)
 		else:
 			streams = re.findall('(?:src|href)=[\'|"](http[s]?://(?!(?:www.|m.|)javbraze.com)(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
 			if streams:
