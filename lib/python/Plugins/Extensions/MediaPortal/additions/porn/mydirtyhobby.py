@@ -76,9 +76,9 @@ class MDHGenreNewScreen(MPScreen):
 	def genreData(self):
 		self['name'].setText('')
 		self.genreliste.insert(0, ("Stream-MDH (Old)", None))
-		self.genreliste.insert(0, ("Being Watched", "https://www.stream-mdh.se/videos?t=a&o=bw&page="))
-		self.genreliste.insert(0, ("Most Viewed", "https://www.stream-mdh.se/videos?t=a&o=mv&page="))
-		self.genreliste.insert(0, ("Newest", "https://www.stream-mdh.se/videos?t=a&o=mr&page="))
+		self.genreliste.insert(0, ("Being Watched", "https://www.stream-mydirtyhobby.co/videos?t=a&o=bw&page="))
+		self.genreliste.insert(0, ("Most Viewed", "https://www.stream-mydirtyhobby.co/videos?t=a&o=mv&page="))
+		self.genreliste.insert(0, ("Newest", "https://www.stream-mydirtyhobby.co/videos?t=a&o=mr&page="))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -334,17 +334,17 @@ class MDHFilmNewScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://www.stream-mdh.se/search/videos?search_query=%s&page=%s" % (self.Link, str(self.page))
+			url = "https://www.stream-mydirtyhobby.co/search/videos?search_query=%s&page=%s" % (self.Link, str(self.page))
 		else:
 			url = self.Link + str(self.page)
-		twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination">(.*?)</div>', '.*[>|=](\d+)[<|&|"]>\d')
 		Movies = re.findall('class="well well-sm.*?href="(.*?)".*?img\ssrc="(.*?)"\stitle="(.*?)"', data, re.S)
 		if Movies:
 			for (Url, Image, Title) in Movies:
-				Url = "https://www.stream-mdh.se" + Url
+				Url = "https://www.stream-mydirtyhobby.co" + Url
 				self.filmliste.append((decodeHtml(Title), Url, Image))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), '', None))
@@ -365,7 +365,7 @@ class MDHFilmNewScreen(MPScreen, ThumbsHelper):
 			return
 		Link = self['liste'].getCurrent()[0][1]
 		self.keyLocked = True
-		twAgentGetPage(Link, agent=myagent).addCallback(self.getVideoUrl).addErrback(self.dataError)
+		getPage(Link, agent=myagent).addCallback(self.getVideoUrl).addErrback(self.dataError)
 
 	def getVideoUrl(self, data):
 		url = re.findall('iframe\ssrc="(.*?)"', data, re.S|re.I)

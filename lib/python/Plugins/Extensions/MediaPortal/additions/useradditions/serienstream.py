@@ -111,8 +111,8 @@ class ssMain(MPScreen):
 
 	def Login(self):
 		loginUrl = BASE_URL + "/login"
-		loginData = {'autoLogin': "on", 'password': self.password, 'email': self.username}
-		twAgentGetPage(loginUrl, method='POST', postdata=urlencode(loginData), agent=ss_agent, cookieJar=ss_cookies, headers={'Content-Type':'application/x-www-form-urlencoded', 'Referer':BASE_URL}).addCallback(self.Login2).addErrback(self.dataError)
+		loginData = {'password': self.password, 'email': self.username}
+		twAgentGetPage(loginUrl, method='POST', postdata=urlencode(loginData), agent=ss_agent, cookieJar=ss_cookies, headers={'Content-Type':'application/x-www-form-urlencoded', 'Referer':loginUrl}).addCallback(self.Login2).addErrback(self.dataError)
 
 	def Login2(self, data):
 		url = BASE_URL + '/account'
