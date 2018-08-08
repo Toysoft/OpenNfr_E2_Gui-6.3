@@ -28,8 +28,8 @@ class PrimeWireGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.primewire.ac/"
-		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
+		url = "https://www1.primewire.ac/"
+		twAgentGetPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('class="opener-menu-genre">(.*)class="opener-menu-section', data, re.S)
@@ -40,10 +40,10 @@ class PrimeWireGenreScreen(MPScreen):
 				self.genreliste.append((Title, Url))
 			self.genreliste.sort()
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
-			self.genreliste.insert(1, ("Featured Movies", "http://www.primewire.ac/index.php?sort=featured&page="))
-			self.genreliste.insert(2, ("Popular Movies", "http://www.primewire.ac/index.php?sort=views&page="))
-			self.genreliste.insert(3, ("Top Rated Movies", "http://www.primewire.ac/index.php?sort=ratings&page="))
-			self.genreliste.insert(4, ("Newly Released Movies", "http://www.primewire.ac/index.php?sort=release&page="))
+			self.genreliste.insert(1, ("Featured Movies", "https://www1.primewire.ac/index.php?sort=featured&page="))
+			self.genreliste.insert(2, ("Popular Movies", "https://www1.primewire.ac/index.php?sort=views&page="))
+			self.genreliste.insert(3, ("Top Rated Movies", "https://www1.primewire.ac/index.php?sort=ratings&page="))
+			self.genreliste.insert(4, ("Newly Released Movies", "https://www1.primewire.ac/index.php?sort=release&page="))
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.ml.moveToIndex(0)
 			self.keyLocked = False
@@ -63,7 +63,7 @@ class PrimeWireGenreScreen(MPScreen):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			auswahl = "--- Search ---"
-			url = "http://www.primewire.ac/?search_keywords=%s&search_section=1&page=" % self.suchString
+			url = "https://www1.primewire.ac/?search_keywords=%s&search_section=1&page=" % self.suchString
 			self.session.open(PrimeWireFilmlisteScreen, url, auswahl)
 
 class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
@@ -117,7 +117,7 @@ class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 			url = "%s&sort=%s" % (url, self.sort)
 		if self.filter:
 			url = "%s&country=%s" % (url, self.filter)
-		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		self.lastpage = re.findall('<div class="number_movies_result">(.*?)\sitems found</div>', data)
@@ -129,8 +129,8 @@ class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 		chMovies = re.findall('<div\sclass="index_item\sindex_item_ie">.*?<a\shref="(.*?)"\stitle="(.*?)"><img\ssrc="(.*?)"', data, re.S)
 		if chMovies:
 			for (chUrl,chTitle,chImage) in chMovies:
-				chUrl = "http://www.primewire.ac/" + chUrl
-				chImage = "http://www.primewire.ac" + chImage
+				chUrl = "https://www1.primewire.ac/" + chUrl
+				chImage = "https://www1.primewire.ac" + chImage
 				self.streamList.append((decodeHtml(chTitle),chUrl,chImage))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No videos found!'), '', None))
@@ -143,7 +143,7 @@ class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 		self.image = self['liste'].getCurrent()[0][2]
 		CoverHelper(self['coverArt']).getCover(self.image)
 		url = self['liste'].getCurrent()[0][1]
-		getPage(url, agent=std_headers).addCallback(self.showInfos2).addErrback(self.dataError)
+		twAgentGetPage(url, agent=std_headers).addCallback(self.showInfos2).addErrback(self.dataError)
 
 	def showInfos2(self, data):
 		Handlung = re.search('display:block;">(.*?)</p></td>', data, re.S)
@@ -214,14 +214,14 @@ class PrimeWireStreamsScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		getPage(self.Link).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(self.Link).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		streams = re.findall('<a href="(/stream/.*?\.html)".*?version_host">(.*?)</', data, re.S)
 		if streams:
 			for (Url, StreamHoster) in streams:
 				if isSupportedHoster(StreamHoster, True):
-					Url = "http://www.primewire.ac" + Url
+					Url = "https://www1.primewire.ac" + Url
 					self.streamList.append((StreamHoster, Url))
 			if len(self.streamList) == 0:
 				self.streamList.append((_('No supported streams found!'), None))
@@ -238,7 +238,7 @@ class PrimeWireStreamsScreen(MPScreen):
 		if self.keyLocked or exist == None:
 			return
 		url = self['liste'].getCurrent()[0][1]
-		getPage(url).addCallback(self.getStream).addErrback(self.dataError)
+		twAgentGetPage(url).addCallback(self.getStream).addErrback(self.dataError)
 
 	def getStream(self, data):
 		streams = re.findall('data-href="(.*?)"', data, re.S)

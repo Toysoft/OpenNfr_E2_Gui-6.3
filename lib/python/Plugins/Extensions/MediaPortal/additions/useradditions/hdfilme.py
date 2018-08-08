@@ -211,6 +211,7 @@ class hdfilmeStreams(MPScreen):
 				'720' : 2, #MP4 720p
 				'480' : 3, #MP4 480p
 				'360' : 4, #MP4 360p
+				'0' : 5, #MP4
 			}
 		)
 
