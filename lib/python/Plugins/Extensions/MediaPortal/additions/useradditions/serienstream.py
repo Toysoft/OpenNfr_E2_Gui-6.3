@@ -1,41 +1,4 @@
 ﻿# -*- coding: utf-8 -*-
-###############################################################################################
-#
-#    MediaPortal for Dreambox OS
-#
-#    Coded by MediaPortal Team (c) 2013-2018
-#
-#  This plugin is open source but it is NOT free software.
-#
-#  This plugin may only be distributed to and executed on hardware which
-#  is licensed by Dream Property GmbH. This includes commercial distribution.
-#  In other words:
-#  It's NOT allowed to distribute any parts of this plugin or its source code in ANY way
-#  to hardware which is NOT licensed by Dream Property GmbH.
-#  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
-#  on hardware which is NOT licensed by Dream Property GmbH.
-#
-#  This applies to the source code as a whole as well as to parts of it, unless
-#  explicitely stated otherwise.
-#
-#  If you want to use or modify the code or parts of it,
-#  you have to keep OUR license and inform us about the modifications, but it may NOT be
-#  commercially distributed other than under the conditions noted above.
-#
-#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
-#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
-#
-#  As an exception regarding modifcations, you are NOT permitted to remove
-#  any copy protections implemented in this plugin or change them for means of disabling
-#  or working around the copy protections, unless the change has been explicitly permitted
-#  by the original authors. Also decompiling and modification of the closed source
-#  parts is NOT permitted.
-#
-#  Advertising with this plugin is NOT allowed.
-#  For other uses, permission from the authors is necessary.
-#
-###############################################################################################
-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.configlistext import ConfigListScreenExt
@@ -65,17 +28,6 @@ ss_agent = ''
 
 config.mediaportal.ss_username = ConfigText(default="ssEmail", fixed_size=False)
 config.mediaportal.ss_password = ConfigPassword(default="ssPassword", fixed_size=False)
-
-def ss_grabpage(pageurl):
-	if requestsModule:
-		try:
-			s = requests.session()
-			url = urlparse.urlparse(pageurl)
-			headers = {'User-Agent': ss_agent}
-			page = s.get(url.geturl(), cookies=ss_cookies, headers=headers, timeout=15)
-			return page.content
-		except:
-			pass
 
 class ssMain(MPScreen):
 
@@ -266,11 +218,7 @@ class ssSerien(MPScreen, SearchHelper):
 
 	def loadPage(self):
 		url = BASE_URL + "/serien"
-		if not mp_globals.requests:
-			twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
-		else:
-			data = ss_grabpage(url)
-			self.loadPageData(data)
+		twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
 		serien = re.findall('<li>.*?<a\s(?:data-alternative-title=".*?"\s|)href="/serie/stream/(.*?)".*?title=".*?Stream anschauen">(.*?)</a>.*?</li>', data, re.S)
@@ -305,11 +253,7 @@ class ssSerien(MPScreen, SearchHelper):
 		self.showInfos()
 		self.updateP = 1
 		url = self['liste'].getCurrent()[0][1]
-		if not mp_globals.requests:
-			twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.setCoverUrl).addErrback(self.dataError)
-		else:
-			data = ss_grabpage(url)
-			self.setCoverUrl(data)
+		twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.setCoverUrl).addErrback(self.dataError)
 
 	def setCoverUrl(self, data):
 		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://s.to/public/img/cover/.*?)"', data, re.S)
@@ -388,11 +332,7 @@ class ssNeueEpisoden(MPScreen):
 		self['name'].setText(_('Please wait...'))
 		while not self.filmQ.empty():
 			url = self.filmQ.get_nowait()
-		if not mp_globals.requests:
-			twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
-		else:
-			data = ss_grabpage(url)
-			self.parseData(data)
+		twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		parse = re.search('neusten Episoden</h2>(.*?)class="cf">', data, re.S)
@@ -443,11 +383,7 @@ class ssNeueEpisoden(MPScreen):
 		self.showInfos()
 		self.updateP = 1
 		url = self['liste'].getCurrent()[0][1]
-		if not mp_globals.requests:
-			twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.setCoverUrl).addErrback(self.dataError)
-		else:
-			data = ss_grabpage(url)
-			self.setCoverUrl(data)
+		twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.setCoverUrl).addErrback(self.dataError)
 
 	def setCoverUrl(self, data):
 		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://s.to/public/img/cover/.*?)"', data, re.S)
@@ -458,12 +394,13 @@ class ssNeueEpisoden(MPScreen):
 	def reloadList(self):
 		self.loadPage()
 
-class ssWatchlist(MPScreen):
+class ssWatchlist(MPScreen, SearchHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', widgets=('MP_widget_search',))
+		SearchHelper.__init__(self)
 
-		self["actions"] = ActionMap(["MP_Actions"], {
+		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
 			"0" : self.closeAll,
 			"ok" : self.keyOK,
 			"cancel": self.keyCancel,
@@ -471,7 +408,15 @@ class ssWatchlist(MPScreen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"upUp" : self.key_repeatedUp,
+			"rightUp" : self.key_repeatedUp,
+			"leftUp" : self.key_repeatedUp,
+			"downUp" : self.key_repeatedUp,
+			"upRepeated" : self.keyUpRepeated,
+			"downRepeated" : self.keyDownRepeated,
+			"rightRepeated" : self.keyRightRepeated,
+			"leftRepeated" : self.keyLeftRepeated
 		}, -1)
 
 		self['title'] = Label("Serienstream.to")
@@ -486,6 +431,13 @@ class ssWatchlist(MPScreen):
 		self.keyLocked = True
 		self.cove = None
 		self.onLayoutFinish.append(self.loadPlaylist)
+
+	def goToNumber(self, num):
+		self.keyNumberGlobal(num, self.streamList)
+		self.showSearchkey(num)
+
+	def goToLetter(self, key):
+		self.keyLetterGlobal(key, self.streamList)
 
 	def loadPlaylist(self):
 		self.keyLocked = True
@@ -507,7 +459,7 @@ class ssWatchlist(MPScreen):
 			self.keyLocked = False
 		self.ml.setList(map(self._defaultlistleft, self.streamList))
 		self.ml.moveToIndex(0)
-		self.showInfos()
+		self.loadPicQueued()
 
 	def showInfos(self):
 		exist = self['liste'].getCurrent()
@@ -515,15 +467,19 @@ class ssWatchlist(MPScreen):
 			return
 		title = self['liste'].getCurrent()[0][0]
 		self['name'].setText(title)
-		self.getCover()
 
-	def getCover(self):
+	def loadPic(self):
+		if self.picQ.empty():
+			self.eventP.clear()
+			return
+		while not self.picQ.empty():
+			self.picQ.get_nowait()
+		streamName = self['liste'].getCurrent()[0][0]
+		self['name'].setText(streamName)
+		self.showInfos()
+		self.updateP = 1
 		url = self['liste'].getCurrent()[0][1]
-		if not mp_globals.requests:
-			twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.setCoverUrl).addErrback(self.dataError)
-		else:
-			data = ss_grabpage(url)
-			self.setCoverUrl(data)
+		twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.setCoverUrl).addErrback(self.dataError)
 
 	def setCoverUrl(self, data):
 		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://s.to/public/img/cover/.*?)"', data, re.S)
@@ -585,11 +541,7 @@ class ssStaffeln(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		if not mp_globals.requests:
-			twAgentGetPage(self.Url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
-		else:
-			data = ss_grabpage(self.Url)
-			self.parseData(data)
+		twAgentGetPage(self.Url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		self.descr = re.search('data-full-description="(.*?)">', data, re.S)
@@ -625,7 +577,6 @@ class ssStaffeln(MPScreen):
 			return
 		staffel = self['liste'].getCurrent()[0][2]
 		url = self['liste'].getCurrent()[0][1]
-		print url
 		self.session.open(ssEpisoden, url, staffel, self.Title, self.cover)
 
 class ssEpisoden(MPScreen):
@@ -641,6 +592,7 @@ class ssEpisoden(MPScreen):
 			"0" : self.closeAll,
 			"ok" : self.keyOK,
 			"cancel": self.keyCancel,
+			"green" : self.keyToggle,
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
@@ -650,6 +602,7 @@ class ssEpisoden(MPScreen):
 		self['title'] = Label("Serienstream.to")
 		self['ContentTitle'] = Label(_("Episode Selection"))
 		self['name'] = Label(self.Title)
+		self['F2'] = Label(_("Toggle"))
 
 		self.streamList = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -660,11 +613,7 @@ class ssEpisoden(MPScreen):
 
 	def loadPage(self):
 		self.streamList = []
-		if not mp_globals.requests:
-			twAgentGetPage(self.Url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
-		else:
-			data = ss_grabpage(self.Url)
-			self.parseData(data)
+		twAgentGetPage(self.Url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		self.watched_liste = []
@@ -676,7 +625,7 @@ class ssEpisoden(MPScreen):
 			if not leer == 0:
 				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
 				for lines in sorted(self.updates_read.readlines()):
-					line = re.findall('"(.*?)"', lines)
+					line = re.findall('"(.*?S\d+E\d+)', lines)
 					if line:
 						self.watched_liste.append("%s" % (line[0]))
 				self.updates_read.close()
@@ -696,11 +645,11 @@ class ssEpisoden(MPScreen):
 					if title_de == "":
 						title = title_en.strip()
 						Flag = "EN"
-						check = (decodeHtml(self.Title)) + " - " + staffel + episode + " - " + (decodeHtml(title_en.strip()))
+						check = decodeHtml(self.Title) + " - " + staffel + episode
 					else:
 						title = title_de.strip()
 						Flag = "DE"
-						check = (decodeHtml(self.Title)) + " - " + staffel + episode + " - " + (decodeHtml(title_de.strip()))
+						check = decodeHtml(self.Title) + " - " + staffel + episode
 					episodenName = staffel + episode + " - " + title
 					checkname = check
 					checkname2 = check.replace('ä','ae').replace('ö','oe').replace('ü','ue').replace('Ä','Ae').replace('Ö','Oe').replace('Ü','Ue')
@@ -737,6 +686,67 @@ class ssEpisoden(MPScreen):
 		url = self['liste'].getCurrent()[0][1]
 		self.session.openWithCallback(self.reloadList, ssStreams, self.Title, episodenName, url, self.cover)
 
+	def keyToggle(self):
+		if self['liste'].getCurrent()[0][2] and self['liste'].getCurrent()[0][1]:
+			if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
+				open(config.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
+			self.update_liste = []
+			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_bs_watched")
+			self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
+			for lines in sorted(self.updates_read.readlines()):
+				line = re.findall('"(.*?)"', lines)
+				if line:
+					title = self.Title + " - " + self['liste'].getCurrent()[0][0]
+					check = re.split('(S[0-9][0-9]E[0-9][0-9])', title, re.I)
+					check = check[0] + check[1]
+					if not check in line[0]:
+						self.update_liste.append(line[0])
+			self.updates_read.close()
+			writeTmp = open(config.mediaportal.watchlistpath.value+"mp_bs_watched.tmp","w")
+
+			for lines in self.update_liste:
+				writeTmp.write('"%s"\n' % lines)
+			writeTmp.close()
+			shutil.move(config.mediaportal.watchlistpath.value+"mp_bs_watched.tmp", config.mediaportal.watchlistpath.value+"mp_bs_watched")
+			self.reloadList()
+		else:
+			if not re.search('\S[0-9][0-9]E[0-9][0-9]', self.Title, re.I):
+				episodenName = self['liste'].getCurrent()[0][0]
+				self.streamname = self.Title + " - " + episodenName
+			else:
+				self.streamname = self.Title
+			if re.search('\sS[0-9][0-9]E[0-9][0-9]', self.streamname) and not re.search('-\sS[0-9][0-9]E[0-9][0-9]', self.streamname):
+				new_title = ""
+				splits = re.split('(S[0-9][0-9]E[0-9][0-9])', self.streamname, re.I)
+				count = 0
+				for split in splits:
+					if count == 1:
+						new_title += "- "
+					new_title += split
+					count += 1
+				self.streamname = new_title
+			if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
+				open(config.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
+			self.update_liste = []
+			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_bs_watched")
+			if not leer == 0:
+				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
+				for lines in sorted(self.updates_read.readlines()):
+					line = re.findall('"(.*?)"', lines)
+					if line:
+						self.update_liste.append("%s" % (line[0]))
+				self.updates_read.close()
+				updates_read2 = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
+				check = ("%s" % self.streamname)
+				if not check in self.update_liste:
+					updates_read2.write('"%s"\n' % (self.streamname))
+					updates_read2.close()
+			else:
+				updates_read3 = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
+				updates_read3.write('"%s"\n' % (self.streamname))
+				updates_read3.close()
+			self.reloadList()
+
 	def reloadList(self):
 		self.keyLocked = True
 		self.loadPage()
@@ -768,11 +778,7 @@ class ssStreams(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		if not mp_globals.requests:
-			twAgentGetPage(self.serienUrl, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
-		else:
-			data = ss_grabpage(self.serienUrl)
-			self.parseData(data)
+		twAgentGetPage(self.serienUrl, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		streams = re.findall('episodeLink.*?data-lang-key="(.*?)".*?data-link-target="(.*?)">.*?<i class="icon\s(.*?)"', data, re.S)
@@ -803,7 +809,7 @@ class ssStreams(MPScreen):
 				url = BASE_URL + url
 				headers = {'User-Agent': ss_agent}
 				try:
-					response = requests.get(url, cookies=ss_cookies, headers=headers)
+					response = requests.get(url, cookies=ss_cookies, headers=headers, timeout=30)
 					if response.history:
 						get_stream_link(self.session).check_link(str(response.url), self.playfile)
 					else:
@@ -852,14 +858,10 @@ class ssStreams(MPScreen):
 			updates_read2 = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
 			check = ("%s" % self.streamname)
 			if not check in self.update_liste:
-				print "update add: %s" % (self.streamname)
 				updates_read2.write('"%s"\n' % (self.streamname))
 				updates_read2.close()
-			else:
-				print "dupe %s" % (self.streamname)
 		else:
 			updates_read3 = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
-			print "update add: %s" % (self.streamname)
 			updates_read3.write('"%s"\n' % (self.streamname))
 			updates_read3.close()
 		self.session.open(SimplePlayer, [(self.streamname, stream_url, self.cover)], showPlaylist=False, ltype='serienstream', cover=True)
