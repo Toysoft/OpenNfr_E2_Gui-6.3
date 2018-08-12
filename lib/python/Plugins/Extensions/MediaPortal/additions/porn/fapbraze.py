@@ -70,25 +70,25 @@ class fapbrazeGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://fapbraze.com/categories/"
-		getPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
+		url = "https://fapbraze.com/categories/"
+		twAgentGetPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		Cats = re.findall('class="category".*?href="(.*?)".*?img\ssrc="(.*?)".*?title">(.*?)</div', data, re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
-				Url = 'http://fapbraze.com/' + Url
-				Image = 'http://fapbraze.com/' + Image
+				Url = 'https://fapbraze.com/' + Url
+				Image = 'https://fapbraze.com/' + Image
 				Title = Title.replace(' HD','').replace(' Porn','')
 				self.genreliste.append((Title, Url, Image, True))
 		self.genreliste.sort()
-		self.genreliste.insert(0, ("Being Watched", "http://fapbraze.com/watched/", default_cover, False))
-		self.genreliste.insert(0, ("Longest", "http://fapbraze.com/longest/", default_cover, False))
-		self.genreliste.insert(0, ("Most Downloaded", "http://fapbraze.com/downloaded/", default_cover, False))
-		self.genreliste.insert(0, ("Most Discussed", "http://fapbraze.com/discussed/", default_cover, False))
-		self.genreliste.insert(0, ("Top Rated", "http://fapbraze.com/rated/", default_cover, False))
-		self.genreliste.insert(0, ("Most Popular", "http://fapbraze.com/popular/", default_cover, False))
-		self.genreliste.insert(0, ("Most Recent", "http://fapbraze.com/recent/", default_cover, False))
+		self.genreliste.insert(0, ("Being Watched", "https://fapbraze.com/watched/", default_cover, False))
+		self.genreliste.insert(0, ("Longest", "https://fapbraze.com/longest/", default_cover, False))
+		self.genreliste.insert(0, ("Most Downloaded", "https://fapbraze.com/downloaded/", default_cover, False))
+		self.genreliste.insert(0, ("Most Discussed", "https://fapbraze.com/discussed/", default_cover, False))
+		self.genreliste.insert(0, ("Top Rated", "https://fapbraze.com/rated/", default_cover, False))
+		self.genreliste.insert(0, ("Most Popular", "https://fapbraze.com/popular/", default_cover, False))
+		self.genreliste.insert(0, ("Most Recent", "https://fapbraze.com/recent/", default_cover, False))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover, False))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -159,7 +159,7 @@ class fapbrazeFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "http://fapbraze.com/search/video/?s=%s&page=%s" % (self.Link, str(self.page))
+			url = "https://fapbraze.com/search/video/?s=%s&page=%s" % (self.Link, str(self.page))
 		else:
 			if self.page > 1:
 				if self.Cat:
@@ -169,15 +169,15 @@ class fapbrazeFilmScreen(MPScreen, ThumbsHelper):
 				url = self.Link + cat + str(self.page) + "/"
 			else:
 				url = self.Link
-		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</ul>')
-		Movies = re.findall('class="video".*?href="(.*?)"\stitle="(.*?)".*?img\ssrc="(.*?)".*?class="video-overlay.*?>(.*?)</span.*?pull-left">(.*?)</span.*?text-right">(\d+)', data, re.S)
+		Movies = re.findall('class="col-sm.*?href="(.*?)"\stitle="(.*?)".*?img\s(?:class="img-responsive\s{0,1}"\s|)src="(.*?)".*?class="video-overlay.*?>(.*?)</span.*?pull-left">(.*?)</span.*?text-right">(\d+)', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Runtime, Added, Views) in Movies:
-				Url = "http://fapbraze.com" + Url
-				Image = "http://fapbraze.com" + Image
+				Url = "https://fapbraze.com" + Url
+				Image = "https://fapbraze.com" + Image
 				Runtime = Runtime.strip()
 				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Added, Views))
 		if len(self.filmliste) == 0:
@@ -206,20 +206,31 @@ class fapbrazeFilmScreen(MPScreen, ThumbsHelper):
 		image = self['liste'].getCurrent()[0][2]
 		if url:
 			self.keyLocked = True
-			getPage(url, agent=myagent).addCallback(self.loadStream).addErrback(self.dataError)
+			twAgentGetPage(url, agent=myagent).addCallback(self.loadStream).addErrback(self.dataError)
 
 	def loadStream(self, data):
-		streams = re.findall('source\ssrc="(.*?)"', data, re.S)
+		streams = re.findall('source\ssrc="(.*?\.mp4)"\stype="video/mp4"', data, re.S)
 		if streams:
-			self.got_link(streams[0])
+			title = self['liste'].getCurrent()[0][0]
+			self.session.open(SimplePlayer, [(title, streams[0])], showPlaylist=False, ltype='fapbraze')
 		else:
-			streams = re.findall('(?:src|href)=[\'|"](http[s]?://(?!(?:www.|m.|)fapbraze.com)(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
+			streams = re.findall('<iframe.*?src="https://www.fembed.com/v/(.*?)\s{0,1}"', data, re.S)
 			if streams:
-				for (stream, hostername) in streams:
-					if isSupportedHoster(hostername, True):
-						url = stream.replace('&amp;','&').replace('&#038;','&')
-						get_stream_link(self.session).check_link(url, self.got_link)
+				url = "https://www.fembed.com/api/sources/" + streams[0]
+				getPage(url, agent=myagent, method='POST', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_link).addErrback(self.dataError)
+			else:
+				streams = re.findall('(?:src|href)=[\'|"](http[s]?://(?!(?:www.|m.|)fapbraze.com)(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
+				if streams:
+					for (stream, hostername) in streams:
+						if isSupportedHoster(hostername, True):
+							url = stream.replace('&amp;','&').replace('&#038;','&')
+							get_stream_link(self.session).check_link(url, self.got_link)
 		self.keyLocked = False
+
+	def get_link(self, data):
+		vid = re.findall('"file":"(.*?)"', data, re.S)
+		if vid:
+			self.got_link(vid[-1].replace('\/','/'))
 
 	def got_link(self, stream_url):
 		title = self['liste'].getCurrent()[0][0]

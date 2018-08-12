@@ -768,7 +768,7 @@ class m4kStreamListeScreen(MPScreen):
 		if stream_url == None:
 			message = self.session.open(MessageBoxExt, _("Stream not found, try another Stream Hoster."), MessageBoxExt.TYPE_INFO, timeout=3)
 		else:
-			self.session.open(SimplePlayer, [(self.streamName, stream_url, self.coverUrl)], showPlaylist=False, ltype='movie4k', cover=True)
+			self.session.open(SimplePlayer, [(self.streamName, stream_url)], showPlaylist=False, ltype='movie4k')
 
 class m4kPartListeScreen(MPScreen):
 

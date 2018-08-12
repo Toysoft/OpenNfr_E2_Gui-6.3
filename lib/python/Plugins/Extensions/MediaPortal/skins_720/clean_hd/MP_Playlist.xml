@@ -27,16 +27,13 @@
     <convert type="MPServicePosition">Gauge</convert>
   </widget>
   <widget backgroundColor="#20000000" font="mediaportal;16" halign="left" position="860,540" render="Label" size="80,23" source="session.CurrentService" transparent="1">
-    <convert type="MPServicePosition">Length</convert>
-  </widget>
-  <widget backgroundColor="#20000000" font="mediaportal;16" halign="left" position="860,540" render="Label" size="80,23" source="session.CurrentService" transparent="1">
-    <convert type="MPServicePosition">Length</convert>
+    <convert type="MPServicePosition">Position</convert>
   </widget>
   <widget backgroundColor="#20000000" font="mediaportal;16" position="1186,540" render="Label" size="80,23" source="session.CurrentService" transparent="1" halign="right">
     <convert type="MPServicePosition">Remaining,Negate</convert>
   </widget>
   <widget backgroundColor="#20000000" font="mediaportal;16" halign="center" position="1023,540" render="Label" size="80,23" source="session.CurrentService" transparent="1">
-    <convert type="MPServicePosition">Position</convert>
+    <convert type="MPServicePosition">Length</convert>
   </widget>
   <eLabel backgroundColor="#20000000" font="mediaportal;20" position="861,640" size="120,23" text="Playmode" transparent="1" valign="top" />
   <widget backgroundColor="#20000000" font="mediaportal;20" name="playmode" position="993,640" size="273,23" transparent="1" valign="top" />

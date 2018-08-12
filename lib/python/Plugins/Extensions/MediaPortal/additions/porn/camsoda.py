@@ -149,7 +149,10 @@ class camsodaFilmScreen(MPScreen, ThumbsHelper):
 					try:
 						tsize = str(node["tsize"])
 					except:
-						tsize = str(node["thumb_small"]).split('/')[-3]
+						try:
+							tsize = str(node["thumb_small"]).split('/')[-3]
+						except:
+							tsize = str(node["thumb"]).split('/')[-3]
 					Image = 'https://thumbs-orig.camsoda.com/thumbs/' + stream_name + '/' + enc + '/' + tsize + '/null/' + Name + '.jpg'
 					Viewers = node["connections"]
 					descr = str(node["subject_html"])

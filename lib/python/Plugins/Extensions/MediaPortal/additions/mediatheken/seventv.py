@@ -285,18 +285,25 @@ class sevenStreamScreen(MPScreen):
 
 		self.onLayoutFinish.append(self.loadPage)
 
-	def loadPage(self, x=0):
+	def loadPage(self, x=0, ajax=None):
 		if x == 0:
-			url = self.Link + "/ganze-folgen"
+			if ajax:
+				url = ajax
+			else:
+				url = self.Link + "/ganze-folgen"
 			self['ContentTitle'].setText(_("Episodes:"))
 		else:
-			url = self.Link + "/alle-clips"
+			if ajax:
+				url = ajax
+			else:
+				url = self.Link + "/alle-clips"
 			self['ContentTitle'].setText(_("Clips:"))
 		print url
 		twAgentGetPage(url, agent=sevenAgent, cookieJar=sevenCookies).addCallback(self.parseData, x).addErrback(self.dataError)
 
 	def parseData(self, data, x):
 		articles = re.findall("<article class(.*?)</article>", data, re.S)
+		ajax = re.findall('data-ajax-more="(.*?)"', data, re.S)
 		if articles:
 			for node in articles:
 				episodes = re.findall('href="(.*?)".*?data-src="(.*?)".*?teaser-title">(.*?)</h5>', node, re.S)
@@ -305,6 +312,10 @@ class sevenStreamScreen(MPScreen):
 						url = BASE_URL + url
 						img = img.replace('300x160','620x348')
 						self.filmliste.append((title, url, img))
+		if ajax:
+			url = BASE_URL + ajax[0]
+			self.loadPage(x, url)
+			return
 		if len(self.filmliste) == 0:
 			if x == 1:
 				CoverHelper(self['coverArt']).getCover(self.Image)

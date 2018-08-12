@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MediaPortal\n"
-"POT-Creation-Date: 2018-07-15 10:21+0200\n"
-"PO-Revision-Date: 2018-07-15 10:21+0200\n"
+"POT-Creation-Date: 2018-07-17 19:48+0200\n"
+"PO-Revision-Date: 2018-07-17 19:48+0200\n"
 "Last-Translator: dhwz <dhwz@gmx.net>\n"
 "Language-Team: MediaPortal Team\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.0.9\n"
 "X-Poedit-Basepath: ../../../..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -61,6 +61,7 @@ msgstr ""
 "Einstellung (MP Setup)!"
 
 #: mpgz/src/additions/porn/adultbay.py:168
+#: mpgz/src/additions/porn/bitporno.py:99
 #: mpgz/src/additions/porn/freeomovie.py:148
 #: mpgz/src/additions/porn/hqporner.py:141
 #: mpgz/src/additions/porn/ivhunter.py:115
@@ -69,7 +70,7 @@ msgstr ""
 #: mpgz/src/additions/porn/mydirtyhobby.py:222
 #: mpgz/src/additions/porn/mydirtyhobby.py:319
 #: mpgz/src/additions/porn/pandamovie.py:110
-#: mpgz/src/additions/porn/paradisehill.py:137
+#: mpgz/src/additions/porn/paradisehill.py:135
 #: mpgz/src/additions/porn/porn00.py:126
 #: mpgz/src/additions/porn/pornfromczech.py:126
 #: mpgz/src/additions/porn/pornorips.py:134
@@ -136,6 +137,7 @@ msgid "Page"
 msgstr "Seite"
 
 #: mpgz/src/additions/porn/adultbay.py:170
+#: mpgz/src/additions/porn/bitporno.py:101
 #: mpgz/src/additions/porn/freeomovie.py:150
 #: mpgz/src/additions/porn/hqporner.py:143
 #: mpgz/src/additions/porn/ivhunter.py:117
@@ -144,7 +146,7 @@ msgstr "Seite"
 #: mpgz/src/additions/porn/mydirtyhobby.py:224
 #: mpgz/src/additions/porn/mydirtyhobby.py:321
 #: mpgz/src/additions/porn/pandamovie.py:112
-#: mpgz/src/additions/porn/paradisehill.py:139
+#: mpgz/src/additions/porn/paradisehill.py:137
 #: mpgz/src/additions/porn/porn00.py:128
 #: mpgz/src/additions/porn/pornfromczech.py:128
 #: mpgz/src/additions/porn/pornorips.py:136
@@ -164,7 +166,7 @@ msgstr "Seite"
 #: mpgz/src/additions/useradditions/filmpalast.py:306
 #: mpgz/src/additions/useradditions/flimmerstube.py:116
 #: mpgz/src/additions/useradditions/ganime.py:73
-#: mpgz/src/additions/useradditions/hdfilme.py:146
+#: mpgz/src/additions/useradditions/hdfilme.py:145
 #: mpgz/src/additions/useradditions/kinoxto.py:453
 #: mpgz/src/additions/useradditions/movie4k.py:432
 #: mpgz/src/additions/useradditions/movie4k.py:889
@@ -245,7 +247,7 @@ msgstr "Seite:"
 #: mpgz/src/additions/porn/justporn.py:155
 #: mpgz/src/additions/porn/lfporn.py:123
 #: mpgz/src/additions/porn/pandamovie.py:157
-#: mpgz/src/additions/porn/paradisehill.py:174
+#: mpgz/src/additions/porn/paradisehill.py:167
 #: mpgz/src/additions/porn/porn00.py:158
 #: mpgz/src/additions/porn/pornfromczech.py:156
 #: mpgz/src/additions/porn/pornorips.py:192
@@ -258,7 +260,7 @@ msgstr "Seite:"
 #: mpgz/src/additions/useradditions/filmpalast.py:193
 #: mpgz/src/additions/useradditions/filmpalast.py:259
 #: mpgz/src/additions/useradditions/filmpalast.py:334
-#: mpgz/src/additions/useradditions/hdfilme.py:170
+#: mpgz/src/additions/useradditions/hdfilme.py:169
 #: mpgz/src/additions/useradditions/movie4k.py:331
 #: mpgz/src/additions/useradditions/movie4k.py:425
 #: mpgz/src/additions/useradditions/movie4k.py:452
@@ -298,7 +300,7 @@ msgstr "Keine Filme gefunden!"
 #: mpgz/src/additions/useradditions/filmpalast.py:401
 #: mpgz/src/additions/useradditions/flimmerstube.py:189
 #: mpgz/src/additions/useradditions/flimmerstube.py:192
-#: mpgz/src/additions/useradditions/hdfilme.py:279
+#: mpgz/src/additions/useradditions/hdfilme.py:278
 #: mpgz/src/additions/useradditions/kinoxto.py:857
 #: mpgz/src/additions/useradditions/kinoxto.py:889
 #: mpgz/src/additions/useradditions/kinoxto.py:969
@@ -313,18 +315,7 @@ msgstr "Keine Filme gefunden!"
 msgid "No supported streams found!"
 msgstr "Keine unterstützten Streams gefunden!"
 
-#: mpgz/src/additions/porn/freeomovie.py:82
-#: mpgz/src/additions/useradditions/hdfilme.py:83
-#: mpgz/src/additions/useradditions/kinoxto.py:120
-#: mpgz/src/additions/useradditions/movie4k.py:154
-#: mpgz/src/additions/useradditions/serienstream.py:164
-msgid ""
-"Mandatory depends python-requests and/or python-pyexecjs and nodejs are "
-"missing!"
-msgstr ""
-"Zwingend erforderliche Abhängigkeiten python-requests und/oder python-"
-"pyexecjs und nodejs fehlen!"
-
+#: mpgz/src/additions/porn/bitporno.py:114
 #: mpgz/src/additions/porn/freeomovie.py:160
 #: mpgz/src/additions/porn/ivhunter.py:130
 #: mpgz/src/additions/porn/ivhunter.py:187
@@ -337,7 +328,7 @@ msgstr ""
 #: mpgz/src/additions/porn/pandamovie.py:20
 #: mpgz/src/additions/porn/pandamovie.py:122
 #: mpgz/src/additions/porn/pandamovie.py:193
-#: mpgz/src/additions/porn/paradisehill.py:149
+#: mpgz/src/additions/porn/paradisehill.py:147
 #: mpgz/src/additions/porn/porn00.py:141
 #: mpgz/src/additions/porn/pornfromczech.py:141
 #: mpgz/src/additions/porn/pornorips.py:133
@@ -461,6 +452,22 @@ msgstr ""
 #: src/resources/simplelist.py:466 src/resources/simplelist.py:655
 msgid "Please wait..."
 msgstr "Bitte warten..."
+
+#: mpgz/src/additions/porn/bitporno.py:160
+msgid "No playable movies found, try next page!"
+msgstr "Keine abspielbaren Filme gefunden, nächste Seite probieren!"
+
+#: mpgz/src/additions/porn/freeomovie.py:82
+#: mpgz/src/additions/useradditions/hdfilme.py:83
+#: mpgz/src/additions/useradditions/kinoxto.py:120
+#: mpgz/src/additions/useradditions/movie4k.py:154
+#: mpgz/src/additions/useradditions/serienstream.py:164
+msgid ""
+"Mandatory depends python-requests and/or python-pyexecjs and nodejs are "
+"missing!"
+msgstr ""
+"Zwingend erforderliche Abhängigkeiten python-requests und/oder python-"
+"pyexecjs und nodejs fehlen!"
 
 #: mpgz/src/additions/porn/freeomovie.py:193
 #: mpgz/src/additions/useradditions/ddl_me.py:340
@@ -630,8 +637,8 @@ msgstr "Episoden Auswahl"
 
 #: mpgz/src/additions/useradditions/filmpalast.py:375
 #: mpgz/src/additions/useradditions/ganime.py:183
+#: mpgz/src/additions/useradditions/hdfilme.py:231
 #: mpgz/src/additions/useradditions/hdfilme.py:232
-#: mpgz/src/additions/useradditions/hdfilme.py:233
 #: mpgz/src/additions/useradditions/kinoxto.py:799
 #: mpgz/src/additions/useradditions/movie4k.py:650
 #: mpgz/src/additions/useradditions/onlinefilme.py:437
@@ -643,7 +650,7 @@ msgstr "Episoden Auswahl"
 msgid "Stream Selection"
 msgstr "Stream Auswahl"
 
-#: mpgz/src/additions/useradditions/hdfilme.py:349
+#: mpgz/src/additions/useradditions/hdfilme.py:348
 #: mpgz/src/additions/useradditions/tata.py:238
 msgid "Sorry, can't extract a stream url."
 msgstr "Entschuldigung, Stream URL kann nicht extrahiert werden."
@@ -1062,7 +1069,7 @@ msgstr ""
 "Aus rechtlichen Gründen darf dieses Video nur innerhalb der Schweiz "
 "angesehen werden."
 
-#: src/additions/mediatheken/watchbox.py:173
+#: src/additions/mediatheken/watchbox.py:172
 msgid "This movie can't be played it's protected with DRM."
 msgstr "Film kann nicht abgespielt werden da DRM-geschützt."
 

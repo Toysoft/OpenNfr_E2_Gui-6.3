@@ -71,7 +71,7 @@ class sexuGenreScreen(MPScreen):
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('class="listTags">(.*?)class="wrapper', data, re.S)
+		parse = re.search('class="listTags">(.*?)</ul>', data, re.S)
 		Cats = re.findall('href="(.*?)".*?</i>(.*?)</a>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
@@ -157,6 +157,8 @@ class sexuFilmScreen(MPScreen, ThumbsHelper):
 			for (Url, Title, Image, Runtime) in Movies:
 				Url = "http://sexu.com" + Url
 				Title = Title.strip('.').replace("\\'","'")
+				if Image.startswith('//'):
+					Image = "http:" + Image
 				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), None, None))
@@ -195,5 +197,7 @@ class sexuFilmScreen(MPScreen, ThumbsHelper):
 					res = int(stream[1])
 			title = self['liste'].getCurrent()[0][0]
 			headers = '&Referer=http://sexu.com/'
+			if link.startswith('//'):
+				link = "http:" + link
 			link = link + '#User-Agent='+agent+headers
 			self.session.open(SimplePlayer, [(title, link)], showPlaylist=False, ltype='sexu')

@@ -176,16 +176,21 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 			url = "https://www.fembed.com/api/sources/" + streams[0]
 			getPage(url, agent=myagent, method='POST', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_link).addErrback(self.dataError)
 		else:
-			streams = re.findall('(?:src|href)=[\'|"](http[s]?://(?!(?:www.|m.|)javbraze.com)(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
+			streams = re.findall('src="(/modules/video/player/config2.php\?id=\d+)"', data, re.S)
 			if streams:
-				for (stream, hostername) in streams:
-					if isSupportedHoster(hostername, True):
-						url = stream.replace('&amp;','&').replace('&#038;','&')
-						get_stream_link(self.session).check_link(url, self.got_link)
+				url = "https://javbraze.com" + streams[0]
+				twAgentGetPage(url, agent=myagent).addCallback(self.get_link).addErrback(self.dataError)
+			else:
+				streams = re.findall('(?:src|href)=[\'|"](http[s]?://(?!(?:www.|m.|)javbraze.com)(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
+				if streams:
+					for (stream, hostername) in streams:
+						if isSupportedHoster(hostername, True):
+							url = stream.replace('&amp;','&').replace('&#038;','&')
+							get_stream_link(self.session).check_link(url, self.got_link)
 		self.keyLocked = False
 
 	def get_link(self, data):
-		vid = re.findall('"file":"(.*?)"', data, re.S)
+		vid = re.findall('[\'|\"]file[\'|\"]:\s{0,1}[\'|\"](.*?)[\'|\"]', data, re.S)
 		if vid:
 			self.got_link(vid[-1].replace('\/','/'))
 

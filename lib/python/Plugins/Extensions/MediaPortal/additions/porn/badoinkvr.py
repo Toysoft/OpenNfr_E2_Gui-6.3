@@ -228,7 +228,7 @@ class badoinkvrFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'pagination">(.*?)</ul>')
-		Movies = re.findall('class="video-card-image" src="(.*?)".*?class="video-card-title.*?href="(.*?)"\stitle="(.*?)".*?itemprop="datePublished".*?>(.*?)</span.*?itemprop="duration".*?>(.*?)</span.*?Starring:(.*?)</div>', data, re.S)
+		Movies = re.findall('class="video-card-image" src="(.*?)".*?class="video-card-title.*?href="(.*?)"\stitle="(.*?)".*?itemprop="datePublished".*?>(.*?)</span.*?itemprop="duration".*?>(.*?)</span.*?itemprop="actor">(.*?)</div>', data, re.S)
 		if Movies:
 			for (Image, Url, Title, Date, Runtime, Models) in Movies:
 				Image = Image.replace('&amp;','&')

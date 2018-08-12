@@ -167,9 +167,15 @@ class get_stream_link:
 			if not stream_url:
 				stream_url = re.findall('"location":"(.*?)"', data, re.S|re.I)
 			if stream_url:
+				if "&sig=" in stream_url[0]:
+					url = stream_url[0].split('&sig=')
+					file = url[1].split('&f=')
+					url = url[0] + "&sig=" + file[0].replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B') + "&f=" + file[1]
+				else:
+					url = stream_url[0]
 				mp_globals.premiumize = True
 				mp_globals.realdebrid = False
-				self._callback(stream_url[0].replace('\\',''))
+				self._callback(url.replace('\\',''))
 			else:
 				self.fallback = True
 				self.check_link(self.link, self._callback)
@@ -485,7 +491,7 @@ class get_stream_link:
 			elif re.search('clipwatching.com', data, re.S):
 				link = data
 				twAgentGetPage(link).addCallback(self.clipwatching).addErrback(self.errorload)
-				
+
 			elif re.search('vidup.tv', data, re.S):
 				link = data
 				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
@@ -495,30 +501,19 @@ class get_stream_link:
 				link = 'http://www.fembed.com/api/source/' + data.split('/v/')[-1]
 				twAgentGetPage(link, method='POST', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.fembed).addErrback(self.errorload)
 
-			elif re.search('flashx.tv|flashx.pw', data, re.S):
+			elif re.search('flashx.tv|flashx.pw|flashx.co', data, re.S):
 				link = data
-				id = re.search('flashx.(tv|pw)/(embed-|dl\?|fxplay-|embed.php\?c=|)(\w+)', data)
+				id = re.search('flashx.(tv|pw|co)/(embed-|dl\?|fxplay-|embed.php\?c=|)(\w+)', data)
 				if id:
-					link = "https://www.flashx.tv/%s.html" % id.group(3)
-				if config.mediaportal.premiumize_use.value and not self.fallback:
-					self.rdb = 0
-					self.prz = 1
-					self.callPremium(link)
+					link = "https://www.flashx.co/%s.html" % id.group(3)
+					if config.mediaportal.premiumize_use.value and not self.fallback:
+						self.rdb = 0
+						self.prz = 1
+						TwAgentHelper().getRedirectedUrl(link).addCallback(self.flashx).addErrback(self.errorload)
+					else:
+						self.only_premium()
 				else:
-					#id = re.search('flashx\.tv/(\w+)', data.replace('\.html',''))
-					#if id:
-						#id = id.groups(0)
-					headers = {'Host': 'www.flashx.tv',
-							'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.137 Safari/537.36',
-							'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-							'Accept-Language': 'en-US,en;q=0.5',
-							#'Accept-Encoding': 'gzip, deflate, br',
-							'Connection': 'keep-alive',
-							'Upgrade-Insecure-Requests': '1',
-							'Cookie': ''}
-					url = "https://www.flashx.tv/embed.php?c="+id.group(3)
-					print url
-					twAgentGetPage(url, headers=headers).addCallback(self.flashx, id.group(3)).addErrback(self.errorload)
+					self.stream_not_found()
 
 			elif re.search('userporn.com', data, re.S):
 				self.userporn_tv(data)
@@ -633,7 +628,6 @@ class get_stream_link:
 				getPage(link).addCallback(self.kodik).addErrback(self.errorload)
 
 			elif re.search('(docs|drive)\.google\.com/|youtube\.googleapis\.com|googleusercontent.com', data, re.S):
-				print "1"
 				if 'youtube.googleapis.com' in data:
 					docid = re.search('docid=([\w]+)', data)
 					link = 'https://drive.google.com/file/d/%s/edit' % docid.groups(1)
@@ -682,7 +676,6 @@ class get_stream_link:
 					getPage(link).addCallback(self.openloadApi, id.group(1)).addErrback(self.errorload)
 
 			elif re.search('thevideo\.me|thevideo\.cc', data, re.S):
-				print data
 				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
 					if (re.search('thevideo(\.me|\.cc)/embed-', data, re.S) or re.search('640x360.html', data, re.S)):
 						id = re.findall('thevideo(?:\.me|\.cc)/(?:embed-|)(.*?)(?:\.html|-\d+x\d+\.html)', data)
@@ -698,7 +691,6 @@ class get_stream_link:
 						id = re.findall('thevideo(?:\.me|\.cc)/(?:embed-|)(.*?)(?:\.html|-\d+x\d+\.html)', data)
 						if id:
 							link = "https://thevideo.me/embed-%s-640x360.html" % id[0]
-							print link
 							twAgentGetPage(link, agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36').addCallback(self.thevideome).addErrback(self.errorload)
 
 			elif re.search('exashare\.com', data, re.S):
@@ -811,13 +803,16 @@ class get_stream_link:
 			self.stream_not_found()
 
 	def streamcloud_getpage(self, url, post_data):
-		spezialagent = 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0'
-		getPage(url, method='POST', cookies=ck, agent=spezialagent, postdata=post_data, headers={'Content-Type':'application/x-www-form-urlencoded', 'Referer': url, 'Origin':'http://streamcloud.eu'}).addCallback(self.streamcloud_data).addErrback(self.errorload)
+		spezialagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+		getPage(url, method='POST', cookies=ck, agent=spezialagent, postdata=post_data, headers={'Content-Type':'application/x-www-form-urlencoded', 'Referer': url, 'Origin':'http://streamcloud.eu'}).addCallback(self.streamcloud_data, url).addErrback(self.errorload)
 
-	def streamcloud_data(self, data):
+	def streamcloud_data(self, data, url):
 		stream_url = re.findall('file:\s"(.*?)",', data)
 		if stream_url:
-			self._callback(stream_url[0])
+			mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+			headers = '&Referer=' + url
+			stream = stream_url[0] + '#User-Agent='+mp_globals.player_agent+headers
+			self._callback(stream)
 		elif re.search('This video is encoding now', data, re.S):
 			self.session.open(MessageBoxExt, _("This video is encoding now. Please check back later."), MessageBoxExt.TYPE_INFO, timeout=10)
 		else:

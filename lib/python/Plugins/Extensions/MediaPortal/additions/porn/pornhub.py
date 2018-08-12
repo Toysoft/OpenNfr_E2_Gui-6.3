@@ -492,7 +492,7 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper, rnCalc):
 		if 'class="recaptchaContent"' in data and nodejs:
 			self.rncalc(data, self.loadPage)
 		else:
-			if self.page == 1 and self.Name == "Member Subscriptions":
+			if self.page == 1 and (self.Name == "Member Subscriptions" or self.Name == "Pornstar Subscriptions"):
 				countprofile = re.findall('class="showingInfo">Showing up to (\d+) subscriptions.</div>', data, re.S)
 				if countprofile:
 					self.lastpage = int(round((float(countprofile[0].replace(',','')) / 100) + 0.5))
@@ -503,8 +503,13 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper, rnCalc):
 				parsedata = parse.group(1)
 			else:
 				if self.Name == "Member Subscriptions":
+					self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 					parsedata = data
 				else:
+					if self.Name == "Channel Subscriptions":
+						countprofile = re.findall('>Channel Subscriptions <span>\((\d+)\)', data, re.S)
+						if countprofile:
+							self.lastpage = int(round((float(countprofile[0].replace(',','')) / 100) + 0.5))
 					self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 					parse = re.search('(.*?)class="profileContentRight', data, re.S)
 					parsedata = parse.group(1)
@@ -1177,7 +1182,12 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 
 			Title = self['liste'].getCurrent()[0][0]
 			mp_globals.player_agent = phAgent
-			self.session.open(SimplePlayer, [(Title, fetchurl)], showPlaylist=False, ltype='pornhub')
+			if "&hash=" in fetchurl:
+				url = fetchurl.split('&hash=')
+				url = url[0] + "&hash=" + url[1].replace('/','%252F').replace('=','%253D').replace('+','%252B')
+			else:
+				url = fetchurl
+			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='pornhub')
 
 	def ok(self, data):
 		message = re.findall('"message":"(.*?)",', data, re.S)

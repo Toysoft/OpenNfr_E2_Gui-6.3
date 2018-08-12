@@ -127,10 +127,7 @@ class MTVdeChartsGenreScreen(MPScreen):
 				('MTV.it\tTop10 1996','http://classifiche.mtv.it/hit-parade-1996/ske1sc'),
 				('MTV.it\tTop50 90s','http://classifiche.mtv.it/classifica-musica-anni-90-mtv-classic/njr5z7'),
 				('MTV.it\tTop50 80s','http://classifiche.mtv.it/top-50-classifica-musica-anni-80-2012/p6stm9'),
-				('MTV.pl\tPoland Top30',"http://www.mtv.pl/notowania/253-mtv-ty-wybierasz"),
 				('MTV.pl\tPoland Club Charts',"http://www.mtv.pl/notowania/254-mtv-club-chart"),
-				('MTVasia.com\tChart Attack','http://www.mtvasia.com/charts/jc1t6v/chart-attack'),
-				('MTVasia.com\tThe Most Streamed Singles','http://www.mtvasia.com/charts/5m6qmd/now-streaming'),
 				('MTV.no\tNorway Most Clicked',"http://www.mtv.no/charts/195-mtv-norway-most-clicked")]
 
 		self.ml.setList(map(self._defaultlistleft, self.genreliste))
@@ -200,7 +197,7 @@ class MTVdeChartsSongListeScreen(MPScreen):
 		twAgentGetPage(url, headers=headers).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if ("MTV.de" in self.genreName) or ("MTVasia.com" in self.genreName):
+		if "MTV.de" in self.genreName:
 			if not self.json_url:
 				jsonurl = re.findall('class="module intl_m327" data-tfstatic="true" data-tffeed="(.*?)"', data, re.S)
 				if jsonurl:
@@ -218,7 +215,10 @@ class MTVdeChartsSongListeScreen(MPScreen):
 							artist = str(item["artists"][0]["name"])
 						except:
 							artist = str(item["shortTitle"])
-						image = str(item["images"][0]["url"])
+						try:
+							image = str(item["images"][0]["url"])
+						except:
+							image = None
 
 						if "MTV.de" in self.genreName:
 							vidtitle = pos + ". " + artist + " - " + title

@@ -198,15 +198,16 @@ class myspassFolgenListeScreen(MPScreen):
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		folgen = re.findall('href=".*?--\/(\d+)\/".*?class="title">(.*?)<small.*?lass="subTitle">(.*?)</.*?class="desc">(.*?)</', data, re.S)
+		myspassdata = json.loads(data)
+		folgen = re.findall('href=".*?--/(\d+)/".*?class="title">(.*?)<small.*?lass="subTitle">(.*?)</.*?class="desc">(.*?)</', myspassdata["slider"], re.S)
 		if folgen:
 			for (id, title, meta, desc) in folgen:
-				link = "http://www.myspass.de/includes/apps/video/getvideometadataxml.php?id=%s" % id
-				image = "http://www.myspass.de/myspass/media/images/videos/%s/%s_640x360.jpg" % (id[-2:], id)
-				episode = re.search("(Folge.*?\|.*?)\|", meta, re.S).group(1).strip().replace(' | ', ' - ')
-				runtime = re.search(".*\|(.*?)$", meta, re.S).group(1).strip()
-				title = episode + " - " + decodeHtml(stripAllTags(title))
-				self.folgenliste.append((title, link, image, desc, runtime))
+				link = "http://www.myspass.de/includes/apps/video/getvideometadataxml.php?id=%s" % str(id)
+				image = "http://www.myspass.de/myspass/media/images/videos/%s/%s_640x360.jpg" % (str(id[-2:]), str(id))
+				episode = re.search("(Folge.*?\|.*?)\|", str(meta), re.S).group(1).strip().replace(' | ', ' - ')
+				runtime = re.search(".*\|(.*?)$", str(meta), re.S).group(1).strip()
+				title = episode + " - " + decodeHtml(stripAllTags(str(title)))
+				self.folgenliste.append((title, link, image, str(desc), runtime))
 			self.ml.setList(map(self._defaultlistleft, self.folgenliste))
 			self.keyLocked = False
 			self.showInfos()

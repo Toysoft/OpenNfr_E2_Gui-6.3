@@ -190,7 +190,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018071501"))
+config.mediaportal.version = NoSave(ConfigText(default="2018081101"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.skinfail = ConfigYesNo(default = False)
@@ -294,7 +294,7 @@ config.mediaportal.sp_use_yt_with_proxy = ConfigSelection(default = "no", choice
 config.mediaportal.sp_on_movie_start = ConfigSelection(default = "start", choices = [("start", _("Start from the beginning")), ("ask", _("Ask user")), ("resume", _("Resume from last position"))])
 config.mediaportal.sp_save_resumecache = ConfigYesNo(default = False)
 config.mediaportal.sp_radio_cover = ConfigSelection(default = "large", choices = [("large", _("large")), ("small", _("small")), ("off", _("off"))])
-config.mediaportal.sp_radio_visualization = ConfigYesNo(default = False)
+config.mediaportal.sp_radio_visualization = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Mode 1")), ("2", _("Mode 2")), ("3", _("Mode 3"))])
 config.mediaportal.sp_radio_bgsaver = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Ken Burns effect")), ("2", _("Just photos")), ("3", _("Black screen"))])
 config.mediaportal.sp_radio_bgsaver_keywords = ConfigText(default="music", fixed_size=False)
 config.mediaportal.yt_proxy_username = ConfigText(default="user!", fixed_size=False)
