@@ -522,7 +522,7 @@ class ImageBackup(Screen):
                 self.ROOTFSBIN = getMachineRootFile()
 		self.KERNELBIN = getMachineKernelFile()
 		self.ROOTFSTYPE = getImageFileSystem()
-		if self.MACHINEBUILD in ("hd51","vs1500","h7","ceryon7252"):
+		if self.MACHINEBUILD in ("hd51","vs1500","h7","ceryon7252","8100s"):
 			self.MTDBOOT = "mmcblk0p1"
 			self.EMMCIMG = "disk.img"
 		elif self.MACHINEBUILD in ("xc7439"):
@@ -634,6 +634,11 @@ class ImageBackup(Screen):
 					cmdline = self.read_startup("/boot/STARTUP").split("=",3)[3].split(" ",1)[0]
 				else:
 					cmdline = self.read_startup("/boot/" + self.list[self.selection]).split("=",3)[3].split(" ",1)[0]
+			elif self.MACHINEBUILD in ("8100s"):
+				if self.list[self.selection] == "Recovery":
+					cmdline = self.read_startup("/boot/STARTUP").split("=",4)[4].split(" ",1)[0]
+				else:
+					cmdline = self.read_startup("/boot/" + self.list[self.selection]).split("=",4)[4].split(" ",1)[0]
 			else:
 				if self.list[self.selection] == "Recovery":
 					cmdline = self.read_startup("/boot/cmdline.txt").split("=",1)[1].split(" ",1)[0]
@@ -660,6 +665,8 @@ class ImageBackup(Screen):
 				if path.isfile(path.join(self.path, name)):
 					if self.MACHINEBUILD in ("hd51","vs1500","h7","ceryon7252"):
 						cmdline = self.read_startup("/boot/" + name).split("=",3)[3].split(" ",1)[0]
+					elif self.MACHINEBUILD in ("8100s"):
+						cmdline = self.read_startup("/boot/" + name).split("=",4)[4].split(" ",1)[0]
 					else:
 						cmdline = self.read_startup("/boot/" + name).split("=",1)[1].split(" ",1)[0]
 					if cmdline in Harddisk.getextdevices("ext4"):
