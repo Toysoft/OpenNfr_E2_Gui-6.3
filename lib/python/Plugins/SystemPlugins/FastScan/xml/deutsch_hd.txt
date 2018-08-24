@@ -2,7 +2,7 @@ Das Erste HD
 ZDF HD
 kabel eins HD
 RTL HD
-RTLNITRO HD
+NITRO HD
 RTLII HD
 ProSieben HD
 Pro7 MAXX HD
@@ -16,7 +16,7 @@ VOX HD
 arte HD
 Disney Channel HD
 DMAX HD
-N24 HD
+WELT HD
 n-tv HD
 tagesschau24 HD
 3sat HD

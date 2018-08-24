@@ -7,7 +7,7 @@ Sky Cinema Action
 Sky Cinema Comedy
 Sky Cinema Emotion
 Sky Cinema Hits
-Sky Cinema Family
+Sky Cinema Family Adventure
 Sky Cinema Nostalgie
 Sky Krimi
 13th Street
@@ -16,14 +16,11 @@ Fox Serie
 Heimatkanal
 kabel eins classics
 Kinowelt TV
-RTL Crime
-RTL Passion
-RTL Living
 Romance TV
 SAT.1 emotions
 SYFY
 TNT Serie
-TNT Film (TCM)
+TNT Film
 TLC
 Boomerang
 Cartoon Network

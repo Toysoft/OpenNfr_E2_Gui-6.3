@@ -2,7 +2,7 @@ Das Erste
 ZDF
 kabel eins
 RTL Television
-RTLNITRO
+NITRO
 RTLplus
 RTL2
 ProSieben
@@ -18,7 +18,7 @@ ANIXE SD
 TOGGO plus
 DMAX
 kabel eins Doku
-N24
+WELT
 N24 DOKU
 n-tv
 Welt der Wunder

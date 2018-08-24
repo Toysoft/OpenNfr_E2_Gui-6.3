@@ -8,15 +8,14 @@ Sky Cinema +1 HD
 Sky Cinema +24 HD
 Sky Cinema Action HD
 Sky Cinema Hits HD
-Sky Cinema Family HD
+Sky Cinema Family Adventure HD
 13th Street HD
 Fox HD
-RTL Crime HD
 SYFY HD
 TNT Serie HD
 TNT Comedy HD
 TLC HD
-Universal HD
+Universal TV HD
 Disney Cinemagic HD
 Disney Junior HD
 Discovery HD
@@ -28,8 +27,7 @@ E! Entertainm. HD
 Eurosport 1 HD
 Eurosport 2 HD
 Sky Sport Austria HD
-Sport1+ HD
-Sport1 US HD
+SPORT1 HD
 Sky Sport News HD
 Sky Sport News HD
 Sky Sport 1 HD

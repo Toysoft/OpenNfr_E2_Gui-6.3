@@ -3,7 +3,6 @@ ORF2
 ORF2 K
 ORF III
 ORF SPORT+
-oe24.TV
 ATV
 ATV2
 PULS 4 Austria
@@ -19,11 +18,10 @@ ORF2 O
 ORF2 T
 ORF2 V
 ORF2 W
-SCHWEIZ 5
 DMAX Austria
 Kabel 1 Austria
 kabel1 Doku austria
-N24 Austria
+N24 DOKU Austria
 Pro7 MAXX Austria
 ProSieben Austria
 RTL Austria
@@ -43,7 +41,7 @@ Sky Cinema Action
 Sky Cinema Comedy
 Sky Cinema Emotion
 Sky Cinema Hits
-Sky Cinema Family
+Sky Cinema Family Adventure
 Sky Cinema Nostalgie
 Sky Krimi
 13th Street
@@ -52,14 +50,11 @@ Fox Serie
 Heimatkanal
 kabel eins classics
 Kinowelt TV
-RTL Crime
-RTL Passion
-RTL Living
 Romance TV
 SAT.1 emotions
 SYFY
 TNT Serie
-TNT Film (TCM)
+TNT Film
 TLC
 Boomerang
 Cartoon Network
@@ -124,7 +119,7 @@ Das Erste
 ZDF
 kabel eins
 RTL Television
-RTLNITRO
+NITRO
 RTLplus
 RTL2
 ProSieben
@@ -140,7 +135,7 @@ ANIXE SD
 TOGGO plus
 DMAX
 kabel eins Doku
-N24
+WELT
 N24 DOKU
 n-tv
 Welt der Wunder
