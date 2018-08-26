@@ -1,46 +1,31 @@
 ﻿# -*- coding: utf-8 -*-
-###############################################################################################
-#
-#    MediaPortal for Dreambox OS
-#
-#    Coded by MediaPortal Team (c) 2013-2018
-#
-#  This plugin is open source but it is NOT free software.
-#
-#  This plugin may only be distributed to and executed on hardware which
-#  is licensed by Dream Property GmbH. This includes commercial distribution.
-#  In other words:
-#  It's NOT allowed to distribute any parts of this plugin or its source code in ANY way
-#  to hardware which is NOT licensed by Dream Property GmbH.
-#  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
-#  on hardware which is NOT licensed by Dream Property GmbH.
-#
-#  This applies to the source code as a whole as well as to parts of it, unless
-#  explicitely stated otherwise.
-#
-#  If you want to use or modify the code or parts of it,
-#  you have to keep OUR license and inform us about the modifications, but it may NOT be
-#  commercially distributed other than under the conditions noted above.
-#
-#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
-#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
-#
-#  As an exception regarding modifcations, you are NOT permitted to remove
-#  any copy protections implemented in this plugin or change them for means of disabling
-#  or working around the copy protections, unless the change has been explicitly permitted
-#  by the original authors. Also decompiling and modification of the closed source
-#  parts is NOT permitted.
-#
-#  Advertising with this plugin is NOT allowed.
-#  For other uses, permission from the authors is necessary.
-#
-###############################################################################################
-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-myagent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0'
 default_cover = "file://%s/pornfromczech.png" % (config.mediaportal.iconcachepath.value + "logos")
+
+try:
+	from Plugins.Extensions.MediaPortal.resources import cfscrape
+except:
+	cfscrapeModule = False
+else:
+	cfscrapeModule = True
+
+try:
+	import requests
+except:
+	requestsModule = False
+else:
+	requestsModule = True
+
+import urlparse
+import thread
+
+pfcz_cookies = CookieJar()
+pfcz_ck = {}
+pfcz_agent = ''
+
+BASE_URL = "http://www.pornfromczech.com"
 
 class pornCzechGenreScreen(MPScreen):
 
@@ -66,8 +51,39 @@ class pornCzechGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.pornfromczech.com/"
-		getPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
+		thread.start_new_thread(self.get_tokens,("GetTokens",))
+
+	def get_tokens(self, threadName):
+		if requestsModule and cfscrapeModule:
+			printl("Calling thread: %s" % threadName,self,'A')
+			global pfcz_ck
+			global pfcz_agent
+			if pfcz_ck == {} or pfcz_agent == '':
+				pfcz_ck, pfcz_agent = cfscrape.get_tokens(BASE_URL)
+				requests.cookies.cookiejar_from_dict(pfcz_ck, cookiejar=pfcz_cookies)
+			else:
+				try:
+					s = requests.session()
+					url = urlparse.urlparse(BASE_URL)
+					headers = {'user-agent': pfcz_agent}
+					page = s.get(url.geturl(), cookies=pfcz_cookies, headers=headers, timeout=15, allow_redirects=False)
+					if page.status_code == 503 and page.headers.get("Server", "").startswith("cloudflare") and b"jschl_vc" in page.content and b"jschl_answer" in page.content:
+						pfcz_ck, pfcz_agent = cfscrape.get_tokens(BASE_URL)
+						requests.cookies.cookiejar_from_dict(pfcz_ck, cookiejar=pfcz_cookies)
+				except:
+					pass
+			self.keyLocked = False
+			reactor.callFromThread(self.getGenres)
+		else:
+			reactor.callFromThread(self.pfcz_error)
+
+	def pfcz_error(self):
+		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or python-pyexecjs and nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
+		self.keyCancel()
+
+	def getGenres(self):
+		url = BASE_URL
+		twAgentGetPage(url, agent=pfcz_agent, cookieJar=pfcz_cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('id="categories-2"(.*?)id="text-6"', data, re.S)
@@ -82,7 +98,7 @@ class pornCzechGenreScreen(MPScreen):
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.keyLocked = False
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			Name = "--- Search ---"
@@ -144,7 +160,7 @@ class pornCzechFilmScreen(MPScreen, ThumbsHelper):
 			url = "http://www.pornfromczech.com/page/" + str(self.page) + "/?s=" + self.Link
 		else:
 			url = self.Link + str(self.page)
-		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=pfcz_agent, cookieJar=pfcz_cookies).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, '', "class='pages'>.*?of\s(.*?)<")
@@ -204,7 +220,7 @@ class pornCzechFilmAuswahlScreen(MPScreen):
 
 	def loadPage(self):
 		self.keyLocked = True
-		getPage(self.genreLink, agent=myagent).addCallback(self.loadPageData).addErrback(self.dataError)
+		twAgentGetPage(self.genreLink, agent=pfcz_agent, cookieJar=pfcz_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
 		streams = re.findall('<iframe.*?src=[\'|"](http[s]?://(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
@@ -230,7 +246,7 @@ class pornCzechFilmAuswahlScreen(MPScreen):
 		if url:
 			if "strdef.world" in url:
 				url = url.replace('https','http')
-				getPage(url, headers={'Referer':'http://www.pornfromczech.com/'}, agent=myagent).addCallback(self.parseOL).addErrback(self.dataError)
+				twAgentGetPage(url, headers={'Referer':BASE_URL}, agent=pfcz_agent, cookieJar=pfcz_cookies).addCallback(self.parseOL).addErrback(self.dataError)
 			else:
 				get_stream_link(self.session).check_link(url, self.got_link)
 

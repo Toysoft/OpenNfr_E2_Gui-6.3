@@ -1,5 +1,4 @@
 ﻿# -*- coding: utf-8 -*-
-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import TwAgentHelper
@@ -40,7 +39,7 @@ class hqpornerGenreScreen(MPScreen):
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			Link = self.suchString

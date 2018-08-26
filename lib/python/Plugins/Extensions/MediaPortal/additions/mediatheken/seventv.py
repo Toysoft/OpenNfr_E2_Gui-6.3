@@ -298,7 +298,6 @@ class sevenStreamScreen(MPScreen):
 			else:
 				url = self.Link + "/alle-clips"
 			self['ContentTitle'].setText(_("Clips:"))
-		print url
 		twAgentGetPage(url, agent=sevenAgent, cookieJar=sevenCookies).addCallback(self.parseData, x).addErrback(self.dataError)
 
 	def parseData(self, data, x):
@@ -309,7 +308,8 @@ class sevenStreamScreen(MPScreen):
 				episodes = re.findall('href="(.*?)".*?data-src="(.*?)".*?teaser-title">(.*?)</h5>', node, re.S)
 				if episodes:
 					for (url, img, title) in episodes:
-						url = BASE_URL + url
+						if not url.startswith('http'):
+							url = BASE_URL + url
 						img = img.replace('300x160','620x348')
 						self.filmliste.append((title, url, img))
 		if ajax:

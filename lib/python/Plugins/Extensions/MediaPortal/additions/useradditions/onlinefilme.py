@@ -1,7 +1,4 @@
 ﻿# -*- coding: utf-8 -*-
-#
-#    Copyright (c) 2016 Billy2011, MediaPortal Team
-#
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt

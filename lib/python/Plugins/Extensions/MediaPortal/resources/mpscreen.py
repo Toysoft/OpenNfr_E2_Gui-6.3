@@ -719,6 +719,16 @@ class MPScreen(Screen, HelpableScreen):
 		return res
 ##################
 
+####### twitch
+	def twitchListEntry(self, entry):
+		width = self['liste'].instance.size().width()
+		height = self['liste'].l.getItemSize().height()
+		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
+		res = [entry]
+		res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 110, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]))
+		res.append((eListboxPythonMultiContent.TYPE_TEXT, 120, 0, width - 120, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]))
+		return res
+
 ####### pornhub
 	def pornhubPlayListEntry(self, entry):
 		width = self['liste'].instance.size().width()

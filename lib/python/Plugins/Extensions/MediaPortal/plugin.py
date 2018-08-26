@@ -190,7 +190,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018081101"))
+config.mediaportal.version = NoSave(ConfigText(default="2018082501"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.skinfail = ConfigYesNo(default = False)
@@ -1243,6 +1243,8 @@ class MPList(Screen, HelpableScreen):
 	def showPornOK(self, pincode):
 		if pincode:
 			pincheck.pinEntered()
+			config.mediaportal.filter.value = "Porn"
+			config.mediaportal.filter.save()
 			config.mediaportal.showporn.value = True
 			config.mediaportal.showporn.save()
 			configfile.save()
@@ -2535,6 +2537,8 @@ class MPWall(Screen, HelpableScreen):
 	def showPornOK(self, pincode):
 		if pincode:
 			pincheck.pinEntered()
+			config.mediaportal.filter.value = "Porn"
+			config.mediaportal.filter.save()
 			config.mediaportal.showporn.value = True
 			config.mediaportal.showporn.save()
 			configfile.save()
@@ -3310,6 +3314,8 @@ class MPWall2(Screen, HelpableScreen):
 	def showPornOK(self, pincode):
 		if pincode:
 			pincheck.pinEntered()
+			config.mediaportal.filter.value = "Porn"
+			config.mediaportal.filter.save()
 			config.mediaportal.showporn.value = True
 			config.mediaportal.showporn.save()
 			configfile.save()
@@ -4075,6 +4081,8 @@ class MPWallVTi(Screen, HelpableScreen):
 	def showPornOK(self, pincode):
 		if pincode:
 			pincheck.pinEntered()
+			config.mediaportal.filter.value = "Porn"
+			config.mediaportal.filter.save()
 			config.mediaportal.showporn.value = True
 			config.mediaportal.showporn.save()
 			configfile.save()

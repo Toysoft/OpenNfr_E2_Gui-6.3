@@ -97,7 +97,7 @@ class befuckGenreScreen(MPScreen):
 		ImageUrl = self['liste'].getCurrent()[0][2]
 		CoverHelper(self['coverArt']).getCover(ImageUrl)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			Link = '?q=%s' % self.suchString

@@ -6,7 +6,7 @@ from Plugins.Extensions.MediaPortal.resources.packer import unpack, detect
 
 def streamango(self, data):
 	get_packedjava = re.findall("mango.js.*?(eval.function.*?\{\}\)\))", data, re.S)
-	if get_packedjava and detect(get_packedjava[0	]):
+	if get_packedjava and detect(get_packedjava[0]):
 		sJavascript = get_packedjava[0]
 		sUnpacked = unpack(sJavascript)
 		if sUnpacked:

@@ -127,7 +127,7 @@ class tataMain(MPScreen):
 		else:
 			self.session.open(tataParsing, genre, url)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.strip()
 			url = self.suchString

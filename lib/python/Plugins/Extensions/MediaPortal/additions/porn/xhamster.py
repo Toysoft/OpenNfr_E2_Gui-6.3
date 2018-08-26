@@ -153,7 +153,7 @@ class xhamsterGenreScreen(MPScreen):
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
 		if Name == "--- Search ---":
-			self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True, auto_text_init=False, suggest_func=self.getSuggestions)
+			self.suchen(suggest_func=self.getSuggestions)
 		elif Name == "Subscriptions":
 			self.session.open(xhamsterSubscriptionsScreen, Name)
 		elif Name == "Pornstars":
@@ -164,7 +164,7 @@ class xhamsterGenreScreen(MPScreen):
 			if Link:
 				self.session.open(xhamsterFilmScreen, Link, Name)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback

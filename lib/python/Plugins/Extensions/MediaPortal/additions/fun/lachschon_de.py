@@ -191,23 +191,23 @@ class LSDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		spl=content.split('<li>')
 		for i in range(1,len(spl),1):
 			entry=spl[i]
-			match=re.compile('<a href="(.+?)"', re.DOTALL).findall(entry)
+			match=re.compile('<a href="(.+?)"', re.S).findall(entry)
 			if match:
 				url=match[0]
 			else:
 				continue
-			match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+			match=re.compile('src="(.+?)"', re.S).findall(entry)
 			if match:
 				thumb=match[0]
 				if thumb.startswith('//'):
 					thumb = 'http:' + thumb
 			else:
 				thumb = None
-			match=re.compile('<span class="rating">(.+?)</span>', re.DOTALL).findall(entry)
+			match=re.compile('<span class="rating">(.+?)</span>', re.S).findall(entry)
 			rating=-1
 			if match:
 				rating=match[0]
-			match=re.compile('class="title" href="(.+?)"(.+?)title="(.+?)">(.+?)\n', re.DOTALL).findall(entry)
+			match=re.compile('class="title" href="(.+?)"(.+?)title="(.+?)">(.+?)\n', re.S).findall(entry)
 			title=match[0][3]
 			title=decodeHtml(title).strip()
 			if rating!=-1:

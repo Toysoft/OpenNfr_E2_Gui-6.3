@@ -113,7 +113,7 @@ class hdfilmeMain(MPScreen):
 		else:
 			self.session.open(hdfilmeParsing, genre, url)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.strip()
 			url = '%s/movie-search?key=%s&page_film=' % (BASE_URL, urllib.quote_plus(self.suchString))

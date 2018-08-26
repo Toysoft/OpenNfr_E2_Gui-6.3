@@ -104,7 +104,7 @@ class tubewolfGenreScreen(MPScreen):
 			self.keyLocked = False
 		self['name'].setText('')
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback

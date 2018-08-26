@@ -112,7 +112,7 @@ class TnAflixGenreScreen(MPScreen):
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(TnAflixFilmScreen, Link, Name, self.portal, self.baseurl)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '%20')
 			Link = '%s' % (self.suchString)

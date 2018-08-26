@@ -98,7 +98,7 @@ class tubepornclassicGenreScreen(MPScreen):
 		else:
 			self.session.open(tubepornclassicFilmScreen, Link, Name)
 
-	def SuchenCallback(self, callback):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback

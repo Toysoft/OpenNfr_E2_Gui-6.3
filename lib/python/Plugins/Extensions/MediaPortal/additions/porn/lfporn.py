@@ -1,5 +1,4 @@
 ﻿# -*- coding: utf-8 -*-
-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
@@ -46,7 +45,7 @@ class LFPornGenreScreen(MPScreen):
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.keyLocked = False
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			Name = "--- Search ---"

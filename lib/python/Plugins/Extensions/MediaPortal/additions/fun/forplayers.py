@@ -77,11 +77,11 @@ class forPlayersGenreScreen(MPScreen):
 		if self.selectionLink == "4":
 			limit = int(150)
 			api.set_systems(SYSTEMS)
-			self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True, auto_text_init=False)
+			self.suchen()
 		else:
 			self.session.open(forPlayersVideoScreen, self.selectionLink, '')
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback
 			self.session.open(forPlayersVideoScreen, self.selectionLink, self.suchString)

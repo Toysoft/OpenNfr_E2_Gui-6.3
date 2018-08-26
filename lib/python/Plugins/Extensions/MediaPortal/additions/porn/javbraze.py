@@ -1,5 +1,4 @@
 ﻿# -*- coding: utf-8 -*-
-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
@@ -61,7 +60,7 @@ class javbrazeGenreScreen(MPScreen):
 		Image = self['liste'].getCurrent()[0][2]
 		CoverHelper(self['coverArt']).getCover(Image)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			Name = "--- Search ---"

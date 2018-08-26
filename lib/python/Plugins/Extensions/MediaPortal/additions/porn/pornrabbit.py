@@ -103,7 +103,7 @@ class pornrabbitGenreScreen(MPScreen):
 			count = self['liste'].getCurrent()[0][3]
 			self.session.open(pornrabbitFilmScreen, Link, Name, count)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '%20')
 			Name = "--- Search ---"

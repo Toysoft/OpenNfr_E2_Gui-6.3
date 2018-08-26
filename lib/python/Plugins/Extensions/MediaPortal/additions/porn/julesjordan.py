@@ -113,7 +113,7 @@ class julesjordanGenreScreen(MPScreen):
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(julesjordanFilmScreen, Link, Name)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback
 			Name = "--- Search ---"

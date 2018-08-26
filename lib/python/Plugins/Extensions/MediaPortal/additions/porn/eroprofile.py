@@ -107,7 +107,7 @@ class eroprofileGenreScreen(MPScreen):
 			ID = self['liste'].getCurrent()[0][1]
 			self.session.open(eroprofileFilmScreen, '', Name, ID)
 
-	def SuchenCallback(self, callback=None, entry=None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = self['liste'].getCurrent()[0][0]
 			self.suchString = callback.replace(' ', '+')

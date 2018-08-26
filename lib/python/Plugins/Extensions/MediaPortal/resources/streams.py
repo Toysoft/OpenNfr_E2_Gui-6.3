@@ -501,9 +501,9 @@ class get_stream_link:
 				link = 'http://www.fembed.com/api/source/' + data.split('/v/')[-1]
 				twAgentGetPage(link, method='POST', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.fembed).addErrback(self.errorload)
 
-			elif re.search('flashx.tv|flashx.pw|flashx.co', data, re.S):
+			elif re.search('flashx.tv|flashx.pw|flashx.co|flashx.to', data, re.S):
 				link = data
-				id = re.search('flashx.(tv|pw|co)/(embed-|dl\?|fxplay-|embed.php\?c=|)(\w+)', data)
+				id = re.search('flashx.(tv|pw|co|to)/(embed-|dl\?|fxplay-|embed.php\?c=|)(\w+)', data)
 				if id:
 					link = "https://www.flashx.co/%s.html" % id.group(3)
 					if config.mediaportal.premiumize_use.value and not self.fallback:

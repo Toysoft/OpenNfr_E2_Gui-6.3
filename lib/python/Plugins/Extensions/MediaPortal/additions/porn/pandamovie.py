@@ -29,37 +29,32 @@ class pandamovieGenreScreen(MPScreen):
 
 	def loadPage(self):
 		self.filmliste = []
-		url = "https://pandamovie.biz/adult/"
+		url = "https://pandamovie.biz/xxx/"
 		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		parse = re.search('<a href="#">%s</a>(.*?)</ul>' % self.mode, data, re.S)
+		parse = re.search('(?:<h2>|<a href="#">)%s(?:</h2>|</a>)(.*?)</ul>' % self.mode, data, re.S)
 		if parse:
-			raw = re.findall('href="(.*?)">(.*?)</a', parse.group(1), re.S)
+			raw = re.findall('href="(.*?)"\s{0,1}>(.*?)</a', parse.group(1), re.S)
 			if raw:
 				for (Url, Title) in raw:
 					if Url.startswith('//'):
 						Url = "https:" + Url
-					Url = Url + "/page/"
+					Url = Url.strip('/') + "/page/"
 					self.filmliste.append((decodeHtml(Title), Url))
 				self.filmliste.sort()
 		if self.mode == "Genres":
-			self.filmliste.insert(0, ("Years", "Porn Years", None))
+			self.filmliste.insert(0, ("Years", "Release Year", None))
 			self.filmliste.insert(0, ("Studios", "Studios", None))
-			self.filmliste.insert(0, ("HD", "https://pandamovie.biz/adult/watch-hd-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Featured", "https://pandamovie.biz/adult/watch-featured-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Clips & Scenes", "https://pandamovie.biz/adult/watch-clips-scenes-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Japanese Movies", "https://pandamovie.biz/adult/watch-japanese-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Italian Movies", "https://pandamovie.biz/adult/watch-italian-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Spanish Movies", "https://pandamovie.biz/adult/watch-spanish-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("German Movies", "https://pandamovie.biz/adult/watch-german-porns-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Newest Movies", "https://pandamovie.biz/adult/movies/page/", None))
+			self.filmliste.insert(0, ("Featured", "https://pandamovie.biz/xxx/genres/featured-movies/page/", None))
+			self.filmliste.insert(0, ("Clips & Scenes", "https://pandamovie.biz/xxx/genres/xxx-scenes/page/", None))
+			self.filmliste.insert(0, ("Newest Movies", "https://pandamovie.biz/xxx/movies/page/", None))
 			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
 		self['name'].setText("")
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			Link = self.suchString
@@ -119,19 +114,29 @@ class pandamovieListScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://pandamovie.biz/adult/page/%s?s=%s" % (str(self.page), self.Link)
+			url = "https://pandamovie.biz/xxx/page/%s/?s=%s" % (str(self.page), self.Link)
 		else:
 			url = self.Link + str(self.page)
+		print url
 		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		self.getLastPage(data, "id='pagination'(.*?)</div>", '.*[\/|>](\d+)[\'|<]')
-		raw = re.findall('class="ml-item".*?href="(.*?)".*?<img data-original="(.*?)".*?alt="(.*?)"', data, re.S)
+		self.getLastPage(data, 'class="pagination">(.*?)</div>', 'Page \d+ of (\d+)')
+		if "<h2>Featured Movies</h2>" in data:
+			data = re.search('<h2>Featured Movies</h2>.*?archive_post(.*?)$', data, re.S).group(1)
+		raw = re.findall('class="item movies".*?<img src="(.*?)".*?alt="(.*?)".*?href="(.*?)"', data, re.S)
 		if raw:
-			for (link, image, title) in raw:
+			for (image, title, link) in raw:
 				self.filmliste.append((decodeHtml(title), link, image))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.ml.moveToIndex(0)
+		else:
+			raw = re.findall('class="result-item".*?href="(.*?)".*?<img src="(.*?)".*?alt="(.*?)"', data, re.S)
+			if raw:
+				for (link, image, title) in raw:
+					self.filmliste.append((decodeHtml(title), link, image))
+				self.ml.setList(map(self._defaultlistleft, self.filmliste))
+				self.ml.moveToIndex(0)
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), None, None))
 		self.keyLocked = False

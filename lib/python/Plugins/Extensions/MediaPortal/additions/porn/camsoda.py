@@ -136,27 +136,48 @@ class camsodaFilmScreen(MPScreen, ThumbsHelper):
 		self.ml.moveToIndex(0)
 		jsondata = json.loads(data)
 		for node in jsondata["results"]:
-			if node.has_key("status"):
-				status = str(node["status"])
-			else:
-				status = ""
-			if status != "offline" and status != "private":
-				stream_name = str(node["stream_name"])
+
+			if node.has_key("tpl"):
+				if node.has_key("schedule_private") and node["schedule_private"] == 1:
+					continue
+				stream_name = str(node["tpl"][5])
 				if stream_name != "":
-					Title = str(node["display_name"])
-					Name = str(node["username"])
+					Title = str(node["tpl"][1])
+					Name = str(node["tpl"][0])
 					enc = stream_name.split('-')[-1]
 					try:
-						tsize = str(node["tsize"])
+						tsize = str(node["tpl"][6])
 					except:
 						try:
 							tsize = str(node["thumb_small"]).split('/')[-3]
 						except:
 							tsize = str(node["thumb"]).split('/')[-3]
 					Image = 'https://thumbs-orig.camsoda.com/thumbs/' + stream_name + '/' + enc + '/' + tsize + '/null/' + Name + '.jpg'
-					Viewers = node["connections"]
-					descr = str(node["subject_html"])
+					Viewers = node["tpl"][2]
+					descr = str(node["tpl"][4])
 					self.filmliste.append((Title, Name, Image, Viewers, descr))
+			else:
+				if node.has_key("status"):
+					status = str(node["status"])
+				else:
+					status = ""
+				if status != "offline" and status != "private":
+					stream_name = str(node["stream_name"])
+					if stream_name != "":
+						Title = str(node["display_name"])
+						Name = str(node["username"])
+						enc = stream_name.split('-')[-1]
+						try:
+							tsize = str(node["tsize"])
+						except:
+							try:
+								tsize = str(node["thumb_small"]).split('/')[-3]
+							except:
+								tsize = str(node["thumb"]).split('/')[-3]
+						Image = 'https://thumbs-orig.camsoda.com/thumbs/' + stream_name + '/' + enc + '/' + tsize + '/null/' + Name + '.jpg'
+						Viewers = node["connections"]
+						descr = str(node["subject_html"])
+						self.filmliste.append((Title, Name, Image, Viewers, descr))
 		if len(self.filmliste):
 			if self.Name != "Top Rated":
 				self.filmliste.sort(key=lambda t : t[3], reverse=True)

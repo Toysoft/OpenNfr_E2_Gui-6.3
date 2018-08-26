@@ -112,13 +112,13 @@ class cliphunterGenreScreen(MPScreen):
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
 		if Name == "--- Search ---":
-			self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True, auto_text_init=False, suggest_func=self.getSuggestions)
+			self.suchen(suggest_func=self.getSuggestions)
 		elif Name == "Pornstars":
 			self.session.open(cliphunterPornstarScreen, Link, Name)
 		else:
 			self.session.open(cliphunterFilmScreen, Link, Name)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '%20')
 			Link = '%s' % (self.suchString)

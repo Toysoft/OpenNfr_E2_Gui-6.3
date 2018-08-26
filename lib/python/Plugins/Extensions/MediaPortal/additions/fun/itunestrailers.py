@@ -44,7 +44,7 @@ class itunestrailersGenreScreen(MPScreen):
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			Link = 'https://trailers.apple.com/trailers/global/atv/search.php?q=%s' % self.suchString

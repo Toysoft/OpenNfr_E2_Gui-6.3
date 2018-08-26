@@ -21,10 +21,10 @@ config.mediaportal.yt_param_video_type_idx = ConfigInteger(default = 0)
 config.mediaportal.yt_refresh_token = ConfigText(default="")
 
 APIKEYV3 = mp_globals.yt_a
-param_hl = ('&hl=en-GB', '&hl=de-DE', '&hl=fr-FR', '&hl=it-IT', '')
-param_ajax_hl = ('en', 'de', 'fr', 'it', '')
+param_hl = ('&hl=en-US', '&hl=de-DE', '&hl=fr-FR', '&hl=it-IT', '&hl=es-ES', '&hl=pt-PT', '&hl=pl-PL', '&hl=da-DK', '&hl=nb-NO', '&hl=sv-SE', '&hl=fi-FI', '')
+param_ajax_hl = ('en','de','fr','it','es','pt','pl','da','no','sv','fi','')
 picker_lang = ''
-param_ajax_gl = ('us','gb','de','fr','it')
+param_ajax_gl = ('us','gb','de','at','ch','fr','it','es','pt','pl','dk','no','se','fi')
 
 agent = getUserAgent()
 std_headers = {
@@ -42,7 +42,6 @@ class youtubeGenreScreen(MenuHelper):
 		self.old_mainidx = -1
 
 		self.param_safesearch = ['&safeSearch=none']
-		self.param_format = '&format=5'
 		self.subCat = []
 		self.subCat_L2 = []
 
@@ -60,15 +59,31 @@ class youtubeGenreScreen(MenuHelper):
 			(_('German'), '&relevanceLanguage=de'),
 			(_('French'), '&relevanceLanguage=fr'),
 			(_('Italian'), '&relevanceLanguage=it'),
+			(_('Spanish'), '&relevanceLanguage=es'),
+			(_('Portuguese'), '&relevanceLanguage=pt'),
+			(_('Polish'), '&relevanceLanguage=pl'),
+			(_('Danish'), '&relevanceLanguage=da'),
+			(_('Norwegian'), '&relevanceLanguage=no'),
+			(_('Swedish'), '&relevanceLanguage=sv'),
+			(_('Finnish'), '&relevanceLanguage=fi'),
 			(_('Any'), '')
 			]
 
 		self.param_regionid = [
 			(_('Whole world'), '&regionCode=US'),
-			(_('England'), '&regionCode=GB'),
+			(_('Great Britain'), '&regionCode=GB'),
 			(_('Germany'), '&regionCode=DE'),
+			(_('Austria'), '&regionCode=AT'),
+			(_('Switzerland'), '&regionCode=CH'),
 			(_('France'), '&regionCode=FR'),
-			(_('Italy'), '&regionCode=IT')
+			(_('Italy'), '&regionCode=IT'),
+			(_('Spain'), '&regionCode=ES'),
+			(_('Portugal'), '&regionCode=PT'),
+			(_('Poland'), '&regionCode=PL'),
+			(_('Denmark'), '&regionCode=DK'),
+			(_('Norway'), '&regionCode=NO'),
+			(_('Sweden'), '&regionCode=SE'),
+			(_('Finland'), '&regionCode=FI')
 			]
 
 		self.param_duration = [
@@ -107,8 +122,8 @@ class youtubeGenreScreen(MenuHelper):
 			(_('Search request'), (self.paraQuery, None), (0,1,2,)),
 			(_('Event type'), (self.param_event_types, config.mediaportal.yt_param_event_types_idx), (0,)),
 			(_('Sort by'), (self.param_time, config.mediaportal.yt_param_time_idx), (0,1,2,)),
-			(_('Language'), (self.param_metalang, config.mediaportal.yt_param_meta_idx), (0,1,2,6,8,9,10,11,12,13)),
-			(_('Search region'), (self.param_regionid, config.mediaportal.yt_param_regionid_idx), (0,1,2,6,8,9,10,11,12,13)),
+			(_('Language'), (self.param_metalang, config.mediaportal.yt_param_meta_idx), (0,1,2,7,9,10,11,12,13,14)),
+			(_('Search region'), (self.param_regionid, config.mediaportal.yt_param_regionid_idx), (0,1,2,3,7,9,10,11,12,13,14)),
 			(_('User name'), (self.paraAuthor, None), (0,1,2,)),
 			(_('3D Search'), (self.param_3d, config.mediaportal.yt_param_3d_idx), (0,)),
 			(_('Runtime'), (self.param_duration, config.mediaportal.yt_param_duration_idx), (0,)),
@@ -148,7 +163,7 @@ class youtubeGenreScreen(MenuHelper):
 			(_('Video search'), 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=%QR%&type=video&key=%KEY%'),
 			(_('Playlist search'), 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=%QR%&type=playlist&key=%KEY%'),
 			(_('Channel search'), 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=%QR%&type=channel&key=%KEY%'),
-			#(_('Categories'), 'https://www.googleapis.com/youtube/v3/guideCategories?part=snippet&key=%KEY%'),
+			(_('Trends'), 'https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&key=%KEY%'),
 			(400 * "—", ''),
 			(_('My channel'), ''),
 			(_('Favorites'), ''),
@@ -171,7 +186,6 @@ class youtubeGenreScreen(MenuHelper):
 			(_('Gaming'), 'https://www.youtube.com/channel/UCOpNcN46UbXVtpKMrmU4Abg'),
 			(_('Sports'), 'https://www.youtube.com/channel/UCEgdi0XIXXZ-qJOFPf4JSKw'),
 			(_('Live'), 'https://www.youtube.com/channel/UC4R8DWoMoI7CAwX8_LjQHig'),
-			(_('Education'), 'https://www.youtube.com/channel/UC3yA8nDwraeOfnYfBWun83g'),
 			('YouTube Spotlight', 'https://www.youtube.com/channel/UCBR8-60-B28hp2BmDPdntcQ'),
 			('YouTube Trends', 'https://www.youtube.com/channel/UCeNZlh03MyUkjRlLFpVQxsg'),
 			('YouTube Creators', 'https://www.youtube.com/channel/UCUZHFZ9jIKrLroW8LcyJEQQ'),
@@ -183,7 +197,6 @@ class youtubeGenreScreen(MenuHelper):
 			('Audible Hörbücher', 'https://www.youtube.com/user/audibletrailer'),
 			('Björns Hörspiel-TV', 'https://www.youtube.com/user/BjoernsHoerspielTV'),
 			('Edgar Allan Poe´s Kaminzimmer', 'https://www.youtube.com/user/EAPoeProductions'),
-			('felix auris', 'https://www.youtube.com/user/mercuriius'),
 			('FRUITY - SOUND - DISASTER', 'https://www.youtube.com/user/MrFruitylooper'),
 			('Hein Bloed', 'https://www.youtube.com/user/Heinbloedful'),
 			('Hörbücher, Hörspiele und mehr', 'https://www.youtube.com/user/BestSound1000'),
@@ -449,7 +462,7 @@ class youtubeGenreScreen(MenuHelper):
 			self.subCat,
 			None,
 			None,
-			#None,
+			None,
 			None,
 			self.subCatYourChannel,
 			None,
@@ -466,7 +479,7 @@ class youtubeGenreScreen(MenuHelper):
 			self.subCat_L2,
 			None,
 			None,
-			#None,
+			None,
 			None,
 			[None, None, None, None],
 			None,
@@ -678,7 +691,7 @@ class youtubeGenreScreen(MenuHelper):
 
 		genreurl = self.mh_genreUrl[0] + self.mh_genreUrl[1]
 		if 'googleapis.com' in genreurl:
-			if '/guideCategories' in genreurl or '/playlists' in genreurl:
+			if '/playlists' in genreurl:
 				lr = param_hl[config.mediaportal.yt_param_meta_idx.value]
 
 			if not '%ACCESSTOKEN%' in genreurl:
@@ -722,7 +735,9 @@ class youtubeGenreScreen(MenuHelper):
 			yt_oauth2.requestDevCode(self.session)
 
 	def saveIdx(self):
+		config.mediaportal.yt_param_time_idx.save()
 		config.mediaportal.yt_param_meta_idx.save()
+		configfile.save()
 		yt_oauth2._tokenExpired()
 
 	def getSuggestions(self, text, max_res):
@@ -754,7 +769,14 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		('&gl=GB'),
 		('&gl=DE'),
 		('&gl=FR'),
-		('&gl=IT')
+		('&gl=IT'),
+		('&gl=ES'),
+		('&gl=PT'),
+		('&gl=PL'),
+		('&gl=DK'),
+		('&gl=NO'),
+		('&gl=SE'),
+		('&gl=FI')
 		)
 
 	def __init__(self, session, stvLink, stvGenre, title="YouTube"):
@@ -1000,6 +1022,18 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 			self.page = 1
 		self.c4_browse_ajax = str(jdata.get('nextPageToken', ''))
 
+	def convertDuration(self, duration):
+		date = ':' + duration.replace('P', '').replace('W', '-').replace('D', ' ').replace('T', '').replace('H', ':').replace('M', ':').replace('S', '')
+		if 'S' not in duration:
+			date += '00'
+		elif date[-2] == ':':
+			date = date[:-1] + '0' + date[-1]
+		if 'M' not in duration:
+			date = date[:-2] + '00' + date[-3:]
+		elif date[-5] == ':':
+			date = date[:-4] + '0' + date[-4:]
+		return date[1:]
+
 	def genreData(self, data):
 		if self.apiUrlv3:
 			data = json.loads(data)
@@ -1042,13 +1076,58 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 				else:
 					return str(thumbnails['default']['url'])
 
-
-			listType = re.search('ItemList|subscriptionList|activityList|playlistList|CategoryList|channelList', data.get('kind', '')) != None
+			listType = re.search('ItemList|subscriptionList|activityList|playlistList|CategoryList|channelList|videoListResponse', data.get('kind', '')) != None
+			runtimeurl = 'https://www.googleapis.com/youtube/v3/videos?key=%KEY%&part=contentDetails,snippet&id='
+			runtimeurl = runtimeurl.replace('%KEY%', APIKEYV3)
 			for item in data.get('items', []):
 				if not listType:
-					kind = item['id'].get('kind')
+					try:
+						kind = item['id'].get('kind')
+					except:
+						continue
 				else:
-					kind = item.get('kind')
+					try:
+						kind = item.get('kind')
+					except:
+						continue
+
+				if kind != None:
+					if item.has_key('snippet'):
+						if kind.endswith('#video'):
+							try:
+								runtimeurl = runtimeurl + str(item['id']['videoId']) + ","
+							except:
+								try:
+									runtimeurl = runtimeurl + str(item['id']) + ","
+								except:
+									continue
+						elif kind.endswith('#playlistItem'):
+							try:
+								runtimeurl = runtimeurl + str(item['snippet']['resourceId']['videoId']) + ","
+							except:
+								continue
+
+			if not runtimeurl.endswith('&id='):
+				runtimedata = ''
+				try:
+					import requests
+					s = requests.session()
+					page = s.get(runtimeurl.strip(','))
+					runtimedata = json.loads(page.content)
+				except:
+					pass
+
+			for item in data.get('items', []):
+				if not listType:
+					try:
+						kind = item['id'].get('kind')
+					except:
+						continue
+				else:
+					try:
+						kind = item.get('kind')
+					except:
+						continue
 				if kind != None:
 					if item.has_key('snippet'):
 						localized = item['snippet'].has_key('localized')
@@ -1064,16 +1143,45 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 								url = str(item['id']['videoId'])
 								img = getThumbnail(item['snippet']['thumbnails'])
 							except:
+								try:
+									url = str(item['id'])
+									img = getThumbnail(item['snippet']['thumbnails'])
+								except:
+									continue
+							try:
+								for runitem in runtimedata.get('items', []):
+									if str(runitem["id"]) == url:
+										runtime = self.convertDuration(str(runitem["contentDetails"]["duration"]))
+										if runtime == "00:00":
+											runtime = "live"
+										desc = _("Runtime:") + " " + runtime + "\n\n" + desc
+										date = re.findall('(\d{4})-(\d{2})-(\d{2})T(.*?).000Z', str(runitem['snippet'].get('publishedAt', '')))
+										date = date[0][2] + "." + date[0][1] + "." + date[0][0] + ", " + date[0][3]
+										desc = _("Published:") + " " + date + "\n" + desc
+										break
+							except:
 								pass
-							else:
-								self.filmliste.append(('', title, url, img, desc, '', ''))
+							self.filmliste.append(('', title, url, img, desc, '', ''))
 						elif kind.endswith('#playlistItem'):
 							try:
 								url = str(item['snippet']['resourceId']['videoId'])
 								img = getThumbnail(item['snippet']['thumbnails'])
 							except:
-								pass
+								continue
 							else:
+								try:
+									for runitem in runtimedata.get('items', []):
+										if str(runitem["id"]) == url:
+											runtime = self.convertDuration(str(runitem["contentDetails"]["duration"]))
+											if runtime == "00:00":
+												runtime = "live"
+											desc = _("Runtime:") + " " + runtime + "\n\n" + desc
+											date = re.findall('(\d{4})-(\d{2})-(\d{2})T(.*?).000Z', str(runitem['snippet'].get('publishedAt', '')))
+											date = date[0][2] + "." + date[0][1] + "." + date[0][0] + ", " + date[0][3]
+											desc = _("Published:") + " " + date + "\n" + desc
+											break
+								except:
+									pass
 								self.filmliste.append(('', title, url, img, desc, '', ''))
 						elif kind.endswith('channel'):
 							if listType:
@@ -1181,13 +1289,13 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 						if m:
 							title += decodeHtml(m.group(1))
 					elif 'dir="ltr" title="' in entry:
-						m = re.search('dir="ltr" title="(.+?)"', entry, re.DOTALL)
+						m = re.search('dir="ltr" title="(.+?)"', entry, re.S)
 						if m:
 							title += decodeHtml(m.group(1).strip())
 						m = re.search('data-thumb="(.*?)"', entry)
 						img = m and m.group(1)
 					else:
-						m = re.search('dir="ltr".*?">(.+?)</a>', entry, re.DOTALL)
+						m = re.search('dir="ltr".*?">(.+?)</a>', entry, re.S)
 						if m:
 							title += decodeHtml(m.group(1).strip())
 						m = re.search('data-thumb="(.*?)"', entry)
@@ -1294,7 +1402,6 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		self.videoPrio = int(config.mediaportal.youtubeprio.value)
 
 	def delFavo(self):
-
 		i = self['liste'].getSelectedIndex()
 		c = j = 0
 		l = len(self.filmliste)
@@ -1706,6 +1813,7 @@ class YT_Oauth2:
 				data = json.load(data_file)
 				config.mediaportal.yt_refresh_token.value = data['refresh_token'].encode('utf-8')
 				config.mediaportal.yt_refresh_token.save()
+				configfile.save()
 				return True
 
 	def requestDevCode(self, session):
@@ -1757,6 +1865,7 @@ class YT_Oauth2:
 					config.mediaportal.yt_refresh_token.value = tokenData['refresh_token'].encode('utf-8')
 					config.mediaportal.yt_refresh_token.value = tokenData['refresh_token'].encode('utf-8')
 					config.mediaportal.yt_refresh_token.save()
+					configfile.save()
 					self._expiresIn = tokenData['expires_in']
 					self._startRefreshTimer()
 					f = open(self.TOKEN_PATH, 'w')

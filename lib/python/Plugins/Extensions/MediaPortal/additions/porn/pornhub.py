@@ -42,6 +42,7 @@ from Plugins.Extensions.MediaPortal.resources.configlistext import ConfigListScr
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 from Plugins.Extensions.MediaPortal.resources.DelayedFunction import DelayedFunction
+import requests
 
 config.mediaportal.pornhub_username = ConfigText(default="pornhubUserName", fixed_size=False)
 config.mediaportal.pornhub_password = ConfigPassword(default="pornhubPassword", fixed_size=False)
@@ -49,10 +50,11 @@ config.mediaportal.pornhub_cdnfix = ConfigYesNo(default=False)
 
 base_url = 'https://www.pornhub.com'
 
+ph_cookies = CookieJar()
+ph_cookiesUrl = CookieJar()
 ck = {}
-ckUrl = {}
 phLoggedIn = False
-phAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
+phAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36"
 json_headers = {
 	'Accept':'application/json',
 	'Accept-Language':'en,en-US;q=0.7,en;q=0.3',
@@ -63,16 +65,58 @@ json_headers = {
 
 default_cover = "file://%s/pornhub.png" % (config.mediaportal.iconcachepath.value + "logos")
 token = ''
-nodejs = True
 
-class rnCalc:
-	def rncalc(self, data, callback):
-		ck.clear()
+class LoginFunc:
+
+	def LoginClear(self, callback):
+		ck.update({'lang':'en'})
+		requests.cookies.cookiejar_from_dict(ck, cookiejar=ph_cookies)
 		global phLoggedIn
-		phLoggedIn = False
+		if phLoggedIn:
+			callback()
+		else:
+			ph_cookies.clear()
+			ck.clear()
+			phLoggedIn = False
+			self.Login(callback)
+
+	def Login(self, callback):
+		url = base_url
+		twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.Login2, callback).addErrback(self.dataError)
+
+	def Login2(self, data, callback):
+		self.username = str(config.mediaportal.pornhub_username.value)
+		self.password = str(config.mediaportal.pornhub_password.value)
+		parse = re.findall('name="redirect"\svalue="(.*?)".*?name="token"\svalue="(.*?)"', data, re.S)
+		if parse:
+			global token
+			token = str(parse[0][1])
+			if self.username != "pornhubUserName" and self.password != "pornhubPassword":
+				loginUrl = base_url + "/front/authenticate"
+				loginData = {
+					'redirect' : str(parse[0][0]),
+					'token' : token,
+					'remember_me' : '1',
+					'from' : 'pc_login_modal_:index',
+					'username' : self.username,
+					'password' : self.password
+					}
+				twAgentGetPage(loginUrl, agent=phAgent, method='POST', postdata=urlencode(loginData), cookieJar=ph_cookies, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.Login3, callback).addErrback(self.dataError)
+			else:
+				callback()
+		else:
+			callback()
+
+	def Login3(self, data, callback):
+		global phLoggedIn
+		user = '"username":"%s"' % self.username
+		if user in data:
+			phLoggedIn = True
+		else:
+			phLoggedIn = False
 		callback()
 
-class pornhubGenreScreen(MPScreen, rnCalc):
+class pornhubGenreScreen(MPScreen, LoginFunc):
 
 	def __init__(self, session):
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
@@ -101,93 +145,60 @@ class pornhubGenreScreen(MPScreen, rnCalc):
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 
-		self.onLayoutFinish.append(self.Login)
+		self.onLayoutFinish.append(self.checkLogin)
 
-	def Login(self):
-		global nodejs
-		nodejs = True
-		ck.update({'lang':'en'})
-		url = base_url
-		getPage(url, agent=phAgent, cookies=ck).addCallback(self.Login2).addErrback(self.dataError)
-
-	def Login2(self, data):
-		parse = re.findall('name="redirect"\svalue="(.*?)".*?name="token"\svalue="(.*?)"', data, re.S)
-		if parse:
-			global token
-			token = str(parse[0][1])
-			if self.username != "pornhubUserName" and self.password != "pornhubPassword":
-				loginUrl = base_url + "/front/authenticate"
-				loginData = {
-					'redirect' : str(parse[0][0]),
-					'token' : token,
-					'remember_me' : '1',
-					'from' : 'pc_login_modal_:index',
-					'username' : self.username,
-					'password' : self.password
-					}
-				getPage(loginUrl, agent=phAgent, method='POST', postdata=urlencode(loginData), cookies=ck, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.layoutFinished).addErrback(self.dataError)
-			else:
-				self.layoutFinished()
-		else:
-			self.layoutFinished()
+	def checkLogin(self):
+		self.LoginClear(self.layoutFinished)
 
 	def layoutFinished(self,res=None):
 		self.keyLocked = True
 		url = base_url + "/categories"
-		getPage(url, agent=phAgent, cookies=ck).addCallback(self.genreData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		if 'class="recaptchaContent"' in data and nodejs:
-			self.rncalc(data, self.layoutFinished)
-		else:
-			self.filmliste = []
-			global phLoggedIn
-			if re.findall('class="(logged-in)"', data):
-				phLoggedIn = True
-			else:
-				phLoggedIn = False
-			Cats = re.findall('<div\sclass="category-wrapper\s{0,1}">.*?<a\shref="(.*?)".*?<img\ssrc="(.*?)".*?alt="(.*?)"', data, re.S)
-			if Cats:
-				for (Url, Image, Title) in Cats:
-					if re.match(".*\?",Url):
-						Url = base_url + Url + "&page="
-					else:
-						Url = base_url + Url + "?page="
-					self.filmliste.append((Title, Url, Image))
-				self.filmliste.sort()
-			if phLoggedIn:
-				self.filmliste.insert(0, (400 * "—", None, default_cover))
-				self.filmliste.insert(0, ("My Feed", "%s/feeds?section=videos&page=" % base_url, default_cover))
-				self.filmliste.insert(0, ("Recommended", "%s/recommended?page=" % base_url, default_cover))
-				self.filmliste.insert(0, ("Member Subscriptions", "%s/users/%s/subscriptions?page=" % (base_url, self.username), default_cover))
-				self.filmliste.insert(0, ("Channel Subscriptions", "%s/users/%s/channel_subscriptions?page=" % (base_url, self.username), default_cover))
-				self.filmliste.insert(0, ("Pornstar Subscriptions", "%s/users/%s/pornstar_subscriptions?page=" % (base_url, self.username), default_cover))
-				self.filmliste.insert(0, ("Favourite Playlists", "%s/users/%s/playlists/favorites?page=" % (base_url, self.username), default_cover))
-				self.filmliste.insert(0, ("Favourite Videos", "%s/users/%s/videos/favorites?page=" % (base_url, self.username), default_cover))
+		self.filmliste = []
+		Cats = re.findall('<div\sclass="category-wrapper\s{0,1}">.*?<a\shref="(.*?)".*?<img\s+src="(.*?)".*?alt="(.*?)"', data, re.S)
+		if Cats:
+			for (Url, Image, Title) in Cats:
+				if re.match(".*\?",Url):
+					Url = base_url + Url + "&page="
+				else:
+					Url = base_url + Url + "?page="
+				self.filmliste.append((Title, Url, Image))
+			self.filmliste.sort()
+		if phLoggedIn:
 			self.filmliste.insert(0, (400 * "—", None, default_cover))
-			self.filmliste.insert(0, ("Playlists", "%s/playlists?page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Channels", "%s/channels?page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Pornstars", "%s/pornstars?page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Homemade - Longest", "%s/video?p=homemade&o=lg&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Homemade - Hottest", "%s/video?p=homemade&o=ht&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Homemade - Top Rated", "%s/video?p=homemade&o=tr&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Homemade - Most Viewed", "%s/video?p=homemade&o=mv&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Homemade - Featured Recently", "%s/video?p=homemade&o=mr&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Homemade - Newest", "%s/video?p=homemade&o=cm&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Longest", "%s/video?o=lg&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Hottest", "%s/video?o=ht&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Top Rated", "%s/video?o=tr&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Most Viewed", "%s/video?o=mv&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Community Feed", "%s/community?content=videos&page=" % base_url, default_cover))
-			if not phLoggedIn:
-				self.filmliste.insert(0, ("Recommended", "%s/recommended?page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Featured Recently", "%s/video?o=mr&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("Newest", "%s/video?o=cm&page=" % base_url, default_cover))
-			self.filmliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
-			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
-			self.showInfos()
+			self.filmliste.insert(0, ("My Feed", "%s/feeds?section=videos&page=" % base_url, default_cover))
+			self.filmliste.insert(0, ("Recommended", "%s/recommended?page=" % base_url, default_cover))
+			self.filmliste.insert(0, ("Member Subscriptions", "%s/users/%s/subscriptions?page=" % (base_url, self.username), default_cover))
+			self.filmliste.insert(0, ("Channel Subscriptions", "%s/users/%s/channel_subscriptions?page=" % (base_url, self.username), default_cover))
+			self.filmliste.insert(0, ("Pornstar Subscriptions", "%s/users/%s/pornstar_subscriptions?page=" % (base_url, self.username), default_cover))
+			self.filmliste.insert(0, ("Favourite Playlists", "%s/users/%s/playlists/favorites?page=" % (base_url, self.username), default_cover))
+			self.filmliste.insert(0, ("Favourite Videos", "%s/users/%s/videos/favorites?page=" % (base_url, self.username), default_cover))
+		self.filmliste.insert(0, (400 * "—", None, default_cover))
+		self.filmliste.insert(0, ("Playlists", "%s/playlists?page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Channels", "%s/channels?page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Pornstars", "%s/pornstars?page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Homemade - Longest", "%s/video?p=homemade&o=lg&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Homemade - Hottest", "%s/video?p=homemade&o=ht&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Homemade - Top Rated", "%s/video?p=homemade&o=tr&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Homemade - Most Viewed", "%s/video?p=homemade&o=mv&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Homemade - Featured Recently", "%s/video?p=homemade&o=mr&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Homemade - Newest", "%s/video?p=homemade&o=cm&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Longest", "%s/video?o=lg&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Hottest", "%s/video?o=ht&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Top Rated", "%s/video?o=tr&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Most Viewed", "%s/video?o=mv&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Community Feed", "%s/community?content=videos&page=" % base_url, default_cover))
+		if not phLoggedIn:
+			self.filmliste.insert(0, ("Recommended", "%s/recommended?page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Featured Recently", "%s/video?o=mr&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("Newest", "%s/video?o=cm&page=" % base_url, default_cover))
+		self.filmliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
+		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
+		self.ml.moveToIndex(0)
+		self.keyLocked = False
+		self.showInfos()
 
 	def showInfos(self):
 		Image = self['liste'].getCurrent()[0][2]
@@ -216,7 +227,7 @@ class pornhubGenreScreen(MPScreen, rnCalc):
 			if Link:
 				self.session.open(pornhubFilmScreen, Link, Name)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
@@ -231,13 +242,15 @@ class pornhubGenreScreen(MPScreen, rnCalc):
 
 	def setupCallback(self, answer=False):
 		if answer:
+			ph_cookies.clear()
 			ck.clear()
+			requests.cookies.cookiejar_from_dict(ck, cookiejar=ph_cookies)
 			global phLoggedIn
 			phLoggedIn = False
 			token = ''
 			self.username = str(config.mediaportal.pornhub_username.value)
 			self.password = str(config.mediaportal.pornhub_password.value)
-			self.Login()
+			self.LoginClear(self.layoutFinished)
 
 class pornhubSetupScreen(MPSetupScreen, ConfigListScreenExt):
 
@@ -269,7 +282,7 @@ class pornhubSetupScreen(MPSetupScreen, ConfigListScreenExt):
 				x[1].save()
 		self.close(True)
 
-class pornhubPlayListScreen(MPScreen, ThumbsHelper, rnCalc):
+class pornhubPlayListScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
@@ -317,36 +330,33 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper, rnCalc):
 		self.filmliste = []
 		self.keyLocked = True
 		url = self.Link + str(self.page) + "&o=%s" % self.sort
-		getPage(url, agent=phAgent, cookies=ck).addCallback(self.loadPageData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if 'class="recaptchaContent"' in data and nodejs:
-			self.rncalc(data, self.loadPage)
+		countprofile = re.findall('class="showingInfo">Showing up to (\d+) playlists.</div>', data, re.S)
+		if countprofile:
+			self.lastpage = int(round((float(countprofile[0].replace(',','')) / 30) + 0.5))
+			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		else:
-			countprofile = re.findall('class="showingInfo">Showing up to (\d+) playlists.</div>', data, re.S)
-			if countprofile:
-				self.lastpage = int(round((float(countprofile[0].replace(',','')) / 30) + 0.5))
-				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-			else:
-				self.getLastPage(data, 'class="pagination3">(.*?)</div>')
-			preparse = re.search('class="sectionWrapper(.*?)class="pagination3"', data, re.S)
-			if not preparse:
-				preparse = re.search('class="sectionWrapper(.*?)id="profileInformation"', data, re.S)
-			Cats = re.findall('class="playlist-videos">.*?class="number"><span>(.*?)</span>.*?src="(.*?jpg)".*?href="(/view_video.php.*?)".*?class="viewPlaylistLink\s{0,1}"\shref="(.*?)".*?class="title\s{0,1}"\stitle="(.*?)"', preparse.group(1), re.S)
-			if Cats:
-				for Videos, Image, PlayUrl, Url, Title in Cats:
-					Url = base_url + Url
-					PlayUrl = base_url + PlayUrl
-					self.filmliste.append((decodeHtml(Title), Videos, Image, Url, PlayUrl))
-			if len(self.filmliste) == 0:
-				self.filmliste.append((_('No playlists found!'), "", None, None, None))
-			self.ml.setList(map(self.pornhubPlayListEntry, self.filmliste))
-			if not self.reload:
-				self.ml.moveToIndex(0)
-			self.reload = False
-			self.keyLocked = False
-			self.th_ThumbsQuery(self.filmliste, 0, 3, 2, None, None, self.page, self.lastpage, mode=1)
-			self.showInfos()
+			self.getLastPage(data, 'class="pagination3">(.*?)</div>')
+		preparse = re.search('class="sectionWrapper(.*?)class="pagination3"', data, re.S)
+		if not preparse:
+			preparse = re.search('class="sectionWrapper(.*?)id="profileInformation"', data, re.S)
+		Cats = re.findall('class="playlist-videos">.*?class="number"><span>(.*?)</span>.*?src="(.*?jpg)".*?href="(/view_video.php.*?)".*?class="viewPlaylistLink\s{0,1}"\shref="(.*?)".*?class="title\s{0,1}"\stitle="(.*?)"', preparse.group(1), re.S)
+		if Cats:
+			for Videos, Image, PlayUrl, Url, Title in Cats:
+				Url = base_url + Url
+				PlayUrl = base_url + PlayUrl
+				self.filmliste.append((decodeHtml(Title), Videos, Image, Url, PlayUrl))
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('No playlists found!'), "", None, None, None))
+		self.ml.setList(map(self.pornhubPlayListEntry, self.filmliste))
+		if not self.reload:
+			self.ml.moveToIndex(0)
+		self.reload = False
+		self.keyLocked = False
+		self.th_ThumbsQuery(self.filmliste, 0, 3, 2, None, None, self.page, self.lastpage, mode=1)
+		self.showInfos()
 
 	def showInfos(self):
 		submsg = ""
@@ -360,23 +370,20 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper, rnCalc):
 				url = self['liste'].getCurrent()[0][3]
 				self.lock = True
 				self['F4'].setText('')
-				getPage(url, agent=phAgent, cookies=ck).addCallback(self.showInfos2).addErrback(self.dataError)
+				twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.showInfos2).addErrback(self.dataError)
 		self['handlung'].setText("%s: %s" % (_("Sort order"), self.sortname) + submsg)
 
 	def showInfos2(self, data):
-		if 'class="recaptchaContent"' in data and nodejs:
-			self.rncalc(data, self.showInfos)
+		fav = re.findall('var\salreadyAddedToFav\s=\s(\d);', data, re.S)
+		isfav = str(fav[0])
+		if isfav == "1":
+			submsg = "\nFavourite"
+			self['F4'].setText(_("Remove Favourite"))
 		else:
-			fav = re.findall('var\salreadyAddedToFav\s=\s(\d);', data, re.S)
-			isfav = str(fav[0])
-			if isfav == "1":
-				submsg = "\nFavourite"
-				self['F4'].setText(_("Remove Favourite"))
-			else:
-				submsg = ""
-				self['F4'].setText(_("Add Favourite"))
-			self.lock = False
-			self['handlung'].setText("%s: %s" % (_("Sort order"), self.sortname) + submsg)
+			submsg = ""
+			self['F4'].setText(_("Add Favourite"))
+		self.lock = False
+		self['handlung'].setText("%s: %s" % (_("Sort order"), self.sortname) + submsg)
 
 	def keyOK(self):
 		CatLink = self['liste'].getCurrent()[0][3]
@@ -406,7 +413,7 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper, rnCalc):
 		if phLoggedIn:
 			self.playurl = self['liste'].getCurrent()[0][3]
 			if self.playurl:
-				getPage(self.playurl, agent=phAgent, cookies=ck).addCallback(self.parseFavourite).addErrback(self.dataError)
+				twAgentGetPage(self.playurl, agent=phAgent, cookieJar=ph_cookies).addCallback(self.parseFavourite).addErrback(self.dataError)
 
 	def parseFavourite(self, data):
 		parse = re.findall('var\stoken\s=\s"(.*?)";.*?var\salreadyAddedToFav\s=\s(\d);.*?var\splaylistId\s=\s"(\d+)";', data, re.S)
@@ -418,7 +425,7 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper, rnCalc):
 				FavUrl = base_url + "/playlist/remove_favourite?playlist_id=%s&token=%s" % (id, favtoken)
 			else:
 				FavUrl = base_url + "/playlist_json/favourite?playlist_id=%s&token=%s" % (id, favtoken)
-			getPage(FavUrl, agent=phAgent, cookies=ck, headers={'Content-Type':'application/x-www-form-urlencoded','Referer':self.playurl}).addCallback(self.ok).addErrback(self.dataError)
+			twAgentGetPage(FavUrl, agent=phAgent, cookieJar=ph_cookies, headers={'Content-Type':'application/x-www-form-urlencoded','Referer':self.playurl}).addCallback(self.ok).addErrback(self.dataError)
 			self.reload = True
 			DelayedFunction(1000, self.loadPage)
 
@@ -430,7 +437,7 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper, rnCalc):
 		#print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 		pass
 
-class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper, rnCalc):
+class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
@@ -483,62 +490,59 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper, rnCalc):
 		self.keyLocked = True
 		if self.page > 1 and self.Name == "Member Subscriptions":
 			url = self.Link.replace('/subscriptions','/subscriptions/ajax') + str(self.page) + self.sort
-			getPage(url, agent=phAgent, method='POST', cookies=ck, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+			twAgentGetPage(url, agent=phAgent, method='POST', cookieJar=ph_cookies, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		else:
 			url = self.Link + str(self.page) + self.sort
-			getPage(url, agent=phAgent, cookies=ck).addCallback(self.loadPageData).addErrback(self.dataError)
+			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if 'class="recaptchaContent"' in data and nodejs:
-			self.rncalc(data, self.loadPage)
+		if self.page == 1 and (self.Name == "Member Subscriptions" or self.Name == "Pornstar Subscriptions"):
+			countprofile = re.findall('class="showingInfo">Showing up to (\d+) subscriptions.</div>', data, re.S)
+			if countprofile:
+				self.lastpage = int(round((float(countprofile[0].replace(',','')) / 100) + 0.5))
+				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+			else:
+				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+			parse = re.search('(.*?)class="profileContentRight', data, re.S)
+			parsedata = parse.group(1)
 		else:
-			if self.page == 1 and (self.Name == "Member Subscriptions" or self.Name == "Pornstar Subscriptions"):
-				countprofile = re.findall('class="showingInfo">Showing up to (\d+) subscriptions.</div>', data, re.S)
-				if countprofile:
-					self.lastpage = int(round((float(countprofile[0].replace(',','')) / 100) + 0.5))
-					self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-				else:
-					self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+			if self.Name == "Member Subscriptions":
+				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+				parsedata = data
+			else:
+				if self.Name == "Channel Subscriptions":
+					countprofile = re.findall('>Channel Subscriptions <span>\((\d+)\)', data, re.S)
+					if countprofile:
+						self.lastpage = int(round((float(countprofile[0].replace(',','')) / 100) + 0.5))
+				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 				parse = re.search('(.*?)class="profileContentRight', data, re.S)
 				parsedata = parse.group(1)
-			else:
-				if self.Name == "Member Subscriptions":
-					self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-					parsedata = data
-				else:
-					if self.Name == "Channel Subscriptions":
-						countprofile = re.findall('>Channel Subscriptions <span>\((\d+)\)', data, re.S)
-						if countprofile:
-							self.lastpage = int(round((float(countprofile[0].replace(',','')) / 100) + 0.5))
-					self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-					parse = re.search('(.*?)class="profileContentRight', data, re.S)
-					parsedata = parse.group(1)
-			Cats = re.findall('class="pornStarLink.*?href="(.*?)".*?img\sclass="avatar.*?src="(.*?)".*?alt="(.*?)"', parsedata, re.S)
+		Cats = re.findall('class="pornStarLink.*?href="(.*?)".*?img\s+class="avatar.*?src="(.*?)".*?alt="(.*?)"', parsedata, re.S)
+		if not Cats:
+			Cats = re.findall('class="userLink.*?\shref="(.*?)".*?img\s+class="avatar.*?src="(.*?)".*?alt="(.*?)"', parsedata, re.S)
 			if not Cats:
-				Cats = re.findall('class="userLink.*?\shref="(.*?)".*?img\sclass="avatar.*?src="(.*?)".*?alt="(.*?)"', parsedata, re.S)
-				if not Cats:
-					Cats = re.findall('class="channelSubChannel.*?a\shref="(.*?)".*?img\ssrc="(.*?)".*?wtitle">.*?>(.*?)</a.', parsedata, re.S)
-			if Cats:
-				for Url, Image, Title in Cats:
-					if self.Name == "Member Subscriptions":
-						Url = Url + '/videos/public?page='
-					elif self.Name == "Pornstar Subscriptions":
-						Url = Url + '?o=cm&page='
-					else:
-						Url = Url + '/videos?o=da&page='
-					Url = base_url + Url
-					self.filmliste.append((decodeHtml(Title), Url, Image))
-				if self.Name == "Pornstar Subscriptions" and self.sortname == "Pornstar Name":
-					self.filmliste.sort()
-			if len(self.filmliste) == 0:
-				self.filmliste.append((_('No subscriptions found!'), None, None))
-			self.ml.setList(map(self._defaultlistleft, self.filmliste))
-			if not self.reload:
-				self.ml.moveToIndex(0)
-			self.reload = False
-			self.keyLocked = False
-			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
-			self.showInfos()
+				Cats = re.findall('class="channelSubChannel.*?a\shref="(.*?)".*?img\s+src="(.*?)".*?wtitle">.*?>(.*?)</a.', parsedata, re.S)
+		if Cats:
+			for Url, Image, Title in Cats:
+				if self.Name == "Member Subscriptions":
+					Url = Url + '/videos/public?page='
+				elif self.Name == "Pornstar Subscriptions":
+					Url = Url + '?o=cm&page='
+				else:
+					Url = Url + '/videos?o=da&page='
+				Url = base_url + Url
+				self.filmliste.append((decodeHtml(Title), Url, Image))
+			if self.Name == "Pornstar Subscriptions" and self.sortname == "Pornstar Name":
+				self.filmliste.sort()
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('No subscriptions found!'), None, None))
+		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		if not self.reload:
+			self.ml.moveToIndex(0)
+		self.reload = False
+		self.keyLocked = False
+		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
+		self.showInfos()
 
 	def showInfos(self):
 		Image = self['liste'].getCurrent()[0][2]
@@ -576,13 +580,13 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper, rnCalc):
 			url = self['liste'].getCurrent()[0][1]
 			if url:
 				url = url + "1"
-				getPage(url, agent=phAgent, cookies=ck).addCallback(self.parseSubscribe).addErrback(self.dataError)
+				twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.parseSubscribe).addErrback(self.dataError)
 
 	def parseSubscribe(self, data):
 		subs = re.findall('data-unsubscribe-url="(.*?)"', data, re.S)
 		if subs:
 			url = base_url + subs[0].replace('&amp;','&')
-			getPage(url, agent=phAgent, cookies=ck).addCallback(self.parseSubscribe2).addErrback(self.dataError)
+			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.parseSubscribe2).addErrback(self.dataError)
 
 	def parseSubscribe2(self, data):
 		unsub = re.findall('(Subscription removed.*?PASS)', data, re.S)
@@ -592,7 +596,7 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper, rnCalc):
 		else:
 			self.session.open(MessageBoxExt, _("Unknown error."), MessageBoxExt.TYPE_INFO)
 
-class pornhubPornstarScreen(MPScreen, ThumbsHelper, rnCalc):
+class pornhubPornstarScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
@@ -639,28 +643,25 @@ class pornhubPornstarScreen(MPScreen, ThumbsHelper, rnCalc):
 		self.filmliste = []
 		self.keyLocked = True
 		url = self.Link + str(self.page) + "&o=%s" % self.sort
-		getPage(url, agent=phAgent, cookies=ck).addCallback(self.loadPageData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if 'class="recaptchaContent"' in data and nodejs:
-			self.rncalc(data, self.loadPage)
-		else:
-			self.getLastPage(data, 'class="pagination3">(.*?)</div>')
-			parse = re.search('class="textFilter">.*?</span>(.*)', data, re.S)
-			Cats = re.findall('rank_number">(.*?)<.*?src="(.*?)".*?href="(.*?)".*?class="title.*?>(.*?)<.*?videosNumber">(.*?)\sVideos', parse.group(1), re.S)
-			if Cats:
-				for Rank, Image, Url, Title, Videos in Cats:
-					Url = base_url + Url + "?page="
-					self.filmliste.append((decodeHtml(Title), Url, Image, Rank.strip(), Videos))
-			if len(self.filmliste) == 0:
-				self.filmliste.append((_('No pornstars found!'), None, None, "", ""))
-			self.ml.setList(map(self.pornhubPornstarListEntry, self.filmliste))
-			if not self.reload:
-				self.ml.moveToIndex(0)
-			self.reload = False
-			self.keyLocked = False
-			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
-			self.showInfos()
+		self.getLastPage(data, 'class="pagination3">(.*?)</div>')
+		parse = re.search('class="textFilter">.*?</span>(.*)', data, re.S)
+		Cats = re.findall('rank_number">(.*?)<.*?src="(.*?)".*?href="(.*?)".*?class="title.*?>(.*?)<.*?videosNumber">(.*?)\sVideos', parse.group(1), re.S)
+		if Cats:
+			for Rank, Image, Url, Title, Videos in Cats:
+				Url = base_url + Url + "?page="
+				self.filmliste.append((decodeHtml(Title), Url, Image, Rank.strip(), Videos))
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('No pornstars found!'), None, None, "", ""))
+		self.ml.setList(map(self.pornhubPornstarListEntry, self.filmliste))
+		if not self.reload:
+			self.ml.moveToIndex(0)
+		self.reload = False
+		self.keyLocked = False
+		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
+		self.showInfos()
 
 	def showInfos(self):
 		Image = self['liste'].getCurrent()[0][2]
@@ -668,21 +669,18 @@ class pornhubPornstarScreen(MPScreen, ThumbsHelper, rnCalc):
 		CoverHelper(self['coverArt']).getCover(Image)
 		if phLoggedIn:
 			url = self['liste'].getCurrent()[0][1] + "1"
-			getPage(url, agent=phAgent, cookies=ck).addCallback(self.showInfos2).addErrback(self.dataError)
+			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.showInfos2).addErrback(self.dataError)
 
 	def showInfos2(self, data):
-		if 'class="recaptchaContent"' in data and nodejs:
-			self.rncalc(data, self.showInfos)
+		subs = re.findall('data-subscribed="(\d)"', data, re.S)
+		Subscribed = str(subs[0])
+		if Subscribed == "1":
+			submsg = "\nSubscribed"
+			self['F1'].setText(_("Unsubscribe"))
 		else:
-			subs = re.findall('data-subscribed="(\d)"', data, re.S)
-			Subscribed = str(subs[0])
-			if Subscribed == "1":
-				submsg = "\nSubscribed"
-				self['F1'].setText(_("Unsubscribe"))
-			else:
-				submsg = ""
-				self['F1'].setText(_("Subscribe"))
-			self['handlung'].setText("%s: %s" % (_("Sort order"), self.sortname) + submsg)
+			submsg = ""
+			self['F1'].setText(_("Subscribe"))
+		self['handlung'].setText("%s: %s" % (_("Sort order"), self.sortname) + submsg)
 
 	def keyOK(self):
 		Name = self['liste'].getCurrent()[0][0]
@@ -707,7 +705,7 @@ class pornhubPornstarScreen(MPScreen, ThumbsHelper, rnCalc):
 			return
 		if phLoggedIn:
 			url = self['liste'].getCurrent()[0][1] + "1"
-			getPage(url, agent=phAgent, cookies=ck).addCallback(self.parseSubscribe).addErrback(self.dataError)
+			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.parseSubscribe).addErrback(self.dataError)
 
 	def parseSubscribe(self, data):
 		subs = re.findall('data-subscribe-url="(.*?)".{0,4}data-unsubscribe-url="(.*?)".{0,4}data-subscribed="(.*?)"', data, re.S)
@@ -717,7 +715,7 @@ class pornhubPornstarScreen(MPScreen, ThumbsHelper, rnCalc):
 				url = base_url + subs[0][1].replace('&amp;','&')
 			else:
 				url = base_url + subs[0][0].replace('&amp;','&')
-			getPage(url, agent=phAgent, cookies=ck).addCallback(self.parseSubscribe2).addErrback(self.dataError)
+			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.parseSubscribe2).addErrback(self.dataError)
 
 	def parseSubscribe2(self, data):
 		unsub = re.findall('(Subscription removed.*?PASS)', data, re.S)
@@ -732,7 +730,7 @@ class pornhubPornstarScreen(MPScreen, ThumbsHelper, rnCalc):
 			else:
 				self.session.open(MessageBoxExt, _("Unknown error."), MessageBoxExt.TYPE_INFO)
 
-class pornhubChannelScreen(MPScreen, ThumbsHelper, rnCalc):
+class pornhubChannelScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
@@ -779,30 +777,27 @@ class pornhubChannelScreen(MPScreen, ThumbsHelper, rnCalc):
 		self.filmliste = []
 		self.keyLocked = True
 		url = self.Link + str(self.page) + "&o=%s" % self.sort
-		getPage(url, agent=phAgent, cookies=ck).addCallback(self.loadPageData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		if 'class="recaptchaContent"' in data and nodejs:
-			self.rncalc(data, self.loadPage)
-		else:
-			self.getLastPage(data, 'class="pagination3">(.*?)</div>')
-			Cats = re.findall('class="channelsWrapper.*?class="rank">.*?<span>Rank<br/>\s{0,1}(\d+)</span>.*?href="(.*?)".*?img\salt="(.*?)"\ssrc="(.*?)".*?Videos<span>(.*?)</span>.*?data-subscribe-url="(.*?)"\sdata-unsubscribe-url="(.*?)"\sdata-subscribed="(.*?)"', data, re.S)
-			if Cats:
-				for Rank, Url, Title, Image, Videos, Reg, Unreg, Subscribed in Cats:
-					Url = base_url + Url + "/videos?o=da&page="
-					Reg = base_url + Reg.replace('&amp;','&')
-					Unreg = base_url + Unreg.replace('&amp;','&')
-					Videos = Videos.replace(',','')
-					self.filmliste.append((decodeHtml(Title), Url, Image, Rank.strip(), Videos, Reg, Unreg, Subscribed))
-			if len(self.filmliste) == 0:
-				self.filmliste.append((_('No channels found!'), None, None, "", "", None, None, ""))
-			self.ml.setList(map(self.pornhubPornstarListEntry, self.filmliste))
-			if not self.reload:
-				self.ml.moveToIndex(0)
-			self.reload = False
-			self.keyLocked = False
-			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
-			self.showInfos()
+		self.getLastPage(data, 'class="pagination3">(.*?)</div>')
+		Cats = re.findall('class="channelsWrapper.*?class="rank">.*?<span>Rank<br/>\s{0,1}(\d+)</span>.*?href="(.*?)".*?img\salt="(.*?)"\ssrc="(.*?)".*?Videos<span>(.*?)</span>.*?data-subscribe-url="(.*?)"\sdata-unsubscribe-url="(.*?)"\sdata-subscribed="(.*?)"', data, re.S)
+		if Cats:
+			for Rank, Url, Title, Image, Videos, Reg, Unreg, Subscribed in Cats:
+				Url = base_url + Url + "/videos?o=da&page="
+				Reg = base_url + Reg.replace('&amp;','&')
+				Unreg = base_url + Unreg.replace('&amp;','&')
+				Videos = Videos.replace(',','')
+				self.filmliste.append((decodeHtml(Title), Url, Image, Rank.strip(), Videos, Reg, Unreg, Subscribed))
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('No channels found!'), None, None, "", "", None, None, ""))
+		self.ml.setList(map(self.pornhubPornstarListEntry, self.filmliste))
+		if not self.reload:
+			self.ml.moveToIndex(0)
+		self.reload = False
+		self.keyLocked = False
+		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
+		self.showInfos()
 
 	def showInfos(self):
 		submsg = ""
@@ -845,7 +840,7 @@ class pornhubChannelScreen(MPScreen, ThumbsHelper, rnCalc):
 				url = self['liste'].getCurrent()[0][6]
 			else:
 				url = self['liste'].getCurrent()[0][5]
-			getPage(url, agent=phAgent, cookies=ck).addCallback(self.parseSubscribe).addErrback(self.dataError)
+			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.parseSubscribe).addErrback(self.dataError)
 
 	def parseSubscribe(self, data):
 		unsub = re.findall('(Subscription removed.*?PASS)', data, re.S)
@@ -860,7 +855,7 @@ class pornhubChannelScreen(MPScreen, ThumbsHelper, rnCalc):
 			else:
 				self.session.open(MessageBoxExt, _("Unknown error."), MessageBoxExt.TYPE_INFO)
 
-class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
+class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 
 	def __init__(self, session, Link, Name, Count=None):
 		self.Link = Link
@@ -915,9 +910,12 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 
-		self.onLayoutFinish.append(self.loadPage)
+		self.onLayoutFinish.append(self.checkLogin)
 
-	def loadPage(self):
+	def checkLogin(self):
+		self.LoginClear(self.loadPage)
+
+	def loadPage(self,res=None):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		if re.match(".*Feed",self.Name):
@@ -928,78 +926,76 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 		else:
 			url = "%s%s" % (self.Link, str(self.page))
 		if re.match(".*Feed",self.Name):
-			getPage(url, agent=phAgent, cookies=ck).addCallback(self.loadFeedData).addErrback(self.dataError)
+			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.loadFeedData).addErrback(self.dataError)
 		else:
-			getPage(url, agent=phAgent, cookies=ck).addCallback(self.genreData).addErrback(self.dataError)
+			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		self.filmliste = []
-		if 'class="recaptchaContent"' in data and nodejs:
-			self.rncalc(data, self.loadPage)
+		Movies = None
+		countprofile = re.findall('class="showingInfo">Showing up to (?:<span class="totalSpan">)(\d+)(?:</span>) videos.</div>', data, re.S)
+		if countprofile:
+			self.lastpage = int(round((float(countprofile[0].replace(',','')) / 48) + 0.5))
+			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		else:
-			Movies = None
-			countprofile = re.findall('class="showingInfo">Showing up to (?:<span class="totalSpan">)(\d+)(?:</span>) videos.</div>', data, re.S)
+			countprofile = re.findall('id="stats".*?SUBSCRIBERS.*?floatRight">(.*?)\s{0,1}<br/', data, re.S)
 			if countprofile:
-				self.lastpage = int(round((float(countprofile[0].replace(',','')) / 48) + 0.5))
+				self.lastpage = int(round((float(countprofile[0].replace(',','')) / 36) + 0.5))
 				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 			else:
-				countprofile = re.findall('id="stats".*?SUBSCRIBERS.*?floatRight">(.*?)\s{0,1}<br/', data, re.S)
-				if countprofile:
-					self.lastpage = int(round((float(countprofile[0].replace(',','')) / 36) + 0.5))
+				if self.Count:
+					self.lastpage = int(round((float(self.Count) / 36) + 0.5))
 					self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 				else:
-					if self.Count:
-						self.lastpage = int(round((float(self.Count) / 36) + 0.5))
-						self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+					if self.lastpage == 1:
+						self['page'].setText('1 / 1')
 					else:
-						if self.lastpage == 1:
-							self['page'].setText('1 / 1')
+						if self.Name == "Related":
+							self.lastpage = 6
+							self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 						else:
-							if self.Name == "Related":
-								self.lastpage = 6
-								self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-							else:
-								self.getLastPage(data, 'class="pagination3">(.*?)</div>')
-			parse = re.search('class="nf-videos(.*?)class="pagination3">', data, re.S)
+							self.getLastPage(data, 'class="pagination3">(.*?)</div>')
+		parse = re.search('class="nf-videos(.*?)class="pagination3">', data, re.S)
+		if not parse:
+			parse = re.search('class="videos\srow-5-thumbs(.*?)id="cmtWrapper">', data, re.S)
 			if not parse:
-				parse = re.search('class="videos\srow-5-thumbs(.*?)id="cmtWrapper">', data, re.S)
+				parse = re.search('class="videos\srow-5-thumbs(.*?)class="pagination3">', data, re.S)
 				if not parse:
-					parse = re.search('class="videos\srow-5-thumbs(.*?)class="pagination3">', data, re.S)
+					parse = re.search('class="videos\srecommendedContainerLoseOne(.*?)class="pagination3">', data, re.S)
 					if not parse:
-						parse = re.search('class="videos\srecommendedContainerLoseOne(.*?)class="pagination3">', data, re.S)
+						parse = re.search('class="profileVids">(.*?)class="profileContentRight', data, re.S)
 						if not parse:
-							parse = re.search('class="profileVids">(.*?)class="profileContentRight', data, re.S)
-							if not parse:
-								parse = re.search('id="lrelateRecommendedItems"(.*?)</ul>', data, re.S)
+							parse = re.search('id="lrelateRecommendedItems"(.*?)</ul>', data, re.S)
 
-			if parse:
-				Movies = re.findall('class="(?:js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', parse.group(1), re.S)
-			if Movies:
-				for (Url, Title, Image, Runtime, Views, Added) in Movies:
-					Url = base_url + Url
-					Title = Title.replace('&amp;amp;','&')
-					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, Added))
-			if len(self.filmliste) == 0:
-				self.filmliste.append((_('No movies found!'), None, None, "", "", ""))
-			self.ml.setList(map(self._defaultlistleft, self.filmliste))
-			if not self.reload:
-				self.ml.moveToIndex(0)
-			self.reload = False
-			self.keyLocked = False
-			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
-			self.showInfos()
+		if parse:
+			Movies = re.findall('class="(?:js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', parse.group(1), re.S)
+		if Movies:
+			for (Url, Title, Image, Runtime, Views, Added) in Movies:
+				Url = base_url + Url
+				Title = Title.replace('&amp;amp;','&')
+				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, Added))
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('No movies found!'), None, None, "", "", ""))
+		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		if not self.reload:
+			self.ml.moveToIndex(0)
+		self.reload = False
+		self.keyLocked = False
+		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
+		self.showInfos()
 
 	def loadFeedData(self, data):
 		self.filmliste = []
 		parse = re.findall('feedItemSection"(.*?)</section', data, re.S)
 		if parse:
 			for each in parse:
-				Movies = re.findall('class="(?:js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', each, re.S)
-				if Movies:
-					for (Url, Title, Image, Runtime, Views, Added) in Movies:
-						Url = base_url + Url
-						Title = Title.replace('&amp;amp;','&')
-						self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, Added))
+				if not ('class="price"' in each or 'class="premiumIcon' in each):
+					Movies = re.findall('class="(?:js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', each, re.S)
+					if Movies:
+						for (Url, Title, Image, Runtime, Views, Added) in Movies:
+							Url = base_url + Url
+							Title = Title.replace('&amp;amp;','&')
+							self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, Added))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), None, None, "", "", ""))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -1032,71 +1028,68 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 			self.infoTimer.start(2000, True)
 
 	def getInfos2(self):
-		getPage(self.url, agent=phAgent, cookies=ck, headers={'Referer':base_url}).addCallback(self.showInfos2).addErrback(self.dataError)
+		twAgentGetPage(self.url, agent=phAgent, cookieJar=ph_cookies, headers={'Referer':base_url}).addCallback(self.showInfos2).addErrback(self.dataError)
 
 	def showInfos2(self, data):
-		if 'class="recaptchaContent"' in data and nodejs:
-			self.rncalc(data, self.showInfos)
+		runtime = self['liste'].getCurrent()[0][3]
+		views = self['liste'].getCurrent()[0][4]
+		added = self['liste'].getCurrent()[0][5]
+		self.favourited = ""
+		self.suburl = ""
+		self.unsuburl = ""
+		self.subscribed = ""
+		favparse = re.findall('favouriteUrl.*?itemId":\"{0,1}(\d+)\"{0,1},.*?isFavourite":(\d),.*?token=(.*?)",', data, re.S)
+		if favparse:
+			self.favtoken = str(favparse[0][2])
+			self.id = str(favparse[0][0])
+			self.favourited = str(favparse[0][1])
+		userinfo = re.findall('From:.*?data-type="(.*?)".*?bolded">(.*?)</', data, re.S)
+		if userinfo:
+			usertype = userinfo[0][0].title()
+			username = userinfo[0][1]
 		else:
-			runtime = self['liste'].getCurrent()[0][3]
-			views = self['liste'].getCurrent()[0][4]
-			added = self['liste'].getCurrent()[0][5]
-			self.favourited = ""
-			self.suburl = ""
-			self.unsuburl = ""
-			self.subscribed = ""
-			favparse = re.findall('favouriteUrl.*?itemId":\"{0,1}(\d+)\"{0,1},.*?isFavourite":(\d),.*?token=(.*?)",', data, re.S)
-			if favparse:
-				self.favtoken = str(favparse[0][2])
-				self.id = str(favparse[0][0])
-				self.favourited = str(favparse[0][1])
-			userinfo = re.findall('From:.*?data-type="(.*?)".*?bolded">(.*?)</', data, re.S)
-			if userinfo:
-				usertype = userinfo[0][0].title()
-				username = userinfo[0][1]
-			else:
-				username = "unknown"
-				usertype = ""
-			if not username == "unknown":
-				subparse = re.findall('data-subscribe-url="(.*?)".{0,4}data-unsubscribe-url="(.*?)".{0,4}data-subscribed="(.*?)"', data, re.S)
-				if subparse:
-					self.suburl = base_url + subparse[0][0].replace('&amp;','&')
-					self.unsuburl = base_url + subparse[0][1].replace('&amp;','&')
-					self.subscribed = str(subparse[0][2])
-			if self.subscribed == "1" and phLoggedIn:
-				submsg = "\n" + usertype + ": " + username + " - Subscribed"
-				self['F1'].setText(_("Unsubscribe"))
-			elif self.subscribed == "0" and phLoggedIn:
-				submsg = "\n" + usertype + ": " + username
-				self['F1'].setText(_("Subscribe"))
-			else:
-				submsg = ""
-				self['F1'].setText("")
-			if self.favourited == "1" and phLoggedIn:
-				if self.Name == "Favourite Videos":
-					favmsg = ""
-				else:
-					favmsg = "\nFavourited"
-				self['F4'].setText(_("Remove Favourite"))
-			elif self.favourited == "0" and phLoggedIn:
+			username = "unknown"
+			usertype = ""
+		if not username == "unknown":
+			subparse = re.findall('data-subscribe-url="(.*?)".{0,4}data-unsubscribe-url="(.*?)".{0,4}data-subscribed="(.*?)"', data, re.S)
+			if subparse:
+				self.suburl = base_url + subparse[0][0].replace('&amp;','&')
+				self.unsuburl = base_url + subparse[0][1].replace('&amp;','&')
+				self.subscribed = str(subparse[0][2])
+		if self.subscribed == "1" and phLoggedIn:
+			submsg = "\n" + usertype + ": " + username + " - Subscribed"
+			self['F1'].setText(_("Unsubscribe"))
+		elif self.subscribed == "0" and phLoggedIn:
+			submsg = "\n" + usertype + ": " + username
+			self['F1'].setText(_("Subscribe"))
+		else:
+			submsg = ""
+			self['F1'].setText("")
+		if self.favourited == "1" and phLoggedIn:
+			if self.Name == "Favourite Videos":
 				favmsg = ""
-				self['F4'].setText(_("Add Favourite"))
 			else:
-				favmsg = ""
-				self['F4'].setText("")
-			if not self.id == '':
-				self['F3'].setText(_("Show Related"))
-			else:
-				self['F3'].setText("")
-			self.lock = False
-			self['handlung'].setText("Runtime: %s\nViews: %s\nAdded: %s%s%s" % (runtime, views, added, submsg, favmsg))
+				favmsg = "\nFavourited"
+			self['F4'].setText(_("Remove Favourite"))
+		elif self.favourited == "0" and phLoggedIn:
+			favmsg = ""
+			self['F4'].setText(_("Add Favourite"))
+		else:
+			favmsg = ""
+			self['F4'].setText("")
+		if not self.id == '':
+			self['F3'].setText(_("Show Related"))
+		else:
+			self['F3'].setText("")
+		self.lock = False
+		self['handlung'].setText("Runtime: %s\nViews: %s\nAdded: %s%s%s" % (runtime, views, added, submsg, favmsg))
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		self.url = self['liste'].getCurrent()[0][1]
 		if self.url:
-			getPage(self.url, agent=phAgent, cookies=ckUrl).addCallback(self.parseData).addErrback(self.dataError)
+			twAgentGetPage(self.url, agent=phAgent, cookieJar=ph_cookiesUrl).addCallback(self.parseData).addErrback(self.dataError)
 
 	def keyFavourite(self):
 		if self.keyLocked:
@@ -1115,7 +1108,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 				'token' : self.favtoken,
 				'toggle' : toggle
 				}
-			getPage(FavUrl, agent=phAgent, method='POST', postdata=urlencode(FavData), cookies=ck, headers={'Content-Type':'application/x-www-form-urlencoded','Referer':self.url}).addCallback(self.ok).addErrback(self.dataError)
+			twAgentGetPage(FavUrl, agent=phAgent, method='POST', postdata=urlencode(FavData), cookieJar=ph_cookies, headers={'Content-Type':'application/x-www-form-urlencoded','Referer':self.url}).addCallback(self.ok).addErrback(self.dataError)
 			if self.Name == "Favourite Videos":
 				self.reload = True
 				DelayedFunction(1000, self.loadPage)
@@ -1143,7 +1136,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 			else:
 				url = self.suburl
 			if not self.suburl == "" and not self.unsuburl == "":
-				getPage(url, agent=phAgent, cookies=ck).addCallback(self.parseSubscribe).addErrback(self.dataError)
+				twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.parseSubscribe).addErrback(self.dataError)
 
 	def parseSubscribe(self, data):
 		unsub = re.findall('(Subscription removed.*?PASS)', data, re.S)
@@ -1161,33 +1154,30 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, rnCalc):
 				self.session.open(MessageBoxExt, _("Unknown error."), MessageBoxExt.TYPE_INFO)
 
 	def parseData(self, data):
-		if 'class="recaptchaContent"' in data and nodejs:
-			self.rncalc(data, self.keyOK)
+		match = re.findall('quality":"720","videoUrl"."(.*?)"', data, re.S)
+		if not match:
+			match = re.findall('quality":"480","videoUrl"."(.*?)"', data, re.S)
+		if not match:
+			match = re.findall('quality":"240","videoUrl"."(.*?)"', data, re.S)
+		fetchurl = urllib2.unquote(match[0]).replace('\/','/')
+
+		# retry till we get a good working cdn streamurl
+		if config.mediaportal.pornhub_cdnfix.value:
+			if re.match('.*?bv.phncdn.com', fetchurl, re.S):
+				self.count += 1
+				if self.count < 20:
+					self.keyOK()
+					printl('CDN retry: '+str(self.count),self,'A')
+					return
+
+		Title = self['liste'].getCurrent()[0][0]
+		mp_globals.player_agent = phAgent
+		if "&hash=" in fetchurl:
+			url = fetchurl.split('&hash=')
+			url = url[0] + "&hash=" + url[1].replace('/','%252F').replace('=','%253D').replace('+','%252B')
 		else:
-			match = re.findall('quality":"720","videoUrl"."(.*?)"', data, re.S)
-			if not match:
-				match = re.findall('quality":"480","videoUrl"."(.*?)"', data, re.S)
-			if not match:
-				match = re.findall('quality":"240","videoUrl"."(.*?)"', data, re.S)
-			fetchurl = urllib2.unquote(match[0]).replace('\/','/')
-
-			# retry till we get a good working cdn streamurl
-			if config.mediaportal.pornhub_cdnfix.value:
-				if re.match('.*?bv.phncdn.com', fetchurl, re.S):
-					self.count += 1
-					if self.count < 20:
-						self.keyOK()
-						printl('CDN retry: '+str(self.count),self,'A')
-						return
-
-			Title = self['liste'].getCurrent()[0][0]
-			mp_globals.player_agent = phAgent
-			if "&hash=" in fetchurl:
-				url = fetchurl.split('&hash=')
-				url = url[0] + "&hash=" + url[1].replace('/','%252F').replace('=','%253D').replace('+','%252B')
-			else:
-				url = fetchurl
-			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='pornhub')
+			url = fetchurl
+		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='pornhub')
 
 	def ok(self, data):
 		message = re.findall('"message":"(.*?)",', data, re.S)

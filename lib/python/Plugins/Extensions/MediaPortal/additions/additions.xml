@@ -33,7 +33,7 @@
 		<plugin type="mod" modfile="fun.lachmeister_de" confopt="showLachmeister" default="False" confcat="fun" gz="0" name="Lachmeister" icon="lachmeister_de" filter="Fun" screen="show_LMDE_Genre" param1="" param2=""/>
 		<plugin type="mod" modfile="fun.hanswurst_net" confopt="showHansWurst" default="True" confcat="fun" gz="0" name="Hans-Wurst.net" icon="hanswurst_net" filter="Fun" screen="show_HWNET_Genre" param1="" param2=""/>
 		<plugin type="mod" modfile="fun.lachschon_de" confopt="showLachschon" default="True" confcat="fun" gz="0" name="LACHSCHON.DE" icon="lachschon_de" filter="Fun" screen="show_LSDE_Genre" param1="" param2=""/>
-		<plugin type="mod" modfile="fun.twitch" confopt="showTwitch" default="True" confcat="fun" gz="0" name="Twitch" icon="twitch" filter="Fun" screen="twitchGames" param1="" param2=""/>
+		<plugin type="mod" modfile="fun.twitch" confopt="showTwitch" default="True" confcat="fun" gz="0" name="Twitch" icon="twitch" filter="Mediathek/Fun" screen="twitchMainScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="fun.chefkoch" confopt="showChefkoch" default="True" confcat="fun" gz="0" name="Chefkoch.de" icon="chefkoch" filter="Fun" screen="chefkochGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="fun.germanytv" confopt="showgermanytv" default="True" confcat="fun" gz="0" name="Germany-TV" icon="germanytv" filter="Fun" screen="germanytvChannelScreen" param1="" param2=""/>
 		<!--mediatheken section-->

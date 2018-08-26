@@ -254,7 +254,7 @@ class toSearchForPornBrowse(MPScreen):
 			return
 		auswahl = self['liste'].getCurrent()[0][0]
 
-		conf = xml.etree.cElementTree.parse("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/additions/additions.xml")
+		conf = xml.etree.cElementTree.parse(CONFIG)
 		for x in conf.getroot():
 			if x.tag == "set" and x.get("name") == 'additions':
 				root =  x

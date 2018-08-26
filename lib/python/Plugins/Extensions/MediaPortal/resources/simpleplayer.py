@@ -1890,10 +1890,12 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 				downloadPage(cover, '/tmp/.RadioCover.jpg').addCallback(self.showCover2)
 			elif mp_globals.isDreamOS:
 				downloadPage(fallback, '/tmp/.RadioCover.jpg').addCallback(self.showCover2)
-		elif (CoverSize == "small" and self.playerMode == 'RADIO') or self.playerMode != 'RADIO':
+		elif CoverSize == "small" and self.playerMode == 'RADIO':
 			self._Cover.getCover(cover, download_cb=download_cb)
 			if mp_globals.isDreamOS:
 				downloadPage(cover, '/tmp/.RadioCover.jpg').addCallback(self.showCover2)
+		elif self.playerMode != 'RADIO':
+			self._Cover.getCover(cover, download_cb=download_cb)
 
 	def showCover2(self, ret):
 		if model in ["dm7080","dm900","dm920"]:

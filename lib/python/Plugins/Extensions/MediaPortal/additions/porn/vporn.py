@@ -144,13 +144,13 @@ class vpornGenreScreen(MPScreen):
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		if Name == "--- Search ---":
-			self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True, auto_text_init=False, suggest_func=self.getSuggestions)
+			self.suchen(suggest_func=self.getSuggestions)
 		else:
 			Link = self['liste'].getCurrent()[0][1]
 			Main = self['liste'].getCurrent()[0][3]
 			self.session.open(vpornFilmScreen, Link, Name, self.hd, self.date, Main)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			Name = "--- Search ---"

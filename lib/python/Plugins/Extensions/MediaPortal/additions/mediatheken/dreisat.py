@@ -120,7 +120,7 @@ class dreisatGenreScreen(MPScreen, ThumbsHelper):
 		else:
 			self.session.open(dreisatListScreen, Link, Name)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '-')
 			Name = "--- Suche ---"

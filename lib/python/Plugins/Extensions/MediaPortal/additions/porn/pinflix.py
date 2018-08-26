@@ -128,7 +128,7 @@ class pinflixGenreScreen(MPScreen):
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(pinflixFilmScreen, Link, Name, self.portal, self.baseurl)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback

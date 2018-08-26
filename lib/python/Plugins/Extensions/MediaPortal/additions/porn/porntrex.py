@@ -1,5 +1,4 @@
 ﻿# -*- coding: utf-8 -*-
-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.configlistext import ConfigListScreenExt
@@ -109,7 +108,7 @@ class porntrexGenreScreen(MPScreen):
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(porntrexFilmScreen, Link, Name, self.portal, self.baseurl)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback

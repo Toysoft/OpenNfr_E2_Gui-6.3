@@ -58,7 +58,7 @@ class elladiesGenreScreen(MPScreen):
 			streamGenreID = self['liste'].getCurrent()[0][1]
 			self.session.open(elladiesFilmScreen, streamSearchString, streamGenreName, streamGenreID)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			streamGenreName = self['liste'].getCurrent()[0][0]
 			self.suchString = callback.replace(' ', '+')
@@ -166,7 +166,7 @@ class elladiesFilmScreen(MPScreen, ThumbsHelper):
 			url = 'http://just.eroprofile.com/play/' + url
 			getPage(url).addCallback(self.getVideoPage).addErrback(self.dataError)
 
-	def SuchenCallback(self, callback = None, entry = None):
+	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
 			self.SearchString = self.suchString
