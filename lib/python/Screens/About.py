@@ -44,7 +44,7 @@ class About(Screen):
 			cpuMHz = "   (1,5 GHz)"
 		elif getMachineBuild() in ('formuler1', 'triplex'):
 			cpuMHz = "   (1,3 GHz)"
-		elif getMachineBuild() in ('u5','u5pvr'):
+		elif getMachineBuild() in ('u5','u53','u52','u51','u5pvr','h9','cc1','sf8008'):
 			cpuMHz = "   (1,6 GHz)"			
 		elif getMachineBuild() in ('vuuno4k','vuultimo4k', 'gb7252', 'dags7252'):
 			cpuMHz = "   (1,7 GHz)"
@@ -247,7 +247,7 @@ class Devices(Screen):
 			if not parts:
 				continue
 			device = parts[3]
-			if not search('sd[a-z][1-9]', device):
+			if not search('sd[a-z][1-9]', device) or not search('mmcblk1p[1-9]', device):
 				continue
 			if device in list2:
 				continue
