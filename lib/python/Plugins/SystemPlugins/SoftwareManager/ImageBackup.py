@@ -562,7 +562,7 @@ class ImageBackup(Screen):
 		}, -2)
 		
 	def createBackupJob(self):
-		if SystemInfo["HaveMultiBoot"]:
+                if SystemInfo["HaveMultiBoot"]:
 			with open("/boot/STARTUP", 'r') as myfile:
 				data=myfile.read().replace('\n', '')
 			myfile.close()
@@ -668,7 +668,7 @@ class ImageBackup(Screen):
 						cmdline = self.read_startup("/boot/" + name).split("=",1)[1].split(" ",1)[0]
 					if cmdline in Harddisk.getextdevices("ext4"):
 						files.append(name)
-			if getMachineBuild() not in ("gb7252"):
+			if getMachineBuild() not in ("gb7252","cc1","sf8008"):
 				files.append("Recovery")
                 return files
 
