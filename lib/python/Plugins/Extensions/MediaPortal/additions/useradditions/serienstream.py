@@ -322,23 +322,26 @@ class ssNeueEpisoden(MPScreen):
 
 	def loadPage(self):
 		self.streamList = []
-		url = BASE_URL
-		self.filmQ.put(url)
-		if not self.eventL.is_set():
-			self.eventL.set()
-			self.loadPageQueued()
-
-	def loadPageQueued(self, headers={}):
-		self['name'].setText(_('Please wait...'))
-		while not self.filmQ.empty():
-			url = self.filmQ.get_nowait()
-		twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(BASE_URL, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
+		self.watched_liste = []
+		self.mark_last_watched = []
+		if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
+			open(config.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
+			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_bs_watched")
+			if not leer == 0:
+				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
+				for lines in sorted(self.updates_read.readlines()):
+					line = re.findall('"(.*?S\d+E\d+)', lines)
+					if line:
+						self.watched_liste.append("%s" % (line[0]))
+				self.updates_read.close()
 		parse = re.search('neusten Episoden</h2>(.*?)class="cf">', data, re.S)
-		neue = re.findall('<div class="col-md-12">.*?<a href="(.*?)">.*?<span class="listTag bigListTag blue2">(.*?)</span>.*?<span class="listTag bigListTag blue1">St.(.*?)</span>.*?<span class="listTag bigListTag grey">Ep.(.*?)</span>', parse.group(1), re.S)
+		neue = re.findall('<div class="col-md-12">.*?/public/img/(\w{2}).*?<a href="(.*?)">.*?<span class="listTag bigListTag blue2">(.*?)</span>.*?<span class="listTag bigListTag blue1">St.(.*?)</span>.*?<span class="listTag bigListTag grey">Ep.(.*?)</span>', parse.group(1), re.S)
 		if neue:
-			for url, title, staffel, episode in neue:
+			for flag, url, title, staffel, episode in neue:
 				if int(staffel) < 10:
 					staffel = "S0"+str(staffel)
 				else:
@@ -347,14 +350,22 @@ class ssNeueEpisoden(MPScreen):
 					episode = "E0"+str(episode)
 				else:
 					episode = "E"+str(episode)
-				title = "%s - %s%s" % (title, staffel, episode)
+				Title = "%s - %s%s" % (title, staffel, episode)
 				url = BASE_URL + url
-				self.streamList.append((title, url))
+				Flag = flag.upper()
+				check = decodeHtml(title) + " - " + staffel + episode
+				checkname = check
+				checkname2 = check.replace('ä','ae').replace('ö','oe').replace('ü','ue').replace('Ä','Ae').replace('Ö','Oe').replace('Ü','Ue')
+
+				if (checkname in self.watched_liste) or (checkname2 in self.watched_liste):
+					self.streamList.append((decodeHtml(Title), url, True, Flag))
+				else:
+					self.streamList.append((decodeHtml(Title), url, False, Flag))
 		if len(self.streamList) == 0:
-			self.streamList.append((_('No episodes found!'), None))
+			self.streamList.append((_('No episodes found!'), None, False, None))
 		else:
 			self.keyLocked = False
-		self.ml.setList(map(self._defaultlistleft, self.streamList))
+		self.ml.setList(map(self._defaultlistleftmarked, self.streamList))
 		self.loadPicQueued()
 
 	def keyOK(self):
@@ -392,6 +403,7 @@ class ssNeueEpisoden(MPScreen):
 			CoverHelper(self['coverArt']).getCover(self.cover, agent=ss_agent, cookieJar=ss_cookies)
 
 	def reloadList(self):
+		self.keyLocked = True
 		self.loadPage()
 
 class ssWatchlist(MPScreen, SearchHelper):
@@ -674,7 +686,7 @@ class ssEpisoden(MPScreen):
 			twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.showInfos2).addErrback(self.dataError)
 
 	def showInfos2(self, data):
-		descr = re.search('class="descriptionSpoiler">(.*?)</p>', data, re.S)
+		descr = re.search('class="descriptionSpoiler".*?>(.*?)</p>', data, re.S)
 		if descr:
 			self['handlung'].setText(stripAllTags(decodeHtml(descr.group(1))).strip())
 

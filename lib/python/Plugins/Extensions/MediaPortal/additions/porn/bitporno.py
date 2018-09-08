@@ -42,14 +42,13 @@ class bitpornoGenreScreen(MPScreen):
 					Url = base_url + Url.replace('&amp;','&') + "&page="
 					self.genreliste.append((Title, Url))
 		self.genreliste.sort()
-		self.genreliste.insert(0, ("Featured", base_url + "/?view=&or=&page="))
-		self.genreliste.insert(0, ("Most Viewed", base_url + "/?q=&&cat=&sort=mostviewed&time=someday&length=all&user=&page="))
-		self.genreliste.insert(0, ("Past", base_url + "/?q=&&cat=&sort=oldest&time=past&length=all&user=&page="))
-		self.genreliste.insert(0, ("This Year", base_url + "/?q=&&cat=&sort=oldest&time=tyear&length=all&user=&page="))
-		self.genreliste.insert(0, ("This Month", base_url + "/?q=&&cat=&sort=oldest&time=tmonth&length=all&user=&page="))
-		self.genreliste.insert(0, ("This Week", base_url + "/?q=&&cat=&sort=oldest&time=tweek&length=all&user=&page="))
-		self.genreliste.insert(0, ("Today", base_url + "/?q=&&cat=&sort=oldest&time=today&length=all&user=&page="))
-		self.genreliste.insert(0, ("Newest", base_url + "/?q=&&cat=&sort=recent&time=someday&length=all&user=&page="))
+		self.genreliste.insert(0, ("Most Viewed", base_url + "/?q=&cat=&sort=mostviewed&time=someday&length=all&user=&page="))
+		self.genreliste.insert(0, ("Past", base_url + "/?q=&cat=&sort=oldest&time=past&length=all&user=&page="))
+		self.genreliste.insert(0, ("This Year", base_url + "/?q=&cat=&sort=oldest&time=tyear&length=all&user=&page="))
+		self.genreliste.insert(0, ("This Month", base_url + "/?q=&cat=&sort=oldest&time=tmonth&length=all&user=&page="))
+		self.genreliste.insert(0, ("This Week", base_url + "/?q=&cat=&sort=oldest&time=tweek&length=all&user=&page="))
+		self.genreliste.insert(0, ("Today", base_url + "/?q=&cat=&sort=oldest&time=today&length=all&user=&page="))
+		self.genreliste.insert(0, ("Newest", base_url + "/?q=&cat=&sort=recent&time=someday&length=all&user=&page="))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -144,9 +143,9 @@ class bitpornoFilmScreen(MPScreen, ThumbsHelper):
 				if stop:
 					continue
 
-				blacklist = [	'misaanime', 'shiryutetsu', 'shootgamez', 'wsadzxop011', 'peerapat24373', 'inzpistudio' ]
+				blacklist = [	'misaanime', 'shiryutetsu', 'shootgamez', 'wsadzxop011', 'peerapat24373', 'inzpistudio', 'zicozico', 'Fuck66666', 'nyc646dude' ]
 				for x in blacklist:
-					if x == User.lower():
+					if x.lower() == User.lower():
 						stop = True
 				if stop:
 					continue
@@ -162,7 +161,7 @@ class bitpornoFilmScreen(MPScreen, ThumbsHelper):
 						'tonari-no-kaibutsu', 'animerawrip', 'fall-year-princess', 'sirius the jaeger', 'otatu-anime-senyuu', 'zenzen-suki-jenain',
 						'satsuriku-no-tenshi', 'mahouka koukou no rettousei', 'dame-x-prince' ]
 				for x in blacklist:
-					if x in Title.lower():
+					if x.lower() in Title.lower():
 						stop = True
 				if stop:
 					continue

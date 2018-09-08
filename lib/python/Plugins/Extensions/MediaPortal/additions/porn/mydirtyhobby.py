@@ -6,6 +6,7 @@ from Plugins.Extensions.MediaPortal.resources.DelayedFunction import DelayedFunc
 myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
 
 mdh_ck = {}
+mdh_ck2 = {}
 mdh_cookies = CookieJar()
 
 default_cover = "file://%s/mydirtyhobby.png" % (config.mediaportal.iconcachepath.value + "logos")
@@ -34,9 +35,46 @@ class MDHGenreNewScreen(MPScreen):
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 
-		self.onLayoutFinish.append(self.genreData)
+		self.onLayoutFinish.append(self.layoutFinished)
 
-	def genreData(self):
+	def layoutFinished(self):
+		self.keyLocked = True
+		self['name'].setText(_("Please wait..."))
+		url = "https://www.stream-mydirtyhobby.co"
+		getPage(url, agent=myagent, cookies=mdh_ck2, headers={'Referer':'https://www.stream-mydirtyhobby.co/'}, timeout=30).addCallback(self.checkData).addErrback(self.dataError)
+
+	def checkData(self, data):
+		if "XMLHttpRequest" in data:
+			parse = re.findall('GET","(.*?)".*?"(.*?)"', data, re.S)
+			url = "https://www.stream-mydirtyhobby.co" + parse[0][0] + str(random.randint(1400,1800)) + parse[0][1]
+			DelayedFunction(4000, self.getJs, url)
+		elif 'class="g-recaptcha"' in data:
+			self['name'].setText('')
+			self.session.open(MessageBoxExt, _("Google reCAPTCHA detected, please verify your current IP by\naccessing the website 'https://www.stream-mydirtyhobby.co' with your browser."), MessageBoxExt.TYPE_INFO)
+		else:
+			self.genreData(data)
+
+	def getJs(self, url):
+		getPage(url, agent=myagent, cookies=mdh_ck2, headers={'Referer':'https://www.stream-mydirtyhobby.co'}, timeout=30).addCallback(self.getJs2).addErrback(self.dataError)
+
+	def getJs2(self, data):
+		try:
+			import execjs
+			node = execjs.get("Node")
+		except:
+			printl('nodejs not found',self,'E')
+			self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
+			return
+		js = re.search('(.*?)if\(\$\(window', data, re.S).group(1)
+		js = js + "function go(){ cookie = toHex(BFCrypt.decrypt(c, 2, a, b)) };"
+		js = js + 'go(); return cookie;'
+		result = node.exec_(js)
+		printl('BLAZINGFAST-WEB-PROTECT: '+result,self,'A')
+		mdh_ck2.update({'BLAZINGFAST-WEB-PROTECT':str(result)})
+		url = "https://www.stream-mydirtyhobby.co/"
+		getPage(url, agent=myagent, cookies=mdh_cookies2, headers={'Referer':'https://www.stream-mydirtyhobby.co/'}, timeout=30).addCallback(self.genreData).addErrback(self.genreData)
+
+	def genreData(self, data=None):
 		self['name'].setText('')
 		self.genreliste.insert(0, ("Stream-MDH (Old)", None))
 		self.genreliste.insert(0, ("Being Watched", "https://www.stream-mydirtyhobby.co/videos?t=a&o=bw&page="))
@@ -311,7 +349,7 @@ class MDHFilmNewScreen(MPScreen, ThumbsHelper):
 			url = "https://www.stream-mydirtyhobby.co/search/videos?search_query=%s&page=%s" % (self.Link, str(self.page))
 		else:
 			url = self.Link + str(self.page)
-		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+		getPage(url, agent=myagent, cookies=mdh_ck2, headers={'Referer':'https://www.stream-mydirtyhobby.co/'}).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination">(.*?)</div>', '.*[>|=](\d+)[<|&|"]>\d')
@@ -339,7 +377,7 @@ class MDHFilmNewScreen(MPScreen, ThumbsHelper):
 			return
 		Link = self['liste'].getCurrent()[0][1]
 		self.keyLocked = True
-		getPage(Link, agent=myagent).addCallback(self.getVideoUrl).addErrback(self.dataError)
+		getPage(Link, agent=myagent, cookies=mdh_ck2, headers={'Referer':'https://www.stream-mydirtyhobby.co/'}).addCallback(self.getVideoUrl).addErrback(self.dataError)
 
 	def keyRelated(self):
 		Link = self['liste'].getCurrent()[0][0]

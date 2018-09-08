@@ -316,7 +316,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 		Videos = re.findall('class=\'pes_author_div(.*?)(?:tm_playlist_hl|small_post_control)', prep, re.S)
 		if Videos:
 			for Video in Videos:
-				Movie = re.findall("src='(.*?.jpg)'.*?class='duration_small'.*?'>(.*?)</span></div></div><div class='post_control'><a class='tdn post_time' href='(.*?\.html.*?)'\stitle='(.*?)'>(.*?\sviews)", Video, re.S)
+				Movie = re.findall("src='(.*?.jpg)'.*?class='duration_small'.*?'>(.*?)</span></div></div><div class='post_control'><a class='tdn post_time' href='(.*?\.html.*?)'\stitle='(?!bitrate:\d+)(.*?)'>(.*?\sviews)", Video, re.S)
 				if Movie:
 					for (Image, Runtime, Url, Title, AddedViews) in Movie:
 						if "post_control_time" in AddedViews:
@@ -334,7 +334,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 
 
 				else:
-					Movie = re.findall("href='(/post.*?\.html.*?)'.*?src='(.*?)'.*?class='duration_small'.*?'>(.*?)<.*?title='(.*?)'(.*?\sviews)", Video, re.S)
+					Movie = re.findall("href='(/post.*?\.html.*?)'.*?src='(.*?)'.*?class='duration_small'.*?'>(.*?)<.*?title='(?!bitrate:\d+)(.*?)'(.*?\sviews)", Video, re.S)
 					if Movie:
 						for (Url, Image, Runtime, Title, AddedViews) in Movie:
 							if "post_control_time" in AddedViews:
