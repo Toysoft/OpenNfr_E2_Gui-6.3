@@ -215,7 +215,7 @@ def getCpuCoresString():
 			if len(splitted) > 1:
 				splitted[1] = splitted[1].replace('\n','')
 				if splitted[0].startswith("processor"):
-					if getMachineBuild() in ('vuultimo4k','u5','u5pvr'):
+					if getMachineBuild() in ('u51','u52','u53','vuultimo4k','u5','u5pvr','h9','alien5','cc1','sf8008'):
 						cores = 4
 					elif int(splitted[1]) > 0:
 						cores = 2
