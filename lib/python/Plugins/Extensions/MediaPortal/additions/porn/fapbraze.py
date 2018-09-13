@@ -74,13 +74,13 @@ class fapbrazeGenreScreen(MPScreen):
 		twAgentGetPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		Cats = re.findall('class="category".*?href="(.*?)".*?img\ssrc="(.*?)".*?title">(.*?)</div', data, re.S)
+		Cats = re.findall('class="category".*?href="(.*?)".*?img\ssrc=".*?(https://fapbraze.com/media/videos/cat/.*?jpg)".*?title">(.*?)</div', data, re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
 				Url = 'https://fapbraze.com/' + Url
-				Image = 'https://fapbraze.com/' + Image
 				Title = Title.replace(' HD','').replace(' Porn','')
-				self.genreliste.append((Title, Url, Image, True))
+				if Title not in ["Dog", "Horse"]:
+					self.genreliste.append((Title, Url, Image, True))
 		self.genreliste.sort()
 		self.genreliste.insert(0, ("Being Watched", "https://fapbraze.com/watched/", default_cover, False))
 		self.genreliste.insert(0, ("Longest", "https://fapbraze.com/longest/", default_cover, False))
@@ -173,11 +173,10 @@ class fapbrazeFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</ul>')
-		Movies = re.findall('class="col-sm.*?href="(.*?)"\stitle="(.*?)".*?img\s(?:class="img-responsive\s{0,1}"\s|)src="(.*?)".*?class="video-overlay.*?>(.*?)</span.*?pull-left">(.*?)</span.*?text-right">(\d+)', data, re.S)
+		Movies = re.findall('class="col-sm.*?href="(.*?)"\stitle="(.*?)".*?img\s(?:class="img-responsive\s{0,1}"\s|)src=".*?(https://fapbraze.com/media/videos/.*?jpg)".*?class="video-overlay.*?>(.*?)</span.*?pull-left">(.*?)</span.*?text-right">(\d+)', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Runtime, Added, Views) in Movies:
 				Url = "https://fapbraze.com" + Url
-				Image = "https://fapbraze.com" + Image
 				Runtime = Runtime.strip()
 				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Added, Views))
 		if len(self.filmliste) == 0:

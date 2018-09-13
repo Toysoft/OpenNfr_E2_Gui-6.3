@@ -342,9 +342,10 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper):
 		preparse = re.search('class="sectionWrapper(.*?)class="pagination3"', data, re.S)
 		if not preparse:
 			preparse = re.search('class="sectionWrapper(.*?)id="profileInformation"', data, re.S)
-		Cats = re.findall('class="playlist-videos">.*?class="number"><span>(.*?)</span>.*?src="(.*?jpg)".*?href="(/view_video.php.*?)".*?class="viewPlaylistLink\s{0,1}"\shref="(.*?)".*?class="title\s{0,1}"\stitle="(.*?)"', preparse.group(1), re.S)
+		Cats = re.findall('class="playlist-videos">.*?class="number"><span>(.*?)</span>.*?borderLink.*?href="(/view_video.php.*?)".*?class="viewPlaylistLink\s{0,1}"\shref="(.*?)".*?data-mediumthumb="(.*?)".*?class="title\s{0,1}"\stitle="(.*?)"', preparse.group(1), re.S)
 		if Cats:
-			for Videos, Image, PlayUrl, Url, Title in Cats:
+			for Videos, PlayUrl, Url, Image, Title in Cats:
+				Image = re.sub(r"\(.*?\)", "", Image)
 				Url = base_url + Url
 				PlayUrl = base_url + PlayUrl
 				self.filmliste.append((decodeHtml(Title), Videos, Image, Url, PlayUrl))
@@ -899,6 +900,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		self.id = ""
 		self.favkey = ""
 		self.favhash = ""
+		self.retry = False
 
 		self.infoTimer = eTimer()
 		try:
@@ -928,6 +930,8 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		if re.match(".*Feed",self.Name):
 			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.loadFeedData).addErrback(self.dataError)
 		else:
+			if self.retry:
+				url = url.replace('/public','/upload')
 			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -961,21 +965,31 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 			if not parse:
 				parse = re.search('class="videos\srow-5-thumbs(.*?)class="pagination3">', data, re.S)
 				if not parse:
-					parse = re.search('class="videos\srecommendedContainerLoseOne(.*?)class="pagination3">', data, re.S)
+					parse = re.search('class="videos\srow-5-thumbs(.*?)class="footer-title">', data, re.S)
 					if not parse:
-						parse = re.search('class="profileVids">(.*?)class="profileContentRight', data, re.S)
+						parse = re.search('class="videos\srecommendedContainerLoseOne(.*?)class="pagination3">', data, re.S)
 						if not parse:
-							parse = re.search('id="lrelateRecommendedItems"(.*?)</ul>', data, re.S)
+							parse = re.search('class="profileVids">(.*?)class="profileContentRight', data, re.S)
+							if not parse:
+								parse = re.search('id="lrelateRecommendedItems"(.*?)</ul>', data, re.S)
 
 		if parse:
-			Movies = re.findall('class="(?:js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', parse.group(1), re.S)
+			Movies = re.findall('(class="(?:js-pop |)videoblock.*?<var\sclass="added">.*?</var>)', parse.group(1), re.S)
 		if Movies:
-			for (Url, Title, Image, Runtime, Views, Added) in Movies:
-				Url = base_url + Url
-				Title = Title.replace('&amp;amp;','&')
-				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, Added))
+			for each in Movies:
+				if not ('class="price"' in each or 'class="premiumIcon' in each):
+					Movie = re.findall('class="(?:js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', each, re.S)
+					for (Url, Title, Image, Runtime, Views, Added) in Movie:
+						Url = base_url + Url
+						Title = Title.replace('&amp;amp;','&')
+						self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, Added))
 		if len(self.filmliste) == 0:
-			self.filmliste.append((_('No movies found!'), None, None, "", "", ""))
+			if self.Link.endswith('/videos/public?page='):
+				self.retry = True
+				self.loadPage()
+				return
+			else:
+				self.filmliste.append((_('No movies found!'), None, None, "", "", ""))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		if not self.reload:
 			self.ml.moveToIndex(0)

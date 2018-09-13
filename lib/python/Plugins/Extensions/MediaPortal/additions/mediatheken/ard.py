@@ -582,6 +582,8 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		elif self.gF == "11":	#	Tagesschau/themen
 			self.folgen = re.findall('data-ctrl-contentsoptionalLayouter-entry.*?textWrapper.*?href="(.*?)" class="textLink">.*?headline">(.*?)</', data, re.S)
 		else:
+			if 'class="controls sliding"' in data:
+				data = re.search('.*class="controls sliding"(.*?)$', data, re.S).group(1)
 			self.folgen = re.findall('<div class="teaser" data-ctrl-.*?textWrapper.*?href="(.*?)" class="textLink">.*?headline">(.*?)</', data, re.S)
 		if self.folgen:
 			for (url,title) in self.folgen:

@@ -96,9 +96,30 @@ class tvnowGZEpisodenScreen(tvnowEpisodenScreen):
 										image = "http://ais.tvnow.de/rtlnow/%s/660x660/formatimage.jpg" % nodex["pictures"]["default"][0]["id"]
 									except:
 										image = self.Image
-									descr = str(nodex["articleLong"])
-									if descr == "":
-										descr = str(nodex["articleShort"])
+									if nodex.has_key("broadcastStartDate"):
+										date = str(nodex["broadcastStartDate"])
+									else:
+										date = ""
+									if nodex.has_key("episode"):
+										episode = str(nodex["episode"])
+									else:
+										episode = ""
+									descr = ""
+									if date != "":
+										date = re.findall('(\d{4})-(\d{2})-(\d{2}) (.*?)$', date)
+										date = date[0][2] + "." + date[0][1] + "." + date[0][0] + ", " + date[0][3]
+										descr = "Datum: " + date + "\n"
+									if (episode != "None" and episode != ""):
+										descr = descr + "Episode: " + episode + "\n"
+									if descr != "":
+										descr = descr + "\n"
+									descrlong = str(nodex["articleLong"])
+									if descrlong == "":
+										descrshort = str(nodex["articleShort"])
+									if descrlong != "":
+										descr = descr + descrlong
+									else:
+										descr = descr + descrshort
 									self.filmliste.append((str(nodex["title"]), str(nodex["id"]), descr, image))
 							except:
 								continue
@@ -108,7 +129,7 @@ class tvnowGZEpisodenScreen(tvnowEpisodenScreen):
 		except:
 			pass
 
-	def parseContainer(self, data, id=False):
+	def parseContainer(self, data, id=False, annual=False):
 		if id:
 			self.container -= 1
 			nowdata = json.loads(data)
@@ -120,14 +141,43 @@ class tvnowGZEpisodenScreen(tvnowEpisodenScreen):
 								image = "http://ais.tvnow.de/rtlnow/%s/660x660/formatimage.jpg" % nodex["pictures"]["default"][0]["id"]
 							except:
 								image = self.Image
-							descr = str(nodex["articleLong"])
-							if descr == "":
-								descr = str(nodex["articleShort"])
+							if nodex.has_key("broadcastStartDate"):
+								date = str(nodex["broadcastStartDate"])
+							else:
+								date = ""
+							descr = ""
+							if date != "":
+								date = re.findall('(\d{4})-(\d{2})-(\d{2}) (.*?)$', date)
+								date = date[0][2] + "." + date[0][1] + "." + date[0][0] + ", " + date[0][3]
+								descr = "Datum: " + date + "\n"
+							if nodex.has_key("season"):
+								season = str(nodex["season"])
+							else:
+								season = ""
+							if nodex.has_key("episode"):
+								episode = str(nodex["episode"])
+							else:
+								episode = ""
+							if (season != "None" and season != ""):
+								descr = descr + "Staffel: " + season + "\n"
+							if (episode != "None" and episode != ""):
+								descr = descr + "Episode: " + episode + "\n"
+							if descr != "":
+								descr = descr + "\n"
+							descrlong = str(nodex["articleLong"])
+							if descrlong == "":
+								descrshort = str(nodex["articleShort"])
+							if descrlong != "":
+								descr = descr + descrlong
+							else:
+								descr = descr + descrshort
 							self.filmliste.append((str(nodex["title"]), str(nodex["id"]), descr, image))
 					except:
 						continue
 			except:
 				pass
+			if annual:
+				self.parseContainer("", False)
 		if self.container == 0:
 			if len(self.filmliste) == 0:
 				self.filmliste.append((_('Currently no free episodes available!'), None, None, None))

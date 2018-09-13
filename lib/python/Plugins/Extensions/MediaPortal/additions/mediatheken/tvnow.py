@@ -203,16 +203,35 @@ class tvnowStaffelScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		url = BASE_URL + "formats/seo?fields=formatTabs.*&name=" + self.Link + ".php"
+		url = BASE_URL + "formats/seo?fields=*,formatTabs.*,annualNavigation.*&name=" + self.Link + ".php"
 		getPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		nowdata = json.loads(data)
-		try:
-			for node in nowdata["formatTabs"]["items"]:
-				self.filmliste.append((str(node["headline"]), str(node["id"]), str(node["visible"]),str(node["tv"])))
-		except:
-			pass
+		if not nowdata["tabSeason"]:
+			from datetime import date
+			id = str(nowdata['id'])
+			for node in nowdata['annualNavigation']['items']:
+				year = int(node["year"])
+				months = node['months']
+				for m in range(1, 13, 1):
+					m1 = (m + 1)
+					if m1 > 12: m1 = m1 % 12
+					days = (date(year + m/12, m1, 1)  - date(year, m, 1)).days
+					m = str(m)
+					if not m in months:
+						continue
+					month = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
+					title = '%s %s' % (month[int(m)-1], year)
+					url = BASE_URL + 'movies?fields=*,format,pictures,broadcastStartDate&filter=%7B%22BroadcastStartDate%22:%7B%22between%22:%7B%22start%22:%22{0}-{1}-{2}+00:00:00%22,%22end%22:+%22{3}-{4}-{5}+23:59:59%22%7D%7D,+%22FormatId%22+:+{6}%7D&maxPerPage=500&order=BroadcastStartDate+desc'.format(year, m.zfill(2), '01', year, m.zfill(2), str(days).zfill(2), id)
+					self.filmliste.append((title, url))
+			self.filmliste.reverse()
+		else:
+			try:
+				for node in nowdata["formatTabs"]["items"]:
+					self.filmliste.append((str(node["headline"]), str(node["id"])))
+			except:
+				pass
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('Currently no seasons available!'), None, None, None))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -269,8 +288,12 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 
 	def loadPage(self):
 		self['name'].setText(_('Please wait...'))
-		url = BASE_URL + "formatlists/" + self.Link + "?fields=*,formatTabPages.*,formatTabPages.container.*,formatTabPages.container.movies.format.*,formatTabPages.container.movies.pictures"
-		getPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
+		if BASE_URL in self.Link:
+			self.container += 1
+			getPage(self.Link, agent=nowAgent).addCallback(self.parseContainer, id=True, annual=True).addErrback(self.dataError)
+		else:
+			url = BASE_URL + "formatlists/" + self.Link + "?fields=*,formatTabPages.*,formatTabPages.container.*,formatTabPages.container.movies.format.*,formatTabPages.container.movies.pictures"
+			getPage(url, agent=nowAgent).addCallback(self.parseData).addErrback(self.dataError)
 
 	def loadContainer(self, id):
 		url = BASE_URL + "containers/" + id + "/movies?fields=*,format.*,pictures&maxPerPage=500"
@@ -294,9 +317,30 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 										image = "http://ais.tvnow.de/rtlnow/%s/660x660/formatimage.jpg" % nodex["pictures"]["default"][0]["id"]
 									except:
 										image = self.Image
-									descr = str(nodex["articleLong"])
-									if descr == "":
-										descr = str(nodex["articleShort"])
+									if nodex.has_key("broadcastStartDate"):
+										date = str(nodex["broadcastStartDate"])
+									else:
+										date = ""
+									if nodex.has_key("episode"):
+										episode = str(nodex["episode"])
+									else:
+										episode = ""
+									descr = ""
+									if date != "":
+										date = re.findall('(\d{4})-(\d{2})-(\d{2}) (.*?)$', date)
+										date = date[0][2] + "." + date[0][1] + "." + date[0][0] + ", " + date[0][3]
+										descr = "Datum: " + date + "\n"
+									if (episode != "None" and episode != ""):
+										descr = descr + "Episode: " + episode + "\n"
+									if descr != "":
+										descr = descr + "\n"
+									descrlong = str(nodex["articleLong"])
+									if descrlong == "":
+										descrshort = str(nodex["articleShort"])
+									if descrlong != "":
+										descr = descr + descrlong
+									else:
+										descr = descr + descrshort
 									self.filmliste.append((str(nodex["title"]), str(nodex["id"]), descr, image))
 							except:
 								continue
@@ -311,7 +355,7 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 		from Plugins.Extensions.MediaPortal.resources.debuglog import printlog as printl
 		printl(error,self,"E")
 
-	def parseContainer(self, data, id=False):
+	def parseContainer(self, data, id=False, annual=False):
 		if id:
 			self.container -= 1
 			nowdata = json.loads(data)
@@ -323,14 +367,43 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 								image = "http://ais.tvnow.de/rtlnow/%s/660x660/formatimage.jpg" % nodex["pictures"]["default"][0]["id"]
 							except:
 								image = self.Image
-							descr = str(nodex["articleLong"])
-							if descr == "":
-								descr = str(nodex["articleShort"])
+							if nodex.has_key("broadcastStartDate"):
+								date = str(nodex["broadcastStartDate"])
+							else:
+								date = ""
+							descr = ""
+							if date != "":
+								date = re.findall('(\d{4})-(\d{2})-(\d{2}) (.*?)$', date)
+								date = date[0][2] + "." + date[0][1] + "." + date[0][0] + ", " + date[0][3]
+								descr = "Datum: " + date + "\n"
+							if nodex.has_key("season"):
+								season = str(nodex["season"])
+							else:
+								season = ""
+							if nodex.has_key("episode"):
+								episode = str(nodex["episode"])
+							else:
+								episode = ""
+							if (season != "None" and season != ""):
+								descr = descr + "Staffel: " + season + "\n"
+							if (episode != "None" and episode != ""):
+								descr = descr + "Episode: " + episode + "\n"
+							if descr != "":
+								descr = descr + "\n"
+							descrlong = str(nodex["articleLong"])
+							if descrlong == "":
+								descrshort = str(nodex["articleShort"])
+							if descrlong != "":
+								descr = descr + descrlong
+							else:
+								descr = descr + descrshort
 							self.filmliste.append((str(nodex["title"]), str(nodex["id"]), descr, image))
 					except:
 						continue
 			except:
 				pass
+			if annual:
+				self.parseContainer("", False)
 		if self.container == 0:
 			if len(self.filmliste) == 0:
 				self.filmliste.append((_('Currently no free episodes available!'), None, None, None))

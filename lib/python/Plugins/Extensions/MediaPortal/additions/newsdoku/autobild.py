@@ -109,7 +109,7 @@ class autoBildFilmListeScreen(MPScreen, ThumbsHelper):
 	def findStream(self, data):
 		self.keyLocked = False
 		streamname = self['liste'].getCurrent()[0][0]
-		stream_url = re.findall('"src":"http:(.*?).mp4"', data, re.S)
+		stream_url = re.findall('"src":"http[s]?:(.*?).mp4"', data, re.S)
 		urlConv = 'http:' + stream_url[0].replace('\\', '') + '.mp4'
 		if stream_url:
 			self.session.open(SimplePlayer, [(streamname, urlConv)], showPlaylist=False, ltype='autobild')

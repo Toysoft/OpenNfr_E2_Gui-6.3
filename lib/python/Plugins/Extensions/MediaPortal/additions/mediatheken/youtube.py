@@ -788,7 +788,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		ThumbsHelper.__init__(self)
 
 		self.favoGenre = self.genreName.startswith(_('Favorites'))
-		self.apiUrl = 'gdata.youtube.com' in self.stvLink
+		self.apiUrl = 'youtube.com' in self.stvLink
 		self.apiUrlv3 = 'googleapis.com' in self.stvLink
 		self.ajaxUrl = '/c4_browse_ajax' in self.stvLink
 		self.c4_browse_ajax = ''
@@ -867,6 +867,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		self.showCover = False
 		self.lastCover = ""
 		self.actType = None
+		self.mine = False
 
 		if not self.apiUrl:
 			self.onLayoutFinish.append(self.loadPageData)
@@ -875,6 +876,10 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 
 	def checkAPICallv2(self):
 		m = re.search('/api/users/(.*?)/uploads\?', self.stvLink, re.S)
+		if not m:
+			m = re.search('/user/(.*?)/videos\?$', self.stvLink, re.S)
+		if not m:
+			m = re.search('/channel/(.*?)/videos\?$', self.stvLink, re.S)
 		if m:
 			if m.group(1).startswith('PL'):
 				self.stvLink = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&order=date&playlistId=%s&key=%s" % (m.group(1), APIKEYV3)
@@ -984,6 +989,11 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 			url = url.replace('%ACCESSTOKEN%', token, 1)
 			if '%playlistId=' in url:
 				return self.getRelatedUserPL(url, token)
+		if "&mine=true" in url:
+			self.mine = True
+		else:
+			self.mine = False
+		#printl(url,self,'I')
 		twAgentGetPage(url, cookieJar=self.keckse, agent=agent, headers=self.headers).addCallback(self.genreData).addErrback(self.dataError)
 
 	def getRelatedUserPL(self, url, token):
@@ -1001,6 +1011,10 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 				playlist = item['contentDetails']['relatedPlaylists']
 				if pl in playlist:
 					yt_url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=%s&access_token=%s&order=date' % (str(playlist[pl]), token)
+					yt_url += "&maxResults=%d" % (self.max_res,)
+					if self.c4_browse_ajax:
+						yt_url += '&pageToken=' + self.c4_browse_ajax
+					#printl(yt_url,self,'I')
 					return twAgentGetPage(yt_url, cookieJar=self.keckse, agent=agent, headers=self.headers).addCallback(self.genreData).addErrback(self.dataError)
 
 		reactor.callLater(0, genreData, '')
@@ -1035,325 +1049,354 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		return date[1:]
 
 	def genreData(self, data):
-		if self.apiUrlv3:
-			data = json.loads(data)
-			self.parsePagingUrlv3(data)
+		if ("quotaExceeded" in data) or ("dailyLimitExceeded" in data):
+			global APIKEYV3
+			if APIKEYV3 != mp_globals.yt_a_backup:
+				APIKEYV3 = mp_globals.yt_a_backup
+				self.ml.setList(map(self.YT_ListEntry, [('',_('We switched to our API backup key, please try again!'),'','','','','')]))
+			else:
+				self.ml.setList(map(self.YT_ListEntry, [('',_('Our YouTube API quota exceeded, try again tomorrow!'),'','','','','')]))
+			self['handlung'].setText("")
+			self.keyLocked = True
+		else:
+			if self.apiUrlv3:
+				data = json.loads(data)
+				self.parsePagingUrlv3(data)
 
-		elif not self.apiUrl:
-			try:
-				if "load_more_widget_html" in data:
-					data = json.loads(data)
-					self.parsePagingUrl(data["load_more_widget_html"].replace("\\n","").replace("\\","").encode('utf-8'))
-					data = data["content_html"].replace("\\n","").replace("\\","").encode('utf-8')
-				else:
-					data = json.loads(data)["content_html"].replace("\\n","").replace("\\","").encode('utf-8')
+			elif not self.apiUrl:
+				try:
+					if "load_more_widget_html" in data:
+						data = json.loads(data)
+						self.parsePagingUrl(data["load_more_widget_html"].replace("\\n","").replace("\\","").encode('utf-8'))
+						data = data["content_html"].replace("\\n","").replace("\\","").encode('utf-8')
+					else:
+						data = json.loads(data)["content_html"].replace("\\n","").replace("\\","").encode('utf-8')
+						self.parsePagingUrl(data)
+				except:
 					self.parsePagingUrl(data)
-			except:
-				self.parsePagingUrl(data)
 
-		elif not self.pages:
-			m = re.search('totalResults>(.*?)</', data)
-			if m:
-				a = int(m.group(1))
-				self.pages = a // self.max_res
-				if a % self.max_res:
-					self.pages += 1
-				if self.pages > self.max_pages:
-					self.pages = self.max_pages
-				self.page = 1
+			elif not self.pages:
+				m = re.search('totalResults>(.*?)</', data)
+				if m:
+					a = int(m.group(1))
+					self.pages = a // self.max_res
+					if a % self.max_res:
+						self.pages += 1
+					if self.pages > self.max_pages:
+						self.pages = self.max_pages
+					self.page = 1
 
-		self.filmliste = []
-		if self.apiUrlv3:
-			def getThumbnail(thumbnails):
-				if 'maxres' in thumbnails:
-					return str(thumbnails['maxres']['url'])
-				elif 'medium' in thumbnails:
-					return str(thumbnails['medium']['url'])
-				elif 'standard' in thumbnails:
-					return str(thumbnails['standard']['url'])
-				elif 'high' in thumbnails:
-					return str(thumbnails['high']['url'])
-				else:
-					return str(thumbnails['default']['url'])
+			self.filmliste = []
+			if self.apiUrlv3:
+				def getThumbnail(thumbnails):
+					if 'maxres' in thumbnails:
+						return str(thumbnails['maxres']['url'])
+					elif 'medium' in thumbnails:
+						return str(thumbnails['medium']['url'])
+					elif 'standard' in thumbnails:
+						return str(thumbnails['standard']['url'])
+					elif 'high' in thumbnails:
+						return str(thumbnails['high']['url'])
+					else:
+						return str(thumbnails['default']['url'])
 
-			listType = re.search('ItemList|subscriptionList|activityList|playlistList|CategoryList|channelList|videoListResponse', data.get('kind', '')) != None
-			runtimeurl = 'https://www.googleapis.com/youtube/v3/videos?key=%KEY%&part=contentDetails,snippet&id='
-			runtimeurl = runtimeurl.replace('%KEY%', APIKEYV3)
-			for item in data.get('items', []):
-				if not listType:
-					try:
-						kind = item['id'].get('kind')
-					except:
-						continue
-				else:
-					try:
-						kind = item.get('kind')
-					except:
-						continue
+				listType = re.search('ItemList|subscriptionList|activityList|playlistList|CategoryList|channelList|videoListResponse', data.get('kind', '')) != None
+				runtimeurl = 'https://www.googleapis.com/youtube/v3/videos?key=%KEY%&part=contentDetails,snippet,statistics&id='
+				runtimeurl = runtimeurl.replace('%KEY%', APIKEYV3)
+				for item in data.get('items', []):
+					if not listType:
+						try:
+							kind = item['id'].get('kind')
+						except:
+							continue
+					else:
+						try:
+							kind = item.get('kind')
+						except:
+							continue
 
-				if kind != None:
-					if item.has_key('snippet'):
-						if kind.endswith('#video'):
-							try:
-								runtimeurl = runtimeurl + str(item['id']['videoId']) + ","
-							except:
+					if kind != None:
+						if item.has_key('snippet'):
+							if kind.endswith('#video'):
 								try:
-									runtimeurl = runtimeurl + str(item['id']) + ","
+									runtimeurl = runtimeurl + str(item['id']['videoId']) + ","
+								except:
+									try:
+										runtimeurl = runtimeurl + str(item['id']) + ","
+									except:
+										continue
+							elif kind.endswith('#playlistItem'):
+								try:
+									runtimeurl = runtimeurl + str(item['snippet']['resourceId']['videoId']) + ","
 								except:
 									continue
-						elif kind.endswith('#playlistItem'):
-							try:
-								runtimeurl = runtimeurl + str(item['snippet']['resourceId']['videoId']) + ","
-							except:
-								continue
 
-			if not runtimeurl.endswith('&id='):
-				runtimedata = ''
-				try:
-					import requests
-					s = requests.session()
-					page = s.get(runtimeurl.strip(','))
-					runtimedata = json.loads(page.content)
-				except:
-					pass
+				if not runtimeurl.endswith('&id='):
+					runtimedata = ''
+					try:
+						import requests
+						s = requests.session()
+						page = s.get(runtimeurl.strip(','))
+						runtimedata = json.loads(page.content)
+					except:
+						pass
 
-			for item in data.get('items', []):
-				if not listType:
-					try:
-						kind = item['id'].get('kind')
-					except:
-						continue
-				else:
-					try:
-						kind = item.get('kind')
-					except:
-						continue
-				if kind != None:
-					if item.has_key('snippet'):
-						localized = item['snippet'].has_key('localized')
-						if not localized:
-							title = str(item['snippet'].get('title', ''))
-							desc = str(item['snippet'].get('description', ''))
-						else:
-							loca = item['snippet']['localized']
-							title = str(loca.get('title', ''))
-							desc = str(loca.get('description', ''))
-						if kind.endswith('#video'):
-							try:
-								url = str(item['id']['videoId'])
-								img = getThumbnail(item['snippet']['thumbnails'])
-							except:
+				for item in data.get('items', []):
+					if not listType:
+						try:
+							kind = item['id'].get('kind')
+						except:
+							continue
+					else:
+						try:
+							kind = item.get('kind')
+						except:
+							continue
+					if kind != None:
+						if item.has_key('snippet'):
+							localized = item['snippet'].has_key('localized')
+							if not localized:
+								title = str(item['snippet'].get('title', ''))
+								desc = str(item['snippet'].get('description', ''))
+							else:
+								loca = item['snippet']['localized']
+								title = str(loca.get('title', ''))
+								desc = str(loca.get('description', ''))
+							if kind.endswith('#video'):
 								try:
-									url = str(item['id'])
+									url = str(item['id']['videoId'])
 									img = getThumbnail(item['snippet']['thumbnails'])
 								except:
-									continue
-							try:
-								for runitem in runtimedata.get('items', []):
-									if str(runitem["id"]) == url:
-										runtime = self.convertDuration(str(runitem["contentDetails"]["duration"]))
-										if runtime == "00:00":
-											runtime = "live"
-										desc = _("Runtime:") + " " + runtime + "\n\n" + desc
-										date = re.findall('(\d{4})-(\d{2})-(\d{2})T(.*?).000Z', str(runitem['snippet'].get('publishedAt', '')))
-										date = date[0][2] + "." + date[0][1] + "." + date[0][0] + ", " + date[0][3]
-										desc = _("Published:") + " " + date + "\n" + desc
-										break
-							except:
-								pass
-							self.filmliste.append(('', title, url, img, desc, '', ''))
-						elif kind.endswith('#playlistItem'):
-							try:
-								url = str(item['snippet']['resourceId']['videoId'])
-								img = getThumbnail(item['snippet']['thumbnails'])
-							except:
-								continue
-							else:
+									try:
+										url = str(item['id'])
+										img = getThumbnail(item['snippet']['thumbnails'])
+									except:
+										continue
+								desc = "\n" + desc
 								try:
 									for runitem in runtimedata.get('items', []):
+										runtime = ''
 										if str(runitem["id"]) == url:
+											views = str(runitem["statistics"]["viewCount"])
 											runtime = self.convertDuration(str(runitem["contentDetails"]["duration"]))
 											if runtime == "00:00":
 												runtime = "live"
-											desc = _("Runtime:") + " " + runtime + "\n\n" + desc
-											date = re.findall('(\d{4})-(\d{2})-(\d{2})T(.*?).000Z', str(runitem['snippet'].get('publishedAt', '')))
-											date = date[0][2] + "." + date[0][1] + "." + date[0][0] + ", " + date[0][3]
-											desc = _("Published:") + " " + date + "\n" + desc
+											if runtime != "live":
+												desc = _("Views:") + " " + views + "\n" + desc
+											desc = _("Runtime:") + " " + runtime + "\n" + desc
 											break
 								except:
 									pass
-								self.filmliste.append(('', title, url, img, desc, '', ''))
-						elif kind.endswith('channel'):
-							if listType:
-								id = str(item['id'])
-								url = '/channel/%s/featured' % id
-								img = getThumbnail(item['snippet']['thumbnails'])
-								self.filmliste.append(('', title, url, img, desc, '', ''))
-							else:
-								url = str(item['id']['channelId'])
-								img = getThumbnail(item['snippet']['thumbnails'])
-								self.filmliste.append(('', title, url, img, desc, 'CV3', ''))
-						elif kind.endswith('#playlist'):
-							if not listType:
-								url = str(item['id']['playlistId'])
-							else:
-								url = str(item['id'])
-							img = getThumbnail(item['snippet']['thumbnails'])
-							self.filmliste.append(('', title, url, img, desc, 'PV3', ''))
-						elif kind.endswith('#subscription'):
-							url = str(item['snippet']['resourceId']['channelId'])
-							img = getThumbnail(item['snippet']['thumbnails'])
-							self.filmliste.append(('', title, url, img, desc, 'CV3', ''))
-						elif kind.endswith('#guideCategory'):
-							url = str(item['id'])
-							img = ''
-							self.filmliste.append(('', title, url, img, desc, 'GV3', ''))
-						elif kind.endswith('#activity'):
-							desc = str(item['snippet'].get('description', ''))
-							if item['snippet'].get('type') == self.actType:
 								try:
-									if self.actType == u'upload':
-										url = str(item['contentDetails'][self.actType]['videoId'])
-									else:
-										url = str(item['contentDetails'][self.actType]['resourceId']['videoId'])
-									img = getThumbnail(item['snippet']['thumbnails'])
+									date = re.findall('(\d{4})-(\d{2})-(\d{2})T(.*?).000Z', str(item['snippet'].get('publishedAt', '')))
+									date = date[0][2] + "." + date[0][1] + "." + date[0][0] + ", " + date[0][3]
+									desc = _("Published:") + " " + date + "\n" + desc
 								except:
 									pass
-								else:
+								channel = str(item['snippet'].get('channelTitle', ''))
+								desc = _("Channel:") + " " + channel + "\n" + desc
+								self.filmliste.append(('', title, url, img, desc, '', ''))
+							elif kind.endswith('#playlistItem'):
+								try:
+									url = str(item['snippet']['resourceId']['videoId'])
+									img = getThumbnail(item['snippet']['thumbnails'])
+								except:
+									continue
+								desc = "\n" + desc
+								try:
+									for runitem in runtimedata.get('items', []):
+										runtime = ''
+										if str(runitem["id"]) == url:
+											views = str(runitem["statistics"]["viewCount"])
+											runtime = self.convertDuration(str(runitem["contentDetails"]["duration"]))
+											if runtime == "00:00":
+												runtime = "live"
+											if runtime != "live":
+												desc = _("Views:") + " " + views + "\n" + desc
+											desc = _("Runtime:") + " " + runtime + "\n" + desc
+											break
+								except:
+									pass
+								try:
+									date = re.findall('(\d{4})-(\d{2})-(\d{2})T(.*?).000Z', str(item['snippet'].get('publishedAt', '')))
+									date = date[0][2] + "." + date[0][1] + "." + date[0][0] + ", " + date[0][3]
+									desc = _("Published:") + " " + date + "\n" + desc
+								except:
+									pass
+								channel = str(item['snippet'].get('channelTitle', ''))
+								desc = _("Channel:") + " " + channel + "\n" + desc
+								self.filmliste.append(('', title, url, img, desc, '', ''))
+							elif kind.endswith('channel'):
+								if listType:
+									id = str(item['id'])
+									url = '/channel/%s/featured' % id
+									img = getThumbnail(item['snippet']['thumbnails'])
 									self.filmliste.append(('', title, url, img, desc, '', ''))
-					elif 'contentDetails' in item:
-						details = item['contentDetails']
-						if kind.endswith('#channel'):
-							if 'relatedPlaylists' in details:
-								for k, v in details['relatedPlaylists'].iteritems:
-									url = str(v)
-									img = ''
-									desc = ''
-									self.filmliste.append(('', str(k).title(), url, img, desc, 'PV3', ''))
-
-		else:
-			data = data.replace('\n', '')
-			entrys = None
-			list_item_cont = branded_item = shelf_item = yt_pl_thumb = list_item = pl_video_yt_uix_tile = yt_lockup_video = False
-			if self.genreName.endswith("Channels") and "branded-page-related-channels-item" in data:
-				branded_item = True
-				entrys = data.split("branded-page-related-channels-item")
-			elif "channels-browse-content-list-item" in data:
-				list_item = True
-				entrys = data.split("channels-browse-content-list-item")
-			elif "browse-list-item-container" in data:
-				list_item_cont = True
-				entrys = data.split("browse-list-item-container")
-			elif re.search('[" ]+shelf-item[" ]+', data):
-				shelf_item = True
-				entrys = data.split("shelf-item ")
-			elif "yt-pl-thumb " in data:
-				yt_pl_thumb = True
-				entrys = data.split("yt-pl-thumb ")
-			elif "pl-video yt-uix-tile " in data:
-				pl_video_yt_uix_tile = True
-				entrys = data.split("pl-video yt-uix-tile ")
-			elif "yt-lockup-video " in data:
-				yt_lockup_video = True
-				entrys = data.split("yt-lockup-video ")
-
-			if entrys and not self.propertyImageUrl:
-				m = re.search('"appbar-nav-avatar" src="(.*?)"', entrys[0])
-				property_img = m and m.group(1)
-				if property_img:
-					if property_img.startswith('//'):
-						property_img = 'http:' + property_img
-					self.propertyImageUrl = property_img
-
-			if list_item_cont or branded_item or shelf_item or list_item or yt_pl_thumb or pl_video_yt_uix_tile or yt_lockup_video:
-				for entry in entrys[1:]:
-
-					if 'data-item-type="V"' in entry:
-						vidcnt = '[Paid Content] '
-					elif 'data-title="[Private' in entry:
-						vidcnt = '[private Video] '
-					else:
-						vidcnt = ''
-
-					gid = 'S'
-					m = re.search('href="(.*?)" class=', entry)
-					vid = m and m.group(1).replace('&amp;','&')
-					if not vid:
-						continue
-					if branded_item and not '/SB' in vid:
-						continue
-
-					img = title = ''
-					if '<span class="" ' in entry:
-						m = re.search('<span class="" .*?>(.*?)</span>', entry)
-						if m:
-							title += decodeHtml(m.group(1))
-					elif 'dir="ltr" title="' in entry:
-						m = re.search('dir="ltr" title="(.+?)"', entry, re.S)
-						if m:
-							title += decodeHtml(m.group(1).strip())
-						m = re.search('data-thumb="(.*?)"', entry)
-						img = m and m.group(1)
-					else:
-						m = re.search('dir="ltr".*?">(.+?)</a>', entry, re.S)
-						if m:
-							title += decodeHtml(m.group(1).strip())
-						m = re.search('data-thumb="(.*?)"', entry)
-						img = m and m.group(1)
-
-					if not img:
-						img = self.propertyImageUrl
-
-					if img and img.startswith('//'):
-						img = 'http:' + img
-					img = img.replace('&amp;','&')
-
-					desc = ''
-					if not vidcnt and 'list=' in vid and not '/videos?' in self.stvLink:
-						m = re.search('formatted-video-count-label">\s+<b>(.*?)</b>', entry)
-						if m:
-							vidcnt = '[%s Videos] ' % m.group(1)
-					elif vid.startswith('/watch?'):
-						if not vidcnt:
-							vid = re.search('v=(.+)', vid).group(1)
-							gid = ''
-							m = re.search('video-time">(.+?)<', entry)
-							if m:
-								dura = m.group(1)
-								if len(dura)==4:
-									vtim = '0:0%s' % dura
-								elif len(dura)==5:
-										vtim = '0:%s' % dura
 								else:
-									vtim = dura
-								vidcnt = '[%s] ' % vtim
+									url = str(item['id']['channelId'])
+									img = getThumbnail(item['snippet']['thumbnails'])
+									self.filmliste.append(('', title, url, img, desc, 'CV3', ''))
+							elif kind.endswith('#playlist'):
+								if not listType:
+									url = str(item['id']['playlistId'])
+								else:
+									url = str(item['id'])
+								img = getThumbnail(item['snippet']['thumbnails'])
+								self.filmliste.append(('', title, url, img, desc, 'PV3', ''))
+							elif kind.endswith('#subscription'):
+								url = str(item['snippet']['resourceId']['channelId'])
+								img = getThumbnail(item['snippet']['thumbnails'])
+								self.filmliste.append(('', title, url, img, desc, 'CV3', ''))
+							elif kind.endswith('#guideCategory'):
+								url = str(item['id'])
+								img = ''
+								self.filmliste.append(('', title, url, img, desc, 'GV3', ''))
+							elif kind.endswith('#activity'):
+								desc = str(item['snippet'].get('description', ''))
+								if item['snippet'].get('type') == self.actType:
+									try:
+										if self.actType == u'upload':
+											url = str(item['contentDetails'][self.actType]['videoId'])
+										else:
+											url = str(item['contentDetails'][self.actType]['resourceId']['videoId'])
+										img = getThumbnail(item['snippet']['thumbnails'])
+									except:
+										pass
+									else:
+										self.filmliste.append(('', title, url, img, desc, '', ''))
+						elif 'contentDetails' in item:
+							details = item['contentDetails']
+							if kind.endswith('#channel'):
+								if 'relatedPlaylists' in details:
+									for k, v in details['relatedPlaylists'].iteritems:
+										url = str(v)
+										img = ''
+										desc = ''
+										self.filmliste.append(('', str(k).title(), url, img, desc, 'PV3', ''))
 
-						m = re.search('data-name=.*?>(.*?)</.*?<li>(.*?)</li>\s+</ul>', entry)
-						if m:
-							desc += 'von ' + decodeHtml(m.group(1)) + ' · ' + m.group(2).replace('</li>', ' ').replace('<li>', '· ') + '\n'
+			else:
+				data = data.replace('\n', '')
+				entrys = None
+				list_item_cont = branded_item = shelf_item = yt_pl_thumb = list_item = pl_video_yt_uix_tile = yt_lockup_video = False
+				if self.genreName.endswith("Channels") and "branded-page-related-channels-item" in data:
+					branded_item = True
+					entrys = data.split("branded-page-related-channels-item")
+				elif "channels-browse-content-list-item" in data:
+					list_item = True
+					entrys = data.split("channels-browse-content-list-item")
+				elif "browse-list-item-container" in data:
+					list_item_cont = True
+					entrys = data.split("browse-list-item-container")
+				elif re.search('[" ]+shelf-item[" ]+', data):
+					shelf_item = True
+					entrys = data.split("shelf-item ")
+				elif "yt-pl-thumb " in data:
+					yt_pl_thumb = True
+					entrys = data.split("yt-pl-thumb ")
+				elif "pl-video yt-uix-tile " in data:
+					pl_video_yt_uix_tile = True
+					entrys = data.split("pl-video yt-uix-tile ")
+				elif "yt-lockup-video " in data:
+					yt_lockup_video = True
+					entrys = data.split("yt-lockup-video ")
 
-					m = re.search('class="yt-lockup-description.*?dir="ltr">(.*?)</div>', entry)
+				if entrys and not self.propertyImageUrl:
+					m = re.search('"appbar-nav-avatar" src="(.*?)"', entrys[0])
+					property_img = m and m.group(1)
+					if property_img:
+						if property_img.startswith('//'):
+							property_img = 'http:' + property_img
+						self.propertyImageUrl = property_img
 
-					if (shelf_item or list_item_cont) and not desc and not m:
-						m = re.search('shelf-description.*?">(.+?)</div>', entry)
+				if list_item_cont or branded_item or shelf_item or list_item or yt_pl_thumb or pl_video_yt_uix_tile or yt_lockup_video:
+					for entry in entrys[1:]:
 
-					if m:
-						desc += decodeHtml(m.group(1).strip())
-						splits = desc.split('<br />')
+						if 'data-item-type="V"' in entry:
+							vidcnt = '[Paid Content] '
+						elif 'data-title="[Private' in entry:
+							vidcnt = '[private Video] '
+						else:
+							vidcnt = ''
+
+						gid = 'S'
+						m = re.search('href="(.*?)" class=', entry)
+						vid = m and m.group(1).replace('&amp;','&')
+						if not vid:
+							continue
+						if branded_item and not '/SB' in vid:
+							continue
+
+						img = title = ''
+						if '<span class="" ' in entry:
+							m = re.search('<span class="" .*?>(.*?)</span>', entry)
+							if m:
+								title += decodeHtml(m.group(1))
+						elif 'dir="ltr" title="' in entry:
+							m = re.search('dir="ltr" title="(.+?)"', entry, re.S)
+							if m:
+								title += decodeHtml(m.group(1).strip())
+							m = re.search('data-thumb="(.*?)"', entry)
+							img = m and m.group(1)
+						else:
+							m = re.search('dir="ltr".*?">(.+?)</a>', entry, re.S)
+							if m:
+								title += decodeHtml(m.group(1).strip())
+							m = re.search('data-thumb="(.*?)"', entry)
+							img = m and m.group(1)
+
+						if not img:
+							img = self.propertyImageUrl
+
+						if img and img.startswith('//'):
+							img = 'http:' + img
+						img = img.replace('&amp;','&')
+
 						desc = ''
-						for split in splits:
-							if not '<a href="' in split:
-								desc += split + '\n'
+						if not vidcnt and 'list=' in vid and not '/videos?' in self.stvLink:
+							m = re.search('formatted-video-count-label">\s+<b>(.*?)</b>', entry)
+							if m:
+								vidcnt = '[%s Videos] ' % m.group(1)
+						elif vid.startswith('/watch?'):
+							if not vidcnt:
+								vid = re.search('v=(.+)', vid).group(1)
+								gid = ''
+								m = re.search('video-time">(.+?)<', entry)
+								if m:
+									dura = m.group(1)
+									if len(dura)==4:
+										vtim = '0:0%s' % dura
+									elif len(dura)==5:
+											vtim = '0:%s' % dura
+									else:
+										vtim = dura
+									vidcnt = '[%s] ' % vtim
 
-					if list_item and not vidcnt:
-						m = re.search('yt-lockup-meta-info"><li>(.*?)</ul>', entry)
+							m = re.search('data-name=.*?>(.*?)</.*?<li>(.*?)</li>\s+</ul>', entry)
+							if m:
+								desc += 'von ' + decodeHtml(m.group(1)) + ' · ' + m.group(2).replace('</li>', ' ').replace('<li>', '· ') + '\n'
+
+						m = re.search('class="yt-lockup-description.*?dir="ltr">(.*?)</div>', entry)
+
+						if (shelf_item or list_item_cont) and not desc and not m:
+							m = re.search('shelf-description.*?">(.+?)</div>', entry)
+
 						if m:
-							vidcnt = re.sub('<.*?>', '', m.group(1))
-							vidcnt = '[%s] ' % vidcnt
+							desc += decodeHtml(m.group(1).strip())
+							splits = desc.split('<br />')
+							desc = ''
+							for split in splits:
+								if not '<a href="' in split:
+									desc += split + '\n'
 
-					self.filmliste.append((vidcnt, str(title), vid, img, desc, gid, ''))
+						if list_item and not vidcnt:
+							m = re.search('yt-lockup-meta-info"><li>(.*?)</ul>', entry)
+							if m:
+								vidcnt = re.sub('<.*?>', '', m.group(1))
+								vidcnt = '[%s] ' % vidcnt
 
-		reactor.callLater(0, self.checkListe)
+						self.filmliste.append((vidcnt, str(title), vid, img, desc, gid, ''))
+
+			reactor.callLater(0, self.checkListe)
 
 	def checkListe(self):
 		if len(self.filmliste) == 0:
@@ -1374,6 +1417,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		self.showInfos()
 
 	def dataError(self, error):
+		self.keyLocked = True
 		self.ml.setList(map(self.YT_ListEntry, [('',_('No contents / results found!'),'','','','','')]))
 		self['handlung'].setText("")
 
@@ -1709,8 +1753,11 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		elif gid == 'PV3':
 			dhTitle = 'Videos: ' + self['liste'].getCurrent()[0][1]
 			genreurl = self['liste'].getCurrent()[0][2]
-			genreurl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&order=date&playlistId='+self['liste'].getCurrent()[0][2]+'&key=%KEY%'
-
+			genreurl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&order=date&playlistId='+self['liste'].getCurrent()[0][2]
+			if config.mediaportal.yt_refresh_token.value and self.mine:
+				genreurl = genreurl + '&access_token=%ACCESSTOKEN%'
+			else:
+				genreurl = genreurl + '&key=%KEY%'
 			if self.favoGenre:
 				self.session.openWithCallback(self.getFavos, YT_ListScreen, genreurl, dhTitle)
 			else:

@@ -190,7 +190,7 @@ config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices =
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018082501"))
+config.mediaportal.version = NoSave(ConfigText(default="2018091201"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 
 config.mediaportal.skinfail = ConfigYesNo(default = False)
@@ -266,7 +266,7 @@ config.mediaportal.youtubeenablevp9 = ConfigYesNo(default = False)
 config.mediaportal.youtubeenabledash = ConfigYesNo(default = False)
 config.mediaportal.youtubeprio = ConfigSelection(default = "2", choices = [("0", "360p"),("1", "480p"),("2", "720p"),("3", "1080p"),("4", "1440p"),("5", "2160p")])
 config.mediaportal.videoquali_others = ConfigSelection(default = "2", choices = [("0", _("Low")),("1", _("Medium")),("2", _("High"))])
-config.mediaportal.youtube_max_items_pp = ConfigInteger(default = 19, limits = (10,50))
+config.mediaportal.youtube_max_items_pp = ConfigInteger(default = 50, limits = (50,50))
 config.mediaportal.pornpin = ConfigYesNo(default = True)
 config.mediaportal.pornpin_cache = ConfigSelection(default = "0", choices = [("0", _("never")), ("5", _("5 minutes")), ("15", _("15 minutes")), ("30", _("30 minutes")), ("60", _("60 minutes"))])
 config.mediaportal.kidspin = ConfigYesNo(default = False)
@@ -333,9 +333,10 @@ config.mediaportal.simplelist_gcoversupp = ConfigYesNo(default = True)
 config.mediaportal.is_radio = ConfigYesNo(default=False)
 
 mp_globals.bsp = bsdcd(bsdcd(bsdcd(decrypt('4bb1Wtzc3NyT8nw+AI3hYvbEIQBESnieenhZiTdgwmp2jdYDGj6zREKyQchZ9UL7fo5wA3je9Bq8BbDG8s4FdPAMtWRRUIhaiydveD3TbOPePc5oI+37hw==', CONFIG, 256))))
-mp_globals.yt_a = bsdcd(bsdcd(bsdcd(decrypt('kj8yV97e3t4fDPdo3ca07O6kKsuY9oZkvUqpBPJPkvzRYyzeAuLofAra3HKWsJmhvQ8EsGMDfnziGjqj3047WS8bojGewMj+in3daO4hlTSA6GUSwft7LNFdibC0hxTppR1VLXaRvKs=', CONFIG, 256))))
-mp_globals.yt_i = bsdcd(bsdcd(bsdcd(decrypt('6T8yV5mZmZkf3mpGhQOBtEl8qSHI314cYq7dLTlEswoOTaaMktY5N37bfxUXGzUcKMBVEjMRiiTOSkNBaOzfKLy3tPmUvE3dYv2CAmayBgrftcOkb7hMaz6Y/jAQym1oT6E/X7P7tpComuUMFWJhDhSuYYt1o3CFx3j53vFgAdUdsWNlN96bgwCEUaJr4JeuaCh+4mMZbN0mDHb0D8jscSZ1MJ97En2ZMRbanG5O/e/3d3kvxN4dU0PaVy4qRUQ9UEhO0XL1E0eV2S4dORGFqXeLTvs=', CONFIG, 256))))
-mp_globals.yt_s = bsdcd(bsdcd(bsdcd(decrypt('LUAyV6SkpKS3bO2Io81BlkONIwZfjHfCJgDdZMqw47QAGmIZT7tupMulXgbH+EkiOqKf84cqJX4T0EJYyhfiWF2Fy3Tb/nRdkzlcv5GgCF8rXFo1rFTW5ibXzsHu5HCmqRLW5meGHTo=', CONFIG, 256))))
+mp_globals.yt_a_backup = bsdcd(bsdcd(bsdcd(decrypt('kj8yV97e3t4fDPdo3ca07O6kKsuY9oZkvUqpBPJPkvzRYyzeAuLofAra3HKWsJmhvQ8EsGMDfnziGjqj3047WS8bojGewMj+in3daO4hlTSA6GUSwft7LNFdibC0hxTppR1VLXaRvKs=', CONFIG, 256))))
+mp_globals.yt_a = bsdcd(bsdcd(bsdcd(decrypt('UZaWW4SEhITpj4ekRW9S5/qupnllwhRtf/E+k6BPucAMPts9j6xKJy3M1asKr3H0enK1QKFMvP03B4TW3vmWlKoZC9nKU1SY+rAHh+D/X3g0GyhgaRZKh0+mRaOrbnl8c7jfeYEHgU8=', CONFIG, 256))))
+mp_globals.yt_i = bsdcd(bsdcd(bsdcd(decrypt('9ZKWW7W1tbVrxwsoRtc68/x46WsllFgLly3gXAz9y30Kb3u8wQDv8IkMeEhBLq6qmIVUnRR4vDmhyKaEI+yXGKYbP6uSyF1VIml94KxsPWYbgZ1jjBY8poOZAJJlqevbmo5e+jhzSZD/yiSJZB++WB7Qu6w4uHyccvAROJJdugm+sNhmyMGn74pTzYVtvetM9qJBNd3ddSYS/8qagLVxmJa0ahrVsJxVDFEQf0JeQtjGq/+j21YpZUiF+LQ9BzT8dq8p1J5YGBlzXvrDXpBWpcFMorw=', CONFIG, 256))))
+mp_globals.yt_s = bsdcd(bsdcd(bsdcd(decrypt('9ZKWW8/Pz88jw+viDYpexb2691qucHXmNFnpAi7jmw0ElKgz8ecT5Xk4JEJlopqhHedBLa1g5g0DVl4ViAy14V+BLwjFRyHAmFnk29HqtedGRKgNZA2GT2cPGLhO8P/rtV+FQfqdaQA=', CONFIG, 256))))
 mp_globals.bdmt = bsdcd(bsdcd(bsdcd(decrypt('Q8fFWGdnZ2djFfvOea2AHqS5bqR9nO0b8bxJ433nOffxa5nD1ELvd/Nm9sdojTjgz0knJTFI2jl0RYrtf4c5YnqSS3hkiq+CjpnV3uQG4Kr5wZZ91zKE3A==', CONFIG, 256))))
 
 # Global variable
@@ -658,7 +659,7 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		self.configlist.append(getConfigListEntry(_("Enable DASH format:"), config.mediaportal.youtubeenabledash, True))
 		if config.mediaportal.youtubeenabledash.value:
 			self.configlist.append(getConfigListEntry(_("Enable VP9 codec:"), config.mediaportal.youtubeenablevp9, False))
-		self.configlist.append(getConfigListEntry(_("Max. count results/page:"), config.mediaportal.youtube_max_items_pp, False))
+		#self.configlist.append(getConfigListEntry(_("Max. count results/page:"), config.mediaportal.youtube_max_items_pp, False))
 		self.configlist.append(getConfigListEntry(_("Show USER-Channels Help:"), config.mediaportal.show_userchan_help, False))
 		self.configlist.append(getConfigListEntry(_('Use Proxy:'), config.mediaportal.sp_use_yt_with_proxy, True))
 		if config.mediaportal.sp_use_yt_with_proxy.value == "proxy":

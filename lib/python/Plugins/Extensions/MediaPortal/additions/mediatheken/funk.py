@@ -42,7 +42,7 @@ default_cover = "file://%s/funk.png" % (config.mediaportal.iconcachepath.value +
 
 headers = {
 	'Authorization':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnROYW1lIjoid2ViYXBwLXYzMSIsInNjb3BlIjoic3RhdGljLWNvbnRlbnQtYXBpLGN1cmF0aW9uLWFwaSxuZXh4LWNvbnRlbnQtYXBpLXYzMSx3ZWJhcHAtYXBpIn0.mbuG9wS9Yf5q6PqgR4fiaRFIagiHk9JhwoKES7ksVX4',
-	'Accept-Encoding':'gzip',
+	'Accept-Encoding':'deflate',
 }
 
 BASE_URL = 'https://www.funk.net/api/v3.1'
@@ -112,6 +112,7 @@ class funkGenreScreen(MPScreen):
 			self.filmliste.append((title, image, url, descr))
 		self.filmliste.sort(key=lambda t : t[0].lower())
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		self.ml.moveToIndex(0)
 		self.keyLocked = False
 		self.showInfos()
 
@@ -215,6 +216,7 @@ class funkSeasonsScreen(MPScreen):
 				url = BASE_URL + "/webapp/videos/byPlaylistAlias/" + str(item["alias"]) + "?filterFsk=false&size=100&sort=episodeNr,ASC"
 				self.filmliste.append((title, image, url, descr))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		self.ml.moveToIndex(0)
 		self.keyLocked = False
 		self.showInfos()
 
@@ -331,6 +333,7 @@ class funkEpisodesScreen(MPScreen):
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No episodes found!'), None, None, "", "", "", None))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		self.ml.moveToIndex(0)
 		self.keyLocked = False
 		self.showInfos()
 

@@ -191,7 +191,7 @@ class gigatvFilmScreen(MPScreen, ThumbsHelper):
 				message = self.session.open(MessageBoxExt, _("This video is not available."), MessageBoxExt.TYPE_INFO, timeout=5)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('src.":."(http://lx\d+.spieletips.de/\d+(?:_v\d+|)/(?:1080|720|480|360)+p.mp4)."', data, re.S)
+		videoPage = re.findall('src.":."(http[s]?://(?:lx\d+.spieletips.de|vid-cdn\d+.stroeermb.de)/\d+(?:_v\d+|)/(?:1080|720|480|360)+p.mp4)."', data, re.S)
 		if videoPage:
 			url = videoPage[0]
 			self.play(url)

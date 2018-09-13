@@ -30,7 +30,6 @@ class youtubeUrl(object):
 	mp_globals.premiumize = self.useProxy
 	playing = False
 
-
   def initDownloadAgent(self):
 	self.proxyurl = None
 	if self.useProxy:
@@ -188,7 +187,7 @@ class youtubeUrl(object):
 		links = {}
 		audio = {}
 		encoded_url_map = ""
-		if self.dash:
+		if self.dash and self.videoPrio > 2:
 			try:
 				encoded_url_map += u"," + flashvars.get('adaptive_fmts', [])
 			except:
@@ -231,9 +230,12 @@ class youtubeUrl(object):
 			try:
 				links[self.VIDEO_FMT_PRIORITY_MAP[str(key)]] = url
 			except KeyError:
-				try:
-					audio[self.AUDIO_FMT_PRIORITY_MAP[str(key)]] = url
-				except KeyError:
+				if self.dash and self.videoPrio > 2:
+					try:
+						audio[self.AUDIO_FMT_PRIORITY_MAP[str(key)]] = url
+					except KeyError:
+						continue
+				else:
 					continue
 
 		url = flashvars.get('hlsvp','')
@@ -251,16 +253,17 @@ class youtubeUrl(object):
 		#print "#####################################################################################"
 		try:
 			self.video_url = links[sorted(links.iterkeys())[0]].encode('utf-8')
-			try:
-				if int(re.search('.*?itag=(\d+)', self.video_url).group(1))>100:
-					self.audio_url = audio[sorted(audio.iterkeys())[0]].encode('utf-8')
-					#print "#####################################################################################"
-					#for i in audio:
-					#	type = re.search('.*?itag=(\d+)', audio[i]).group(1)
-					#	print type + "\t" + audio[i]
-					#print "#####################################################################################"
-			except:
-				pass
+			if self.dash and self.videoPrio > 2:
+				try:
+					if int(re.search('.*?itag=(\d+)', self.video_url).group(1))>100:
+						self.audio_url = audio[sorted(audio.iterkeys())[0]].encode('utf-8')
+						#print "#####################################################################################"
+						#for i in audio:
+						#	type = re.search('.*?itag=(\d+)', audio[i]).group(1)
+						#	print type + "\t" + audio[i]
+						#print "#####################################################################################"
+				except:
+					pass
 			#self.__callBack(self.video_url)
 			self.callBack(self.video_url, self.audio_url)
 		except (KeyError,IndexError):
@@ -425,12 +428,11 @@ class youtubeUrl(object):
   def parseM3U8Playlist(self, data):
 	bandwith_list = []
 	match_sec_m3u8=re.findall('BANDWIDTH=(\d+).*?\n(.*?m3u8)', data, re.S)
-	videoPrio = int(config.mediaportal.youtubeprio.value)
-	if videoPrio >= 3:
+	if self.videoPrio >= 3:
 		bw = int(match_sec_m3u8[-1][0])
-	elif videoPrio == 2:
+	elif self.videoPrio == 2:
 		bw = int(match_sec_m3u8[-1][0])/2
-	elif videoPrio == 1:
+	elif self.videoPrio == 1:
 		bw = int(match_sec_m3u8[-1][0])/3
 	else:
 		bw = int(match_sec_m3u8[-1][0])/4

@@ -356,12 +356,14 @@ class sevenStreamScreen(MPScreen):
 			runtime = ""
 
 		if date:
-			date = "Datum: " + date[0] + "\n"
+			date = re.findall('(\d{4})-(\d{2})-(\d{2})T(.*?)\+', date[0])
+			date = date[0][2] + "." + date[0][1] + "." + date[0][0] + ", " + date[0][3]
+			date = "Datum: " + date + "\n"
 		else:
 			date = ""
 
 		if season and episode:
-			epi = "Staffel: " + season[0] + " Episode: " + episode[0] + "\n"
+			epi = "Staffel: " + season[0] + "\nEpisode: " + episode[0] + "\n"
 		else:
 			epi = ""
 
