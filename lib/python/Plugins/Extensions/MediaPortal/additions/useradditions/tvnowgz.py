@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.debuglog import printlog as printl
 from Plugins.Extensions.MediaPortal.additions.mediatheken.tvnow import tvnowFirstScreen, tvnowSubGenreScreen, tvnowStaffelScreen, tvnowEpisodenScreen
 
 default_cover = "file://%s/tvnow.png" % (config.mediaportal.iconcachepath.value + "logos")
@@ -178,9 +179,10 @@ class tvnowGZEpisodenScreen(tvnowEpisodenScreen):
 				pass
 			if annual:
 				self.parseContainer("", False)
+		printl(self.container,self,"I")
 		if self.container == 0:
 			if len(self.filmliste) == 0:
-				self.filmliste.append((_('Currently no free episodes available!'), None, None, None))
+				self.filmliste.append((_('Currently no playable episodes available!'), None, None, None))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.keyLocked = False
 			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, 1, 1, mode=1)

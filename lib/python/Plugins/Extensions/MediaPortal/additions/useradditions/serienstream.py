@@ -466,12 +466,13 @@ class ssWatchlist(MPScreen, SearchHelper):
 			pass
 		if len(self.streamList) == 0:
 			self.streamList.append((_('Watchlist is currently empty'), None))
+			self.ml.setList(map(self._defaultlistleft, self.streamList))
 		else:
 			self.streamList.sort()
 			self.keyLocked = False
-		self.ml.setList(map(self._defaultlistleft, self.streamList))
-		self.ml.moveToIndex(0)
-		self.loadPicQueued()
+			self.ml.setList(map(self._defaultlistleft, self.streamList))
+			self.ml.moveToIndex(0)
+			self.loadPicQueued()
 
 	def showInfos(self):
 		exist = self['liste'].getCurrent()

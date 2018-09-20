@@ -263,11 +263,13 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 				m = re.search(">Neue Blockbuster<.*?<div id='view' class='small one'>(.*?)</div><div class=.hr.", data)
 
 			if m:
-				m = re.findall('title=\'(.*?)\'.*?href=\'(.*?)\'.*?<img.*?(http[s]?://.*?jpg)', m.group(1))
+				m = re.findall('title=\'(.*?)\'.*?href=\'(.*?)\'.*?<img.*?((?:http[s]?:|)//.*?jpg)', m.group(1))
 				if m:
 					self.page = 1
 					self.pages = 1
 					for (t, h, i) in m:
+						if i.startswith('//'):
+							i = "https:" + i
 						self.filmListe.append((decodeHtml(t), "%s%s" % (self.baseUrl, h), i, '', ''))
 		else:
 			if self.genreSearch:
@@ -287,10 +289,14 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 					if self.genreSearch:
 						for (t, h, i, sm, r) in m:
 							imdb = 'IMDb: %s / 10' % r
+							if i.startswith('//'):
+								i = "https:" + i
 							self.filmListe.append((decodeHtml(t), "%s%s" % (self.baseUrl, h), i, sm, ''))
 					else:
 						for (t, h, i, r) in m:
 							imdb = 'IMDb: %s / 10' % r
+							if i.startswith('//'):
+								i = "https:" + i
 							self.filmListe.append((decodeHtml(t), "%s%s" % (self.baseUrl, h), i, '', imdb))
 
 				if not self.pages:
