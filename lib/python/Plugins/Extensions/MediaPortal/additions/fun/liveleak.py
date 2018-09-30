@@ -40,7 +40,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 
-default_cover = "file://%s/liveleak.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/liveleak.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class LiveLeakScreen(MPScreen):
 

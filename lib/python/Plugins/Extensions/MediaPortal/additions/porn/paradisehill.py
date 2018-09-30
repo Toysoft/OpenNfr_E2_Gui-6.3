@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-default_cover = "file://%s/paradisehill.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/paradisehill.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class paradisehillGenreScreen(MPScreen):
 

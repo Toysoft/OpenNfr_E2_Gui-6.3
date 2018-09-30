@@ -13,6 +13,10 @@ def datoporn(self, data):
 			links = re.findall('file:"(.*?)"', sUnpacked, re.S)
 			if links:
 				url = links[-1]
+	else:
+		links = re.findall('player.updateSrc\(\{src: "(.*?\.m3u8)"', data, re.S)
+		if links:
+			url = links[0]
 	if url:
 		self._callback(url)
 	else:

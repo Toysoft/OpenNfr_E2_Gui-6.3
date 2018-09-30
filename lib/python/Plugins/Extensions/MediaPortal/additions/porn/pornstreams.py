@@ -211,4 +211,4 @@ class PornStreamsFilmAuswahlScreen(MPScreen):
 
 	def got_link(self, stream_url):
 		title = self.genreName
-		self.session.open(SimplePlayer, [(title, stream_url, self.cover)], showPlaylist=False, ltype='pornstreams', cover=True)
+		self.session.open(SimplePlayer, [(title, stream_url, self.cover)], showPlaylist=False, ltype='pornstreams', cover=True, forceGST=True)

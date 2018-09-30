@@ -40,7 +40,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
 baseurl = "www.befuck.com"
-default_cover = "file://%s/befuck.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/befuck.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class befuckGenreScreen(MPScreen):
 

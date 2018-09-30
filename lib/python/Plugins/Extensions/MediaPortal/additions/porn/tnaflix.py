@@ -51,11 +51,11 @@ class TnAflixGenreScreen(MPScreen):
 		if self.mode == "tnaflix":
 			self.portal = "TnAflix.com"
 			self.baseurl = "https://www.tnaflix.com"
-			default_cover = "file://%s/tnaflix.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/tnaflix.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "empflix":
 			self.portal = "Empflix.com"
 			self.baseurl = "https://www.empflix.com"
-			default_cover = "file://%s/empflix.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/empflix.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
@@ -129,9 +129,9 @@ class TnAflixFilmScreen(MPScreen, ThumbsHelper):
 
 		global default_cover
 		if self.portal == "TnAflix.com":
-			default_cover = "file://%s/tnaflix.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/tnaflix.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.portal == "Empflix.com":
-			default_cover = "file://%s/empflix.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/empflix.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)

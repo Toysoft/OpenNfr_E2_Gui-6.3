@@ -2,7 +2,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-config.mediaportal.itunestrailersquality = ConfigText(default="720p", fixed_size=False)
+config_mp.mediaportal.itunestrailersquality = ConfigText(default="720p", fixed_size=False)
 
 class itunestrailersGenreScreen(MPScreen):
 
@@ -20,7 +20,7 @@ class itunestrailersGenreScreen(MPScreen):
 			"yellow": self.keyQuality
 		}, -1)
 
-		self.quality = config.mediaportal.itunestrailersquality.value
+		self.quality = config_mp.mediaportal.itunestrailersquality.value
 
 		self['title'] = Label("iTunes Movie Trailers")
 		self['ContentTitle'] = Label(_("Selection:"))
@@ -67,16 +67,16 @@ class itunestrailersGenreScreen(MPScreen):
 		self.keyLocked = True
 		if self.quality == "720p":
 			self.quality = "1080p"
-			config.mediaportal.itunestrailersquality.value = "1080p"
+			config_mp.mediaportal.itunestrailersquality.value = "1080p"
 		elif self.quality == "1080p":
 			self.quality = "480p"
-			config.mediaportal.itunestrailersquality.value = "480p"
+			config_mp.mediaportal.itunestrailersquality.value = "480p"
 		elif self.quality == "480p":
 			self.quality = "720p"
-			config.mediaportal.itunestrailersquality.value = "720p"
+			config_mp.mediaportal.itunestrailersquality.value = "720p"
 
-		config.mediaportal.itunestrailersquality.save()
-		configfile.save()
+		config_mp.mediaportal.itunestrailersquality.save()
+		configfile_mp.save()
 		self['F3'].setText(self.quality)
 		self.layoutFinished()
 
@@ -282,12 +282,12 @@ class itunestrailersSubFilmScreen(MPScreen):
 	def getVideo(self, data):
 		video = re.search('<mediaURL>(.*?)</mediaURL>', data, re.S)
 		Link = video.group(1)
-		if config.mediaportal.itunestrailersquality.value == "720p":
+		if config_mp.mediaportal.itunestrailersquality.value == "720p":
 			Link = Link.replace('a720p.m4v','h720p.mov')
-		elif config.mediaportal.itunestrailersquality.value == "1080p":
+		elif config_mp.mediaportal.itunestrailersquality.value == "1080p":
 			Link = Link.replace('a720p.m4v','h1080p.mov')
 			Link = Link.replace('h720p.mov','h1080p.mov')
-		elif config.mediaportal.itunestrailersquality.value == "480p":
+		elif config_mp.mediaportal.itunestrailersquality.value == "480p":
 			Link = Link.replace('a720p.m4v','h480p.mov')
 			Link = Link.replace('h720p.mov','h480p.mov')
 		Title = self['liste'].getCurrent()[0][0]

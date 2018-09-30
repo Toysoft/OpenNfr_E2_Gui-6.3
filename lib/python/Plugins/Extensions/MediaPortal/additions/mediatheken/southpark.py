@@ -39,8 +39,8 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-config.mediaportal.southparklang = ConfigText(default="de", fixed_size=False)
-config.mediaportal.southparkquality = ConfigText(default="HD", fixed_size=False)
+config_mp.mediaportal.southparklang = ConfigText(default="de", fixed_size=False)
+config_mp.mediaportal.southparkquality = ConfigText(default="HD", fixed_size=False)
 
 class SouthparkGenreScreen(MPScreen):
 
@@ -55,8 +55,8 @@ class SouthparkGenreScreen(MPScreen):
 			"blue"	: self.keyLocale
 		}, -1)
 
-		self.locale = config.mediaportal.southparklang.value
-		self.quality = config.mediaportal.southparkquality.value
+		self.locale = config_mp.mediaportal.southparklang.value
+		self.quality = config_mp.mediaportal.southparkquality.value
 
 		self['title'] = Label("Southpark.de")
 		self['ContentTitle'] = Label("Genre:")
@@ -95,26 +95,26 @@ class SouthparkGenreScreen(MPScreen):
 		self.keyLocked = True
 		if self.locale == "de":
 			self.locale = "en"
-			config.mediaportal.southparklang.value = "en"
+			config_mp.mediaportal.southparklang.value = "en"
 		elif self.locale == "en":
 			self.locale = "de"
-			config.mediaportal.southparklang.value = "de"
+			config_mp.mediaportal.southparklang.value = "de"
 
-		config.mediaportal.southparklang.save()
-		configfile.save()
+		config_mp.mediaportal.southparklang.save()
+		configfile_mp.save()
 		self['F4'].setText(self.locale)
 		self.loadPage()
 
 	def keyQuality(self):
 		if self.quality == "SD":
 			self.quality = "HD"
-			config.mediaportal.southparkquality.value = "HD"
+			config_mp.mediaportal.southparkquality.value = "HD"
 		elif self.quality == "HD":
 			self.quality = "SD"
-			config.mediaportal.southparkquality.value = "SD"
+			config_mp.mediaportal.southparkquality.value = "SD"
 
-		config.mediaportal.southparkquality.save()
-		configfile.save()
+		config_mp.mediaportal.southparkquality.save()
+		configfile_mp.save()
 		self['F3'].setText(self.quality)
 		self.loadPage()
 
@@ -217,7 +217,7 @@ class SouthparkAktScreen(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self.locale = config.mediaportal.southparklang.value
+		self.locale = config_mp.mediaportal.southparklang.value
 
 		self['title'] = Label("Southpark.de")
 		self['ContentTitle'] = Label("Folge: %s" % self.Name)
@@ -246,7 +246,7 @@ class SouthparkAktScreen(MPScreen):
 			for title, id in xmls:
 				if not re.match(".*?Intro\sHD", title):
 					x += 1
-					if config.mediaportal.southparkquality.value == "SD":
+					if config_mp.mediaportal.southparkquality.value == "SD":
 						quality = "phttp"
 					else:
 						quality = "hls"
@@ -271,7 +271,7 @@ class SouthparkAktScreen(MPScreen):
 			return
 		self.keyLocked = True
 		self.link = self['liste'].getCurrent()[0][1]
-		if config.mediaportal.use_hls_proxy.value or config.mediaportal.southparkquality.value == "SD":
+		if config_mp.mediaportal.use_hls_proxy.value or config_mp.mediaportal.southparkquality.value == "SD":
 			getPage(self.link).addCallback(self.StartStream).addErrback(self.dataError)
 		else:
 			message = self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO, timeout=5)

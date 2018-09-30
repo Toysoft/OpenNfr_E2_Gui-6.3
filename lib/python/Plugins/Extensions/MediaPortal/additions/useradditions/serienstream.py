@@ -26,8 +26,8 @@ ss_cookies = CookieJar()
 ss_ck = {}
 ss_agent = ''
 
-config.mediaportal.ss_username = ConfigText(default="ssEmail", fixed_size=False)
-config.mediaportal.ss_password = ConfigPassword(default="ssPassword", fixed_size=False)
+config_mp.mediaportal.ss_username = ConfigText(default="ssEmail", fixed_size=False)
+config_mp.mediaportal.ss_password = ConfigPassword(default="ssPassword", fixed_size=False)
 
 class ssMain(MPScreen):
 
@@ -45,8 +45,8 @@ class ssMain(MPScreen):
 			"blue": self.keySetup
 		}, -1)
 
-		self.username = str(config.mediaportal.ss_username.value)
-		self.password = str(config.mediaportal.ss_password.value)
+		self.username = str(config_mp.mediaportal.ss_username.value)
+		self.password = str(config_mp.mediaportal.ss_password.value)
 
 		self['title'] = Label("Serienstream.to")
 		self['ContentTitle'] = Label(_("Selection"))
@@ -152,8 +152,8 @@ class ssSetupScreen(MPSetupScreen, ConfigListScreenExt):
 		self.list = []
 		ConfigListScreenExt.__init__(self, self.list)
 
-		self.list.append(getConfigListEntry(_("Email:"), config.mediaportal.ss_username))
-		self.list.append(getConfigListEntry(_("Password:"), config.mediaportal.ss_password))
+		self.list.append(getConfigListEntry(_("Email:"), config_mp.mediaportal.ss_username))
+		self.list.append(getConfigListEntry(_("Password:"), config_mp.mediaportal.ss_password))
 
 		self["config"].setList(self.list)
 
@@ -166,7 +166,7 @@ class ssSetupScreen(MPSetupScreen, ConfigListScreenExt):
 	def saveConfig(self):
 		for x in self["config"].list:
 			x[1].save()
-		configfile.save()
+		configfile_mp.save()
 		self.close()
 
 	def exit(self):
@@ -275,7 +275,7 @@ class ssSerien(MPScreen, SearchHelper):
 			return
 		muTitle = self['liste'].getCurrent()[0][0]
 		muID = self['liste'].getCurrent()[0][1]
-		fn = config.mediaportal.watchlistpath.value+"mp_ss_watchlist"
+		fn = config_mp.mediaportal.watchlistpath.value+"mp_ss_watchlist"
 		if not fileExists(fn):
 			open(fn,"w").close()
 		try:
@@ -327,12 +327,12 @@ class ssNeueEpisoden(MPScreen):
 	def parseData(self, data):
 		self.watched_liste = []
 		self.mark_last_watched = []
-		if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
-			open(config.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
-		if fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
-			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_bs_watched")
+		if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched"):
+			open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
+		if fileExists(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched"):
+			leer = os.path.getsize(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched")
 			if not leer == 0:
-				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
+				self.updates_read = open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
 				for lines in sorted(self.updates_read.readlines()):
 					line = re.findall('"(.*?S\d+E\d+)', lines)
 					if line:
@@ -454,7 +454,7 @@ class ssWatchlist(MPScreen, SearchHelper):
 	def loadPlaylist(self):
 		self.keyLocked = True
 		self.streamList = []
-		self.wl_path = config.mediaportal.watchlistpath.value+"mp_ss_watchlist"
+		self.wl_path = config_mp.mediaportal.watchlistpath.value+"mp_ss_watchlist"
 		try:
 			readStations = open(self.wl_path,"r")
 			rawData = readStations.read()
@@ -631,12 +631,12 @@ class ssEpisoden(MPScreen):
 	def parseData(self, data):
 		self.watched_liste = []
 		self.mark_last_watched = []
-		if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
-			open(config.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
-		if fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
-			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_bs_watched")
+		if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched"):
+			open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
+		if fileExists(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched"):
+			leer = os.path.getsize(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched")
 			if not leer == 0:
-				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
+				self.updates_read = open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
 				for lines in sorted(self.updates_read.readlines()):
 					line = re.findall('"(.*?S\d+E\d+)', lines)
 					if line:
@@ -701,11 +701,11 @@ class ssEpisoden(MPScreen):
 
 	def keyToggle(self):
 		if self['liste'].getCurrent()[0][2] and self['liste'].getCurrent()[0][1]:
-			if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
-				open(config.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
+			if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched"):
+				open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
 			self.update_liste = []
-			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_bs_watched")
-			self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
+			leer = os.path.getsize(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched")
+			self.updates_read = open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
 			for lines in sorted(self.updates_read.readlines()):
 				line = re.findall('"(.*?)"', lines)
 				if line:
@@ -715,12 +715,12 @@ class ssEpisoden(MPScreen):
 					if not check in line[0]:
 						self.update_liste.append(line[0])
 			self.updates_read.close()
-			writeTmp = open(config.mediaportal.watchlistpath.value+"mp_bs_watched.tmp","w")
+			writeTmp = open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched.tmp","w")
 
 			for lines in self.update_liste:
 				writeTmp.write('"%s"\n' % lines)
 			writeTmp.close()
-			shutil.move(config.mediaportal.watchlistpath.value+"mp_bs_watched.tmp", config.mediaportal.watchlistpath.value+"mp_bs_watched")
+			shutil.move(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched.tmp", config_mp.mediaportal.watchlistpath.value+"mp_bs_watched")
 			self.reloadList()
 		else:
 			if not re.search('\S[0-9][0-9]E[0-9][0-9]', self.Title, re.I):
@@ -738,24 +738,24 @@ class ssEpisoden(MPScreen):
 					new_title += split
 					count += 1
 				self.streamname = new_title
-			if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
-				open(config.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
+			if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched"):
+				open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
 			self.update_liste = []
-			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_bs_watched")
+			leer = os.path.getsize(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched")
 			if not leer == 0:
-				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
+				self.updates_read = open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
 				for lines in sorted(self.updates_read.readlines()):
 					line = re.findall('"(.*?)"', lines)
 					if line:
 						self.update_liste.append("%s" % (line[0]))
 				self.updates_read.close()
-				updates_read2 = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
+				updates_read2 = open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
 				check = ("%s" % self.streamname)
 				if not check in self.update_liste:
 					updates_read2.write('"%s"\n' % (self.streamname))
 					updates_read2.close()
 			else:
-				updates_read3 = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
+				updates_read3 = open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
 				updates_read3.write('"%s"\n' % (self.streamname))
 				updates_read3.close()
 			self.reloadList()
@@ -857,24 +857,24 @@ class ssStreams(MPScreen):
 				new_title += split
 				count += 1
 			self.streamname = new_title
-		if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
-			open(config.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
+		if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched"):
+			open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched","w").close()
 		self.update_liste = []
-		leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_bs_watched")
+		leer = os.path.getsize(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched")
 		if not leer == 0:
-			self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
+			self.updates_read = open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
 			for lines in sorted(self.updates_read.readlines()):
 				line = re.findall('"(.*?)"', lines)
 				if line:
 					self.update_liste.append("%s" % (line[0]))
 			self.updates_read.close()
-			updates_read2 = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
+			updates_read2 = open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
 			check = ("%s" % self.streamname)
 			if not check in self.update_liste:
 				updates_read2.write('"%s"\n' % (self.streamname))
 				updates_read2.close()
 		else:
-			updates_read3 = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
+			updates_read3 = open(config_mp.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
 			updates_read3.write('"%s"\n' % (self.streamname))
 			updates_read3.close()
 		self.session.open(SimplePlayer, [(self.streamname, stream_url, self.cover)], showPlaylist=False, ltype='serienstream', cover=True)

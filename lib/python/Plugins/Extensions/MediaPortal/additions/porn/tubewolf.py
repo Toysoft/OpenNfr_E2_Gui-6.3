@@ -39,7 +39,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-default_cover = "file://%s/tubewolf.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/tubewolf.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class tubewolfGenreScreen(MPScreen):
 
@@ -50,19 +50,19 @@ class tubewolfGenreScreen(MPScreen):
 		if self.mode == "tubewolf":
 			self.portal = "TubeWolf.com"
 			self.baseurl = "https://www.tubewolf.com"
-			default_cover = "file://%s/tubewolf.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/tubewolf.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "alphaporno":
 			self.portal = "AlphaPorno.com"
 			self.baseurl = "https://www.alphaporno.com"
-			default_cover = "file://%s/alphaporno.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/alphaporno.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "zedporn":
 			self.portal = "ZedPorn.com"
 			self.baseurl = "https://zedporn.com"
-			default_cover = "file://%s/zedporn.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/zedporn.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "crocotube":
 			self.portal = "CrocoTube.com"
 			self.baseurl = "https://crocotube.com"
-			default_cover = "file://%s/crocotube.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/crocotube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
@@ -131,13 +131,13 @@ class tubewolfListScreen(MPScreen, ThumbsHelper):
 
 		global default_cover
 		if self.portal == "TubeWolf.com":
-			default_cover = "file://%s/tubewolf.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/tubewolf.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.portal == "AlphaPorno.com":
-			default_cover = "file://%s/alphaporno.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/alphaporno.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.portal == "ZedPorn.com":
-			default_cover = "file://%s/zedporn.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/zedporn.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.portal == "CrocoTube.com":
-			default_cover = "file://%s/crocotube.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/crocotube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)

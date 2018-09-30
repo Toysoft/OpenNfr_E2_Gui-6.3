@@ -48,7 +48,7 @@ json_headers = {
 	'Content-Type':'application/x-www-form-urlencoded',
 	}
 
-default_cover = "file://%s/cliphunter.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/cliphunter.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class cliphunterGenreScreen(MPScreen):
 

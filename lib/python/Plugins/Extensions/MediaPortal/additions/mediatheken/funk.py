@@ -38,7 +38,7 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-default_cover = "file://%s/funk.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/funk.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 headers = {
 	'Authorization':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnROYW1lIjoid2ViYXBwLXYzMSIsInNjb3BlIjoic3RhdGljLWNvbnRlbnQtYXBpLGN1cmF0aW9uLWFwaSxuZXh4LWNvbnRlbnQtYXBpLXYzMSx3ZWJhcHAtYXBpIn0.mbuG9wS9Yf5q6PqgR4fiaRFIagiHk9JhwoKES7ksVX4',
@@ -109,7 +109,8 @@ class funkGenreScreen(MPScreen):
 			else:
 				descr = ""
 			url = BASE_URL + "/webapp/playlists/byChannelAlias/" + str(item["alias"]) + "?sort=language,ASC"
-			self.filmliste.append((title, image, url, descr))
+			if title not in ("Doctor Who", "Uncle", "Threesome", "Orange is the new Black", "The Job Lot"):
+				self.filmliste.append((title, image, url, descr))
 		self.filmliste.sort(key=lambda t : t[0].lower())
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
@@ -359,7 +360,7 @@ class funkEpisodesScreen(MPScreen):
 			videourl = nexx.getVideoUrl(id, downld)
 		if videourl:
 			if "m3u8" in videourl:
-				if config.mediaportal.use_hls_proxy.value:
+				if config_mp.mediaportal.use_hls_proxy.value:
 					self.session.open(SimplePlayer, [(Title, videourl)], showPlaylist=False, ltype='funk')
 				else:
 					message = self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO, timeout=5)

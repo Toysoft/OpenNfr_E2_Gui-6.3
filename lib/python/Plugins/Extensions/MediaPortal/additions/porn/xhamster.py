@@ -48,11 +48,11 @@ pornstars = []
 xhAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36"
 base_url = "https://xhamster.com"
 
-default_cover = "file://%s/xhamster.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/xhamster.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 def writeFavSub():
 	try:
-		wl_path = config.mediaportal.watchlistpath.value+"mp_xhamster_favsub"
+		wl_path = config_mp.mediaportal.watchlistpath.value+"mp_xhamster_favsub"
 		writefavsub = open(wl_path, 'w')
 		for m in favourites:
 			writefavsub.write('"fav";"%s";"%s"\n' % (m[0], m[1]))
@@ -94,7 +94,7 @@ class xhamsterGenreScreen(MPScreen):
 		subscriptions = []
 		global pornstars
 		pornstars = []
-		self.wl_path = config.mediaportal.watchlistpath.value+"mp_xhamster_favsub"
+		self.wl_path = config_mp.mediaportal.watchlistpath.value+"mp_xhamster_favsub"
 		try:
 			readfavsub = open(self.wl_path,"r")
 			rawData = readfavsub.read()
@@ -112,7 +112,6 @@ class xhamsterGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		url = base_url + "/categories"
-		ck.update({'x_ndvkey':'s%3A8%3A%22bef3e026%22%3B'})
 		getPage(url, agent=xhAgent, cookies=ck).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -129,19 +128,19 @@ class xhamsterGenreScreen(MPScreen):
 		self.genreliste.insert(0, ("Favourite Videos", 'favs'))
 		self.genreliste.insert(0, (400 * "—", None))
 		self.genreliste.insert(0, ("Pornstars", '%s/pornstars' % base_url))
-		self.genreliste.insert(0, ("Most Commented (All Time)", '%s/rankings/alltime-top-commented' % base_url))
-		self.genreliste.insert(0, ("Most Commented (Monthly)", '%s/rankings/monthly-top-commented' % base_url))
-		self.genreliste.insert(0, ("Most Commented (Weekly)", '%s/rankings/weekly-top-commented' % base_url))
-		self.genreliste.insert(0, ("Most Commented (Daily)", '%s/rankings/daily-top-commented' % base_url))
-		self.genreliste.insert(0, ("Most Viewed (All Time)", '%s/rankings/alltime-top-viewed' % base_url))
-		self.genreliste.insert(0, ("Most Viewed (Monthly)", '%s/rankings/monthly-top-viewed' % base_url))
-		self.genreliste.insert(0, ("Most Viewed (Weekly)", '%s/rankings/weekly-top-viewed' % base_url))
-		self.genreliste.insert(0, ("Most Viewed (Daily)", '%s/rankings/daily-top-viewed' % base_url))
-		self.genreliste.insert(0, ("Top Rated (All Time)", '%s/rankings/alltime-top-videos' % base_url))
-		self.genreliste.insert(0, ("Top Rated (Monthly)", '%s/rankings/monthly-top-videos' % base_url))
-		self.genreliste.insert(0, ("Top Rated (Weekly)", '%s/rankings/weekly-top-videos' % base_url))
-		self.genreliste.insert(0, ("Top Rated (Daily)", '%s/rankings/daily-top-videos' % base_url))
-		self.genreliste.insert(0, ("Newest", '%s/new/' % base_url))
+		self.genreliste.insert(0, ("Most Commented (All Time)", '%s/most-commented' % base_url))
+		self.genreliste.insert(0, ("Most Commented (Monthly)", '%s/most-commented/monthly' % base_url))
+		self.genreliste.insert(0, ("Most Commented (Weekly)", '%s/most-commented/weekly' % base_url))
+		self.genreliste.insert(0, ("Most Commented (Daily)", '%s/most-commented/daily' % base_url))
+		self.genreliste.insert(0, ("Most Viewed (All Time)", '%s/most-viewed' % base_url))
+		self.genreliste.insert(0, ("Most Viewed (Monthly)", '%s/most-viewed/monthly' % base_url))
+		self.genreliste.insert(0, ("Most Viewed (Weekly)", '%s/most-viewed/weekly' % base_url))
+		self.genreliste.insert(0, ("Most Viewed (Daily)", '%s/most-viewed/daily' % base_url))
+		self.genreliste.insert(0, ("Top Rated (All Time)", '%s/best' % base_url))
+		self.genreliste.insert(0, ("Top Rated (Monthly)", '%s/best/monthly' % base_url))
+		self.genreliste.insert(0, ("Top Rated (Weekly)", '%s/best/weekly' % base_url))
+		self.genreliste.insert(0, ("Top Rated (Daily)", '%s/best/daily' % base_url))
+		self.genreliste.insert(0, ("Newest", '%s' % base_url))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.ml.moveToIndex(0)
@@ -363,9 +362,9 @@ class xhamsterPornstarsScreen(MPScreen):
 			for m in pornstars:
 				self.streamList.append((m[1], m[0]))
 		else:
-			stars = re.findall('href=".*?/pornstars/(.*?)"\s{0,2}>(.*?)</a', data, re.S)
+			stars = re.findall('class="item">.*?href=".*?/pornstars/(?!all/)(.*?)"\s{0,2}>(.*?)</a', data, re.S)
 			for (url, name) in stars:
-				self.streamList.append((name, url))
+				self.streamList.append((name.strip(), url))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No pornstars found!'), None))
 		self.ml.setList(map(self._defaultlistleft, self.streamList))
@@ -496,11 +495,11 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 		else:
 			self['name'].setText(_('Please wait...'))
 			if re.match(".*?Search", self.Name):
-				url = "http://xhamster.com/search?q=%s&qcat=video&page=%s" % (self.Link, str(self.page))
 				if self.hd:
-					ck.update({'video_search_form':"%7b%22categories%22%3a%7b%22straight%22%3atrue%2c%22gay%22%3afalse%2c%22shemale%22%3afalse%7d%2c%22quality%22%3a%22hd%22%7d"})
+					hd = "hd"
 				else:
-					ck.update({'video_search_form':"%7b%22categories%22%3a%7b%22straight%22%3atrue%2c%22gay%22%3afalse%2c%22shemale%22%3afalse%7d%2c%22quality%22%3a%22all%22%7d"})
+					hd = "all"
+				url = "https://xhamster.com/search?date=any&duration=any&sort=relevance&quality=%s&categories=MjM6ODoRrDU=&q=%s&p=%s" % (hd, self.Link, str(self.page))
 			else:
 				if re.match('.*?\/channels\/', self.Link):
 					url = "%s-%s.html" % (self.Link, str(self.page))

@@ -49,7 +49,7 @@ json_headers = {
 	'X-Requested-With':'XMLHttpRequest',
 	'Content-Type':'application/x-www-form-urlencoded',
 	}
-default_cover = "file://%s/xvideos.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/xvideos.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 headers = {
 	'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
 	'Accept-Encoding':'deflate, br',
@@ -122,10 +122,6 @@ class xvideosGenreScreen(MPScreen):
 		Sort = self['liste'].getCurrent()[0][3]
 		if Name == "--- Search ---":
 			self.suchen(suggest_func=self.getSuggestions)
-		elif Name == "Channels":
-			self.session.open(xvideosChannelsScreen, Link, Name, Sort)
-		elif Name == "Playlists":
-			self.session.open(xvideosPlaylistsScreen, Link, Name, Sort)
 		elif Name == "Pornstars":
 			self.session.open(xvideosPornstarsScreen, Link, Name, Sort)
 		else:
@@ -237,7 +233,7 @@ class xvideosPornstarsScreen(MPScreen, ThumbsHelper):
 	def keyAge(self):
 		if self.keyLocked:
 			return
-		rangelist = [ ['Ever', 'ever/'], ['1 Month', ''], ['2 Weeks', '2weeks/'], ['New', 'new/'] ]
+		rangelist = [ ['Ever', 'ever/'], ['1 Year', ''], ['3 Months', '3months/'], ['New', 'new/'] ]
 		self.session.openWithCallback(self.keyAgeAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
 
 	def keyAgeAction(self, result):
@@ -262,10 +258,11 @@ class xvideosPornstarsScreen(MPScreen, ThumbsHelper):
 
 class xvideosFilmScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name, Sort):
+	def __init__(self, session, Link, Name, Sort, Related=False):
 		self.Link = Link
 		self.Name = Name
 		self.Sort = Sort
+		self.Related = Related
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -282,7 +279,7 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			"prevBouquet" : self.keyPageDown,
 			"red" : self.keyKeywords,
 			"green" : self.keyPageNumber,
-			"yellow" : self.keySort,
+			"yellow" : self.keySortRelated,
 			"blue" : self.keyAge
 		}, -1)
 
@@ -292,8 +289,10 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 		if self.Sort:
 			self['F3'] = Label(_("Sort"))
 			self['F4'].setText(_("Filter"))
-		elif not self.Sort and self.Name != "Newest" and self.Name != "100% Verified" and not "Porn in" in self.Name and not "$$PORNSTAR$$" in self.Link:
+		elif not self.Related and not self.Sort and self.Name != "Newest" and self.Name != "100% Verified" and not "Porn in" in self.Name and not "$$PORNSTAR$$" in self.Link:
 			self['F4'].setText(_("Filter"))
+		if not self.Sort:
+			self['F3'] = Label(_("Show Related"))
 
 		self['Page'] = Label(_("Page:"))
 		self.keyLocked = True
@@ -321,82 +320,98 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
-		if re.match(".*Search", self.Name):
-			url = "https://www.xvideos.com/?k=%s&p=%s&sort=%s&datef=%s&durf=allduration&typef=straight" % (self.Link, str(self.page-1), self.sort, self.age)
+		if self.Related:
+			self.counter = 0
+			twAgentGetPage(self.Link, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
 		else:
-			if self.page == 1 and self.Name == "Newest":
-				url = self.Link.replace('/new/$$PAGE$$', '')
-			elif self.page == 1 and "Porn in" in self.Name:
-				url = self.Link.replace('$$PAGE$$', '')
+			if re.match(".*Search", self.Name):
+				url = "https://www.xvideos.com/?k=%s&p=%s&sort=%s&datef=%s&durf=allduration&typef=straight" % (self.Link, str(self.page-1), self.sort, self.age)
 			else:
-				url = self.Link.replace('$$PAGE$$', str(self.page-1)).replace('$$AGE$$', self.age)
-		self.counter = 1
-		self.url2 = None
-		if "$$PORNSTAR$$" in url:
-			self.counter = 2
-			self.url2 = url.replace('$$PORNSTAR$$', 'best')
-			url = url.replace('$$PORNSTAR$$', 'pornstar')
-			twAgentGetPage(self.url2, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
-		print url
-		twAgentGetPage(url, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
+				if self.page == 1 and self.Name == "Newest":
+					url = self.Link.replace('/new/$$PAGE$$', '')
+				elif self.page == 1 and "Porn in" in self.Name:
+					url = self.Link.replace('$$PAGE$$', '')
+				else:
+					url = self.Link.replace('$$PAGE$$', str(self.page-1)).replace('$$AGE$$', self.age)
+			self.counter = 1
+			self.url2 = None
+			if "$$PORNSTAR$$" in url:
+				self.counter = 2
+				self.url2 = url.replace('$$PORNSTAR$$', 'best')
+				url = url.replace('$$PORNSTAR$$', 'pornstar')
+				twAgentGetPage(self.url2, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
+			twAgentGetPage(url, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		self.keyword_list = []
-		if re.match(".*Search", self.Name):
-			keydata = re.search('Combine search with(.*?)</div', data, re.S)
-			if keydata:
-				keywords = re.findall('<a href="/\?k=(.*?)">(.*?)</a>', keydata.group(1), re.S)
-				if keywords:
-					for keyword in keywords:
-						self.keyword_list.append([keyword[1], keyword[0]])
-						self['F1'].setText(_("Keywords"))
-						self.keywords = True
+		if self.Related:
+			self['page'].setText('1 / 1')
+			datarel = re.findall('var video_related=(.*?);window.wpn_categories', data, re.S)
+			if datarel:
+				json_data = json.loads(datarel[0])
+				for item in json_data:
+					Title = str(item["t"])
+					Url = "https://www.xvideos.com" + str(item["u"])
+					Image = str(item["i"])
+					Runtime = str(item["d"])
+					Views = str(item["n"])
+					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
+		else:
+			self.keyword_list = []
+			if re.match(".*Search", self.Name):
+				keydata = re.search('Related searches</strong>(.*?)</div', data, re.S)
+				if keydata:
+					keywords = re.findall('<a href="/\?k=(.*?)&amp;related">(.*?)</a>', keydata.group(1), re.S)
+					if keywords:
+						for keyword in keywords:
+							self.keyword_list.append([keyword[1], keyword[0]])
+							self['F1'].setText(_("Keywords"))
+							self.keywords = True
+					else:
+						self['F1'].setText("")
+						self.keywords = False
 				else:
 					self['F1'].setText("")
 					self.keywords = False
-			else:
-				self['F1'].setText("")
-				self.keywords = False
-		self.counter -= 1
-		lastp = re.search('(\d+,{0,1}\d+)\sverified women and couple videos', data, re.S)
-		if lastp:
-			lastp = lastp.group(1).replace(',','')
-			lastp = round((float(lastp) / 24) + 0.5)
-			self.lastpage = int(lastp)
-			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		else:
-			lastp = re.search('class="sub">\((.*?)\sresults\)</span>', data, re.S)
+			self.counter -= 1
+			lastp = re.search('(\d+,{0,1}\d+)\sverified women and couple videos', data, re.S)
 			if lastp:
-				lastp = lastp.group(1).replace(',','').replace('+','')
+				lastp = lastp.group(1).replace(',','')
 				lastp = round((float(lastp) / 24) + 0.5)
 				self.lastpage = int(lastp)
 				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 			else:
-				lastp = re.search('current">(.*?)\svideos', data, re.S)
+				lastp = re.search('class="sub">\((.*?)\sresults\)</span>', data, re.S)
 				if lastp:
-					lastp = lastp.group(1).replace(',','')
+					lastp = lastp.group(1).replace(',','').replace('+','')
 					lastp = round((float(lastp) / 24) + 0.5)
 					self.lastpage = int(lastp)
 					self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 				else:
-					self.lastpage = 999
-					self['page'].setText(str(self.page))
-		Movies = re.findall('id="video_\d+"\sclass="thumb-block\s{0,1}">.*?class="thumb"><a href="(.*?)"><img src=".*?data-src="(.*?)".*?<a href.*?title="(.*?)">.*?</a></p><p class="metadata">(.*?)</div>', data, re.S)
-		if Movies:
-			for (Url, Image, Title, Meta) in Movies:
-				Views = re.findall('<span>\s-\s(.*?)\sViews</span>', Meta, re.S)
-				if Views:
-					Views = Views[0]
-				else:
-					Views = "0"
-				Runtime = re.findall('class="duration">(.*?)</span>', Meta, re.S)
-				if Runtime:
-					Runtime = Runtime[0]
-				else:
-					Runtime = "-"
-				Url = "https://www.xvideos.com" + Url
-				Image = Image.replace('img-hw.xvideos-cdn', 'img-egc.xvideos-cdn').replace('thumbs169', 'thumbs169lll').replace('THUMBNUM.jpg', '15.jpg')
-				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
+					lastp = re.search('current">(.*?)\svideos', data, re.S)
+					if lastp:
+						lastp = lastp.group(1).replace(',','')
+						lastp = round((float(lastp) / 24) + 0.5)
+						self.lastpage = int(lastp)
+						self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+					else:
+						self.lastpage = 999
+						self['page'].setText(str(self.page))
+			Movies = re.findall('id="video_\d+"\sclass="thumb-block\s{0,1}">.*?class="thumb"><a href="(.*?)"><img src=".*?data-src="(.*?)".*?<a href.*?title="(.*?)">.*?</a></p><p class="metadata">(.*?)</div>', data, re.S)
+			if Movies:
+				for (Url, Image, Title, Meta) in Movies:
+					Views = re.findall('<span>\s-\s(.*?)\sViews</span>', Meta, re.S)
+					if Views:
+						Views = Views[0]
+					else:
+						Views = "0"
+					Runtime = re.findall('class="duration">(.*?)</span>', Meta, re.S)
+					if Runtime:
+						Runtime = Runtime[0]
+					else:
+						Runtime = "-"
+					Url = "https://www.xvideos.com" + Url
+					Image = Image.replace('img-hw.xvideos-cdn', 'img-egc.xvideos-cdn').replace('thumbs169', 'thumbs169lll').replace('THUMBNUM.jpg', '15.jpg')
+					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
 		if self.counter == 0:
 			if len(self.filmliste) == 0:
 				self.filmliste.append((_('No movies found!'), "", None, None, None))
@@ -418,13 +433,15 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			self.Link = result[1]
 			self.loadPage()
 
-	def keySort(self):
+	def keySortRelated(self):
 		if self.keyLocked:
 			return
-		if not self.Sort:
-			return
-		rangelist = [ ['Relevance', 'relevance'], ['Upload date', 'uploaddate'], ['Rating', 'rating'], ['Length', 'length'], ['Views', 'views'] ]
-		self.session.openWithCallback(self.keySortAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
+		if self.Sort:
+			rangelist = [ ['Relevance', 'relevance'], ['Upload date', 'uploaddate'], ['Rating', 'rating'], ['Length', 'length'], ['Views', 'views'] ]
+			self.session.openWithCallback(self.keySortAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
+		else:
+			Link = self['liste'].getCurrent()[0][1]
+			self.session.open(xvideosFilmScreen, Link, "Related", False, True)
 
 	def keySortAction(self, result):
 		if result:
@@ -436,6 +453,8 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 		if self.keyLocked:
 			return
 		elif not self.Sort and (self.Name == "Newest" or self.Name == "100% Verified" or "Porn in" in self.Name or "$$PORNSTAR$$" in self.Link):
+			return
+		if self.Related:
 			return
 		if re.match(".*Search", self.Name):
 			rangelist = [ ['Today', 'today'], ['This week', 'week'], ['This month', 'month'], ['Last 3 month', '3month'], ['Last 6 month', '6month'], ['All time', 'all'] ]
@@ -490,7 +509,7 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 		for x in match_sec_m3u8:
 			if int(x[0]) > max:
 				max = int(x[0])
-		videoPrio = int(config.mediaportal.videoquali_others.value)
+		videoPrio = int(config_mp.mediaportal.videoquali_others.value)
 		if videoPrio == 2:
 			bw = max
 		elif videoPrio == 1:
@@ -502,11 +521,11 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			self.bandwith_list.append((int(bandwith),url))
 		_, best = min((abs(int(x[0]) - bw), x) for x in self.bandwith_list)
 		url = baseurl.replace('https','http') + best[1]
-		playlist_path = config.mediaportal.storagepath.value+"tmp.m3u8"
+		playlist_path = config_mp.mediaportal.storagepath.value+"tmp.m3u8"
 		f1 = open(playlist_path, 'w')
 		f1.write('#EXTM3U\n#EXT-X-STREAM-INF:PROGRAM-ID=1\n%s' % url)
 		f1.close()
-		self.playVideo("file://%stmp.m3u8" % config.mediaportal.storagepath.value)
+		self.playVideo("file://%stmp.m3u8" % config_mp.mediaportal.storagepath.value)
 
 	def playVideo(self, url):
 		Title = self['liste'].getCurrent()[0][0]

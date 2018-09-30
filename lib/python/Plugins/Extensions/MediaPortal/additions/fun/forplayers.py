@@ -43,7 +43,7 @@ from Plugins.Extensions.MediaPortal.resources.api import ForPlayersApi, SYSTEMS
 
 api = ForPlayersApi()
 
-default_cover = "file://%s/4players.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/4players.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class forPlayersGenreScreen(MPScreen):
 

@@ -88,13 +88,13 @@ class cannaPlaylist(MPScreen):
 		self.onLayoutFinish.append(self.loadPlaylist)
 
 	def loadPlaylist(self):
-		if not fileExists(config.mediaportal.watchlistpath.value+"mp_canna_playlist"):
-			open(config.mediaportal.watchlistpath.value+"mp_canna_playlist","w").close()
+		if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist"):
+			open(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist","w").close()
 
-		leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_canna_playlist")
+		leer = os.path.getsize(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist")
 		if not leer == 0:
 			self.filmliste = []
-			self.songs_read = open(config.mediaportal.watchlistpath.value+"mp_canna_playlist" , "r")
+			self.songs_read = open(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist" , "r")
 			for lines in sorted(self.songs_read.readlines()):
 				line = re.findall('"(.*?)" "(.*?)"', lines)
 				if line:
@@ -120,9 +120,9 @@ class cannaPlaylist(MPScreen):
 
 		cannaName = self['liste'].getCurrent()[0][0]
 
-		writeTmp = open(config.mediaportal.watchlistpath.value+"mp_canna_playlist.tmp","w")
-		if fileExists(config.mediaportal.watchlistpath.value+"mp_canna_playlist"):
-			readPlaylist = open(config.mediaportal.watchlistpath.value+"mp_canna_playlist","r")
+		writeTmp = open(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist.tmp","w")
+		if fileExists(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist"):
+			readPlaylist = open(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist","r")
 			for rawData in readPlaylist.readlines():
 				data = re.findall('"(.*?)" "(.*?)"', rawData, re.S)
 				if data:
@@ -131,7 +131,7 @@ class cannaPlaylist(MPScreen):
 						writeTmp.write('"%s" "%s"\n' % (read_name, read_url))
 			readPlaylist.close()
 			writeTmp.close()
-			shutil.move(config.mediaportal.watchlistpath.value+"mp_canna_playlist.tmp", config.mediaportal.watchlistpath.value+"mp_canna_playlist")
+			shutil.move(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist.tmp", config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist")
 			self.loadPlaylist()
 
 class cannaMusicListeScreen(MPScreen):
@@ -191,12 +191,12 @@ class cannaMusicListeScreen(MPScreen):
 		cannaName = self['liste'].getCurrent()[0][0]
 		cannaUrl = self['liste'].getCurrent()[0][1]
 
-		if not fileExists(config.mediaportal.watchlistpath.value+"mp_canna_playlist"):
-			open(config.mediaportal.watchlistpath.value+"mp_canna_playlist","w").close()
+		if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist"):
+			open(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist","w").close()
 
 		if not self.checkPlaylist(cannaName):
-			if fileExists(config.mediaportal.watchlistpath.value+"mp_canna_playlist"):
-				writePlaylist = open(config.mediaportal.watchlistpath.value+"mp_canna_playlist","a")
+			if fileExists(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist"):
+				writePlaylist = open(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist","a")
 				writePlaylist.write('"%s" "%s"\n' % (cannaName, cannaUrl))
 				writePlaylist.close()
 				message = self.session.open(MessageBoxExt, _("added"), MessageBoxExt.TYPE_INFO, timeout=2)
@@ -204,14 +204,14 @@ class cannaMusicListeScreen(MPScreen):
 			message = self.session.open(MessageBoxExt, _("Song already exists."), MessageBoxExt.TYPE_INFO, timeout=2)
 
 	def checkPlaylist(self, song):
-		if not fileExists(config.mediaportal.watchlistpath.value+"mp_canna_playlist"):
-			open(config.mediaportal.watchlistpath.value+"mp_canna_playlist","w").close()
+		if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist"):
+			open(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist","w").close()
 			return False
 		else:
-			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_canna_playlist")
+			leer = os.path.getsize(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist")
 			if not leer == 0:
 				self.dupelist = []
-				self.songs_read = open(config.mediaportal.watchlistpath.value+"mp_canna_playlist" , "r")
+				self.songs_read = open(config_mp.mediaportal.watchlistpath.value+"mp_canna_playlist" , "r")
 				for lines in sorted(self.songs_read.readlines()):
 					line = re.findall('"(.*?)" "(.*?)"', lines)
 					if line:

@@ -47,7 +47,7 @@ class VirtualKeyBoardExt(Screen, NumericalTextInput, HelpableScreen):
 		self.text = text + self.cursor
 		self.auto_text_init = auto_text_init
 
-		self.suggest_func = suggest_func if config.mediaportal.ena_suggestions.value else None
+		self.suggest_func = suggest_func if config_mp.mediaportal.ena_suggestions.value else None
 		self.DEFAULT_LM = 0
 		self.ml2 = MenuList([], enableWrapAround=False, content=eListboxPythonMultiContent)
 		self["suggestionlist"] = self.ml2

@@ -39,10 +39,10 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-config.mediaportal.radio_base = ConfigText(default="http://www.rad.io", fixed_size=False)
+config_mp.mediaportal.radio_base = ConfigText(default="http://www.rad.io", fixed_size=False)
 
-default_cover = "file://%s/radio.png" % (config.mediaportal.iconcachepath.value + "logos")
-base_url = config.mediaportal.radio_base.value
+default_cover = "file://%s/radio.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+base_url = config_mp.mediaportal.radio_base.value
 
 def check_playlist(url):
 	import requests
@@ -122,15 +122,15 @@ class RadioGenreScreen(MPScreen):
 		if Genre == _('Favorites'):
 			self.session.open(RadioPlaylist)
 		else:
-			config.mediaportal.radio_base.value = Url
-			config.mediaportal.radio_base.save()
-			configfile.save()
+			config_mp.mediaportal.radio_base.value = Url
+			config_mp.mediaportal.radio_base.save()
+			configfile_mp.save()
 			global base_url
-			base_url = config.mediaportal.radio_base.value
+			base_url = config_mp.mediaportal.radio_base.value
 			self.session.open(RadioSubGenreScreen, Genre, Url)
 
 	def restoreRadio(self):
-		config.mediaportal.is_radio.value = False
+		config_mp.mediaportal.is_radio.value = False
 
 class RadioSubGenreScreen(MPScreen):
 
@@ -342,7 +342,7 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 		url = check_playlist(url)
 		stationName = self['liste'].getCurrent()[0][0]
 		stationCover = str(jsondata['pictureBaseURL'])+"c175.png"
-		config.mediaportal.is_radio.value = True
+		config_mp.mediaportal.is_radio.value = True
 		self.session.open(SimplePlayer, [(stationName, url, stationCover)], showPlaylist=False, ltype='radio', playerMode='RADIO', cover=True)
 
 	def keyAdd(self):
@@ -350,7 +350,7 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 		stationId = self['liste'].getCurrent()[0][1]
 		if self.keyLocked or not stationId:
 			return
-		fn = config.mediaportal.watchlistpath.value+"mp_radio_playlist"
+		fn = config_mp.mediaportal.watchlistpath.value+"mp_radio_playlist"
 		if not fileExists(fn):
 			open(fn,"w").close()
 		try:
@@ -390,10 +390,10 @@ class RadioPlaylist(MPScreen):
 
 	def loadStations(self):
 		self.playList = []
-		if not fileExists(config.mediaportal.watchlistpath.value+"mp_radio_playlist"):
-			open(config.mediaportal.watchlistpath.value+"mp_radio_playlist","w").close()
-		if fileExists(config.mediaportal.watchlistpath.value+"mp_radio_playlist"):
-			path = config.mediaportal.watchlistpath.value+"mp_radio_playlist"
+		if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_radio_playlist"):
+			open(config_mp.mediaportal.watchlistpath.value+"mp_radio_playlist","w").close()
+		if fileExists(config_mp.mediaportal.watchlistpath.value+"mp_radio_playlist"):
+			path = config_mp.mediaportal.watchlistpath.value+"mp_radio_playlist"
 
 		if fileExists(path):
 			readStations = open(path,"r")
@@ -451,7 +451,7 @@ class RadioPlaylist(MPScreen):
 		url = check_playlist(url)
 		stationName = self['liste'].getCurrent()[0][0]
 		stationCover = str(jsondata['pictureBaseURL'])+"c175.png"
-		config.mediaportal.is_radio.value = True
+		config_mp.mediaportal.is_radio.value = True
 		self.session.open(SimplePlayer, [(stationName, url, stationCover)], showPlaylist=False, ltype='radio', playerMode='RADIO', cover=True)
 
 	def keyDel(self):
@@ -462,7 +462,7 @@ class RadioPlaylist(MPScreen):
 		i = self['liste'].getSelectedIndex()
 		c = j = 0
 		l = len(self.playList)
-		fn = config.mediaportal.watchlistpath.value+"mp_radio_playlist"
+		fn = config_mp.mediaportal.watchlistpath.value+"mp_radio_playlist"
 		try:
 			f1 = open(fn, 'w')
 			while j < l:

@@ -41,7 +41,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 baseurl = "https://www.servus.com"
 stvAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
-default_cover = "file://%s/servustv.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/servustv.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class sTVGenreScreen(MPScreen):
 
@@ -156,7 +156,7 @@ class sTVids(MPScreen):
 		for x in match_sec_m3u8:
 			if int(x[0]) > max:
 				max = int(x[0])
-		videoPrio = int(config.mediaportal.videoquali_others.value)
+		videoPrio = int(config_mp.mediaportal.videoquali_others.value)
 		if videoPrio == 2:
 			bw = max
 		elif videoPrio == 1:

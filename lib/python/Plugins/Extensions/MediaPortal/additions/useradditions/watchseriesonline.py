@@ -112,7 +112,7 @@ class wsoIndex(MPScreen, SearchHelper):
 			return
 		muTitle = current[0][0]
 		muID = current[0][1]
-		fn = config.mediaportal.watchlistpath.value+"mp_wso_watchlist"
+		fn = config_mp.mediaportal.watchlistpath.value+"mp_wso_watchlist"
 		if not fileExists(fn):
 			open(fn,"w").close()
 		try:
@@ -207,7 +207,7 @@ class wsoWatchlist(MPScreen):
 	def loadPlaylist(self):
 		self.keyLocked = True
 		self.streamList = []
-		self.wl_path = config.mediaportal.watchlistpath.value+"mp_wso_watchlist"
+		self.wl_path = config_mp.mediaportal.watchlistpath.value+"mp_wso_watchlist"
 		try:
 			readStations = open(self.wl_path,"r")
 			rawData = readStations.read()
@@ -294,12 +294,12 @@ class wsoEpisodes(MPScreen):
 	def parseData(self, data):
 		self.watched_list = []
 		self.mark_last_watched = []
-		if not fileExists(config.mediaportal.watchlistpath.value+"mp_wso_watched"):
-			open(config.mediaportal.watchlistpath.value+"mp_wso_watched","w").close()
-		if fileExists(config.mediaportal.watchlistpath.value+"mp_wso_watched"):
-			empty = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_wso_watched")
+		if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_wso_watched"):
+			open(config_mp.mediaportal.watchlistpath.value+"mp_wso_watched","w").close()
+		if fileExists(config_mp.mediaportal.watchlistpath.value+"mp_wso_watched"):
+			empty = os.path.getsize(config_mp.mediaportal.watchlistpath.value+"mp_wso_watched")
 			if not empty == 0:
-				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_wso_watched" , "r")
+				self.updates_read = open(config_mp.mediaportal.watchlistpath.value+"mp_wso_watched" , "r")
 				for lines in sorted(self.updates_read.readlines()):
 					line = re.findall('"(.*?)"', lines)
 					if line:
@@ -390,18 +390,18 @@ class wsoStreams(MPScreen):
 			self.streamname = self.Title + " - " + self.episode
 		else:
 			self.streamname = self.Title
-		if not fileExists(config.mediaportal.watchlistpath.value+"mp_wso_watched"):
-			open(config.mediaportal.watchlistpath.value+"mp_wso_watched","w").close()
+		if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_wso_watched"):
+			open(config_mp.mediaportal.watchlistpath.value+"mp_wso_watched","w").close()
 		self.update_list = []
-		empty = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_wso_watched")
+		empty = os.path.getsize(config_mp.mediaportal.watchlistpath.value+"mp_wso_watched")
 		if not empty == 0:
-			self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_wso_watched" , "r")
+			self.updates_read = open(config_mp.mediaportal.watchlistpath.value+"mp_wso_watched" , "r")
 			for lines in sorted(self.updates_read.readlines()):
 				line = re.findall('"(.*?)"', lines)
 				if line:
 					self.update_list.append("%s" % (line[0]))
 			self.updates_read.close()
-			updates_read2 = open(config.mediaportal.watchlistpath.value+"mp_wso_watched" , "a")
+			updates_read2 = open(config_mp.mediaportal.watchlistpath.value+"mp_wso_watched" , "a")
 			check = ("%s" % self.streamname)
 			if not check in self.update_list:
 				print "update add: %s" % (self.streamname)
@@ -410,7 +410,7 @@ class wsoStreams(MPScreen):
 			else:
 				print "dupe %s" % (self.streamname)
 		else:
-			updates_read3 = open(config.mediaportal.watchlistpath.value+"mp_wso_watched" , "a")
+			updates_read3 = open(config_mp.mediaportal.watchlistpath.value+"mp_wso_watched" , "a")
 			print "update add: %s" % (self.streamname)
 			updates_read3.write('"%s"\n' % (self.streamname))
 			updates_read3.close()

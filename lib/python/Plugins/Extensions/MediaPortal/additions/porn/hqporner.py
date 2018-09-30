@@ -3,7 +3,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import TwAgentHelper
 from Plugins.Extensions.MediaPortal.resources.packer import unpack, detect
-default_cover = "file://%s/hqporner.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/hqporner.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 hqAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
 
 class hqpornerGenreScreen(MPScreen):

@@ -32,7 +32,7 @@ class EightiesLink:
 			if mp_globals.isDreamOS:
 				if fileExists("/usr/bin/ffmpeg"):
 					BgFileEraser = eBackgroundFileEraser.getInstance()
-					self.path = config.mediaportal.storagepath.value
+					self.path = config_mp.mediaportal.storagepath.value
 					if os.path.exists(self.path):
 						for fn in next(os.walk(self.path))[2]:
 							BgFileEraser.erase(os.path.join(self.path,fn))

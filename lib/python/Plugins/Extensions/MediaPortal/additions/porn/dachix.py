@@ -39,7 +39,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-default_cover = "file://%s/dachix.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/dachix.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class dachixGenreScreen(MPScreen):
 

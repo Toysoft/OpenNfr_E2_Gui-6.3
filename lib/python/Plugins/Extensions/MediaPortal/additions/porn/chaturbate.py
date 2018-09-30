@@ -41,8 +41,8 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 BASEURL = "https://chaturbate.com/"
 
-config.mediaportal.chaturbate_filter = ConfigText(default="all", fixed_size=False)
-default_cover = "file://%s/chaturbate.png" % (config.mediaportal.iconcachepath.value + "logos")
+config_mp.mediaportal.chaturbate_filter = ConfigText(default="all", fixed_size=False)
+default_cover = "file://%s/chaturbate.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class chaturbateGenreScreen(MPScreen):
 
@@ -56,7 +56,7 @@ class chaturbateGenreScreen(MPScreen):
 			"yellow": self.keyFilter
 		}, -1)
 
-		self.filter = config.mediaportal.chaturbate_filter.value
+		self.filter = config_mp.mediaportal.chaturbate_filter.value
 
 		self['title'] = Label("Chaturbate.com")
 		self['ContentTitle'] = Label("Genre:")
@@ -72,10 +72,10 @@ class chaturbateGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		if config.mediaportal.chaturbate_filter.value == "all":
+		if config_mp.mediaportal.chaturbate_filter.value == "all":
 			filter = ""
 		else:
-			filter = config.mediaportal.chaturbate_filter.value + "/"
+			filter = config_mp.mediaportal.chaturbate_filter.value + "/"
 		url = BASEURL + 'tags/' + filter
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -122,25 +122,25 @@ class chaturbateGenreScreen(MPScreen):
 	def keyFilter(self):
 		if self.filter == "all":
 			self.filter = "female"
-			config.mediaportal.chaturbate_filter.value = "female"
+			config_mp.mediaportal.chaturbate_filter.value = "female"
 		elif self.filter == "female":
 			self.filter = "couple"
-			config.mediaportal.chaturbate_filter.value = "couple"
+			config_mp.mediaportal.chaturbate_filter.value = "couple"
 		elif self.filter == "couple":
 			self.filter = "male"
-			config.mediaportal.chaturbate_filter.value = "male"
+			config_mp.mediaportal.chaturbate_filter.value = "male"
 		elif self.filter == "male":
 			self.filter = "trans"
-			config.mediaportal.chaturbate_filter.value = "trans"
+			config_mp.mediaportal.chaturbate_filter.value = "trans"
 		elif self.filter == "trans":
 			self.filter = "all"
-			config.mediaportal.chaturbate_filter.value = "all"
+			config_mp.mediaportal.chaturbate_filter.value = "all"
 		else:
 			self.filter = "all"
-			config.mediaportal.chaturbate_filter.value = "all"
+			config_mp.mediaportal.chaturbate_filter.value = "all"
 
-		config.mediaportal.chaturbate_filter.save()
-		configfile.save()
+		config_mp.mediaportal.chaturbate_filter.save()
+		configfile_mp.save()
 		self['F3'].setText(self.filter)
 		self.layoutFinished()
 
@@ -149,10 +149,10 @@ class chaturbateFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		if config.mediaportal.chaturbate_filter.value == "all":
+		if config_mp.mediaportal.chaturbate_filter.value == "all":
 			self.filter = ""
 		else:
-			self.filter = config.mediaportal.chaturbate_filter.value + "/"
+			self.filter = config_mp.mediaportal.chaturbate_filter.value + "/"
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -212,7 +212,7 @@ class chaturbateFilmScreen(MPScreen, ThumbsHelper):
 	def loadPageData(self, data):
 		self.ml.moveToIndex(0)
 		self.getLastPage(data, 'class="paging">(.*?)</ul>')
-		Movies = re.findall('<li>.<a\shref="(.*?)".*?<img\ssrc=".*?".*?gender(\w)">(\d+)</span>.*?<li\stitle(?:="(.*?)"|)>.*?location.*?>(.*?)</li>.*?class="cams">(.*?)</li>.*?</div>.*?</li>', data, re.S)
+		Movies = re.findall('<li class="room_list_room" data-slug=".*?">.<a\shref="(.*?)".*?<img\ssrc=".*?".*?gender(\w)">(\d+)</span>.*?<li\stitle(?:="(.*?)"|)>.*?location.*?>(.*?)</li>.*?class="cams">(.*?)</li>.*?</div>.*?</li>', data, re.S)
 		if Movies:
 			for (Url, Gender, Age, Description, Location, Viewers) in Movies:
 				if not Description:
@@ -276,7 +276,7 @@ class chaturbateFilmScreen(MPScreen, ThumbsHelper):
 		for x in match_sec_m3u8:
 			if int(x[0]) > max:
 				max = int(x[0])
-		videoPrio = int(config.mediaportal.videoquali_others.value)
+		videoPrio = int(config_mp.mediaportal.videoquali_others.value)
 		if videoPrio == 2:
 			bw = max
 		elif videoPrio == 1:

@@ -43,8 +43,8 @@ from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoard
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
-config.mediaportal.youporn_username = ConfigText(default="youpornUserName", fixed_size=False)
-config.mediaportal.youporn_password = ConfigPassword(default="youpornPassword", fixed_size=False)
+config_mp.mediaportal.youporn_username = ConfigText(default="youpornUserName", fixed_size=False)
+config_mp.mediaportal.youporn_password = ConfigPassword(default="youpornPassword", fixed_size=False)
 
 ck = CookieJar()
 ypLoggedIn = False
@@ -54,7 +54,7 @@ headers = {
 	'Accept-Language':'de,en-US;q=0.7,en;q=0.3',
 	'X-Requested-With':'XMLHttpRequest',
 	}
-default_cover = "file://%s/youporn.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/youporn.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class youpornGenreScreen(MPScreen):
 
@@ -72,8 +72,8 @@ class youpornGenreScreen(MPScreen):
 			"blue": self.keySetup
 		}, -1)
 
-		self.username = str(config.mediaportal.youporn_username.value)
-		self.password = str(config.mediaportal.youporn_password.value)
+		self.username = str(config_mp.mediaportal.youporn_username.value)
+		self.password = str(config_mp.mediaportal.youporn_password.value)
 
 		self['title'] = Label("YouPorn.com")
 		self['ContentTitle'] = Label("Genre:")
@@ -192,8 +192,8 @@ class youpornGenreScreen(MPScreen):
 			ck.clear()
 			global ypLoggedIn
 			ypLoggedIn = False
-			self.username = str(config.mediaportal.youporn_username.value)
-			self.password = str(config.mediaportal.youporn_password.value)
+			self.username = str(config_mp.mediaportal.youporn_username.value)
+			self.password = str(config_mp.mediaportal.youporn_password.value)
 			self.Login()
 
 	def getSuggestions(self, text, max_res):
@@ -228,8 +228,8 @@ class youpornSetupScreen(MPSetupScreen, ConfigListScreenExt):
 		self.list = []
 		ConfigListScreenExt.__init__(self, self.list)
 
-		self.list.append(getConfigListEntry(_("Username:"), config.mediaportal.youporn_username))
-		self.list.append(getConfigListEntry(_("Password:"), config.mediaportal.youporn_password))
+		self.list.append(getConfigListEntry(_("Username:"), config_mp.mediaportal.youporn_username))
+		self.list.append(getConfigListEntry(_("Password:"), config_mp.mediaportal.youporn_password))
 
 		self["config"].setList(self.list)
 

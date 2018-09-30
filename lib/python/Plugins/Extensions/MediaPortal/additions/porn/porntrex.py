@@ -5,10 +5,10 @@ from Plugins.Extensions.MediaPortal.resources.configlistext import ConfigListScr
 
 myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36'
 
-config.mediaportal.porntrex_username = ConfigText(default="porntrexUserName", fixed_size=False)
-config.mediaportal.porntrex_password = ConfigPassword(default="porntrexPassword", fixed_size=False)
-config.mediaportal.javwhores_username = ConfigText(default="javwhoresUserName", fixed_size=False)
-config.mediaportal.javwhores_password = ConfigPassword(default="javwhoresPassword", fixed_size=False)
+config_mp.mediaportal.porntrex_username = ConfigText(default="porntrexUserName", fixed_size=False)
+config_mp.mediaportal.porntrex_password = ConfigPassword(default="porntrexPassword", fixed_size=False)
+config_mp.mediaportal.javwhores_username = ConfigText(default="javwhoresUserName", fixed_size=False)
+config_mp.mediaportal.javwhores_password = ConfigPassword(default="javwhoresPassword", fixed_size=False)
 
 ck = {}
 LoggedIn = False
@@ -24,23 +24,23 @@ class porntrexGenreScreen(MPScreen):
 		if self.mode == "porntrex":
 			self.portal = "PornTrex.com"
 			self.baseurl = "https://www.porntrex.com"
-			default_cover = "file://%s/porntrex.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/porntrex.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 			global username
 			global password
-			username = str(config.mediaportal.porntrex_username.value)
-			password = str(config.mediaportal.porntrex_password.value)
+			username = str(config_mp.mediaportal.porntrex_username.value)
+			password = str(config_mp.mediaportal.porntrex_password.value)
 		elif self.mode == "javwhores":
 			self.portal = "JavWhores.com"
 			self.baseurl = "https://www.javwhores.com"
-			default_cover = "file://%s/javwhores.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/javwhores.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 			global username
 			global password
-			username = str(config.mediaportal.javwhores_username.value)
-			password = str(config.mediaportal.javwhores_password.value)
+			username = str(config_mp.mediaportal.javwhores_username.value)
+			password = str(config_mp.mediaportal.javwhores_password.value)
 		elif self.mode == "camwhoresbay":
 			self.portal = "Camwhoresbay.com"
 			self.baseurl = "http://www.camwhoresbay.com"
-			default_cover = "file://%s/camwhoresbay.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/camwhoresbay.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
@@ -130,11 +130,11 @@ class porntrexGenreScreen(MPScreen):
 			ck.clear()
 			LoggedIn = False
 			if self.mode == "porntrex":
-				username = str(config.mediaportal.porntrex_username.value)
-				password = str(config.mediaportal.porntrex_password.value)
+				username = str(config_mp.mediaportal.porntrex_username.value)
+				password = str(config_mp.mediaportal.porntrex_password.value)
 			elif self.mode == "javwhores":
-				username = str(config.mediaportal.javwhores_username.value)
-				password = str(config.mediaportal.javwhores_password.value)
+				username = str(config_mp.mediaportal.javwhores_username.value)
+				password = str(config_mp.mediaportal.javwhores_password.value)
 
 class porntrexSetupScreen(MPSetupScreen, ConfigListScreenExt):
 
@@ -151,11 +151,11 @@ class porntrexSetupScreen(MPSetupScreen, ConfigListScreenExt):
 		ConfigListScreenExt.__init__(self, self.list)
 
 		if self.mode == "porntrex":
-			self.list.append(getConfigListEntry(_("Username:"), config.mediaportal.porntrex_username))
-			self.list.append(getConfigListEntry(_("Password:"), config.mediaportal.porntrex_password))
+			self.list.append(getConfigListEntry(_("Username:"), config_mp.mediaportal.porntrex_username))
+			self.list.append(getConfigListEntry(_("Password:"), config_mp.mediaportal.porntrex_password))
 		elif self.mode == "javwhores":
-			self.list.append(getConfigListEntry(_("Username:"), config.mediaportal.javwhores_username))
-			self.list.append(getConfigListEntry(_("Password:"), config.mediaportal.javwhores_password))
+			self.list.append(getConfigListEntry(_("Username:"), config_mp.mediaportal.javwhores_username))
+			self.list.append(getConfigListEntry(_("Password:"), config_mp.mediaportal.javwhores_password))
 
 		self["config"].setList(self.list)
 
@@ -168,7 +168,7 @@ class porntrexSetupScreen(MPSetupScreen, ConfigListScreenExt):
 	def saveConfig(self):
 		for x in self["config"].list:
 			x[1].save()
-		configfile.save()
+		configfile_mp.save()
 		self.close()
 
 	def exit(self):
@@ -184,11 +184,11 @@ class porntrexFilmScreen(MPScreen, ThumbsHelper):
 
 		global default_cover
 		if self.portal == "PornTrex.com":
-			default_cover = "file://%s/porntrex.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/porntrex.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.portal == "JavWhores.com":
-			default_cover = "file://%s/javwhores.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/javwhores.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.portal == "Camwhoresbay.com":
-			default_cover = "file://%s/camwhoresbay.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/camwhoresbay.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)

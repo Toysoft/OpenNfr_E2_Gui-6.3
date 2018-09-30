@@ -4,7 +4,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 ivhagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
 
-default_cover = "file://%s/ivhunter.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/ivhunter.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class ivhunterGenreScreen(MPScreen):
 

@@ -50,7 +50,7 @@ json_headers = {
 	'Referer':'https://www.redtube.com/',
 	'Origin':'https://www.redtube.com/'
 	}
-default_cover = "file://%s/redtube.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/redtube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 token = ''
 

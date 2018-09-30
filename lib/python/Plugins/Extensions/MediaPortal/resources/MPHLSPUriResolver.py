@@ -55,7 +55,7 @@ try:
 			Log.i(self._schemas)
 
 		def _getBandwidth(self):
-			videoPrio = int(config.mediaportal.videoquali_others.value)
+			videoPrio = int(config_mp.mediaportal.videoquali_others.value)
 			if videoPrio == 2:
 				bw = 4000000
 			elif videoPrio == 1:
@@ -74,8 +74,8 @@ try:
 						return
 					if uri:
 						self._bitrate = self._getBandwidth()
-						path = config.mediaportal.storagepath.value
-						ip = "127.0.0.1" #".".join(str(x) for x in config.mediaportal.hls_proxy_ip.value)
+						path = config_mp.mediaportal.storagepath.value
+						ip = "127.0.0.1" #".".join(str(x) for x in config_mp.mediaportal.hls_proxy_ip.value)
 						import uuid
 						uid = uuid.uuid1()
 						uri = 'http://%s:%d/?url=%s&bitrate=%d&path=%s&uid=%s' % (ip, mp_globals.hls_proxy_port, uri, self._bitrate, path, uid)

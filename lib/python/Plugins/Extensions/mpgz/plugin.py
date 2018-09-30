@@ -39,7 +39,7 @@
 from update import *
 
 config.mpgz = ConfigSubsection()
-config.mpgz.version = NoSave(ConfigText(default="2018091901"))
+config.mpgz.version = NoSave(ConfigText(default="2018092701"))
 
 def autostart(reason, session=None, **kwargs):
 	if reason == 0:
@@ -47,7 +47,7 @@ def autostart(reason, session=None, **kwargs):
 			_session = session
 			addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "mediaportal1.ttf", "mediaportal", 100, False)
 			addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "mediaportal_clean.ttf", "mediaportal_clean", 100, False)
-			if config.mediaportal.autoupdate.value:
+			if config_mp.mediaportal.autoupdate.value:
 				config.misc.standbyCounter.addNotifier(checkupdate(session).standbyCounterChanged, initial_call = False)
 				checkupdate(session).checkforupdate()
 

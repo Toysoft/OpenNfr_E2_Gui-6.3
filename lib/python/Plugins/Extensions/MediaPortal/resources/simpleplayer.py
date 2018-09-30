@@ -77,7 +77,7 @@ STREAM_BUFFERING_ENABLED = False
 def clearTmpBuffer():
 	from enigma import eBackgroundFileEraser
 	BgFileEraser = eBackgroundFileEraser.getInstance()
-	path = config.mediaportal.storagepath.value
+	path = config_mp.mediaportal.storagepath.value
 	if os.path.exists(path):
 		for fn in next(os.walk(path))[2]:
 			BgFileEraser.erase(os.path.join(path,fn))
@@ -95,17 +95,17 @@ class M3U8Player:
 			pass
 
 	def _setM3U8BufferSize(self):
-		if config.mediaportal.use_hls_proxy.value:
+		if config_mp.mediaportal.use_hls_proxy.value:
 			service = self.session.nav.getCurrentService()
 			try:
-				service.streamed().setBufferSize(long(config.mediaportal.hls_buffersize.value) * 1024 ** 2)
+				service.streamed().setBufferSize(long(config_mp.mediaportal.hls_buffersize.value) * 1024 ** 2)
 			except:
 				pass
 
 	def _getM3U8Video(self, title, url, **kwargs):
 		if self._check_cache:
-			if not os.path.isdir(config.mediaportal.storagepath.value):
-				self.session.open(MessageBoxExt, _("You've to check Your HLS-PLayer Cachepath-Setting in MP-Setup:\n") + config.mediaportal.storagepath.value, MessageBoxExt.TYPE_ERROR)
+			if not os.path.isdir(config_mp.mediaportal.storagepath.value):
+				self.session.open(MessageBoxExt, _("You've to check Your HLS-PLayer Cachepath-Setting in MP-Setup:\n") + config_mp.mediaportal.storagepath.value, MessageBoxExt.TYPE_ERROR)
 				self.close()
 				return
 			else:
@@ -114,15 +114,15 @@ class M3U8Player:
 
 	def _playM3U8(self, title, url, **kwargs):
 		def getProxyConfig(url):
-			is_proxy_set = config.mediaportal.sp_use_hlsp_with_proxy.value == 'plset' and (url.rfind(' PROXY') > 0)
-			useProxy = ((config.mediaportal.sp_use_hlsp_with_proxy.value == 'always') or is_proxy_set) and (config.mediaportal.hlsp_proxy_host.value != 'example_proxy.com!')
+			is_proxy_set = config_mp.mediaportal.sp_use_hlsp_with_proxy.value == 'plset' and (url.rfind(' PROXY') > 0)
+			useProxy = ((config_mp.mediaportal.sp_use_hlsp_with_proxy.value == 'always') or is_proxy_set) and (config_mp.mediaportal.hlsp_proxy_host.value != 'example_proxy.com!')
 			if useProxy:
 				if is_proxy_set:
 					url = url.replace(' PROXY', '')
-				proxyhost = config.mediaportal.hlsp_proxy_host.value
-				proxyport = config.mediaportal.hlsp_proxy_port.value
-				puser = config.mediaportal.hlsp_proxy_username.value
-				ppass = config.mediaportal.hlsp_proxy_password.value
+				proxyhost = config_mp.mediaportal.hlsp_proxy_host.value
+				proxyport = config_mp.mediaportal.hlsp_proxy_port.value
+				puser = config_mp.mediaportal.hlsp_proxy_username.value
+				ppass = config_mp.mediaportal.hlsp_proxy_password.value
 
 				if '/noconnect' in proxyhost:
 					proxyhost, option = proxyhost.split('/')[-2:]
@@ -139,8 +139,8 @@ class M3U8Player:
 
 		if ('.m3u8' in url) or ('m3u8-aapl' in url):
 			self._bitrate = self._getBandwidth()
-			path = config.mediaportal.storagepath.value
-			ip = "127.0.0.1" #".".join(str(x) for x in config.mediaportal.hls_proxy_ip.value)
+			path = config_mp.mediaportal.storagepath.value
+			ip = "127.0.0.1" #".".join(str(x) for x in config_mp.mediaportal.hls_proxy_ip.value)
 			url, proxycfg = getProxyConfig(url)
 			uid = uuid.uuid1()
 			if ' headers=' in url:
@@ -152,7 +152,7 @@ class M3U8Player:
 		self._initStream(title, url, **kwargs)
 
 	def _getBandwidth(self):
-		videoPrio = int(config.mediaportal.videoquali_others.value)
+		videoPrio = int(config_mp.mediaportal.videoquali_others.value)
 		if videoPrio == 2:
 			bw = 4000000
 		elif videoPrio == 1:
@@ -207,7 +207,7 @@ class CoverSearchHelper:
 			self.cb_searchCover(None)
 
 	def cb_searchCover(self, jdata, fallback='', retry=False, title=''):
-		CoverSize = config.mediaportal.sp_radio_cover.value
+		CoverSize = config_mp.mediaportal.sp_radio_cover.value
 		url = None
 		fallbackurl = fallback
 		import json
@@ -332,7 +332,7 @@ class SimpleSeekHelper:
 						self.cursorTimer.start(200, False)
 
 	def __BgCoverShow(self):
-		if MerlinMusicPlayerPresent and config.mediaportal.sp_radio_visualization.value == "3":
+		if MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value == "3":
 			self.RadioBg['background'].hide()
 		else:
 			self.RadioBg['background'].show()
@@ -403,12 +403,12 @@ class SimpleSeekHelper:
 			self.seekExit()
 
 	def seekLeft(self):
-		self.percent -= float(config.mediaportal.sp_seekbar_sensibility.value) / 10.0
+		self.percent -= float(config_mp.mediaportal.sp_seekbar_sensibility.value) / 10.0
 		if self.percent < 0.0:
 			self.percent = 0.0
 
 	def seekRight(self):
-		self.percent += float(config.mediaportal.sp_seekbar_sensibility.value) / 10.0
+		self.percent += float(config_mp.mediaportal.sp_seekbar_sensibility.value) / 10.0
 		if self.percent > 100.0:
 			self.percent = 100.0
 
@@ -519,7 +519,7 @@ class SimplePlayerResume:
 		self.posTrackerActive = False
 		self.currService = None
 		self.eof_resume = False
-		self.use_sp_resume = config.mediaportal.sp_on_movie_start.value != "start"
+		self.use_sp_resume = config_mp.mediaportal.sp_on_movie_start.value != "start"
 		self.posTrackerTimer = eTimer()
 		self.eofResumeTimer = eTimer()
 		if mp_globals.isDreamOS:
@@ -580,10 +580,10 @@ class SimplePlayerResume:
 		if (length > 0) and abs(length - last) < 5*90000:
 			return
 		l = last / 90000
-		if self.eof_resume or (config.mediaportal.sp_on_movie_start.value == "resume" and not mp_globals.yt_download_runs):
+		if self.eof_resume or (config_mp.mediaportal.sp_on_movie_start.value == "resume" and not mp_globals.yt_download_runs):
 			self.eof_resume = False
 			self.session.openWithCallback(self.playLastCB, MessageBoxExt, _("Resuming playback"), timeout=2, type=MessageBoxExt.TYPE_INFO)
-		elif config.mediaportal.sp_on_movie_start.value == "ask" and not mp_globals.yt_download_runs:
+		elif config_mp.mediaportal.sp_on_movie_start.value == "ask" and not mp_globals.yt_download_runs:
 			self.session.openWithCallback(self.playLastCB, MessageBoxExt, _("Do you want to resume this playback?") + "\n" + (_("Resume position at %s") % ("%d:%02d:%02d" % (l/3600, l%3600/60, l%60))), timeout=10)
 
 	def resetEOFResumeFlag(self):
@@ -628,7 +628,7 @@ class SimplePlaylist(MPScreen):
 		MPScreen.__init__(self, session, skin='MP_Playlist')
 
 		self["hidePig"] = Boolean()
-		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
+		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 
 		self["actions"] = ActionMap(["OkCancelActions",'MediaPlayerSeekActions',"EPGSelectActions",'ColorActions','InfobarActions'],
 		{
@@ -711,7 +711,7 @@ class SimplePlaylist(MPScreen):
 		if self.listTitle:
 			self['title'].setText(self.listTitle.replace('\t',' '))
 		else:
-			self['title'].setText("%s Playlist-%02d" % (self.plType, config.mediaportal.sp_pl_number.value))
+			self['title'].setText("%s Playlist-%02d" % (self.plType, config_mp.mediaportal.sp_pl_number.value))
 
 		from sepg.mp_epg import mpepg
 		if self.playerMode == 'IPTV' and not mpepg.isImporting:
@@ -782,7 +782,7 @@ class RadioBackground(Screen):
 			self["visu"] = MerlinMusicPlayerWidget()
 			self["rms0"] = MerlinMusicPlayerRMS()
 			self["rms1"] = MerlinMusicPlayerRMS()
-			if config.mediaportal.sp_radio_visualization.value == "0":
+			if config_mp.mediaportal.sp_radio_visualization.value == "0":
 				self["cover"].hide()
 				self["visu"].hide()
 				self["rms0"].hide()
@@ -796,16 +796,16 @@ class RadioBackground(Screen):
 					<widget alphatest="blend" name="BgCover" position="648,10" size="800,800" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="15" />'''
 
 			if MerlinMusicPlayerPresent:
-				if config.mediaportal.sp_radio_visualization.value == "3":
+				if config_mp.mediaportal.sp_radio_visualization.value == "3":
 					self.skin += '''<widget name="cover" position="0,0" size="1920,1080" transparent="0" backgroundColor="#00000000" mode="visGLRandom" noCoverAvailablePic="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png"/>'''
 				else:
 					self.skin += '''<widget name="cover" position="735,270" size="450,450" transparent="1" mode="cover" noCoverAvailablePic="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="13" />
 					<widget name="rms0" channel="0" backgroundColor="#404040" zPosition="13" position="650,251" size="70,495" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_90x60_h9.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="0" pixmapBackgroundColor1="#080808" distance="15" maxValue="60" fadeOutTime="500" smoothing="0.8" />
 					<widget name="rms1" channel="1" backgroundColor="#404040" zPosition="13" position="1200,251" size="70,495" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_90x60_h9.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="0" pixmapBackgroundColor1="#080808" distance="15" maxValue="60" fadeOutTime="500" smoothing="0.8" />'''
 
-				if config.mediaportal.sp_radio_visualization.value == "1":
+				if config_mp.mediaportal.sp_radio_visualization.value == "1":
 					self.skin += '''<widget name="visu" position="0,741" size="1920,339" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="0" blendColor="#fcc000" smoothing="0.4" />'''
-				if config.mediaportal.sp_radio_visualization.value == "2":
+				if config_mp.mediaportal.sp_radio_visualization.value == "2":
 					self.skin += '''<widget name="visu" position="0,880" size="1920,200" transparent="1" zPosition="11" pixmapBackground2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmap2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_30x20_h8.png" distance1="18" distance2="8" mode="visImagesUp" maxValue ="25" fadeOutTime="0" internalSize="0" pixmapBackgroundColor1="#080808" drawBackground="0" smoothing="0.3" />'''
 
 			self.skin += '''</screen>'''
@@ -822,7 +822,7 @@ class RadioBackground(Screen):
 					<widget name="rms0" channel="0" backgroundColor="#404040" zPosition="13" position="420,167" size="60,330" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_60x40_h6.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="1" pixmapBackgroundColor1="#080808" distance="10" maxValue="60" fadeOutTime="500" smoothing="0.8" />
 					<widget name="rms1" channel="1" backgroundColor="#404040" zPosition="13" position="800,167" size="60,330" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_60x40_h6.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="1" pixmapBackgroundColor1="#080808" distance="10" maxValue="60" fadeOutTime="500" smoothing="0.8" />'''
 
-				if config.mediaportal.sp_radio_visualization.value == "1":
+				if config_mp.mediaportal.sp_radio_visualization.value == "1":
 					self.skin += '''<widget name="visu" position="0,494" size="1280,226" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="2" blendColor="#fcc000" smoothing="0.4" />'''
 
 			self.skin += '''</screen>'''
@@ -838,22 +838,22 @@ class RadioBackground(Screen):
 		self.onLayoutFinish.append(self.startRun)
 
 	def startRun(self):
-		if MerlinMusicPlayerPresent and config.mediaportal.sp_radio_visualization.value != "3":
+		if MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value != "3":
 			self['background'].show()
 		self['screenSaverBg'].hide()
 		self['screenSaver'].hide()
 
-		if MerlinMusicPlayerPresent and config.mediaportal.sp_radio_visualization.value == "3":
+		if MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value == "3":
 			return
 
 		if self.playerMode == "RADIO":
 			try:
-				if config.mediaportal.sp_radio_visualization.value == "0":
+				if config_mp.mediaportal.sp_radio_visualization.value == "0":
 					self['screenSaver'].instance.setShowHideAnimation("mp_screensaver")
 					self['BgCover'].instance.setShowHideAnimation("mp_quick_fade")
 			except:
 				pass
-			self.mode = config.mediaportal.sp_radio_bgsaver.value
+			self.mode = config_mp.mediaportal.sp_radio_bgsaver.value
 			if self.mode != "0":
 				if mp_globals.videomode == 2:
 					self.res_x = 1920
@@ -877,7 +877,7 @@ class RadioBackground(Screen):
 			self.val += 1
 			self.timestamp = self.getTimestamp()
 		if self.val == self.offset:
-			if config.mediaportal.sp_radio_visualization.value == "0":
+			if config_mp.mediaportal.sp_radio_visualization.value == "0":
 				self['screenSaver'].hide()
 			self.fadeouttimer.start(500, 1)
 		else:
@@ -893,8 +893,8 @@ class RadioBackground(Screen):
 
 	def initCallNewPicture(self):
 		self.timestamp = self.getTimestamp()
-		if len(config.mediaportal.sp_radio_bgsaver_keywords.value)>0:
-			keywords = "/?" + urllib.quote_plus(config.mediaportal.sp_radio_bgsaver_keywords.value)
+		if len(config_mp.mediaportal.sp_radio_bgsaver_keywords.value)>0:
+			keywords = "/?" + urllib.quote_plus(config_mp.mediaportal.sp_radio_bgsaver_keywords.value)
 		else:
 			keywords = ""
 		CoverHelper(self['screenSaver']).getCover("https://source.unsplash.com/1920x1080%s" % keywords, screensaver=True)
@@ -1053,7 +1053,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 		Screen.__init__(self, session)
 		self.skin_path = mp_globals.pluginPath + mp_globals.skinsPath
-		self.wallicon_path = config.mediaportal.iconcachepath.value + "icons/"
+		self.wallicon_path = config_mp.mediaportal.iconcachepath.value + "icons/"
 		path = "%s/%s/simpleplayer/SimplePlayer.xml" % (self.skin_path, mp_globals.currentskin)
 		if not fileExists(path):
 			path = self.skin_path + mp_globals.skinFallback + "/simpleplayer/SimplePlayer.xml"
@@ -1080,7 +1080,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			"SPMoveUp": self.moveSkinUp
 		}, -1)
 
-		if config.mediaportal.sp_use_number_seek.value:
+		if config_mp.mediaportal.sp_use_number_seek.value:
 			self["actions2"] = ActionMap(["WizardActions",'MediaPlayerSeekActions','InfobarInstantRecord',"EPGSelectActions",'MoviePlayerActions','ColorActions','InfobarActions',"MenuActions","HelpActions"],
 			{
 				"seekdef:1": self.Key1,
@@ -1122,11 +1122,11 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 		self.allowPiP = False
 		InfoBarSeek.__init__(self)
-		if not (mp_globals.isDreamOS and playerMode == 'RADIO' and config.mediaportal.sp_radio_visualization.value != "0"):
+		if not (mp_globals.isDreamOS and playerMode == 'RADIO' and config_mp.mediaportal.sp_radio_visualization.value != "0"):
 			InfoBarPVRState.__init__(self, screen=SimplePlayerPVRState, force_show=True)
 
 		self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
-		if config.mediaportal.restorelastservice.value == "1" and not config.mediaportal.backgroundtv.value:
+		if config_mp.mediaportal.restorelastservice.value == "1" and not config_mp.mediaportal.backgroundtv.value:
 			self.lastservice = self.session.nav.getCurrentlyPlayingServiceReference()
 		else:
 			self.lastservice = None
@@ -1142,7 +1142,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		self.saverActive = False
 		self.autoScrSaver = autoScrSaver
 		self.pl_open = False
-		self.playMode = [str(config.mediaportal.sp_playmode.value)]
+		self.playMode = [str(config_mp.mediaportal.sp_playmode.value)]
 		self.listTitle = listTitle
 		self.playAll = playAll
 		self.playList = playList
@@ -1157,7 +1157,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		self.pl_entry = ['', '', '', '', '', '', '', '', '']
 		self.plType = plType
 		self.playList2 = playList2
-		self.pl_name = 'mp_global_pl_%02d' % config.mediaportal.sp_pl_number.value
+		self.pl_name = 'mp_global_pl_%02d' % config_mp.mediaportal.sp_pl_number.value
 		self.title_inr = title_inr
 		self.cover = cover
 		self.ltype = ltype
@@ -1352,7 +1352,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 	def dataError2(self, res):
 		self.keyPlayNextLocked = False
-		reactor.callLater(2, self.playNextStream, config.mediaportal.sp_on_movie_eof.value)
+		reactor.callLater(2, self.playNextStream, config_mp.mediaportal.sp_on_movie_eof.value)
 
 	def playStream(self, title, url, **kwargs):
 		#if self.ltype == 'youtube' and ".m3u8" in url and mp_globals.isDreamOS:
@@ -1369,7 +1369,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self._initStream(title, url, **kwargs)
 		elif self.youtubelive:
 			self._initStream(title, url, **kwargs)
-		elif config.mediaportal.use_hls_proxy.value and not self.forceGST and ('.m3u8' in url or 'm3u8-aapl' in url):
+		elif config_mp.mediaportal.use_hls_proxy.value and not self.forceGST and ('.m3u8' in url or 'm3u8-aapl' in url):
 			self._getM3U8Video(title, url, **kwargs)
 		else:
 			self._initStream(title, url, **kwargs)
@@ -1511,7 +1511,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			if not self._playing:
 				clearTmpBuffer()
 				self.dwnld_lastnum = (self.dwnld_lastnum + 1) % 2
-				path = config.mediaportal.storagepath.value + 'downloaded_file_%d.mp4' % self.dwnld_lastnum
+				path = config_mp.mediaportal.storagepath.value + 'downloaded_file_%d.mp4' % self.dwnld_lastnum
 				self.downloadStream(url, path, playService, proxy)
 		else:
 			self.progrObj.setValue(0)
@@ -1583,7 +1583,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 	def randomNow(self):
 		if self.playAll:
-			self.playRandom(config.mediaportal.sp_on_movie_stop.value)
+			self.playRandom(config_mp.mediaportal.sp_on_movie_stop.value)
 
 	def seekFwd(self):
 		if self.isTSVideo:
@@ -1593,7 +1593,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		elif self.seekBarLocked:
 			self.seekRight()
 		elif self.playAll:
-			self.playNextStream(config.mediaportal.sp_on_movie_stop.value)
+			self.playNextStream(config_mp.mediaportal.sp_on_movie_stop.value)
 
 	def seekBack(self):
 		if self.isTSVideo:
@@ -1603,7 +1603,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		elif self.seekBarLocked:
 			self.seekLeft()
 		elif self.playAll:
-			self.playPrevStream(config.mediaportal.sp_on_movie_stop.value)
+			self.playPrevStream(config_mp.mediaportal.sp_on_movie_stop.value)
 
 	def handleLeave(self, how):
 		if self.playerMode in ('MP3',):
@@ -1614,7 +1614,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			if self.plType == 'local':
 				list = (
 					(_("Yes"), "quit"),
-					(_("Yes & Add Service to global Playlist-%02d") % config.mediaportal.sp_pl_number.value, "add"),
+					(_("Yes & Add Service to global Playlist-%02d") % config_mp.mediaportal.sp_pl_number.value, "add"),
 					(_("No"), "continue"),
 					(_("No, but start over from the beginning"), "restart")
 				)
@@ -1661,18 +1661,18 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 				InfoBarShowHide.doWriteAlpha(self,config.av.osd_alpha.value)
 			except:
 				pass
-			self.handleLeave(config.mediaportal.sp_on_movie_stop.value)
+			self.handleLeave(config_mp.mediaportal.sp_on_movie_stop.value)
 
 	def doEofInternal(self, playing):
 		if not self.youtubelive:
 			if playing:
 				if not self.resumeEOF():
 					if self.playMode[0] == 'random':
-						self.playRandom(config.mediaportal.sp_on_movie_eof.value)
+						self.playRandom(config_mp.mediaportal.sp_on_movie_eof.value)
 					elif self.playMode[0] == 'forward':
-						self.playNextStream(config.mediaportal.sp_on_movie_eof.value)
+						self.playNextStream(config_mp.mediaportal.sp_on_movie_eof.value)
 					elif self.playMode[0] == 'backward':
-						self.playPrevStream(config.mediaportal.sp_on_movie_eof.value)
+						self.playPrevStream(config_mp.mediaportal.sp_on_movie_eof.value)
 					elif self.playMode[0] == 'endless':
 						#self.playEndlessStream()
 						self.doSeek(0)
@@ -1706,7 +1706,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		reactor.callLater(1, clearTmpBuffer)
 
 	def restoreLastService(self):
-		if config.mediaportal.restorelastservice.value == "1" and not config.mediaportal.backgroundtv.value:
+		if config_mp.mediaportal.restorelastservice.value == "1" and not config_mp.mediaportal.backgroundtv.value:
 			self.session.nav.playService(self.lastservice)
 		else:
 			self.session.nav.stopService()
@@ -1814,11 +1814,11 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 	def cb_Menu(self, data):
 		if data != []:
 			if data[0] == 1:
-				self.playMode[0] = config.mediaportal.sp_playmode.value
+				self.playMode[0] = config_mp.mediaportal.sp_playmode.value
 				self.configSaver()
 				if self.cover or self.cover2 or self.searchCoverSupp:
 					self.showCover(self.pl_status[4])
-				self.pl_name = 'mp_global_pl_%02d' % config.mediaportal.sp_pl_number.value
+				self.pl_name = 'mp_global_pl_%02d' % config_mp.mediaportal.sp_pl_number.value
 			elif data[0] == 2:
 				self.addToPlaylist()
 
@@ -1876,7 +1876,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 	def showCover(self, cover, download_cb=None, CoverSize="small", fallback=''):
 		from coverhelper import downloadPage
-		if config.mediaportal.sp_infobar_cover_off.value:
+		if config_mp.mediaportal.sp_infobar_cover_off.value:
 			self.hideSPCover()
 			self['Cover'].hide()
 			self['noCover'].show()
@@ -1935,7 +1935,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self.coverBGisHidden = False
 
 	def configSaver(self):
-		self.scrSaver = config.mediaportal.sp_scrsaver.value
+		self.scrSaver = config_mp.mediaportal.sp_scrsaver.value
 		if self.scrSaver == 'automatic' and self.autoScrSaver or self.scrSaver == 'on':
 			if not self.saverActive:
 				self.SaverTimer.start(1000*60, True)
@@ -2019,22 +2019,22 @@ class SimpleConfig(Screen, ConfigListScreenExt):
 		self['title'] = Label(_("SimplePlayer Configuration"))
 		self.setTitle(_("SimplePlayer Configuration"))
 		self.list = []
-		self.list.append(getConfigListEntry(_('Global playlist number:'), config.mediaportal.sp_pl_number))
-		self.list.append(getConfigListEntry(_('Playmode:'), config.mediaportal.sp_playmode))
-		self.list.append(getConfigListEntry(_('Screensaver:'), config.mediaportal.sp_scrsaver))
-		self.list.append(getConfigListEntry(_('Highest resolution for playback (only YouTube):'), config.mediaportal.youtubeprio))
-		self.list.append(getConfigListEntry(_('Videoquality:'), config.mediaportal.videoquali_others))
-		self.list.append(getConfigListEntry(_('Save resume cache in flash memory:'), config.mediaportal.sp_save_resumecache))
-		self.list.append(getConfigListEntry(_('Behavior on movie start:'), config.mediaportal.sp_on_movie_start))
-		self.list.append(getConfigListEntry(_('Behavior on movie stop:'), config.mediaportal.sp_on_movie_stop))
-		self.list.append(getConfigListEntry(_('Behavior on movie end:'), config.mediaportal.sp_on_movie_eof))
-		self.list.append(getConfigListEntry(_('Seekbar sensibility:'), config.mediaportal.sp_seekbar_sensibility))
-		self.list.append(getConfigListEntry(_('Infobar cover always off:'), config.mediaportal.sp_infobar_cover_off))
-		self.list.append(getConfigListEntry(_('Use SP number seek:'), config.mediaportal.sp_use_number_seek))
-		self.list.append(getConfigListEntry(_('Radio cover:'), config.mediaportal.sp_radio_cover))
-		self.list.append(getConfigListEntry(_('Radio visualization:'), config.mediaportal.sp_radio_visualization))
-		self.list.append(getConfigListEntry(_('Radio screensaver:'), config.mediaportal.sp_radio_bgsaver))
-		self.list.append(getConfigListEntry(_('Radio screensaver keywords:'), config.mediaportal.sp_radio_bgsaver_keywords))
+		self.list.append(getConfigListEntry(_('Global playlist number:'), config_mp.mediaportal.sp_pl_number))
+		self.list.append(getConfigListEntry(_('Playmode:'), config_mp.mediaportal.sp_playmode))
+		self.list.append(getConfigListEntry(_('Screensaver:'), config_mp.mediaportal.sp_scrsaver))
+		self.list.append(getConfigListEntry(_('Highest resolution for playback (only YouTube):'), config_mp.mediaportal.youtubeprio))
+		self.list.append(getConfigListEntry(_('Videoquality:'), config_mp.mediaportal.videoquali_others))
+		self.list.append(getConfigListEntry(_('Save resume cache in flash memory:'), config_mp.mediaportal.sp_save_resumecache))
+		self.list.append(getConfigListEntry(_('Behavior on movie start:'), config_mp.mediaportal.sp_on_movie_start))
+		self.list.append(getConfigListEntry(_('Behavior on movie stop:'), config_mp.mediaportal.sp_on_movie_stop))
+		self.list.append(getConfigListEntry(_('Behavior on movie end:'), config_mp.mediaportal.sp_on_movie_eof))
+		self.list.append(getConfigListEntry(_('Seekbar sensibility:'), config_mp.mediaportal.sp_seekbar_sensibility))
+		self.list.append(getConfigListEntry(_('Infobar cover always off:'), config_mp.mediaportal.sp_infobar_cover_off))
+		self.list.append(getConfigListEntry(_('Use SP number seek:'), config_mp.mediaportal.sp_use_number_seek))
+		self.list.append(getConfigListEntry(_('Radio cover:'), config_mp.mediaportal.sp_radio_cover))
+		self.list.append(getConfigListEntry(_('Radio visualization:'), config_mp.mediaportal.sp_radio_visualization))
+		self.list.append(getConfigListEntry(_('Radio screensaver:'), config_mp.mediaportal.sp_radio_bgsaver))
+		self.list.append(getConfigListEntry(_('Radio screensaver keywords:'), config_mp.mediaportal.sp_radio_bgsaver_keywords))
 		ConfigListScreenExt.__init__(self, self.list)
 		self['setupActions'] = ActionMap(['SetupActions'],
 		{
@@ -2068,10 +2068,10 @@ class SimplePlayerMenu(Screen):
 		if pltype != 'extern':
 			self.liste.append((_('Configuration'), 1))
 		if pltype in ('local', 'extern') :
-			self.pl_name = 'mp_global_pl_%02d' % config.mediaportal.sp_pl_number.value
-			self.liste.append((_('Add service to global playlist-%02d') % config.mediaportal.sp_pl_number.value, 2))
+			self.pl_name = 'mp_global_pl_%02d' % config_mp.mediaportal.sp_pl_number.value
+			self.liste.append((_('Add service to global playlist-%02d') % config_mp.mediaportal.sp_pl_number.value, 2))
 			if showPlaylist and pltype == 'local':
-				self.liste.append((_('Open global playlist-%02d') % config.mediaportal.sp_pl_number.value, 3))
+				self.liste.append((_('Open global playlist-%02d') % config_mp.mediaportal.sp_pl_number.value, 3))
 		elif showPlaylist:
 			self.liste.append((_('Open local playlist'), 4))
 		if VideoSetupPresent:
@@ -2184,7 +2184,7 @@ class SimplePlaylistIO:
 		assert pl_name != None
 		assert list != []
 
-		pl_path = config.mediaportal.watchlistpath.value + pl_name
+		pl_path = config_mp.mediaportal.watchlistpath.value + pl_name
 
 		l = len(list)
 		if idx in range(0, l):
@@ -2231,7 +2231,7 @@ class SimplePlaylistIO:
 
 		assert pl_name != None
 
-		pl_path = config.mediaportal.watchlistpath.value + pl_name
+		pl_path = config_mp.mediaportal.watchlistpath.value + pl_name
 		try:
 			if fileExists(pl_path):
 				f1 = open(pl_path, 'a+')
@@ -2266,7 +2266,7 @@ class SimplePlaylistIO:
 
 		assert pl_name != None
 
-		pl_path = config.mediaportal.watchlistpath.value + pl_name
+		pl_path = config_mp.mediaportal.watchlistpath.value + pl_name
 		try:
 			if not fileExists(pl_path):
 				f_new = True

@@ -39,7 +39,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
-default_cover = "file://%s/watchbox.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/watchbox.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 wbAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36"
 base_url = 'https://www.watchbox.de'
 
@@ -183,7 +183,7 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 		for x in match_sec_m3u8:
 			if int(x[0]) > max:
 				max = int(x[0])
-		videoPrio = int(config.mediaportal.videoquali_others.value)
+		videoPrio = int(config_mp.mediaportal.videoquali_others.value)
 		if videoPrio == 2:
 			bw = max
 		elif videoPrio == 1:

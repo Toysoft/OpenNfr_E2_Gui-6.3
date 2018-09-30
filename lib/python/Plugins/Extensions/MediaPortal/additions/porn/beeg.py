@@ -43,7 +43,7 @@ from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPag
 IPhone5Agent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3'
 MyHeaders= {'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 			'Accept-Language':'en-US,en;q=0.5'}
-default_cover = "file://%s/beeg.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/beeg.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 beeg_apikey = ''
 beeg_salt = ''

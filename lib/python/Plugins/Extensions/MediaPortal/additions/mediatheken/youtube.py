@@ -9,16 +9,16 @@ from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
-config.mediaportal.yt_param_regionid_idx = ConfigInteger(default = 2)
-config.mediaportal.yt_param_time_idx = ConfigInteger(default = 0)
-config.mediaportal.yt_param_meta_idx = ConfigInteger(default = 1)
-config.mediaportal.yt_paramListIdx = ConfigInteger(default = 0)
-config.mediaportal.yt_param_3d_idx = ConfigInteger(default = 0)
-config.mediaportal.yt_param_duration_idx = ConfigInteger(default = 0)
-config.mediaportal.yt_param_video_definition_idx = ConfigInteger(default = 0)
-config.mediaportal.yt_param_event_types_idx = ConfigInteger(default = 0)
-config.mediaportal.yt_param_video_type_idx = ConfigInteger(default = 0)
-config.mediaportal.yt_refresh_token = ConfigText(default="")
+config_mp.mediaportal.yt_param_regionid_idx = ConfigInteger(default = 2)
+config_mp.mediaportal.yt_param_time_idx = ConfigInteger(default = 0)
+config_mp.mediaportal.yt_param_meta_idx = ConfigInteger(default = 1)
+config_mp.mediaportal.yt_paramListIdx = ConfigInteger(default = 0)
+config_mp.mediaportal.yt_param_3d_idx = ConfigInteger(default = 0)
+config_mp.mediaportal.yt_param_duration_idx = ConfigInteger(default = 0)
+config_mp.mediaportal.yt_param_video_definition_idx = ConfigInteger(default = 0)
+config_mp.mediaportal.yt_param_event_types_idx = ConfigInteger(default = 0)
+config_mp.mediaportal.yt_param_video_type_idx = ConfigInteger(default = 0)
+config_mp.mediaportal.yt_refresh_token = ConfigText(default="")
 
 APIKEYV3 = mp_globals.yt_a
 param_hl = ('&hl=en-US', '&hl=de-DE', '&hl=fr-FR', '&hl=it-IT', '&hl=es-ES', '&hl=pt-PT', '&hl=pl-PL', '&hl=da-DK', '&hl=nb-NO', '&hl=sv-SE', '&hl=fi-FI', '')
@@ -31,7 +31,7 @@ std_headers = {
 	'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
 	'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 }
-default_cover = "file://%s/youtube.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/youtube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class youtubeGenreScreen(MenuHelper):
 	def __init__(self, session):
@@ -120,15 +120,15 @@ class youtubeGenreScreen(MenuHelper):
 
 		self.paramList = [
 			(_('Search request'), (self.paraQuery, None), (0,1,2,)),
-			(_('Event type'), (self.param_event_types, config.mediaportal.yt_param_event_types_idx), (0,)),
-			(_('Sort by'), (self.param_time, config.mediaportal.yt_param_time_idx), (0,1,2,)),
-			(_('Language'), (self.param_metalang, config.mediaportal.yt_param_meta_idx), (0,1,2,7,9,10,11,12,13,14)),
-			(_('Search region'), (self.param_regionid, config.mediaportal.yt_param_regionid_idx), (0,1,2,3,7,9,10,11,12,13,14)),
+			(_('Event type'), (self.param_event_types, config_mp.mediaportal.yt_param_event_types_idx), (0,)),
+			(_('Sort by'), (self.param_time, config_mp.mediaportal.yt_param_time_idx), (0,1,2,)),
+			(_('Language'), (self.param_metalang, config_mp.mediaportal.yt_param_meta_idx), (0,1,2,7,9,10,11,12,13,14)),
+			(_('Search region'), (self.param_regionid, config_mp.mediaportal.yt_param_regionid_idx), (0,1,2,3,7,9,10,11,12,13,14)),
 			(_('User name'), (self.paraAuthor, None), (0,1,2,)),
-			(_('3D Search'), (self.param_3d, config.mediaportal.yt_param_3d_idx), (0,)),
-			(_('Runtime'), (self.param_duration, config.mediaportal.yt_param_duration_idx), (0,)),
-			(_('Video definition'), (self.param_video_definition, config.mediaportal.yt_param_video_definition_idx), (0,)),
-			(_('Video type'), (self.param_video_type, config.mediaportal.yt_param_video_type_idx), (0,))
+			(_('3D Search'), (self.param_3d, config_mp.mediaportal.yt_param_3d_idx), (0,)),
+			(_('Runtime'), (self.param_duration, config_mp.mediaportal.yt_param_duration_idx), (0,)),
+			(_('Video definition'), (self.param_video_definition, config_mp.mediaportal.yt_param_video_definition_idx), (0,)),
+			(_('Video type'), (self.param_video_type, config_mp.mediaportal.yt_param_video_type_idx), (0,))
 			]
 
 		self.subCatUserChannel = [
@@ -358,7 +358,7 @@ class youtubeGenreScreen(MenuHelper):
 
 		try:
 			fname = mp_globals.pluginPath + "/userfiles/userchan.xml"
-			self.user_path = config.mediaportal.watchlistpath.value + "mp_userchan.xml"
+			self.user_path = config_mp.mediaportal.watchlistpath.value + "mp_userchan.xml"
 			from os.path import exists
 			if not exists(self.user_path):
 				shutil.copyfile(fname, self.user_path)
@@ -437,9 +437,9 @@ class youtubeGenreScreen(MenuHelper):
 	def initSubCat(self):
 		CoverHelper(self['coverArt']).getCover(default_cover)
 
-		hl = param_hl[config.mediaportal.yt_param_meta_idx.value]
+		hl = param_hl[config_mp.mediaportal.yt_param_meta_idx.value]
 
-		rc = self.param_regionid[config.mediaportal.yt_param_regionid_idx.value][1].split('=')[-1]
+		rc = self.param_regionid[config_mp.mediaportal.yt_param_regionid_idx.value][1].split('=')[-1]
 		if not rc:
 			rc = 'US'
 
@@ -515,15 +515,15 @@ class youtubeGenreScreen(MenuHelper):
 	def showParams(self):
 		try:
 			self['query'].setText(self.param_qr)
-			self['time'].setText(self.param_time[config.mediaportal.yt_param_time_idx.value][0])
-			self['reserve1'].setText(self.param_video_definition[config.mediaportal.yt_param_video_definition_idx.value][0])
-			self['reserve2'].setText(self.param_video_type[config.mediaportal.yt_param_video_type_idx.value][0])
-			self['metalang'].setText(self.param_metalang[config.mediaportal.yt_param_meta_idx.value][0])
-			self['regionid'].setText(self.param_regionid[config.mediaportal.yt_param_regionid_idx.value][0])
-			self['3d'].setText(self.param_3d[config.mediaportal.yt_param_3d_idx.value][0])
-			self['duration'].setText(self.param_duration[config.mediaportal.yt_param_duration_idx.value][0])
+			self['time'].setText(self.param_time[config_mp.mediaportal.yt_param_time_idx.value][0])
+			self['reserve1'].setText(self.param_video_definition[config_mp.mediaportal.yt_param_video_definition_idx.value][0])
+			self['reserve2'].setText(self.param_video_type[config_mp.mediaportal.yt_param_video_type_idx.value][0])
+			self['metalang'].setText(self.param_metalang[config_mp.mediaportal.yt_param_meta_idx.value][0])
+			self['regionid'].setText(self.param_regionid[config_mp.mediaportal.yt_param_regionid_idx.value][0])
+			self['3d'].setText(self.param_3d[config_mp.mediaportal.yt_param_3d_idx.value][0])
+			self['duration'].setText(self.param_duration[config_mp.mediaportal.yt_param_duration_idx.value][0])
 			self['author'].setText(self.param_author)
-			self['keywords'].setText(self.param_event_types[config.mediaportal.yt_param_event_types_idx.value][0])
+			self['keywords'].setText(self.param_event_types[config_mp.mediaportal.yt_param_event_types_idx.value][0])
 		except:
 			pass
 
@@ -629,9 +629,9 @@ class youtubeGenreScreen(MenuHelper):
 	def keyYellow(self, edit=1):
 		c = len(self.paramList)
 		list = []
-		if config.mediaportal.yt_paramListIdx.value not in range(0, c):
-			config.mediaportal.yt_paramListIdx.value = 0
-		old_idx = config.mediaportal.yt_paramListIdx.value
+		if config_mp.mediaportal.yt_paramListIdx.value not in range(0, c):
+			config_mp.mediaportal.yt_paramListIdx.value = 0
+		old_idx = config_mp.mediaportal.yt_paramListIdx.value
 		for i in range(c):
 			if self.mh_menuIdx[0] in self.paramList[i][2]:
 				list.append((self.paramList[i][0], i))
@@ -644,7 +644,7 @@ class youtubeGenreScreen(MenuHelper):
 	def cb_handlekeyYellow(self, answer):
 		pidx = answer and answer[1]
 		if pidx != None:
-			config.mediaportal.yt_paramListIdx.value = pidx
+			config_mp.mediaportal.yt_paramListIdx.value = pidx
 			if type(self.paramList[pidx][1][0]) == list:
 				self.changeListParam(self.paramList[pidx][0], *self.paramList[pidx][1])
 			else:
@@ -681,18 +681,18 @@ class youtubeGenreScreen(MenuHelper):
 			self.channelId = 'none'
 
 	def openListScreen(self):
-		tm = self.param_time[config.mediaportal.yt_param_time_idx.value][1]
-		lr = self.param_metalang[config.mediaportal.yt_param_meta_idx.value][1]
-		regionid = self.param_regionid[config.mediaportal.yt_param_regionid_idx.value][1]
-		_3d = self.param_3d[config.mediaportal.yt_param_3d_idx.value][1]
-		dura = self.param_duration[config.mediaportal.yt_param_duration_idx.value][1]
-		vid_def = self.param_video_definition[config.mediaportal.yt_param_video_definition_idx.value][1]
-		event_type = self.param_event_types[config.mediaportal.yt_param_event_types_idx.value][1]
+		tm = self.param_time[config_mp.mediaportal.yt_param_time_idx.value][1]
+		lr = self.param_metalang[config_mp.mediaportal.yt_param_meta_idx.value][1]
+		regionid = self.param_regionid[config_mp.mediaportal.yt_param_regionid_idx.value][1]
+		_3d = self.param_3d[config_mp.mediaportal.yt_param_3d_idx.value][1]
+		dura = self.param_duration[config_mp.mediaportal.yt_param_duration_idx.value][1]
+		vid_def = self.param_video_definition[config_mp.mediaportal.yt_param_video_definition_idx.value][1]
+		event_type = self.param_event_types[config_mp.mediaportal.yt_param_event_types_idx.value][1]
 
 		genreurl = self.mh_genreUrl[0] + self.mh_genreUrl[1]
 		if 'googleapis.com' in genreurl:
 			if '/playlists' in genreurl:
-				lr = param_hl[config.mediaportal.yt_param_meta_idx.value]
+				lr = param_hl[config_mp.mediaportal.yt_param_meta_idx.value]
 
 			if not '%ACCESSTOKEN%' in genreurl:
 				if self.param_author:
@@ -704,7 +704,7 @@ class youtubeGenreScreen(MenuHelper):
 				genreurl = genreurl.replace('%QR%', urllib.quote_plus(self.param_qr))
 				genreurl += regionid + lr + tm + channel_id + self.param_safesearch[0]
 				if 'type=video' in genreurl:
-					vid_type = self.param_video_type[config.mediaportal.yt_param_video_type_idx.value][1]
+					vid_type = self.param_video_type[config_mp.mediaportal.yt_param_video_type_idx.value][1]
 					genreurl += _3d + dura + vid_def + event_type + vid_type
 
 		elif _('Favorites') in self.mh_genreTitle:
@@ -719,13 +719,13 @@ class youtubeGenreScreen(MenuHelper):
 		global picker_lang
 		picker_lang = ''
 		if _('My channel') in self.mh_genreTitle:
-			if not config.mediaportal.yt_refresh_token.value:
+			if not config_mp.mediaportal.yt_refresh_token.value:
 				self.session.open(MessageBoxExt, _("You need to request a token to allow access to your YouTube account."), MessageBoxExt.TYPE_INFO)
 				return
 		self.openListScreen()
 
 	def login(self):
-		if not config.mediaportal.yt_refresh_token.value:
+		if not config_mp.mediaportal.yt_refresh_token.value:
 			yt_oauth2.requestDevCode(self.session)
 		else:
 			self.session.openWithCallback(self.cb_login, MessageBoxExt, _("Did you revoke the access?"), type=MessageBoxExt.TYPE_YESNO, default=False)
@@ -735,14 +735,14 @@ class youtubeGenreScreen(MenuHelper):
 			yt_oauth2.requestDevCode(self.session)
 
 	def saveIdx(self):
-		config.mediaportal.yt_param_time_idx.save()
-		config.mediaportal.yt_param_meta_idx.save()
-		configfile.save()
+		config_mp.mediaportal.yt_param_time_idx.save()
+		config_mp.mediaportal.yt_param_meta_idx.save()
+		configfile_mp.save()
 		yt_oauth2._tokenExpired()
 
 	def getSuggestions(self, text, max_res):
-		hl = param_ajax_hl[config.mediaportal.yt_param_meta_idx.value]
-		gl = param_ajax_gl[config.mediaportal.yt_param_regionid_idx.value]
+		hl = param_ajax_hl[config_mp.mediaportal.yt_param_meta_idx.value]
+		gl = param_ajax_gl[config_mp.mediaportal.yt_param_regionid_idx.value]
 		url = "https://clients1.google.com/complete/search?client=youtube&hl=%s&gl=%s&ds=yt&q=%s" % (hl, gl, urllib.quote_plus(text))
 		d = twAgentGetPage(url, agent=agent, headers=std_headers, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
@@ -849,11 +849,11 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 
 		self.setVideoPrio()
 
-		self.favo_path = config.mediaportal.watchlistpath.value + "mp_yt_favorites.xml"
+		self.favo_path = config_mp.mediaportal.watchlistpath.value + "mp_yt_favorites.xml"
 		self.keckse = CookieJar()
 		self.filmliste = []
 		self.start_idx = 1
-		self.max_res = int(config.mediaportal.youtube_max_items_pp.value)
+		self.max_res = int(config_mp.mediaportal.youtube_max_items_pp.value)
 		self.max_pages = 1000 / self.max_res
 		self.total_res = 0
 		self.pages = 0
@@ -914,7 +914,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 			return
 		self.keyLocked = True
 		self.ml.setList(map(self.YT_ListEntry, [(_('Please wait...'),'','','','','','')]))
-		hl = param_ajax_hl[config.mediaportal.yt_param_meta_idx.value]
+		hl = param_ajax_hl[config_mp.mediaportal.yt_param_meta_idx.value]
 		if hl != picker_lang:
 			self.setLang("https://www.youtube.com", hl)
 			return
@@ -940,7 +940,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 				elif url[-1] != '?' or url[-1] != '&':
 					url = '%s&flow=list' % url
 				if not '&gl=' in url:
-					url += self.param_regionid[config.mediaportal.yt_param_regionid_idx.value]
+					url += self.param_regionid[config_mp.mediaportal.yt_param_regionid_idx.value]
 
 			self.lastUrl = url
 			if self.apiUrlv3 and '%ACT-' in url:
@@ -1443,7 +1443,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		self['handlung'].setText(_("Unfortunately, this video can not be played!\n")+str(error))
 
 	def setVideoPrio(self):
-		self.videoPrio = int(config.mediaportal.youtubeprio.value)
+		self.videoPrio = int(config_mp.mediaportal.youtubeprio.value)
 
 	def delFavo(self):
 		i = self['liste'].getSelectedIndex()
@@ -1567,12 +1567,12 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 			(_("Video count"), ("order=videoCount", 4)),
 			(_("View count"), ("order=viewCount", 5))
 			)
-		self.session.openWithCallback(self.cb_handleSortParam, ChoiceBoxExt, title=_("Sort by"), list = list, selection=config.mediaportal.yt_param_time_idx.value)
+		self.session.openWithCallback(self.cb_handleSortParam, ChoiceBoxExt, title=_("Sort by"), list = list, selection=config_mp.mediaportal.yt_param_time_idx.value)
 
 	def cb_handleSortParam(self, answer):
 		p = answer and answer[1]
 		if p != None:
-			config.mediaportal.yt_param_time_idx.value = p[1]
+			config_mp.mediaportal.yt_param_time_idx.value = p[1]
 			self.stvLink = re.sub('order=([a-zA-Z]+)', p[0], self.stvLink)
 			self.keckse.clear()
 			self.c4_browse_ajax = ''
@@ -1743,7 +1743,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		elif gid == 'GV3':
 			dhTitle = 'Ergebnisse: ' + self['liste'].getCurrent()[0][1]
 			genreurl = self['liste'].getCurrent()[0][2]
-			hl = param_hl[config.mediaportal.yt_param_meta_idx.value]
+			hl = param_hl[config_mp.mediaportal.yt_param_meta_idx.value]
 			genreurl = 'https://www.googleapis.com/youtube/v3/channels?part=snippet&categoryId='+self['liste'].getCurrent()[0][2]+hl+'&key=%KEY%'
 
 			if self.favoGenre:
@@ -1754,7 +1754,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 			dhTitle = 'Videos: ' + self['liste'].getCurrent()[0][1]
 			genreurl = self['liste'].getCurrent()[0][2]
 			genreurl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&order=date&playlistId='+self['liste'].getCurrent()[0][2]
-			if config.mediaportal.yt_refresh_token.value and self.mine:
+			if config_mp.mediaportal.yt_refresh_token.value and self.mine:
 				genreurl = genreurl + '&access_token=%ACCESSTOKEN%'
 			else:
 				genreurl = genreurl + '&key=%KEY%'
@@ -1851,16 +1851,16 @@ class YT_Oauth2:
 		self.abortPoll = False
 		self.waitingBox = None
 		self.session = None
-		if not config.mediaportal.yt_refresh_token.value:
+		if not config_mp.mediaportal.yt_refresh_token.value:
 			self._recoverToken()
 
 	def _recoverToken(self):
 		if os.path.isfile(self.TOKEN_PATH):
 			with open(self.TOKEN_PATH) as data_file:
 				data = json.load(data_file)
-				config.mediaportal.yt_refresh_token.value = data['refresh_token'].encode('utf-8')
-				config.mediaportal.yt_refresh_token.save()
-				configfile.save()
+				config_mp.mediaportal.yt_refresh_token.value = data['refresh_token'].encode('utf-8')
+				config_mp.mediaportal.yt_refresh_token.save()
+				configfile_mp.save()
 				return True
 
 	def requestDevCode(self, session):
@@ -1909,10 +1909,10 @@ class YT_Oauth2:
 			else:
 				if not tokenData.get('error',''):
 					self.accessToken = tokenData['access_token'].encode('utf-8')
-					config.mediaportal.yt_refresh_token.value = tokenData['refresh_token'].encode('utf-8')
-					config.mediaportal.yt_refresh_token.value = tokenData['refresh_token'].encode('utf-8')
-					config.mediaportal.yt_refresh_token.save()
-					configfile.save()
+					config_mp.mediaportal.yt_refresh_token.value = tokenData['refresh_token'].encode('utf-8')
+					config_mp.mediaportal.yt_refresh_token.value = tokenData['refresh_token'].encode('utf-8')
+					config_mp.mediaportal.yt_refresh_token.save()
+					configfile_mp.save()
 					self._expiresIn = tokenData['expires_in']
 					self._startRefreshTimer()
 					f = open(self.TOKEN_PATH, 'w')
@@ -1928,8 +1928,8 @@ class YT_Oauth2:
 		self.session = session
 		if not skip:
 			self._tokenExpired()
-		if config.mediaportal.yt_refresh_token.value:
-			postData = self.CLIENT_ID + self.CLIENT_SECRET + '&refresh_token=%s&grant_type=refresh_token' % config.mediaportal.yt_refresh_token.value
+		if config_mp.mediaportal.yt_refresh_token.value:
+			postData = self.CLIENT_ID + self.CLIENT_SECRET + '&refresh_token=%s&grant_type=refresh_token' % config_mp.mediaportal.yt_refresh_token.value
 
 			d = twAgentGetPage(self.OAUTH2_URL+'/token', method='POST', postdata=postData, headers={'Content-Type': 'application/x-www-form-urlencoded'}).addCallback(self._cb_refresh, False).addErrback(self._cb_refresh)
 			return d
@@ -1951,8 +1951,8 @@ class YT_Oauth2:
 				return self.accessToken
 
 	def revokeToken(self):
-		if config.mediaportal.yt_refresh_token.value:
-			twAgentGetPage(self.OAUTH2_URL+'/revoke?token=%s' % config.mediaportal.yt_refresh_token.value).addCallback(self._cb_revoke, False).addErrback(self._cb_revoke)
+		if config_mp.mediaportal.yt_refresh_token.value:
+			twAgentGetPage(self.OAUTH2_URL+'/revoke?token=%s' % config_mp.mediaportal.yt_refresh_token.value).addCallback(self._cb_revoke, False).addErrback(self._cb_revoke)
 
 	def _cb_revoke(self, data, error=True):
 		if error:

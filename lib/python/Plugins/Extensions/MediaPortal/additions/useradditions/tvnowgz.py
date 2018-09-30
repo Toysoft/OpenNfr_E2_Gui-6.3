@@ -4,7 +4,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.debuglog import printlog as printl
 from Plugins.Extensions.MediaPortal.additions.mediatheken.tvnow import tvnowFirstScreen, tvnowSubGenreScreen, tvnowStaffelScreen, tvnowEpisodenScreen
 
-default_cover = "file://%s/tvnow.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/tvnow.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class tvnowGZFirstScreen(tvnowFirstScreen):
 

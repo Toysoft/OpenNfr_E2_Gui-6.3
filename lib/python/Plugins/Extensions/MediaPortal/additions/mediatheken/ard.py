@@ -39,20 +39,16 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
+from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 
-# Globals
-suchCache = ""
-dm = "dummy"
-mainLink = "http://www.ardmediathek.de"
-tDef = "Keine Informationen/Angaben"
+BASE_URL = "http://www.ardmediathek.de"
+default_cover = "file://%s/ard.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 isWeg = "Nicht (oder nicht mehr) auf den ARD-Servern vorhanden!"
-placeHolder = ("---","99")
-ardPic = "file://%s/ard.png" % (config.mediaportal.iconcachepath.value + "logos")
 
 class ARDGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -64,69 +60,57 @@ class ARDGenreScreen(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self.keyLocked = True
 		self['title'] = Label("ARD Mediathek")
-		self['ContentTitle'] = Label("Auswahl des Genres")
+		self['ContentTitle'] = Label("Genre:")
 
 		self.genreliste = []
+		self.suchString = ''
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
 		self.genreliste = []
-		self.genreliste.append(("Suche  -  TV", "1"))
-		self.genreliste.append(("A bis Z  -  TV", "2"))
-		self.genreliste.append(("Sendung verpasst!?  -  TV", "3"))
-		self.genreliste.append(("Kategorien  -  TV", "4"))
-		self.genreliste.append(("Tagesschau  -  TV", "11"))
-		self.genreliste.append(placeHolder)
-		self.genreliste.append(("Suche  -  Radio", "6"))
-		self.genreliste.append(("A bis Z  -  Radio", "7"))
-		self.genreliste.append(("Kategorien  -  Radio", "8"))
+		self.genreliste.append(("Suche - TV", "1"))
+		self.genreliste.append(("Sendungen A bis Z - TV", "2"))
+		self.genreliste.append(("Sendung verpasst!? - TV", "3"))
+		self.genreliste.append(("Kategorien - TV", "4"))
+		self.genreliste.append(("Tagesschau - TV", "11"))
+		self.genreliste.append((400 * "—","99"))
+		self.genreliste.append(("Suche - Radio", "6"))
+		self.genreliste.append(("Sendungen A bis Z - Radio", "7"))
+		self.genreliste.append(("Kategorien - Radio", "8"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-		self.keyLocked = False
-		CoverHelper(self['coverArt']).getCover(ardPic)
 
 	def keyOK(self):
-		if self.keyLocked:
-			return
 		self.gN = self['liste'].getCurrent()[0][0]
 		self.gF = self['liste'].getCurrent()[0][1]
 		if self.gF == "99":
 			return
-		elif self.gF == "1" or self.gF == "6": # Suche TV oder Radio
-			self.session.openWithCallback(self.searchCallback, VirtualKeyBoardExt, title = (_(self.gN)), text = suchCache, is_dialog=True)
+		elif self.gF == "1" or self.gF == "6":
+			self.session.openWithCallback(self.searchCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True)
 		else:
 			self.session.open(ARDPreSelect,self.gN,self.gF)
 
-	def searchCallback(self, callbackStr):
+	def searchCallback(self, callback):
 		self.gF = self['liste'].getCurrent()[0][1]
-		if callbackStr is not None:
-			global suchCache
-			suchCache = callbackStr
-			self.searchStr = callbackStr
-			self.gN = "Suche... ' %s '" % self.searchStr
-			self.searchStr = self.searchStr.replace(' ', '+')
-			self.searchStr = self.searchStr.replace('ä', '%C3%A4')	#	Umlaute URI-konform wandeln, sonst Fehler zB. beim Suchen nach "Börse".
-			self.searchStr = self.searchStr.replace('ö', '%C3%B6')
-			self.searchStr = self.searchStr.replace('ü', '%C3%BC')
-			self.searchStr = self.searchStr.replace('Ä', '%C3%84')
-			self.searchStr = self.searchStr.replace('Ö', '%C3%96')
-			self.searchStr = self.searchStr.replace('Ü', '%C3%9C')
-			self.searchStr = self.searchStr.replace('ß', '%C3%9F')
+		if callback is not None and len(callback):
+			self.suchString = callback
+			searchStr = urllib.quote(callback)
+			genreName = "Suche - " + self.suchString
 			if self.gF == "1":
-				url = mainLink+"/suche?searchText="+self.searchStr+"&source=tv&sort="	#	Hier kein "%s" verwenden! Fehler, wenn "%" in URI landet!
+				url = BASE_URL+"/suche?searchText="+searchStr+"&source=tv&sort="
 			elif self.gF == "6":
-				url = mainLink+"/suche?searchText="+self.searchStr+"&source=radio&sort="
-			self.session.open(ARDStreamScreen,url,self.gN,self.gF)
+				url = BASE_URL+"/suche?searchText="+searchStr+"&source=radio&sort="
+			print url
+			self.session.open(ARDStreamScreen,url,genreName,self.gF)
 
 class ARDPreSelect(MPScreen):
 
 	def __init__(self,session,genreName,genreFlag):
 		self.gN = genreName
 		self.gF = genreFlag
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -140,7 +124,7 @@ class ARDPreSelect(MPScreen):
 
 		self.keyLocked = True
 		self['title'] = Label("ARD Mediathek")
-		self['ContentTitle'] = Label("Auswahl des Genres")
+		self['ContentTitle'] = Label(_("Selection:") + " %s" % self.gN)
 
 		self.genreliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -149,7 +133,6 @@ class ARDPreSelect(MPScreen):
 
 	def loadPage(self):
 		if self.gF == "2" or self.gF == "7":
-			self['name'].setText(self.gN+"\nAuswahl des Buchstabens")
 			self.genreliste = []
 			for c in xrange(26): # ABC, Radio & TV
 				self.genreliste.append((chr(ord('A') + c), None))
@@ -157,14 +140,13 @@ class ARDPreSelect(MPScreen):
 		elif self.gF == "4" or self.gF == "8":
 			self.genreliste = []
 			if self.gF == "4": # Extra-Kategorien, Radio & TV
-				self['name'].setText(self.gN+"\nAuswahl der Kategorie")
 				self.genreliste.append(("TOP von Seite 1 - TV", "1"))
 				self.genreliste.append(("Neueste Videos", "2"))
 				self.genreliste.append(("Am besten bewertete Videos", "3"))
 				self.genreliste.append(("Meistabgerufene Videos", "4"))
 				self.genreliste.append(("Ausgewählte Filme", "5"))
 				self.genreliste.append(("Ausgewählte Dokus", "6"))
-				self.genreliste.append(placeHolder)
+				self.genreliste.append((400 * "—","99"))
 				self.genreliste.append(("Kinder & Familie", "7"))
 				self.genreliste.append(('"Must see" - was die Redaktion schaut', "8"))
 				self.genreliste.append(("Kurzes für Zwischendurch", "9"))
@@ -179,21 +161,18 @@ class ARDPreSelect(MPScreen):
 				self.genreliste.append(("Alle Filme", "18"))
 				self.genreliste.append(("Alle Dokus & Reportagen", "19"))
 			if self.gF == "8": # Extra-Kategorien, nur Radio
-				self['name'].setText(self.gN+"\nAuswahl der Kategorie")
 				self.genreliste.append(("Neueste Clips", "1"))
 				self.genreliste.append(("Meistabgerufene Clips", "2"))
-				self.genreliste.append(placeHolder)
+				self.genreliste.append((400 * "—","99"))
 				self.genreliste.append(("Tipps der Redaktion", "3"))
 				self.genreliste.append(("Hörspiel", "4"))
 		elif self.gF == "3":	# Sendung verpasst?
-			self['name'].setText("Sendung verpasst!?\nAuswahl des Kalendertages")
 			for q in range (0, 7):
 				s2 = (datetime.date.today()+datetime.timedelta(days=-q)).strftime("%A %d. %B %Y")
 				s3 = str(q)
-				self.genreliste.append((s2,s3,dm,dm))
+				self.genreliste.append((s2,s3))
 		elif self.gF == "11":
 			self.genreliste = []
-			self['name'].setText(self.gN+"\nAuswahl der Kategorie")
 			self.genreliste.append(("Tagesschau", "1"))
 			self.genreliste.append(("Tagesschau mit Gebärdensprache", "2"))
 			self.genreliste.append(("Tagesthemen", "3"))
@@ -201,7 +180,7 @@ class ARDPreSelect(MPScreen):
 
 		self.keyLocked = False
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-		CoverHelper(self['coverArt']).getCover(ardPic)
+		self.showInfos()
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -211,66 +190,66 @@ class ARDPreSelect(MPScreen):
 		if extra == "99":
 			return
 		elif self.gF == "3":
-			self.session.open(ARDPreSelectSender,auswahl,self.gF,extra,dm)
+			self.session.open(ARDPreSelectSender,auswahl,self.gF,extra)
 		elif self.gF == "4":	# Kategorien TV
 			if extra == '1': # TOP von Seite 1 - TV
-				streamLink = "%s/tv" % mainLink
+				streamLink = "%s/tv" % BASE_URL
 			elif extra == '2': # Neueste Videos
-				streamLink = "%s/tv/Neueste-Videos/mehr?documentId=21282466" % mainLink
+				streamLink = "%s/tv/Neueste-Videos/mehr?documentId=21282466" % BASE_URL
 			elif extra == '3': # Am besten bewertete Videos
-				streamLink = "%s/tv/Am-besten-bewertet/mehr?documentId=21282468" % mainLink
+				streamLink = "%s/tv/Am-besten-bewertet/mehr?documentId=21282468" % BASE_URL
 			elif extra == '4': # Meistabgerufene Videos
-				streamLink = "%s/tv/Meistabgerufene-Videos/mehr?documentId=23644244" % mainLink
+				streamLink = "%s/tv/Meistabgerufene-Videos/mehr?documentId=23644244" % BASE_URL
 			elif extra == '5': # Ausgewählte Filme
-				streamLink = "%s/tv/Ausgewählte-Filme/mehr?documentId=33649088" % mainLink
+				streamLink = "%s/tv/Ausgewählte-Filme/mehr?documentId=33649088" % BASE_URL
 			elif extra == '6': # Ausgewählte Dokus
-				streamLink = "%s/tv/Ausgewählte-Dokus/mehr?documentId=33649086" % mainLink
+				streamLink = "%s/tv/Ausgewählte-Dokus/mehr?documentId=33649086" % BASE_URL
 			elif extra == '7': # Kinder & Familie
-				streamLink = "%s/tv/Kinder-Familie/mehr?documentId=21282542" % mainLink
+				streamLink = "%s/tv/Kinder-Familie/mehr?documentId=21282542" % BASE_URL
 			elif extra == '8': # "Must see" - was die Redaktion schaut
-				streamLink = "%s/tv/mustsee" % mainLink
+				streamLink = "%s/tv/mustsee" % BASE_URL
 			elif extra == '9': # Kurzes für Zwischendurch
-				streamLink = "%s/tv/Kurzes-für-Zwischendurch/mehr?documentId=45458112" % mainLink
+				streamLink = "%s/tv/Kurzes-für-Zwischendurch/mehr?documentId=45458112" % BASE_URL
 			elif extra == '10': # Unterhaltung & Comedy
-				streamLink = "%s/tv/unterhaltung" % mainLink
+				streamLink = "%s/tv/unterhaltung" % BASE_URL
 			elif extra == '11': # Wissen
-				streamLink = "%s/tv/wissen" % mainLink
+				streamLink = "%s/tv/wissen" % BASE_URL
 			elif extra == '12': # Politik
-				streamLink = "%s/tv/politik" % mainLink
+				streamLink = "%s/tv/politik" % BASE_URL
 			elif extra == '13': # Kultur
-				streamLink = "%s/tv/kultur" % mainLink
+				streamLink = "%s/tv/kultur" % BASE_URL
 			elif extra == '14': # Ratgeber
-				streamLink = "%s/tv/ratgeber" % mainLink
+				streamLink = "%s/tv/ratgeber" % BASE_URL
 			elif extra == '15': # Sport
-				streamLink = "%s/tv/sport" % mainLink
+				streamLink = "%s/tv/sport" % BASE_URL
 			elif extra == '16': # Sportreportagen
-				streamLink = "%s/tv/Sportreportagen-dokus/Tipps?documentId=30366344" % mainLink
+				streamLink = "%s/tv/Sportreportagen-dokus/Tipps?documentId=30366344" % BASE_URL
 			elif extra == '17': # Reise
-				streamLink = "%s/tv/reise" % mainLink
+				streamLink = "%s/tv/reise" % BASE_URL
 			elif extra == '18': # Alle Filme
-				streamLink = "%s/tv/Alle-Filme/mehr?documentId=31610076" % mainLink
+				streamLink = "%s/tv/Alle-Filme/mehr?documentId=31610076" % BASE_URL
 			elif extra == '19': # Alle Dokus & Reportagen
-				streamLink = "%s/tv/Alle-Dokus-und-Reportagen/mehr?documentId=29897594" % mainLink
+				streamLink = "%s/tv/Alle-Dokus-und-Reportagen/mehr?documentId=29897594" % BASE_URL
 			self.session.open(ARDStreamScreen,streamLink,auswahl,self.gF)
 		elif self.gF == "8": # Kategorien Radio
 			if extra == '1': # Neueste Clips
-				streamLink = "%s/radio/Neueste-Audios/mehr?documentId=21282450" % mainLink
+				streamLink = "%s/radio/Neueste-Audios/mehr?documentId=21282450" % BASE_URL
 			elif extra == '2': # Meistabgerufene Clips
-				streamLink = "%s/radio/Meistabgerufene-Audios/mehr?documentId=21282452" % mainLink
+				streamLink = "%s/radio/Meistabgerufene-Audios/mehr?documentId=21282452" % BASE_URL
 			elif extra == '3': # Tipps der Redaktion
-				streamLink = "%s/radio/Tipps-der-Redaktion/mehr?documentId=21301892" % mainLink
+				streamLink = "%s/radio/Tipps-der-Redaktion/mehr?documentId=21301892" % BASE_URL
 			elif extra == '4': # Hörspiel
-				streamLink = "%s/radio/Hörspiele/mehr?documentId=21301890" % mainLink
+				streamLink = "%s/radio/Hörspiele/mehr?documentId=21301890" % BASE_URL
 			self.session.open(ARDStreamScreen,streamLink,auswahl,self.gF)
 		elif self.gF == "11": # Tagesschau
 			if extra == '1': # Tagesschau
-				streamLink = "%s/tv/Tagesschau/Sendung?documentId=4326&bcastId=4326" % mainLink
+				streamLink = "%s/tv/Tagesschau/Sendung?documentId=4326&bcastId=4326" % BASE_URL
 			elif extra == '2': # Tagesschau mit Gebärdensprache
-				streamLink = mainLink+"/tv/Tagesschau-mit-Geb%C3%A4rdensprache/Sendung?documentId=12722002&bcastId=12722002"
+				streamLink = BASE_URL+"/tv/Tagesschau-mit-Geb%C3%A4rdensprache/Sendung?documentId=12722002&bcastId=12722002"
 			elif extra == '3': # Tagesthemen
-				streamLink = "%s/tv/Tagesthemen/Sendung?documentId=3914&bcastId=3914" % mainLink
+				streamLink = "%s/tv/Tagesthemen/Sendung?documentId=3914&bcastId=3914" % BASE_URL
 			elif extra == '4': # Tagesschau24
-				streamLink = "%s/tv/tagesschau24/Sendung?documentId=6753968&bcastId=6753968" % mainLink
+				streamLink = "%s/tv/tagesschau24/Sendung?documentId=6753968&bcastId=6753968" % BASE_URL
 			self.session.open(ARDStreamScreen,streamLink,auswahl,self.gF)
 		else:
 			if self.gF == "2" or self.gF == "7": # ABC (TV oder Radio)
@@ -282,12 +261,11 @@ class ARDPreSelect(MPScreen):
 
 class ARDPreSelectSender(MPScreen):
 
-	def __init__(self,session,genreName,genreFlag,sender,such):
+	def __init__(self,session,genreName,genreFlag,sender):
 		self.gN = genreName
 		self.gF = genreFlag
 		self.sender = sender
-		self.such = such
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -299,9 +277,8 @@ class ARDPreSelectSender(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self.keyLocked = True
 		self['title'] = Label("ARD Mediathek")
-		self['ContentTitle'] = Label("Auswahl des Genres")
+		self['ContentTitle'] = Label(_("Selection:") + " %s" % self.gN)
 
 		self.genreliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -309,44 +286,34 @@ class ARDPreSelectSender(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		self.genreliste = []
-		if self.gF == "3":	# Sendung verpasst!?
-			self['name'].setText("Sendung verpasst!?\nAuswahl des Senders")
-			self.genreliste.append(("Das Erste", "208"))
-			self.genreliste.append(("BR", "2224"))
-			self.genreliste.append(("HR", "5884"))
-			self.genreliste.append(("MDR", "5882"))
-			self.genreliste.append(("MDR Thüringen", "1386988"))
-			self.genreliste.append(("MDR Sachsen-Anhalt", "1386898"))
-			self.genreliste.append(("MDR Sachsen", "1386804"))
-			self.genreliste.append(("NDR", "5906"))
-			self.genreliste.append(("RB", "5898"))
-			self.genreliste.append(("RBB", "5874"))
-			self.genreliste.append(("RBB Brandenburg", "21518356"))
-			self.genreliste.append(("RBB Berlin", "21518358"))
-			self.genreliste.append(("SR", "5870"))
-			self.genreliste.append(("SWR", "5310"))
-			self.genreliste.append(("SWR Rheinland-Pfalz", "5872"))
-			self.genreliste.append(("SWR Baden-Württemberg", "5904"))
-			self.genreliste.append(("WDR", "5902"))
-			self.genreliste.append(("tagesschau24", "5878"))
-			self.genreliste.append(("ARD alpha", "5868"))
-			self.genreliste.append(("ONE", "673348"))
-			self.genreliste.append(("KiKA", "5886"))
-
+		self.genreliste.append(("Das Erste", "208"))
+		self.genreliste.append(("BR", "2224"))
+		self.genreliste.append(("HR", "5884"))
+		self.genreliste.append(("MDR", "5882"))
+		self.genreliste.append(("MDR Thüringen", "1386988"))
+		self.genreliste.append(("MDR Sachsen-Anhalt", "1386898"))
+		self.genreliste.append(("MDR Sachsen", "1386804"))
+		self.genreliste.append(("NDR", "5906"))
+		self.genreliste.append(("RB", "5898"))
+		self.genreliste.append(("RBB", "5874"))
+		self.genreliste.append(("RBB Brandenburg", "21518356"))
+		self.genreliste.append(("RBB Berlin", "21518358"))
+		self.genreliste.append(("SR", "5870"))
+		self.genreliste.append(("SWR", "5310"))
+		self.genreliste.append(("SWR Rheinland-Pfalz", "5872"))
+		self.genreliste.append(("SWR Baden-Württemberg", "5904"))
+		self.genreliste.append(("WDR", "5902"))
+		self.genreliste.append(("tagesschau24", "5878"))
+		self.genreliste.append(("ARD alpha", "5868"))
+		self.genreliste.append(("ONE", "673348"))
+		self.genreliste.append(("KiKA", "5886"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-		self.keyLocked = False
-		CoverHelper(self['coverArt']).getCover(ardPic)
+		self.showInfos()
 
 	def keyOK(self):
-		if self.keyLocked:
-			return
 		auswahl = self['liste'].getCurrent()[0][0]
 		extra = self['liste'].getCurrent()[0][1]
-		if extra == "99":
-			return
-		if self.gF == "3":
-			url = "%s/tv/sendungVerpasst?tag=%s&kanal=%s" % (mainLink,self.sender,extra)	# "self.sender" kein Tippfehler!
+		url = "%s/tv/sendungVerpasst?tag=%s&kanal=%s" % (BASE_URL,self.sender,extra)	# "self.sender" kein Tippfehler!
 		self.session.open(ARDStreamScreen,url,auswahl,self.gF)
 
 class ARDPostSelect(MPScreen, ThumbsHelper):
@@ -355,7 +322,7 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 		self.auswahl = auswahl
 		self.gN = genreName
 		self.gF = genreFlag
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -371,31 +338,27 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 
 		self.keyLocked = True
 		self['title'] = Label("ARD Mediathek")
-		self['ContentTitle'] = Label("Auswahl der Inhalte")
+		self['ContentTitle'] = Label(_("Selection:") + " %s" % self.gN)
 
-		self['Page'] = Label(_("Page:"))
 		self.genreliste = []
-		self.page = 1
 		self.sendungen = ""
-		self.lastpage = 1	# Alles hier hat nur 1 Seite
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
 		if self.gF == "2":	# ABC - TV
-			url = "%s/tv/sendungen-a-z?buchstabe=%s&mcontent=page.1" % (mainLink,self.auswahl)
+			url = "%s/tv/sendungen-a-z?buchstabe=%s&mcontent=page.1" % (BASE_URL,self.auswahl)
 		if self.gF == "7":	# ABC - Radio
-			url = "%s/radio/sendungen-a-z?buchstabe=%s&mcontent=page.1" % (mainLink,self.auswahl)
+			url = "%s/radio/sendungen-a-z?buchstabe=%s&mcontent=page.1" % (BASE_URL,self.auswahl)
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
 		self.genreliste = []
-		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		self.sendungen = re.findall('<div class="box" .*?textWrapper.*?<a\shref="(.*?)".*?headline">(.*?)<', data, re.S)
 		if self.sendungen:
 			for (url,title) in self.sendungen:
-				url = mainLink+url.replace("&amp;","&")
+				url = BASE_URL+url.replace("&amp;","&")
 				if "|" in title:
 					title = title.replace("|","-")
 				self.genreliste.append((decodeHtml(title),url))
@@ -410,6 +373,8 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 	def showInfos(self):
 		if self.keyLocked:
 			return
+		streamName = self['liste'].getCurrent()[0][0]
+		self['name'].setText(streamName)
 		if self.gF != "10":
 			url = self['liste'].getCurrent()[0][1]
 			if url:
@@ -419,18 +384,16 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 		if self.keyLocked:
 			return
 		handlung = ''
-		streamPic = None
+		streamPic = default_cover
 		gefunden = re.findall('<meta name="description" content="(.*?)"/.*?<meta name="author" content="(.*?)".*?<meta name="gsaimg512" content="(.*?)"/>.*?<div class="box">.*?textWrapper.*?dachzeile">(.*?)[<|\s]', data, re.S)
 		if gefunden:
 			for (itxt,sender,streamPic,ausgaben) in gefunden:
 				itxttmp = itxt.split("|")
 				itxt = itxttmp[-1]
 				itxt = decodeHtml(itxt)
-				itxt = itxt.lstrip()
-				if itxt == "":
-					itxt = tDef
+				itxt = itxt.strip()
 				if not ausgaben:
-					ausgaben = tDef
+					ausgaben = ""
 				url = self['liste'].getCurrent()[0][1]
 				if "/tv/" in url:
 					media = "TV"
@@ -438,11 +401,9 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 					media = "Radio"
 				else:
 					media = "?"
-				handlung = "Media: %s\nGenre: %s\nSender: %s\nClips: %s" % (media,self.gN,sender,ausgaben)
+				handlung = "Media: %s\nSender: %s\nClips: %s" % (media,sender,ausgaben)
 		streamHandlung = handlung+"\n\n"+itxt
 		self['handlung'].setText(streamHandlung)
-		streamName = self['liste'].getCurrent()[0][0]
-		self['name'].setText("Sendung / Thema\n"+streamName)
 		if streamPic:
 			CoverHelper(self['coverArt']).getCover(streamPic)
 
@@ -462,7 +423,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		self.streamLink = streamLink
 		self.gN = genreName
 		self.gF = genreFlag
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -474,7 +435,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 			"down" : self.keyDown,
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
-			"yellow" : self.keyYellow,
+			"yellow" : self.keySort,
 			"blue" : self.keyBlue,
 			"nextBouquet" : self.keyPageUp,
 			"prevBouquet" : self.keyPageDown
@@ -482,21 +443,17 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 
 		self.keyLocked = True
 		self['title'] = Label("ARD Mediathek")
-		if self.gF == "4":
-			self['ContentTitle'] = Label("Auswahl des Videos")
-		else:
-			self['ContentTitle'] = Label("Auswahl des Clips")
+		self['ContentTitle'] = Label(_("Selection:") + " %s" % self.gN)
 		self['name'] = Label(_("Please wait..."))
 		if self.gF == "1" or self.gF == "6":
-			self['F3'] = Label("Relevanz")
+			self['F3'] = Label(_("Sort"))
 		else:
 			self['F4'] = Label("Mehr...")
 
-		self['Page'] = Label(_("Page:"))
 		self.future = 0
 		self.page = 1
 		self.lastpage = 1
-		self.suchTrigger = "date"
+		self.suchTrigger = "score"
 		self.blueTrigger = 0
 		self.blueURL = ""
 		self.blueMemory = [0,0,0]
@@ -512,6 +469,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		if self.blueTrigger == 0:
 			if self.gF == "1" or self.gF =="6":	# Suche
 				url = self.streamLink+self.suchTrigger+"&mresults=page."+str(self.page)	# Kein "%s" hier verwenden!! Gewandelte Umlaute aus searchCallBack enthalten "%"!
+				print url
 			elif self.gF == "4" or self.gF == "8":	# Kategorien
 				url = "%s&mcontent=page.%s" % (self.streamLink,self.page)
 			elif self.gF == "3":
@@ -567,7 +525,9 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		else:	#	"Mehr..."
 			self.blueMemory[1] = self.lastpage
 			self.lastpage = 1
-		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+		if self.lastpage > 1:
+			self['Page'].setText(_("Page:"))
+			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 
 		if self.blueTrigger == 1:
 			self.blueIdx = 0
@@ -588,7 +548,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		if self.folgen:
 			for (url,title) in self.folgen:
 				if not "Livestream" in url and not "http:" in url and "bcastId" in url:
-					url = mainLink+url.replace("&amp;","&")
+					url = BASE_URL+url.replace("&amp;","&")
 					sub = re.search('documentId=(.*?)($|&)', url, re.S)
 					if sub:
 						iD = sub.group(1)
@@ -606,7 +566,6 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 	def showInfos(self):
 		if self.keyLocked:
 			return
-		self['name'].setText('')
 		self.blueURL = self['liste'].getCurrent()[0][1]
 		if self.blueURL:
 			getPage(self.blueURL).addCallback(self.handlePicAndTxt).addErrback(self.dataError)
@@ -615,7 +574,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		if self.keyLocked:
 			return
 		handlung = ''
-		streamPic = None
+		streamPic = default_cover
 		self.future = 0
 		if not "dcterms.date" in data:
 			self.future = 1
@@ -628,18 +587,13 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		if ergebnis:
 			for (itxt,sender,streamPic,sendung,uhr,meta) in ergebnis:
 				self.sendung = sendung
-				if not itxt or len(itxt) == 0:
-					itxt = tDef
+				title = self['liste'].getCurrent()[0][0]
+				if title in itxt:
+					itxttmp = itxt.split(title+":")
+					itxt = itxttmp[-1].strip()
+					itxt = decodeHtml(itxt)
 				else:
-					title = self['liste'].getCurrent()[0][0]
-					if title in itxt:
-						itxttmp = itxt.split(title+":")
-						itxt = itxttmp[-1].lstrip()
-						itxt = decodeHtml(itxt)
-						if itxt == "":
-							itxt = tDef
-					else:
-						itxt = decodeHtml(itxt)
+					itxt = decodeHtml(itxt).strip()
 				if "ARD" in uhr:	#	Fakeeintrag um Absturz zu verhindern
 					uhr = " - Liegt in der Zukunft!"
 				else:
@@ -650,27 +604,25 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 				airtime = meta[0]
 				dur = meta[1]
 			url = self['liste'].getCurrent()[0][1]
-			handlung = "Genre: %s\nSender: %s\nClip-Datum: %s%s\nDauer: %s" % (self.gN,sender,airtime,uhr,dur)
+			handlung = "Sender: %s\nDatum: %s%s\nLaufzeit: %s" % (sender,airtime,uhr,dur)
+		self['name'].setText(decodeHtml(self.sendung))
 		streamHandlung = handlung+"\n\n"+itxt
 		self['handlung'].setText(streamHandlung)
-		streamName = self['liste'].getCurrent()[0][0]
-		self['name'].setText("Sendung / Thema\n"+decodeHtml(self.sendung))
 		if streamPic:
 			CoverHelper(self['coverArt']).getCover(streamPic)
 
-	def keyYellow(self):
+	def keySort(self):
 		if self.keyLocked:
 			return
-		if self.gF == "1" or self.gF =="6":
-			if self.suchTrigger == "date":
-				self['F3'].setText("Datum")
-				self.suchTrigger = "score"
-			elif self.suchTrigger == "score":
-				self['F3'].setText("Relevanz")
-				self.suchTrigger = "date"
-		else:
+		if not (self.gF == "1" or self.gF =="6"):
 			return
-		self.loadPage()
+		rangelist = [['Relevanz', 'score'], ['Datum', 'date']]
+		self.session.openWithCallback(self.keySortAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
+
+	def keySortAction(self, result):
+		if result:
+			self.suchTrigger = result[1]
+			self.loadPage()
 
 	def keyBlue(self):
 		if self.keyLocked:
@@ -709,7 +661,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 			return
 		else:
 			mediaid = self['liste'].getCurrent()[0][2]
-			url = mainLink+"/play/media/"+mediaid+"?devicetype=tablet&features=flash"
+			url = BASE_URL+"/play/media/"+mediaid+"?devicetype=tablet&features=flash"
 			getPage(url).addCallback(self.getStreams).addErrback(self.dataError)
 
 	def getStreams(self, data):

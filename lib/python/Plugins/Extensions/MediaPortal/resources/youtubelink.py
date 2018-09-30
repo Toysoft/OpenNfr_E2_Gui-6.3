@@ -1,22 +1,22 @@
 ﻿# -*- coding: utf-8 -*-
 
-from Components.config import config
+from config import config_mp
 
 class YoutubeLink(object):
 	def __init__(self, session):
 		self.session = session
 		self._callback = None
 		self.title = ''
-		self.videoPrio = int(config.mediaportal.youtubeprio.value)
+		self.videoPrio = int(config_mp.mediaportal.youtubeprio.value)
 
 	def getLink(self, cb_play, cb_err, title, url, imgurl, album='', artist='', dash=None, fmt_map=None):
-		dash = config.mediaportal.youtubeenabledash.value
+		dash = config_mp.mediaportal.youtubeenabledash.value
 		self._callback = cb_play
 		self.title = title
 		self.imgurl = imgurl
 		self.artist = artist
 		self.album = album
-		if config.mediaportal.sp_use_yt_with_proxy.value in ("rdb", "prz"):
+		if config_mp.mediaportal.sp_use_yt_with_proxy.value in ("rdb", "prz"):
 			url = "http://www.youtube.com/watch?v=" + url
 			from streams import get_stream_link
 			get_stream_link(self.session).check_link(url, self.cbYTLink)

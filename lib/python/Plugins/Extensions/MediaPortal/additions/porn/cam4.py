@@ -41,8 +41,8 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 BASEURL = "https://cam4.com/"
 
-config.mediaportal.cam4_filter = ConfigText(default="all", fixed_size=False)
-default_cover = "file://%s/cam4.png" % (config.mediaportal.iconcachepath.value + "logos")
+config_mp.mediaportal.cam4_filter = ConfigText(default="all", fixed_size=False)
+default_cover = "file://%s/cam4.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 cam4Agent = "Mozilla/5.0 (iPhone; CPU iPhone OS 8_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12A366 Safari/600.1.4"
 
 class cam4GenreScreen(MPScreen):
@@ -57,7 +57,7 @@ class cam4GenreScreen(MPScreen):
 			"yellow": self.keyFilter
 		}, -1)
 
-		self.filter = config.mediaportal.cam4_filter.value
+		self.filter = config_mp.mediaportal.cam4_filter.value
 
 		self['title'] = Label("Cam4.com")
 		self['ContentTitle'] = Label("Genre:")
@@ -94,19 +94,19 @@ class cam4GenreScreen(MPScreen):
 	def keyFilter(self):
 		if self.filter == "all":
 			self.filter = "female"
-			config.mediaportal.cam4_filter.value = "female"
+			config_mp.mediaportal.cam4_filter.value = "female"
 		elif self.filter == "female":
 			self.filter = "male"
-			config.mediaportal.cam4_filter.value = "male"
+			config_mp.mediaportal.cam4_filter.value = "male"
 		elif self.filter == "male":
 			self.filter = "shemale"
-			config.mediaportal.cam4_filter.value = "shemale"
+			config_mp.mediaportal.cam4_filter.value = "shemale"
 		elif self.filter == "shemale":
 			self.filter = "all"
-			config.mediaportal.cam4_filter.value = "all"
+			config_mp.mediaportal.cam4_filter.value = "all"
 
-		config.mediaportal.cam4_filter.save()
-		configfile.save()
+		config_mp.mediaportal.cam4_filter.save()
+		configfile_mp.save()
 		self['F3'].setText(self.filter)
 
 class cam4FilmScreen(MPScreen, ThumbsHelper):
@@ -114,10 +114,10 @@ class cam4FilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		if config.mediaportal.cam4_filter.value == "all":
+		if config_mp.mediaportal.cam4_filter.value == "all":
 			self.filter = ""
 		else:
-			self.filter = config.mediaportal.cam4_filter.value
+			self.filter = config_mp.mediaportal.cam4_filter.value
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 

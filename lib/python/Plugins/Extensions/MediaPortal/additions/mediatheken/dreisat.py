@@ -41,7 +41,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 dreiurl = "http://www.3sat.de"
 baseurl = "http://www.3sat.de/mediathek/"
-default_cover = "file://%s/3sat.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/3sat.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class dreisatGenreScreen(MPScreen, ThumbsHelper):
 
@@ -77,12 +77,12 @@ class dreisatGenreScreen(MPScreen, ThumbsHelper):
 		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
+		self.filmliste.append(("Suche", '', default_cover))
 		self.filmliste.append(("Sendung verpasst!?", '', default_cover))
-		self.filmliste.append(("--- Suche ---", '', default_cover))
 		raw = re.findall('class="mediatheklistbox.*?_hover".*?href="(.*?)".*?img\sclass=.*?MediathekListPic"\salt="(.*?)"\ssrc="(.*?)"', data, re.S)
 		if raw:
 			for (Url, Title, Image) in raw:
-				Image = dreiurl + "%s" % Image
+				Image = dreiurl + Image.replace('161x90','946x532')
 				if not Url.startswith('http'):
 					Url = 'http:' + Url
 				self.filmliste.append((decodeHtml(Title), Url, Image))
@@ -93,7 +93,7 @@ class dreisatGenreScreen(MPScreen, ThumbsHelper):
 		raw = re.findall('class="mediatheklistbox.*?_hover".*?href="(.*?)".*?img\sclass=.*?MediathekListPic"\salt="(.*?)"\ssrc="(.*?)"', data, re.S)
 		if raw:
 			for (Url, Title, Image) in raw:
-				Image = dreiurl + "%s" % Image
+				Image = dreiurl + Image.replace('161x90','946x532')
 				if not Url.startswith('http'):
 					Url = 'http:' + Url
 				self.filmliste.append((decodeHtml(Title), Url, Image))
@@ -113,7 +113,7 @@ class dreisatGenreScreen(MPScreen, ThumbsHelper):
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		if Name == "--- Suche ---":
+		if Name == "Suche":
 			self.suchen()
 		elif Name == 'Sendung verpasst!?':
 			self.session.open(dreisatDateScreen, Link, Name)
@@ -123,7 +123,7 @@ class dreisatGenreScreen(MPScreen, ThumbsHelper):
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '-')
-			Name = "--- Suche ---"
+			Name = "Suche"
 			Link = '%s?mode=suche&query=%s' % (baseurl, self.suchString)
 			self.session.open(dreisatListScreen, Link, Name)
 
@@ -222,15 +222,16 @@ class dreisatListScreen(MPScreen, ThumbsHelper):
 			else:
 				self.lastpage = 0
 				self['page'].setText("%s / 1" % str(self.page+1))
-
 		raw = re.findall('BoxPicture.*?src="(.*?)".*?BoxHeadline.*?href=".*?obj=(.*?)">(.*?)<.*?FloatText.*?href=".*?">(.*?)</a>', data, re.S)
 		if raw:
 			for (Image, id, Title, Handlung) in raw:
-				Image = dreiurl + "%s" % Image
+				Image = dreiurl + "%s" % Image.replace('161x90','946x532')
 				Handlung = Handlung.replace('<b>','').replace('</b>','')
 				self.filmliste.append((decodeHtml(Title), id, Image, Handlung))
-			self.ml.setList(map(self._defaultlistleft, self.filmliste))
-			self.ml.moveToIndex(0)
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_("No videos found!"), None, default_cover, ""))
+		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		self.ml.moveToIndex(0)
 		self.keyLocked = False
 		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page+1, self.lastpage, mode=1, pagefix=-1)
 		self.showInfos()
@@ -261,9 +262,10 @@ class dreisatListScreen(MPScreen, ThumbsHelper):
 		if self.keyLocked:
 			return
 		self.title = self['liste'].getCurrent()[0][0]
-		id = self['liste'].getCurrent()[0][1].replace('amp;','')
-		url = baseurl + "xmlservice/web/beitragsDetails?ak=web&id=%s" % id
-		getPage(url).addCallback(self.getDataStream).addErrback(self.dataError)
+		id = self['liste'].getCurrent()[0][1]
+		if id:
+			url = baseurl + "xmlservice/web/beitragsDetails?ak=web&id=%s" % id.replace('amp;','')
+			getPage(url).addCallback(self.getDataStream).addErrback(self.dataError)
 
 	def getDataStream(self, data):
 		stream = re.findall('basetype="h264_aac_mp4_http_na_na"(?:\sisDownload="false"|)>.<quality>veryhigh</quality>.<url>(http://[tvdl|nrodl|rodl].*?zdf.de.*?.mp4)</url>', data, re.S)

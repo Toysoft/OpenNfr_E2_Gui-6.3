@@ -174,50 +174,53 @@ class ConfigPORNPIN(ConfigInteger):
         def __init__(self, default, len = 4, censor = ""):
                 ConfigSequence.__init__(self, seperator = ":", limits = [(1000, (10**len)-1)], censor_char = censor, default = default)
 
+config_mp.mediaportal = ConfigSubsection()
 config.mediaportal = ConfigSubsection()
 
 # Fake entry fuer die Kategorien
-config.mediaportal.fake_entry = NoSave(ConfigNothing())
+config_mp.mediaportal.fake_entry = NoSave(ConfigNothing())
 
 # EPG Import
-config.mediaportal.epg_enabled = ConfigOnOff(default = False)
-config.mediaportal.epg_runboot = ConfigOnOff(default = False)
-config.mediaportal.epg_wakeupsleep = ConfigOnOff(default = False)
-config.mediaportal.epg_wakeup = ConfigClock(default = calcDefaultStarttime())
-config.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices = [
+config_mp.mediaportal.epg_enabled = ConfigOnOff(default = False)
+config_mp.mediaportal.epg_runboot = ConfigOnOff(default = False)
+config_mp.mediaportal.epg_wakeupsleep = ConfigOnOff(default = False)
+config_mp.mediaportal.epg_wakeup = ConfigClock(default = calcDefaultStarttime())
+config_mp.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choices = [
 		("wakeup", _("Wake up and import")),
 		("skip", _("Skip the import"))
 		])
 
 # Allgemein
-config.mediaportal.version = NoSave(ConfigText(default="2018091201"))
-config.mediaportal.autoupdate = ConfigYesNo(default = True)
+config_mp.mediaportal.version = NoSave(ConfigText(default="2018092703"))
+config.mediaportal.version = NoSave(ConfigText(default="2018092703"))
+config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
+config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 
-config.mediaportal.skinfail = ConfigYesNo(default = False)
+config_mp.mediaportal.skinfail = ConfigYesNo(default = False)
 
-config.mediaportal.retries = ConfigSubsection()
+config_mp.mediaportal.retries = ConfigSubsection()
 
-config.mediaportal.pincode = ConfigPIN(default = 0000)
-config.mediaportal.retries.pincode = ConfigSubsection()
-config.mediaportal.retries.pincode.tries = ConfigInteger(default = 3)
-config.mediaportal.retries.pincode.time = ConfigInteger(default = 0)
+config_mp.mediaportal.pincode = ConfigPIN(default = 0000)
+config_mp.mediaportal.retries.pincode = ConfigSubsection()
+config_mp.mediaportal.retries.pincode.tries = ConfigInteger(default = 3)
+config_mp.mediaportal.retries.pincode.time = ConfigInteger(default = 0)
 
-config.mediaportal.adultpincode = ConfigPORNPIN(default = random.randint(1,999), len = 4)
-if config.mediaportal.adultpincode.value < 1:
-	config.mediaportal.adultpincode.value = random.randint(1,999)
+config_mp.mediaportal.adultpincode = ConfigPORNPIN(default = random.randint(1,999), len = 4)
+if config_mp.mediaportal.adultpincode.value < 1:
+	config_mp.mediaportal.adultpincode.value = random.randint(1,999)
 
-config.mediaportal.retries.adultpin = ConfigSubsection()
-config.mediaportal.retries.adultpin.tries = ConfigInteger(default = 3)
-config.mediaportal.retries.adultpin.time = ConfigInteger(default = 0)
+config_mp.mediaportal.retries.adultpin = ConfigSubsection()
+config_mp.mediaportal.retries.adultpin.tries = ConfigInteger(default = 3)
+config_mp.mediaportal.retries.adultpin.time = ConfigInteger(default = 0)
 
-config.mediaportal.showporn = ConfigYesNo(default = False)
-config.mediaportal.hideporn_startup = ConfigYesNo(default = True)
-config.mediaportal.showuseradditions = ConfigYesNo(default = False)
-config.mediaportal.pinuseradditions = ConfigYesNo(default = False)
-config.mediaportal.ena_suggestions = ConfigYesNo(default = True)
+config_mp.mediaportal.showporn = ConfigYesNo(default = False)
+config_mp.mediaportal.hideporn_startup = ConfigYesNo(default = True)
+config_mp.mediaportal.showuseradditions = ConfigYesNo(default = False)
+config_mp.mediaportal.pinuseradditions = ConfigYesNo(default = False)
+config_mp.mediaportal.ena_suggestions = ConfigYesNo(default = True)
 
-config.mediaportal.animation_coverart = ConfigSelection(default = "mp_crossfade_fast", choices = [("mp_crossfade_fast", _("Crossfade (fast)")),("mp_crossfade_slow", _("Crossfade (slow)"))])
-config.mediaportal.animation_label = ConfigSelection(default = "mp_crossfade_fast", choices = [("mp_crossfade_fast", _("Crossfade (fast)")),("mp_crossfade_slow", _("Crossfade (slow)"))])
+config_mp.mediaportal.animation_coverart = ConfigSelection(default = "mp_crossfade_fast", choices = [("mp_crossfade_fast", _("Crossfade (fast)")),("mp_crossfade_slow", _("Crossfade (slow)"))])
+config_mp.mediaportal.animation_label = ConfigSelection(default = "mp_crossfade_fast", choices = [("mp_crossfade_fast", _("Crossfade (fast)")),("mp_crossfade_slow", _("Crossfade (slow)"))])
 
 skins = []
 if mp_globals.videomode == 2:
@@ -225,7 +228,8 @@ if mp_globals.videomode == 2:
 	for skin in os.listdir("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_1080/"):
 		if os.path.isdir(os.path.join("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_1080/", skin)):
 			skins.append(skin)
-	config.mediaportal.skin2 = ConfigSelection(default = "clean_fhd", choices = skins)
+	config_mp.mediaportal.skin2 = ConfigSelection(default = "clean_fhd", choices = skins)
+	config.mediaportal.skin2 = NoSave(ConfigSelection(default = "clean_fhd", choices = skins))
 	mp_globals.skinFallback = "/clean_fhd"
 else:
 	mp_globals.skinsPath = "/skins_720"
@@ -233,106 +237,107 @@ else:
 		if os.path.isdir(os.path.join("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/", skin)):
 			if skin != "original":
 				skins.append(skin)
-	config.mediaportal.skin2 = ConfigSelection(default = "clean_hd", choices = skins)
+	config_mp.mediaportal.skin2 = ConfigSelection(default = "clean_hd", choices = skins)
+	config.mediaportal.skin2 = NoSave(ConfigSelection(default = "clean_hd", choices = skins))
 	mp_globals.skinFallback = "/clean_hd"
 
-config.mediaportal.skin = NoSave(ConfigText(default=config.mediaportal.skin2.value))
+config_mp.mediaportal.skin = NoSave(ConfigText(default=config_mp.mediaportal.skin2.value))
 
 if mp_globals.covercollection:
-	config.mediaportal.ansicht = ConfigSelection(default = "wall2", choices = [("wall2", _("Wall 2.0")), ("wall", _("Wall")), ("liste", _("List"))])
+	config_mp.mediaportal.ansicht = ConfigSelection(default = "wall2", choices = [("wall2", _("Wall 2.0")), ("wall", _("Wall")), ("liste", _("List"))])
 elif mp_globals.videomode == 2 and mp_globals.isVTi:
-	config.mediaportal.ansicht = ConfigSelection(default = "wall_vti", choices = [("wall_vti", _("Wall VTi")), ("wall", _("Wall")), ("liste", _("List"))])
+	config_mp.mediaportal.ansicht = ConfigSelection(default = "wall_vti", choices = [("wall_vti", _("Wall VTi")), ("wall", _("Wall")), ("liste", _("List"))])
 elif mp_globals.videomode == 2 and mp_globals.fakeScale:
-	config.mediaportal.ansicht = ConfigSelection(default = "wall", choices = [("wall", _("Wall")), ("liste", _("List"))])
+	config_mp.mediaportal.ansicht = ConfigSelection(default = "wall", choices = [("wall", _("Wall")), ("liste", _("List"))])
 elif mp_globals.videomode == 2 and not mp_globals.isDreamOS:
-	config.mediaportal.ansicht = ConfigSelection(default = "liste", choices = [("liste", _("List"))])
+	config_mp.mediaportal.ansicht = ConfigSelection(default = "liste", choices = [("liste", _("List"))])
 else:
 	if mp_globals.isVTi:
-		config.mediaportal.ansicht = ConfigSelection(default = "wall_vti", choices = [("wall_vti", _("Wall VTi")), ("wall", _("Wall")), ("liste", _("List"))])
+		config_mp.mediaportal.ansicht = ConfigSelection(default = "wall_vti", choices = [("wall_vti", _("Wall VTi")), ("wall", _("Wall")), ("liste", _("List"))])
 	else:
-		config.mediaportal.ansicht = ConfigSelection(default = "wall", choices = [("wall", _("Wall")), ("liste", _("List"))])
-config.mediaportal.wallmode = ConfigSelection(default = "color", choices = [("color", _("Color")),("bw", _("Black&White")),("color_zoom", _("Color (Zoom)")),("bw_zoom", _("Black&White (Zoom)"))])
-config.mediaportal.wall2mode = ConfigSelection(default = "color", choices = [("color", _("Color")),("bw", _("Black&White"))])
-config.mediaportal.selektor = ConfigSelection(default = "white", choices = [("blue", _("Blue")),("green", _("Green")),("red", _("Red")),("turkis", _("Aqua")),("white", _("White"))])
-config.mediaportal.use_hls_proxy = ConfigYesNo(default = False)
-config.mediaportal.hls_proxy_ip = ConfigIP(default = [127,0,0,1], auto_jump = True)
-config.mediaportal.hls_proxy_port = ConfigInteger(default = 0, limits = (0,65535))
-config.mediaportal.hls_buffersize = ConfigInteger(default = 32, limits = (1,64))
-config.mediaportal.storagepath = ConfigText(default="/tmp/mediaportal/tmp/", fixed_size=False)
-config.mediaportal.iconcachepath = ConfigText(default="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/", fixed_size=False)
-config.mediaportal.autoplayThreshold = ConfigInteger(default = 50, limits = (1,100))
-config.mediaportal.filter = ConfigSelection(default = "ALL", choices = ["ALL", "Mediathek", "User-additions", "Fun", "NewsDoku", "Sport", "Music", "Porn"])
-config.mediaportal.youtubeenablevp9 = ConfigYesNo(default = False)
-config.mediaportal.youtubeenabledash = ConfigYesNo(default = False)
-config.mediaportal.youtubeprio = ConfigSelection(default = "2", choices = [("0", "360p"),("1", "480p"),("2", "720p"),("3", "1080p"),("4", "1440p"),("5", "2160p")])
-config.mediaportal.videoquali_others = ConfigSelection(default = "2", choices = [("0", _("Low")),("1", _("Medium")),("2", _("High"))])
-config.mediaportal.youtube_max_items_pp = ConfigInteger(default = 50, limits = (50,50))
-config.mediaportal.pornpin = ConfigYesNo(default = True)
-config.mediaportal.pornpin_cache = ConfigSelection(default = "0", choices = [("0", _("never")), ("5", _("5 minutes")), ("15", _("15 minutes")), ("30", _("30 minutes")), ("60", _("60 minutes"))])
-config.mediaportal.kidspin = ConfigYesNo(default = False)
-config.mediaportal.setuppin = ConfigYesNo(default = False)
-config.mediaportal.watchlistpath = ConfigText(default="/etc/enigma2/", fixed_size=False)
-config.mediaportal.sortplugins = ConfigSelection(default = "abc", choices = [("hits", "Hits"), ("abc", "ABC"), ("user", "User")])
-config.mediaportal.pagestyle = ConfigSelection(default="Graphic", choices = ["Graphic", "Text"])
-config.mediaportal.debugMode = ConfigSelection(default="Silent", choices = ["High", "Normal", "Silent"])
-config.mediaportal.font = ConfigSelection(default = "1", choices = [("1", "Mediaportal 1")])
-config.mediaportal.showAsThumb = ConfigYesNo(default = False)
-config.mediaportal.restorelastservice = ConfigSelection(default = "1", choices = [("1", _("after SimplePlayer quits")),("2", _("after MediaPortal quits"))])
-config.mediaportal.backgroundtv = ConfigYesNo(default = False)
-config.mediaportal.minitv = ConfigYesNo(default = True)
+		config_mp.mediaportal.ansicht = ConfigSelection(default = "wall", choices = [("wall", _("Wall")), ("liste", _("List"))])
+config_mp.mediaportal.wallmode = ConfigSelection(default = "color", choices = [("color", _("Color")),("bw", _("Black&White")),("color_zoom", _("Color (Zoom)")),("bw_zoom", _("Black&White (Zoom)"))])
+config_mp.mediaportal.wall2mode = ConfigSelection(default = "color", choices = [("color", _("Color")),("bw", _("Black&White"))])
+config_mp.mediaportal.selektor = ConfigSelection(default = "white", choices = [("blue", _("Blue")),("green", _("Green")),("red", _("Red")),("turkis", _("Aqua")),("white", _("White"))])
+config_mp.mediaportal.use_hls_proxy = ConfigYesNo(default = False)
+config_mp.mediaportal.hls_proxy_ip = ConfigIP(default = [127,0,0,1], auto_jump = True)
+config_mp.mediaportal.hls_proxy_port = ConfigInteger(default = 0, limits = (0,65535))
+config_mp.mediaportal.hls_buffersize = ConfigInteger(default = 32, limits = (1,64))
+config_mp.mediaportal.storagepath = ConfigText(default="/tmp/mediaportal/tmp/", fixed_size=False)
+config_mp.mediaportal.iconcachepath = ConfigText(default="/media/hdd/mediaportal/", fixed_size=False)
+config_mp.mediaportal.autoplayThreshold = ConfigInteger(default = 50, limits = (1,100))
+config_mp.mediaportal.filter = ConfigSelection(default = "ALL", choices = ["ALL", "Mediathek", "User-additions", "Fun", "NewsDoku", "Sport", "Music", "Porn"])
+config.mediaportal.filter = NoSave(ConfigSelection(default = "ALL", choices = ["ALL"]))
+config_mp.mediaportal.youtubeenablevp9 = ConfigYesNo(default = False)
+config_mp.mediaportal.youtubeenabledash = ConfigYesNo(default = False)
+config_mp.mediaportal.youtubeprio = ConfigSelection(default = "2", choices = [("0", "360p"),("1", "480p"),("2", "720p"),("3", "1080p"),("4", "1440p"),("5", "2160p")])
+config_mp.mediaportal.videoquali_others = ConfigSelection(default = "2", choices = [("0", _("Low")),("1", _("Medium")),("2", _("High"))])
+config_mp.mediaportal.youtube_max_items_pp = ConfigInteger(default = 50, limits = (50,50))
+config_mp.mediaportal.pornpin = ConfigYesNo(default = True)
+config_mp.mediaportal.pornpin_cache = ConfigSelection(default = "0", choices = [("0", _("never")), ("5", _("5 minutes")), ("15", _("15 minutes")), ("30", _("30 minutes")), ("60", _("60 minutes"))])
+config_mp.mediaportal.kidspin = ConfigYesNo(default = False)
+config_mp.mediaportal.setuppin = ConfigYesNo(default = False)
+config_mp.mediaportal.watchlistpath = ConfigText(default="/etc/enigma2/", fixed_size=False)
+config_mp.mediaportal.sortplugins = ConfigSelection(default = "abc", choices = [("hits", "Hits"), ("abc", "ABC"), ("user", "User")])
+config_mp.mediaportal.pagestyle = ConfigSelection(default="Graphic", choices = ["Graphic", "Text"])
+config_mp.mediaportal.debugMode = ConfigSelection(default="Silent", choices = ["High", "Normal", "Silent"])
+config_mp.mediaportal.font = ConfigSelection(default = "1", choices = [("1", "Mediaportal 1")])
+config_mp.mediaportal.showAsThumb = ConfigYesNo(default = False)
+config_mp.mediaportal.restorelastservice = ConfigSelection(default = "1", choices = [("1", _("after SimplePlayer quits")),("2", _("after MediaPortal quits"))])
+config_mp.mediaportal.backgroundtv = ConfigYesNo(default = False)
+config_mp.mediaportal.minitv = ConfigYesNo(default = True)
 
 # Konfiguration erfolgt in SimplePlayer
-config.mediaportal.sp_playmode = ConfigSelection(default = "forward", choices = [("forward", _("Forward")),("backward", _("Backward")),("random", _("Random")),("endless", _("Endless"))])
-config.mediaportal.sp_scrsaver = ConfigSelection(default = "off", choices = [("on", _("On")),("off", _("Off")),("automatic", _("Automatic"))])
-config.mediaportal.sp_on_movie_stop = ConfigSelection(default = "quit", choices = [("ask", _("Ask user")), ("quit", _("Return to previous service"))])
-config.mediaportal.sp_on_movie_eof = ConfigSelection(default = "quit", choices = [("ask", _("Ask user")), ("quit", _("Return to previous service")), ("pause", _("Pause movie at end"))])
-config.mediaportal.sp_seekbar_sensibility = ConfigInteger(default = 10, limits = (1,50))
-config.mediaportal.sp_infobar_cover_off = ConfigYesNo(default = False)
-config.mediaportal.sp_use_number_seek = ConfigYesNo(default = True)
-config.mediaportal.sp_pl_number = ConfigInteger(default = 1, limits = (1,99))
-config.mediaportal.sp_use_yt_with_proxy = ConfigSelection(default = "no", choices = [("no", _("No")), ("prz", "with Premiumize"), ("rdb", "with Real-Debrid"), ("proxy", "with a HTTP Proxy")])
-config.mediaportal.sp_on_movie_start = ConfigSelection(default = "start", choices = [("start", _("Start from the beginning")), ("ask", _("Ask user")), ("resume", _("Resume from last position"))])
-config.mediaportal.sp_save_resumecache = ConfigYesNo(default = False)
-config.mediaportal.sp_radio_cover = ConfigSelection(default = "large", choices = [("large", _("large")), ("small", _("small")), ("off", _("off"))])
-config.mediaportal.sp_radio_visualization = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Mode 1")), ("2", _("Mode 2")), ("3", _("Mode 3"))])
-config.mediaportal.sp_radio_bgsaver = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Ken Burns effect")), ("2", _("Just photos")), ("3", _("Black screen"))])
-config.mediaportal.sp_radio_bgsaver_keywords = ConfigText(default="music", fixed_size=False)
-config.mediaportal.yt_proxy_username = ConfigText(default="user!", fixed_size=False)
-config.mediaportal.yt_proxy_password = ConfigPassword(default="pass!", fixed_size=False)
-config.mediaportal.yt_proxy_host = ConfigText(default = "example_proxy.com!", fixed_size = False)
-config.mediaportal.yt_proxy_port = ConfigInteger(default = 8080, limits = (0,65535))
-config.mediaportal.hlsp_proxy_username = ConfigText(default="user!", fixed_size=False)
-config.mediaportal.hlsp_proxy_password = ConfigPassword(default="pass!", fixed_size=False)
-config.mediaportal.hlsp_proxy_host = ConfigText(default = "example_proxy.com!", fixed_size = False)
-config.mediaportal.hlsp_proxy_port = ConfigInteger(default = 8080, limits = (0,65535))
-config.mediaportal.sp_use_hlsp_with_proxy = ConfigSelection(default = "no", choices = [("no", _("No")), ("always", "Use it always"), ("plset", "Set in the playlist")])
+config_mp.mediaportal.sp_playmode = ConfigSelection(default = "forward", choices = [("forward", _("Forward")),("backward", _("Backward")),("random", _("Random")),("endless", _("Endless"))])
+config_mp.mediaportal.sp_scrsaver = ConfigSelection(default = "off", choices = [("on", _("On")),("off", _("Off")),("automatic", _("Automatic"))])
+config_mp.mediaportal.sp_on_movie_stop = ConfigSelection(default = "quit", choices = [("ask", _("Ask user")), ("quit", _("Return to previous service"))])
+config_mp.mediaportal.sp_on_movie_eof = ConfigSelection(default = "quit", choices = [("ask", _("Ask user")), ("quit", _("Return to previous service")), ("pause", _("Pause movie at end"))])
+config_mp.mediaportal.sp_seekbar_sensibility = ConfigInteger(default = 10, limits = (1,50))
+config_mp.mediaportal.sp_infobar_cover_off = ConfigYesNo(default = False)
+config_mp.mediaportal.sp_use_number_seek = ConfigYesNo(default = True)
+config_mp.mediaportal.sp_pl_number = ConfigInteger(default = 1, limits = (1,99))
+config_mp.mediaportal.sp_use_yt_with_proxy = ConfigSelection(default = "no", choices = [("no", _("No")), ("prz", "with Premiumize"), ("rdb", "with Real-Debrid"), ("proxy", "with a HTTP Proxy")])
+config_mp.mediaportal.sp_on_movie_start = ConfigSelection(default = "start", choices = [("start", _("Start from the beginning")), ("ask", _("Ask user")), ("resume", _("Resume from last position"))])
+config_mp.mediaportal.sp_save_resumecache = ConfigYesNo(default = False)
+config_mp.mediaportal.sp_radio_cover = ConfigSelection(default = "large", choices = [("large", _("large")), ("small", _("small")), ("off", _("off"))])
+config_mp.mediaportal.sp_radio_visualization = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Mode 1")), ("2", _("Mode 2")), ("3", _("Mode 3"))])
+config_mp.mediaportal.sp_radio_bgsaver = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Ken Burns effect")), ("2", _("Just photos")), ("3", _("Black screen"))])
+config_mp.mediaportal.sp_radio_bgsaver_keywords = ConfigText(default="music", fixed_size=False)
+config_mp.mediaportal.yt_proxy_username = ConfigText(default="user!", fixed_size=False)
+config_mp.mediaportal.yt_proxy_password = ConfigPassword(default="pass!", fixed_size=False)
+config_mp.mediaportal.yt_proxy_host = ConfigText(default = "example_proxy.com!", fixed_size = False)
+config_mp.mediaportal.yt_proxy_port = ConfigInteger(default = 8080, limits = (0,65535))
+config_mp.mediaportal.hlsp_proxy_username = ConfigText(default="user!", fixed_size=False)
+config_mp.mediaportal.hlsp_proxy_password = ConfigPassword(default="pass!", fixed_size=False)
+config_mp.mediaportal.hlsp_proxy_host = ConfigText(default = "example_proxy.com!", fixed_size = False)
+config_mp.mediaportal.hlsp_proxy_port = ConfigInteger(default = 8080, limits = (0,65535))
+config_mp.mediaportal.sp_use_hlsp_with_proxy = ConfigSelection(default = "no", choices = [("no", _("No")), ("always", "Use it always"), ("plset", "Set in the playlist")])
 
 # premiumize.me
-config.mediaportal.premiumize_use = ConfigYesNo(default = False)
-config.mediaportal.premiumize_username = ConfigText(default="user!", fixed_size=False)
-config.mediaportal.premiumize_password = ConfigPassword(default="pass!", fixed_size=False)
-config.mediaportal.premiumize_proxy_config_url = ConfigText(default="", fixed_size=False)
+config_mp.mediaportal.premiumize_use = ConfigYesNo(default = False)
+config_mp.mediaportal.premiumize_username = ConfigText(default="user!", fixed_size=False)
+config_mp.mediaportal.premiumize_password = ConfigPassword(default="pass!", fixed_size=False)
+config_mp.mediaportal.premiumize_proxy_config_url = ConfigText(default="", fixed_size=False)
 
 # real-debrid.com
-config.mediaportal.realdebrid_use = ConfigYesNo(default = False)
-config.mediaportal.realdebrid_accesstoken = ConfigText(default="", fixed_size=False)
-config.mediaportal.realdebrid_refreshtoken = ConfigText(default="", fixed_size=False)
-config.mediaportal.realdebrid_rclient_id = ConfigText(default="", fixed_size=False)
-config.mediaportal.realdebrid_rclient_secret = ConfigText(default="", fixed_size=False)
+config_mp.mediaportal.realdebrid_use = ConfigYesNo(default = False)
+config_mp.mediaportal.realdebrid_accesstoken = ConfigText(default="", fixed_size=False)
+config_mp.mediaportal.realdebrid_refreshtoken = ConfigText(default="", fixed_size=False)
+config_mp.mediaportal.realdebrid_rclient_id = ConfigText(default="", fixed_size=False)
+config_mp.mediaportal.realdebrid_rclient_secret = ConfigText(default="", fixed_size=False)
 
 # Premium Hosters
-config.mediaportal.premium_color = ConfigSelection(default="0xFFFF00", choices = [("0xFF0000",_("Red")),("0xFFFF00",_("Yellow")),("0x00FF00",_("Green")),("0xFFFFFF",_("White")),("0x00ccff",_("Light Blue")),("0x66ff99",_("Light Green"))])
+config_mp.mediaportal.premium_color = ConfigSelection(default="0xFFFF00", choices = [("0xFF0000",_("Red")),("0xFFFF00",_("Yellow")),("0x00FF00",_("Green")),("0xFFFFFF",_("White")),("0x00ccff",_("Light Blue")),("0x66ff99",_("Light Green"))])
 
 # Userchannels Help
-config.mediaportal.show_userchan_help = ConfigYesNo(default = True)
+config_mp.mediaportal.show_userchan_help = ConfigYesNo(default = True)
 
 # SimpleList
-config.mediaportal.simplelist_gcoversupp = ConfigYesNo(default = True)
+config_mp.mediaportal.simplelist_gcoversupp = ConfigYesNo(default = True)
 
 # Radio
-config.mediaportal.is_radio = ConfigYesNo(default=False)
+config_mp.mediaportal.is_radio = ConfigYesNo(default=False)
 
-mp_globals.bsp = bsdcd(bsdcd(bsdcd(decrypt('4bb1Wtzc3NyT8nw+AI3hYvbEIQBESnieenhZiTdgwmp2jdYDGj6zREKyQchZ9UL7fo5wA3je9Bq8BbDG8s4FdPAMtWRRUIhaiydveD3TbOPePc5oI+37hw==', CONFIG, 256))))
 mp_globals.yt_a_backup = bsdcd(bsdcd(bsdcd(decrypt('kj8yV97e3t4fDPdo3ca07O6kKsuY9oZkvUqpBPJPkvzRYyzeAuLofAra3HKWsJmhvQ8EsGMDfnziGjqj3047WS8bojGewMj+in3daO4hlTSA6GUSwft7LNFdibC0hxTppR1VLXaRvKs=', CONFIG, 256))))
 mp_globals.yt_a = bsdcd(bsdcd(bsdcd(decrypt('UZaWW4SEhITpj4ekRW9S5/qupnllwhRtf/E+k6BPucAMPts9j6xKJy3M1asKr3H0enK1QKFMvP03B4TW3vmWlKoZC9nKU1SY+rAHh+D/X3g0GyhgaRZKh0+mRaOrbnl8c7jfeYEHgU8=', CONFIG, 256))))
 mp_globals.yt_i = bsdcd(bsdcd(bsdcd(decrypt('9ZKWW7W1tbVrxwsoRtc68/x46WsllFgLly3gXAz9y30Kb3u8wQDv8IkMeEhBLq6qmIVUnRR4vDmhyKaEI+yXGKYbP6uSyF1VIml94KxsPWYbgZ1jjBY8poOZAJJlqevbmo5e+jhzSZD/yiSJZB++WB7Qu6w4uHyccvAROJJdugm+sNhmyMGn74pTzYVtvetM9qJBNd3ddSYS/8qagLVxmJa0ahrVsJxVDFEQf0JeQtjGq/+j21YpZUiF+LQ9BzT8dq8p1J5YGBlzXvrDXpBWpcFMorw=', CONFIG, 256))))
@@ -378,7 +383,7 @@ for x in conf.getroot():
 						exec("from "+modfile.split('.')[1]+" import *")
 					else:
 						exec("from additions."+modfile+" import *")
-					exec("config.mediaportal."+x.get("confopt")+" = ConfigYesNo(default = "+x.get("default")+")")
+					exec("config_mp.mediaportal."+x.get("confopt")+" = ConfigYesNo(default = "+x.get("default")+")")
 
 xmlpath = resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/additions/")
 for file in os.listdir(xmlpath):
@@ -392,13 +397,16 @@ for file in os.listdir(xmlpath):
 				for x in root:
 					if x.tag == "plugin":
 						if x.get("type") == "mod":
-							modfile = x.get("modfile")
-							if fileExists('/etc/enigma2/mp_override/'+modfile.split('.')[1]+'.py'):
-								sys.path.append('/etc/enigma2/mp_override')
-								exec("from "+modfile.split('.')[1]+" import *")
-							else:
-								exec("from additions."+modfile+" import *")
-							exec("config.mediaportal."+x.get("confopt")+" = ConfigYesNo(default = "+x.get("default")+")")
+							try:
+								modfile = x.get("modfile")
+								if fileExists('/etc/enigma2/mp_override/'+modfile.split('.')[1]+'.py'):
+									sys.path.append('/etc/enigma2/mp_override')
+									exec("from "+modfile.split('.')[1]+" import *")
+								else:
+									exec("from additions."+modfile+" import *")
+								exec("config_mp.mediaportal."+x.get("confopt")+" = ConfigYesNo(default = "+x.get("default")+")")
+							except:
+								pass
 
 class CheckPathes:
 
@@ -408,48 +416,48 @@ class CheckPathes:
 
 	def checkPathes(self, cb):
 		self.cb = cb
-		res, msg = SimplePlaylistIO.checkPath(config.mediaportal.watchlistpath.value, '', True)
+		res, msg = SimplePlaylistIO.checkPath(config_mp.mediaportal.watchlistpath.value, '', True)
 		if not res:
 			self.session.openWithCallback(self._callback, MessageBoxExt, msg, MessageBoxExt.TYPE_ERROR)
 
-		res, msg = SimplePlaylistIO.checkPath(config.mediaportal.storagepath.value, '', True)
+		res, msg = SimplePlaylistIO.checkPath(config_mp.mediaportal.storagepath.value, '', True)
 		if not res:
 			self.session.openWithCallback(self._callback, MessageBoxExt, msg, MessageBoxExt.TYPE_ERROR)
 
-		if mp_globals.pluginPath in config.mediaportal.iconcachepath.value:
-			config.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
-			config.mediaportal.iconcachepath.save()
-			configfile.save()
-		elif "/tmp/" in config.mediaportal.iconcachepath.value:
-			config.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
-			config.mediaportal.iconcachepath.save()
-			configfile.save()
-		elif "/usr/lib/enigma2/" in config.mediaportal.iconcachepath.value:
-			config.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
-			config.mediaportal.iconcachepath.save()
-			configfile.save()
-		elif "/var/volatile/" in config.mediaportal.iconcachepath.value:
-			config.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
-			config.mediaportal.iconcachepath.save()
-			configfile.save()
-		elif "/var/share/" in config.mediaportal.iconcachepath.value:
-			config.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
-			config.mediaportal.iconcachepath.save()
-			configfile.save()
+		if mp_globals.pluginPath in config_mp.mediaportal.iconcachepath.value:
+			config_mp.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
+			config_mp.mediaportal.iconcachepath.save()
+			configfile_mp.save()
+		elif "/tmp/" in config_mp.mediaportal.iconcachepath.value:
+			config_mp.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
+			config_mp.mediaportal.iconcachepath.save()
+			configfile_mp.save()
+		elif "/usr/lib/enigma2/" in config_mp.mediaportal.iconcachepath.value:
+			config_mp.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
+			config_mp.mediaportal.iconcachepath.save()
+			configfile_mp.save()
+		elif "/var/volatile/" in config_mp.mediaportal.iconcachepath.value:
+			config_mp.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
+			config_mp.mediaportal.iconcachepath.save()
+			configfile_mp.save()
+		elif "/var/share/" in config_mp.mediaportal.iconcachepath.value:
+			config_mp.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
+			config_mp.mediaportal.iconcachepath.save()
+			configfile_mp.save()
 
-		res, msg = SimplePlaylistIO.checkPath(config.mediaportal.iconcachepath.value + "icons/", '', True)
+		res, msg = SimplePlaylistIO.checkPath(config_mp.mediaportal.iconcachepath.value + "icons/", '', True)
 		if not res:
 			self.session.openWithCallback(self._callback, MessageBoxExt, msg, MessageBoxExt.TYPE_ERROR)
 
-		res, msg = SimplePlaylistIO.checkPath(config.mediaportal.iconcachepath.value + "icons_bw/", '', True)
+		res, msg = SimplePlaylistIO.checkPath(config_mp.mediaportal.iconcachepath.value + "icons_bw/", '', True)
 		if not res:
 			self.session.openWithCallback(self._callback, MessageBoxExt, msg, MessageBoxExt.TYPE_ERROR)
 
-		res, msg = SimplePlaylistIO.checkPath(config.mediaportal.iconcachepath.value + "icons_zoom/", '', True)
+		res, msg = SimplePlaylistIO.checkPath(config_mp.mediaportal.iconcachepath.value + "icons_zoom/", '', True)
 		if not res:
 			self.session.openWithCallback(self._callback, MessageBoxExt, msg, MessageBoxExt.TYPE_ERROR)
 
-		res, msg = SimplePlaylistIO.checkPath(config.mediaportal.iconcachepath.value + "logos/", '', True)
+		res, msg = SimplePlaylistIO.checkPath(config_mp.mediaportal.iconcachepath.value + "logos/", '', True)
 		if not res:
 			self.session.openWithCallback(self._callback, MessageBoxExt, msg, MessageBoxExt.TYPE_ERROR)
 
@@ -469,7 +477,7 @@ class PinCheck:
 
 	def pinEntered(self):
 		self.pin_entered = True
-		self.timer.start(60000*int(config.mediaportal.pornpin_cache.value), 1)
+		self.timer.start(60000*int(config_mp.mediaportal.pornpin_cache.value), 1)
 
 	def lock(self):
 		self.pin_entered = False
@@ -482,9 +490,9 @@ class CheckPremiumize:
 		self.session = session
 
 	def premiumize(self):
-		if config.mediaportal.premiumize_use.value:
-			self.puser = config.mediaportal.premiumize_username.value
-			self.ppass = config.mediaportal.premiumize_password.value
+		if config_mp.mediaportal.premiumize_use.value:
+			self.puser = config_mp.mediaportal.premiumize_username.value
+			self.ppass = config_mp.mediaportal.premiumize_password.value
 			url = "https://api.premiumize.me/pm-api/v1.php?method=accountstatus&params[login]=%s&params[pass]=%s" % (self.puser, self.ppass)
 			r_getPage(url, timeout=15).addCallback(self.premiumizeData).addErrback(self.dataError)
 		else:
@@ -505,7 +513,7 @@ class CheckPremiumize:
 
 	def premiumizeProxyConfig(self, msgbox=True):
 		return
-		url = config.mediaportal.premiumize_proxy_config_url.value
+		url = config_mp.mediaportal.premiumize_proxy_config_url.value
 		if re.search('^https://.*?\.pac', url):
 			r_getPage(url, method="GET", timeout=15).addCallback(self.premiumizeProxyData, msgbox).addErrback(self.dataError)
 		else:
@@ -542,7 +550,7 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			f.close()
 
 		self["hidePig"] = Boolean()
-		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
+		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 
 		Screen.__init__(self, session)
 
@@ -556,18 +564,18 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			for skin in os.listdir("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_1080/"):
 				if os.path.isdir(os.path.join("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_1080/", skin)):
 					skins.append(skin)
-			config.mediaportal.skin2.setChoices(skins, "clean_fhd")
+			config_mp.mediaportal.skin2.setChoices(skins, "clean_fhd")
 		else:
 			mp_globals.skinsPath = "/skins_720"
 			for skin in os.listdir("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/"):
 				if os.path.isdir(os.path.join("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/", skin)):
 					skins.append(skin)
-			config.mediaportal.skin2.setChoices(skins, "clean_hd")
+			config_mp.mediaportal.skin2.setChoices(skins, "clean_hd")
 
 		self._getConfig()
 
-		if config.mediaportal.adultpincode.value < 1:
-			config.mediaportal.adultpincode.value = random.randint(1,999)
+		if config_mp.mediaportal.adultpincode.value < 1:
+			config_mp.mediaportal.adultpincode.value = random.randint(1,999)
 
 		self['title'] = Label(_("Setup"))
 		self['F1'] = Label("Premium")
@@ -592,7 +600,7 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			self.configlist.append(getConfigListEntry(400 * "¯", ))
 
 	def _spacer(self):
-		self.configlist.append(getConfigListEntry("", config.mediaportal.fake_entry, False))
+		self.configlist.append(getConfigListEntry("", config_mp.mediaportal.fake_entry, False))
 
 	def _getConfig(self):
 		self.configlist = []
@@ -606,93 +614,93 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		### Allgemein
 		self.configlist.append(getConfigListEntry(_("GENERAL"), ))
 		self._separator()
-		self.configlist.append(getConfigListEntry(_("Automatic Update Check:"), config.mediaportal.autoupdate, False))
-		self.configlist.append(getConfigListEntry(_("Mainview Style:"), config.mediaportal.ansicht, True))
-		if config.mediaportal.ansicht.value == "wall":
-			self.configlist.append(getConfigListEntry(_("Wall Mode:"), config.mediaportal.wallmode, True))
-		if config.mediaportal.ansicht.value == "wall2":
-			self.configlist.append(getConfigListEntry(_("Wall 2.0 Mode:"), config.mediaportal.wall2mode, False))
-		if (config.mediaportal.ansicht.value == "wall" or config.mediaportal.ansicht.value == "wall2" or config.mediaportal.ansicht.value == "wall_vti"):
-			self.configlist.append(getConfigListEntry(_("Wall-Selector-Color:"), config.mediaportal.selektor, False))
-			self.configlist.append(getConfigListEntry(_("Page Display Style:"), config.mediaportal.pagestyle, False))
-		self.configlist.append(getConfigListEntry(_("Skin:"), config.mediaportal.skin2, False))
-		#self.configlist.append(getConfigListEntry(_("ShowAsThumb as Default:"), config.mediaportal.showAsThumb, False))
-		self.configlist.append(getConfigListEntry(_("Disable Background-TV:"), config.mediaportal.backgroundtv, True))
-		if not config.mediaportal.backgroundtv.value:
-			self.configlist.append(getConfigListEntry(_("Restore last service:"), config.mediaportal.restorelastservice, False))
-			self.configlist.append(getConfigListEntry(_("Disable Mini-TV:"), config.mediaportal.minitv, False))
-		self.configlist.append(getConfigListEntry(_("Enable search suggestions:"), config.mediaportal.ena_suggestions, False))
+		self.configlist.append(getConfigListEntry(_("Automatic Update Check:"), config_mp.mediaportal.autoupdate, False))
+		self.configlist.append(getConfigListEntry(_("Mainview Style:"), config_mp.mediaportal.ansicht, True))
+		if config_mp.mediaportal.ansicht.value == "wall":
+			self.configlist.append(getConfigListEntry(_("Wall Mode:"), config_mp.mediaportal.wallmode, True))
+		if config_mp.mediaportal.ansicht.value == "wall2":
+			self.configlist.append(getConfigListEntry(_("Wall 2.0 Mode:"), config_mp.mediaportal.wall2mode, False))
+		if (config_mp.mediaportal.ansicht.value == "wall" or config_mp.mediaportal.ansicht.value == "wall2" or config_mp.mediaportal.ansicht.value == "wall_vti"):
+			self.configlist.append(getConfigListEntry(_("Wall-Selector-Color:"), config_mp.mediaportal.selektor, False))
+			self.configlist.append(getConfigListEntry(_("Page Display Style:"), config_mp.mediaportal.pagestyle, False))
+		self.configlist.append(getConfigListEntry(_("Skin:"), config_mp.mediaportal.skin2, False))
+		#self.configlist.append(getConfigListEntry(_("ShowAsThumb as Default:"), config_mp.mediaportal.showAsThumb, False))
+		self.configlist.append(getConfigListEntry(_("Disable Background-TV:"), config_mp.mediaportal.backgroundtv, True))
+		if not config_mp.mediaportal.backgroundtv.value:
+			self.configlist.append(getConfigListEntry(_("Restore last service:"), config_mp.mediaportal.restorelastservice, False))
+			self.configlist.append(getConfigListEntry(_("Disable Mini-TV:"), config_mp.mediaportal.minitv, False))
+		self.configlist.append(getConfigListEntry(_("Enable search suggestions:"), config_mp.mediaportal.ena_suggestions, False))
 		if mp_globals.animations:
-			self.configlist.append(getConfigListEntry(_("Coverart animation")+":", config.mediaportal.animation_coverart, False))
-			self.configlist.append(getConfigListEntry(_("Label animation")+":", config.mediaportal.animation_label, False))
+			self.configlist.append(getConfigListEntry(_("Coverart animation")+":", config_mp.mediaportal.animation_coverart, False))
+			self.configlist.append(getConfigListEntry(_("Label animation")+":", config_mp.mediaportal.animation_label, False))
 		self._spacer()
 		self.configlist.append(getConfigListEntry(_("YOUTH PROTECTION"), ))
 		self._separator()
-		self.configlist.append(getConfigListEntry(_("Setup PIN:"), config.mediaportal.pincode, False))
-		self.configlist.append(getConfigListEntry(_("Setup PIN Query:"), config.mediaportal.setuppin, False))
-		self.configlist.append(getConfigListEntry(_("Kids PIN Query:"), config.mediaportal.kidspin, False))
-		self.configlist.append(getConfigListEntry(_("Adult PIN:"), config.mediaportal.adultpincode, False))
-		self.configlist.append(getConfigListEntry(_("Adult PIN Query:"), config.mediaportal.pornpin, False))
-		self.configlist.append(getConfigListEntry(_("Remember Adult PIN:"), config.mediaportal.pornpin_cache, False))
-		self.configlist.append(getConfigListEntry(_("Auto hide adult section on startup:"), config.mediaportal.hideporn_startup,False))
+		self.configlist.append(getConfigListEntry(_("Setup PIN:"), config_mp.mediaportal.pincode, False))
+		self.configlist.append(getConfigListEntry(_("Setup PIN Query:"), config_mp.mediaportal.setuppin, False))
+		self.configlist.append(getConfigListEntry(_("Kids PIN Query:"), config_mp.mediaportal.kidspin, False))
+		self.configlist.append(getConfigListEntry(_("Adult PIN:"), config_mp.mediaportal.adultpincode, False))
+		self.configlist.append(getConfigListEntry(_("Adult PIN Query:"), config_mp.mediaportal.pornpin, False))
+		self.configlist.append(getConfigListEntry(_("Remember Adult PIN:"), config_mp.mediaportal.pornpin_cache, False))
+		self.configlist.append(getConfigListEntry(_("Auto hide adult section on startup:"), config_mp.mediaportal.hideporn_startup,False))
 		self._spacer()
 		self.configlist.append(getConfigListEntry(_("OTHER"), ))
 		self._separator()
-		self.configlist.append(getConfigListEntry(_("Use HLS-Player:"), config.mediaportal.use_hls_proxy, True))
-		if config.mediaportal.use_hls_proxy.value:
-			self.configlist.append(getConfigListEntry(_("HLS-Player buffersize [MB]:"), config.mediaportal.hls_buffersize, False))
-			#self.configlist.append(getConfigListEntry(_("HLS-Player IP:"), config.mediaportal.hls_proxy_ip, False))
-			#self.configlist.append(getConfigListEntry(_("HLS-Player Port:"), config.mediaportal.hls_proxy_port, False))
-			self.configlist.append(getConfigListEntry(_('Use HLS-Player Proxy:'), config.mediaportal.sp_use_hlsp_with_proxy, False))
-			self.configlist.append(getConfigListEntry(_("HLSP-HTTP-Proxy Host or IP:"), config.mediaportal.hlsp_proxy_host, False))
-			self.configlist.append(getConfigListEntry(_("HLSP-Proxy Port:"), config.mediaportal.hlsp_proxy_port, False))
-			self.configlist.append(getConfigListEntry(_("HLSP-Proxy username:"), config.mediaportal.hlsp_proxy_username, False))
-			self.configlist.append(getConfigListEntry(_("HLSP-Proxy password:"), config.mediaportal.hlsp_proxy_password, False))
-		self.configlist.append(getConfigListEntry(_("Temporary Cachepath:"), config.mediaportal.storagepath, False))
-		self.configlist.append(getConfigListEntry(_("Icon Cachepath:"), config.mediaportal.iconcachepath, False))
-		self.configlist.append(getConfigListEntry(_("Videoquality:"), config.mediaportal.videoquali_others, False))
-		self.configlist.append(getConfigListEntry(_("Watchlist/Playlist/Userchan path:"), config.mediaportal.watchlistpath, False))
+		self.configlist.append(getConfigListEntry(_("Use HLS-Player:"), config_mp.mediaportal.use_hls_proxy, True))
+		if config_mp.mediaportal.use_hls_proxy.value:
+			self.configlist.append(getConfigListEntry(_("HLS-Player buffersize [MB]:"), config_mp.mediaportal.hls_buffersize, False))
+			#self.configlist.append(getConfigListEntry(_("HLS-Player IP:"), config_mp.mediaportal.hls_proxy_ip, False))
+			#self.configlist.append(getConfigListEntry(_("HLS-Player Port:"), config_mp.mediaportal.hls_proxy_port, False))
+			self.configlist.append(getConfigListEntry(_('Use HLS-Player Proxy:'), config_mp.mediaportal.sp_use_hlsp_with_proxy, False))
+			self.configlist.append(getConfigListEntry(_("HLSP-HTTP-Proxy Host or IP:"), config_mp.mediaportal.hlsp_proxy_host, False))
+			self.configlist.append(getConfigListEntry(_("HLSP-Proxy Port:"), config_mp.mediaportal.hlsp_proxy_port, False))
+			self.configlist.append(getConfigListEntry(_("HLSP-Proxy username:"), config_mp.mediaportal.hlsp_proxy_username, False))
+			self.configlist.append(getConfigListEntry(_("HLSP-Proxy password:"), config_mp.mediaportal.hlsp_proxy_password, False))
+		self.configlist.append(getConfigListEntry(_("Temporary Cachepath:"), config_mp.mediaportal.storagepath, False))
+		self.configlist.append(getConfigListEntry(_("Icon Cachepath:"), config_mp.mediaportal.iconcachepath, False))
+		self.configlist.append(getConfigListEntry(_("Videoquality:"), config_mp.mediaportal.videoquali_others, False))
+		self.configlist.append(getConfigListEntry(_("Watchlist/Playlist/Userchan path:"), config_mp.mediaportal.watchlistpath, False))
 		self._spacer()
 		self.configlist.append(getConfigListEntry(_("YOUTUBE"), ))
 		self._separator()
-		self.configlist.append(getConfigListEntry(_("Highest resolution for playback:"), config.mediaportal.youtubeprio, False))
-		self.configlist.append(getConfigListEntry(_("Enable DASH format:"), config.mediaportal.youtubeenabledash, True))
-		if config.mediaportal.youtubeenabledash.value:
-			self.configlist.append(getConfigListEntry(_("Enable VP9 codec:"), config.mediaportal.youtubeenablevp9, False))
-		#self.configlist.append(getConfigListEntry(_("Max. count results/page:"), config.mediaportal.youtube_max_items_pp, False))
-		self.configlist.append(getConfigListEntry(_("Show USER-Channels Help:"), config.mediaportal.show_userchan_help, False))
-		self.configlist.append(getConfigListEntry(_('Use Proxy:'), config.mediaportal.sp_use_yt_with_proxy, True))
-		if config.mediaportal.sp_use_yt_with_proxy.value == "proxy":
-			self.configlist.append(getConfigListEntry(_("HTTP-Proxy Host or IP:"), config.mediaportal.yt_proxy_host, False))
-			self.configlist.append(getConfigListEntry(_("HTTP-Proxy Port:"), config.mediaportal.yt_proxy_port, False))
-			self.configlist.append(getConfigListEntry(_("HTTP-Proxy username:"), config.mediaportal.yt_proxy_username, False))
-			self.configlist.append(getConfigListEntry(_("HTTP-Proxy password:"), config.mediaportal.yt_proxy_password, False))
+		self.configlist.append(getConfigListEntry(_("Highest resolution for playback:"), config_mp.mediaportal.youtubeprio, False))
+		self.configlist.append(getConfigListEntry(_("Enable DASH format:"), config_mp.mediaportal.youtubeenabledash, True))
+		if config_mp.mediaportal.youtubeenabledash.value:
+			self.configlist.append(getConfigListEntry(_("Enable VP9 codec:"), config_mp.mediaportal.youtubeenablevp9, False))
+		#self.configlist.append(getConfigListEntry(_("Max. count results/page:"), config_mp.mediaportal.youtube_max_items_pp, False))
+		self.configlist.append(getConfigListEntry(_("Show USER-Channels Help:"), config_mp.mediaportal.show_userchan_help, False))
+		self.configlist.append(getConfigListEntry(_('Use Proxy:'), config_mp.mediaportal.sp_use_yt_with_proxy, True))
+		if config_mp.mediaportal.sp_use_yt_with_proxy.value == "proxy":
+			self.configlist.append(getConfigListEntry(_("HTTP-Proxy Host or IP:"), config_mp.mediaportal.yt_proxy_host, False))
+			self.configlist.append(getConfigListEntry(_("HTTP-Proxy Port:"), config_mp.mediaportal.yt_proxy_port, False))
+			self.configlist.append(getConfigListEntry(_("HTTP-Proxy username:"), config_mp.mediaportal.yt_proxy_username, False))
+			self.configlist.append(getConfigListEntry(_("HTTP-Proxy password:"), config_mp.mediaportal.yt_proxy_password, False))
 		#self._spacer()
 		#self.configlist.append(getConfigListEntry("MP-EPG-IMPORTER", ))
 		#self._separator()
-		#self.configlist.append(getConfigListEntry(_("Enable import:"), config.mediaportal.epg_enabled, True))
-		#if config.mediaportal.epg_enabled.value:
-		#	self.configlist.append(getConfigListEntry(_("Automatic start time:"), config.mediaportal.epg_wakeup, False))
-		#	self.configlist.append(getConfigListEntry(_("Standby at startup:"), config.mediaportal.epg_wakeupsleep, False))
-		#	self.configlist.append(getConfigListEntry(_("When in deep standby:"), config.mediaportal.epg_deepstandby, False))
-		#	self.configlist.append(getConfigListEntry(_("Start import after booting up:"), config.mediaportal.epg_runboot, False))
+		#self.configlist.append(getConfigListEntry(_("Enable import:"), config_mp.mediaportal.epg_enabled, True))
+		#if config_mp.mediaportal.epg_enabled.value:
+		#	self.configlist.append(getConfigListEntry(_("Automatic start time:"), config_mp.mediaportal.epg_wakeup, False))
+		#	self.configlist.append(getConfigListEntry(_("Standby at startup:"), config_mp.mediaportal.epg_wakeupsleep, False))
+		#	self.configlist.append(getConfigListEntry(_("When in deep standby:"), config_mp.mediaportal.epg_deepstandby, False))
+		#	self.configlist.append(getConfigListEntry(_("Start import after booting up:"), config_mp.mediaportal.epg_runboot, False))
 		self._spacer()
 		self.configlist.append(getConfigListEntry("PREMIUMIZE.ME", ))
 		self._separator()
-		self.configlist.append(getConfigListEntry(_("Activate premiumize.me:"), config.mediaportal.premiumize_use, True))
-		if config.mediaportal.premiumize_use.value:
-			self.configlist.append(getConfigListEntry(_("Customer ID:"), config.mediaportal.premiumize_username, False))
-			self.configlist.append(getConfigListEntry(_("PIN:"), config.mediaportal.premiumize_password, False))
-			#self.configlist.append(getConfigListEntry(_("Autom. Proxy-Config.-URL:"), config.mediaportal.premiumize_proxy_config_url, False))
+		self.configlist.append(getConfigListEntry(_("Activate premiumize.me:"), config_mp.mediaportal.premiumize_use, True))
+		if config_mp.mediaportal.premiumize_use.value:
+			self.configlist.append(getConfigListEntry(_("Customer ID:"), config_mp.mediaportal.premiumize_username, False))
+			self.configlist.append(getConfigListEntry(_("PIN:"), config_mp.mediaportal.premiumize_password, False))
+			#self.configlist.append(getConfigListEntry(_("Autom. Proxy-Config.-URL:"), config_mp.mediaportal.premiumize_proxy_config_url, False))
 		self._spacer()
 		self.configlist.append(getConfigListEntry("REAL-DEBRID.COM", ))
 		self._separator()
-		self.configlist.append(getConfigListEntry(_("Activate Real-Debrid.com:"), config.mediaportal.realdebrid_use, True))
-		if config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value:
+		self.configlist.append(getConfigListEntry(_("Activate Real-Debrid.com:"), config_mp.mediaportal.realdebrid_use, True))
+		if config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value:
 			self._spacer()
 			self.configlist.append(getConfigListEntry("PREMIUM", ))
 			self._separator()
-			self.configlist.append(getConfigListEntry(_("Streammarkercolor:"), config.mediaportal.premium_color, False))
+			self.configlist.append(getConfigListEntry(_("Streammarkercolor:"), config_mp.mediaportal.premium_color, False))
 
 		conf = xml.etree.cElementTree.parse(CONFIG)
 		for x in conf.getroot():
@@ -703,10 +711,10 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 						if x.get("type") == "mod":
 							modfile = x.get("modfile")
 							gz = x.get("gz")
-							if not config.mediaportal.showuseradditions.value and gz == "1":
+							if not config_mp.mediaportal.showuseradditions.value and gz == "1":
 								pass
 							else:
-								exec("self."+x.get("confcat")+".append(getConfigListEntry(\""+x.get("name").replace("&amp;","&")+"\", config.mediaportal."+x.get("confopt")+", False))")
+								exec("self."+x.get("confcat")+".append(getConfigListEntry(\""+x.get("name").replace("&amp;","&")+"\", config_mp.mediaportal."+x.get("confopt")+", False))")
 
 		xmlpath = resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/additions/")
 		for file in os.listdir(xmlpath):
@@ -720,13 +728,15 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 						for x in root:
 							if x.tag == "plugin":
 								if x.get("type") == "mod":
-									modfile = x.get("modfile")
-									gz = x.get("gz")
-									if not config.mediaportal.showuseradditions.value and gz == "1":
+									try:
+										modfile = x.get("modfile")
+										gz = x.get("gz")
+										if not config_mp.mediaportal.showuseradditions.value and gz == "1":
+											pass
+										else:
+											exec("self."+x.get("confcat")+".append(getConfigListEntry(\""+x.get("name").replace("&amp;","&")+"\", config_mp.mediaportal."+x.get("confopt")+", False))")
+									except:
 										pass
-									else:
-										exec("self."+x.get("confcat")+".append(getConfigListEntry(\""+x.get("name").replace("&amp;","&")+"\", config.mediaportal."+x.get("confopt")+", False))")
-
 		self._spacer()
 		self.configlist.append(getConfigListEntry(_("LIBRARIES"), ))
 		self._separator()
@@ -762,7 +772,7 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		for x in self.music:
 			self.configlist.append((_("Show ")+x[0]+":",x[1], False))
 
-		if config.mediaportal.showporn.value:
+		if config_mp.mediaportal.showporn.value:
 			self._spacer()
 			self.configlist.append(getConfigListEntry(_("PORN"), ))
 			self._separator()
@@ -773,7 +783,7 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		test = resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/additions/useradditions/")
 
 		if len(os.listdir(test)) > 2:
-			if config.mediaportal.showuseradditions.value:
+			if config_mp.mediaportal.showuseradditions.value:
 				self._spacer()
 				self.configlist.append(getConfigListEntry(_("USER-ADDITIONS"), ))
 				self._separator()
@@ -784,9 +794,9 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		self._spacer()
 		self.configlist.append(getConfigListEntry("DEBUG", ))
 		self._separator()
-		self.configlist.append(getConfigListEntry("Debug-Mode:", config.mediaportal.debugMode, False))
+		self.configlist.append(getConfigListEntry("Debug-Mode:", config_mp.mediaportal.debugMode, False))
 		if len(os.listdir(test)) > 2:
-			self.configlist.append(getConfigListEntry(_("Activate User-additions:"), config.mediaportal.showuseradditions, False))
+			self.configlist.append(getConfigListEntry(_("Activate User-additions:"), config_mp.mediaportal.showuseradditions, False))
 
 		self["config"].list = self.configlist
 		self["config"].setList(self.configlist)
@@ -802,28 +812,28 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 	def keyOK(self):
 		if self["config"].current:
 			self["config"].current[1].onDeselect(self.session)
-		if config.mediaportal.watchlistpath.value[0] != '/':
-			config.mediaportal.watchlistpath.value = '/' + config.mediaportal.watchlistpath.value
-		if config.mediaportal.watchlistpath.value[-1] != '/':
-			config.mediaportal.watchlistpath.value = config.mediaportal.watchlistpath.value + '/'
-		if config.mediaportal.storagepath.value[0] != '/':
-			config.mediaportal.storagepath.value = '/' + config.mediaportal.storagepath.value
-		if config.mediaportal.storagepath.value[-1] != '/':
-			config.mediaportal.storagepath.value = config.mediaportal.storagepath.value + '/'
-		if config.mediaportal.storagepath.value[-4:] != 'tmp/':
-			config.mediaportal.storagepath.value = config.mediaportal.storagepath.value + 'tmp/'
-		if config.mediaportal.iconcachepath.value[0] != '/':
-			config.mediaportal.iconcachepath.value = '/' + config.mediaportal.iconcachepath.value
-		if config.mediaportal.iconcachepath.value[-1] != '/':
-			config.mediaportal.iconcachepath.value = config.mediaportal.iconcachepath.value + '/'
-		if (config.mediaportal.showporn.value == False and config.mediaportal.filter.value == 'Porn'):
-			config.mediaportal.filter.value = 'ALL'
-		if (config.mediaportal.showuseradditions.value == False and config.mediaportal.filter.value == 'User-additions'):
-			config.mediaportal.filter.value = 'ALL'
+		if config_mp.mediaportal.watchlistpath.value[0] != '/':
+			config_mp.mediaportal.watchlistpath.value = '/' + config_mp.mediaportal.watchlistpath.value
+		if config_mp.mediaportal.watchlistpath.value[-1] != '/':
+			config_mp.mediaportal.watchlistpath.value = config_mp.mediaportal.watchlistpath.value + '/'
+		if config_mp.mediaportal.storagepath.value[0] != '/':
+			config_mp.mediaportal.storagepath.value = '/' + config_mp.mediaportal.storagepath.value
+		if config_mp.mediaportal.storagepath.value[-1] != '/':
+			config_mp.mediaportal.storagepath.value = config_mp.mediaportal.storagepath.value + '/'
+		if config_mp.mediaportal.storagepath.value[-4:] != 'tmp/':
+			config_mp.mediaportal.storagepath.value = config_mp.mediaportal.storagepath.value + 'tmp/'
+		if config_mp.mediaportal.iconcachepath.value[0] != '/':
+			config_mp.mediaportal.iconcachepath.value = '/' + config_mp.mediaportal.iconcachepath.value
+		if config_mp.mediaportal.iconcachepath.value[-1] != '/':
+			config_mp.mediaportal.iconcachepath.value = config_mp.mediaportal.iconcachepath.value + '/'
+		if (config_mp.mediaportal.showporn.value == False and config_mp.mediaportal.filter.value == 'Porn'):
+			config_mp.mediaportal.filter.value = 'ALL'
+		if (config_mp.mediaportal.showuseradditions.value == False and config_mp.mediaportal.filter.value == 'User-additions'):
+			config_mp.mediaportal.filter.value = 'ALL'
 
 		CheckPathes(self.session).checkPathes(self.cb_checkPathes)
 
-		if (config.mediaportal.showuseradditions.value and not config.mediaportal.pinuseradditions.value):
+		if (config_mp.mediaportal.showuseradditions.value and not config_mp.mediaportal.pinuseradditions.value):
 			self.a = str(random.randint(1,9))
 			self.b = str(random.randint(0,9))
 			self.c = str(random.randint(0,9))
@@ -832,13 +842,13 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			message = _("Some of the plugins may not be legally used in your country!\n\nIf you accept this then enter the following code now:\n\n%s" % (code))
 			self.session.openWithCallback(self.keyOK2, MessageBoxExt, message, MessageBoxExt.TYPE_YESNO)
 		else:
-			if not config.mediaportal.showuseradditions.value:
-				config.mediaportal.pinuseradditions.value = False
-				config.mediaportal.pinuseradditions.save()
+			if not config_mp.mediaportal.showuseradditions.value:
+				config_mp.mediaportal.pinuseradditions.value = False
+				config_mp.mediaportal.pinuseradditions.save()
 			self.keySave()
 
 	def premium(self):
-		if config.mediaportal.realdebrid_use.value:
+		if config_mp.mediaportal.realdebrid_use.value:
 			if mp_globals.isDreamOS:
 				self.session.open(realdebrid_oauth2, None, calltype='user', is_dialog=True)
 			else:
@@ -852,24 +862,24 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 
 	def keyOK2(self, answer):
 		if answer is True:
-			self.session.openWithCallback(self.validcode, PinInputExt, pinList = [(int(self.a+self.b+self.c+self.d))], triesEntry = config.mediaportal.retries.pincode, title = _("Please enter the correct code"), windowTitle = _("Enter code"))
+			self.session.openWithCallback(self.validcode, PinInputExt, pinList = [(int(self.a+self.b+self.c+self.d))], triesEntry = config_mp.mediaportal.retries.pincode, title = _("Please enter the correct code"), windowTitle = _("Enter code"))
 		else:
-			config.mediaportal.showuseradditions.value = False
-			config.mediaportal.showuseradditions.save()
-			config.mediaportal.pinuseradditions.value = False
-			config.mediaportal.pinuseradditions.save()
+			config_mp.mediaportal.showuseradditions.value = False
+			config_mp.mediaportal.showuseradditions.save()
+			config_mp.mediaportal.pinuseradditions.value = False
+			config_mp.mediaportal.pinuseradditions.save()
 			self.keySave()
 
 	def validcode(self, code):
 		if code:
-			config.mediaportal.pinuseradditions.value = True
-			config.mediaportal.pinuseradditions.save()
+			config_mp.mediaportal.pinuseradditions.value = True
+			config_mp.mediaportal.pinuseradditions.save()
 			self.keySave()
 		else:
-			config.mediaportal.showuseradditions.value = False
-			config.mediaportal.showuseradditions.save()
-			config.mediaportal.pinuseradditions.value = False
-			config.mediaportal.pinuseradditions.save()
+			config_mp.mediaportal.showuseradditions.value = False
+			config_mp.mediaportal.showuseradditions.save()
+			config_mp.mediaportal.pinuseradditions.value = False
+			config_mp.mediaportal.pinuseradditions.save()
 			self.keySave()
 
 class MPList(Screen, HelpableScreen):
@@ -887,18 +897,18 @@ class MPList(Screen, HelpableScreen):
 			f.close()
 
 		self["hidePig"] = Boolean()
-		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
+		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 
 		Screen.__init__(self, session)
 
 		addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "mediaportal1.ttf", "mediaportal", 100, False)
 
-		if config.mediaportal.backgroundtv.value:
-			config.mediaportal.minitv.value = True
-			config.mediaportal.minitv.save()
-			config.mediaportal.restorelastservice.value = "2"
-			config.mediaportal.restorelastservice.save()
-			configfile.save()
+		if config_mp.mediaportal.backgroundtv.value:
+			config_mp.mediaportal.minitv.value = True
+			config_mp.mediaportal.minitv.save()
+			config_mp.mediaportal.restorelastservice.value = "2"
+			config_mp.mediaportal.restorelastservice.save()
+			configfile_mp.save()
 			session.nav.stopService()
 			session.nav.playService(lastservice)
 			session.nav.stopService()
@@ -927,7 +937,7 @@ class MPList(Screen, HelpableScreen):
 		}, -1)
 
 		self['title'] = Label("MediaPortal")
-		self['version'] = Label(config.mediaportal.version.value[0:8])
+		self['version'] = Label(config_mp.mediaportal.version.value[0:8])
 
 		self['name'] = Label("")
 
@@ -972,7 +982,7 @@ class MPList(Screen, HelpableScreen):
 
 		if not mp_globals.start:
 			self.close(self.session, True, self.lastservice)
-		if config.mediaportal.autoupdate.value:
+		if config_mp.mediaportal.autoupdate.value:
 			checkupdate(self.session).checkforupdate()
 
 		self.all = []
@@ -995,14 +1005,14 @@ class MPList(Screen, HelpableScreen):
 						if x.get("type") == "mod":
 							modfile = x.get("modfile")
 							confcat = x.get("confcat")
-							if not config.mediaportal.showporn.value and confcat == "porn":
+							if not config_mp.mediaportal.showporn.value and confcat == "porn":
 								pass
 							else:
 								gz = x.get("gz")
-								if not config.mediaportal.showuseradditions.value and gz == "1":
+								if not config_mp.mediaportal.showuseradditions.value and gz == "1":
 									pass
 								else:
-									mod = eval("config.mediaportal." + x.get("confopt") + ".value")
+									mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
 									if mod:
 										filter = x.get("filter")
 										#check auf mehrere filter
@@ -1042,14 +1052,14 @@ class MPList(Screen, HelpableScreen):
 								if x.get("type") == "mod":
 									modfile = x.get("modfile")
 									confcat = x.get("confcat")
-									if not config.mediaportal.showporn.value and confcat == "porn":
+									if not config_mp.mediaportal.showporn.value and confcat == "porn":
 										pass
 									else:
 										gz = x.get("gz")
-										if not config.mediaportal.showuseradditions.value and gz == "1":
+										if not config_mp.mediaportal.showuseradditions.value and gz == "1":
 											pass
 										else:
-											mod = eval("config.mediaportal." + x.get("confopt") + ".value")
+											mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
 											if mod:
 												filter = x.get("filter")
 												#check auf mehrere filter
@@ -1086,25 +1096,25 @@ class MPList(Screen, HelpableScreen):
 
 		self.cat = 0
 
-		if config.mediaportal.filter.value == "ALL":
+		if config_mp.mediaportal.filter.value == "ALL":
 			name = _("ALL")
-		elif config.mediaportal.filter.value == "Mediathek":
+		elif config_mp.mediaportal.filter.value == "Mediathek":
 			name = _("Libraries")
-		elif config.mediaportal.filter.value == "User-additions":
+		elif config_mp.mediaportal.filter.value == "User-additions":
 			name = _("User-additions")
-		elif config.mediaportal.filter.value == "Fun":
+		elif config_mp.mediaportal.filter.value == "Fun":
 			name = _("Tech & Fun")
-		elif config.mediaportal.filter.value == "NewsDoku":
+		elif config_mp.mediaportal.filter.value == "NewsDoku":
 			name = _("News & Documentary")
-		elif config.mediaportal.filter.value == "Music":
+		elif config_mp.mediaportal.filter.value == "Music":
 			name = _("Music")
-		elif config.mediaportal.filter.value == "Sport":
+		elif config_mp.mediaportal.filter.value == "Sport":
 			name = _("Sports")
-		elif config.mediaportal.filter.value == "Porn":
+		elif config_mp.mediaportal.filter.value == "Porn":
 			name = _("Porn")
 		self['F4'].setText(name)
 
-		filter = config.mediaportal.filter.value
+		filter = config_mp.mediaportal.filter.value
 		if filter == "ALL":
 			xfilter = "all"
 		elif filter == "Mediathek":
@@ -1125,8 +1135,8 @@ class MPList(Screen, HelpableScreen):
 		exec("self.currentlist = self."+xfilter)
 		if len(self.currentlist) == 0:
 			self.chFilter()
-			config.mediaportal.filter.save()
-			configfile.save()
+			config_mp.mediaportal.filter.save()
+			configfile_mp.save()
 			self.close(self.session, False, self.lastservice)
 		else:
 			exec("self.ml.setList(self."+xfilter+")")
@@ -1134,24 +1144,24 @@ class MPList(Screen, HelpableScreen):
 			self['name'].setText(auswahl)
 
 	def chFilter(self):
-		if config.mediaportal.filter.value == "ALL":
-			config.mediaportal.filter.value = "Mediathek"
-		elif config.mediaportal.filter.value == "Mediathek":
-			config.mediaportal.filter.value = "Fun"
-		elif config.mediaportal.filter.value == "Fun":
-			config.mediaportal.filter.value = "Music"
-		elif config.mediaportal.filter.value == "Music":
-			config.mediaportal.filter.value = "Sport"
-		elif config.mediaportal.filter.value == "Sport":
-			config.mediaportal.filter.value = "NewsDoku"
-		elif config.mediaportal.filter.value == "NewsDoku":
-			config.mediaportal.filter.value = "Porn"
-		elif config.mediaportal.filter.value == "Porn":
-			config.mediaportal.filter.value = "User-additions"
-		elif config.mediaportal.filter.value == "User-additions":
-			config.mediaportal.filter.value = "ALL"
+		if config_mp.mediaportal.filter.value == "ALL":
+			config_mp.mediaportal.filter.value = "Mediathek"
+		elif config_mp.mediaportal.filter.value == "Mediathek":
+			config_mp.mediaportal.filter.value = "Fun"
+		elif config_mp.mediaportal.filter.value == "Fun":
+			config_mp.mediaportal.filter.value = "Music"
+		elif config_mp.mediaportal.filter.value == "Music":
+			config_mp.mediaportal.filter.value = "Sport"
+		elif config_mp.mediaportal.filter.value == "Sport":
+			config_mp.mediaportal.filter.value = "NewsDoku"
+		elif config_mp.mediaportal.filter.value == "NewsDoku":
+			config_mp.mediaportal.filter.value = "Porn"
+		elif config_mp.mediaportal.filter.value == "Porn":
+			config_mp.mediaportal.filter.value = "User-additions"
+		elif config_mp.mediaportal.filter.value == "User-additions":
+			config_mp.mediaportal.filter.value = "ALL"
 		else:
-			config.mediaportal.filter.value = "ALL"
+			config_mp.mediaportal.filter.value = "ALL"
 
 	def checkPathes(self):
 		CheckPathes(self.session).checkPathes(self.cb_checkPathes)
@@ -1175,7 +1185,7 @@ class MPList(Screen, HelpableScreen):
 
 	def hauptListEntry(self, name, icon, modfile=None):
 		res = [(name, icon, modfile)]
-		poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons", icon)
+		poster_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "icons", icon)
 		url = self.icon_url+"icons/" + icon + ".png"
 		remote_hash = ""
 		ds = defer.DeferredSemaphore(tokens=5)
@@ -1195,7 +1205,7 @@ class MPList(Screen, HelpableScreen):
 							ds.run(downloadPage, url, poster_path)
 							poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 
-		logo_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", icon)
+		logo_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "logos", icon)
 		url = self.icon_url+"logos/" + icon + ".png"
 		if not fileExists(logo_path):
 			if self.logo_data:
@@ -1230,30 +1240,30 @@ class MPList(Screen, HelpableScreen):
 		return res
 
 	def showPorn(self):
-		if config.mediaportal.showporn.value:
-			config.mediaportal.showporn.value = False
-			if config.mediaportal.filter.value == "Porn":
-				config.mediaportal.filter.value = "ALL"
-			config.mediaportal.showporn.save()
-			config.mediaportal.filter.save()
-			configfile.save()
+		if config_mp.mediaportal.showporn.value:
+			config_mp.mediaportal.showporn.value = False
+			if config_mp.mediaportal.filter.value == "Porn":
+				config_mp.mediaportal.filter.value = "ALL"
+			config_mp.mediaportal.showporn.save()
+			config_mp.mediaportal.filter.save()
+			configfile_mp.save()
 			self.restart()
 		else:
-			self.session.openWithCallback(self.showPornOK, PinInputExt, pinList = [(config.mediaportal.adultpincode.value)], triesEntry = config.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
+			self.session.openWithCallback(self.showPornOK, PinInputExt, pinList = [(config_mp.mediaportal.adultpincode.value)], triesEntry = config_mp.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
 
 	def showPornOK(self, pincode):
 		if pincode:
 			pincheck.pinEntered()
-			config.mediaportal.filter.value = "Porn"
-			config.mediaportal.filter.save()
-			config.mediaportal.showporn.value = True
-			config.mediaportal.showporn.save()
-			configfile.save()
+			config_mp.mediaportal.filter.value = "Porn"
+			config_mp.mediaportal.filter.save()
+			config_mp.mediaportal.showporn.value = True
+			config_mp.mediaportal.showporn.save()
+			configfile_mp.save()
 			self.restart()
 
 	def keySetup(self):
-		if config.mediaportal.setuppin.value:
-			self.session.openWithCallback(self.pinok, PinInputExt, pinList = [(config.mediaportal.pincode.value)], triesEntry = config.mediaportal.retries.pincode, title = _("Please enter the correct PIN"), windowTitle = _("Enter setup PIN"))
+		if config_mp.mediaportal.setuppin.value:
+			self.session.openWithCallback(self.pinok, PinInputExt, pinList = [(config_mp.mediaportal.pincode.value)], triesEntry = config_mp.mediaportal.retries.pincode, title = _("Please enter the correct PIN"), windowTitle = _("Enter setup PIN"))
 		else:
 			self.session.openWithCallback(self.restart, MPSetup)
 
@@ -1318,7 +1328,7 @@ class MPList(Screen, HelpableScreen):
 							if auswahl ==  x.get("name").replace("&amp;","&"):
 								status = [item for item in mp_globals.status if item[0] == x.get("modfile")]
 								if status:
-									if int(config.mediaportal.version.value) < int(status[0][1]):
+									if int(config_mp.mediaportal.version.value) < int(status[0][1]):
 										if status[0][1] == "9999":
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 										else:
@@ -1336,7 +1346,7 @@ class MPList(Screen, HelpableScreen):
 									self.par2 = param2
 								if confcat == "porn":
 									exec("self.pornscreen = " + x.get("screen") + "")
-								elif kids != "1" and config.mediaportal.kidspin.value:
+								elif kids != "1" and config_mp.mediaportal.kidspin.value:
 									exec("self.pornscreen = " + x.get("screen") + "")
 								else:
 									exec("self.session.open(" + x.get("screen") + param + ")")
@@ -1357,7 +1367,7 @@ class MPList(Screen, HelpableScreen):
 									if auswahl ==  x.get("name").replace("&amp;","&"):
 										status = [item for item in mp_globals.status if item[0] == x.get("modfile")]
 										if status:
-											if int(config.mediaportal.version.value) < int(status[0][1]):
+											if int(config_mp.mediaportal.version.value) < int(status[0][1]):
 												if status[0][1] == "9999":
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 												else:
@@ -1375,15 +1385,15 @@ class MPList(Screen, HelpableScreen):
 											self.par2 = param2
 										if confcat == "porn":
 											exec("self.pornscreen = " + x.get("screen") + "")
-										elif kids != "1" and config.mediaportal.kidspin.value:
+										elif kids != "1" and config_mp.mediaportal.kidspin.value:
 											exec("self.pornscreen = " + x.get("screen") + "")
 										else:
 											exec("self.session.open(" + x.get("screen") + param + ")")
 
 		if self.pornscreen:
-			if config.mediaportal.pornpin.value:
+			if config_mp.mediaportal.pornpin.value:
 				if pincheck.pin_entered == False:
-					self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config.mediaportal.adultpincode.value)], triesEntry = config.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
+					self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config_mp.mediaportal.adultpincode.value)], triesEntry = config_mp.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
 				else:
 					if self.par1 == "":
 						self.session.open(self.pornscreen)
@@ -1410,23 +1420,23 @@ class MPList(Screen, HelpableScreen):
 				self.session.open(self.pornscreen, self.par1, self.par2)
 
 	def keyCancel(self):
-		config.mediaportal.filter.save()
-		configfile.save()
+		config_mp.mediaportal.filter.save()
+		configfile_mp.save()
 		self.close(self.session, True, self.lastservice)
 
 	def restart(self):
-		config.mediaportal.filter.save()
-		configfile.save()
+		config_mp.mediaportal.filter.save()
+		configfile_mp.save()
 		if autoStartTimer is not None:
 			autoStartTimer.update()
 		self.close(self.session, False, self.lastservice)
 
 	def startChoose(self):
-		if not config.mediaportal.showporn.value:
+		if not config_mp.mediaportal.showporn.value:
 			xporn = ""
 		else:
 			xporn = _('Porn')
-		if not config.mediaportal.showuseradditions.value:
+		if not config_mp.mediaportal.showuseradditions.value:
 			useradd = ""
 		else:
 			useradd = _('User-additions')
@@ -1435,9 +1445,9 @@ class MPList(Screen, HelpableScreen):
 
 	def gotFilter(self, filter):
 		if filter:
-			if not config.mediaportal.showporn.value and filter[1] == "porn":
+			if not config_mp.mediaportal.showporn.value and filter[1] == "porn":
 				return
-			if not config.mediaportal.showuseradditions.value and filter[1] == "useradditions":
+			if not config_mp.mediaportal.showuseradditions.value and filter[1] == "useradditions":
 				return
 			if filter[0] == "":
 				return
@@ -1458,12 +1468,12 @@ class MPList(Screen, HelpableScreen):
 					xfilter = "Music"
 				elif filter[1] == "porn":
 					xfilter = "Porn"
-				config.mediaportal.filter.value = xfilter
+				config_mp.mediaportal.filter.value = xfilter
 				exec("self.currentlist = self."+filter[1])
 				if len(self.currentlist) == 0:
 					self.chFilter()
-					config.mediaportal.filter.save()
-					configfile.save()
+					config_mp.mediaportal.filter.save()
+					configfile_mp.save()
 					self.close(self.session, False, self.lastservice)
 				else:
 					exec("self.ml.setList(self."+filter[1]+")")
@@ -1478,7 +1488,7 @@ class MPSort(MPScreen):
 		MPScreen.__init__(self, session, skin='MP_Sort')
 
 		self["hidePig"] = Boolean()
-		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
+		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 
 		self['title'] = Label(_("Userdefined Plugin sorting"))
 		self.list = []
@@ -1536,8 +1546,8 @@ class MPSort(MPScreen):
 			ok = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', line, re.S)
 			if ok:
 				(name, pic, genre, hits, msort) = ok[0]
-				if config.mediaportal.filter.value != "ALL":
-					if genre == config.mediaportal.filter.value:
+				if config_mp.mediaportal.filter.value != "ALL":
+					if genre == config_mp.mediaportal.filter.value:
 						self.config_list_select.append((name, pic, genre, hits, msort))
 						self.config_list.append((name, pic, genre, hits, msort))
 				else:
@@ -1550,7 +1560,7 @@ class MPSort(MPScreen):
 		config_read.close()
 
 	def keyCancel(self):
-		config.mediaportal.sortplugins.value = "user"
+		config_mp.mediaportal.sortplugins.value = "user"
 		self.close()
 
 class MPWall(Screen, HelpableScreen):
@@ -1571,14 +1581,14 @@ class MPWall(Screen, HelpableScreen):
 						if x.get("type") == "mod":
 							modfile = x.get("modfile")
 							confcat = x.get("confcat")
-							if not config.mediaportal.showporn.value and confcat == "porn":
+							if not config_mp.mediaportal.showporn.value and confcat == "porn":
 								pass
 							else:
 								gz = x.get("gz")
-								if not config.mediaportal.showuseradditions.value and gz == "1":
+								if not config_mp.mediaportal.showuseradditions.value and gz == "1":
 									pass
 								else:
-									mod = eval("config.mediaportal." + x.get("confopt") + ".value")
+									mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
 									if mod:
 										y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
 
@@ -1594,32 +1604,35 @@ class MPWall(Screen, HelpableScreen):
 						for x in root:
 							if x.tag == "plugin":
 								if x.get("type") == "mod":
-									modfile = x.get("modfile")
-									confcat = x.get("confcat")
-									if not config.mediaportal.showporn.value and confcat == "porn":
-										pass
-									else:
-										gz = x.get("gz")
-										if not config.mediaportal.showuseradditions.value and gz == "1":
+									try:
+										modfile = x.get("modfile")
+										confcat = x.get("confcat")
+										if not config_mp.mediaportal.showporn.value and confcat == "porn":
 											pass
 										else:
-											mod = eval("config.mediaportal." + x.get("confopt") + ".value")
-											if mod:
-												y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
+											gz = x.get("gz")
+											if not config_mp.mediaportal.showuseradditions.value and gz == "1":
+												pass
+											else:
+												mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
+												if mod:
+													y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
+									except:
+										pass
 
 		if len(self.plugin_liste) == 0:
 			self.plugin_liste.append(("","","Mediathek"))
 
 		# Porn
-		if (config.mediaportal.showporn.value == False and config.mediaportal.filter.value == 'Porn'):
-			config.mediaportal.filter.value = 'ALL'
+		if (config_mp.mediaportal.showporn.value == False and config_mp.mediaportal.filter.value == 'Porn'):
+			config_mp.mediaportal.filter.value = 'ALL'
 
 		# User-additions
-		if (config.mediaportal.showuseradditions.value == False and config.mediaportal.filter.value == 'User-additions'):
-			config.mediaportal.filter.value = 'ALL'
+		if (config_mp.mediaportal.showuseradditions.value == False and config_mp.mediaportal.filter.value == 'User-additions'):
+			config_mp.mediaportal.filter.value = 'ALL'
 
 		# Plugin Sortierung
-		if config.mediaportal.sortplugins != "default":
+		if config_mp.mediaportal.sortplugins != "default":
 
 			# Erstelle Pluginliste falls keine vorhanden ist.
 			self.sort_plugins_file = "/etc/enigma2/mp_pluginliste"
@@ -1674,27 +1687,27 @@ class MPWall(Screen, HelpableScreen):
 				read_pluginliste.close()
 
 			# Sortieren nach hits
-			if config.mediaportal.sortplugins.value == "hits":
+			if config_mp.mediaportal.sortplugins.value == "hits":
 				self.new_pluginliste.sort(key=lambda x: int(x[3]))
 				self.new_pluginliste.reverse()
 
 			# Sortieren nach abcde..
-			elif config.mediaportal.sortplugins.value == "abc":
+			elif config_mp.mediaportal.sortplugins.value == "abc":
 				self.new_pluginliste.sort(key=lambda x: str(x[0]).lower())
 
-			elif config.mediaportal.sortplugins.value == "user":
+			elif config_mp.mediaportal.sortplugins.value == "user":
 				self.new_pluginliste.sort(key=lambda x: int(x[4]))
 
 			self.plugin_liste = self.new_pluginliste
 
 		skincontent = ""
 
-		if config.mediaportal.wallmode.value == "bw":
+		if config_mp.mediaportal.wallmode.value == "bw":
 			self.wallbw = True
-		elif config.mediaportal.wallmode.value == "bw_zoom":
+		elif config_mp.mediaportal.wallmode.value == "bw_zoom":
 			self.wallbw = True
 			self.wallzoom = True
-		elif config.mediaportal.wallmode.value == "color_zoom":
+		elif config_mp.mediaportal.wallmode.value == "color_zoom":
 			self.wallzoom = True
 
 		if mp_globals.videomode == 2:
@@ -1734,11 +1747,11 @@ class MPWall(Screen, HelpableScreen):
 				posy = posystart
 
 		# Page Style
-		if config.mediaportal.pagestyle.value == "Graphic":
+		if config_mp.mediaportal.pagestyle.value == "Graphic":
 			self.dump_liste_page_tmp = self.plugin_liste
-			if config.mediaportal.filter.value != "ALL":
+			if config_mp.mediaportal.filter.value != "ALL":
 				self.plugin_liste_page_tmp = []
-				self.plugin_liste_page_tmp = [x for x in self.dump_liste_page_tmp if re.search(config.mediaportal.filter.value, x[2])]
+				self.plugin_liste_page_tmp = [x for x in self.dump_liste_page_tmp if re.search(config_mp.mediaportal.filter.value, x[2])]
 			else:
 				self.plugin_liste_page_tmp = self.plugin_liste
 
@@ -1777,18 +1790,18 @@ class MPWall(Screen, HelpableScreen):
 			f.close()
 
 		self["hidePig"] = Boolean()
-		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
+		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 
 		Screen.__init__(self, session)
 
 		addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "mediaportal1.ttf", "mediaportal", 100, False)
 
-		if config.mediaportal.backgroundtv.value:
-			config.mediaportal.minitv.value = True
-			config.mediaportal.minitv.save()
-			config.mediaportal.restorelastservice.value = "2"
-			config.mediaportal.restorelastservice.save()
-			configfile.save()
+		if config_mp.mediaportal.backgroundtv.value:
+			config_mp.mediaportal.minitv.value = True
+			config_mp.mediaportal.minitv.save()
+			config_mp.mediaportal.restorelastservice.value = "2"
+			config_mp.mediaportal.restorelastservice.save()
+			configfile_mp.save()
 			session.nav.stopService()
 			session.nav.playService(lastservice)
 			session.nav.stopService()
@@ -1821,7 +1834,7 @@ class MPWall(Screen, HelpableScreen):
 		}, -1)
 
 		self['name'] = Label("")
-		self['version'] = Label(config.mediaportal.version.value[0:8])
+		self['version'] = Label(config_mp.mediaportal.version.value[0:8])
 		self['F1'] = Label("SimpleList")
 		self['F2'] = Label("")
 		self['F3'] = Label(_("Sort"))
@@ -1845,7 +1858,7 @@ class MPWall(Screen, HelpableScreen):
 				self["zeile"+str(x)].show()
 
 		# Apple Page Style
-		if config.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
+		if config_mp.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
 			for x in range(1,self.counting_pages+1):
 				self["page_empty"+str(x)] = Pixmap()
 				self["page_empty"+str(x)].show()
@@ -1882,7 +1895,7 @@ class MPWall(Screen, HelpableScreen):
 		twAgentGetPage(statusurl, agent=update_agent, timeout=30).addCallback(_status)
 
 	def manuelleSortierung(self):
-		if config.mediaportal.filter.value == 'ALL':
+		if config_mp.mediaportal.filter.value == 'ALL':
 			self.session.openWithCallback(self.restart, MPSort)
 		else:
 			self.session.open(MessageBoxExt, _('Ordering is only possible with filter "ALL".'), MessageBoxExt.TYPE_INFO, timeout=3)
@@ -1908,27 +1921,27 @@ class MPWall(Screen, HelpableScreen):
 		_hosters()
 		if not mp_globals.start:
 			self.close(self.session, True, self.lastservice)
-		if config.mediaportal.autoupdate.value:
+		if config_mp.mediaportal.autoupdate.value:
 			checkupdate(self.session).checkforupdate()
 
-		if config.mediaportal.filter.value == "ALL":
+		if config_mp.mediaportal.filter.value == "ALL":
 			name = _("ALL")
-		elif config.mediaportal.filter.value == "Mediathek":
+		elif config_mp.mediaportal.filter.value == "Mediathek":
 			name = _("Libraries")
-		elif config.mediaportal.filter.value == "User-additions":
+		elif config_mp.mediaportal.filter.value == "User-additions":
 			name = _("User-additions")
-		elif config.mediaportal.filter.value == "Fun":
+		elif config_mp.mediaportal.filter.value == "Fun":
 			name = _("Tech & Fun")
-		elif config.mediaportal.filter.value == "NewsDoku":
+		elif config_mp.mediaportal.filter.value == "NewsDoku":
 			name = _("News & Documentary")
-		elif config.mediaportal.filter.value == "Music":
+		elif config_mp.mediaportal.filter.value == "Music":
 			name = _("Music")
-		elif config.mediaportal.filter.value == "Sport":
+		elif config_mp.mediaportal.filter.value == "Sport":
 			name = _("Sports")
-		elif config.mediaportal.filter.value == "Porn":
+		elif config_mp.mediaportal.filter.value == "Porn":
 			name = _("Porn")
 		self['F4'].setText(name)
-		self.sortplugin = config.mediaportal.sortplugins.value
+		self.sortplugin = config_mp.mediaportal.sortplugins.value
 		if self.sortplugin == "hits":
 			self.sortplugin = "Hits"
 		elif self.sortplugin == "abc":
@@ -1937,38 +1950,38 @@ class MPWall(Screen, HelpableScreen):
 			self.sortplugin = "User"
 		self['F2'].setText(self.sortplugin)
 		self.dump_liste = self.plugin_liste
-		if config.mediaportal.filter.value != "ALL":
+		if config_mp.mediaportal.filter.value != "ALL":
 			self.plugin_liste = []
-			self.plugin_liste = [x for x in self.dump_liste if re.search(config.mediaportal.filter.value, x[2])]
+			self.plugin_liste = [x for x in self.dump_liste if re.search(config_mp.mediaportal.filter.value, x[2])]
 		if len(self.plugin_liste) == 0:
 			self.chFilter()
-			if config.mediaportal.filter.value == "ALL":
+			if config_mp.mediaportal.filter.value == "ALL":
 				name = _("ALL")
-			elif config.mediaportal.filter.value == "Mediathek":
+			elif config_mp.mediaportal.filter.value == "Mediathek":
 				name = _("Libraries")
-			elif config.mediaportal.filter.value == "User-additions":
+			elif config_mp.mediaportal.filter.value == "User-additions":
 				name = _("User-additions")
-			elif config.mediaportal.filter.value == "Fun":
+			elif config_mp.mediaportal.filter.value == "Fun":
 				name = _("Tech & Fun")
-			elif config.mediaportal.filter.value == "NewsDoku":
+			elif config_mp.mediaportal.filter.value == "NewsDoku":
 				name = _("News & Documentary")
-			elif config.mediaportal.filter.value == "Music":
+			elif config_mp.mediaportal.filter.value == "Music":
 				name = _("Music")
-			elif config.mediaportal.filter.value == "Sport":
+			elif config_mp.mediaportal.filter.value == "Sport":
 				name = _("Sports")
-			elif config.mediaportal.filter.value == "Porn":
+			elif config_mp.mediaportal.filter.value == "Porn":
 				name = _("Porn")
 			self['F4'].setText(name)
 
-		if config.mediaportal.sortplugins.value == "hits":
+		if config_mp.mediaportal.sortplugins.value == "hits":
 			self.plugin_liste.sort(key=lambda x: int(x[3]))
 			self.plugin_liste.reverse()
-		elif config.mediaportal.sortplugins.value == "abc":
+		elif config_mp.mediaportal.sortplugins.value == "abc":
 			self.plugin_liste.sort(key=lambda t : t[0].lower())
-		elif config.mediaportal.sortplugins.value == "user":
+		elif config_mp.mediaportal.sortplugins.value == "user":
 			self.plugin_liste.sort(key=lambda x: int(x[4]))
 
-		poster_path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/Selektor_%s.png" % config.mediaportal.selektor.value
+		poster_path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/Selektor_%s.png" % config_mp.mediaportal.selektor.value
 
 		scale = AVSwitch().getFramebufferScale()
 		if mp_globals.videomode == 2:
@@ -2013,7 +2026,7 @@ class MPWall(Screen, HelpableScreen):
 			remote_hash = ""
 			ds = defer.DeferredSemaphore(tokens=5)
 			if self.wallbw:
-				poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons_bw", postername)
+				poster_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "icons_bw", postername)
 				url = icon_url+"icons_bw/" + postername + ".png"
 				if not fileExists(poster_path):
 					if icons_data:
@@ -2031,7 +2044,7 @@ class MPWall(Screen, HelpableScreen):
 									ds.run(downloadPage, url, poster_path)
 									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 			else:
-				poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons", postername)
+				poster_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "icons", postername)
 				url = icon_url+"icons/" + postername + ".png"
 				if not fileExists(poster_path):
 					if icons_data:
@@ -2049,7 +2062,7 @@ class MPWall(Screen, HelpableScreen):
 									ds.run(downloadPage, url, poster_path)
 									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 
-			logo_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", postername)
+			logo_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "logos", postername)
 			url = icon_url+"logos/" + postername + ".png"
 			if not fileExists(logo_path):
 				if logo_data:
@@ -2084,7 +2097,7 @@ class MPWall(Screen, HelpableScreen):
 					self["zeile"+str(x)].show()
 
 			if self.wallzoom:
-				poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons_zoom", postername)
+				poster_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "icons_zoom", postername)
 				url = icon_url+"icons_zoom/" + postername + ".png"
 				if not fileExists(poster_path):
 					if icons_data_zoom:
@@ -2120,7 +2133,7 @@ class MPWall(Screen, HelpableScreen):
 					if x <= 40:
 						self["zeile_bw"+str(x)].hide()
 			elif self.wallbw:
-				poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons", postername)
+				poster_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "icons", postername)
 				if not fileExists(poster_path):
 					poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 
@@ -2142,7 +2155,7 @@ class MPWall(Screen, HelpableScreen):
 					if x <= 40:
 						self["zeile_bw"+str(x)].hide()
 
-		if config.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
+		if config_mp.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
 			for x in range(1,self.counting_pages+1):
 				poster_path = "%s/page_select.png" % (self.images_path)
 				self["page_sel"+str(x)].instance.setPixmap(gPixmapPtr())
@@ -2187,7 +2200,7 @@ class MPWall(Screen, HelpableScreen):
 				if int(counting) == int(self.plugin_counting)+1:
 					self.mainlist.append(list_dummy)
 
-		if config.mediaportal.pagestyle.value == "Graphic":
+		if config_mp.mediaportal.pagestyle.value == "Graphic":
 			pageinfo = ""
 		else:
 			pageinfo = _("Page") + " %s / %s" % (self.select_list+1, len(self.mainlist))
@@ -2236,7 +2249,7 @@ class MPWall(Screen, HelpableScreen):
 							if auswahl ==  x.get("name").replace("&amp;","&"):
 								status = [item for item in mp_globals.status if item[0] == x.get("modfile")]
 								if status:
-									if int(config.mediaportal.version.value) < int(status[0][1]):
+									if int(config_mp.mediaportal.version.value) < int(status[0][1]):
 										if status[0][1] == "9999":
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 										else:
@@ -2254,7 +2267,7 @@ class MPWall(Screen, HelpableScreen):
 									self.par2 = param2
 								if confcat == "porn":
 									exec("self.pornscreen = " + x.get("screen") + "")
-								elif kids != "1" and config.mediaportal.kidspin.value:
+								elif kids != "1" and config_mp.mediaportal.kidspin.value:
 									exec("self.pornscreen = " + x.get("screen") + "")
 								else:
 									exec("self.session.open(" + x.get("screen") + param + ")")
@@ -2275,7 +2288,7 @@ class MPWall(Screen, HelpableScreen):
 									if auswahl ==  x.get("name").replace("&amp;","&"):
 										status = [item for item in mp_globals.status if item[0] == x.get("modfile")]
 										if status:
-											if int(config.mediaportal.version.value) < int(status[0][1]):
+											if int(config_mp.mediaportal.version.value) < int(status[0][1]):
 												if status[0][1] == "9999":
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 												else:
@@ -2293,15 +2306,15 @@ class MPWall(Screen, HelpableScreen):
 											self.par2 = param2
 										if confcat == "porn":
 											exec("self.pornscreen = " + x.get("screen") + "")
-										elif kids != "1" and config.mediaportal.kidspin.value:
+										elif kids != "1" and config_mp.mediaportal.kidspin.value:
 											exec("self.pornscreen = " + x.get("screen") + "")
 										else:
 											exec("self.session.open(" + x.get("screen") + param + ")")
 
 		if self.pornscreen:
-			if config.mediaportal.pornpin.value:
+			if config_mp.mediaportal.pornpin.value:
 				if pincheck.pin_entered == False:
-					self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config.mediaportal.adultpincode.value)], triesEntry = config.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
+					self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config_mp.mediaportal.adultpincode.value)], triesEntry = config_mp.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
 				else:
 					if self.par1 == "":
 						self.session.open(self.pornscreen)
@@ -2409,7 +2422,7 @@ class MPWall(Screen, HelpableScreen):
 
 	def check_empty_list(self):
 		if len(self.plugin_liste) == 0:
-			self['name'].setText('Keine Plugins der Kategorie %s aktiviert!' % config.mediaportal.filter.value)
+			self['name'].setText('Keine Plugins der Kategorie %s aktiviert!' % config_mp.mediaportal.filter.value)
 			self["frame"].hide()
 			return True
 		else:
@@ -2420,7 +2433,7 @@ class MPWall(Screen, HelpableScreen):
 			self["zeile"+str(x)].hide()
 
 	def paint_new_last(self):
-		if config.mediaportal.pagestyle.value == "Graphic":
+		if config_mp.mediaportal.pagestyle.value == "Graphic":
 			pageinfo = ""
 		else:
 			pageinfo = _("Page") + " %s / %s" % (self.select_list+1, len(self.mainlist))
@@ -2428,7 +2441,7 @@ class MPWall(Screen, HelpableScreen):
 		self.selektor_index = len(self.mainlist[int(self.select_list)])
 		self.move_selector()
 		# Apple Page Style
-		if config.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
+		if config_mp.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
 			self.refresh_apple_page_bar()
 
 		for x in self.mainlist[int(self.select_list)]:
@@ -2437,7 +2450,7 @@ class MPWall(Screen, HelpableScreen):
 		self.hideshow2()
 
 	def paint_new(self):
-		if config.mediaportal.pagestyle.value == "Graphic":
+		if config_mp.mediaportal.pagestyle.value == "Graphic":
 			pageinfo = ""
 		else:
 			pageinfo = _("Page") + " %s / %s" % (self.select_list+1, len(self.mainlist))
@@ -2445,7 +2458,7 @@ class MPWall(Screen, HelpableScreen):
 		self.selektor_index = 1
 		self.move_selector()
 		# Apple Page Style
-		if config.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
+		if config_mp.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
 			self.refresh_apple_page_bar()
 
 		for x in self.mainlist[int(self.select_list)]:
@@ -2464,8 +2477,8 @@ class MPWall(Screen, HelpableScreen):
 				self["page_empty"+str(x)].show()
 
 	def keySetup(self):
-		if config.mediaportal.setuppin.value:
-			self.session.openWithCallback(self.pinok, PinInputExt, pinList = [(config.mediaportal.pincode.value)], triesEntry = config.mediaportal.retries.pincode, title = _("Please enter the correct PIN"), windowTitle = _("Enter setup PIN"))
+		if config_mp.mediaportal.setuppin.value:
+			self.session.openWithCallback(self.pinok, PinInputExt, pinList = [(config_mp.mediaportal.pincode.value)], triesEntry = config_mp.mediaportal.retries.pincode, title = _("Please enter the correct PIN"), windowTitle = _("Enter setup PIN"))
 		else:
 			self.session.openWithCallback(self.restart, MPSetup)
 
@@ -2478,92 +2491,92 @@ class MPWall(Screen, HelpableScreen):
 			self.session.openWithCallback(self.restart, MPSetup)
 
 	def chSort(self):
-		if config.mediaportal.sortplugins.value == "hits":
-			config.mediaportal.sortplugins.value = "abc"
-		elif config.mediaportal.sortplugins.value == "abc":
-			config.mediaportal.sortplugins.value = "user"
-		elif config.mediaportal.sortplugins.value == "user":
-			config.mediaportal.sortplugins.value = "hits"
+		if config_mp.mediaportal.sortplugins.value == "hits":
+			config_mp.mediaportal.sortplugins.value = "abc"
+		elif config_mp.mediaportal.sortplugins.value == "abc":
+			config_mp.mediaportal.sortplugins.value = "user"
+		elif config_mp.mediaportal.sortplugins.value == "user":
+			config_mp.mediaportal.sortplugins.value = "hits"
 		self.restart()
 
 	def chFilter(self):
-		if config.mediaportal.filter.value == "ALL":
-			config.mediaportal.filter.value = "Mediathek"
-		elif config.mediaportal.filter.value == "Mediathek":
-			config.mediaportal.filter.value = "Fun"
-		elif config.mediaportal.filter.value == "Fun":
-			config.mediaportal.filter.value = "Music"
-		elif config.mediaportal.filter.value == "Music":
-			config.mediaportal.filter.value = "Sport"
-		elif config.mediaportal.filter.value == "Sport":
-			config.mediaportal.filter.value = "NewsDoku"
-		elif config.mediaportal.filter.value == "NewsDoku":
-			config.mediaportal.filter.value = "Porn"
-		elif config.mediaportal.filter.value == "Porn":
-			config.mediaportal.filter.value = "User-additions"
-		elif config.mediaportal.filter.value == "User-additions":
-			config.mediaportal.filter.value = "ALL"
+		if config_mp.mediaportal.filter.value == "ALL":
+			config_mp.mediaportal.filter.value = "Mediathek"
+		elif config_mp.mediaportal.filter.value == "Mediathek":
+			config_mp.mediaportal.filter.value = "Fun"
+		elif config_mp.mediaportal.filter.value == "Fun":
+			config_mp.mediaportal.filter.value = "Music"
+		elif config_mp.mediaportal.filter.value == "Music":
+			config_mp.mediaportal.filter.value = "Sport"
+		elif config_mp.mediaportal.filter.value == "Sport":
+			config_mp.mediaportal.filter.value = "NewsDoku"
+		elif config_mp.mediaportal.filter.value == "NewsDoku":
+			config_mp.mediaportal.filter.value = "Porn"
+		elif config_mp.mediaportal.filter.value == "Porn":
+			config_mp.mediaportal.filter.value = "User-additions"
+		elif config_mp.mediaportal.filter.value == "User-additions":
+			config_mp.mediaportal.filter.value = "ALL"
 		else:
-			config.mediaportal.filter.value = "ALL"
+			config_mp.mediaportal.filter.value = "ALL"
 		self.restartAndCheck()
 
 	def restartAndCheck(self):
-		if config.mediaportal.filter.value != "ALL":
+		if config_mp.mediaportal.filter.value != "ALL":
 			dump_liste2 = self.dump_liste
 			self.plugin_liste = []
-			self.plugin_liste = [x for x in dump_liste2 if re.search(config.mediaportal.filter.value, x[2])]
+			self.plugin_liste = [x for x in dump_liste2 if re.search(config_mp.mediaportal.filter.value, x[2])]
 			if len(self.plugin_liste) == 0:
 				self.chFilter()
 			else:
-				config.mediaportal.filter.save()
-				configfile.save()
+				config_mp.mediaportal.filter.save()
+				configfile_mp.save()
 				self.close(self.session, False, self.lastservice)
 		else:
-			config.mediaportal.filter.save()
-			configfile.save()
+			config_mp.mediaportal.filter.save()
+			configfile_mp.save()
 			self.close(self.session, False, self.lastservice)
 
 	def showPorn(self):
-		if config.mediaportal.showporn.value:
-			config.mediaportal.showporn.value = False
-			if config.mediaportal.filter.value == "Porn":
-				config.mediaportal.filter.value = "ALL"
-			config.mediaportal.showporn.save()
-			config.mediaportal.filter.save()
-			configfile.save()
+		if config_mp.mediaportal.showporn.value:
+			config_mp.mediaportal.showporn.value = False
+			if config_mp.mediaportal.filter.value == "Porn":
+				config_mp.mediaportal.filter.value = "ALL"
+			config_mp.mediaportal.showporn.save()
+			config_mp.mediaportal.filter.save()
+			configfile_mp.save()
 			self.restart()
 		else:
-			self.session.openWithCallback(self.showPornOK, PinInputExt, pinList = [(config.mediaportal.adultpincode.value)], triesEntry = config.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
+			self.session.openWithCallback(self.showPornOK, PinInputExt, pinList = [(config_mp.mediaportal.adultpincode.value)], triesEntry = config_mp.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
 
 	def showPornOK(self, pincode):
 		if pincode:
 			pincheck.pinEntered()
-			config.mediaportal.filter.value = "Porn"
-			config.mediaportal.filter.save()
-			config.mediaportal.showporn.value = True
-			config.mediaportal.showporn.save()
-			configfile.save()
+			config_mp.mediaportal.filter.value = "Porn"
+			config_mp.mediaportal.filter.save()
+			config_mp.mediaportal.showporn.value = True
+			config_mp.mediaportal.showporn.save()
+			configfile_mp.save()
 			self.restart()
 
 	def keyCancel(self):
-		config.mediaportal.filter.save()
-		configfile.save()
+		config_mp.mediaportal.filter.save()
+		configfile_mp.save()
 		self.close(self.session, True, self.lastservice)
 
 	def restart(self):
-		config.mediaportal.filter.save()
-		config.mediaportal.sortplugins.save()
-		configfile.save()
+		config_mp.mediaportal.filter.save()
+		config_mp.mediaportal.sortplugins.save()
+		configfile_mp.save()
 		if autoStartTimer is not None:
 			autoStartTimer.update()
 		self.close(self.session, False, self.lastservice)
 
 	def startChoose(self):
-		if not config.mediaportal.showporn.value:
+		if not config_mp.mediaportal.showporn.value:
 			xporn = ""
 		else:
 			xporn = _('Porn')
-		if not config.mediaportal.showuseradditions.value:
+		if not config_mp.mediaportal.showuseradditions.value:
 			useradd = ""
 		else:
 			useradd = _('User-additions')
@@ -2572,14 +2585,14 @@ class MPWall(Screen, HelpableScreen):
 
 	def gotFilter(self, filter):
 		if filter:
-			if not config.mediaportal.showporn.value and filter[1] == "Porn":
+			if not config_mp.mediaportal.showporn.value and filter[1] == "Porn":
 				return
-			if not config.mediaportal.showuseradditions.value and filter[1] == "User-additions":
+			if not config_mp.mediaportal.showuseradditions.value and filter[1] == "User-additions":
 				return
 			if filter[0] == "":
 				return
 			elif filter:
-				config.mediaportal.filter.value = filter[1]
+				config_mp.mediaportal.filter.value = filter[1]
 				self.restartAndCheck()
 
 class MPWall2(Screen, HelpableScreen):
@@ -2603,14 +2616,14 @@ class MPWall2(Screen, HelpableScreen):
 						if x.get("type") == "mod":
 							modfile = x.get("modfile")
 							confcat = x.get("confcat")
-							if not config.mediaportal.showporn.value and confcat == "porn":
+							if not config_mp.mediaportal.showporn.value and confcat == "porn":
 								pass
 							else:
 								gz = x.get("gz")
-								if not config.mediaportal.showuseradditions.value and gz == "1":
+								if not config_mp.mediaportal.showuseradditions.value and gz == "1":
 									pass
 								else:
-									mod = eval("config.mediaportal." + x.get("confopt") + ".value")
+									mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
 									if mod:
 										y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
 
@@ -2626,32 +2639,35 @@ class MPWall2(Screen, HelpableScreen):
 						for x in root:
 							if x.tag == "plugin":
 								if x.get("type") == "mod":
-									modfile = x.get("modfile")
-									confcat = x.get("confcat")
-									if not config.mediaportal.showporn.value and confcat == "porn":
-										pass
-									else:
-										gz = x.get("gz")
-										if not config.mediaportal.showuseradditions.value and gz == "1":
+									try:
+										modfile = x.get("modfile")
+										confcat = x.get("confcat")
+										if not config_mp.mediaportal.showporn.value and confcat == "porn":
 											pass
 										else:
-											mod = eval("config.mediaportal." + x.get("confopt") + ".value")
-											if mod:
-												y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
+											gz = x.get("gz")
+											if not config_mp.mediaportal.showuseradditions.value and gz == "1":
+												pass
+											else:
+												mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
+												if mod:
+													y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
+									except:
+										pass
 
 		if len(self.plugin_liste) == 0:
 			self.plugin_liste.append(("","","Mediathek"))
 
 		# Porn
-		if (config.mediaportal.showporn.value == False and config.mediaportal.filter.value == 'Porn'):
-			config.mediaportal.filter.value = 'ALL'
+		if (config_mp.mediaportal.showporn.value == False and config_mp.mediaportal.filter.value == 'Porn'):
+			config_mp.mediaportal.filter.value = 'ALL'
 
 		# User-additions
-		if (config.mediaportal.showuseradditions.value == False and config.mediaportal.filter.value == 'User-additions'):
-			config.mediaportal.filter.value = 'ALL'
+		if (config_mp.mediaportal.showuseradditions.value == False and config_mp.mediaportal.filter.value == 'User-additions'):
+			config_mp.mediaportal.filter.value = 'ALL'
 
 		# Plugin Sortierung
-		if config.mediaportal.sortplugins != "default":
+		if config_mp.mediaportal.sortplugins != "default":
 
 			# Erstelle Pluginliste falls keine vorhanden ist.
 			self.sort_plugins_file = "/etc/enigma2/mp_pluginliste"
@@ -2706,20 +2722,20 @@ class MPWall2(Screen, HelpableScreen):
 				read_pluginliste.close()
 
 			# Sortieren nach hits
-			if config.mediaportal.sortplugins.value == "hits":
+			if config_mp.mediaportal.sortplugins.value == "hits":
 				self.new_pluginliste.sort(key=lambda x: int(x[3]))
 				self.new_pluginliste.reverse()
 
 			# Sortieren nach abcde..
-			elif config.mediaportal.sortplugins.value == "abc":
+			elif config_mp.mediaportal.sortplugins.value == "abc":
 				self.new_pluginliste.sort(key=lambda x: str(x[0]).lower())
 
-			elif config.mediaportal.sortplugins.value == "user":
+			elif config_mp.mediaportal.sortplugins.value == "user":
 				self.new_pluginliste.sort(key=lambda x: int(x[4]))
 
 			self.plugin_liste = self.new_pluginliste
 
-		if config.mediaportal.wall2mode.value == "bw":
+		if config_mp.mediaportal.wall2mode.value == "bw":
 			self.wallbw = True
 
 		if mp_globals.videomode == 2:
@@ -2743,9 +2759,9 @@ class MPWall2(Screen, HelpableScreen):
 			f.close()
 
 		self.dump_liste_page_tmp = self.plugin_liste
-		if config.mediaportal.filter.value != "ALL":
+		if config_mp.mediaportal.filter.value != "ALL":
 			self.plugin_liste_page_tmp = []
-			self.plugin_liste_page_tmp = [x for x in self.dump_liste_page_tmp if re.search(config.mediaportal.filter.value, x[2])]
+			self.plugin_liste_page_tmp = [x for x in self.dump_liste_page_tmp if re.search(config_mp.mediaportal.filter.value, x[2])]
 		else:
 			self.plugin_liste_page_tmp = self.plugin_liste
 
@@ -2753,7 +2769,7 @@ class MPWall2(Screen, HelpableScreen):
 			self.counting_pages = int(round(float((len(self.plugin_liste_page_tmp)-1) / self.perpage) + 0.5))
 
 		# Page Style
-		if config.mediaportal.pagestyle.value == "Graphic":
+		if config_mp.mediaportal.pagestyle.value == "Graphic":
 			skincontent = ""
 			self.skin = self.skin.replace('</screen>', '')
 
@@ -2771,18 +2787,18 @@ class MPWall2(Screen, HelpableScreen):
 			self.skin += "</screen>"
 
 		self["hidePig"] = Boolean()
-		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
+		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 
 		Screen.__init__(self, session)
 
 		addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "mediaportal1.ttf", "mediaportal", 100, False)
 
-		if config.mediaportal.backgroundtv.value:
-			config.mediaportal.minitv.value = True
-			config.mediaportal.minitv.save()
-			config.mediaportal.restorelastservice.value = "2"
-			config.mediaportal.restorelastservice.save()
-			configfile.save()
+		if config_mp.mediaportal.backgroundtv.value:
+			config_mp.mediaportal.minitv.value = True
+			config_mp.mediaportal.minitv.save()
+			config_mp.mediaportal.restorelastservice.value = "2"
+			config_mp.mediaportal.restorelastservice.save()
+			configfile_mp.save()
 			session.nav.stopService()
 			session.nav.playService(lastservice)
 			session.nav.stopService()
@@ -2815,7 +2831,7 @@ class MPWall2(Screen, HelpableScreen):
 		}, -1)
 
 		self['name'] = Label("")
-		self['version'] = Label(config.mediaportal.version.value[0:8])
+		self['version'] = Label(config_mp.mediaportal.version.value[0:8])
 		self['F1'] = Label("SimpleList")
 		self['F2'] = Label("")
 		self['F3'] = Label(_("Sort"))
@@ -2829,7 +2845,7 @@ class MPWall2(Screen, HelpableScreen):
 		self["covercollection"] = CoverCollection()
 
 		# Apple Page Style
-		if config.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
+		if config_mp.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
 			for x in range(1,self.counting_pages+1):
 				self["page_empty"+str(x)] = Pixmap()
 				self["page_empty"+str(x)].show()
@@ -2862,7 +2878,7 @@ class MPWall2(Screen, HelpableScreen):
 		twAgentGetPage(statusurl, agent=update_agent, timeout=30).addCallback(_status)
 
 	def manuelleSortierung(self):
-		if config.mediaportal.filter.value == 'ALL':
+		if config_mp.mediaportal.filter.value == 'ALL':
 			self.session.openWithCallback(self.restart, MPSort)
 		else:
 			self.session.open(MessageBoxExt, _('Ordering is only possible with filter "ALL".'), MessageBoxExt.TYPE_INFO, timeout=3)
@@ -2888,28 +2904,28 @@ class MPWall2(Screen, HelpableScreen):
 		_hosters()
 		if not mp_globals.start:
 			self.close(self.session, True, self.lastservice)
-		if config.mediaportal.autoupdate.value:
+		if config_mp.mediaportal.autoupdate.value:
 			checkupdate(self.session).checkforupdate()
 
 		# load plugin icons
-		if config.mediaportal.filter.value == "ALL":
+		if config_mp.mediaportal.filter.value == "ALL":
 			name = _("ALL")
-		elif config.mediaportal.filter.value == "Mediathek":
+		elif config_mp.mediaportal.filter.value == "Mediathek":
 			name = _("Libraries")
-		elif config.mediaportal.filter.value == "User-additions":
+		elif config_mp.mediaportal.filter.value == "User-additions":
 			name = _("User-additions")
-		elif config.mediaportal.filter.value == "Fun":
+		elif config_mp.mediaportal.filter.value == "Fun":
 			name = _("Tech & Fun")
-		elif config.mediaportal.filter.value == "NewsDoku":
+		elif config_mp.mediaportal.filter.value == "NewsDoku":
 			name = _("News & Documentary")
-		elif config.mediaportal.filter.value == "Music":
+		elif config_mp.mediaportal.filter.value == "Music":
 			name = _("Music")
-		elif config.mediaportal.filter.value == "Sport":
+		elif config_mp.mediaportal.filter.value == "Sport":
 			name = _("Sports")
-		elif config.mediaportal.filter.value == "Porn":
+		elif config_mp.mediaportal.filter.value == "Porn":
 			name = _("Porn")
 		self['F4'].setText(name)
-		self.sortplugin = config.mediaportal.sortplugins.value
+		self.sortplugin = config_mp.mediaportal.sortplugins.value
 		if self.sortplugin == "hits":
 			self.sortplugin = "Hits"
 		elif self.sortplugin == "abc":
@@ -2918,38 +2934,38 @@ class MPWall2(Screen, HelpableScreen):
 			self.sortplugin = "User"
 		self['F2'].setText(self.sortplugin)
 		self.dump_liste = self.plugin_liste
-		if config.mediaportal.filter.value != "ALL":
+		if config_mp.mediaportal.filter.value != "ALL":
 			self.plugin_liste = []
-			self.plugin_liste = [x for x in self.dump_liste if re.search(config.mediaportal.filter.value, x[2])]
+			self.plugin_liste = [x for x in self.dump_liste if re.search(config_mp.mediaportal.filter.value, x[2])]
 		if len(self.plugin_liste) == 0:
 			self.chFilter()
-			if config.mediaportal.filter.value == "ALL":
+			if config_mp.mediaportal.filter.value == "ALL":
 				name = _("ALL")
-			elif config.mediaportal.filter.value == "Mediathek":
+			elif config_mp.mediaportal.filter.value == "Mediathek":
 				name = _("Libraries")
-			elif config.mediaportal.filter.value == "User-additions":
+			elif config_mp.mediaportal.filter.value == "User-additions":
 				name = _("User-additions")
-			elif config.mediaportal.filter.value == "Fun":
+			elif config_mp.mediaportal.filter.value == "Fun":
 				name = _("Tech & Fun")
-			elif config.mediaportal.filter.value == "NewsDoku":
+			elif config_mp.mediaportal.filter.value == "NewsDoku":
 				name = _("News & Documentary")
-			elif config.mediaportal.filter.value == "Music":
+			elif config_mp.mediaportal.filter.value == "Music":
 				name = _("Music")
-			elif config.mediaportal.filter.value == "Sport":
+			elif config_mp.mediaportal.filter.value == "Sport":
 				name = _("Sports")
-			elif config.mediaportal.filter.value == "Porn":
+			elif config_mp.mediaportal.filter.value == "Porn":
 				name = _("Porn")
 			self['F4'].setText(name)
 
-		if config.mediaportal.sortplugins.value == "hits":
+		if config_mp.mediaportal.sortplugins.value == "hits":
 			self.plugin_liste.sort(key=lambda x: int(x[3]))
 			self.plugin_liste.reverse()
 
 		# Sortieren nach abcde..
-		elif config.mediaportal.sortplugins.value == "abc":
+		elif config_mp.mediaportal.sortplugins.value == "abc":
 			self.plugin_liste.sort(key=lambda t : t[0].lower())
 
-		elif config.mediaportal.sortplugins.value == "user":
+		elif config_mp.mediaportal.sortplugins.value == "user":
 			self.plugin_liste.sort(key=lambda x: int(x[4]))
 
 		itemList = []
@@ -2976,7 +2992,7 @@ class MPWall2(Screen, HelpableScreen):
 			row = []
 			itemList.append(((row),))
 			if self.wallbw:
-				poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons_bw", p_picname)
+				poster_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "icons_bw", p_picname)
 				url = icon_url+"icons_bw/" + p_picname + ".png"
 				if not fileExists(poster_path):
 					if icons_data:
@@ -2994,7 +3010,7 @@ class MPWall2(Screen, HelpableScreen):
 									ds.run(downloadPage, url, poster_path)
 									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 			else:
-				poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons", p_picname)
+				poster_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "icons", p_picname)
 				url = icon_url+"icons/" + p_picname + ".png"
 				if not fileExists(poster_path):
 					if icons_data:
@@ -3012,7 +3028,7 @@ class MPWall2(Screen, HelpableScreen):
 									ds.run(downloadPage, url, poster_path)
 									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 
-			logo_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", p_picname)
+			logo_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "logos", p_picname)
 			url = icon_url+"logos/" + p_picname + ".png"
 			if not fileExists(logo_path):
 				if logo_data:
@@ -3032,7 +3048,7 @@ class MPWall2(Screen, HelpableScreen):
 			posterlist.append(poster_path)
 		self["covercollection"].setList(itemList,posterlist)
 
-		if config.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
+		if config_mp.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
 			for x in range(1,self.counting_pages+1):
 				poster_path = "%s/page_select.png" % (self.images_path)
 				self["page_sel"+str(x)].instance.setPixmap(gPixmapPtr())
@@ -3081,7 +3097,7 @@ class MPWall2(Screen, HelpableScreen):
 							if p_name ==  x.get("name").replace("&amp;","&"):
 								status = [item for item in mp_globals.status if item[0] == x.get("modfile")]
 								if status:
-									if int(config.mediaportal.version.value) < int(status[0][1]):
+									if int(config_mp.mediaportal.version.value) < int(status[0][1]):
 										if status[0][1] == "9999":
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 										else:
@@ -3099,7 +3115,7 @@ class MPWall2(Screen, HelpableScreen):
 									self.par2 = param2
 								if confcat == "porn":
 									exec("self.pornscreen = " + x.get("screen") + "")
-								elif kids != "1" and config.mediaportal.kidspin.value:
+								elif kids != "1" and config_mp.mediaportal.kidspin.value:
 									exec("self.pornscreen = " + x.get("screen") + "")
 								else:
 									exec("self.session.open(" + x.get("screen") + param + ")")
@@ -3120,7 +3136,7 @@ class MPWall2(Screen, HelpableScreen):
 									if p_name ==  x.get("name").replace("&amp;","&"):
 										status = [item for item in mp_globals.status if item[0] == x.get("modfile")]
 										if status:
-											if int(config.mediaportal.version.value) < int(status[0][1]):
+											if int(config_mp.mediaportal.version.value) < int(status[0][1]):
 												if status[0][1] == "9999":
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 												else:
@@ -3138,15 +3154,15 @@ class MPWall2(Screen, HelpableScreen):
 											self.par2 = param2
 										if confcat == "porn":
 											exec("self.pornscreen = " + x.get("screen") + "")
-										elif kids != "1" and config.mediaportal.kidspin.value:
+										elif kids != "1" and config_mp.mediaportal.kidspin.value:
 											exec("self.pornscreen = " + x.get("screen") + "")
 										else:
 											exec("self.session.open(" + x.get("screen") + param + ")")
 
 		if self.pornscreen:
-			if config.mediaportal.pornpin.value:
+			if config_mp.mediaportal.pornpin.value:
 				if pincheck.pin_entered == False:
-					self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config.mediaportal.adultpincode.value)], triesEntry = config.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
+					self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config_mp.mediaportal.adultpincode.value)], triesEntry = config_mp.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
 				else:
 					if self.par1 == "":
 						self.session.open(self.pornscreen)
@@ -3184,11 +3200,11 @@ class MPWall2(Screen, HelpableScreen):
 			item = self["covercollection"].getCurrent()
 			(p_name, p_picname, p_picpath, p_genre, p_hits, p_sort) = item[0]
 			try:
-				self['name'].instance.setShowHideAnimation(config.mediaportal.animation_label.value)
+				self['name'].instance.setShowHideAnimation(config_mp.mediaportal.animation_label.value)
 			except:
 				pass
 			self['name'].setText(p_name)
-			if config.mediaportal.pagestyle.value == "Graphic":
+			if config_mp.mediaportal.pagestyle.value == "Graphic":
 				self.refresh_apple_page_bar()
 			else:
 				currentPage = self["covercollection"].getCurrentPage()
@@ -3221,14 +3237,14 @@ class MPWall2(Screen, HelpableScreen):
 
 	def check_empty_list(self):
 		if len(self.plugin_liste) == 0:
-			self['name'].setText('Keine Plugins der Kategorie %s aktiviert!' % config.mediaportal.filter.value)
+			self['name'].setText('Keine Plugins der Kategorie %s aktiviert!' % config_mp.mediaportal.filter.value)
 			return True
 		else:
 			return False
 
 	# Apple Page Style
 	def refresh_apple_page_bar(self):
-		if config.mediaportal.pagestyle.value == "Graphic":
+		if config_mp.mediaportal.pagestyle.value == "Graphic":
 			if self["covercollection"].getCurrentIndex() >=0:
 				currentPage = self["covercollection"].getCurrentPage()
 				totalPages = self["covercollection"].getTotalPages()
@@ -3241,8 +3257,8 @@ class MPWall2(Screen, HelpableScreen):
 						self["page_empty"+str(x)].show()
 
 	def keySetup(self):
-		if config.mediaportal.setuppin.value:
-			self.session.openWithCallback(self.pinok, PinInputExt, pinList = [(config.mediaportal.pincode.value)], triesEntry = config.mediaportal.retries.pincode, title = _("Please enter the correct PIN"), windowTitle = _("Enter setup PIN"))
+		if config_mp.mediaportal.setuppin.value:
+			self.session.openWithCallback(self.pinok, PinInputExt, pinList = [(config_mp.mediaportal.pincode.value)], triesEntry = config_mp.mediaportal.retries.pincode, title = _("Please enter the correct PIN"), windowTitle = _("Enter setup PIN"))
 		else:
 			self.session.openWithCallback(self.restart, MPSetup)
 
@@ -3255,92 +3271,92 @@ class MPWall2(Screen, HelpableScreen):
 			self.session.openWithCallback(self.restart, MPSetup)
 
 	def chSort(self):
-		if config.mediaportal.sortplugins.value == "hits":
-			config.mediaportal.sortplugins.value = "abc"
-		elif config.mediaportal.sortplugins.value == "abc":
-			config.mediaportal.sortplugins.value = "user"
-		elif config.mediaportal.sortplugins.value == "user":
-			config.mediaportal.sortplugins.value = "hits"
+		if config_mp.mediaportal.sortplugins.value == "hits":
+			config_mp.mediaportal.sortplugins.value = "abc"
+		elif config_mp.mediaportal.sortplugins.value == "abc":
+			config_mp.mediaportal.sortplugins.value = "user"
+		elif config_mp.mediaportal.sortplugins.value == "user":
+			config_mp.mediaportal.sortplugins.value = "hits"
 		self.restart()
 
 	def chFilter(self):
-		if config.mediaportal.filter.value == "ALL":
-			config.mediaportal.filter.value = "Mediathek"
-		elif config.mediaportal.filter.value == "Mediathek":
-			config.mediaportal.filter.value = "Fun"
-		elif config.mediaportal.filter.value == "Fun":
-			config.mediaportal.filter.value = "Music"
-		elif config.mediaportal.filter.value == "Music":
-			config.mediaportal.filter.value = "Sport"
-		elif config.mediaportal.filter.value == "Sport":
-			config.mediaportal.filter.value = "NewsDoku"
-		elif config.mediaportal.filter.value == "NewsDoku":
-			config.mediaportal.filter.value = "Porn"
-		elif config.mediaportal.filter.value == "Porn":
-			config.mediaportal.filter.value = "User-additions"
-		elif config.mediaportal.filter.value == "User-additions":
-			config.mediaportal.filter.value = "ALL"
+		if config_mp.mediaportal.filter.value == "ALL":
+			config_mp.mediaportal.filter.value = "Mediathek"
+		elif config_mp.mediaportal.filter.value == "Mediathek":
+			config_mp.mediaportal.filter.value = "Fun"
+		elif config_mp.mediaportal.filter.value == "Fun":
+			config_mp.mediaportal.filter.value = "Music"
+		elif config_mp.mediaportal.filter.value == "Music":
+			config_mp.mediaportal.filter.value = "Sport"
+		elif config_mp.mediaportal.filter.value == "Sport":
+			config_mp.mediaportal.filter.value = "NewsDoku"
+		elif config_mp.mediaportal.filter.value == "NewsDoku":
+			config_mp.mediaportal.filter.value = "Porn"
+		elif config_mp.mediaportal.filter.value == "Porn":
+			config_mp.mediaportal.filter.value = "User-additions"
+		elif config_mp.mediaportal.filter.value == "User-additions":
+			config_mp.mediaportal.filter.value = "ALL"
 		else:
-			config.mediaportal.filter.value = "ALL"
+			config_mp.mediaportal.filter.value = "ALL"
 		self.restartAndCheck()
 
 	def restartAndCheck(self):
-		if config.mediaportal.filter.value != "ALL":
+		if config_mp.mediaportal.filter.value != "ALL":
 			dump_liste2 = self.dump_liste
 			self.plugin_liste = []
-			self.plugin_liste = [x for x in dump_liste2 if re.search(config.mediaportal.filter.value, x[2])]
+			self.plugin_liste = [x for x in dump_liste2 if re.search(config_mp.mediaportal.filter.value, x[2])]
 			if len(self.plugin_liste) == 0:
 				self.chFilter()
 			else:
-				config.mediaportal.filter.save()
-				configfile.save()
+				config_mp.mediaportal.filter.save()
+				configfile_mp.save()
 				self.close(self.session, False, self.lastservice)
 		else:
-			config.mediaportal.filter.save()
-			configfile.save()
+			config_mp.mediaportal.filter.save()
+			configfile_mp.save()
 			self.close(self.session, False, self.lastservice)
 
 	def showPorn(self):
-		if config.mediaportal.showporn.value:
-			config.mediaportal.showporn.value = False
-			if config.mediaportal.filter.value == "Porn":
-				config.mediaportal.filter.value = "ALL"
-			config.mediaportal.showporn.save()
-			config.mediaportal.filter.save()
-			configfile.save()
+		if config_mp.mediaportal.showporn.value:
+			config_mp.mediaportal.showporn.value = False
+			if config_mp.mediaportal.filter.value == "Porn":
+				config_mp.mediaportal.filter.value = "ALL"
+			config_mp.mediaportal.showporn.save()
+			config_mp.mediaportal.filter.save()
+			configfile_mp.save()
 			self.restart()
 		else:
-			self.session.openWithCallback(self.showPornOK, PinInputExt, pinList = [(config.mediaportal.adultpincode.value)], triesEntry = config.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
+			self.session.openWithCallback(self.showPornOK, PinInputExt, pinList = [(config_mp.mediaportal.adultpincode.value)], triesEntry = config_mp.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
 
 	def showPornOK(self, pincode):
 		if pincode:
 			pincheck.pinEntered()
-			config.mediaportal.filter.value = "Porn"
-			config.mediaportal.filter.save()
-			config.mediaportal.showporn.value = True
-			config.mediaportal.showporn.save()
-			configfile.save()
+			config_mp.mediaportal.filter.value = "Porn"
+			config_mp.mediaportal.filter.save()
+			config_mp.mediaportal.showporn.value = True
+			config_mp.mediaportal.showporn.save()
+			configfile_mp.save()
 			self.restart()
 
 	def keyCancel(self):
-		config.mediaportal.filter.save()
-		configfile.save()
+		config_mp.mediaportal.filter.save()
+		configfile_mp.save()
 		self.close(self.session, True, self.lastservice)
 
 	def restart(self):
-		config.mediaportal.filter.save()
-		config.mediaportal.sortplugins.save()
-		configfile.save()
+		config_mp.mediaportal.filter.save()
+		config_mp.mediaportal.sortplugins.save()
+		configfile_mp.save()
 		if autoStartTimer is not None:
 			autoStartTimer.update()
 		self.close(self.session, False, self.lastservice)
 
 	def startChoose(self):
-		if not config.mediaportal.showporn.value:
+		if not config_mp.mediaportal.showporn.value:
 			xporn = ""
 		else:
 			xporn = _('Porn')
-		if not config.mediaportal.showuseradditions.value:
+		if not config_mp.mediaportal.showuseradditions.value:
 			useradd = ""
 		else:
 			useradd = _('User-additions')
@@ -3349,14 +3365,14 @@ class MPWall2(Screen, HelpableScreen):
 
 	def gotFilter(self, filter):
 		if filter:
-			if not config.mediaportal.showporn.value and filter[1] == "Porn":
+			if not config_mp.mediaportal.showporn.value and filter[1] == "Porn":
 				return
-			if not config.mediaportal.showuseradditions.value and filter[1] == "User-additions":
+			if not config_mp.mediaportal.showuseradditions.value and filter[1] == "User-additions":
 				return
 			if filter[0] == "":
 				return
 			elif filter:
-				config.mediaportal.filter.value = filter[1]
+				config_mp.mediaportal.filter.value = filter[1]
 				self.restartAndCheck()
 
 class MPWallVTi(Screen, HelpableScreen):
@@ -3380,14 +3396,14 @@ class MPWallVTi(Screen, HelpableScreen):
 						if x.get("type") == "mod":
 							modfile = x.get("modfile")
 							confcat = x.get("confcat")
-							if not config.mediaportal.showporn.value and confcat == "porn":
+							if not config_mp.mediaportal.showporn.value and confcat == "porn":
 								pass
 							else:
 								gz = x.get("gz")
-								if not config.mediaportal.showuseradditions.value and gz == "1":
+								if not config_mp.mediaportal.showuseradditions.value and gz == "1":
 									pass
 								else:
-									mod = eval("config.mediaportal." + x.get("confopt") + ".value")
+									mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
 									if mod:
 										y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
 
@@ -3403,32 +3419,35 @@ class MPWallVTi(Screen, HelpableScreen):
 						for x in root:
 							if x.tag == "plugin":
 								if x.get("type") == "mod":
-									modfile = x.get("modfile")
-									confcat = x.get("confcat")
-									if not config.mediaportal.showporn.value and confcat == "porn":
-										pass
-									else:
-										gz = x.get("gz")
-										if not config.mediaportal.showuseradditions.value and gz == "1":
+									try:
+										modfile = x.get("modfile")
+										confcat = x.get("confcat")
+										if not config_mp.mediaportal.showporn.value and confcat == "porn":
 											pass
 										else:
-											mod = eval("config.mediaportal." + x.get("confopt") + ".value")
-											if mod:
-												y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
+											gz = x.get("gz")
+											if not config_mp.mediaportal.showuseradditions.value and gz == "1":
+												pass
+											else:
+												mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
+												if mod:
+													y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
+									except:
+										pass
 
 		if len(self.plugin_liste) == 0:
 			self.plugin_liste.append(("","","Mediathek"))
 
 		# Porn
-		if (config.mediaportal.showporn.value == False and config.mediaportal.filter.value == 'Porn'):
-			config.mediaportal.filter.value = 'ALL'
+		if (config_mp.mediaportal.showporn.value == False and config_mp.mediaportal.filter.value == 'Porn'):
+			config_mp.mediaportal.filter.value = 'ALL'
 
 		# User-additions
-		if (config.mediaportal.showuseradditions.value == False and config.mediaportal.filter.value == 'User-additions'):
-			config.mediaportal.filter.value = 'ALL'
+		if (config_mp.mediaportal.showuseradditions.value == False and config_mp.mediaportal.filter.value == 'User-additions'):
+			config_mp.mediaportal.filter.value = 'ALL'
 
 		# Plugin Sortierung
-		if config.mediaportal.sortplugins != "default":
+		if config_mp.mediaportal.sortplugins != "default":
 
 			# Erstelle Pluginliste falls keine vorhanden ist.
 			self.sort_plugins_file = "/etc/enigma2/mp_pluginliste"
@@ -3483,20 +3502,20 @@ class MPWallVTi(Screen, HelpableScreen):
 				read_pluginliste.close()
 
 			# Sortieren nach hits
-			if config.mediaportal.sortplugins.value == "hits":
+			if config_mp.mediaportal.sortplugins.value == "hits":
 				self.new_pluginliste.sort(key=lambda x: int(x[3]))
 				self.new_pluginliste.reverse()
 
 			# Sortieren nach abcde..
-			elif config.mediaportal.sortplugins.value == "abc":
+			elif config_mp.mediaportal.sortplugins.value == "abc":
 				self.new_pluginliste.sort(key=lambda x: str(x[0]).lower())
 
-			elif config.mediaportal.sortplugins.value == "user":
+			elif config_mp.mediaportal.sortplugins.value == "user":
 				self.new_pluginliste.sort(key=lambda x: int(x[4]))
 
 			self.plugin_liste = self.new_pluginliste
 
-		if config.mediaportal.wall2mode.value == "bw":
+		if config_mp.mediaportal.wall2mode.value == "bw":
 			self.wallbw = True
 
 		if mp_globals.videomode == 2:
@@ -3520,13 +3539,13 @@ class MPWallVTi(Screen, HelpableScreen):
 			f.close()
 
 		# Page Style
-		if config.mediaportal.pagestyle.value == "Graphic":
+		if config_mp.mediaportal.pagestyle.value == "Graphic":
 			skincontent = ""
 			self.skin = self.skin.replace('</screen>', '')
 			self.dump_liste_page_tmp = self.plugin_liste
-			if config.mediaportal.filter.value != "ALL":
+			if config_mp.mediaportal.filter.value != "ALL":
 				self.plugin_liste_page_tmp = []
-				self.plugin_liste_page_tmp = [x for x in self.dump_liste_page_tmp if re.search(config.mediaportal.filter.value, x[2])]
+				self.plugin_liste_page_tmp = [x for x in self.dump_liste_page_tmp if re.search(config_mp.mediaportal.filter.value, x[2])]
 			else:
 				self.plugin_liste_page_tmp = self.plugin_liste
 
@@ -3545,18 +3564,18 @@ class MPWallVTi(Screen, HelpableScreen):
 			self.skin += "</screen>"
 
 		self["hidePig"] = Boolean()
-		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
+		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 
 		Screen.__init__(self, session)
 
 		addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "mediaportal1.ttf", "mediaportal", 100, False)
 
-		if config.mediaportal.backgroundtv.value:
-			config.mediaportal.minitv.value = True
-			config.mediaportal.minitv.save()
-			config.mediaportal.restorelastservice.value = "2"
-			config.mediaportal.restorelastservice.save()
-			configfile.save()
+		if config_mp.mediaportal.backgroundtv.value:
+			config_mp.mediaportal.minitv.value = True
+			config_mp.mediaportal.minitv.save()
+			config_mp.mediaportal.restorelastservice.value = "2"
+			config_mp.mediaportal.restorelastservice.save()
+			configfile_mp.save()
 			session.nav.stopService()
 			session.nav.playService(lastservice)
 			session.nav.stopService()
@@ -3589,7 +3608,7 @@ class MPWallVTi(Screen, HelpableScreen):
 		}, -1)
 
 		self['name'] = Label("")
-		self['version'] = Label(config.mediaportal.version.value[0:8])
+		self['version'] = Label(config_mp.mediaportal.version.value[0:8])
 		self['F1'] = Label("SimpleList")
 		self['F2'] = Label("")
 		self['F3'] = Label(_("Sort"))
@@ -3604,7 +3623,7 @@ class MPWallVTi(Screen, HelpableScreen):
 		self['list'].l.setViewMode(eWallPythonMultiContent.MODE_WALL)
 
 		# Apple Page Style
-		if config.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
+		if config_mp.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
 			for x in range(1,self.counting_pages+1):
 				self["page_empty"+str(x)] = Pixmap()
 				self["page_empty"+str(x)].show()
@@ -3637,7 +3656,7 @@ class MPWallVTi(Screen, HelpableScreen):
 		twAgentGetPage(statusurl, agent=update_agent, timeout=30).addCallback(_status)
 
 	def manuelleSortierung(self):
-		if config.mediaportal.filter.value == 'ALL':
+		if config_mp.mediaportal.filter.value == 'ALL':
 			self.session.openWithCallback(self.restart, MPSort)
 		else:
 			self.session.open(MessageBoxExt, _('Ordering is only possible with filter "ALL".'), MessageBoxExt.TYPE_INFO, timeout=3)
@@ -3663,28 +3682,28 @@ class MPWallVTi(Screen, HelpableScreen):
 		_hosters()
 		if not mp_globals.start:
 			self.close(self.session, True, self.lastservice)
-		if config.mediaportal.autoupdate.value:
+		if config_mp.mediaportal.autoupdate.value:
 			checkupdate(self.session).checkforupdate()
 
 		# load plugin icons
-		if config.mediaportal.filter.value == "ALL":
+		if config_mp.mediaportal.filter.value == "ALL":
 			name = _("ALL")
-		elif config.mediaportal.filter.value == "Mediathek":
+		elif config_mp.mediaportal.filter.value == "Mediathek":
 			name = _("Libraries")
-		elif config.mediaportal.filter.value == "User-additions":
+		elif config_mp.mediaportal.filter.value == "User-additions":
 			name = _("User-additions")
-		elif config.mediaportal.filter.value == "Fun":
+		elif config_mp.mediaportal.filter.value == "Fun":
 			name = _("Tech & Fun")
-		elif config.mediaportal.filter.value == "NewsDoku":
+		elif config_mp.mediaportal.filter.value == "NewsDoku":
 			name = _("News & Documentary")
-		elif config.mediaportal.filter.value == "Music":
+		elif config_mp.mediaportal.filter.value == "Music":
 			name = _("Music")
-		elif config.mediaportal.filter.value == "Sport":
+		elif config_mp.mediaportal.filter.value == "Sport":
 			name = _("Sports")
-		elif config.mediaportal.filter.value == "Porn":
+		elif config_mp.mediaportal.filter.value == "Porn":
 			name = _("Porn")
 		self['F4'].setText(name)
-		self.sortplugin = config.mediaportal.sortplugins.value
+		self.sortplugin = config_mp.mediaportal.sortplugins.value
 		if self.sortplugin == "hits":
 			self.sortplugin = "Hits"
 		elif self.sortplugin == "abc":
@@ -3693,38 +3712,38 @@ class MPWallVTi(Screen, HelpableScreen):
 			self.sortplugin = "User"
 		self['F2'].setText(self.sortplugin)
 		self.dump_liste = self.plugin_liste
-		if config.mediaportal.filter.value != "ALL":
+		if config_mp.mediaportal.filter.value != "ALL":
 			self.plugin_liste = []
-			self.plugin_liste = [x for x in self.dump_liste if re.search(config.mediaportal.filter.value, x[2])]
+			self.plugin_liste = [x for x in self.dump_liste if re.search(config_mp.mediaportal.filter.value, x[2])]
 		if len(self.plugin_liste) == 0:
 			self.chFilter()
-			if config.mediaportal.filter.value == "ALL":
+			if config_mp.mediaportal.filter.value == "ALL":
 				name = _("ALL")
-			elif config.mediaportal.filter.value == "Mediathek":
+			elif config_mp.mediaportal.filter.value == "Mediathek":
 				name = _("Libraries")
-			elif config.mediaportal.filter.value == "User-additions":
+			elif config_mp.mediaportal.filter.value == "User-additions":
 				name = _("User-additions")
-			elif config.mediaportal.filter.value == "Fun":
+			elif config_mp.mediaportal.filter.value == "Fun":
 				name = _("Tech & Fun")
-			elif config.mediaportal.filter.value == "NewsDoku":
+			elif config_mp.mediaportal.filter.value == "NewsDoku":
 				name = _("News & Documentary")
-			elif config.mediaportal.filter.value == "Music":
+			elif config_mp.mediaportal.filter.value == "Music":
 				name = _("Music")
-			elif config.mediaportal.filter.value == "Sport":
+			elif config_mp.mediaportal.filter.value == "Sport":
 				name = _("Sports")
-			elif config.mediaportal.filter.value == "Porn":
+			elif config_mp.mediaportal.filter.value == "Porn":
 				name = _("Porn")
 			self['F4'].setText(name)
 
-		if config.mediaportal.sortplugins.value == "hits":
+		if config_mp.mediaportal.sortplugins.value == "hits":
 			self.plugin_liste.sort(key=lambda x: int(x[3]))
 			self.plugin_liste.reverse()
 
 		# Sortieren nach abcde..
-		elif config.mediaportal.sortplugins.value == "abc":
+		elif config_mp.mediaportal.sortplugins.value == "abc":
 			self.plugin_liste.sort(key=lambda t : t[0].lower())
 
-		elif config.mediaportal.sortplugins.value == "user":
+		elif config_mp.mediaportal.sortplugins.value == "user":
 			self.plugin_liste.sort(key=lambda x: int(x[4]))
 
 		itemList = []
@@ -3751,7 +3770,7 @@ class MPWallVTi(Screen, HelpableScreen):
 			row = []
 			itemList.append(((row),))
 			if self.wallbw:
-				poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons_bw", p_picname)
+				poster_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "icons_bw", p_picname)
 				url = icon_url+"icons_bw/" + p_picname + ".png"
 				if not fileExists(poster_path):
 					if icons_data:
@@ -3769,7 +3788,7 @@ class MPWallVTi(Screen, HelpableScreen):
 									ds.run(downloadPage, url, poster_path)
 									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 			else:
-				poster_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "icons", p_picname)
+				poster_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "icons", p_picname)
 				url = icon_url+"icons/" + p_picname + ".png"
 				if not fileExists(poster_path):
 					if icons_data:
@@ -3787,7 +3806,7 @@ class MPWallVTi(Screen, HelpableScreen):
 									ds.run(downloadPage, url, poster_path)
 									poster_path = "%s/images/comingsoon.png" % mp_globals.pluginPath
 
-			logo_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", p_picname)
+			logo_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "logos", p_picname)
 			url = icon_url+"logos/" + p_picname + ".png"
 			if not fileExists(logo_path):
 				if logo_data:
@@ -3808,7 +3827,7 @@ class MPWallVTi(Screen, HelpableScreen):
 
 		self['list'].setlist(posterlist)
 
-		if config.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
+		if config_mp.mediaportal.pagestyle.value == "Graphic" and len(self.plugin_liste_page_tmp) != 0:
 			for x in range(1,self.counting_pages+1):
 				poster_path = "%s/page_select.png" % (self.images_path)
 				self["page_sel"+str(x)].instance.setPixmap(gPixmapPtr())
@@ -3857,7 +3876,7 @@ class MPWallVTi(Screen, HelpableScreen):
 							if p_name ==  x.get("name").replace("&amp;","&"):
 								status = [item for item in mp_globals.status if item[0] == x.get("modfile")]
 								if status:
-									if int(config.mediaportal.version.value) < int(status[0][1]):
+									if int(config_mp.mediaportal.version.value) < int(status[0][1]):
 										if status[0][1] == "9999":
 											self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 										else:
@@ -3875,7 +3894,7 @@ class MPWallVTi(Screen, HelpableScreen):
 									self.par2 = param2
 								if confcat == "porn":
 									exec("self.pornscreen = " + x.get("screen") + "")
-								elif kids != "1" and config.mediaportal.kidspin.value:
+								elif kids != "1" and config_mp.mediaportal.kidspin.value:
 									exec("self.pornscreen = " + x.get("screen") + "")
 								else:
 									exec("self.session.open(" + x.get("screen") + param + ")")
@@ -3896,7 +3915,7 @@ class MPWallVTi(Screen, HelpableScreen):
 									if p_name ==  x.get("name").replace("&amp;","&"):
 										status = [item for item in mp_globals.status if item[0] == x.get("modfile")]
 										if status:
-											if int(config.mediaportal.version.value) < int(status[0][1]):
+											if int(config_mp.mediaportal.version.value) < int(status[0][1]):
 												if status[0][1] == "9999":
 													self.session.open(MessageBoxExt, _("This Plugin has been marked as \"not working\" by the developers.\n\nCurrent developer status of this Plugin is:\n\"%s\"\n\nIf someone else is willing to provide a fix for this Plugin then please get in contact with us.") % status[0][2], MessageBoxExt.TYPE_INFO)
 												else:
@@ -3914,15 +3933,15 @@ class MPWallVTi(Screen, HelpableScreen):
 											self.par2 = param2
 										if confcat == "porn":
 											exec("self.pornscreen = " + x.get("screen") + "")
-										elif kids != "1" and config.mediaportal.kidspin.value:
+										elif kids != "1" and config_mp.mediaportal.kidspin.value:
 											exec("self.pornscreen = " + x.get("screen") + "")
 										else:
 											exec("self.session.open(" + x.get("screen") + param + ")")
 
 		if self.pornscreen:
-			if config.mediaportal.pornpin.value:
+			if config_mp.mediaportal.pornpin.value:
 				if pincheck.pin_entered == False:
-					self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config.mediaportal.adultpincode.value)], triesEntry = config.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
+					self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config_mp.mediaportal.adultpincode.value)], triesEntry = config_mp.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
 				else:
 					if self.par1 == "":
 						self.session.open(self.pornscreen)
@@ -3953,7 +3972,7 @@ class MPWallVTi(Screen, HelpableScreen):
 			item = self['list'].getcurrentselection()
 			(p_name, p_picname, p_picpath, p_genre, p_hits, p_sort) = item
 			self['name'].setText(p_name)
-			if config.mediaportal.pagestyle.value == "Graphic":
+			if config_mp.mediaportal.pagestyle.value == "Graphic":
 				self.refresh_apple_page_bar()
 			else:
 				currentPage = self["list"].getCurrentPage()
@@ -3987,14 +4006,14 @@ class MPWallVTi(Screen, HelpableScreen):
 
 	def check_empty_list(self):
 		if len(self.plugin_liste) == 0:
-			self['name'].setText('Keine Plugins der Kategorie %s aktiviert!' % config.mediaportal.filter.value)
+			self['name'].setText('Keine Plugins der Kategorie %s aktiviert!' % config_mp.mediaportal.filter.value)
 			return True
 		else:
 			return False
 
 	# Apple Page Style
 	def refresh_apple_page_bar(self):
-		if config.mediaportal.pagestyle.value == "Graphic":
+		if config_mp.mediaportal.pagestyle.value == "Graphic":
 			if self["list"].getCurrentIndex() >=0:
 				currentPage = self["list"].getCurrentPage()
 				totalPages = self["list"].getPageCount()
@@ -4008,8 +4027,8 @@ class MPWallVTi(Screen, HelpableScreen):
 						self["page_empty"+str(x)].show()
 
 	def keySetup(self):
-		if config.mediaportal.setuppin.value:
-			self.session.openWithCallback(self.pinok, PinInputExt, pinList = [(config.mediaportal.pincode.value)], triesEntry = config.mediaportal.retries.pincode, title = _("Please enter the correct PIN"), windowTitle = _("Enter setup PIN"))
+		if config_mp.mediaportal.setuppin.value:
+			self.session.openWithCallback(self.pinok, PinInputExt, pinList = [(config_mp.mediaportal.pincode.value)], triesEntry = config_mp.mediaportal.retries.pincode, title = _("Please enter the correct PIN"), windowTitle = _("Enter setup PIN"))
 		else:
 			self.session.openWithCallback(self.restart, MPSetup)
 
@@ -4022,92 +4041,92 @@ class MPWallVTi(Screen, HelpableScreen):
 			self.session.openWithCallback(self.restart, MPSetup)
 
 	def chSort(self):
-		if config.mediaportal.sortplugins.value == "hits":
-			config.mediaportal.sortplugins.value = "abc"
-		elif config.mediaportal.sortplugins.value == "abc":
-			config.mediaportal.sortplugins.value = "user"
-		elif config.mediaportal.sortplugins.value == "user":
-			config.mediaportal.sortplugins.value = "hits"
+		if config_mp.mediaportal.sortplugins.value == "hits":
+			config_mp.mediaportal.sortplugins.value = "abc"
+		elif config_mp.mediaportal.sortplugins.value == "abc":
+			config_mp.mediaportal.sortplugins.value = "user"
+		elif config_mp.mediaportal.sortplugins.value == "user":
+			config_mp.mediaportal.sortplugins.value = "hits"
 		self.restart()
 
 	def chFilter(self):
-		if config.mediaportal.filter.value == "ALL":
-			config.mediaportal.filter.value = "Mediathek"
-		elif config.mediaportal.filter.value == "Mediathek":
-			config.mediaportal.filter.value = "Fun"
-		elif config.mediaportal.filter.value == "Fun":
-			config.mediaportal.filter.value = "Music"
-		elif config.mediaportal.filter.value == "Music":
-			config.mediaportal.filter.value = "Sport"
-		elif config.mediaportal.filter.value == "Sport":
-			config.mediaportal.filter.value = "NewsDoku"
-		elif config.mediaportal.filter.value == "NewsDoku":
-			config.mediaportal.filter.value = "Porn"
-		elif config.mediaportal.filter.value == "Porn":
-			config.mediaportal.filter.value = "User-additions"
-		elif config.mediaportal.filter.value == "User-additions":
-			config.mediaportal.filter.value = "ALL"
+		if config_mp.mediaportal.filter.value == "ALL":
+			config_mp.mediaportal.filter.value = "Mediathek"
+		elif config_mp.mediaportal.filter.value == "Mediathek":
+			config_mp.mediaportal.filter.value = "Fun"
+		elif config_mp.mediaportal.filter.value == "Fun":
+			config_mp.mediaportal.filter.value = "Music"
+		elif config_mp.mediaportal.filter.value == "Music":
+			config_mp.mediaportal.filter.value = "Sport"
+		elif config_mp.mediaportal.filter.value == "Sport":
+			config_mp.mediaportal.filter.value = "NewsDoku"
+		elif config_mp.mediaportal.filter.value == "NewsDoku":
+			config_mp.mediaportal.filter.value = "Porn"
+		elif config_mp.mediaportal.filter.value == "Porn":
+			config_mp.mediaportal.filter.value = "User-additions"
+		elif config_mp.mediaportal.filter.value == "User-additions":
+			config_mp.mediaportal.filter.value = "ALL"
 		else:
-			config.mediaportal.filter.value = "ALL"
+			config_mp.mediaportal.filter.value = "ALL"
 		self.restartAndCheck()
 
 	def restartAndCheck(self):
-		if config.mediaportal.filter.value != "ALL":
+		if config_mp.mediaportal.filter.value != "ALL":
 			dump_liste2 = self.dump_liste
 			self.plugin_liste = []
-			self.plugin_liste = [x for x in dump_liste2 if re.search(config.mediaportal.filter.value, x[2])]
+			self.plugin_liste = [x for x in dump_liste2 if re.search(config_mp.mediaportal.filter.value, x[2])]
 			if len(self.plugin_liste) == 0:
 				self.chFilter()
 			else:
-				config.mediaportal.filter.save()
-				configfile.save()
+				config_mp.mediaportal.filter.save()
+				configfile_mp.save()
 				self.close(self.session, False, self.lastservice)
 		else:
-			config.mediaportal.filter.save()
-			configfile.save()
+			config_mp.mediaportal.filter.save()
+			configfile_mp.save()
 			self.close(self.session, False, self.lastservice)
 
 	def showPorn(self):
-		if config.mediaportal.showporn.value:
-			config.mediaportal.showporn.value = False
-			if config.mediaportal.filter.value == "Porn":
-				config.mediaportal.filter.value = "ALL"
-			config.mediaportal.showporn.save()
-			config.mediaportal.filter.save()
-			configfile.save()
+		if config_mp.mediaportal.showporn.value:
+			config_mp.mediaportal.showporn.value = False
+			if config_mp.mediaportal.filter.value == "Porn":
+				config_mp.mediaportal.filter.value = "ALL"
+			config_mp.mediaportal.showporn.save()
+			config_mp.mediaportal.filter.save()
+			configfile_mp.save()
 			self.restart()
 		else:
-			self.session.openWithCallback(self.showPornOK, PinInputExt, pinList = [(config.mediaportal.adultpincode.value)], triesEntry = config.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
+			self.session.openWithCallback(self.showPornOK, PinInputExt, pinList = [(config_mp.mediaportal.adultpincode.value)], triesEntry = config_mp.mediaportal.retries.adultpin, title = _("Please enter the correct PIN"), windowTitle = _("Enter adult PIN"))
 
 	def showPornOK(self, pincode):
 		if pincode:
 			pincheck.pinEntered()
-			config.mediaportal.filter.value = "Porn"
-			config.mediaportal.filter.save()
-			config.mediaportal.showporn.value = True
-			config.mediaportal.showporn.save()
-			configfile.save()
+			config_mp.mediaportal.filter.value = "Porn"
+			config_mp.mediaportal.filter.save()
+			config_mp.mediaportal.showporn.value = True
+			config_mp.mediaportal.showporn.save()
+			configfile_mp.save()
 			self.restart()
 
 	def keyCancel(self):
-		config.mediaportal.filter.save()
-		configfile.save()
+		config_mp.mediaportal.filter.save()
+		configfile_mp.save()
 		self.close(self.session, True, self.lastservice)
 
 	def restart(self):
-		config.mediaportal.filter.save()
-		config.mediaportal.sortplugins.save()
-		configfile.save()
+		config_mp.mediaportal.filter.save()
+		config_mp.mediaportal.sortplugins.save()
+		configfile_mp.save()
 		if autoStartTimer is not None:
 			autoStartTimer.update()
 		self.close(self.session, False, self.lastservice)
 
 	def startChoose(self):
-		if not config.mediaportal.showporn.value:
+		if not config_mp.mediaportal.showporn.value:
 			xporn = ""
 		else:
 			xporn = _('Porn')
-		if not config.mediaportal.showuseradditions.value:
+		if not config_mp.mediaportal.showuseradditions.value:
 			useradd = ""
 		else:
 			useradd = _('User-additions')
@@ -4116,35 +4135,35 @@ class MPWallVTi(Screen, HelpableScreen):
 
 	def gotFilter(self, filter):
 		if filter:
-			if not config.mediaportal.showporn.value and filter[1] == "Porn":
+			if not config_mp.mediaportal.showporn.value and filter[1] == "Porn":
 				return
-			if not config.mediaportal.showuseradditions.value and filter[1] == "User-additions":
+			if not config_mp.mediaportal.showuseradditions.value and filter[1] == "User-additions":
 				return
 			if filter[0] == "":
 				return
 			elif filter:
-				config.mediaportal.filter.value = filter[1]
+				config_mp.mediaportal.filter.value = filter[1]
 				self.restartAndCheck()
 
 def exit(session, result, lastservice):
 	global lc_stats
 	if not result:
-		if config.mediaportal.premiumize_use.value:
+		if config_mp.mediaportal.premiumize_use.value:
 			if not mp_globals.premium_yt_proxy_host:
 				CheckPremiumize(session).premiumizeProxyConfig(False)
 
-		mp_globals.currentskin = config.mediaportal.skin2.value
+		mp_globals.currentskin = config_mp.mediaportal.skin2.value
 		mp_globals.font = 'mediaportal'
 		_stylemanager(1)
 
-		if config.mediaportal.ansicht.value == "liste":
+		if config_mp.mediaportal.ansicht.value == "liste":
 			session.openWithCallback(exit, MPList, lastservice)
-		elif config.mediaportal.ansicht.value == "wall":
-			session.openWithCallback(exit, MPWall, lastservice, config.mediaportal.filter.value)
-		elif config.mediaportal.ansicht.value == "wall2":
-			session.openWithCallback(exit, MPWall2, lastservice, config.mediaportal.filter.value)
-		elif config.mediaportal.ansicht.value == "wall_vti":
-			session.openWithCallback(exit, MPWallVTi, lastservice, config.mediaportal.filter.value)
+		elif config_mp.mediaportal.ansicht.value == "wall":
+			session.openWithCallback(exit, MPWall, lastservice, config_mp.mediaportal.filter.value)
+		elif config_mp.mediaportal.ansicht.value == "wall2":
+			session.openWithCallback(exit, MPWall2, lastservice, config_mp.mediaportal.filter.value)
+		elif config_mp.mediaportal.ansicht.value == "wall_vti":
+			session.openWithCallback(exit, MPWallVTi, lastservice, config_mp.mediaportal.filter.value)
 	else:
 		try:
 			if mp_globals.animationfix:
@@ -4155,9 +4174,9 @@ def exit(session, result, lastservice):
 
 		session.nav.playService(lastservice)
 
-		config.mediaportal.skinfail.value = False
-		config.mediaportal.skinfail.save()
-		configfile.save()
+		config_mp.mediaportal.skinfail.value = False
+		config_mp.mediaportal.skinfail.save()
+		configfile_mp.save()
 
 		_stylemanager(0)
 
@@ -4217,9 +4236,9 @@ def _stylemanager(mode):
 			if not fileExists(skin_path):
 				skin_path = mp_globals.pluginPath + mp_globals.skinsPath + "/" + mp_globals.currentskin + "/skin.xml"
 				if not fileExists(skin_path):
-					config.mediaportal.skin2.value = ''
-					config.mediaportal.skin2.save()
-					configfile.save()
+					config_mp.mediaportal.skin2.value = ''
+					config_mp.mediaportal.skin2.save()
+					configfile_mp.save()
 					raisemsg = "Missing MP_skin.xml, this file is mandatory!"
 				else:
 					printl('Obsolete file skin.xml, please use filename MP_skin.xml!','','E')
@@ -4404,19 +4423,19 @@ def _status(data):
 			mp_globals.status.append((plugin,version,status))
 
 from resources.simple_lru_cache import SimpleLRUCache
-mp_globals.lruCache = SimpleLRUCache(50, config.mediaportal.watchlistpath.value + 'mp_lru_cache')
-mp_globals.yt_lruCache = SimpleLRUCache(100, config.mediaportal.watchlistpath.value + 'mp_yt_lru_cache')
+mp_globals.lruCache = SimpleLRUCache(50, config_mp.mediaportal.watchlistpath.value + 'mp_lru_cache')
+mp_globals.yt_lruCache = SimpleLRUCache(100, config_mp.mediaportal.watchlistpath.value + 'mp_yt_lru_cache')
 
 watcher = None
 lc_stats = None
 
 def export_lru_caches():
-	if config.mediaportal.sp_save_resumecache.value:
+	if config_mp.mediaportal.sp_save_resumecache.value:
 		mp_globals.lruCache.saveCache()
 		mp_globals.yt_lruCache.saveCache()
 
 def import_lru_caches():
-	if config.mediaportal.sp_save_resumecache.value:
+	if config_mp.mediaportal.sp_save_resumecache.value:
 		mp_globals.lruCache.readCache()
 		mp_globals.yt_lruCache.readCache()
 
@@ -4424,7 +4443,7 @@ def clearTmpBuffer():
 	if mp_globals.yt_tmp_storage_dirty:
 		mp_globals.yt_tmp_storage_dirty = False
 		BgFileEraser = eBackgroundFileEraser.getInstance()
-		path = config.mediaportal.storagepath.value
+		path = config_mp.mediaportal.storagepath.value
 		if os.path.exists(path):
 			for fn in next(os.walk(path))[2]:
 				BgFileEraser.erase(os.path.join(path,fn))
@@ -4442,7 +4461,7 @@ def startMP(session):
 		pass
 
 	from resources.debuglog import printlog as printl
-	printl('Starting MediaPortal %s' % config.mediaportal.version.value,None,'H')
+	printl('Starting MediaPortal %s' % config_mp.mediaportal.version.value,None,'H')
 
 	global watcher, lc_stats
 
@@ -4452,15 +4471,15 @@ def startMP(session):
 	addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "mediaportal_clean.ttf", "mediaportal_clean", 100, False)
 	addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/MediaPortal/resources/") + "unifont.otf", "Replacement", 100, True)
 
-	if config.mediaportal.skinfail.value:
-		config.mediaportal.skin2.value = ''
-		config.mediaportal.skin2.save()
+	if config_mp.mediaportal.skinfail.value:
+		config_mp.mediaportal.skin2.value = ''
+		config_mp.mediaportal.skin2.save()
 	else:
-		config.mediaportal.skinfail.value = True
-		config.mediaportal.skinfail.save()
-	configfile.save()
+		config_mp.mediaportal.skinfail.value = True
+		config_mp.mediaportal.skinfail.save()
+	configfile_mp.save()
 
-	mp_globals.currentskin = config.mediaportal.skin2.value
+	mp_globals.currentskin = config_mp.mediaportal.skin2.value
 	_stylemanager(1)
 
 	if watcher == None:
@@ -4470,33 +4489,33 @@ def startMP(session):
 		lc_stats = task.LoopingCall(watcher.print_stats)
 		lc_stats.start(60)
 
-	#if config.mediaportal.epg_enabled.value and not config.mediaportal.epg_runboot.value and not mpepg.has_epg:
+	#if config_mp.mediaportal.epg_enabled.value and not config_mp.mediaportal.epg_runboot.value and not mpepg.has_epg:
 	#	def importFini(msg):
 	#		session.open(MessageBoxExt, msg, type = MessageBoxExt.TYPE_INFO, timeout=5)
 	#	mpepg.importEPGData().addCallback(importFini)
 
-	if config.mediaportal.hideporn_startup.value and config.mediaportal.showporn.value:
-		config.mediaportal.showporn.value = False
-		if config.mediaportal.filter.value == "Porn":
-			config.mediaportal.filter.value = "ALL"
-		config.mediaportal.showporn.save()
-		config.mediaportal.filter.save()
-		configfile.save()
+	if config_mp.mediaportal.hideporn_startup.value and config_mp.mediaportal.showporn.value:
+		config_mp.mediaportal.showporn.value = False
+		if config_mp.mediaportal.filter.value == "Porn":
+			config_mp.mediaportal.filter.value = "ALL"
+		config_mp.mediaportal.showporn.save()
+		config_mp.mediaportal.filter.save()
+		configfile_mp.save()
 
-	if config.mediaportal.premiumize_use.value:
+	if config_mp.mediaportal.premiumize_use.value:
 		if not mp_globals.premium_yt_proxy_host:
 			CheckPremiumize(session).premiumizeProxyConfig(False)
 
 	lastservice = session.nav.getCurrentlyPlayingServiceReference()
 
-	if config.mediaportal.ansicht.value == "liste":
+	if config_mp.mediaportal.ansicht.value == "liste":
 		session.openWithCallback(exit, MPList, lastservice)
-	elif config.mediaportal.ansicht.value == "wall":
-		session.openWithCallback(exit, MPWall, lastservice, config.mediaportal.filter.value)
-	elif config.mediaportal.ansicht.value == "wall2":
-		session.openWithCallback(exit, MPWall2, lastservice, config.mediaportal.filter.value)
-	elif config.mediaportal.ansicht.value == "wall_vti":
-		session.openWithCallback(exit, MPWallVTi, lastservice, config.mediaportal.filter.value)
+	elif config_mp.mediaportal.ansicht.value == "wall":
+		session.openWithCallback(exit, MPWall, lastservice, config_mp.mediaportal.filter.value)
+	elif config_mp.mediaportal.ansicht.value == "wall2":
+		session.openWithCallback(exit, MPWall2, lastservice, config_mp.mediaportal.filter.value)
+	elif config_mp.mediaportal.ansicht.value == "wall_vti":
+		session.openWithCallback(exit, MPWallVTi, lastservice, config_mp.mediaportal.filter.value)
 
 ##################################
 # Autostart section
@@ -4514,8 +4533,8 @@ class AutoStartTimer:
 
 	def getWakeTime(self):
 		import time
-		if config.mediaportal.epg_enabled.value:
-			clock = config.mediaportal.epg_wakeup.value
+		if config_mp.mediaportal.epg_enabled.value:
+			clock = config_mp.mediaportal.epg_wakeup.value
 			nowt = time.time()
 			now = time.localtime(nowt)
 			return int(time.mktime((now.tm_year, now.tm_mon, now.tm_mday,
@@ -4540,7 +4559,7 @@ class AutoStartTimer:
 		return wake
 
 	def runImport(self):
-		if config.mediaportal.epg_enabled.value:
+		if config_mp.mediaportal.epg_enabled.value:
 			mpepg.getEPGData()
 
 	def onTimer(self):
@@ -4583,11 +4602,11 @@ def autostart(reason, session=None, **kwargs):
 			watcher = HangWatcher()
 		#if autoStartTimer is None:
 		#	autoStartTimer = AutoStartTimer(session)
-		#if config.mediaportal.epg_runboot.value:
+		#if config_mp.mediaportal.epg_runboot.value:
 		#	# timer isn't reliable here, damn
 		#	onBootStartCheck()
-		#if config.mediaportal.epg_deepstandby.value == 'wakeup':
-		#	if config.mediaportal.epg_wakeupsleep.value:
+		#if config_mp.mediaportal.epg_deepstandby.value == 'wakeup':
+		#	if config_mp.mediaportal.epg_wakeupsleep.value:
 		#		print>>log, "[MP EPGImport] Returning to standby"
 		#		from Tools import Notifications
 		#		Notifications.AddNotification(Screens.Standby.Standby)
@@ -4602,7 +4621,7 @@ def cb_checkPathes():
 def getNextWakeup():
 	"returns timestamp of next time when autostart should be called"
 	if autoStartTimer:
-		if config.mediaportal.epg_deepstandby.value == 'wakeup':
+		if config_mp.mediaportal.epg_deepstandby.value == 'wakeup':
 			print>>log, "[MP EPGImport] Will wake up from deep sleep"
 			return autoStartTimer.update()
 	return -1

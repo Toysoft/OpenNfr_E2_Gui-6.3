@@ -48,7 +48,7 @@ json_headers = {
 	}
 
 myagent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11'
-default_cover = "file://%s/pornoxo.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/pornoxo.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class pornoxoGenreScreen(MPScreen):
 

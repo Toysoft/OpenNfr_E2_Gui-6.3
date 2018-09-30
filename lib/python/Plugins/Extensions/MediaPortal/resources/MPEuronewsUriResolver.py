@@ -39,7 +39,7 @@
 try:
 	from enigma import eServiceReference, eUriResolver, StringList
 	from yt_url import youtubeUrl
-	from tw_util import getPage
+	from twagenthelper import twAgentGetPage
 	import re
 
 	from Tools.Log import Log
@@ -58,7 +58,7 @@ try:
 			uri = uri.replace('mp_euronews://','').lower().strip()
 			if uri == 'en':
 				uri = 'www'
-			uri = "http://%s.euronews.com/api/watchlive.json" % uri
+			uri = "https://%s.euronews.com/api/watchlive.json" % uri
 			def onUrlReady(uri):
 				try:
 					if not service.ptrValid():
@@ -72,7 +72,7 @@ try:
 					service.failedToResolveUri()
 
 			if uri:
-				getPage(uri).addCallback(self.parseLive, service)
+				twAgentGetPage(uri).addCallback(self.parseLive, service)
 			else:
 				service.failedToResolveUri()
 
@@ -83,12 +83,14 @@ try:
 			urls = re.findall('url":"(.*?)"', data, re.S)
 			if urls:
 				uri = urls[-1]
+				if uri.startswith('//'):
+					uri = "https:" + uri
 			try:
 				if not service.ptrValid():
 					Log.w("Service became invalid!")
 					return
 				if uri:
-					getPage(uri).addCallback(self.parseData, service)
+					twAgentGetPage(uri).addCallback(self.parseData, service)
 				else:
 					service.failedToResolveUri()
 			except:

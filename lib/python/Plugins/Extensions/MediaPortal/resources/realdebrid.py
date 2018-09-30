@@ -9,13 +9,13 @@ class realdebrid_oauth2(Screen):
 	def __init__(self, session, link , calltype='link'):
 		self.link = link
 		self.calltype = calltype
-		self.raccesstoken = config.mediaportal.realdebrid_accesstoken.value
-		self.rrefreshtoken = config.mediaportal.realdebrid_refreshtoken.value
-		self.rclient_id = config.mediaportal.realdebrid_rclient_id.value
-		self.rclient_secret = config.mediaportal.realdebrid_rclient_secret.value
+		self.raccesstoken = config_mp.mediaportal.realdebrid_accesstoken.value
+		self.rrefreshtoken = config_mp.mediaportal.realdebrid_refreshtoken.value
+		self.rclient_id = config_mp.mediaportal.realdebrid_rclient_id.value
+		self.rclient_secret = config_mp.mediaportal.realdebrid_rclient_secret.value
 		self.rAPPid = "2BKDBPNPA4D3U"
 		self.rdevicecode = ''
-		self.mpversion = config.mediaportal.version.value
+		self.mpversion = config_mp.mediaportal.version.value
 		self.agent = None
 
 		Screen.__init__(self, session)
@@ -101,11 +101,11 @@ class realdebrid_oauth2(Screen):
 	def removetokens(self, answer):
 		if answer is True:
 			self.session.open(MessageBoxExt, _("Real-Debrid: AuthToken and AccessToken removed!"), MessageBoxExt.TYPE_INFO, timeout=5)
-			config.mediaportal.realdebrid_accesstoken.value = ''
-			config.mediaportal.realdebrid_accesstoken.save()
+			config_mp.mediaportal.realdebrid_accesstoken.value = ''
+			config_mp.mediaportal.realdebrid_accesstoken.save()
 			self.raccesstoken = ''
-			config.mediaportal.realdebrid_refreshtoken.value = ''
-			config.mediaportal.realdebrid_refreshtoken.save()
+			config_mp.mediaportal.realdebrid_refreshtoken.value = ''
+			config_mp.mediaportal.realdebrid_refreshtoken.save()
 		self.closeall()
 
 	def getLink(self, loop=False):
@@ -149,10 +149,10 @@ class realdebrid_oauth2(Screen):
 				url = 'https://api.real-debrid.com/oauth/v2/token'
 				self.rclient_id = str(result['client_id'])
 				self.rclient_secret = str(result['client_secret'])
-				config.mediaportal.realdebrid_rclient_id.value = self.rclient_id
-				config.mediaportal.realdebrid_rclient_id.save()
-				config.mediaportal.realdebrid_rclient_secret.value = self.rclient_secret
-				config.mediaportal.realdebrid_rclient_secret.save()
+				config_mp.mediaportal.realdebrid_rclient_id.value = self.rclient_id
+				config_mp.mediaportal.realdebrid_rclient_id.save()
+				config_mp.mediaportal.realdebrid_rclient_secret.value = self.rclient_secret
+				config_mp.mediaportal.realdebrid_rclient_secret.save()
 				post = {'client_id': self.rclient_id, 'client_secret': self.rclient_secret, 'code': self.rdevicecode, 'grant_type': 'http://oauth.net/grant_type/device/1.0'}
 				self.agent.getWebPage(url, method='POST', postdata=urlencode(post)).addCallback(self.getAuthIdDataToken).addErrback(self.noerrorload) #.addErrback(self.rapiaccesstoken)
 			else:
@@ -171,10 +171,10 @@ class realdebrid_oauth2(Screen):
 		else:
 			self.raccesstoken = str(result['access_token'])
 			self.rrefreshtoken = str(result['refresh_token'])
-			config.mediaportal.realdebrid_accesstoken.value = self.raccesstoken
-			config.mediaportal.realdebrid_accesstoken.save()
-			config.mediaportal.realdebrid_refreshtoken.value = self.rrefreshtoken
-			config.mediaportal.realdebrid_refreshtoken.save()
+			config_mp.mediaportal.realdebrid_accesstoken.value = self.raccesstoken
+			config_mp.mediaportal.realdebrid_accesstoken.save()
+			config_mp.mediaportal.realdebrid_refreshtoken.value = self.rrefreshtoken
+			config_mp.mediaportal.realdebrid_refreshtoken.save()
 			self.getRealdebrid(True)
 
 	def getLinkData(self, data, loop):
@@ -205,8 +205,8 @@ class realdebrid_oauth2(Screen):
 				self.closeall()
 			elif error.value.status == '401':
 				self.session.open(MessageBoxExt, _("Real-Debrid: Bad token (expired, invalid)."), MessageBoxExt.TYPE_INFO, timeout=5)
-				config.mediaportal.realdebrid_accesstoken.value = ''
-				config.mediaportal.realdebrid_accesstoken.save()
+				config_mp.mediaportal.realdebrid_accesstoken.value = ''
+				config_mp.mediaportal.realdebrid_accesstoken.save()
 				self.closeall()
 			elif error.value.status == '403':
 				self.session.open(MessageBoxExt, _("Real-Debrid: Permission denied (or account locked). Check the account status!"), MessageBoxExt.TYPE_INFO, timeout=5)
@@ -223,20 +223,20 @@ class realdebrid_oauth2(Screen):
 		try:
 			result = json.loads(data)
 		except:
-			config.mediaportal.realdebrid_accesstoken.value = ''
-			config.mediaportal.realdebrid_accesstoken.save()
+			config_mp.mediaportal.realdebrid_accesstoken.value = ''
+			config_mp.mediaportal.realdebrid_accesstoken.save()
 			self.codeerror('Realdebrid broken RefreshToken')
 		if result.has_key('error_code') and result['error_code'] == 9:
-			config.mediaportal.realdebrid_accesstoken.value = ''
-			config.mediaportal.realdebrid_accesstoken.save()
+			config_mp.mediaportal.realdebrid_accesstoken.value = ''
+			config_mp.mediaportal.realdebrid_accesstoken.save()
 			self.codeerror('Realdebrid broken RefreshToken')
 		else:
 			self.raccesstoken = str(result['access_token'])
 			self.rrefreshtoken = str(result['refresh_token'])
-			config.mediaportal.realdebrid_accesstoken.value = self.raccesstoken
-			config.mediaportal.realdebrid_accesstoken.save()
-			config.mediaportal.realdebrid_refreshtoken.value = self.rrefreshtoken
-			config.mediaportal.realdebrid_refreshtoken.save()
+			config_mp.mediaportal.realdebrid_accesstoken.value = self.raccesstoken
+			config_mp.mediaportal.realdebrid_accesstoken.save()
+			config_mp.mediaportal.realdebrid_refreshtoken.value = self.rrefreshtoken
+			config_mp.mediaportal.realdebrid_refreshtoken.save()
 			self.getRealdebrid(True)
 
 	def closeall(self, downloadlink=None):

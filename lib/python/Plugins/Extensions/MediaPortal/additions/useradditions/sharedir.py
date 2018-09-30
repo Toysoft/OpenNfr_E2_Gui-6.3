@@ -6,10 +6,10 @@ from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoard
 from Plugins.Extensions.MediaPortal.resources.pininputext import PinInputExt
 from Plugins.Extensions.MediaPortal.additions.porn.x2search4porn import toSearchForPorn
 
-config.mediaportal.sharedir_size = ConfigText(default="", fixed_size=False)
-config.mediaportal.sharedir_sort = ConfigText(default="", fixed_size=False)
-config.mediaportal.sharedir_hoster = ConfigText(default="all Hosters;0", fixed_size=False)
-config.mediaportal.sharedir_type = ConfigText(default="Video", fixed_size=False)
+config_mp.mediaportal.sharedir_size = ConfigText(default="", fixed_size=False)
+config_mp.mediaportal.sharedir_sort = ConfigText(default="", fixed_size=False)
+config_mp.mediaportal.sharedir_hoster = ConfigText(default="all Hosters;0", fixed_size=False)
+config_mp.mediaportal.sharedir_type = ConfigText(default="Video", fixed_size=False)
 
 hosters =[]
 
@@ -24,9 +24,9 @@ class sharedirHelper():
 			self.type = "Audio"
 		else:
 			self.type = "Video"
-		config.mediaportal.sharedir_type.value = self.type
-		config.mediaportal.sharedir_type.save()
-		configfile.save()
+		config_mp.mediaportal.sharedir_type.value = self.type
+		config_mp.mediaportal.sharedir_type.save()
+		configfile_mp.save()
 		self['F4'].setText(self.type)
 		self.loadFirstPage()
 
@@ -39,9 +39,9 @@ class sharedirHelper():
 	def returnSize(self, data):
 		if data:
 			self.size = data[1]
-			config.mediaportal.sharedir_size.value = self.size
-			config.mediaportal.sharedir_size.save()
-			configfile.save
+			config_mp.mediaportal.sharedir_size.value = self.size
+			config_mp.mediaportal.sharedir_size.save()
+			configfile_mp.save
 			self['F3'].setText(data[0])
 			self.loadFirstPage()
 
@@ -54,9 +54,9 @@ class sharedirHelper():
 	def returnSort(self,data):
 		if data:
 			self.sort = data[1]
-			config.mediaportal.sharedir_sort.value = self.sort
-			config.mediaportal.sharedir_sort.save()
-			configfile.save()
+			config_mp.mediaportal.sharedir_sort.value = self.sort
+			config_mp.mediaportal.sharedir_sort.save()
+			configfile_mp.save()
 			self['F2'].setText(data[0])
 			self.loadFirstPage()
 
@@ -73,9 +73,9 @@ class sharedirHelper():
 	def returnHoster(self, data):
 		if data:
 			self.hoster = data[1]
-			config.mediaportal.sharedir_hoster.value = data[0]+";"+data[1]
-			config.mediaportal.sharedir_hoster.save()
-			configfile.save()
+			config_mp.mediaportal.sharedir_hoster.value = data[0]+";"+data[1]
+			config_mp.mediaportal.sharedir_hoster.save()
+			configfile_mp.save()
 			self['F1'].setText(data[0])
 			self.loadFirstPage()
 
@@ -97,10 +97,10 @@ class sharedirHelper():
 		self.keyLocked = False
 
 	def cancelSetValue(self):
-		self.hoster = config.mediaportal.sharedir_hoster.value.split(";")[1]
-		self.sort = config.mediaportal.sharedir_sort.value
-		self.size = config.mediaportal.sharedir_size.value
-		self['F1'].setText(config.mediaportal.sharedir_hoster.value.split(";")[0])
+		self.hoster = config_mp.mediaportal.sharedir_hoster.value.split(";")[1]
+		self.sort = config_mp.mediaportal.sharedir_sort.value
+		self.size = config_mp.mediaportal.sharedir_size.value
+		self['F1'].setText(config_mp.mediaportal.sharedir_hoster.value.split(";")[0])
 		rangelist = [['Relevance', ''], ['Date +', 'da'], ['Date -', 'dd'], ['Size +', 'sa'], ['Size -', 'sd'], ['Filename +', 'na'], ['Filename -', 'nd']]
 		for item in rangelist:
 			if item[1] == self.sort:
@@ -109,7 +109,7 @@ class sharedirHelper():
 		for item in rangelist:
 			if item[1] == self.size:
 				self['F3'].setText(item[0])
-		self['F4'].setText(config.mediaportal.sharedir_type.value)
+		self['F4'].setText(config_mp.mediaportal.sharedir_type.value)
 
 class sharedirMenueScreen(sharedirHelper, MPScreen):
 
@@ -129,13 +129,13 @@ class sharedirMenueScreen(sharedirHelper, MPScreen):
 			"blue" : self.keyType
 		}, -1)
 
-		self.hoster = config.mediaportal.sharedir_hoster.value.split(";")[1]
-		self.sort = config.mediaportal.sharedir_sort.value
-		self.size = config.mediaportal.sharedir_size.value
-		self.type = config.mediaportal.sharedir_type.value
+		self.hoster = config_mp.mediaportal.sharedir_hoster.value.split(";")[1]
+		self.sort = config_mp.mediaportal.sharedir_sort.value
+		self.size = config_mp.mediaportal.sharedir_size.value
+		self.type = config_mp.mediaportal.sharedir_type.value
 		self['title'] = Label("ShareDir")
 		self['ContentTitle'] = Label("%s" % self.Name)
-		self['F1'] = Label(config.mediaportal.sharedir_hoster.value.split(";")[0])
+		self['F1'] = Label(config_mp.mediaportal.sharedir_hoster.value.split(";")[0])
 		self['F4'] = Label(self.type)
 		self.keyLocked = True
 		self.suchString = ''
@@ -166,7 +166,7 @@ class sharedirMenueScreen(sharedirHelper, MPScreen):
 	def genreData(self):
 		self.genreliste.append(("--- Search ---", "callSuchen"))
 		self.genreliste.append(("Search using Keyword List", "callKeywordList"))
-		if config.mediaportal.showporn.value and config.mediaportal.show2search4porn.value:
+		if config_mp.mediaportal.showporn.value and config_mp.mediaportal.show2search4porn.value:
 			self.genreliste.append(("Search using 2Search4Porn List", "call2SearchList"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.ml.moveToIndex(0)
@@ -176,11 +176,11 @@ class sharedirMenueScreen(sharedirHelper, MPScreen):
 		if self.keyLocked:
 			return
 		Pick = self['liste'].getCurrent()[0][1]
-		if config.mediaportal.pornpin.value and not self.pin:
+		if config_mp.mediaportal.pornpin.value and not self.pin:
 			self.pincheck()
 		else:
 			if Pick == "callSuchen":
-				self.type = config.mediaportal.sharedir_type.value
+				self.type = config_mp.mediaportal.sharedir_type.value
 				self.suchen()
 			elif Pick == "callKeywordList":
 				self.session.openWithCallback(self.cancelSetValue, sharedirKeyword, self.type)
@@ -195,7 +195,7 @@ class sharedirMenueScreen(sharedirHelper, MPScreen):
 			self.session.openWithCallback(self.cancelSetValue, sharedirListScreen, self.suchString, Name, self.hoster, self.type, self.size, self.sort)
 
 	def pincheck(self):
-		self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct PIN"), windowTitle = _("Enter PIN"))
+		self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config_mp.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct PIN"), windowTitle = _("Enter PIN"))
 
 	def getTriesEntry(self):
 		return config.ParentalControl.retries.setuppin
@@ -214,7 +214,7 @@ class call2SearchList(toSearchForPorn):
 			search = self['liste'].getCurrent()[0][0].rstrip()
 			Name = "2Search4Porn ShareDir"
 			self.type = "Video"
-			self.session.open(sharedirListScreen, search, Name, config.mediaportal.sharedir_hoster.value.split(";")[1], self.type , config.mediaportal.sharedir_size.value, config.mediaportal.sharedir_sort.value)
+			self.session.open(sharedirListScreen, search, Name, config_mp.mediaportal.sharedir_hoster.value.split(";")[1], self.type , config_mp.mediaportal.sharedir_size.value, config_mp.mediaportal.sharedir_sort.value)
 
 class sharedirKeyword(MPScreen):
 
@@ -252,10 +252,10 @@ class sharedirKeyword(MPScreen):
 	def Searches(self):
 		self.genreliste = []
 		self['liste'] = self.ml
-		if not fileExists(config.mediaportal.watchlistpath.value+"mp_keywords"):
-			open(config.mediaportal.watchlistpath.value+"mp_keywords","w").close()
-		if fileExists(config.mediaportal.watchlistpath.value+"mp_keywords"):
-			fobj = open(config.mediaportal.watchlistpath.value+"mp_keywords","r")
+		if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_keywords"):
+			open(config_mp.mediaportal.watchlistpath.value+"mp_keywords","w").close()
+		if fileExists(config_mp.mediaportal.watchlistpath.value+"mp_keywords"):
+			fobj = open(config_mp.mediaportal.watchlistpath.value+"mp_keywords","r")
 			for line in fobj:
 				self.genreliste.append((line, None))
 			fobj.close()
@@ -289,7 +289,7 @@ class sharedirKeyword(MPScreen):
 		if len(self.genreliste) > 0:
 			search = self['liste'].getCurrent()[0][0].rstrip()
 			Name = "Keywords ShareDir"
-			self.session.open(sharedirListScreen, search, Name, config.mediaportal.sharedir_hoster.value.split(";")[1], self.type , config.mediaportal.sharedir_size.value, config.mediaportal.sharedir_sort.value)
+			self.session.open(sharedirListScreen, search, Name, config_mp.mediaportal.sharedir_hoster.value.split(";")[1], self.type , config_mp.mediaportal.sharedir_size.value, config_mp.mediaportal.sharedir_sort.value)
 
 	def keyRed(self):
 		if self.keyLocked:
@@ -312,7 +312,7 @@ class sharedirKeyword(MPScreen):
 		if self.keyLocked:
 			return
 		self.genreliste.sort(key=lambda t : t[0].lower())
-		fobj_out = open(config.mediaportal.watchlistpath.value+"mp_keywords","w")
+		fobj_out = open(config_mp.mediaportal.watchlistpath.value+"mp_keywords","w")
 		x = len(self.genreliste)
 		if x > 0:
 			for c in range(x):
@@ -320,7 +320,7 @@ class sharedirKeyword(MPScreen):
 				fobj_out.write(writeback)
 			fobj_out.close()
 		else:
-			os.remove(config.mediaportal.watchlistpath.value+"mp_keywords")
+			os.remove(config_mp.mediaportal.watchlistpath.value+"mp_keywords")
 		self.close()
 
 class sharedirListScreen(sharedirHelper, MPScreen):
@@ -353,7 +353,7 @@ class sharedirListScreen(sharedirHelper, MPScreen):
 		self['title'] = Label("ShareDir")
 		self['ContentTitle'] = Label("%s / Search for: %s" % (self.Name, self.suchString))
 		self['Page'] = Label(_("Page:"))
-		self['F1'] = Label(config.mediaportal.sharedir_hoster.value.split(";")[0])
+		self['F1'] = Label(config_mp.mediaportal.sharedir_hoster.value.split(";")[0])
 		self['F4'] = Label(self.type)
 
 		self.keyLocked = True

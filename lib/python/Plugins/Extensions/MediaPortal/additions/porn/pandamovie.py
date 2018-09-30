@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-default_cover = "file://%s/pandamovie.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/pandamovie.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class pandamovieGenreScreen(MPScreen):
 
@@ -29,7 +29,7 @@ class pandamovieGenreScreen(MPScreen):
 
 	def loadPage(self):
 		self.filmliste = []
-		url = "https://pandamovie.biz/xxx/"
+		url = "https://123pandamovie.com/adult/"
 		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
@@ -46,9 +46,7 @@ class pandamovieGenreScreen(MPScreen):
 		if self.mode == "Genres":
 			self.filmliste.insert(0, ("Years", "Release Year", None))
 			self.filmliste.insert(0, ("Studios", "Studios", None))
-			self.filmliste.insert(0, ("Featured", "https://pandamovie.biz/xxx/genres/featured-movies/page/", None))
-			self.filmliste.insert(0, ("Clips & Scenes", "https://pandamovie.biz/xxx/genres/xxx-scenes/page/", None))
-			self.filmliste.insert(0, ("Newest Movies", "https://pandamovie.biz/xxx/movies/page/", None))
+			self.filmliste.insert(0, ("Newest Movies", "https://123pandamovie.com/adult/movies/page/", None))
 			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
@@ -114,7 +112,7 @@ class pandamovieListScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://pandamovie.biz/xxx/page/%s/?s=%s" % (str(self.page), self.Link)
+			url = "https://123pandamovie.com/adult/page/%s/?s=%s" % (str(self.page), self.Link)
 		else:
 			url = self.Link + str(self.page)
 		print url
@@ -213,4 +211,4 @@ class StreamAuswahl(MPScreen):
 
 	def got_link(self, stream_url):
 		title = self.Title
-		self.session.open(SimplePlayer, [(self.Title, stream_url, self.Cover)], showPlaylist=False, ltype='pandamovie', cover=True)
+		self.session.open(SimplePlayer, [(self.Title, stream_url, self.Cover)], showPlaylist=False, ltype='pandamovie', cover=True, forceGST=True)

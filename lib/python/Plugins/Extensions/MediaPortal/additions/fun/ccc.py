@@ -4,7 +4,7 @@ import os.path as os_path
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-default_cover = "file://%s/ccc.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/ccc.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class CccOverviewScreen(MPScreen):
 
@@ -214,7 +214,7 @@ class CccConferenceScreen(MPScreen):
 class CccWatchDb:
 
 	def __init__(self, group):
-		self.__dbfile = config.mediaportal.watchlistpath.value + "mp_" + group
+		self.__dbfile = config_mp.mediaportal.watchlistpath.value + "mp_" + group
 		self.watched = []
 		if os_path.exists(self.__dbfile):
 			rawData = open(self.__dbfile, 'r')

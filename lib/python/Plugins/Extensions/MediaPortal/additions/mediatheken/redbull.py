@@ -39,7 +39,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-default_cover = "file://%s/redbull.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/redbull.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 base_url ="https://api.redbull.tv/v3/"
 rb_token = None
 
@@ -263,7 +263,7 @@ class RBtvGenreScreen(MPScreen):
 		for x in match_sec_m3u8:
 			if int(x[0]) > max:
 				max = int(x[0])
-		videoPrio = int(config.mediaportal.videoquali_others.value)
+		videoPrio = int(config_mp.mediaportal.videoquali_others.value)
 		if videoPrio == 2:
 			bw = max
 		elif videoPrio == 1:

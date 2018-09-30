@@ -41,7 +41,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
 
-default_cover = "file://%s/sexu.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/sexu.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class sexuGenreScreen(MPScreen):
 

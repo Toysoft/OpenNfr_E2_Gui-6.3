@@ -40,7 +40,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
 myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36'
-default_cover = "file://%s/fapbraze.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/fapbraze.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class fapbrazeGenreScreen(MPScreen):
 

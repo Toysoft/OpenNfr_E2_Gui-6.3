@@ -41,7 +41,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 myagent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0'
 BASE_NAME = "Mofos.com"
-default_cover = "file://%s/mofos.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/mofos.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class mofosGenreScreen(MPScreen):
 
@@ -106,7 +106,7 @@ class mofosGenreScreen(MPScreen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		if not config.mediaportal.premiumize_use.value:
+		if not config_mp.mediaportal.premiumize_use.value:
 			message = self.session.open(MessageBoxExt, _("%s only works with enabled MP premiumize.me option (MP Setup)!" % BASE_NAME), MessageBoxExt.TYPE_INFO, timeout=10)
 			return
 		Name = self['liste'].getCurrent()[0][0]

@@ -40,7 +40,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 
-default_cover = "file://%s/twitch.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/twitch.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36"
 headers = {'Accept': 'application/vnd.twitchtv.v5+json', 'Client-ID': '6r2dhbo9ek6mm1gab2snj0navo4sgqy'}
 limit = 25
@@ -198,10 +198,10 @@ class twitchGames(MPScreen):
 			self.lastpage = 1
 			self['page'].setText('1 / 1')
 		if self.ID == "favorites":
-			if not fileExists(config.mediaportal.watchlistpath.value+"mp_twitch_favorites"):
-				open(config.mediaportal.watchlistpath.value+"mp_twitch_favorites","w").close()
-			if fileExists(config.mediaportal.watchlistpath.value+"mp_twitch_favorites"):
-				path = config.mediaportal.watchlistpath.value+"mp_twitch_favorites"
+			if not fileExists(config_mp.mediaportal.watchlistpath.value+"mp_twitch_favorites"):
+				open(config_mp.mediaportal.watchlistpath.value+"mp_twitch_favorites","w").close()
+			if fileExists(config_mp.mediaportal.watchlistpath.value+"mp_twitch_favorites"):
+				path = config_mp.mediaportal.watchlistpath.value+"mp_twitch_favorites"
 			if fileExists(path):
 				read = open(path,"r")
 				for rawData in read.readlines():
@@ -387,7 +387,7 @@ class twitchGames(MPScreen):
 			Title = self['liste'].getCurrent()[0][5]
 			Name = self['liste'].getCurrent()[0][3]
 			Id = self['liste'].getCurrent()[0][6]
-			fn = config.mediaportal.watchlistpath.value+"mp_twitch_favorites"
+			fn = config_mp.mediaportal.watchlistpath.value+"mp_twitch_favorites"
 			if not fileExists(fn):
 				open(fn,"w").close()
 			try:
@@ -404,7 +404,7 @@ class twitchGames(MPScreen):
 			i = self['liste'].getSelectedIndex()
 			j = 0
 			l = len(self.gameList)
-			fn = config.mediaportal.watchlistpath.value+"mp_twitch_favorites"
+			fn = config_mp.mediaportal.watchlistpath.value+"mp_twitch_favorites"
 			try:
 				f1 = open(fn, 'w')
 				while j < l:

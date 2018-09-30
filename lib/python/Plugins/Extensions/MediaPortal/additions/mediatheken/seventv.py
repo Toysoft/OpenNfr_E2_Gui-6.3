@@ -43,7 +43,7 @@ from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPag
 BASE_URL = "http://www.7tv.de"
 sevenAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
 sevenCookies = CookieJar()
-default_cover = "file://%s/seventv.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/seventv.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 logos = ["dmax", "tlc"]
 
@@ -59,7 +59,7 @@ def getlogos():
 		logo_data = None
 
 	for logo in logos:
-		logo_path = "%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", logo)
+		logo_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "logos", logo)
 		url = icon_url+"logos/" + logo + ".png"
 		if not fileExists(logo_path):
 			if logo_data:
@@ -128,7 +128,7 @@ class sevenFirstScreen(MPScreen, ThumbsHelper):
 		self.showInfos()
 
 	def showInfos(self):
-		Image = "file://%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", self['liste'].getCurrent()[0][2])
+		Image = "file://%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "logos", self['liste'].getCurrent()[0][2])
 		CoverHelper(self['coverArt']).getCover(Image)
 		Name = self['liste'].getCurrent()[0][0]
 		self['name'].setText(_("Selection:") + " " + Name)
@@ -139,7 +139,7 @@ class sevenFirstScreen(MPScreen, ThumbsHelper):
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
 		global default_cover
-		default_cover = "file://%s/%s.png" % (config.mediaportal.iconcachepath.value + "logos", self['liste'].getCurrent()[0][2])
+		default_cover = "file://%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "logos", self['liste'].getCurrent()[0][2])
 		self.session.open(sevenGenreScreen, Link, Name)
 
 class sevenGenreScreen(MPScreen):
@@ -233,8 +233,12 @@ class sevenSubGenreScreen(MPScreen, ThumbsHelper):
 		sevendata = json.loads(data.replace('\u0096','-'))
 		for node in sevendata["entries"]:
 			url = BASE_URL + "/" + str(node["url"])
-			image = str(node["images"][0]["url"])
-			self.filmliste.append((str(node["title"]), url, image))
+			title = str(node["title"])
+			if title == "17 Meter":
+				image = str(node["images"][0]["url"])
+			else:
+				image = str(node["images"][0]["url"]).replace('300x160','940x528')
+			self.filmliste.append((title, url, image))
 		self.filmliste.sort(key=lambda t : t[0].lower())
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
@@ -310,7 +314,7 @@ class sevenStreamScreen(MPScreen):
 					for (url, img, title) in episodes:
 						if not url.startswith('http'):
 							url = BASE_URL + url
-						img = img.replace('300x160','620x348')
+						img = img.replace('300x160','940x528')
 						self.filmliste.append((title, url, img))
 		if ajax:
 			url = BASE_URL + ajax[0]

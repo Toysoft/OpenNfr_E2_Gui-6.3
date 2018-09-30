@@ -5,12 +5,12 @@ from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoard
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 from Plugins.Extensions.MediaPortal.resources.pininputext import PinInputExt
 
-config.mediaportal.movie4klang2 = ConfigText(default="de", fixed_size=False)
-config.mediaportal.movie4kdomain3 = ConfigText(default="https://movie4k.io", fixed_size=False)
+config_mp.mediaportal.movie4klang2 = ConfigText(default="de", fixed_size=False)
+config_mp.mediaportal.movie4kdomain3 = ConfigText(default="https://movie4k.io", fixed_size=False)
 
-m4k = config.mediaportal.movie4kdomain3.value.replace('https://','').replace('http://','')
-m4k_url = "%s/" % config.mediaportal.movie4kdomain3.value
-g_url = "%s/movies-genre-" % config.mediaportal.movie4kdomain3.value
+m4k = config_mp.mediaportal.movie4kdomain3.value.replace('https://','').replace('http://','')
+m4k_url = "%s/" % config_mp.mediaportal.movie4kdomain3.value
+g_url = "%s/movies-genre-" % config_mp.mediaportal.movie4kdomain3.value
 
 ds = defer.DeferredSemaphore(tokens=1)
 
@@ -59,8 +59,8 @@ class m4kGenreScreen(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self.locale = config.mediaportal.movie4klang2.value
-		self.domain = config.mediaportal.movie4kdomain3.value
+		self.locale = config_mp.mediaportal.movie4klang2.value
+		self.domain = config_mp.mediaportal.movie4kdomain3.value
 
 		self['title'] = Label(m4k)
 		self['ContentTitle'] = Label("Genre:")
@@ -176,7 +176,7 @@ class m4kGenreScreen(MPScreen):
 		elif name == "Suche...":
 			self.session.openWithCallback(self.searchCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = "", is_dialog=True)
 		elif name == "Erwachsene":
-			if config.mediaportal.pornpin.value and not self.pin:
+			if config_mp.mediaportal.pornpin.value and not self.pin:
 				self.pincheck()
 			else:
 				self.session.open(m4kKinoAlleFilmeListeScreen, self.url, name)
@@ -184,7 +184,7 @@ class m4kGenreScreen(MPScreen):
 			self.session.open(m4kKinoAlleFilmeListeScreen, self.url, name)
 
 	def pincheck(self):
-		self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct PIN"), windowTitle = _("Enter PIN"))
+		self.session.openWithCallback(self.pincheckok, PinInputExt, pinList = [(config_mp.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct PIN"), windowTitle = _("Enter PIN"))
 
 	def getTriesEntry(self):
 		return config.ParentalControl.retries.setuppin
@@ -196,28 +196,28 @@ class m4kGenreScreen(MPScreen):
 
 	def keyDomain(self):
 		if self.domain == "https://movie4k.io":
-			config.mediaportal.movie4kdomain3.value = "https://movie4k.am"
+			config_mp.mediaportal.movie4kdomain3.value = "https://movie4k.am"
 		elif self.domain == "https://movie4k.am":
-			config.mediaportal.movie4kdomain3.value = "https://movie.to"
+			config_mp.mediaportal.movie4kdomain3.value = "https://movie.to"
 		elif self.domain == "https://movie.to":
-			config.mediaportal.movie4kdomain3.value = "http://movie4k.pe"
+			config_mp.mediaportal.movie4kdomain3.value = "http://movie4k.pe"
 		elif self.domain == "http://movie4k.pe":
-			config.mediaportal.movie4kdomain3.value = "http://movie2k.cm"
+			config_mp.mediaportal.movie4kdomain3.value = "http://movie2k.cm"
 		elif self.domain == "http://movie2k.cm":
-			config.mediaportal.movie4kdomain3.value = "http://movie4k.sh"
+			config_mp.mediaportal.movie4kdomain3.value = "http://movie4k.sh"
 		elif self.domain == "http://movie4k.sh":
-			config.mediaportal.movie4kdomain3.value = "https://movie4k.tv"
+			config_mp.mediaportal.movie4kdomain3.value = "https://movie4k.tv"
 		elif self.domain == "https://movie4k.tv":
-			config.mediaportal.movie4kdomain3.value = "http://movie4k.me"
+			config_mp.mediaportal.movie4kdomain3.value = "http://movie4k.me"
 		elif self.domain == "http://movie4k.me":
-			config.mediaportal.movie4kdomain3.value = "http://movie4k.org"
+			config_mp.mediaportal.movie4kdomain3.value = "http://movie4k.org"
 		elif self.domain == "http://movie4k.org":
-			config.mediaportal.movie4kdomain3.value = "https://movie4k.io"
+			config_mp.mediaportal.movie4kdomain3.value = "https://movie4k.io"
 		else:
-			config.mediaportal.movie4kdomain3.value = "http://movie4k.io"
-		config.mediaportal.movie4kdomain3.save()
-		configfile.save()
-		self.domain = config.mediaportal.movie4kdomain3.value
+			config_mp.mediaportal.movie4kdomain3.value = "http://movie4k.io"
+		config_mp.mediaportal.movie4kdomain3.save()
+		configfile_mp.save()
+		self.domain = config_mp.mediaportal.movie4kdomain3.value
 		global m4k, m4k_url, g_url
 		m4k = "%s" % self.domain.replace('https://','').replace('http://','')
 		m4k_url = "%s/" % self.domain
@@ -233,14 +233,14 @@ class m4kGenreScreen(MPScreen):
 				m4k_ck.update({'lang':'de'})
 				requests.cookies.cookiejar_from_dict(m4k_ck, cookiejar=m4k_cookies)
 				self.locale = "en"
-				config.mediaportal.movie4klang2.value = "en"
+				config_mp.mediaportal.movie4klang2.value = "en"
 			elif self.locale == "en":
 				m4k_ck.update({'lang':'en'})
 				requests.cookies.cookiejar_from_dict(m4k_ck, cookiejar=m4k_cookies)
 				self.locale = "de"
-				config.mediaportal.movie4klang2.value = "de"
-			config.mediaportal.movie4klang2.save()
-			configfile.save()
+				config_mp.mediaportal.movie4klang2.value = "de"
+			config_mp.mediaportal.movie4klang2.save()
+			configfile_mp.save()
 			self['F3'].setText(self.locale)
 			self.layoutFinished()
 

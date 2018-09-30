@@ -53,15 +53,15 @@ class pinflixGenreScreen(MPScreen):
 		if self.mode == "pinflix":
 			self.portal = "Pinflix.com"
 			self.baseurl = "www.pinflix.com"
-			default_cover = "file://%s/pinflix.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pinflix.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "pornhd":
 			self.portal = "PornHD.com"
 			self.baseurl = "www.pornhd.com"
-			default_cover = "file://%s/pornhd.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pornhd.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "pornrox":
 			self.portal = "Pornrox.com"
 			self.baseurl = "www.pornrox.com"
-			default_cover = "file://%s/pornrox.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pornrox.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
@@ -245,11 +245,11 @@ class pinflixFilmScreen(MPScreen, ThumbsHelper):
 
 		global default_cover
 		if self.portal == "Pinflix.com":
-			default_cover = "file://%s/pinflix.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pinflix.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.portal == "PornHD.com":
-			default_cover = "file://%s/pornhd.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pornhd.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.portal == "Pornrox.com":
-			default_cover = "file://%s/pornrox.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pornrox.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)

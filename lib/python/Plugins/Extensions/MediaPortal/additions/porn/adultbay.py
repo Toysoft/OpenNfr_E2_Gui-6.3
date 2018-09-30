@@ -2,7 +2,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-default_cover = "file://%s/adultbay.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/adultbay.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 BASE_NAME = "The Adult Bay"
 
@@ -48,7 +48,7 @@ class adultbayGenreScreen(MPScreen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		if not config.mediaportal.premiumize_use.value and not config.mediaportal.realdebrid_use.value:
+		if not config_mp.mediaportal.premiumize_use.value and not config_mp.mediaportal.realdebrid_use.value:
 			message = self.session.open(MessageBoxExt, _("%s only works with enabled MP premiumize.me or Real-Debrid.com option (MP Setup)!" % BASE_NAME), MessageBoxExt.TYPE_INFO, timeout=10)
 			return
 		Name = self['liste'].getCurrent()[0][0]

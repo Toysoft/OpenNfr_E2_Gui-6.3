@@ -113,9 +113,9 @@ class get_stream_link:
 	def __init__(self, session):
 		self._callback = None
 		self.session = session
-		useProxy = config.mediaportal.premiumize_use.value
-		self.puser = config.mediaportal.premiumize_username.value
-		self.ppass = config.mediaportal.premiumize_password.value
+		useProxy = config_mp.mediaportal.premiumize_use.value
+		self.puser = config_mp.mediaportal.premiumize_username.value
+		self.ppass = config_mp.mediaportal.premiumize_password.value
 		self.papiurl = "https://api.premiumize.me/pm-api/v1.php?method=directdownloadlink&params[login]=%s&params[pass]=%s&params[link]=" % (self.puser, self.ppass)
 		self.rdb = 0
 		self.prz = 0
@@ -138,9 +138,9 @@ class get_stream_link:
 			return "error"
 
 	def callPremium(self, link):
-		if self.prz == 1 and config.mediaportal.premiumize_use.value:
+		if self.prz == 1 and config_mp.mediaportal.premiumize_use.value:
 			r_getPage(self.papiurl+link).addCallback(self.papiCallback, link).addErrback(self.errorload)
-		elif self.rdb == 1 and config.mediaportal.realdebrid_use.value:
+		elif self.rdb == 1 and config_mp.mediaportal.realdebrid_use.value:
 			self.session.openWithCallback(self.rapiCallback, realdebrid_oauth2, str(link))
 
 	def callPremiumYT(self, link, val):
@@ -154,7 +154,7 @@ class get_stream_link:
 				mp_globals.realdebrid = True
 				mp_globals.premiumize = False
 				self._callback(stream_url)
-		elif self.prz == 1 and config.mediaportal.premiumize_use.value:
+		elif self.prz == 1 and config_mp.mediaportal.premiumize_use.value:
 			self.rdb = 0
 			r_getPage(self.papiurl+link).addCallback(self.papiCallback, link).addErrback(self.errorload)
 		else:
@@ -179,7 +179,7 @@ class get_stream_link:
 			else:
 				self.fallback = True
 				self.check_link(self.link, self._callback)
-		elif self.rdb == 1 and config.mediaportal.realdebrid_use.value:
+		elif self.rdb == 1 and config_mp.mediaportal.realdebrid_use.value:
 			self.prz = 0
 			self.session.openWithCallback(self.rapiCallback, realdebrid_oauth2, str(link))
 		else:
@@ -214,7 +214,7 @@ class get_stream_link:
 		if data:
 			if re.search("http://streamcloud.eu/", data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					link = re.search("(http://streamcloud.eu/\w+)", data, re.S)
 					if link:
 						link = link.group(1)
@@ -227,7 +227,7 @@ class get_stream_link:
 
 			elif re.search('rapidgator.net|rg.to', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
@@ -236,7 +236,7 @@ class get_stream_link:
 
 			elif re.search('turbobit.net', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
@@ -245,7 +245,7 @@ class get_stream_link:
 
 			elif re.search('4shared.com', data, re.S):
 				link = data
-				if config.mediaportal.realdebrid_use.value and not self.fallback:
+				if config_mp.mediaportal.realdebrid_use.value and not self.fallback:
 					self.rdb = 1
 					self.prz = 0
 					self.callPremium(link)
@@ -254,7 +254,7 @@ class get_stream_link:
 
 			elif re.search('vimeo.com', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
@@ -263,7 +263,7 @@ class get_stream_link:
 
 			elif re.search('uptobox.com', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
@@ -272,7 +272,7 @@ class get_stream_link:
 
 			elif re.search('filerio.com|filerio.in', data, re.S):
 				link = data
-				if config.mediaportal.realdebrid_use.value and not self.fallback:
+				if config_mp.mediaportal.realdebrid_use.value and not self.fallback:
 					self.rdb = 1
 					self.prz = 0
 					self.callPremium(link)
@@ -281,7 +281,7 @@ class get_stream_link:
 
 			elif re.search('filer.net', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -290,7 +290,7 @@ class get_stream_link:
 
 			elif re.search('extmatrix.com', data, re.S):
 				link = data
-				if config.mediaportal.realdebrid_use.value and not self.fallback:
+				if config_mp.mediaportal.realdebrid_use.value and not self.fallback:
 					self.rdb = 1
 					self.prz = 0
 					self.callPremium(link)
@@ -299,7 +299,7 @@ class get_stream_link:
 
 			elif re.search('mediafire.com', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
@@ -308,7 +308,7 @@ class get_stream_link:
 
 			elif re.search('filefactory.com', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
@@ -317,7 +317,7 @@ class get_stream_link:
 
 			elif re.search('gigapeta.com', data, re.S):
 				link = data
-				if config.mediaportal.realdebrid_use.value and not self.fallback:
+				if config_mp.mediaportal.realdebrid_use.value and not self.fallback:
 					self.rdb = 1
 					self.prz = 0
 					self.callPremium(link)
@@ -326,7 +326,7 @@ class get_stream_link:
 
 			elif re.search('salefiles.com', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
@@ -335,7 +335,7 @@ class get_stream_link:
 
 			elif re.search('oboom.com', data, re.S):
 				link = data
-				if config.mediaportal.realdebrid_use.value and not self.fallback:
+				if config_mp.mediaportal.realdebrid_use.value and not self.fallback:
 					self.rdb = 1
 					self.prz = 0
 					self.callPremium(link)
@@ -344,7 +344,7 @@ class get_stream_link:
 
 			elif re.search('uploaded.net|uploaded.to|ul.to', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
@@ -353,19 +353,19 @@ class get_stream_link:
 
 			elif re.search('youtube.com', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
-					if config.mediaportal.sp_use_yt_with_proxy.value == "rdb":
+					if config_mp.mediaportal.sp_use_yt_with_proxy.value == "rdb":
 						self.callPremiumYT(link, "rdb")
-					if config.mediaportal.sp_use_yt_with_proxy.value == "prz":
+					if config_mp.mediaportal.sp_use_yt_with_proxy.value == "prz":
 						self.callPremiumYT(link, "prz")
 				else:
 					self.only_premium()
 
 			elif re.search('bangbrothers.net', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -374,7 +374,7 @@ class get_stream_link:
 
 			elif re.search('brazzers.com', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -383,7 +383,7 @@ class get_stream_link:
 
 			elif re.search('teamskeet.com', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -392,7 +392,7 @@ class get_stream_link:
 
 			elif re.search('naughtyamerica.com', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -401,7 +401,7 @@ class get_stream_link:
 
 			elif re.search('wicked.com', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -410,7 +410,7 @@ class get_stream_link:
 
 			elif re.search('digitalplayground.com', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -419,7 +419,7 @@ class get_stream_link:
 
 			elif re.search('mofos.com', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -428,7 +428,7 @@ class get_stream_link:
 
 			elif re.search('nubilefilms.com', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -437,7 +437,7 @@ class get_stream_link:
 
 			elif re.search('julesjordan.com', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -446,7 +446,7 @@ class get_stream_link:
 
 			elif re.search('kink.com', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -455,7 +455,7 @@ class get_stream_link:
 
 			elif re.search('badoinkvr.com', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -464,7 +464,7 @@ class get_stream_link:
 
 			elif re.search('realitykings.com', data, re.S):
 				link = data
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -473,7 +473,7 @@ class get_stream_link:
 
 			elif re.search('1fichier.com', data, re.S):
 				link = data
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
@@ -506,7 +506,7 @@ class get_stream_link:
 				id = re.search('flashx.(tv|pw|co|to)/(embed-|dl\?|fxplay-|embed.php\?c=|)(\w+)', data)
 				if id:
 					link = "https://www.flashx.co/%s.html" % id.group(3)
-					if config.mediaportal.premiumize_use.value and not self.fallback:
+					if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 						self.rdb = 0
 						self.prz = 1
 						TwAgentHelper().getRedirectedUrl(link).addCallback(self.flashx).addErrback(self.errorload)
@@ -601,7 +601,7 @@ class get_stream_link:
 					id = re.search('vidto\.me/(\w+)', data)
 					if id:
 						link = "http://vidto.me/embed-%s-640x360.html" % id.group(1)
-				if config.mediaportal.premiumize_use.value and not self.fallback:
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
 					self.prz = 1
 					self.callPremium(link)
@@ -652,7 +652,7 @@ class get_stream_link:
 
 			elif re.search('rapidvideo\.com', data, re.S):
 				link = data.replace('rapidvideo.com/e/', 'rapidvideo.com/v/')
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
@@ -667,7 +667,7 @@ class get_stream_link:
 				id = re.search('http[s]?://openload\...\/[^/]+\/(.*?)(\/.*?)?$', link, re.S)
 				if id:
 					link = 'https://openload.co/embed/' + id.group(1)
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
@@ -676,7 +676,7 @@ class get_stream_link:
 					getPage(link).addCallback(self.openloadApi, id.group(1)).addErrback(self.errorload)
 
 			elif re.search('thevideo\.me|thevideo\.cc', data, re.S):
-				if (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value) and not self.fallback:
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					if (re.search('thevideo(\.me|\.cc)/embed-', data, re.S) or re.search('640x360.html', data, re.S)):
 						id = re.findall('thevideo(?:\.me|\.cc)/(?:embed-|)(.*?)(?:\.html|-\d+x\d+\.html)', data)
 						if id:
@@ -720,12 +720,11 @@ class get_stream_link:
 				getPage(url, method='POST', agent=mp_globals.player_agent, cookies=ck, postdata=urlencode(dataPost), headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.okru).addErrback(self.errorload)
 
 			elif re.search('mail\.ru', data, re.S):
-				# https://my.mail.ru/mail/kaki.haki/video/_myvideo/296.html
-				id_raw = re.findall('mail.ru/.*?mail/(.*?)/.*?/(\d*)\.html', data)
+				id_raw = re.findall('mail.ru/video/embed/(\d+)$', data)
 				if id_raw:
-					(m_user, m_id) = id_raw[0]
-					url = "http://videoapi.my.mail.ru/videos/mail/%s/_myvideo/%s.json?ver=0.2.60" % (m_user, m_id)
-					spezialagent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0"
+					url = "https://my.mail.ru/+/video/meta/%s" % id_raw[0]
+					spezialagent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
+					mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
 					kekse = {}
 					getPage(url, agent=spezialagent, cookies=kekse).addCallback(self.mailru, kekse).addErrback(self.errorload)
 				else:
@@ -766,7 +765,7 @@ class get_stream_link:
 		message = self.session.open(MessageBoxExt, _("Stream not found, try another Stream Hoster."), MessageBoxExt.TYPE_INFO, timeout=5)
 
 	def only_premium(self):
-		if not (config.mediaportal.premiumize_use.value or config.mediaportal.realdebrid_use.value):
+		if not (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value):
 			message = self.session.open(MessageBoxExt, _("This hoster is only working with enabled Premium support."), MessageBoxExt.TYPE_INFO, timeout=5)
 		else:
 			message = self.session.open(MessageBoxExt, _("This Stream link is currently not available via Premium, try another Stream Hoster."), MessageBoxExt.TYPE_INFO, timeout=5)
@@ -819,7 +818,7 @@ class get_stream_link:
 			self.stream_not_found()
 
 	def userporn_tv(self, link):
-		fx = Userporn()
+		fx = self.Userporn()
 		stream_url = fx.get_media_url(link)
 		if stream_url:
 			self._callback(stream_url)

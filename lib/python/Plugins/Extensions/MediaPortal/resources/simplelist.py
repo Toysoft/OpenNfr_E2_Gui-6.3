@@ -147,7 +147,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 		MPScreen.__init__(self, session, skin='MP_Plugin')
 
 		self["hidePig"] = Boolean()
-		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
+		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -177,7 +177,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 		self['F4'] = Label(_("Delete PL"))
 		self['F4'].hide()
 
-		self.last_pl_number = config.mediaportal.sp_pl_number.value
+		self.last_pl_number = config_mp.mediaportal.sp_pl_number.value
 		self.last_videodir = config.movielist.last_videodir.value
 		config.movielist.last_videodir.value = self.filelist_path
 		self.last_selection = None
@@ -214,7 +214,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 		self['ContentTitle'].setText(_('List overview'))
 		self.genreliste = []
 		self.genreliste.append(('1', _('Video List'), ''))
-		path = config.mediaportal.watchlistpath.value + 'mp_global_pl_*'
+		path = config_mp.mediaportal.watchlistpath.value + 'mp_global_pl_*'
 		list = glob.glob(path)
 		for fn in list:
 			n = int(re.search('mp_global_pl_(\d+)', fn).group(1))
@@ -226,18 +226,18 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 		for upath in list:
 			fn = upath.split('/')[-1]
 			self.m3u_list[fn] = upath
-			wpath = config.mediaportal.watchlistpath.value + fn
+			wpath = config_mp.mediaportal.watchlistpath.value + fn
 			if not fileExists(wpath) and not fileExists(wpath+'.del'):
 				try:
 					shutil.copyfile(upath, wpath)
 				except:
 					pass
 
-		path = config.mediaportal.watchlistpath.value + '*.m3u'
+		path = config_mp.mediaportal.watchlistpath.value + '*.m3u'
 		list = glob.glob(path)
 		for fn in list:
 			if "_MP_Adult.m3u" in fn or "_XX" in fn:
-				if config.mediaportal.showporn.value:
+				if config_mp.mediaportal.showporn.value:
 					self.genreliste.append(('3', fn.split('/')[-1], fn))
 				else:
 					pass
@@ -246,8 +246,8 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 
 		self.genreliste.sort(key=lambda t : t[0]+t[1].lower())
 
-		if config.mediaportal.showuseradditions.value:
-			dpath = config.mediaportal.watchlistpath.value
+		if config_mp.mediaportal.showuseradditions.value:
+			dpath = config_mp.mediaportal.watchlistpath.value
 
 		self.ml.setList(map(self.simplelistListEntry, self.genreliste))
 		self.keyLocked = False
@@ -267,7 +267,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 			self.last_selection = current
 			url = sref.getPath()
 			fn = sref.getServiceName()
-			self.session.openWithCallback(self.loadFileList, SimplePlayer, [(fn, url)], showPlaylist=False, ltype=self.ltype, googleCoverSupp=config.mediaportal.simplelist_gcoversupp.value, embeddedCoverArt=True)
+			self.session.openWithCallback(self.loadFileList, SimplePlayer, [(fn, url)], showPlaylist=False, ltype=self.ltype, googleCoverSupp=config_mp.mediaportal.simplelist_gcoversupp.value, embeddedCoverArt=True)
 		else:
 			self.keyCancel()
 
@@ -399,7 +399,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 							continue
 
 					elif extm3u and extinf and line:
-						if not config.mediaportal.use_hls_proxy.value:
+						if not config_mp.mediaportal.use_hls_proxy.value:
 							path = line.replace('|', '#')
 						else:
 							path = line
@@ -589,28 +589,28 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 		if self.menu_level == 1:
 			if self.ltype == 'sl_glob_playlist':
 				idx = self['liste'].getSelectedIndex()
-				self.session.open(SimplePlayer, [], playIdx=idx, playList2=self.filelist, plType='global', ltype=self.ltype, playAll=True, googleCoverSupp=config.mediaportal.simplelist_gcoversupp.value, useResume=False)
+				self.session.open(SimplePlayer, [], playIdx=idx, playList2=self.filelist, plType='global', ltype=self.ltype, playAll=True, googleCoverSupp=config_mp.mediaportal.simplelist_gcoversupp.value, useResume=False)
 			elif self.ltype == 'sl_m3ulist':
 				idx = self['liste'].getSelectedIndex()
 				if 'TVG-LIST' in self.filelist[idx][3]: return
-				force_hls_player = config.mediaportal.use_hls_proxy.value or self.filelist[idx][1].startswith('newtopia-stream')
+				force_hls_player = config_mp.mediaportal.use_hls_proxy.value or self.filelist[idx][1].startswith('newtopia-stream')
 				if self.filelist[idx][1] not in ('', 'None'):
 					if force_hls_player and ('.m3u8' in self.filelist[idx][1])>0:
-						if not config.mediaportal.use_hls_proxy.value:
+						if not config_mp.mediaportal.use_hls_proxy.value:
 							self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO)
 							return
 					if any(x in self.filelist[idx][1] for x in ('|', '={')):
-						if not config.mediaportal.use_hls_proxy.value:
+						if not config_mp.mediaportal.use_hls_proxy.value:
 							self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO)
 							return
 
 					if self.do_update:
 						self._update_task.stop()
-					if config.mediaportal.restorelastservice.value == "1" and not config.mediaportal.backgroundtv.value:
+					if config_mp.mediaportal.restorelastservice.value == "1" and not config_mp.mediaportal.backgroundtv.value:
 						self.lastservice = self.session.nav.getCurrentlyPlayingServiceReference()
 					else:
 						self.lastservice = None
-					self.session.openWithCallback(self.restoreLastService, SimplePlayer, self.filelist, playIdx=idx, ltype=self.ltype, playAll=True, googleCoverSupp=config.mediaportal.simplelist_gcoversupp.value, useResume=False, listTitle=self.m3u_title, playerMode=self.sp_option, cover=self.logos)
+					self.session.openWithCallback(self.restoreLastService, SimplePlayer, self.filelist, playIdx=idx, ltype=self.ltype, playAll=True, googleCoverSupp=config_mp.mediaportal.simplelist_gcoversupp.value, useResume=False, listTitle=self.m3u_title, playerMode=self.sp_option, cover=self.logos)
 			elif self.ltype == 'sl_dm3ulist':
 				self.keyLocked = True
 				idx = self['liste'].getSelectedIndex()
@@ -696,7 +696,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 					for l in c.splitlines():
 						if l.startswith('#'):
 							pass
-						elif l.startswith('XXX') and not config.mediaportal.showporn.value:
+						elif l.startswith('XXX') and not config_mp.mediaportal.showporn.value:
 							pass
 						else:
 							yield l
@@ -765,7 +765,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 				self['liste'].moveToIndex(self.last_menu_idx)
 
 	def restoreLastService(self):
-		if config.mediaportal.restorelastservice.value == "1" and not config.mediaportal.backgroundtv.value:
+		if config_mp.mediaportal.restorelastservice.value == "1" and not config_mp.mediaportal.backgroundtv.value:
 			self.session.nav.playService(self.lastservice)
 		else:
 			self.session.nav.stopService()
@@ -806,7 +806,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 	def cb_overwriteM3U(self, answer):
 		stype = answer and answer[1]
 		if stype and stype == "1":
-			wpath = config.mediaportal.watchlistpath.value + self.m3u_update_fn
+			wpath = config_mp.mediaportal.watchlistpath.value + self.m3u_update_fn
 			try:
 				shutil.copyfile(self.m3u_list[self.m3u_update_fn], wpath)
 				self.session.open(MessageBoxExt, _("Playlist \"{0}\" successfully updated").format(self.m3u_update_fn), MessageBoxExt.TYPE_INFO, timeout=3)
@@ -847,8 +847,8 @@ class SimplelistConfig(MPSetupScreen, ConfigListScreenExt):
 		self['title'] = Label(_("SimpleList Configuration"))
 		self['F4'] = Label('')
 		self.list = []
-		self.list.append(getConfigListEntry(_('Global playlist number'), config.mediaportal.sp_pl_number))
-		self.list.append(getConfigListEntry(_('Google coversupport'), config.mediaportal.simplelist_gcoversupp))
+		self.list.append(getConfigListEntry(_('Global playlist number'), config_mp.mediaportal.sp_pl_number))
+		self.list.append(getConfigListEntry(_('Google coversupport'), config_mp.mediaportal.simplelist_gcoversupp))
 
 		ConfigListScreenExt.__init__(self, self.list)
 		self['setupActions'] = ActionMap(['MP_Actions'],
@@ -858,11 +858,11 @@ class SimplelistConfig(MPSetupScreen, ConfigListScreenExt):
 			"blue": 	self.importEPG,
 		},-2)
 
-		if config.mediaportal.epg_enabled.value:
+		if config_mp.mediaportal.epg_enabled.value:
 			self['F4'] = Label(_('Import EPG'))
 
 	def importEPG(self):
-		if config.mediaportal.epg_enabled.value:
+		if config_mp.mediaportal.epg_enabled.value:
 			self['F4'].setText(_('EPG import started'))
 			mpepg.getEPGData().addCallback(self.importFini, self.session).addErrback(self.importFini, self.session, True)
 

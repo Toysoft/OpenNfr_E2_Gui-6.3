@@ -41,13 +41,13 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 
 CONFIG = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/additions/additions.xml"
-default_cover = "file://%s/2search4porn.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/2search4porn.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 favourites = []
 
 def writeFavourites():
 	try:
-		wl_path = config.mediaportal.watchlistpath.value+"mp_2s4p"
+		wl_path = config_mp.mediaportal.watchlistpath.value+"mp_2s4p"
 		writefavsub = open(wl_path, 'w')
 		favourites.sort(key=lambda t : t.lower())
 		for m in favourites:
@@ -100,7 +100,7 @@ class toSearchForPorn(MPScreen, SearchHelper):
 	def readFavourites(self):
 		global favourites
 		favourites = []
-		self.wl_path = config.mediaportal.watchlistpath.value+"mp_2s4p"
+		self.wl_path = config_mp.mediaportal.watchlistpath.value+"mp_2s4p"
 		try:
 			rawData = open(self.wl_path,"r")
 			for m in rawData:
@@ -194,7 +194,7 @@ class toSearchForPornBrowse(MPScreen):
 		}, -1)
 
 		self['title'] = Label("2Search4Porn")
-		self['ContentTitle'] = Label("Select Site")
+		self['ContentTitle'] = Label("Select Website")
 		self['name'] = Label(_("Selection:"))
 		self.keyLocked = True
 		self.pornscreen = None
@@ -214,10 +214,10 @@ class toSearchForPornBrowse(MPScreen):
 				if x.get("type") == "mod":
 					if x.get("confcat") == "porn" and x.get("search") == "1":
 						gz = x.get("gz")
-						if not config.mediaportal.showuseradditions.value and gz == "1":
+						if not config_mp.mediaportal.showuseradditions.value and gz == "1":
 							pass
 						else:
-							mod = eval("config.mediaportal." + x.get("confopt") + ".value")
+							mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
 							if mod:
 								self.genreliste.append((x.get("name").replace("&amp;","&"), None))
 
@@ -236,17 +236,20 @@ class toSearchForPornBrowse(MPScreen):
 							if x.get("type") == "mod":
 								if x.get("confcat") == "porn" and x.get("search") == "1":
 									gz = x.get("gz")
-									if not config.mediaportal.showuseradditions.value and gz == "1":
+									if not config_mp.mediaportal.showuseradditions.value and gz == "1":
 										pass
 									else:
-										mod = eval("config.mediaportal." + x.get("confopt") + ".value")
+										mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
 										if mod:
 											self.genreliste.append((x.get("name").replace("&amp;","&"), None))
 		except:
 			pass
 
-		self.genreliste.sort(key=lambda t : t[0].lower())
-		self.keyLocked = False
+		if len(self.genreliste) == 0:
+			self.genreliste.append((_("No websites found!"), None))
+		else:
+			self.genreliste.sort(key=lambda t : t[0].lower())
+			self.keyLocked = False
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 
 	def keyOK(self):

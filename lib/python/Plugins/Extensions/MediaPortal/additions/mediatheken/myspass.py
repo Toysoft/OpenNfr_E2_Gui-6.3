@@ -38,7 +38,7 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-default_cover = "file://%s/myspass.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/myspass.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class myspassGenreScreen(MPScreen):
 

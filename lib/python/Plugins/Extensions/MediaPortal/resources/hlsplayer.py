@@ -192,7 +192,7 @@ server_port = None
 def start_hls_proxy():
 	global server_port
 	if server_port == None:
-		port = 0 #config.mediaportal.hls_proxy_port
+		port = 0 #config_mp.mediaportal.hls_proxy_port
 		if has_ipv6 and fileExists('/proc/net/if_inet6') and version.major >= 12:
 			server_port = reactor.listenTCP(port, site, interface='::')
 		else:

@@ -26,6 +26,7 @@ from sepg import log
 from Components.ActionMap import NumberActionMap, ActionMap, HelpableActionMap
 from Components.AVSwitch import AVSwitch
 from Components.Button import Button
+from config import config_mp, configfile_mp
 from Components.config import config, ConfigInteger, ConfigSelection, getConfigListEntry, ConfigText, ConfigDirectory, ConfigBoolean, configfile, ConfigSelection, ConfigSubsection, ConfigPIN, NoSave, ConfigNothing, ConfigIP
 
 yes_no_descriptions = {False: _("no"), True: _("yes")}
@@ -161,22 +162,6 @@ def getIconUrl():
 		'http://dhwz.gitlab.io/pages/'
 	]
 	return random.choice(iconurls)
-
-def bstkn(url):
-	urlpart = re.search('https://bs.to/api/(.*?)$', url)
-	if urlpart:
-		import hmac, base64
-		urlpart = urlpart.group(1)
-		datelong = int(round(time()))
-		public_key = base64.b64decode('d0dST3hNNVFZbGpudkFCT1BSeUhvWXNQOHNBMW1oVkw=')
-		resultD = mp_globals.bsp
-		myurlpart = '%s/%s' % (datelong, urlpart)
-		myHmac = hmac.new(resultD, myurlpart,digestmod=hashlib.sha256).hexdigest()
-		token = '{"public_key":"'+public_key+'","timestamp":'+str(datelong)+',"hmac":"'+ myHmac+'"}'
-		retval = base64.b64encode(token)
-		return retval
-	else:
-		return None
 
 def testWebConnection(host="8.8.8.8", port=53, timeout=3):
 	import socket

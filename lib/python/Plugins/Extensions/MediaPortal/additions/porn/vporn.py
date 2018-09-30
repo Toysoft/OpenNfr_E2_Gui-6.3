@@ -42,10 +42,10 @@ from Plugins.Extensions.MediaPortal.resources.configlistext import ConfigListScr
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 
-config.mediaportal.vporn_username = ConfigText(default="vpornUserName", fixed_size=False)
-config.mediaportal.vporn_password = ConfigPassword(default="vpornPassword", fixed_size=False)
-config.mediaportal.vporn_hd = ConfigText(default="SD/HD", fixed_size=False)
-config.mediaportal.vporn_date = ConfigText(default="all time", fixed_size=False)
+config_mp.mediaportal.vporn_username = ConfigText(default="vpornUserName", fixed_size=False)
+config_mp.mediaportal.vporn_password = ConfigPassword(default="vpornPassword", fixed_size=False)
+config_mp.mediaportal.vporn_hd = ConfigText(default="SD/HD", fixed_size=False)
+config_mp.mediaportal.vporn_date = ConfigText(default="all time", fixed_size=False)
 
 vpagent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
 vpck = {}
@@ -56,7 +56,7 @@ json_headers = {
 	'Content-Type':'application/x-www-form-urlencoded',
 	}
 
-default_cover = "file://%s/vporn.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/vporn.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class vpornGenreScreen(MPScreen):
 
@@ -76,10 +76,10 @@ class vpornGenreScreen(MPScreen):
 			"blue": self.keySetup
 		}, -1)
 
-		self.hd = config.mediaportal.vporn_hd.value
-		self.date = config.mediaportal.vporn_date.value
-		self.username = str(config.mediaportal.vporn_username.value)
-		self.password = str(config.mediaportal.vporn_password.value)
+		self.hd = config_mp.mediaportal.vporn_hd.value
+		self.date = config_mp.mediaportal.vporn_date.value
+		self.username = str(config_mp.mediaportal.vporn_username.value)
+		self.password = str(config_mp.mediaportal.vporn_password.value)
 
 		self['title'] = Label("VPORN.com")
 		self['ContentTitle'] = Label("Genre:")
@@ -190,31 +190,31 @@ class vpornGenreScreen(MPScreen):
 	def keyHD(self):
 		if self.hd == "SD/HD":
 			self.hd = "HD"
-			config.mediaportal.vporn_hd.value = "HD"
+			config_mp.mediaportal.vporn_hd.value = "HD"
 		elif self.hd == "HD":
 			self.hd = "SD/HD"
-			config.mediaportal.vporn_hd.value = "SD/HD"
+			config_mp.mediaportal.vporn_hd.value = "SD/HD"
 
-		config.mediaportal.vporn_hd.save()
-		configfile.save()
+		config_mp.mediaportal.vporn_hd.save()
+		configfile_mp.save()
 		self['F2'].setText(self.hd)
 
 	def keyDate(self):
 		if self.date == "all time":
 			self.date = "last 24h"
-			config.mediaportal.vporn_date.value = "last 24h"
+			config_mp.mediaportal.vporn_date.value = "last 24h"
 		elif self.date == "last 24h":
 			self.date = "last week"
-			config.mediaportal.vporn_date.value = "last week"
+			config_mp.mediaportal.vporn_date.value = "last week"
 		elif self.date == "last week":
 			self.date = "last month"
-			config.mediaportal.vporn_date.value = "last month"
+			config_mp.mediaportal.vporn_date.value = "last month"
 		elif self.date == "last month":
 			self.date = "all time"
-			config.mediaportal.vporn_date.value = "all time"
+			config_mp.mediaportal.vporn_date.value = "all time"
 
-		config.mediaportal.vporn_date.save()
-		configfile.save()
+		config_mp.mediaportal.vporn_date.save()
+		configfile_mp.save()
 		self['F3'].setText(self.date)
 
 class vpornSetupScreen(MPSetupScreen, ConfigListScreenExt):
@@ -229,8 +229,8 @@ class vpornSetupScreen(MPSetupScreen, ConfigListScreenExt):
 		self.list = []
 		ConfigListScreenExt.__init__(self, self.list)
 
-		self.list.append(getConfigListEntry(_("Username:"), config.mediaportal.vporn_username))
-		self.list.append(getConfigListEntry(_("Password:"), config.mediaportal.vporn_password))
+		self.list.append(getConfigListEntry(_("Username:"), config_mp.mediaportal.vporn_username))
+		self.list.append(getConfigListEntry(_("Password:"), config_mp.mediaportal.vporn_password))
 
 		self["config"].setList(self.list)
 
@@ -243,7 +243,7 @@ class vpornSetupScreen(MPSetupScreen, ConfigListScreenExt):
 	def saveConfig(self):
 		for x in self["config"].list:
 			x[1].save()
-		configfile.save()
+		configfile_mp.save()
 		self.close()
 
 	def exit(self):

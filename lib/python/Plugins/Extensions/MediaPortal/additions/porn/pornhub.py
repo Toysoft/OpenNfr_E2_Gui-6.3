@@ -44,9 +44,9 @@ from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 from Plugins.Extensions.MediaPortal.resources.DelayedFunction import DelayedFunction
 import requests
 
-config.mediaportal.pornhub_username = ConfigText(default="pornhubUserName", fixed_size=False)
-config.mediaportal.pornhub_password = ConfigPassword(default="pornhubPassword", fixed_size=False)
-config.mediaportal.pornhub_cdnfix = ConfigYesNo(default=False)
+config_mp.mediaportal.pornhub_username = ConfigText(default="pornhubUserName", fixed_size=False)
+config_mp.mediaportal.pornhub_password = ConfigPassword(default="pornhubPassword", fixed_size=False)
+config_mp.mediaportal.pornhub_cdnfix = ConfigYesNo(default=False)
 
 base_url = 'https://www.pornhub.com'
 
@@ -63,7 +63,7 @@ json_headers = {
 	'Referer':base_url
 	}
 
-default_cover = "file://%s/pornhub.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/pornhub.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 token = ''
 
 class LoginFunc:
@@ -85,8 +85,8 @@ class LoginFunc:
 		twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.Login2, callback).addErrback(self.dataError)
 
 	def Login2(self, data, callback):
-		self.username = str(config.mediaportal.pornhub_username.value)
-		self.password = str(config.mediaportal.pornhub_password.value)
+		self.username = str(config_mp.mediaportal.pornhub_username.value)
+		self.password = str(config_mp.mediaportal.pornhub_password.value)
 		parse = re.findall('name="redirect"\svalue="(.*?)".*?name="token"\svalue="(.*?)"', data, re.S)
 		if parse:
 			global token
@@ -132,8 +132,8 @@ class pornhubGenreScreen(MPScreen, LoginFunc):
 			"blue": self.keySetup
 		}, -1)
 
-		self.username = str(config.mediaportal.pornhub_username.value)
-		self.password = str(config.mediaportal.pornhub_password.value)
+		self.username = str(config_mp.mediaportal.pornhub_username.value)
+		self.password = str(config_mp.mediaportal.pornhub_password.value)
 
 		self['title'] = Label("Pornhub.com")
 		self['ContentTitle'] = Label("Genre:")
@@ -248,8 +248,8 @@ class pornhubGenreScreen(MPScreen, LoginFunc):
 			global phLoggedIn
 			phLoggedIn = False
 			token = ''
-			self.username = str(config.mediaportal.pornhub_username.value)
-			self.password = str(config.mediaportal.pornhub_password.value)
+			self.username = str(config_mp.mediaportal.pornhub_username.value)
+			self.password = str(config_mp.mediaportal.pornhub_password.value)
 			self.LoginClear(self.layoutFinished)
 
 class pornhubSetupScreen(MPSetupScreen, ConfigListScreenExt):
@@ -264,9 +264,9 @@ class pornhubSetupScreen(MPSetupScreen, ConfigListScreenExt):
 		self.list = []
 		ConfigListScreenExt.__init__(self, self.list)
 
-		self.list.append(getConfigListEntry(_("Username:"), config.mediaportal.pornhub_username))
-		self.list.append(getConfigListEntry(_("Password:"), config.mediaportal.pornhub_password))
-		self.list.append(getConfigListEntry(_("CDN fix (please don't use this option as default):"), config.mediaportal.pornhub_cdnfix))
+		self.list.append(getConfigListEntry(_("Username:"), config_mp.mediaportal.pornhub_username))
+		self.list.append(getConfigListEntry(_("Password:"), config_mp.mediaportal.pornhub_password))
+		self.list.append(getConfigListEntry(_("CDN fix (please don't use this option as default):"), config_mp.mediaportal.pornhub_cdnfix))
 
 		self["config"].setList(self.list)
 
@@ -528,7 +528,7 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper):
 				if self.Name == "Member Subscriptions":
 					Url = Url + '/videos/public?page='
 				elif self.Name == "Pornstar Subscriptions":
-					Url = Url + '?o=cm&page='
+					Url = Url + '/videos?page='
 				else:
 					Url = Url + '/videos?o=da&page='
 				Url = base_url + Url
@@ -553,7 +553,7 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper):
 	def keyOK(self):
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		self.session.open(pornhubFilmScreen, Link, Name)
+		self.session.open(pornhubFilmScreen, Link, Name, Cat=self.Name)
 
 	def keySort(self):
 		if self.keyLocked:
@@ -858,10 +858,11 @@ class pornhubChannelScreen(MPScreen, ThumbsHelper):
 
 class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 
-	def __init__(self, session, Link, Name, Count=None):
+	def __init__(self, session, Link, Name, Count=None, Cat=None):
 		self.Link = Link
 		self.Name = Name
 		self.Count = Count
+		self.Cat = Cat
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -930,8 +931,10 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		if re.match(".*Feed",self.Name):
 			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.loadFeedData).addErrback(self.dataError)
 		else:
-			if self.retry:
+			if self.retry and self.Cat == "Member Subscriptions":
 				url = url.replace('/public','/upload')
+			elif self.retry and self.Cat == "Pornstar Subscriptions":
+				url = url.replace('/videos','')
 			twAgentGetPage(url, agent=phAgent, cookieJar=ph_cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -972,7 +975,8 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 							parse = re.search('class="profileVids">(.*?)class="profileContentRight', data, re.S)
 							if not parse:
 								parse = re.search('id="lrelateRecommendedItems"(.*?)</ul>', data, re.S)
-
+								if not parse:
+									parse = re.search('class="videos\srow-5-thumbs(.*?)class="pre-footer">', data, re.S)
 		if parse:
 			Movies = re.findall('(class="(?:js-pop |)videoblock.*?<var\sclass="added">.*?</var>)', parse.group(1), re.S)
 		if Movies:
@@ -984,8 +988,14 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 						Title = Title.replace('&amp;amp;','&')
 						self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, Added))
 		if len(self.filmliste) == 0:
-			if self.Link.endswith('/videos/public?page='):
+			if self.Link.endswith('/videos/public?page=') and self.Cat == "Member Subscriptions":
 				self.retry = True
+				self.lastpage = 999
+				self.loadPage()
+				return
+			elif self.Link.endswith('/videos?page=') and self.Cat == "Pornstar Subscriptions":
+				self.retry = True
+				self.lastpage = 999
 				self.loadPage()
 				return
 			else:
@@ -1176,7 +1186,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		fetchurl = urllib2.unquote(match[0]).replace('\/','/')
 
 		# retry till we get a good working cdn streamurl
-		if config.mediaportal.pornhub_cdnfix.value:
+		if config_mp.mediaportal.pornhub_cdnfix.value:
 			if re.match('.*?bv.phncdn.com', fetchurl, re.S):
 				self.count += 1
 				if self.count < 20:

@@ -48,7 +48,7 @@ class checkupdate:
 
 	def __init__(self, session):
 		self.session = session
-		mp_globals.currentskin = config.mediaportal.skin2.value
+		mp_globals.currentskin = config_mp.mediaportal.skin2.value
 
 	def standbyCounterChanged(self, configElement):
 		from Screens.Standby import inStandby
@@ -81,7 +81,7 @@ class checkupdate:
 			self.updateurl = tmp_infolines[1]
 			remoteversion = remoteversion_ipk
 
-		if int(config.mpgz.version.value) < int(remoteversion) and int(config.mediaportal.version.value) >= int(remote_mp_version):
+		if int(config.mpgz.version.value) < int(remoteversion) and int(config_mp.mediaportal.version.value) >= int(remote_mp_version):
 			self.session.openWithCallback(self.startUpdate,MessageBoxExt,_("An update is available for the %s Plugin!\nDo you want to download and install it now?" % "mpgz"), MessageBoxExt.TYPE_YESNO, timeout=15, default=False)
 			return
 		else:
@@ -130,9 +130,9 @@ class MPUpdateScreen(MPScreen):
 	def finishedPluginUpdate(self,retval):
 		self.container.kill()
 		if retval == 0:
-			config.mediaportal.filter.value = "ALL"
-			config.mediaportal.filter.save()
-			configfile.save()
+			config_mp.mediaportal.filter.value = "ALL"
+			config_mp.mediaportal.filter.save()
+			configfile_mp.save()
 			self.session.openWithCallback(self.restartGUI, MessageBoxExt, _("%s successfully updated!\nDo you want to restart the Enigma2 GUI now?" % "mpgz"), MessageBoxExt.TYPE_YESNO)
 		else:
 			self.session.openWithCallback(self.returnGUI, MessageBoxExt, _("%s update failed! Check the update log carefully!" % "mpgz"), MessageBoxExt.TYPE_ERROR)

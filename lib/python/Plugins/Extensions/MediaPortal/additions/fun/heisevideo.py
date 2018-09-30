@@ -38,7 +38,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-default_cover = "file://%s/heisevideo.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/heisevideo.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 heiseAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
 baseUrl = 'http://www.heise.de'
 
@@ -228,7 +228,7 @@ class HeiseTvListScreen(MPScreen, ThumbsHelper):
 		for x in match_sec_m3u8:
 			if int(x[0]) > max:
 				max = int(x[0])
-		videoPrio = int(config.mediaportal.videoquali_others.value)
+		videoPrio = int(config_mp.mediaportal.videoquali_others.value)
 		if videoPrio == 2:
 			bw = max
 		elif videoPrio == 1:

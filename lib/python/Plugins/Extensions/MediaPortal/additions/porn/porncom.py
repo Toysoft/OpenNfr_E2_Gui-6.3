@@ -49,7 +49,7 @@ json_headers = {
 	'X-Requested-With':'XMLHttpRequest',
 	'Content-Type':'application/x-www-form-urlencoded',
 	}
-default_cover = "file://%s/porncom.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/porncom.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class porncomGenreScreen(MPScreen):
 

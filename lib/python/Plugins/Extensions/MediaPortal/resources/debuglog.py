@@ -5,7 +5,7 @@ import datetime
 import os
 import sys
 import re
-from  Components.config import config
+from config import config_mp
 gLogFile = None
 
 #########################################
@@ -30,7 +30,7 @@ VERB_DEFAULT     = 10 # "I" default verbose level when not specified
 VERB_TOLOG       = 20 # " " max verbose level that shows up in normal log
 
 def printlog (string, parent=None, verbLevel=VERB_DEFAULT):
-	debugMode = config.mediaportal.debugMode.value
+	debugMode = config_mp.mediaportal.debugMode.value
 	type = "I"
 
 	if verbLevel == "E":

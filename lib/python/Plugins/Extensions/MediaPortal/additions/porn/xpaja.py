@@ -41,7 +41,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import TwAgentHelper
 
 agent='Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0'
-default_cover = "file://%s/xpaja.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/xpaja.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class xpajaGenreScreen(MPScreen):
 

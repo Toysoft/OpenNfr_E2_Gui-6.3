@@ -1,24 +1,55 @@
 ﻿# -*- coding: utf-8 -*-
-import glob
+###############################################################################################
+#
+#    MediaPortal for Dreambox OS
+#
+#    Coded by MediaPortal Team (c) 2013-2018
+#
+#  This plugin is open source but it is NOT free software.
+#
+#  This plugin may only be distributed to and executed on hardware which
+#  is licensed by Dream Property GmbH. This includes commercial distribution.
+#  In other words:
+#  It's NOT allowed to distribute any parts of this plugin or its source code in ANY way
+#  to hardware which is NOT licensed by Dream Property GmbH.
+#  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
+#  on hardware which is NOT licensed by Dream Property GmbH.
+#
+#  This applies to the source code as a whole as well as to parts of it, unless
+#  explicitely stated otherwise.
+#
+#  If you want to use or modify the code or parts of it,
+#  you have to keep OUR license and inform us about the modifications, but it may NOT be
+#  commercially distributed other than under the conditions noted above.
+#
+#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
+#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
+#
+#  As an exception regarding modifcations, you are NOT permitted to remove
+#  any copy protections implemented in this plugin or change them for means of disabling
+#  or working around the copy protections, unless the change has been explicitly permitted
+#  by the original authors. Also decompiling and modification of the closed source
+#  parts is NOT permitted.
+#
+#  Advertising with this plugin is NOT allowed.
+#  For other uses, permission from the authors is necessary.
+#
+###############################################################################################
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 
-# Globals
-suchCache = ""	# Letzte Sucheingabe
-AdT = " "	# Default: Anzahl der Treffer/Clips/Sendungen
 BASE_URL = "https://www.zdf.de"
-NoC = "Keine abspielbaren Inhalte verfügbar"
-bildchen = "file://%s/zdf.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/zdf.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class ZDFGenreScreen(MPScreen):
 
 	def __init__(self, session):
 		self.keyLocked = True
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
-			"0"		: self.closeAll,
+			"0"	: self.closeAll,
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
 			"up" : self.keyUp,
@@ -28,13 +59,13 @@ class ZDFGenreScreen(MPScreen):
 		}, -1)
 
 		self['title'] = Label("ZDF Mediathek")
-		self['ContentTitle'] = Label("Genre")
-		self['name'].setText("Auswahl")
+		self['ContentTitle'] = Label("Genre:")
+		self['name'].setText(_("Selection:"))
 
 		self.genreliste = []
+		self.suchString = ''
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
-		self.prev = ""
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
@@ -43,9 +74,9 @@ class ZDFGenreScreen(MPScreen):
 
 	def loadPageData(self):
 		self.genreliste = []
-		self.genreliste.append(("Suche (alle Kanäle)", "1", "/"))
-		self.genreliste.append(("Sendungen A bis Z (alle Kanäle)", "2", "/"))
-		self.genreliste.append(("Sendung verpasst? (alle Kanäle)", "3", "/"))
+		self.genreliste.append(("Suche", "1", "/"))
+		self.genreliste.append(("Sendungen A bis Z", "2", "/"))
+		self.genreliste.append(("Sendung verpasst?", "3", "/"))
 		self.genreliste.append(("Podcasts", "4", "/"))
 		self.genreliste.append(("Rubriken", "5", "/"))
 		self.genreliste.append(("ZDF", "6", "/"))
@@ -59,61 +90,49 @@ class ZDFGenreScreen(MPScreen):
 	def showInfos(self):
 		cur = self['liste'].getCurrent()[0][1]
 		streamPic = self['liste'].getCurrent()[0][2]
-		if self.prev == "/" and streamPic == "/":
-			return
-		else:
-			self.prev = streamPic
-		if streamPic == "/":
-			CoverHelper(self['coverArt']).getCover(bildchen)
-		else:
+		if streamPic.startswith('http'):
 			CoverHelper(self['coverArt']).getCover(streamPic)
+		else:
+			CoverHelper(self['coverArt']).getCover(default_cover)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		if " (alle Kanäle)" in self['liste'].getCurrent()[0][0]:
-			genreName = self['liste'].getCurrent()[0][0].split(" (alle Kanäle)")[0]
-		else:
-			genreName = self['liste'].getCurrent()[0][0]
+		genreName = self['liste'].getCurrent()[0][0]
 		genreFlag = self['liste'].getCurrent()[0][1]
 		streamPic = self['liste'].getCurrent()[0][2]
 		if genreFlag == "1": # Suche
-			self.session.openWithCallback(self.searchCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = suchCache, is_dialog=True)
+			self.session.openWithCallback(self.searchCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True)
 		elif genreFlag == "6":	# ZDF
 			streamLink = "%s/suche?q=&from=&to=&sender=ZDF&attrs=&contentTypes=episode" % BASE_URL
-			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,AdT,streamPic)
+			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,streamPic)
 		elif genreFlag == "7":	# ZDFneo
 			streamLink = "%s/suche?q=&from=&to=&sender=ZDFneo&attrs=&contentTypes=episode" % BASE_URL
-			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,AdT,streamPic)
+			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,streamPic)
 		elif genreFlag == "8":	# ZDFinfo
 			streamLink = "%s/suche?q=&from=&to=&sender=ZDFinfo&attrs=&contentTypes=episode" % BASE_URL
-			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,AdT,streamPic)
+			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,streamPic)
 		elif genreFlag == "9":	# ZDFtivi
 			streamLink = "%s/suche?q=&from=&to=&sender=ZDFtivi&attrs=&contentTypes=episode" % BASE_URL
-			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,AdT,streamPic)
+			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,streamPic)
 		else:
-			self.session.open(ZDFPreSelect,genreName,genreFlag,streamPic)
+			self.session.open(ZDFPreSelect,genreName,genreFlag)
 
-	def searchCallback(self, callbackStr):
+	def searchCallback(self, callback):
 		genreFlag = self['liste'].getCurrent()[0][1]
-		self.keyLocked = False
-		if callbackStr is not None:
-			global suchCache
-			suchCache = callbackStr
-			genreName = "Suche... ' %s '" % suchCache
-			streamLink = "%s/suche?q=%s&from=&to=&sender=alle+Sender&attrs=" % (BASE_URL,callbackStr.replace(' ', '+'))
-			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,AdT,bildchen)
-		else:
-			return
+		if callback is not None and len(callback):
+			self.suchString = callback
+			genreName = "Suche - " + self.suchString
+			streamLink = "%s/suche?q=%s&from=&to=&sender=alle+Sender&attrs=" % (BASE_URL,callback.replace(' ', '+'))
+			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,default_cover)
 
 class ZDFPreSelect(MPScreen):
 
-	def __init__(self,session,genreName,genreFlag,prePic):
+	def __init__(self,session,genreName,genreFlag):
 		self.keyLocked = True
 		self.gN = genreName
 		self.gF = genreFlag
-		self.pP = prePic
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -126,6 +145,7 @@ class ZDFPreSelect(MPScreen):
 		}, -1)
 
 		self['title'] = Label("ZDF Mediathek")
+		self['ContentTitle'] = Label(_("Selection:") + " %s" % self.gN)
 
 		self.genreliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -137,23 +157,18 @@ class ZDFPreSelect(MPScreen):
 		url = ""
 		self['name'].setText(_("Please wait..."))
 		if self.gF != "4":
-			self.loadPageData(self.pP)
+			self.loadPageData("")
 		else:
 			url = "%s/service-und-hilfe/podcast" % BASE_URL
 			getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-
 		self.genreliste = []
 		if self.gF == "2":	# A-Z
-			self['name'].setText("Buchstabe")
-			self['ContentTitle'].setText(self.gN)
 			for c in xrange(26):
-				self.genreliste.append((chr(ord('A') + c)," "," ",self.pP,AdT))
-			self.genreliste.insert(0, ('0-9'," "," ",self.pP,AdT))
+				self.genreliste.append((chr(ord('A') + c)," ",default_cover))
+			self.genreliste.insert(0, ('0-9'," ",default_cover))
 		elif self.gF == "3":	# Sendung verpasst?
-			self['name'].setText("Sendetag")
-			self['ContentTitle'].setText(self.gN)
 			for q in range (0,60,1):
 				if q == 0:
 					s1 = " - Heute"
@@ -163,16 +178,14 @@ class ZDFPreSelect(MPScreen):
 					s1 = ""
 				s2 = (datetime.date.today()+datetime.timedelta(days=-q)).strftime("%d.%m.%y")
 				s3 = (datetime.date.today()+datetime.timedelta(days=-q)).strftime("20%y-%m-%d")
-				self.genreliste.append((s2+s1,s3," ",self.pP,AdT))
+				self.genreliste.append((s2+s1,s3,default_cover))
 		elif self.gF == "4":	# Podcast
-			self['ContentTitle'].setText(self.gN)
 			folgen = re.findall('<td headers="t-1">(.*?)</td>.*?"t-2">(.*?)</td.*?"t-3"><a href="(.*?)"', data, re.S)
 			if folgen:
 				for (title,info,assetId) in folgen:
 					title = decodeHtml(title)
-					self['name'].setText("Auswahl")
-					handlung = "Media: "+decodeHtml(info)
-					self.genreliste.append((title,assetId,handlung,bildchen,"-"))
+					if "Video" in info:
+						self.genreliste.append((title,assetId,default_cover))
 		elif self.gF == "5":	# Rubriken
 			self.genreliste.append(("Bestbewertet", "13", "https://www.zdf.de/assets/service-best-bewertet-100~768x432"))
 			self.genreliste.append(("Meistgesehen", "14", "https://www.zdf.de/assets/service-meist-gesehen-100~768x432"))
@@ -188,24 +201,17 @@ class ZDFPreSelect(MPScreen):
 			self.genreliste.append(("Serien", "10", "https://www.zdf.de/assets/film-serien-100~768x432"))
 			self.genreliste.append(("Sport", "11", "https://www.zdf.de/assets/zdfsport-logo-hintergrund-100~768x432"))
 			self.genreliste.append(("Verbraucher", "12", "https://www.zdf.de/assets/verbraucher-100~768x432"))
-			self['ContentTitle'].setText(self.gN)
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
 		self.showInfos()
 
 	def showInfos(self):
-		if self.gF == "4":
-			self['handlung'].setText(self['liste'].getCurrent()[0][2])
-		if self.gF == "5":
-			self['name'].setText("Auswahl")
-			CoverHelper(self['coverArt']).getCover(self['liste'].getCurrent()[0][2])
-		else:
-			CoverHelper(self['coverArt']).getCover(bildchen)
+		self['name'].setText(self['liste'].getCurrent()[0][0])
+		CoverHelper(self['coverArt']).getCover(self['liste'].getCurrent()[0][2])
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		passThru = 0
 		auswahl = self['liste'].getCurrent()[0][0]
 		extra = self['liste'].getCurrent()[0][1]
 		if self.gF == "2":	# A-Z
@@ -213,24 +219,16 @@ class ZDFPreSelect(MPScreen):
 				streamLink = "%s/sendungen-a-z?group=0+-+9" % BASE_URL
 			else:
 				streamLink = "%s/sendungen-a-z?group=%s" % (BASE_URL,auswahl.lower())
-			if "(" in self.gN:
-				self.gN = self.gN.split(" (")[0]
-			self.gN = self.gN+" ( '"+auswahl+"' )"
+			select = self.gN + " - " + auswahl
+			self.session.open(ZDFPostSelect,select,self.gF,streamLink)
 		elif self.gF == "3":	# Sendung verpasst?
 			streamLink = "%s/sendung-verpasst?airtimeDate=%s" % (BASE_URL,extra)
-			passThru = 1
-			if "(" in self.gN:
-				self.gN = self.gN.split(" (")[0]
-			self.gN = self.gN+" ("+auswahl+")"
-			self.session.open(ZDFStreamScreen,streamLink,self.gN,self.gF,AdT,self.pP)
+			select = self.gN + " - " + auswahl
+			self.session.open(ZDFStreamScreen,streamLink,select,self.gF,default_cover)
 		elif self.gF == "4":	# Podcast
-			passThru = 1
-			if "(" in self.gN:
-				self.gN = self.gN.split(" (")[0]
-			self.gN = self.gN+" ('"+auswahl+"')"
-			self.session.open(ZDFStreamScreen,extra,self.gN,self.gF,AdT,self.pP)
+			select = self.gN + " - " + auswahl
+			self.session.open(ZDFStreamScreen,extra,select,self.gF,default_cover)
 		elif self.gF == "5":	# Rubriken
-			passThru = 1
 			extra = self['liste'].getCurrent()[0][1]
 			if extra == "1":
 				streamLink = "%s/comedy-show" % BASE_URL
@@ -260,32 +258,16 @@ class ZDFPreSelect(MPScreen):
 				streamLink = "%s/bestbewertet" % BASE_URL
 			if extra == "14":
 				streamLink = "%s/meist-gesehen" % BASE_URL
-			if "(" in self.gN:
-				self.gN = self.gN.split(" (")[0]
-			self.gN = self.gN+" ("+auswahl+")"
-			self.session.open(ZDFStreamScreen,streamLink,self.gN,self.gF,AdT,self.pP)
-		else:
-			return
-		if passThru == 0 and self.gF == "1":
-			self.session.open(ZDFPostSelect,self.gN,self.gF,self.pP,streamLink,"+")
-		elif passThru == 0 and self.gF != "1":
-			self.session.open(ZDFPostSelect,self.gN,self.gF,self.pP,streamLink,AdT)
+			select = self.gN + " - " + auswahl
+			self.session.open(ZDFStreamScreen,streamLink,select,self.gF,default_cover)
 
 class ZDFPostSelect(MPScreen, ThumbsHelper):
 
-	def __init__(self,session,genreName,genreFlag,prePic,streamLink,anzahl):
-		self.keyLocked = True
+	def __init__(self,session,genreName,genreFlag,streamLink):
 		self.gN = genreName
-		self.gN = self.gN.split("(")
-		if len(self.gN) == 3 or len(self.gN) == 2:
-			self.gN = self.gN[0]+"("+self.gN[1]
-		else:
-			self.gN = self.gN[0]
 		self.gF = genreFlag
-		self.pP = prePic
-		self.anzahl = anzahl
 		self.streamLink = streamLink
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -300,7 +282,7 @@ class ZDFPostSelect(MPScreen, ThumbsHelper):
 		}, -1)
 
 		self['title'] = Label("ZDF Mediathek")
-		self['ContentTitle'] = Label("Sendung")
+		self['ContentTitle'] = Label(_("Selection:") + " %s" % self.gN)
 		self['name'] = Label(_("Please wait..."))
 
 		self.genreliste = []
@@ -317,40 +299,38 @@ class ZDFPostSelect(MPScreen, ThumbsHelper):
 	def loadPageData(self, data):
 		if int(self.gF) > 5:	# ZDF, ZDFneo, ZDFinfo, ZDFtivi
 			self.genreliste = []
-			treffer = re.findall('<div class="image">.*?<img src="(.*?)" title="(.*?)".*?<div class="text">.*?<a href=".*?<a href=".*?">(.*?)<.*?a href=".*?">(.*?) B.*?</div>', data, re.S)
-			for (image,info,title,anzahl) in treffer:
+			treffer = re.findall('<div class="image">.*?<img src="(.*?)" title="(.*?)".*?<div class="text">.*?<a href=".*?<a href=".*?">(.*?)<.*?a href=".*?">.*? B.*?</div>', data, re.S)
+			for (image,info,title) in treffer:
 				info = info.replace("\n"," ")
 				info = decodeHtml(info)
-				handlung = "Clips: %s\n" % anzahl
+				handlung = decodeHtml(info)
 				title = decodeHtml(title)
 				asset = image.split('/')
 				assetId = asset[3]
-				anzahl = anzahl.strip()
 				image = image.replace("94x65","485x273")
 				image = "%s%s" % ("http://www.zdf.de",image)
-				handlung = "Clips: "+anzahl+"\n"+decodeHtml(info)
-				self.genreliste.append((title,assetId,handlung,image,anzahl))
-			self.gN = "Sendung"	# Überschreibe den Wert als Kennung für Sendungen statt Clips
-
+				handlung = decodeHtml(info)
+				self.genreliste.append((title,assetId,handlung,image))
 		else:
 			self.genreliste = []
 			articles = re.findall('(<article.*?</article>)', data, re.S)
 			if articles:
 				for article in articles:
 					data = re.sub('itemprop="image" content=""','',article,flags=re.S)
-					folgen = re.findall('picture class.*?data-srcset="(.*?)~.*?itemprop=\"genre\">(.*?)<.*?m-border\">(.*?) .*?data-plusbar-title=\"(.*?)\".*?data-plusbar-url=\"(.*?)\"', data, re.S)
+					folgen = re.findall('picture class.*?class="m-16-9"\s+data-srcset="(.*?)[\"|\s].*?class="teaser-cat-category">(.*?)</span>.*?m-border\">.*?data-plusbar-title=\"(.*?)\".*?data-plusbar-url=\"(.*?)\"', data, re.S)
 					if folgen:
-						for (image,genre,anzahl,title,url) in folgen:
-							image += "~768x432"
+						for (image,genre,title,url) in folgen:
 							genre = decodeHtml(genre).strip().split("|")[0].strip()
 							title = decodeHtml(title)
-							handlung = "Clips: "+anzahl
+							handlung = ""
 							if genre:
 								if genre != "":
 									handlung = handlung + "\nKontext: "+genre
-							self.genreliste.append((title,url,handlung,image,anzahl))
+							self.genreliste.append((title,url,handlung,image))
 			else:
-				self.genreliste.append((NoC,None,"",bildchen,None))
+				self.genreliste.append(("Keine abspielbaren Inhalte verfügbar",None,"",default_cover))
+			if len(self.genreliste) == 0:
+				self.genreliste.append(("Keine abspielbaren Inhalte verfügbar",None,"",default_cover))
 		self.ml.setList(map(self._defaultlistleft, self.genreliste))
 		self.keyLocked = False
 		self.th_ThumbsQuery(self.genreliste, 0, 1, 3, None, None, 1, 1, mode=1)
@@ -358,38 +338,31 @@ class ZDFPostSelect(MPScreen, ThumbsHelper):
 
 	def showInfos(self):
 		self['handlung'].setText(self['liste'].getCurrent()[0][2])
-		if "(" in self.gN:
-			self.gN = self.gN.split(" (")
-			name = self.gN[0]+"\n\n("+self.gN[1]
-			self['name'].setText(name)
-			self.gN = self.gN[0]+" ("+self.gN[1]
-		else:
-			self['name'].setText(self.gN)
-		if self.gF != "2" and self.gF != "4":
-			CoverHelper(self['coverArt']).getCover(bildchen)
+		image = self['liste'].getCurrent()[0][3]
+		self['name'].setText(self['liste'].getCurrent()[0][0])
+		if self.gF != "4":
+			CoverHelper(self['coverArt']).getCover(image)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		sendung = self['liste'].getCurrent()[0][0]
-		if sendung == NoC:
-			return
-		anzahl = self['liste'].getCurrent()[0][4]
-		image = self['liste'].getCurrent()[0][3]
 		streamLink = self['liste'].getCurrent()[0][1]
-		self.session.open(ZDFStreamScreen,streamLink,self.gN,self.gF,anzahl,image,sendung)
+		image = self['liste'].getCurrent()[0][3]
+		if not streamLink:
+			return
+		select = self.gN + " - " + sendung
+		self.session.open(ZDFStreamScreen,streamLink,select,self.gF,image,sendung)
 
 class ZDFStreamScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session,streamLink,genreName,genreFlag,anzahl,image,sendung="---"):
-		self.keyLocked = True
+	def __init__(self, session,streamLink,genreName,genreFlag,image,sendung="---"):
 		self.streamL = streamLink
 		self.gN = genreName
 		self.gF = genreFlag
-		self.anzahl = anzahl
 		self.sendung = sendung
 		self.image = image
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -406,14 +379,11 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 			}, -1)
 
 		self['title'] = Label("ZDF Mediathek")
-		self['ContentTitle'] = Label("Clip")
-		self['name'] = Label(_("Please wait..."))
+		self['ContentTitle'] = Label(_("Selection:") + " %s" % self.gN)
 
-		self['Page'] = Label(_("Page:"))
 		self.page = 1
 		self.lastpage = 1
 		self.filmliste = []
-		self.dur = "0:00"
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 		self.onLayoutFinish.append(self.loadPage)
@@ -424,7 +394,6 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 			self.streamLink = self.streamL + "&page=" + str(self.page)
 		else:
 			self.streamLink = self.streamL
-		self['page'].setText(str(self.page)+' / '+str(self.lastpage))
 		self['name'].setText(_("Please wait..."))
 		getPage(self.streamLink).addCallback(self.loadPageData).addErrback(self.dataError)
 
@@ -434,18 +403,18 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 			self.lastpage = int(int(pages.group(1)))/24+1
 		if self.lastpage == 0:
 			self.lastpage = 1
-		self['page'].setText(str(self.page)+' / '+str(self.lastpage))
-
+		if self.lastpage > 1:
+			self['Page'].setText(_("Page:"))
+			self['page'].setText(str(self.page)+' / '+str(self.lastpage))
 		self.filmliste = []
 		typ,image,title,info,assetId,sender,sendung,dur = "","","","","","","",""
 		if self.gF == "3": # Sendung verpasst?
-			self['page'].setText('1 / 1')
 			genre = ""
 			articles = re.findall('(<article.*?</article>)', data, re.S)
 			for article in articles:
 				data = re.sub('<div class="img-container x-large-8 x-column">','<source class="m-16-9" data-srcset="/static~Trash">',article, flags=re.S)
 				data = re.sub('itemprop="image" content=""','',data,flags=re.S)
-				treffer = re.findall('<article.*?itemprop=\"image\" content=\"(.*?)\".*?\"teaser-label\".*?</span>(.*?)<strong>(.*?)<.*?title=\"(.*?)\".*?teaser-info.*?>(.*?)<.*?data-plusbar-id=\"(.*?)\".*?data-plusbar-path=\"(.*?)\"', data, re.S)
+				treffer = re.findall('<article.*?picture class.*?data-srcset="(.*?)[\"|\s].*?\"teaser-label\".*?</span>(.*?)<strong>(.*?)<.*?title=\"(.*?)\".*?teaser-info.*?>(.*?)<.*?data-plusbar-id=\"(.*?)\".*?data-plusbar-path=\"(.*?)\"', data, re.S)
 				if treffer:
 					for (image,airtime,clock,title,dur,assetId,assetPath) in treffer:
 						if "/static" in image:
@@ -469,20 +438,22 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 							if not "/static" in image:
 								image += "~768x432"
 						title = decodeHtml(title)
-						handlung = "Clip-Datum: "+airtime+clock+"\nDauer: "+dur
-						self.dur = dur
 						assetId = "https://api.zdf.de/content/documents/zdf/"+assetId+".json?profile=player"
 						assetPath = BASE_URL + assetPath
-						if 'itemprop="genre"' in data:
+						try:
+							sendung = re.findall('class="teaser-cat\s{0,1}">.*?class="teaser-cat-brand">(.*?)</span',data,re.S)[0]
+							sendung = decodeHtml(sendung)
+							sendung = sendung.split("|")[-1].strip()
+						except:
+							sendung = "---"
+						if 'class="teaser-cat ">' in data:
 							try:
-								genre = re.search("itemprop=\"genre\">(.*?)<",data,re.S).group(1).strip()
+								genre = " ("+re.search('class="teaser-cat\s{0,1}">.*?class="teaser-cat-category">(.*?)</span',data,re.S).group(1).strip().split("|")[0].strip()+")"
 							except:
 								pass
-							if genre != "":
-									handlung = handlung + "\nKontext: "+genre
+						handlung = "Sendung: "+decodeHtml(sendung)+genre+"\nDatum: "+airtime+clock+"\nLaufzeit: "+dur
 						self.filmliste.append((title,assetId,handlung,image,title,assetPath))
 		elif self.gF == "4": # Podcast
-			self['page'].setText("1 / 1")
 			image = re.search('<itunes:image href="(.*?)"',data).group(1)
 			treffer = re.findall('<item>.*?<title>(.*?)</ti.*?<itunes:summary>(.*?)</itunes.*?<enclosure url="(.*?)".*?<pubDate>(.*?)</pub.*?<itunes:duration>(.*?)</it', data, re.S)
 			if treffer:
@@ -492,8 +463,8 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 					airtime = airtime.split(" +")[0]
 					title = decodeHtml(title)
 					m, s = divmod(int(dur), 60)
-					self.dur = "%02d:%02d" % (m, s)
-					handlung = "Kanal: Podcast"+"\nClip-Datum: "+airtime+"\nDauer: "+self.dur+"\n\n"+info
+					dur = "%02d:%02d" % (m, s)
+					handlung = "Kanal: Podcast"+"\nDatum: "+airtime+"\nLaufzeit: "+dur+"\n\n"+info
 					self.filmliste.append((title,streamLink,handlung,image,title,''))
 		else:
 			articles = re.findall('(<article.*?</article>)', data, re.S)
@@ -522,6 +493,8 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 					airtime = '---'
 				if "m-border\">" in data:
 					dur = re.search('m-border\">(.*?)<',data).group(1)
+					if "Bilder" in dur:
+						continue
 				else:
 					continue
 				if "data-station" in data:
@@ -555,8 +528,6 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 								image = image.group(1)
 								image = "https://www.zdf.de/assets/"+image
 						except:
-							image = "ToBeParsed~xyz"
-							image = image.split("~")[0]
 							try:
 								image = re.search("data-zdfplayer-teaser-image-overwrite=\'\{(.*?)\&#",data)
 								if image:
@@ -564,18 +535,15 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 									image = image.replace("\/","/")
 									image = "https"+image.split("https")[1]
 							except:
-								image = "ToBeParsed"
-								pass
+								image = default_cover
 					if image == None:
-						image = "ToBeParsed"
-					if image == "ToBeParsed":
-						image = bildchen
+						image = default_cover
 					elif image[-1] == "=":
 						image += "768x432"
 					else:
 						image += "~768x432"
 				else:
-					image = bildchen
+					image = default_cover
 				if not 'data-plusbar-title=' in data or "Aktuell im EPG" in data:
 					continue
 				else:
@@ -584,25 +552,24 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 					info = re.findall('description">(.*?)<',data,re.S)[0]
 					info = decodeHtml(stripAllTags(info).strip())
 				try:
-					sendung = re.findall('itemprop="genre">.*?class="teaser-cat-brand">(.*?)</span',data,re.S)[0]
+					sendung = re.findall('class="teaser-cat\s{0,1}">.*?class="teaser-cat-brand">(.*?)</span',data,re.S)[0]
 					sendung = decodeHtml(sendung)
 					sendung = sendung.split("|")[-1].strip()
 				except:
 					sendung = "---"
 				if self.gF != "1" and sendung == "---":
 					sendung = self.sendung
-				if 'itemprop="genre">' in data:
+				if 'class="teaser-cat ">' in data:
 					try:
-						genre = " ("+re.search('itemprop="genre">.*?class="teaser-cat-category">(.*?)</span',data,re.S).group(1).strip().split("|")[0].strip()+")"
+						genre = " ("+re.search('class="teaser-cat\s{0,1}">.*?class="teaser-cat-category">(.*?)</span',data,re.S).group(1).strip().split("|")[0].strip()+")"
 					except:
 						pass
-				handlung = "Sendung: "+decodeHtml(sendung)+genre+"\nClip-Datum: "+airtime+"\nDauer: "+dur+"\n\n"+info
+				handlung = "Sendung: "+decodeHtml(sendung)+genre+"\nDatum: "+airtime+"\nLaufzeit: "+dur+"\n\n"+info
 				assetId = "https://api.zdf.de/content/documents/zdf/"+assetId+".json?profile=player"
 				assetPath = BASE_URL + assetPath
 				self.filmliste.append((decodeHtml(title),assetId,handlung,image,sendung,assetPath))
 			if self.filmliste == []:
-				self.filmliste.append((NoC,None,"",self.image,None))
-
+				self.filmliste.append(("Keine abspielbaren Inhalte verfügbar",None,"",default_cover,None))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -610,28 +577,13 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 		self.showInfos()
 
 	def showInfos(self):
+		self['name'].setText(self['liste'].getCurrent()[0][0])
 		if self['liste'].getCurrent()[0][3] == "" or self['liste'].getCurrent()[0][3] == "/":
-			CoverHelper(self['coverArt']).getCover(bildchen)
-		elif self['liste'].getCurrent()[0][0] == NoC:
-			self['name'].setText("- - -")
-			CoverHelper(self['coverArt']).getCover(bildchen)
+			CoverHelper(self['coverArt']).getCover(default_cover)
 		else:
 			self.streamPic = self['liste'].getCurrent()[0][3]
-			if self.gF == "1":	# Suche
-				self['name'].setText("Suche"+ "' "+suchCache+" '")
-			elif NoC in self['liste'].getCurrent()[0][0]:	# Nichts gefunden
-				self['name'].setText(NoC)
-			else:
-				if "(" in self.gN:
-					self.gN = self.gN.split(" (")
-					name = self.gN[0]+"\n\n("+self.gN[1]
-					self['name'].setText(name)
-					self.gN = self.gN[0]+" ("+self.gN[1]
-				else:
-					self['name'].setText(self.gN)
 			self['handlung'].setText(self['liste'].getCurrent()[0][2])
 			CoverHelper(self['coverArt']).getCover(self.streamPic)
-		self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -639,13 +591,11 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_("Please wait..."))
 		streamName = self['liste'].getCurrent()[0][0]
 		streamLink = self['liste'].getCurrent()[0][1]
-		if streamName == NoC:	# Nichts gefunden
-			self.loadPage()
-		elif self.gF == "4":	# Podcast
+		if self.gF == "4":	# Podcast
 			playlist = []
 			playlist.append((streamName, streamLink))
 			self.session.open(SimplePlayer, playlist, showPlaylist=False, ltype='zdf')
-			self['name'].setText(self['liste'].getCurrent()[0][4])
+			self['name'].setText(self['liste'].getCurrent()[0][0])
 		else:
 			streamPath = self['liste'].getCurrent()[0][5]
 			getPage(streamPath).addCallback(self.getToken).addErrback(self.dataError)
@@ -666,8 +616,6 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 				b = b.replace('{playerId}','ngplayer_2_3')
 				b = "https://api.zdf.de"+b
 				getPage(str(b), headers={'Api-Auth':'Bearer %s' % self.token, 'Accept':'application/vnd.de.zdf.v1.0+json'}).addCallback(self.getContentJson).addErrback(self.dataError)
-			else:
-				return
 
 	def getContentJson(self,data):
 		a = json.loads(data)
@@ -692,18 +640,8 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 				except:
 					break
 			self.keyLocked = False
-			streamName = self['liste'].getCurrent()[0][0]
 			url = str(b[0])
 		playlist = []
 		playlist.append((streamName, url))
 		self.session.open(SimplePlayer, playlist, showPlaylist=False, ltype='zdf', forceGST=True)
-		if self.gF == "1":
-			self['name'].setText("Suche"+ "' "+suchCache+" '")
-		else:
-			if "(" in self.gN:
-				self.gN = self.gN.split(" (")
-				name = self.gN[0]+"\n\n("+self.gN[1]
-				self['name'].setText(name)
-				self.gN = self.gN[0]+" ("+self.gN[1]
-			else:
-				self['name'].setText(self.gN)
+		self['name'].setText(streamName)

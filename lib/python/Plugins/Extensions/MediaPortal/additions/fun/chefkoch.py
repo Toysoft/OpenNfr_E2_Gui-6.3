@@ -43,7 +43,7 @@ basename = "Chefkoch.de"
 baseurl ="http://www.chefkoch.de"
 securl= "http://www.chefkoch.de/video/artikel/"
 
-default_cover = "file://%s/chefkoch.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/chefkoch.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class chefkochGenreScreen(MPScreen):
 

@@ -46,7 +46,7 @@ headers = {
 	'Accept-Language':'de,en-US;q=0.7,en;q=0.3',
 	'X-Requested-With':'XMLHttpRequest',
 	}
-default_cover = "file://%s/hclips.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/hclips.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class hclipsGenreScreen(MPScreen):
 

@@ -301,6 +301,10 @@ class ConfigListScreenExt:
 	def saveAll(self):
 		for x in self["config"].list:
 			if len(x) > 1:
+				try:
+					x[1].save_forced = False
+				except:
+					pass
 				x[1].save()
 
 	def keySave(self):

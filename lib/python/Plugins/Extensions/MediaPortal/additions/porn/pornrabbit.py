@@ -40,7 +40,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.aes_crypt import aes_decrypt_text
 
-default_cover = "file://%s/pornrabbit.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/pornrabbit.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class pornrabbitGenreScreen(MPScreen):
 

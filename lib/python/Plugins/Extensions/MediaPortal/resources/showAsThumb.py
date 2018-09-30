@@ -13,7 +13,7 @@ thumb_agent = ''
 
 class ThumbsHelper:
 	def __init__(self):
-		self.defaultThumb = False #config.mediaportal.showAsThumb.value
+		self.defaultThumb = False #config_mp.mediaportal.showAsThumb.value
 		self.toShowThumb = False
 		self.th_filmList = []
 		self.th_filmnamePos = None
@@ -160,7 +160,7 @@ class ShowThumbscreen(MPScreen):
 				yoffset = 103
 				fontsize = 17
 				textsize = 20
-			self.coverframe = 'pic_frame_mode1_%s.png' % config.mediaportal.selektor.value
+			self.coverframe = 'pic_frame_mode1_%s.png' % config_mp.mediaportal.selektor.value
 
 		else:
 			if mp_globals.videomode == 2:
@@ -181,7 +181,7 @@ class ShowThumbscreen(MPScreen):
 				yoffset = 103
 				fontsize = 17
 				textsize = 20
-			self.coverframe = 'pic_frame_%s.png' % config.mediaportal.selektor.value
+			self.coverframe = 'pic_frame_%s.png' % config_mp.mediaportal.selektor.value
 
 		# Thumbs Geometrie, groesse und Anzahl berechnen
 		if mp_globals.videomode == 2:
@@ -222,7 +222,7 @@ class ShowThumbscreen(MPScreen):
 		self.skin = self.skin_dump
 
 		self["hidePig"] = Boolean()
-		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
+		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 
 
 		self["actions"] = ActionMap(["MP_Actions"], {

@@ -37,7 +37,7 @@ class flimmerstubeGenreScreen(MPScreen):
 
 	def genreData(self, data):
 		parse = re.search('<section class="sidebox">(.*)</section>',data, re.S)
-		cats = re.findall('<a class=\'.*?\' href="(.*?)" >(.*?)(?:</a>|\/)', parse.group(1), re.S)
+		cats = re.findall('<a class=\'.*?\' href="(.*?)" >(.*?)</a>', parse.group(1), re.S)
 		for (url, title) in cats:
 			if title != "Horror Serien":
 				self.genreliste.append((title, url))
@@ -112,7 +112,7 @@ class flimmerstubeFilmScreen(MPScreen):
 		titles = re.findall('<h4 class="ve-title">.*?<a href="(.*?)">.*?</a>.*?</h4>.*?<div class="ve-screen" title="(.*?)".*?style="background-image: url\((.*?)\);',vSearch.group(1), re.S)
 		if titles:
 			for (url, title, img) in titles:
-				title = title.replace(' - Stream - Deutsch','').replace(' - Stream','').replace(' - DDR Scifi','').replace(' - Giallo','').replace(' - Scifi','').replace(' - Komödie','').replace(' - Exploitation','').replace(' - Horror Komödie','').replace(' - Horror Doku','').replace(' - Horror','').replace(' - Endzeit','').replace(' - Fantasy','').replace(' - Doku','').replace(' - Deutsch','').replace(' - Western','').replace(' - Krimi','').replace(' - Biografie','').replace(' - HD','').replace(' - Tormented','').replace(' - Asia Horror','').replace(' - STream','').replace(' German/Deutsch','').strip('-Horror')
+				title = title.replace(' - Stream - Deutsch','').replace(' - Stream','').replace(' - DDR Scifi','').replace(' - Giallo','').replace(' - Scifi','').replace(' - Komödie','').replace(' - Exploitation','').replace(' - Horror Komödie','').replace(' - Horror Doku','').replace(' - Horror','').replace(' - Endzeit','').replace(' - Fantasy','').replace(' - Doku','').replace(' - Deutsch','').replace(' - Western','').replace(' - Krimi','').replace(' - Biografie','').replace(' - HD','').replace(' - Tormented','').replace(' - Asia Horror','').replace(' - STream','').replace(' - Stream','').replace(' German/Deutsch','')
 				if not ('TV Serie' or 'Mehrteiler') in title:
 					self.filmliste.append((decodeHtml(title), url, img))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -125,6 +125,14 @@ class flimmerstubeFilmScreen(MPScreen):
 		Image = self['liste'].getCurrent()[0][2]
 		self['name'].setText(Title)
 		CoverHelper(self['coverArt']).getCover(Image)
+		Link = "%s%s" % (BASE_URL, self['liste'].getCurrent()[0][1])
+		getPage(Link).addCallback(self.showInfos2).addErrback(self.dataError)
+
+	def showInfos2(self, data):
+		descr = re.findall('class="vep-descr">.*?</span>(.*?)</div>', data, re.S)
+		if descr:
+			descr = stripAllTags(descr[0].replace('<br /> ','<br />').replace('<br />','###NEWLINE###')).replace('###NEWLINE###','\n').strip()
+			self['handlung'].setText(descr)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -146,10 +154,14 @@ class flimmerstubeFilmScreen(MPScreen):
 				if vidUrl:
 					getPage(vidUrl[0].strip()).addCallback(self.getVideoData).addErrback(self.dataError)
 		else:
-			data = data.replace('\\"', '"')
+			data = data.replace('\\"', '"').replace("\\'", "'")
 			dmUrl = re.findall('<iframe.*?src="(http[s]?://www.dailymotion.com/embed/video/.*?)"', data, re.S)
 			if dmUrl:
 				getPage(dmUrl[0]).addCallback(self.getDailymotionStream).addErrback(self.dataError)
+				return
+			mailruUrl = re.findall("<iframe src='(https://my.mail.ru/video/embed/\d+)", data, re.S)
+			if mailruUrl:
+				get_stream_link(self.session).check_link(mailruUrl[0], self.got_link)
 			elif "veohFlashPlayer" in data:
 				veohId = re.search('.*permalinkId=(.*?)\s{0,1}&player', data, re.S)
 				if veohId:
@@ -185,3 +197,8 @@ class flimmerstubeFilmScreen(MPScreen):
 		if stream_url:
 			self.session.open(SimplePlayer, [(Title, stream_url[-1])], showPlaylist=False, ltype='flimmerstube')
 		self.keyLocked = False
+
+	def got_link(self, stream_url):
+		self.keyLocked = False
+		Title = self['liste'].getCurrent()[0][0]
+		self.session.open(SimplePlayer, [(Title, stream_url)], showPlaylist=False, ltype='flimmerstube')

@@ -73,7 +73,7 @@ class CoverHelper:
 						d.addCallback(self.cb_getCover, download_cb)
 					d.addErrback(self.dataErrorP)
 			elif url.startswith('file://'):
-				logopath = (config.mediaportal.iconcachepath.value + "logos")
+				logopath = (config_mp.mediaportal.iconcachepath.value + "logos")
 				if logopath in url:
 					self.logofix = True
 				self.showCoverFile(url[7:])

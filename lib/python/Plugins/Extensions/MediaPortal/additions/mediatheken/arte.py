@@ -38,7 +38,7 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-default_cover = "file://%s/arte.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/arte.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class arteFirstScreen(MPScreen):
 
@@ -56,6 +56,7 @@ class arteFirstScreen(MPScreen):
 		self['name'] = Label(_("Selection:"))
 
 		self.keyLocked = True
+		self.suchString = ''
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
@@ -64,10 +65,11 @@ class arteFirstScreen(MPScreen):
 
 
 	def genreData(self):
-		#self.filmliste.append(("Neueste", "http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/ALL/ALL/-1/AIRDATE_DESC/0/0/DE_FR.json"))
-		#self.filmliste.append(("Meistgesehen", "http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/ALL/ALL/-1/VIEWS/0/0/DE_FR.json"))
-		#self.filmliste.append(("Letzte Chance", "http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/ALL/ALL/-1/LAST_CHANCE/0/0/DE_FR.json"))
-		#self.filmliste.append(("Themen", "by_channel"))
+		self.filmliste.append(("Suche", "search"))
+		self.filmliste.append(("Meistgesehen", "http://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/videos/mostViewed/page/%%PAGE%%/limit/50/de"))
+		self.filmliste.append(("Letzte Chance", "http://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/videos/lastChance/page/%%PAGE%%/limit/50/de"))
+		self.filmliste.append(("Sendungen A-Z", "http://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/magazines/de"))
+		self.filmliste.append(("Themen", "by_channel"))
 		self.filmliste.append(("Datum", "by_date"))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
@@ -77,10 +79,19 @@ class arteFirstScreen(MPScreen):
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		if 'http://' in Link:
+		if Name == "Suche":
+			self.suchen()
+		elif 'http://' in Link:
 			self.session.open(arteSecondScreen, Link, Name)
 		else:
 			self.session.open(arteSubGenreScreen, Link, Name)
+
+	def SuchenCallback(self, callback = None):
+		if callback is not None and len(callback):
+			Name = "Suche"
+			self.suchString = callback
+			Link = self.suchString.replace(' ', '%20')
+			self.session.open(arteSecondScreen, Link, Name)
 
 class arteSubGenreScreen(MPScreen):
 
@@ -112,25 +123,26 @@ class arteSubGenreScreen(MPScreen):
 			for daynr in range(-21,22):
 				day1 = today -datetime.timedelta(days=daynr)
 				dateselect =  day1.strftime('%Y-%m-%d')
-				link = 'https://www.arte.tv/guide/api/api/pages/de/TV_GUIDE/?day=%s' % dateselect
+				link = 'http://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/programs/%s/de' % dateselect
 				self.filmliste.append((dateselect, link))
+			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
+			self.ml.moveToIndex(21)
 		elif self.Name == "Themen":
-			link = 'http://www.arte.tv/papi/tvguide/videos/plus7/program/D/L2/%s/ALL/-1/AIRDATE_DESC/0/0/DE_FR.json'
-			self.filmliste.append(('Aktuelles & Gesellschaft', link % 'ACT'))
-			self.filmliste.append(('Fernsehfilme & Serien', link % 'FIC'))
+			# http://www.arte.tv/hbbtvv2/services/web/index.php/EMAC/teasers/categories/v2/de
+			link = 'http://www.arte.tv/hbbtvv2/services/web/index.php/EMAC/teasers/category/%s/de'
+			self.filmliste.append(('Aktuelles und Gesellschaft', link % 'ACT'))
 			self.filmliste.append(('Kino', link % 'CIN'))
-			self.filmliste.append(('Kunst & Kultur', link % 'ART'))
-			self.filmliste.append(('Popkultur & Alternativ', link % 'CUL'))
-			self.filmliste.append(('Entdeckung', link % 'DEC'))
+			self.filmliste.append(('Fernsehfilme und Serien', link % 'SER'))
+			self.filmliste.append(('Kultur und Pop', link % 'CPO'))
+			self.filmliste.append(('ARTE Concert', link % 'ARS'))
+			self.filmliste.append(('Wissenschaft', link % 'SCI'))
+			self.filmliste.append(('Entdeckung der Welt', link % 'DEC'))
 			self.filmliste.append(('Geschichte', link % 'HIS'))
-			self.filmliste.append(('Junior', link % 'JUN'))
-		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
-		self.ml.moveToIndex(21)
+			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
 
 	def keyOK(self):
-		exist = self['liste'].getCurrent()
-		if self.keyLocked or exist == None:
+		if self.keyLocked:
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
@@ -152,7 +164,9 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"nextBouquet" : self.keyPageUp,
+			"prevBouquet" : self.keyPageDown,
 		}, -1)
 
 		self['title'] = Label("arte Mediathek")
@@ -167,29 +181,195 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
+		self.filmliste = []
 		self['name'].setText(_('Please wait...'))
 		url = self.Link
+		if self.Name == "Suche":
+			url = "https://www.arte.tv/guide/api/api/zones/de/listing_SEARCH/?limit=100&query=%s&page=%s" % (url, str(self.page))
+		else:
+			url = url.replace('%%PAGE%%',str(self.page))
+			if "/teasers/category/" in url:
+				id = url.split('/')[-2]
+				url2 = "http://www.arte.tv/hbbtvv2/services/web/index.php/EMAC/teasers/category/v2/%s/de" % id
+				getPage(url2, agent=std_headers, headers={'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'Referer': self.Link}).addCallback(self.parseData).addErrback(self.dataError)
 		getPage(url, agent=std_headers, headers={'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'Referer': self.Link}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		json_data = json.loads(data)
-		if json_data.has_key('zones'):
-			for node in json_data["zones"][1]["data"]:
-				if node['subtitle']:
-					title = "%s - %s" % (str(node['title']), str(node['subtitle']))
-				else:
-					title = str(node['title'])
-				if node['duration']:
-					m, s = divmod(node['duration'], 60)
-					Runtime = _("Runtime:") + " %02d:%02d" % (m, s)
-				else:
-					Runtime = _("Runtime:") + " --:--"
-				handlung = "%s\n%s" % (Runtime, str(node['fullDescription']))
-				url = "https://api.arte.tv/api/player/v1/config/de/%s" % str(node['programId'])
-				self.filmliste.append((title, url, str(node['images']['landscape']['resolutions'][-1]['url']), handlung))
-		if len(self.filmliste) == 0:
-			self.filmliste.append((_("No videos found!"), '','','','',''))
+		if "teasers" in self.Link:
+			if json_data.has_key('category'):
+				for node in json_data["category"]:
+					if str(node["type"]) == "category":
+						title = "Thema: " + str(node["title"])
+						code = str(node["code"])
+						url = 'http://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/videos/subcategory/%s/page/1/limit/100/de' % code
+						self.filmliste.append((title, url, default_cover, "", "subcat"))
+				self.filmliste.sort()
+			if json_data.has_key('teasers'):
+				if json_data["teasers"].has_key('highlights') and len(json_data["teasers"]["highlights"]) > 0:
+					for node in json_data["teasers"]["highlights"]:
+						kind = str(node['kind'])
+						if kind in ["SHOW", "BONUS"]:
+							url = "https://api.arte.tv/api/player/v1/config/de/%s" % str(node['programId'])
+						else:
+							url = str(node['programId'])
+						if node['subtitle']:
+							title = "%s - %s" % (str(node['title']), str(node['subtitle']))
+						else:
+							title = str(node['title'])
+						title = "Highlight: " + title
+						image = str(node['imageUrl'])
+						if node['teaserText']:
+							descr = str(node['teaserText'])
+						else:
+							descr = ""
+						self.filmliste.append((title, url, image, descr, kind))
+					self.filmliste.sort()
+				if json_data["teasers"].has_key('collections') and len(json_data["teasers"]["collections"]) > 0:
+					for node in json_data["teasers"]["collections"]:
+						kind = str(node['kind'])
+						programid = str(node['programId'])
+						if node['subtitle']:
+							title = "%s - %s" % (str(node['title']), str(node['subtitle']))
+						else:
+							title = str(node['title'])
+						title = "Collection: " + title
+						image = str(node['imageUrl'])
+						if node['teaserText']:
+							descr = str(node['teaserText'])
+						else:
+							descr = ""
+						self.filmliste.append((title, programid, image, descr, kind))
+					self.filmliste.sort()
+				if json_data["teasers"].has_key('playlists') and len(json_data["teasers"]["playlists"]) > 0:
+					for node in json_data["teasers"]["playlists"]:
+						kind = str(node['kind'])
+						programid = str(node['programId'])
+						if node['subtitle']:
+							title = "%s - %s" % (str(node['title']), str(node['subtitle']))
+						else:
+							title = str(node['title'])
+						title = "Playlist: " + title
+						image = str(node['imageUrl'])
+						if node['teaserText']:
+							descr = str(node['teaserText'])
+						else:
+							descr = ""
+						self.filmliste.append((title, programid, image, descr, kind))
+					self.filmliste.sort()
+				if json_data["teasers"].has_key('magazines') and len(json_data["teasers"]["magazines"]) > 0:
+					for node in json_data["teasers"]["magazines"]:
+						title = "Sendung: " + str(node["label"]["de"])
+						url = str(node["url"])
+						image = default_cover
+						self.filmliste.append((title, url, image, "", "sendung"))
+					self.filmliste.sort()
+		else:
+			if json_data.has_key('programs'):
+				for node in json_data["programs"]:
+					if node['video']:
+						if node['video']['kind'] in ["CLIP", "MANUAL_CLIP", "TRAILER"]:
+							continue
+						if node['video']['subtitle']:
+							title = "%s - %s" % (str(node['video']['title']), str(node['video']['subtitle']))
+						else:
+							title = str(node['video']['title'])
+						if node['video']['durationSeconds']:
+							m, s = divmod(node['video']['durationSeconds'], 60)
+							Runtime = _("Runtime:") + " %02d:%02d" % (m, s)
+						else:
+							Runtime = _("Runtime:") + " --:--"
+						if node['video']['broadcastBegin']:
+							date = str(node['video']['broadcastBegin'])
+							date = re.findall('.*?,\s(\d{2})\s(\w+)\s(\d{4})\s(.*?)\s\+', date)
+							date = _("Date:") + " " + date[0][0] + ". " + date[0][1] + " " + date[0][2] + ", " + date[0][3] + "\n"
+						else:
+							date = ""
+						if node['video']['fullDescription']:
+							descr = str(node['video']['fullDescription'])
+						elif node['video']['shortDescription']:
+							descr = str(node['video']['shortDescription'])
+						elif node['video']['teaserText']:
+							descr = str(node['video']['teaserText'])
+						else:
+							descr = ""
+						handlung = "%s%s\n\n%s" % (date, Runtime, descr)
+						image = str(node['video']['imageUrl'])
+						url = "https://api.arte.tv/api/player/v1/config/de/%s" % str(node['video']['programId'])
+						self.filmliste.append((title, url, image, handlung, ""))
+			elif json_data.has_key('videos'):
+				if json_data.has_key('meta'):
+					self.lastpage = json_data["meta"]["pages"]
+					if self.lastpage > 1:
+						self['Page'].setText(_("Page:"))
+						self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+				for node in json_data["videos"]:
+					if node['subtitle']:
+						title = "%s - %s" % (str(node['title']), str(node['subtitle']))
+					else:
+						title = str(node['title'])
+					if node['durationSeconds']:
+						m, s = divmod(node['durationSeconds'], 60)
+						Runtime = _("Runtime:") + " %02d:%02d" % (m, s)
+					else:
+						Runtime = _("Runtime:") + " --:--"
+					if node['broadcastBegin']:
+						date = str(node['broadcastBegin'])
+						date = re.findall('.*?,\s(\d{2})\s(\w+)\s(\d{4})\s(.*?)\s\+', date)
+						date = _("Date:") + " " + date[0][0] + ". " + date[0][1] + " " + date[0][2] + ", " + date[0][3] + "\n"
+					else:
+						date = ""
+					if node['fullDescription']:
+						descr = str(node['fullDescription'])
+					elif node['shortDescription']:
+						descr = str(node['shortDescription'])
+					elif node['teaserText']:
+						descr = str(node['teaserText'])
+					else:
+						descr = ""
+					handlung = "%s%s\n\n%s" % (date, Runtime, descr)
+					image = str(node['imageUrl'])
+					url = "https://api.arte.tv/api/player/v1/config/de/%s" % str(node['programId'])
+					self.filmliste.append((title, url, image, handlung, ""))
+			elif json_data.has_key('magazines'):
+				for node in json_data["magazines"]:
+					if node['subtitle']:
+						title = "%s - %s" % (str(node['title']), str(node['subtitle']))
+					else:
+						title = str(node['title'])
+					if node['fullDescription']:
+						descr = str(node['fullDescription'])
+					else:
+						descr = str(node['shortDescription'])
+					image = str(node['imageUrl'])
+					kind = str(node['kind'])
+					url = str(node['programId'])
+					self.filmliste.append((title, url, image, descr, kind))
+			elif json_data.has_key('data'):
+				if json_data.has_key('nextPage'):
+					if json_data["nextPage"]:
+						self.lastpage = self.page + 1
+					if self.lastpage > 1:
+						self['Page'].setText(_("Page:"))
+						self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+				for node in json_data["data"]:
+					if node['subtitle']:
+						title = "%s - %s" % (str(node['title']), str(node['subtitle']))
+					else:
+						title = str(node['title'])
+					if node['duration']:
+						m, s = divmod(node['duration'], 60)
+						Runtime = _("Runtime:") + " %02d:%02d" % (m, s)
+					else:
+						continue
+					handlung = "%s\n\n%s" % (Runtime, str(node['description']))
+					url = "https://api.arte.tv/api/player/v1/config/de/%s" % str(node['programId'])
+					self.filmliste.append((title, url, str(node['images']['landscape']['resolutions'][-1]['url']), handlung, ""))
+
+			if len(self.filmliste) == 0:
+				self.filmliste.append((_("No videos found!"), '','','','',''))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		self.ml.moveToIndex(0)
 		self.keyLocked = False
 		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
 		self.showInfos()
@@ -203,13 +383,22 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 		CoverHelper(self['coverArt']).getCover(self.ImageUrl)
 
 	def keyOK(self):
-		exist = self['liste'].getCurrent()
-		if self.keyLocked or exist == None:
+		if self.keyLocked:
 			return
 		self.title = self['liste'].getCurrent()[0][0]
 		link = self['liste'].getCurrent()[0][1]
-		print link
-		getPage(link, headers={'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}).addCallback(self.getStream).addErrback(self.dataError)
+		kind = self['liste'].getCurrent()[0][4]
+		if link.startswith('http') and kind != "subcat":
+			getPage(link, headers={'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}).addCallback(self.getStream).addErrback(self.dataError)
+		else:
+			id = self['liste'].getCurrent()[0][1]
+			if kind == "subcat":
+				url = id
+			elif kind != "sendung":
+				url = "http://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/videos/collection/%s/%s/de" % (kind, id)
+			else:
+				url = "http://www.arte.tv/hbbtvv2/services/web/index.php/%s/de" % id
+			self.session.open(arteSecondScreen, url, self.title)
 
 	def getStream(self, data):
 		json_data  = json.loads(data)
@@ -221,7 +410,6 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 		else:
 			url = None
 		if url:
-			print url
 			self.session.open(SimplePlayer, [(self.title, url, self.ImageUrl)], showPlaylist=False, ltype='arte')
 		else:
 			self.session.open(MessageBoxExt, _("This video is not available."), MessageBoxExt.TYPE_INFO, timeout=5)

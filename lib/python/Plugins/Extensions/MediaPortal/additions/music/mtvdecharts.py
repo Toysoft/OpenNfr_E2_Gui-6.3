@@ -40,7 +40,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.mtvdelink import MTVdeLink
 
-config.mediaportal.mtvquality = ConfigText(default="HD", fixed_size=False)
+config_mp.mediaportal.mtvquality = ConfigText(default="HD", fixed_size=False)
 
 class MTVdeChartsGenreScreen(MPScreen):
 
@@ -55,7 +55,7 @@ class MTVdeChartsGenreScreen(MPScreen):
 			"yellow": self.keyQuality
 		}, -1)
 
-		self.quality = config.mediaportal.mtvquality.value
+		self.quality = config_mp.mediaportal.mtvquality.value
 
 		self.keyLocked = True
 		self['title'] = Label("MTV Charts")
@@ -143,13 +143,13 @@ class MTVdeChartsGenreScreen(MPScreen):
 	def keyQuality(self):
 		if self.quality == "SD":
 			self.quality = "HD"
-			config.mediaportal.mtvquality.value = "HD"
+			config_mp.mediaportal.mtvquality.value = "HD"
 		elif self.quality == "HD":
 			self.quality = "SD"
-			config.mediaportal.mtvquality.value = "SD"
+			config_mp.mediaportal.mtvquality.value = "SD"
 
-		config.mediaportal.mtvquality.save()
-		configfile.save()
+		config_mp.mediaportal.mtvquality.save()
+		configfile_mp.save()
 		self['F3'].setText(self.quality)
 		self.loadPage()
 
@@ -306,7 +306,7 @@ class MTVdeChartsSongListeScreen(MPScreen):
 		if self.keyLocked:
 			return
 		idx = self['liste'].getSelectedIndex()
-		if config.mediaportal.use_hls_proxy.value or config.mediaportal.mtvquality.value == "SD":
+		if config_mp.mediaportal.use_hls_proxy.value or config_mp.mediaportal.mtvquality.value == "SD":
 			self.session.open(MTVdeChartsPlayer, self.filmliste, int(idx) , True, self.genreName)
 		else:
 			message = self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO, timeout=5)

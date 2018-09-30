@@ -3,7 +3,7 @@ from os.path import exists
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.additions.mediatheken.youtube import YT_ListScreen
-default_cover = "file://%s/youtube.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/youtube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class show_USER_Genre(MPScreen):
 
@@ -24,8 +24,8 @@ class show_USER_Genre(MPScreen):
 		self['F1'] = Label(_("Exit"))
 		self['F2'] = Label(_("Load"))
 
-		self.user_path = config.mediaportal.watchlistpath.value + "mp_userchan.xml"
-		self.show_help = config.mediaportal.show_userchan_help.value
+		self.user_path = config_mp.mediaportal.watchlistpath.value + "mp_userchan.xml"
+		self.show_help = config_mp.mediaportal.show_userchan_help.value
 		self.keyLocked = True
 		self.genreliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)

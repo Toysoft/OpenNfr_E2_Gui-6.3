@@ -24,7 +24,7 @@ class youtubeUrl(object):
 	self.session = session
 	self.error = ""
 	self.yt_dwnld_agent = None
-	self.useProxy = (config.mediaportal.sp_use_yt_with_proxy.value == 'proxy') and (config.mediaportal.yt_proxy_host.value != 'example_proxy.com!')
+	self.useProxy = (config_mp.mediaportal.sp_use_yt_with_proxy.value == 'proxy') and (config_mp.mediaportal.yt_proxy_host.value != 'example_proxy.com!')
 	self.initDownloadAgent()
 	self.tw_agent_hlp = TwAgentHelper(gzip_decoding=True, followRedirect=True, headers=headers)
 	mp_globals.premiumize = self.useProxy
@@ -33,10 +33,10 @@ class youtubeUrl(object):
   def initDownloadAgent(self):
 	self.proxyurl = None
 	if self.useProxy:
-		proxyhost = config.mediaportal.yt_proxy_host.value
-		proxyport = config.mediaportal.yt_proxy_port.value
-		self.puser = config.mediaportal.yt_proxy_username.value
-		self.ppass = config.mediaportal.yt_proxy_password.value
+		proxyhost = config_mp.mediaportal.yt_proxy_host.value
+		proxyport = config_mp.mediaportal.yt_proxy_port.value
+		self.puser = config_mp.mediaportal.yt_proxy_username.value
+		self.ppass = config_mp.mediaportal.yt_proxy_password.value
 
 		if '/noconnect' in proxyhost:
 			proxyhost, option = proxyhost.split('/')[-2:]
@@ -71,7 +71,7 @@ class youtubeUrl(object):
 	return
 
   def getVideoUrl(self, url, videoPrio=2, dash=None, fmt_map=None):
-	dash = config.mediaportal.youtubeenabledash.value
+	dash = config_mp.mediaportal.youtubeenabledash.value
 	# portions of this part is from mtube plugin
 
 	if not self.__callBack:
@@ -110,7 +110,7 @@ class youtubeUrl(object):
 			'18'  : 8, #MP4 360p
 			'34'  : 9, #FLV 360p
 		}
-		if config.mediaportal.youtubeenablevp9.value:
+		if config_mp.mediaportal.youtubeenablevp9.value:
 			self.VIDEO_FMT_PRIORITY_MAP.update({
 			'303' : 1, #VP9 1080p60 (DASH)
 			'248' : 2, #VP9 1080p (DASH)
@@ -125,7 +125,7 @@ class youtubeUrl(object):
 			'18'  : 10, #MP4 360p
 			'34'  : 11, #FLV 360p
 		}
-		if config.mediaportal.youtubeenablevp9.value:
+		if config_mp.mediaportal.youtubeenablevp9.value:
 			self.VIDEO_FMT_PRIORITY_MAP.update({
 			'308' : 1, #VP9 1440p60 (DASH)
 			'271' : 2, #VP9 1440p (DASH)
@@ -142,7 +142,7 @@ class youtubeUrl(object):
 			'18'  : 12, #MP4 360p
 			'34'  : 13, #FLV 360p
 		}
-		if config.mediaportal.youtubeenablevp9.value:
+		if config_mp.mediaportal.youtubeenablevp9.value:
 			self.VIDEO_FMT_PRIORITY_MAP.update({
 			'315' : 1, #VP9 2160p60 (DASH)
 			'313' : 2, #VP9 2160p (DASH)

@@ -27,7 +27,7 @@ class MTVdeLink:
 		if not token:
 			self._errback(_('Sorry, this video is not found or no longer available due to date or rights restrictions.'))
 		else:
-			if config.mediaportal.mtvquality.value == "SD":
+			if config_mp.mediaportal.mtvquality.value == "SD":
 				quality = "phttp"
 			else:
 				quality = "hls"

@@ -28,7 +28,7 @@ class MediaPortalTmdbScreen(MPScreen):
 		}, -1)
 
 		self["hidePig"] = Boolean()
-		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
+		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
@@ -180,7 +180,7 @@ class MediaPortaltmdbScreenMovie(MPScreen):
 		}, -1)
 
 		self["hidePig"] = Boolean()
-		self["hidePig"].setBoolean(config.mediaportal.minitv.value)
+		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 
 		self.trailer = None
 

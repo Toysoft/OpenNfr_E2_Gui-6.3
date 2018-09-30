@@ -40,7 +40,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
-default_cover = "file://%s/srg.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/srg.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class SRGGenreScreen(MPScreen):
 
@@ -334,7 +334,7 @@ class SRGStreamScreen(MPScreen):
 		try:
 			bandwith_list = []
 			match_sec_m3u8=re.findall('BANDWIDTH=(\d+).*?\n(.*?m3u8)', data, re.S)
-			videoPrio = int(config.mediaportal.videoquali_others.value)
+			videoPrio = int(config_mp.mediaportal.videoquali_others.value)
 			if videoPrio == 2:
 				bw = int(match_sec_m3u8[-2][0])
 			elif videoPrio == 1:

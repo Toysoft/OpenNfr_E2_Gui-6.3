@@ -48,23 +48,23 @@ class updatetubeGenreScreen(MPScreen):
 		if self.mode == "updatetube":
 			self.portal = "UpdateTube.com"
 			self.baseurl = "www.updatetube.com"
-			default_cover = "file://%s/updatetube.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/updatetube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "pinkrod":
 			self.portal = "Pinkrod.com"
 			self.baseurl = "www.pinkrod.com"
-			default_cover = "file://%s/pinkrod.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pinkrod.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "hotshame":
 			self.portal = "hotshame.com"
 			self.baseurl = "www.hotshame.com"
-			default_cover = "file://%s/hotshame.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/hotshame.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "thenewporn":
 			self.portal = "TheNewPorn.com"
 			self.baseurl = "www.thenewporn.com"
-			default_cover = "file://%s/thenewporn.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/thenewporn.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "pornsharing":
 			self.portal = "PornSharing.com"
 			self.baseurl = "www.pornsharing.com"
-			default_cover = "file://%s/pornsharing.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pornsharing.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
@@ -153,15 +153,15 @@ class updatetubeFilmScreen(MPScreen, ThumbsHelper):
 
 		global default_cover
 		if self.portal == "UpdateTube.com":
-			default_cover = "file://%s/updatetube.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/updatetube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.portal == "Pinkrod.com":
-			default_cover = "file://%s/pinkrod.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pinkrod.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.portal == "hotshame.com":
-			default_cover = "file://%s/hotshame.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/hotshame.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.portal == "TheNewPorn.com":
-			default_cover = "file://%s/thenewporn.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/thenewporn.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.portal == "PornSharing.com":
-			default_cover = "file://%s/pornsharing.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pornsharing.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)

@@ -38,7 +38,7 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-default_cover = "file://%s/atv.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/atv.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class atvGenreScreen(MPScreen, ThumbsHelper):
 
@@ -75,10 +75,10 @@ class atvGenreScreen(MPScreen, ThumbsHelper):
 	def parseData(self, data):
 		parse = re.search('class="mod_programs">(.*?)/mod_programs', data, re.S)
 		if parse:
-			raw = re.findall('href="(.*?)">.*?src="(.*?)"\salt="(.*?)"', parse.group(), re.S)
+			raw = re.findall('href="(.*?)">.*?img\ssrc=".*?path=(.*?\.jpg).*?"\salt="(.*?)"', parse.group(), re.S)
 			if raw:
-				for (Url, Image, Title) in raw:
-					Image = Image.replace('&amp;','&')
+				for (Url, ImageId, Title) in raw:
+					Image = "https://static.atv.cdn.tvnext.tv/static/assets/cms/%s" % urllib.unquote(ImageId)
 					self.filmliste.append((decodeHtml(Title), Url, Image))
 				self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 				self.keyLocked = False
@@ -139,17 +139,17 @@ class atvListScreen(MPScreen, ThumbsHelper):
 			if handlung:
 				self.handlung = handlung.group(1)
 		if parse:
-			raw = re.findall('<li class="teaser">.*?href="(.*?)".*?<img src="(.*?)".*?class="title">(.*?)<', parse.group(), re.S)
+			raw = re.findall('<li class="teaser">.*?href="(.*?)".*?img\ssrc=".*?path=(.*?\.jpg).*?class="title">(.*?)<', parse.group(), re.S)
 			if raw:
-				for (Url, Image, Title) in raw:
-					Image = Image.replace('&amp;','&')
+				for (Url, ImageId, Title) in raw:
+					Image = "https://static.atv.cdn.tvnext.tv/static/assets/cms/%s" % urllib.unquote(ImageId)
 					self.filmliste.append((decodeHtml(Title), Url, Image))
 		nextpage = re.search('data-jsb="url=(.*?)" style=.*?Weitere Folgen', data, re.S)
 		if nextpage:
 			self.Link = urllib.unquote_plus(nextpage.group(1))
 			self.loadPage()
 		if len(self.filmliste) == 0:
-			self.filmliste.append(("No channels found.", "",""))
+			self.filmliste.append((_("No videos found!"), "",""))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False

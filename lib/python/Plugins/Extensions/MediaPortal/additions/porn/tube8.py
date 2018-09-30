@@ -49,7 +49,7 @@ json_headers = {
 	'X-Requested-With':'XMLHttpRequest',
 	'Content-Type':'application/json',
 	}
-default_cover = "file://%s/tube8.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/tube8.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class tube8GenreScreen(MPScreen):
 

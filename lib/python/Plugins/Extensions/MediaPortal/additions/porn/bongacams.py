@@ -41,7 +41,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 BASEURL = "https://en.bongacams.com/"
 
-default_cover = "file://%s/bongacams.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/bongacams.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 bongacamsAgent = "Mozilla/5.0 (iPad; CPU OS 8_1_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12B466 Safari/600.1.4"
 ck = {}
 json_headers = {

@@ -39,10 +39,11 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
+from Plugins.Extensions.MediaPortal.resources.debuglog import printlog as printl
 
 BASE_URL = "http://api.tvnow.de/v3/"
 nowAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
-default_cover = "file://%s/tvnow.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/tvnow.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class tvnowFirstScreen(MPScreen, ThumbsHelper):
 
@@ -80,7 +81,7 @@ class tvnowFirstScreen(MPScreen, ThumbsHelper):
 		self.senderliste.append(("SUPER RTL", "superrtl", default_cover))
 		self.senderliste.append(("n-tv", "ntv", default_cover))
 		self.senderliste.append(("RTLplus", "rtlplus",  default_cover))
-		self.senderliste.append(("Watchbox", "watchbox",  "file://%s/watchbox.png" % (config.mediaportal.iconcachepath.value + "logos")))
+		self.senderliste.append(("Watchbox", "watchbox",  "file://%s/watchbox.png" % (config_mp.mediaportal.iconcachepath.value + "logos")))
 		self.ml.setList(map(self._defaultlistcenter, self.senderliste))
 		self.keyLocked = False
 		self.th_ThumbsQuery(self.senderliste, 0, 1, 2, None, None, 1, 1, mode=1)
@@ -352,8 +353,8 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 
 	def dataErrorContainer(self, error):
 		self.container -= 1
-		from Plugins.Extensions.MediaPortal.resources.debuglog import printlog as printl
 		printl(error,self,"E")
+		self.parseContainer("", False)
 
 	def parseContainer(self, data, id=False, annual=False):
 		if id:
@@ -404,9 +405,10 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 				pass
 			if annual:
 				self.parseContainer("", False)
+		printl(self.container,self,"I")
 		if self.container == 0:
 			if len(self.filmliste) == 0:
-				self.filmliste.append((_('Currently no free episodes available!'), None, None, None))
+				self.filmliste.append((_('Currently no playable/free episodes available!'), None, None, None))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.keyLocked = False
 			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, 1, 1, mode=1)
@@ -446,7 +448,7 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 		for x in match_sec_m3u8:
 			if int(x[0]) > max:
 				max = int(x[0])
-		videoPrio = int(config.mediaportal.videoquali_others.value)
+		videoPrio = int(config_mp.mediaportal.videoquali_others.value)
 		if videoPrio == 2:
 			bw = max
 		elif videoPrio == 1:

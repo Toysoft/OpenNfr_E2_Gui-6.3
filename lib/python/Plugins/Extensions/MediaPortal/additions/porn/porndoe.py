@@ -42,7 +42,7 @@ from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoard
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 
 agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
-default_cover = "file://%s/porndoe.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/porndoe.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 ck = {}
 

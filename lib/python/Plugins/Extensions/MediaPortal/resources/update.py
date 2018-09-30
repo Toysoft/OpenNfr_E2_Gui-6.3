@@ -81,7 +81,7 @@ class checkupdate:
 			mirror_replace = re.search('(sourceforge.net.*)', self.updateurl)
 			if mirror_replace:
 				self.updateurl = 'http://' + mirror_rand + '.dl.' + mirror_replace.group(1)
-		if int(config.mediaportal.version.value) < int(remoteversion):
+		if int(config_mp.mediaportal.version.value) < int(remoteversion):
 			if mirror_rand:
 				printl('Random update mirror selected: %s' % mirror_rand,self,'A')
 			printl('Found update url: %s' % self.updateurl,self,'A')
@@ -150,9 +150,9 @@ class MPUpdateScreen(MPScreen):
 	def finishedPluginUpdate(self,retval):
 		self.container.kill()
 		if retval == 0:
-			config.mediaportal.filter.value = "ALL"
-			config.mediaportal.filter.save()
-			configfile.save()
+			config_mp.mediaportal.filter.value = "ALL"
+			config_mp.mediaportal.filter.save()
+			configfile_mp.save()
 			self.session.openWithCallback(self.restartGUI, MessageBoxExt, _("MediaPortal successfully updated!\nDo you want to restart the Enigma2 GUI now?"), MessageBoxExt.TYPE_YESNO)
 		else:
 			self.session.openWithCallback(self.returnGUI, MessageBoxExt, _("MediaPortal update failed! Check the update log carefully!"), MessageBoxExt.TYPE_ERROR)

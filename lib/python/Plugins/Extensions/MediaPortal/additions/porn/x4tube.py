@@ -57,22 +57,22 @@ class fourtubeGenreScreen(MPScreen):
 			self.portal = "4Tube.com"
 			self.baseurl = "www.4tube.com"
 			self.s = "s"
-			default_cover = "file://%s/4tube.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/4tube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "fux":
 			self.portal = "fux.com"
 			self.baseurl = "www.fux.com"
 			self.s = ""
-			default_cover = "file://%s/fux.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/fux.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "porntube":
 			self.portal = "PornTube.com"
 			self.baseurl = "www.porntube.com"
 			self.s = "s"
-			default_cover = "file://%s/porntube.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/porntube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "pornerbros":
 			self.portal = "PornerBros.com"
 			self.baseurl = "www.pornerbros.com"
 			self.s = "s"
-			default_cover = "file://%s/pornerbros.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pornerbros.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
@@ -308,13 +308,13 @@ class fourtubeFilmScreen(MPScreen, ThumbsHelper):
 
 		global default_cover
 		if self.portal == "4Tube.com":
-			default_cover = "file://%s/4tube.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/4tube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.portal == "fux.com":
-			default_cover = "file://%s/fux.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/fux.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.portal == "PornTube.com":
-			default_cover = "file://%s/porntube.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/porntube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.portal == "PornerBros.com":
-			default_cover = "file://%s/pornerbros.png" % (config.mediaportal.iconcachepath.value + "logos")
+			default_cover = "file://%s/pornerbros.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)

@@ -49,7 +49,7 @@ json_headers = {
 	'Content-Type':'application/x-www-form-urlencoded'
 	}
 ck = {}
-default_cover = "file://%s/vjav.png" % (config.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/vjav.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class vjavGenreScreen(MPScreen):
 
