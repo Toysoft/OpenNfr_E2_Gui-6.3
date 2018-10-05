@@ -889,11 +889,11 @@ class NimSetup(Screen, ConfigListScreen, ServiceStopScreen):
 
 		for x in self["config"].list:
 			x[1].cancel()
-		if hasattr(self, "originalTerrestrialRegion"):
-			self.nimConfig.terrestrial.value = self.originalTerrestrialRegion
+		if hasattr(self, "TerrestrialRegion"):
+			self.nimConfig.terrestrial.value = self.TerrestrialRegion
 			self.nimConfig.terrestrial.save()
-		if hasattr(self, "originalCableRegion"):
-			self.nimConfig.cable.scan_provider.value = self.originalCableRegion
+		if hasattr(self, "CableRegion"):
+			self.nimConfig.cable.scan_provider.value = self.CableRegion
 			self.nimConfig.cable.scan_provider.save()
 		# we need to call saveAll to reset the connectedTo choices
 		self.saveAll()
