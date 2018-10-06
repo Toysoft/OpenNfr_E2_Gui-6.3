@@ -311,8 +311,10 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 			getPage(url, agent="XBMC").addCallback(self.getInfos).addErrback(self.dataError)
 
 	def keyOK(self):
+		if self.keyLocked:
+			return
 		stationId = self['liste'].getCurrent()[0][1]
-		if self.keyLocked or not stationId:
+		if not stationId:
 			return
 		url = base_url + "/info/broadcast/getbroadcastembedded?broadcast=%s" % stationId
 		getPage(url, agent="XBMC").addCallback(self.getStreamURL).addErrback(self.dataError)

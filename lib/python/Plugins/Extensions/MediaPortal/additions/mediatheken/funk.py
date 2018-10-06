@@ -360,8 +360,8 @@ class funkEpisodesScreen(MPScreen):
 			videourl = nexx.getVideoUrl(id, downld)
 		if videourl:
 			if "m3u8" in videourl:
-				if config_mp.mediaportal.use_hls_proxy.value:
-					self.session.open(SimplePlayer, [(Title, videourl)], showPlaylist=False, ltype='funk')
+				if config_mp.mediaportal.hlsp_enable.value:
+					self.session.open(SimplePlayer, [(Title, videourl)], showPlaylist=False, ltype='funk', forceGST=False)
 				else:
 					message = self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO, timeout=5)
 			else:

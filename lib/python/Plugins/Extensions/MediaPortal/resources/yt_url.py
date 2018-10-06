@@ -87,29 +87,38 @@ class youtubeUrl(object):
 		}
 	elif videoPrio == 1: #480p
 		self.VIDEO_FMT_PRIORITY_MAP = {
-			'135' : 1, #MP4 480p (DASH)
-			'35'  : 2, #FLV 480p
+			'35'  : 1, #FLV 480p
 			'18'  : 3, #MP4 360p
 			'34'  : 4, #FLV 360p
 		}
+		if config_mp.mediaportal.youtubeenabledash480p.value:
+			self.VIDEO_FMT_PRIORITY_MAP.update({
+			'135' : 2, #MP4 480p (DASH)
+			})
 	elif videoPrio == 2: #720p
 		self.VIDEO_FMT_PRIORITY_MAP = {
 			'22'  : 1, #MP4 720p
-			'135' : 2, #MP4 480p (DASH)
-			'35'  : 3, #FLV 480p
+			'35'  : 2, #FLV 480p
 			'18'  : 4, #MP4 360p
 			'34'  : 5, #FLV 360p
 		}
+		if config_mp.mediaportal.youtubeenabledash480p.value:
+			self.VIDEO_FMT_PRIORITY_MAP.update({
+			'135' : 3, #MP4 480p (DASH)
+			})
 	elif videoPrio == 3: #1080p
 		self.VIDEO_FMT_PRIORITY_MAP = {
 			'299' : 3, #MP4 1080p60 (DASH)
 			'137' : 4, #MP4 1080p (DASH)
 			'22'  : 5, #MP4 720p
-			'135' : 6, #MP4 480p (DASH)
-			'35'  : 7, #FLV 480p
+			'35'  : 6, #FLV 480p
 			'18'  : 8, #MP4 360p
 			'34'  : 9, #FLV 360p
 		}
+		if config_mp.mediaportal.youtubeenabledash480p.value:
+			self.VIDEO_FMT_PRIORITY_MAP.update({
+			'135' : 7, #MP4 480p (DASH)
+			})
 		if config_mp.mediaportal.youtubeenablevp9.value:
 			self.VIDEO_FMT_PRIORITY_MAP.update({
 			'303' : 1, #VP9 1080p60 (DASH)
@@ -120,11 +129,14 @@ class youtubeUrl(object):
 			'299' : 5, #MP4 1080p60 (DASH)
 			'137' : 6, #MP4 1080p (DASH)
 			'22'  : 7, #MP4 720p
-			'135' : 8, #MP4 480p (DASH)
-			'35'  : 9, #FLV 480p
+			'35'  : 8, #FLV 480p
 			'18'  : 10, #MP4 360p
 			'34'  : 11, #FLV 360p
 		}
+		if config_mp.mediaportal.youtubeenabledash480p.value:
+			self.VIDEO_FMT_PRIORITY_MAP.update({
+			'135' : 9, #MP4 480p (DASH)
+			})
 		if config_mp.mediaportal.youtubeenablevp9.value:
 			self.VIDEO_FMT_PRIORITY_MAP.update({
 			'308' : 1, #VP9 1440p60 (DASH)
@@ -137,11 +149,14 @@ class youtubeUrl(object):
 			'299' : 7, #MP4 1080p60 (DASH)
 			'137' : 8, #MP4 1080p (DASH)
 			'22'  : 9, #MP4 720p
-			'135' : 10, #MP4 480p (DASH)
-			'35'  : 11, #FLV 480p
+			'35'  : 10, #FLV 480p
 			'18'  : 12, #MP4 360p
 			'34'  : 13, #FLV 360p
 		}
+		if config_mp.mediaportal.youtubeenabledash480p.value:
+			self.VIDEO_FMT_PRIORITY_MAP.update({
+			'135' : 11, #MP4 480p (DASH)
+			})
 		if config_mp.mediaportal.youtubeenablevp9.value:
 			self.VIDEO_FMT_PRIORITY_MAP.update({
 			'315' : 1, #VP9 2160p60 (DASH)

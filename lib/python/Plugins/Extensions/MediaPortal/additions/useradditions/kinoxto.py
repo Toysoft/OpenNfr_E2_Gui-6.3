@@ -173,8 +173,8 @@ class kxKino(MPScreen, ThumbsHelper):
 			for (kxUrl,kxTitle,kxImage,kxHandlung,kxLang) in kxMovies:
 				kxUrl = kx_url + kxUrl
 				kxImage = kx_url + kxImage
-				self.streamList.append((decodeHtml(kxTitle),kxUrl,kxImage,kxLang,kxHandlung))
-			self.ml.setList(map(self.kinoxlistleftflagged, self.streamList))
+				self.streamList.append((decodeHtml(kxTitle),kxUrl,False,kxLang,kxImage,kxHandlung))
+			self.ml.setList(map(self._defaultlistleftmarked, self.streamList))
 			self.keyLocked = False
 			self.th_ThumbsQuery(self.streamList, 0, 1, 2, None, None, 1, 1)
 			self.showInfos()
@@ -182,8 +182,8 @@ class kxKino(MPScreen, ThumbsHelper):
 	def showInfos(self):
 		filmName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(filmName)
-		coverUrl = self['liste'].getCurrent()[0][2]
-		handlung = self['liste'].getCurrent()[0][4]
+		coverUrl = self['liste'].getCurrent()[0][4]
+		handlung = self['liste'].getCurrent()[0][5]
 		self['handlung'].setText(decodeHtml(handlung))
 		CoverHelper(self['coverArt']).getCover(coverUrl, agent=kx_agent, cookieJar=kx_cookies)
 
@@ -193,7 +193,7 @@ class kxKino(MPScreen, ThumbsHelper):
 			return
 		stream_name = self['liste'].getCurrent()[0][0]
 		auswahl = self['liste'].getCurrent()[0][1]
-		cover = self['liste'].getCurrent()[0][2]
+		cover = self['liste'].getCurrent()[0][4]
 		self.session.open(kxStreams, auswahl, stream_name, cover)
 
 class kxNeuesteKino(MPScreen, ThumbsHelper):
@@ -233,13 +233,13 @@ class kxNeuesteKino(MPScreen, ThumbsHelper):
 	def parseData(self, data):
 		raw_m = re.findall('<div class="Opt leftOpt Headlne"><h1>Frisches aus dem Kino(.*?)</table>', data, re.S)
 		if raw_m:
-			movies = re.findall('td class="Title img_preview" rel="(.*?)"><a href="(/Stream/.*?)" title=".*?" class="OverlayLabel">(.*?)</a></td>', raw_m[0], re.S)
+			movies = re.findall('class="Icon"><img src="/gr/sys/lng/(.*?).png".*?class="Title img_preview" rel="(.*?)"><a href="(/Stream/.*?)" title=".*?" class="OverlayLabel">(.*?)</a></td>', raw_m[0], re.S)
 			if movies:
-				for (kxImage,kxUrl,kxTitle) in movies:
+				for (kxLang,kxImage,kxUrl,kxTitle) in movies:
 					kxUrl = kx_url + kxUrl
 					kxImage = kx_url + kxImage
-					self.streamList.append((decodeHtml(kxTitle),kxUrl,kxImage))
-				self.ml.setList(map(self._defaultlistleft, self.streamList))
+					self.streamList.append((decodeHtml(kxTitle),kxUrl,False,kxLang,kxImage))
+				self.ml.setList(map(self._defaultlistleftmarked, self.streamList))
 				self.keyLocked = False
 				self.th_ThumbsQuery(self.streamList, 0, 1, 2, None, None, 1, 1)
 				self.showInfos()
@@ -248,7 +248,7 @@ class kxNeuesteKino(MPScreen, ThumbsHelper):
 		filmName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(filmName)
 		url = self['liste'].getCurrent()[0][1]
-		image = self['liste'].getCurrent()[0][2]
+		image = self['liste'].getCurrent()[0][4]
 		CoverHelper(self['coverArt']).getCover(image, agent=kx_agent, cookieJar=kx_cookies)
 
 	def getDetails(self, data):
@@ -264,7 +264,7 @@ class kxNeuesteKino(MPScreen, ThumbsHelper):
 			return
 		stream_name = self['liste'].getCurrent()[0][0]
 		auswahl = self['liste'].getCurrent()[0][1]
-		cover = self['liste'].getCurrent()[0][2]
+		cover = self['liste'].getCurrent()[0][4]
 		self.session.open(kxStreams, auswahl, stream_name, cover)
 
 class kxNeuesteOnline(MPScreen, ThumbsHelper):
@@ -304,13 +304,13 @@ class kxNeuesteOnline(MPScreen, ThumbsHelper):
 	def parseData(self, data):
 		neueste = re.findall('div class="Opt leftOpt Headlne"><h1>Neue Filme online vom(.*?)</table>', data, re.S)
 		if neueste:
-			movies = re.findall('td class="Title img_preview" rel="(.*?)"><a href="(/Stream/.*?)" title=".*?" class="OverlayLabel">(.*?)</a></td>', neueste[0], re.S)
+			movies = re.findall(' class="Icon"><img src="/gr/sys/lng/(.*?).png".*?class="Title img_preview" rel="(.*?)"><a href="(/Stream/.*?)" title=".*?" class="OverlayLabel">(.*?)</a></td>', neueste[0], re.S)
 			if movies:
-				for (kxImage,kxUrl,kxTitle) in movies:
+				for (kxLang,kxImage,kxUrl,kxTitle) in movies:
 					kxUrl = kx_url + kxUrl
 					kxImage = kx_url + kxImage
-					self.streamList.append((decodeHtml(kxTitle),kxUrl,kxImage))
-					self.ml.setList(map(self._defaultlistleft, self.streamList))
+					self.streamList.append((decodeHtml(kxTitle),kxUrl,False,kxLang,kxImage))
+					self.ml.setList(map(self._defaultlistleftmarked, self.streamList))
 				self.keyLocked = False
 				self.th_ThumbsQuery(self.streamList, 0, 1, None, None, '<div class="Grahpics">.*?<img src="(.*?)"', 1, 1)
 				self.showInfos()
@@ -319,7 +319,7 @@ class kxNeuesteOnline(MPScreen, ThumbsHelper):
 		filmName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(filmName)
 		url = self['liste'].getCurrent()[0][1]
-		image = self['liste'].getCurrent()[0][2]
+		image = self['liste'].getCurrent()[0][4]
 		CoverHelper(self['coverArt']).getCover(image, agent=kx_agent, cookieJar=kx_cookies)
 		twAgentGetPage(url, agent=kx_agent, cookieJar=kx_cookies).addCallback(self.getDetails).addErrback(self.dataError)
 
@@ -442,15 +442,15 @@ class kxABCpage(MPScreen, ThumbsHelper):
 
 	def parseData(self, data):
 		data = data.replace('\\/','/').replace('\\"','"')
-		kxMovies = re.findall('\["(\d+)".*?href="(.*?)".*?">(.*?)</a>.*?class="Year">(.*?)</span>', data, re.S)
+		kxMovies = re.findall('\["(\d+)".*?href="(.*?)".*?">(.*?)(?:</a>|<a).*?class="Year">(.*?)</span>', data, re.S)
 		if kxMovies:
 			for (kxLang,kxUrl,kxTitle,Year) in kxMovies:
 				kxUrl = kx_url + kxUrl
-				kxImage = None
 				kxHandlung = ""
-				kxTitle = kxTitle + " (" + Year + ")"
-				self.streamList.append((decodeHtml(kxTitle),kxUrl,kxImage,kxLang,kxHandlung))
-				self.ml.setList(map(self.kinoxlistleftflagged, self.streamList))
+				if Year <> "0":
+					kxTitle = kxTitle + " (" + Year + ")"
+				self.streamList.append((decodeHtml(kxTitle),kxUrl,False,kxLang,kxHandlung))
+				self.ml.setList(map(self._defaultlistleftmarked, self.streamList))
 			self.keyLocked = False
 			self.th_ThumbsQuery(self.streamList, 0, 1, 2, None, None, self.page)
 			self.showInfos()
@@ -530,8 +530,8 @@ class kxNeueste(MPScreen, ThumbsHelper):
 		if kxMovies:
 			for (kxLang,kxUrl,kxTitle) in kxMovies:
 				kxUrl = kx_url + kxUrl
-				self.streamList.append((decodeHtml(kxTitle),kxUrl,'',kxLang))
-				self.ml.setList(map(self.kinoxlistleftflagged, self.streamList))
+				self.streamList.append((decodeHtml(kxTitle),kxUrl,False,kxLang))
+				self.ml.setList(map(self._defaultlistleftmarked, self.streamList))
 			self.keyLocked = False
 			self.th_ThumbsQuery(self.streamList, 0, 1, None, 2, '<div class="Grahpics">.*?<img src="(.*?)"', 1, 1)
 
@@ -708,10 +708,10 @@ class kxWatchlist(MPScreen):
 				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
 				if data:
 					(stationName, stationLink, stationLang, stationTotaleps) = data[0]
-					self.streamList.append((stationName, stationLink, '', stationLang))
+					self.streamList.append((stationName, stationLink, False, stationLang))
 			self.streamList.sort()
 			readStations.close()
-			self.ml.setList(map(self.kinoxlistleftflagged, self.streamList))
+			self.ml.setList(map(self._defaultlistleftmarked, self.streamList))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('Watchlist is currently empty'), None))
 			self.ml.setList(map(self._defaultlistleft, self.streamList))
@@ -777,7 +777,7 @@ class kxStreams(MPScreen):
 		hosterdump = re.findall('<li id="Hoster(.*?)/li>', data, re.S)
 		if hosterdump:
 			self.streamList = []
-			self.streamList.append(("Hoster", "nix", "Mirror", "Hits", "Date"))
+			self.streamList.append(("Hoster", None, "Mirror", "", "Date"))
 			for each in hosterdump:
 				if re.search('Mirror', each, re.I):
 					hosters = re.findall('rel="(.*?)".*?<div class="Named">(.*?)</div>.*?<div class="Data"><b>Mirror</b>\:.(.*?)<br.*?><b>Vom</b>\:.(.*\d+)</div>',each, re.S|re.I)
@@ -828,7 +828,8 @@ class kxStreams(MPScreen):
 		if self.keyLocked or exist == None:
 			return
 		url = self['liste'].getCurrent()[0][1]
-		twAgentGetPage(url, agent=kx_agent, cookieJar=kx_cookies).addCallback(self.parseStream, url).addErrback(self.dataError)
+		if url:
+			twAgentGetPage(url, agent=kx_agent, cookieJar=kx_cookies).addCallback(self.parseStream, url).addErrback(self.dataError)
 
 	def parseStream(self, data, url):
 		data = data.replace('\/','/').replace('\\"','"')

@@ -277,4 +277,4 @@ class RBtvGenreScreen(MPScreen):
 		title = self['liste'].getCurrent()[0][0]
 		self['name'].setText(title)
 		self.keyLocked = False
-		self.session.open(SimplePlayer, [(title, best[1])], showPlaylist=False, ltype='redbulltv', forceGST=True)
+		self.session.open(SimplePlayer, [(title, best[1])], showPlaylist=False, ltype='redbulltv')

@@ -462,4 +462,4 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 		url = baseurl.replace('fairplay.m3u8', '') + best[1]
 		Name = self['liste'].getCurrent()[0][0]
 		mp_globals.player_agent = nowAgent
-		self.session.open(SimplePlayer, [(Name, url)], showPlaylist=False, ltype='tvnow', forceGST=True)
+		self.session.open(SimplePlayer, [(Name, url)], showPlaylist=False, ltype='tvnow')

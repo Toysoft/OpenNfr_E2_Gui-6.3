@@ -309,6 +309,7 @@ class ConfigListScreenExt:
 
 	def keySave(self):
 		self.saveAll()
+		configfile_mp.save()
 		self.close()
 
 	def cancelConfirm(self, result):

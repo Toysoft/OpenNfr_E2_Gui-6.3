@@ -69,7 +69,7 @@ def isSupportedHoster(linkOrHoster, check=False):
 		printl("match2: %s" % linkOrHoster,'',"H")
 		return True
 
-	printl("hoster not supported",'',"W")
+	printl("hoster not supported",'',"H")
 	return False
 
 class get_stream_link:
@@ -85,6 +85,7 @@ class get_stream_link:
 	from hosters.flashx import flashx
 	from hosters.flyflv import flyflv, flyflvData
 	from hosters.google import google
+	from hosters.gounlimited import gounlimited
 	from hosters.kodik import kodik, kodikData
 	from hosters.mailru import mailru
 	from hosters.mega3x import mega3x
@@ -97,6 +98,7 @@ class get_stream_link:
 	from hosters.thevideome import thevideome
 	from hosters.uptostream import uptostream
 	from hosters.userporn import Userporn
+	from hosters.vidcloud import vidcloud
 	from hosters.videowood import videowood
 	from hosters.vidlox import vidlox
 	from hosters.vidoza import vidoza
@@ -107,6 +109,7 @@ class get_stream_link:
 	from hosters.vidzi import vidzi
 	from hosters.vivo import vivo
 	from hosters.vkme import vkme, vkmeHash, vkmeHashGet, vkmeHashData, vkPrivat, vkPrivatData
+	from hosters.xdrive import xdrive
 	from hosters.yourupload import yourupload
 	from hosters.youwatch import youwatch, youwatchLink
 
@@ -552,6 +555,10 @@ class get_stream_link:
 				link = data
 				getPage(link).addCallback(self.datoporn).addErrback(self.errorload)
 
+			elif re.search("gounlimited.to", data, re.S):
+				link = data
+				twAgentGetPage(link).addCallback(self.gounlimited).addErrback(self.errorload)
+
 			elif re.search("uptostream.com", data, re.S):
 				link = data
 				getPage(link).addCallback(self.uptostream).addErrback(self.errorload)
@@ -749,6 +756,22 @@ class get_stream_link:
 						message = self.session.open(MessageBoxExt, _("Mandatory Python module python-requests is missing!"), MessageBoxExt.TYPE_ERROR)
 					else:
 						self.vidlox(data)
+
+			elif re.search('vidcloud\.co', data, re.S):
+				fid = re.search('vidcloud\.co/embed/(.*?)/', data, re.S)
+				if fid:
+					link = "https://vidcloud.co/player?fid=%s&page=embed" % fid.group(1)
+					agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36 OPR/34.0.2036.50'
+					mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36 OPR/34.0.2036.50'
+					twAgentGetPage(link, agent=agent).addCallback(self.vidcloud).addErrback(self.errorload)
+				else:
+					self.stream_not_found()
+
+			elif re.search('xdrive\.cc', data, re.S):
+				link = data.replace('https','http')
+				agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36 OPR/34.0.2036.50'
+				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36 OPR/34.0.2036.50'
+				twAgentGetPage(link, agent=agent).addCallback(self.xdrive).addErrback(self.errorload)
 
 			elif re.search('streamango\.com|streamcherry\.com', data, re.S):
 				link = data

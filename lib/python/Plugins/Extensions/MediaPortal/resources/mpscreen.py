@@ -575,7 +575,31 @@ class MPScreen(Screen, HelpableScreen):
 
 		try:
 			if entry[3]:
-				iconlng = entry[3]
+				if entry[3] == '1':
+					iconlng = 'DE'
+				elif entry[3] == '2':
+					iconlng = 'EN'
+				elif entry[3] == '5':
+					iconlng = 'ES'
+				elif entry[3] == '6':
+					iconlng = 'FR'
+				elif entry[3] == '7':
+					iconlng = 'TR'
+				elif entry[3] == '8':
+					iconlng = 'JP'
+				elif entry[3] == '11':
+					iconlng = 'IT'
+				elif entry[3] == '15':
+					iconlng = 'DEUS'
+				elif entry[3] == '24':
+					iconlng = 'GR'
+				elif entry[3] == '25':
+					iconlng = 'RU'
+				elif entry[3] == '26':
+					iconlng = 'IN'
+				else:
+					iconlng = entry[3]
+
 				path = "%s/%s/images/%s.png" % (skin_path, mp_globals.currentskin, iconlng)
 				if not fileExists(path):
 					path = "%s/%s/images/%s.png" % (skin_path, mp_globals.skinFallback, iconlng)
@@ -751,56 +775,6 @@ class MPScreen(Screen, HelpableScreen):
 ##################
 
 ####### kinox
-	def kinoxlistleftflagged(self, entry):
-		width = self['liste'].instance.size().width()
-		height = self['liste'].l.getItemSize().height()
-		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
-		res = [entry]
-
-		skin_path = mp_globals.pluginPath + mp_globals.skinsPath
-
-		try:
-			if entry[3]:
-				if entry[3] == '1' or entry[3] == '/img/us_ger_small.png':
-					iconlng = '1'
-				elif entry[3] == '2' or entry[3] == '/img/us_flag_small.png':
-					iconlng = '2'
-				elif entry[3] == '5' or entry[3] == '/img/flag_spain.gif':
-					iconlng = '5'
-				elif entry[3] == '6' or entry[3] == '/img/flag_france.gif':
-					iconlng = '6'
-				elif entry[3] == '8' or entry[3] == '/img/flag_japan.gif':
-					iconlng = '8'
-				elif entry[3] == '11' or entry[3] == '/img/flag_italy.gif':
-					iconlng = '11'
-				elif entry[3] == '15':
-					iconlng = '15'
-				elif entry[3] == '24' or entry[3] == '/img/flag_greece.gif':
-					iconlng = '24'
-				elif entry[3] == '25':
-					iconlng = 'RU'
-				elif entry[3] == '26':
-					iconlng = 'IN'
-				else:
-					iconlng = entry[3]
-
-				path = "%s/%s/images/%s.png" % (skin_path, mp_globals.currentskin, iconlng)
-				if not fileExists(path):
-					path = "%s/%s/images/%s.png" % (skin_path, mp_globals.skinFallback, iconlng)
-					if not fileExists(path):
-						path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s.png" % iconlng
-
-				lang = LoadPixmap(path)
-				lwidth = lang.size().width()
-				lheight = lang.size().height()
-				vpos = round(float((height-lheight)/2))
-				res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 25, vpos, lwidth, lheight, lang))
-				self.langoffset = lwidth+25
-		except:
-			pass
-
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, self.langoffset+25, 0, width, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]))
-		return res
 
 	def kxStreamListEntry(self, entry):
 		width = self['liste'].instance.size().width()
@@ -827,19 +801,6 @@ class MPScreen(Screen, HelpableScreen):
 		res = [entry]
 		res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 120, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3]))
 		res.append((eListboxPythonMultiContent.TYPE_TEXT, 130, 0, width - 130, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]))
-		return res
-##################
-
-####### topimdb
-	def timdbEntry(self, entry):
-		width = self['liste'].instance.size().width()
-		height = self['liste'].l.getItemSize().height()
-		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
-		res = [entry]
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 75, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]))
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, 85, 0, width - 305, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]))
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, width - 210, 0, 100, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]))
-		res.append((eListboxPythonMultiContent.TYPE_TEXT, width - 100, 0, 100, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3]))
 		return res
 ##################
 

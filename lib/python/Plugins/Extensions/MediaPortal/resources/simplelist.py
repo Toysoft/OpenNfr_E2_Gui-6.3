@@ -18,18 +18,14 @@ if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/SerienFilm/MovieSelect
 	from Plugins.Extensions.SerienFilm.MovieSelection import MovieSelection
 else:
 	from Screens.MovieSelection import MovieSelection
-from Plugins.Extensions.MediaPortal.resources.hlsplayer import *
+from Plugins.Extensions.MediaPortal.resources.mp_hlsp import *
 from sepg.mp_epg import SimpleEPG, mpepg, mutex
 
 try:
 	from Plugins.Extensions.MediaInfo.plugin import MediaInfo
 	MediaInfoPresent = True
 except:
-	try:
-		from Plugins.Extensions.mediainfo.plugin import mediaInfo
-		MediaInfoPresent = True
-	except:
-		MediaInfoPresent = False
+	MediaInfoPresent = False
 
 TVG_LOGO_BASE = "http://logo.tvip.ga/"
 TVG_INK_LOGO_BASE = "http://logo.iptv.ink/"
@@ -221,7 +217,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 			self.genreliste.append(('2', 'Global Playlist-%02d' % n, fn))
 
 		self.m3u_list.clear()
-		path = mp_globals.pluginPath + "/userfiles/"
+		path = mp_globals.pluginPath + "/resources/"
 		list = glob.glob(path + '*.m3u')
 		for upath in list:
 			fn = upath.split('/')[-1]
@@ -399,7 +395,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 							continue
 
 					elif extm3u and extinf and line:
-						if not config_mp.mediaportal.use_hls_proxy.value:
+						if not config_mp.mediaportal.hlsp_enable.value:
 							path = line.replace('|', '#')
 						else:
 							path = line
@@ -593,14 +589,14 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 			elif self.ltype == 'sl_m3ulist':
 				idx = self['liste'].getSelectedIndex()
 				if 'TVG-LIST' in self.filelist[idx][3]: return
-				force_hls_player = config_mp.mediaportal.use_hls_proxy.value or self.filelist[idx][1].startswith('newtopia-stream')
+				force_hls_player = config_mp.mediaportal.hlsp_enable.value or self.filelist[idx][1].startswith('newtopia-stream')
 				if self.filelist[idx][1] not in ('', 'None'):
 					if force_hls_player and ('.m3u8' in self.filelist[idx][1])>0:
-						if not config_mp.mediaportal.use_hls_proxy.value:
+						if not config_mp.mediaportal.hlsp_enable.value:
 							self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO)
 							return
 					if any(x in self.filelist[idx][1] for x in ('|', '={')):
-						if not config_mp.mediaportal.use_hls_proxy.value:
+						if not config_mp.mediaportal.hlsp_enable.value:
 							self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO)
 							return
 

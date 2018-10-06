@@ -178,7 +178,7 @@ class hotmovsFilmScreen(MPScreen, ThumbsHelper, txxxcrypt):
 			getPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		self.getLastPage(data, 'class="pagination(.*?)</div>', '.*>((?:\d+.)\d+)<')
+		self.getLastPage(data, 'class="pagination(.*?)</div>', '.*>((?:\d+.|)\d+)<')
 		Movies = re.findall('data-video-id=.*?href="(.*?)".*?img.*?src="(.*?)"\s{0,1}alt="(.*?)(?:"|,).*?class="thumbnail__info__right">(.*?)</div', data, re.S)
 		if Movies:
 			for (Url, Image, Title, Runtime) in Movies:

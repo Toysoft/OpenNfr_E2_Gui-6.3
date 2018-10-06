@@ -643,5 +643,5 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 			url = str(b[0])
 		playlist = []
 		playlist.append((streamName, url))
-		self.session.open(SimplePlayer, playlist, showPlaylist=False, ltype='zdf', forceGST=True)
+		self.session.open(SimplePlayer, playlist, showPlaylist=False, ltype='zdf')
 		self['name'].setText(streamName)

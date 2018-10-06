@@ -188,7 +188,7 @@ class flimmerstubeFilmScreen(MPScreen):
 		Title = self['liste'].getCurrent()[0][0]
 		stream_url = re.findall('"(240|380|480|720)".*?url":"(http[s]?://www.dailymotion.com/cdn/.*?)"', data, re.S)
 		if stream_url:
-			self.session.open(SimplePlayer, [(Title, stream_url[-1][1])], showPlaylist=False, ltype='flimmerstube', forceGST=True)
+			self.session.open(SimplePlayer, [(Title, stream_url[-1][1])], showPlaylist=False, ltype='flimmerstube')
 		self.keyLocked = False
 
 	def getVeohStream(self, data):

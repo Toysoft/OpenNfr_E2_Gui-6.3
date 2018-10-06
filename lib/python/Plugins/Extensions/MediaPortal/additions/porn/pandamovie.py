@@ -211,4 +211,4 @@ class StreamAuswahl(MPScreen):
 
 	def got_link(self, stream_url):
 		title = self.Title
-		self.session.open(SimplePlayer, [(self.Title, stream_url, self.Cover)], showPlaylist=False, ltype='pandamovie', cover=True, forceGST=True)
+		self.session.open(SimplePlayer, [(self.Title, stream_url, self.Cover)], showPlaylist=False, ltype='pandamovie', cover=True)

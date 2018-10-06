@@ -641,8 +641,8 @@ class m4kStreamListeScreen(MPScreen):
 						hoster_url = "%s%s" % (m4k_url, h_url.replace('\\',''))
 						if not hoster_url in dupe:
 							dupe.append(hoster_url)
-							if isSupportedHoster(h_name, True):
-								self.list.append((h_name, hoster_url, h_date))
+							if isSupportedHoster(h_name.replace('Streamclou','Streamcloud').replace('Streamcher','Streamcherry').replace('Openload.c','Openload').replace('Vidcloud.c','Vidcloud'), True):
+								self.list.append((h_name.replace('Streamclou','Streamcloud').replace('Streamcher','Streamcherry').replace('Openload.c','Openload').replace('Vidcloud.c','Vidcloud'), hoster_url, h_date))
 			else:
 				hosters = re.findall('<a target="_blank" href="(http[s]?://(.*?)/.*?)"', data, re.S)
 				if not hosters:

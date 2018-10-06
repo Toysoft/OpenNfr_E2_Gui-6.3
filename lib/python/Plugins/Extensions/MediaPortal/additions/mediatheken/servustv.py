@@ -171,4 +171,4 @@ class sTVids(MPScreen):
 		url = basepath + best[1]
 		Name = self['liste'].getCurrent()[0][0]
 		mp_globals.player_agent = stvAgent
-		self.session.open(SimplePlayer, [(Name, url)], showPlaylist=False, ltype='servustv', forceGST=True)
+		self.session.open(SimplePlayer, [(Name, url)], showPlaylist=False, ltype='servustv')

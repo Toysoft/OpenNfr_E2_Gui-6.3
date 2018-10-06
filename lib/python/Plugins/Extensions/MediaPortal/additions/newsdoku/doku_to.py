@@ -11,6 +11,8 @@ from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.additions.mediatheken.youtube import YT_ListScreen
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
+default_cover = "file://%s/doku_to.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class show_DUTO_Genre(MenuHelper):
 
 	def __init__(self, session):
@@ -24,16 +26,17 @@ class show_DUTO_Genre(MenuHelper):
 		self.onLayoutFinish.append(self.mh_initMenu)
 
 	def mh_parseCategorys(self, data):
+		CoverHelper(self['coverArt']).getCover(default_cover)
 		menu = [
-			(0, "/", "LETZTE BEITRÄGE"),
-			(0, "/", "KATEGORIEN"),
+			(0, "/", "Letzte Beiträge"),
+			(0, "/", "Kategorien"),
 			]
 		menu_marker = '">Kategorien</h3'
 		menu += self.scanMenu(data,menu_marker, base_url=self.mh_baseUrl, init_level=0)
 		m = re.search('="widget-title">Schlagwörter<(.*?)</div>', data, re.S)
 		if m:
 			menu.append((0, "", "Schlagwörter"))
-			for m2 in re.finditer("<a\shref='(.*?)\/'\sclass='tag-link.*?'>(.*?)</a>", m.group(1)):
+			for m2 in re.finditer('<a\shref="(.*?)\/"\sclass="tag-cloud-link.*?">(.*?)</a>', m.group(1)):
 				url, nm = m2.groups()
 				menu.append((1, url, decodeHtml(nm)))
 		self.mh_genMenu2(menu)
@@ -50,7 +53,7 @@ class DUTO_FilmListeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, genreLink, genreName):
 		self.genreLink = genreLink
 		self.genreName = genreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {

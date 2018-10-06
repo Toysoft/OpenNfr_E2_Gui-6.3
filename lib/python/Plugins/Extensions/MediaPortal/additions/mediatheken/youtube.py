@@ -357,7 +357,7 @@ class youtubeGenreScreen(MenuHelper):
 			self.subCatSelectedChannels.append(self.subCatUserChannel)
 
 		try:
-			fname = mp_globals.pluginPath + "/userfiles/userchan.xml"
+			fname = mp_globals.pluginPath + "/resources/userchan.xml"
 			self.user_path = config_mp.mediaportal.watchlistpath.value + "mp_userchan.xml"
 			from os.path import exists
 			if not exists(self.user_path):

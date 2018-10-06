@@ -347,7 +347,7 @@ class SRGStreamScreen(MPScreen):
 			_, best = min((abs(int(x[0]) - bw), x) for x in bandwith_list)
 			url = best[1]
 
-			self.session.open(SimplePlayer, [(self.serie, url)], showPlaylist=False, ltype='srg', forceGST=True)
+			self.session.open(SimplePlayer, [(self.serie, url)], showPlaylist=False, ltype='srg')
 		except:
 			url = self['liste'].getCurrent()[0][1].replace("srfvodhd-vh.akamaihd", "hdvodsrforigin-f.akamaihd")
 			twAgentGetPage(url, gzip_decoding=True).addCallback(self.loadplaylist).addErrback(self.dataError)

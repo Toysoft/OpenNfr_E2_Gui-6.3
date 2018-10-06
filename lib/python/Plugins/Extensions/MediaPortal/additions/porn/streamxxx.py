@@ -1,7 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 import base64
@@ -36,9 +35,10 @@ class streamxxxGenreScreen(MPScreen):
 		self.genreliste.append(("--- Search ---", None))
 		self.genreliste.append(("Newest", "%s/" % BASE_URL))
 		self.genreliste.append(("Category", "Category"))
-		self.genreliste.append(("Networks", "Networks"))
+		self.genreliste.append(("Videos", "Videos"))
 		self.genreliste.append(("Clips", "%s/category/clips/" % BASE_URL))
 		self.genreliste.append(("Movies", "%s/category/movies-xxx/" % BASE_URL))
+		self.genreliste.append(("HD Movies", "%s/category/movies-xxx/hd/" % BASE_URL))
 		self.genreliste.append(("International Movies", "%s/category/movies/international-movies/" % BASE_URL))
 		self.genreliste.append(("German Movies", "%s/category/international-movies/?s=german" % BASE_URL))
 		self.genreliste.append(("French Movies", "%s/category/international-movies/?s=french" % BASE_URL))
@@ -61,7 +61,7 @@ class streamxxxGenreScreen(MPScreen):
 		Link = self['liste'].getCurrent()[0][1]
 		if Name == "--- Search ---":
 			self.suchen()
-		elif Name == "Networks" or Name == "Category":
+		elif Name == "Videos" or Name == "Category":
 			self.session.open(streamxxxSubGenreScreen, Link, Name)
 		else:
 			self.session.open(streamxxxFilmScreen, Link, Name)
@@ -99,12 +99,13 @@ class streamxxxSubGenreScreen(MPScreen):
 			if preparse:
 				parse = re.findall('href="(.*?)">(.*?)</a', preparse.group(1), re.S)
 		else:
-			preparse = re.search('>BEST NETWORKS</h4>(.*?)</div>', data, re.S|re.I)
+			preparse = re.search('>VIDEOS <span class="fa(.*?)</ul>', data, re.S|re.I)
 			if preparse:
-				parse = re.findall('href="(.*?)"(?: rel="tag"|)>(.*?)</a', preparse.group(1), re.S)
+				parse = re.findall('href="(.*?)"(?: class="st-is-cat st-term-\d+"|)>(.*?)</a', preparse.group(1), re.S)
 		if parse:
 			for (Url, Title) in parse:
-				Title = Title.lower().title()
+				if self.Link == "Category":
+					Title = Title.lower().title()
 				if not re.match('http', Url):
 					Url = "%s%s" % (BASE_URL, Url)
 				self.genreliste.append((decodeHtml(Title), Url))
@@ -174,7 +175,7 @@ class streamxxxFilmScreen(MPScreen, ThumbsHelper):
 		twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		self.getLastPage(data, 'class=\'page-numbers\'>(.*?)</ul>', '.*>((?:\d+.)\d+)<')
+		self.getLastPage(data, 'class=\'page-numbers\'>(.*?)</ul>', '.*>((?:\d+.|)\d+)<')
 		Movies = re.findall('<article\sid="post-\d+.*?<a\shref="(.*?)"\stitle="(.*?)".*?<img src="(.*?)".*?(\d+)\sViews', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Views) in Movies:

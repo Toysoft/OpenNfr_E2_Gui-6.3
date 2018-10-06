@@ -71,7 +71,7 @@ class sexuGenreScreen(MPScreen):
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('class="listTags">(.*?)</ul>', data, re.S)
+		parse = re.search('class="listTags">(.*?)</body>', data, re.S)
 		Cats = re.findall('href="(.*?)".*?</i>(.*?)</a>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:

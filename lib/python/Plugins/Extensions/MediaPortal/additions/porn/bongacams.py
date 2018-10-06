@@ -216,6 +216,6 @@ class bongacamsFilmScreen(MPScreen, ThumbsHelper):
 			title = self['liste'].getCurrent()[0][0]
 			self['name'].setText(title)
 			mp_globals.player_agent = bongacamsAgent
-			self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='bongacams', forceGST=True)
+			self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='bongacams')
 		else:
 			self.session.open(MessageBoxExt, _("Cam is currently offline."), MessageBoxExt.TYPE_INFO)

@@ -306,7 +306,7 @@ class MTVdeChartsSongListeScreen(MPScreen):
 		if self.keyLocked:
 			return
 		idx = self['liste'].getSelectedIndex()
-		if config_mp.mediaportal.use_hls_proxy.value or config_mp.mediaportal.mtvquality.value == "SD":
+		if config_mp.mediaportal.hlsp_enable.value or config_mp.mediaportal.mtvquality.value == "SD":
 			self.session.open(MTVdeChartsPlayer, self.filmliste, int(idx) , True, self.genreName)
 		else:
 			message = self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO, timeout=5)
@@ -314,7 +314,7 @@ class MTVdeChartsSongListeScreen(MPScreen):
 class MTVdeChartsPlayer(SimplePlayer):
 
 	def __init__(self, session, playList, playIdx=0, playAll=True, listTitle=None):
-		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, listTitle=listTitle, ltype='mtv')
+		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, listTitle=listTitle, ltype='mtv', forceGST=False)
 
 	def getVideo(self):
 		title = self.playList[self.playIdx][self.title_inr]

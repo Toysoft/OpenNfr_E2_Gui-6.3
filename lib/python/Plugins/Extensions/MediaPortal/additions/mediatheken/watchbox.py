@@ -198,4 +198,4 @@ class watchboxFolgenListeScreen(MPScreen, ThumbsHelper):
 		url = baseurl.replace('fairplay.m3u8', '') + best[1]
 		title = self['liste'].getCurrent()[0][0]
 		mp_globals.player_agent = wbAgent
-		self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='watchbox', forceGST=True)
+		self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='watchbox')

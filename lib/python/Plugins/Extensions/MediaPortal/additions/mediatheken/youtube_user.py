@@ -50,7 +50,7 @@ class show_USER_Genre(MPScreen):
 			self.getUserFile()
 
 	def getUserFile(self, fInit=False):
-		fname = mp_globals.pluginPath + "/userfiles/userchan.xml"
+		fname = mp_globals.pluginPath + "/resources/mp_userchan.xml"
 		try:
 			if fInit:
 				shutil.copyfile(fname, self.user_path)

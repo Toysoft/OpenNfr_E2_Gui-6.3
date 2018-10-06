@@ -179,7 +179,7 @@ class pornoxoFilmScreen(MPScreen, ThumbsHelper):
 		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		self.getLastPage(data, 'class="pagination"(.*?)</div>')
+		self.getLastPage(data, 'class="pagination(.*?)</div>')
 		Movies = re.findall('vidItem"\sdata-video-id="\d+">.{1,10}(?:<div class="thumb-inner-wrapper">|).*?<a\shref="(.*?)"\s{0,1}>.{0,10}<img\ssrc="(.*?)"\salt="(.*?)"', data, re.S)
 		if Movies:
 			for (Url, Image, Title) in Movies:

@@ -169,12 +169,14 @@ class bangbrosFilmScreen(MPScreen, ThumbsHelper):
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagi">(.*?)ePg_spn">Last', '.*\/(\d+)"')
 		parse = re.search('class="middle">(.*?)class="footer">', data, re.S)
-		Movies = re.findall('class="echThumb"><a title="(.*?)"\s{1,5}href="(.*?)" class="thmb_lnk"><span class="thmb_pic hover-rollover"><b class="tTm">(.*?)</b.*?data-initial-image-url="(.*?)".*?class="cast-wrapper">(.*?)</div>.*?fa-bus.*?class="faTxt">(.*?)</span.*?fa-calendar.*?class="faTxt">(.*?)</span', parse.group(1), re.S)
+		Movies = re.findall('class="echThumb"><a(?: id="video-\w+\d+"|) title="(.*?)"\s{1,5}href="(.*?)" class="thmb_lnk\s{0,2}"><span class="thmb_pic hover-rollover"><b class="tTm">(.*?)</b.*?data-initial-image-url="(.*?)".*?class="cast-wrapper">(.*?)</div>.*?fa-bus.*?class="faTxt">(.*?)</span.*?fa-calendar.*?class="faTxt">(.*?)</span', parse.group(1), re.S)
 		if Movies:
 			for (Title, Url, Runtime, Image, Pornstars, Collection, Date) in Movies:
 				if Image.startswith('//'):
 					Image = 'http:' + Image
+				Image = Image.replace('members/450x340','bangbros/big1')
 				Url = "http://bangbrothers.net" + Url
+				Date = Date.strip()
 				if not Pornstars == '':
 					Title = stripAllTags(Pornstars.replace('</a><a',', </a><a')).strip() + " - " + Title
 				self.filmliste.append((decodeHtml(Title), Url, Image, Date, Collection, Runtime))

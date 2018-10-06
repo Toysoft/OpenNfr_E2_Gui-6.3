@@ -44,16 +44,16 @@ from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
-DS_Version = "DokuStream"
+default_cover = "file://%s/dokustream.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class show_DS_Genre(MenuHelper):
 
 	def __init__(self, session):
 
-		baseUrl = "http://www.doku-stream.org"
+		baseUrl = "https://www.doku-stream.org"
 		MenuHelper.__init__(self, session, 0, None, baseUrl, "", self._defaultlistcenter)
 
-		self['title'] = Label(DS_Version)
+		self['title'] = Label("DokuStream")
 		self['ContentTitle'] = Label("Genres")
 
 		self.menu = []
@@ -63,12 +63,13 @@ class show_DS_Genre(MenuHelper):
 		self.onLayoutFinish.append(self.mh_initMenu)
 
 	def mh_initMenu(self):
+		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.mh_buildMenu(self.mh_baseUrl+'/kategorien/')
 
 	def mh_parseCategorys(self, data, category='Kategorien'):
 		if category == 'Kategorien':
 			self.menu.append((0, '', 'Themen'))
-			a = data.find('="entry-content"')
+			a = data.find('="entry"')
 			if a > 0:
 				b = data.find('</ul>', a)
 				if b > 0:
@@ -81,7 +82,7 @@ class show_DS_Genre(MenuHelper):
 
 		if category == 'Serien':
 			self.menu.append((0, '', 'Serien'))
-			a = data.find('="entry-content"')
+			a = data.find('="entry"')
 			if a > 0:
 				b = data.find('</ul>', a)
 				if b > 0:
@@ -105,7 +106,7 @@ class DS_FilmListeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, genreLink, genreName):
 		self.genreLink = genreLink
 		self.genreName = genreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -137,7 +138,7 @@ class DS_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.sortOrderStrAZ = ""
 		self.sortOrderStrIMDB = ""
 		self.sortOrderStrGenre = ""
-		self['title'] = Label(DS_Version)
+		self['title'] = Label("DokuStream")
 
 		self['Page'] = Label(_("Page:"))
 
@@ -188,7 +189,8 @@ class DS_FilmListeScreen(MPScreen, ThumbsHelper):
 	def loadPageData(self, data):
 		self.dokusListe = []
 		data = data.replace('\n', '')
-		dokus = re.findall('class="content-grid".*?href="(.*?)">.*?="entry-title">(.*?)</.*?<img.*?src="(.*?)"', data)
+		data = re.search('id="infinite-articles"(.*?)$', data, re.S).group(1)
+		dokus = re.findall('<img.*?src="(.*?)".*?class="content-grid".*?href="(.*?)">.*?="entry-title">(.*?)</', data)
 		if dokus:
 			m = re.findall('class=\Dpage larger.*?>(\d+)<', data)
 			try:
@@ -200,7 +202,7 @@ class DS_FilmListeScreen(MPScreen, ThumbsHelper):
 			if not self.page:
 				self.page = 1
 			self['page'].setText("%d / %d" % (self.page,self.lastpage))
-			for	(url,name,img) in dokus:
+			for	(img,url,name) in dokus:
 				self.dokusListe.append((decodeHtml(name), url, img))
 			self.ml.setList(map(self._defaultlistleft, self.dokusListe))
 			self.ml.moveToIndex(0)

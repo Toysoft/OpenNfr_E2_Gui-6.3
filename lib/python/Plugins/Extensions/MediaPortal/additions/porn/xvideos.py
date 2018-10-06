@@ -529,4 +529,4 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 
 	def playVideo(self, url):
 		Title = self['liste'].getCurrent()[0][0]
-		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='xvideos', forceGST=True)
+		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='xvideos')

@@ -22,7 +22,7 @@ class porntrexGenreScreen(MPScreen):
 
 		global default_cover
 		if self.mode == "porntrex":
-			self.portal = "PornTrex.com"
+			self.portal = "Porntrex.com"
 			self.baseurl = "https://www.porntrex.com"
 			default_cover = "file://%s/porntrex.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 			global username
@@ -39,7 +39,7 @@ class porntrexGenreScreen(MPScreen):
 			password = str(config_mp.mediaportal.javwhores_password.value)
 		elif self.mode == "camwhoresbay":
 			self.portal = "Camwhoresbay.com"
-			self.baseurl = "http://www.camwhoresbay.com"
+			self.baseurl = "https://www.camwhoresbay.com"
 			default_cover = "file://%s/camwhoresbay.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
@@ -183,7 +183,7 @@ class porntrexFilmScreen(MPScreen, ThumbsHelper):
 		self.Name = Name
 
 		global default_cover
-		if self.portal == "PornTrex.com":
+		if self.portal == "Porntrex.com":
 			default_cover = "file://%s/porntrex.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.portal == "JavWhores.com":
 			default_cover = "file://%s/javwhores.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
@@ -234,28 +234,18 @@ class porntrexFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination"(.*?)</ul>')
-		if self.portal == "Camwhoresbay.com":
-			Movies = re.findall('class="item.*?href="(.*?)"\stitle="(.*?)".*?data-original="(.*?)".*?class="duration">(.*?)</div.*?class="added"><em>(.*?)</em.*?class="views">(.*?)</div', data, re.S)
-			if Movies:
-				for (url, title, image, runtime, added, views) in Movies:
-					if image.startswith('//'):
-						image = 'http:' + image
-					runtime = runtime.strip()
-					views = views.replace(' ','')
-					self.filmliste.append((decodeHtml(title), url, image, runtime, views, added, False))
-		else:
-			Movies = re.findall('class="video-item.*?href="(.*?)"\stitle="(.*?)".*?data-original="(.*?)".*?</a>(.*?)class="ico.*?class="viewsthumb">(.*?)\sviews.*?clock-o"></i>(.*?)</div.*?list-unstyled">.*?<li>(.*?)</li', data, re.S)
-			if Movies:
-				for (url, title, image, private, views, runtime, added) in Movies:
-					if image.startswith('//'):
-						image = 'https:' + image
-					runtime = runtime.strip()
-					views = views.replace(' ','')
-					if "private" in private:
-						private = True
-					else:
-						private = False
-					self.filmliste.append((decodeHtml(title), url, image, runtime, views, added, private))
+		Movies = re.findall('class="video-item.*?href="(.*?)"\stitle="(.*?)".*?data-original="(.*?)".*?</a>(.*?)class="ico.*?class="viewsthumb">(.*?)\sviews.*?clock-o"></i>(.*?)</div.*?list-unstyled">.*?<li>(.*?)</li', data, re.S)
+		if Movies:
+			for (url, title, image, private, views, runtime, added) in Movies:
+				if image.startswith('//'):
+					image = 'https:' + image
+				runtime = runtime.strip()
+				views = views.replace(' ','')
+				if "private" in private:
+					private = True
+				else:
+					private = False
+				self.filmliste.append((decodeHtml(title), url, image, runtime, views, added, private))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), None, None, '', '', '', False))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))

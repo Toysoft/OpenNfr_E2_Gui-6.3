@@ -76,6 +76,12 @@ except:
 	mp_globals.isDreamOS = False
 
 try:
+	f = open("/proc/stb/info/model", "r")
+	model = ''.join(f.readlines()).strip()
+except:
+	model = ''
+
+try:
 	from Components.ScreenAnimations import *
 	mp_globals.animations = True
 	sa = ScreenAnimations()
@@ -128,11 +134,7 @@ try:
 	from Plugins.Extensions.MediaInfo.plugin import MediaInfo
 	MediaInfoPresent = True
 except:
-	try:
-		from Plugins.Extensions.mediainfo.plugin import mediaInfo
-		MediaInfoPresent = True
-	except:
-		MediaInfoPresent = False
+	MediaInfoPresent = False
 
 def lastMACbyte():
 	try:
@@ -191,8 +193,8 @@ config_mp.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choice
 		])
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2018092703"))
-config.mediaportal.version = NoSave(ConfigText(default="2018092703"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2018100401"))
+config.mediaportal.version = NoSave(ConfigText(default="2018100401"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 
@@ -259,7 +261,7 @@ else:
 config_mp.mediaportal.wallmode = ConfigSelection(default = "color", choices = [("color", _("Color")),("bw", _("Black&White")),("color_zoom", _("Color (Zoom)")),("bw_zoom", _("Black&White (Zoom)"))])
 config_mp.mediaportal.wall2mode = ConfigSelection(default = "color", choices = [("color", _("Color")),("bw", _("Black&White"))])
 config_mp.mediaportal.selektor = ConfigSelection(default = "white", choices = [("blue", _("Blue")),("green", _("Green")),("red", _("Red")),("turkis", _("Aqua")),("white", _("White"))])
-config_mp.mediaportal.use_hls_proxy = ConfigYesNo(default = False)
+config_mp.mediaportal.hlsp_enable = ConfigYesNo(default = True)
 config_mp.mediaportal.hls_proxy_ip = ConfigIP(default = [127,0,0,1], auto_jump = True)
 config_mp.mediaportal.hls_proxy_port = ConfigInteger(default = 0, limits = (0,65535))
 config_mp.mediaportal.hls_buffersize = ConfigInteger(default = 32, limits = (1,64))
@@ -270,6 +272,7 @@ config_mp.mediaportal.filter = ConfigSelection(default = "ALL", choices = ["ALL"
 config.mediaportal.filter = NoSave(ConfigSelection(default = "ALL", choices = ["ALL"]))
 config_mp.mediaportal.youtubeenablevp9 = ConfigYesNo(default = False)
 config_mp.mediaportal.youtubeenabledash = ConfigYesNo(default = False)
+config_mp.mediaportal.youtubeenabledash480p = ConfigYesNo(default = False)
 config_mp.mediaportal.youtubeprio = ConfigSelection(default = "2", choices = [("0", "360p"),("1", "480p"),("2", "720p"),("3", "1080p"),("4", "1440p"),("5", "2160p")])
 config_mp.mediaportal.videoquali_others = ConfigSelection(default = "2", choices = [("0", _("Low")),("1", _("Medium")),("2", _("High"))])
 config_mp.mediaportal.youtube_max_items_pp = ConfigInteger(default = 50, limits = (50,50))
@@ -300,7 +303,10 @@ config_mp.mediaportal.sp_use_yt_with_proxy = ConfigSelection(default = "no", cho
 config_mp.mediaportal.sp_on_movie_start = ConfigSelection(default = "start", choices = [("start", _("Start from the beginning")), ("ask", _("Ask user")), ("resume", _("Resume from last position"))])
 config_mp.mediaportal.sp_save_resumecache = ConfigYesNo(default = False)
 config_mp.mediaportal.sp_radio_cover = ConfigSelection(default = "large", choices = [("large", _("large")), ("small", _("small")), ("off", _("off"))])
-config_mp.mediaportal.sp_radio_visualization = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Mode 1")), ("2", _("Mode 2")), ("3", _("Mode 3"))])
+if model in ["dm900","dm920"]:
+	config_mp.mediaportal.sp_radio_visualization = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Mode 1")), ("2", _("Mode 2")), ("3", _("Mode 3"))])
+else:
+	config_mp.mediaportal.sp_radio_visualization = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Mode 1")), ("2", _("Mode 2"))])
 config_mp.mediaportal.sp_radio_bgsaver = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Ken Burns effect")), ("2", _("Just photos")), ("3", _("Black screen"))])
 config_mp.mediaportal.sp_radio_bgsaver_keywords = ConfigText(default="music", fixed_size=False)
 config_mp.mediaportal.yt_proxy_username = ConfigText(default="user!", fixed_size=False)
@@ -405,8 +411,8 @@ for file in os.listdir(xmlpath):
 								else:
 									exec("from additions."+modfile+" import *")
 								exec("config_mp.mediaportal."+x.get("confopt")+" = ConfigYesNo(default = "+x.get("default")+")")
-							except:
-								pass
+							except Exception as e:
+								printl(e,'',"E")
 
 class CheckPathes:
 
@@ -532,7 +538,6 @@ class CheckPremiumize:
 				self.session.open(MessageBoxExt, _("premiumize: YT ProxyHost not found!"), MessageBoxExt.TYPE_ERROR)
 
 	def dataError(self, error):
-		from debuglog import printlog as printl
 		printl(error,self,"E")
 
 class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
@@ -646,16 +651,16 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		self._spacer()
 		self.configlist.append(getConfigListEntry(_("OTHER"), ))
 		self._separator()
-		self.configlist.append(getConfigListEntry(_("Use HLS-Player:"), config_mp.mediaportal.use_hls_proxy, True))
-		if config_mp.mediaportal.use_hls_proxy.value:
-			self.configlist.append(getConfigListEntry(_("HLS-Player buffersize [MB]:"), config_mp.mediaportal.hls_buffersize, False))
-			#self.configlist.append(getConfigListEntry(_("HLS-Player IP:"), config_mp.mediaportal.hls_proxy_ip, False))
-			#self.configlist.append(getConfigListEntry(_("HLS-Player Port:"), config_mp.mediaportal.hls_proxy_port, False))
-			self.configlist.append(getConfigListEntry(_('Use HLS-Player Proxy:'), config_mp.mediaportal.sp_use_hlsp_with_proxy, False))
-			self.configlist.append(getConfigListEntry(_("HLSP-HTTP-Proxy Host or IP:"), config_mp.mediaportal.hlsp_proxy_host, False))
-			self.configlist.append(getConfigListEntry(_("HLSP-Proxy Port:"), config_mp.mediaportal.hlsp_proxy_port, False))
-			self.configlist.append(getConfigListEntry(_("HLSP-Proxy username:"), config_mp.mediaportal.hlsp_proxy_username, False))
-			self.configlist.append(getConfigListEntry(_("HLSP-Proxy password:"), config_mp.mediaportal.hlsp_proxy_password, False))
+		#self.configlist.append(getConfigListEntry(_("Use HLS-Player:"), config_mp.mediaportal.hlsp_enable, True))
+		#if config_mp.mediaportal.hlsp_enable.value:
+		self.configlist.append(getConfigListEntry(_("HLS-Player buffersize [MB]:"), config_mp.mediaportal.hls_buffersize, False))
+		#self.configlist.append(getConfigListEntry(_("HLS-Player IP:"), config_mp.mediaportal.hls_proxy_ip, False))
+		#self.configlist.append(getConfigListEntry(_("HLS-Player Port:"), config_mp.mediaportal.hls_proxy_port, False))
+		self.configlist.append(getConfigListEntry(_('Use HLS-Player Proxy:'), config_mp.mediaportal.sp_use_hlsp_with_proxy, False))
+		self.configlist.append(getConfigListEntry(_("HLSP-HTTP-Proxy Host or IP:"), config_mp.mediaportal.hlsp_proxy_host, False))
+		self.configlist.append(getConfigListEntry(_("HLSP-Proxy Port:"), config_mp.mediaportal.hlsp_proxy_port, False))
+		self.configlist.append(getConfigListEntry(_("HLSP-Proxy username:"), config_mp.mediaportal.hlsp_proxy_username, False))
+		self.configlist.append(getConfigListEntry(_("HLSP-Proxy password:"), config_mp.mediaportal.hlsp_proxy_password, False))
 		self.configlist.append(getConfigListEntry(_("Temporary Cachepath:"), config_mp.mediaportal.storagepath, False))
 		self.configlist.append(getConfigListEntry(_("Icon Cachepath:"), config_mp.mediaportal.iconcachepath, False))
 		self.configlist.append(getConfigListEntry(_("Videoquality:"), config_mp.mediaportal.videoquali_others, False))
@@ -664,9 +669,11 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		self.configlist.append(getConfigListEntry(_("YOUTUBE"), ))
 		self._separator()
 		self.configlist.append(getConfigListEntry(_("Highest resolution for playback:"), config_mp.mediaportal.youtubeprio, False))
-		self.configlist.append(getConfigListEntry(_("Enable DASH format:"), config_mp.mediaportal.youtubeenabledash, True))
+		self.configlist.append(getConfigListEntry(_("Enable DASH format (no seeking possible):"), config_mp.mediaportal.youtubeenabledash, True))
 		if config_mp.mediaportal.youtubeenabledash.value:
-			self.configlist.append(getConfigListEntry(_("Enable VP9 codec:"), config_mp.mediaportal.youtubeenablevp9, False))
+			self.configlist.append(getConfigListEntry(_("Use DASH format for 480p:"), config_mp.mediaportal.youtubeenabledash480p, False))
+		if config_mp.mediaportal.youtubeenabledash.value:
+			self.configlist.append(getConfigListEntry(_("Enable VP9 codec (required for resolutions >1080p):"), config_mp.mediaportal.youtubeenablevp9, False))
 		#self.configlist.append(getConfigListEntry(_("Max. count results/page:"), config_mp.mediaportal.youtube_max_items_pp, False))
 		self.configlist.append(getConfigListEntry(_("Show USER-Channels Help:"), config_mp.mediaportal.show_userchan_help, False))
 		self.configlist.append(getConfigListEntry(_('Use Proxy:'), config_mp.mediaportal.sp_use_yt_with_proxy, True))
@@ -735,8 +742,8 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 											pass
 										else:
 											exec("self."+x.get("confcat")+".append(getConfigListEntry(\""+x.get("name").replace("&amp;","&")+"\", config_mp.mediaportal."+x.get("confopt")+", False))")
-									except:
-										pass
+									except Exception as e:
+										printl(e,self,"E")
 		self._spacer()
 		self.configlist.append(getConfigListEntry(_("LIBRARIES"), ))
 		self._separator()
@@ -1617,8 +1624,8 @@ class MPWall(Screen, HelpableScreen):
 												mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
 												if mod:
 													y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
-									except:
-										pass
+									except Exception as e:
+										printl(e,self,"E")
 
 		if len(self.plugin_liste) == 0:
 			self.plugin_liste.append(("","","Mediathek"))
@@ -2652,8 +2659,8 @@ class MPWall2(Screen, HelpableScreen):
 												mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
 												if mod:
 													y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
-									except:
-										pass
+									except Exception as e:
+										printl(e,self,"E")
 
 		if len(self.plugin_liste) == 0:
 			self.plugin_liste.append(("","","Mediathek"))
@@ -3432,8 +3439,8 @@ class MPWallVTi(Screen, HelpableScreen):
 												mod = eval("config_mp.mediaportal." + x.get("confopt") + ".value")
 												if mod:
 													y = eval("self.plugin_liste.append((\"" + x.get("name").replace("&amp;","&") + "\", \"" + x.get("icon") + "\", \"" + x.get("filter") + "\"))")
-									except:
-										pass
+									except Exception as e:
+										printl(e,self,"E")
 
 		if len(self.plugin_liste) == 0:
 			self.plugin_liste.append(("","","Mediathek"))

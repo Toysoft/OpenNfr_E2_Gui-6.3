@@ -1,4 +1,4 @@
-﻿<hoster>streamclou</hoster><regex>streamcloud.eu</regex>
+﻿<hoster>streamcloud</hoster><regex>streamcloud.eu</regex>
 <hoster>flashx</hoster><regex>flashx.co</regex>
 <hoster>youwatch</hoster><regex>youwatch.org</regex>
 <hoster>rapidgator</hoster><regex>rapidgator.net</regex>
@@ -26,6 +26,7 @@
 <hoster>mp4upload</hoster><regex>mp4upload.com</regex>
 <hoster>mega3x</hoster><regex>mega3x.net</regex>
 <hoster>datoporn</hoster><regex>dato.porn</regex>
+<hoster>gounlimited</hoster><regex>gounlimited.to</regex>
 <hoster>uptostream</hoster><regex>uptostream.com</regex>
 <hoster>vidwoot</hoster><regex>vidwoot.com</regex>
 <hoster>yourupload</hoster><regex>yourupload.com</regex>
@@ -53,6 +54,8 @@
 <hoster>ok.ru</hoster><regex>ok.ru</regex>
 <hoster>mail.ru</hoster><regex>mail.ru</regex>
 <hoster>vidlox</hoster><regex>vidlox.tv</regex>
+<hoster>vidcloud</hoster><regex>vidcloud.co</regex>
+<hoster>xdrive</hoster><regex>xdrive.cc</regex>
 <hoster>streamango</hoster><regex>streamango.com</regex>
 <hoster>streamcherry</hoster><regex>streamcherry.com</regex>
 <hoster>vidup.tv</hoster><regex>vidup.tv</regex>

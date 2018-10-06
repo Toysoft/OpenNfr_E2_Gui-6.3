@@ -8,16 +8,14 @@ from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
-D4ME_Version = "dokus4.me"
-
-D4ME_siteEncoding = 'utf-8'
+default_cover = "file://%s/dokus4_me.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class show_D4ME_Genre(MenuHelper):
 
 	def __init__(self, session):
-		MenuHelper.__init__(self, session, 1, [[("Neueste Dokus", ""),("Suche...", "/?s=%s&x=0&y=0")],[None,None]], "http://www.dokus4.me", "/index.php", self._defaultlistcenter)
+		MenuHelper.__init__(self, session, 1, [[("Suche", "/?s=%s&x=0&y=0"),("Neueste Dokus", "")],[None,None]], "http://www.dokus4.me", "/index.php", self._defaultlistcenter)
 
-		self['title'] = Label(D4ME_Version)
+		self['title'] = Label("dokus4.me")
 		self['ContentTitle'] = Label("Genres")
 
 		self.param_qr = ''
@@ -25,16 +23,15 @@ class show_D4ME_Genre(MenuHelper):
 		self.onLayoutFinish.append(self.mh_initMenu)
 
 	def mh_parseData(self, data):
-		print 'parseData:'
+		CoverHelper(self['coverArt']).getCover(default_cover)
 		entrys = re.findall('<li class="cat-item.*?href="http://www.dokus4.me/index.php(.*?)/".*?>(.*?)</a>', data)
 		return entrys
 
 	def mh_callGenreListScreen(self):
-		if re.search('Suche...', self.mh_genreTitle):
+		if re.search('Suche', self.mh_genreTitle):
 			self.paraQuery()
 		else:
 			genreurl = self.mh_baseUrl+self.mh_genreBase+self.mh_genreUrl[0]+self.mh_genreUrl[1]
-			print 'GenreURL:',genreurl
 			self.session.open(D4ME_FilmListeScreen, genreurl, self.mh_genreTitle)
 
 	def paraQuery(self):
@@ -54,7 +51,7 @@ class D4ME_FilmListeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, genreLink, genreName):
 		self.genreLink = genreLink
 		self.genreName = genreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -92,7 +89,7 @@ class D4ME_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.sortOrderStrAZ = ""
 		self.sortOrderStrIMDB = ""
 		self.sortOrderStrGenre = ""
-		self['title'] = Label(D4ME_Version)
+		self['title'] = Label("dokus4.me")
 
 		self['Page'] = Label(_("Page:"))
 
@@ -117,11 +114,9 @@ class D4ME_FilmListeScreen(MPScreen, ThumbsHelper):
 
 	def setGenreStrTitle(self):
 		genreName = "%s%s" % (self.genreTitle,self.genreName)
-		#print genreName
 		self['ContentTitle'].setText(genreName)
 
 	def loadPage(self):
-		print "loadPage:"
 		url = "%s/page/%d/" % (self.genreLink, self.page)
 		if self.page:
 			self['page'].setText("%d / %d" % (self.page,self.pages))
@@ -129,29 +124,23 @@ class D4ME_FilmListeScreen(MPScreen, ThumbsHelper):
 		if not self.eventL.is_set():
 			self.eventL.set()
 			self.loadPageQueued()
-		print "eventL ",self.eventL.is_set()
 
 	def loadPageQueued(self):
-		print "loadPageQueued:"
 		self['name'].setText(_('Please wait...'))
 		while not self.filmQ.empty():
 			url = self.filmQ.get_nowait()
-		print url
 		twAgentGetPage(url, cookieJar=self.keckse, agent=None, headers=std_headers).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def dataError(self, error):
 		self.eventL.clear()
-		print "dataError:"
 		printl(error,self,"E")
 		self.dokusListe.append((_("No dokus found!"),"","",""))
 		self.ml.setList(map(self._defaultlistleft, self.dokusListe))
 
 	def loadPageData(self, data):
-		print "loadPageData:"
 		self.dokusListe = []
 		dokus = re.findall('<div class="tbl_titel"><a href="(.*?)" title="(.*?)".*?<img src="(.*?)".*?class="vid_desc">(.*?)</td>', data, re.S)
 		if dokus:
-			print "Dokus found !"
 			if not self.pages:
 				m = re.search("class='pages'>Seite 1 von (\d+)<", data)
 				try:
@@ -162,16 +151,13 @@ class D4ME_FilmListeScreen(MPScreen, ThumbsHelper):
 					self.pages = pages
 			if not self.page:
 				self.page = 1
-			print "Page: %d / %d" % (self.page,self.pages)
 			self['page'].setText("%d / %d" % (self.page,self.pages))
 			for	(url,name,img,desc) in dokus:
-				#print	"Url: ", url, "Name: ", name
 				self.dokusListe.append((decodeHtml(name), url, img, decodeHtml(desc.strip())))
 			self.ml.setList(map(self._defaultlistleft, self.dokusListe))
 			self.th_ThumbsQuery(self.dokusListe, 0, 1, 2, None, None, self.page, self.pages, mode=1)
 			self.loadPicQueued()
 		else:
-			print "No dokus found!"
 			self.dokusListe.append((_("No dokus found!"),"","",""))
 			self.ml.setList(map(self._defaultlistleft, self.dokusListe))
 			if self.filmQ.empty():
@@ -180,41 +166,29 @@ class D4ME_FilmListeScreen(MPScreen, ThumbsHelper):
 				self.loadPageQueued()
 
 	def loadPic(self):
-		print "loadPic:"
 		if self.picQ.empty():
 			self.eventP.clear()
-			print "picQ is empty"
 			return
 		if self.updateP:
-			print "Pict. or descr. update in progress"
-			print "eventP: ",self.eventP.is_set()
-			print "updateP: ",self.updateP
 			return
 		while not self.picQ.empty():
 			self.picQ.get_nowait()
 		streamName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(streamName)
 		streamPic = self['liste'].getCurrent()[0][2]
-		#print "streamName: ",streamName
-		#print "streamPic: ",streamPic
-		#print "streamUrl: ",streamUrl
 		self.updateP = 1
 		CoverHelper(self['coverArt'], self.ShowCoverFileExit).getCover(streamPic)
 
 	def getHandlung(self, desc):
-		print "getHandlung:"
 		if desc == None:
-			print "No Infos found !"
 			self['handlung'].setText(_("No further information available!"))
 			return
 		self.setHandlung(desc)
 
 	def setHandlung(self, data):
-		print "setHandlung:"
 		self['handlung'].setText(data)
 
 	def ShowCoverFileExit(self):
-		print "showCoverExitFile:"
 		self.updateP = 0;
 		self.keyLocked	= False
 		if not self.filmQ.empty():
@@ -224,20 +198,16 @@ class D4ME_FilmListeScreen(MPScreen, ThumbsHelper):
 			self.loadPic()
 
 	def loadPicQueued(self):
-		print "loadPicQueued:"
 		self.picQ.put(None)
 		if not self.eventP.is_set():
 			self.eventP.set()
 		desc = self['liste'].getCurrent()[0][3]
 		self.getHandlung(desc)
 		self.loadPic()
-		print "eventP: ",self.eventP.is_set()
 
 	def parseStream(self, data):
-		print "parseStream:"
 		m2 = re.search('//www.youtube.com/(embed|v)/(.*?)(\?|" |&amp)', data)
 		if m2:
-			print "Streams found"
 			dhVideoId = m2.group(2)
 			dhTitle = self['liste'].getCurrent()[0][0]
 			self.session.open(
@@ -246,7 +216,6 @@ class D4ME_FilmListeScreen(MPScreen, ThumbsHelper):
 				showPlaylist=False
 				)
 		else:
-			print "No stream found"
 			self.session.open(MessageBoxExt,"Kein Stream gefunden!", MessageBoxExt.TYPE_INFO, timeout=10)
 
 	def keyOK(self):
@@ -256,19 +225,16 @@ class D4ME_FilmListeScreen(MPScreen, ThumbsHelper):
 		twAgentGetPage(streamLink).addCallback(self.parseStream).addErrback(self.dataError)
 
 	def keyUpRepeated(self):
-		#print "keyUpRepeated"
 		if self.keyLocked:
 			return
 		self['liste'].up()
 
 	def keyDownRepeated(self):
-		#print "keyDownRepeated"
 		if self.keyLocked:
 			return
 		self['liste'].down()
 
 	def key_repeatedUp(self):
-		#print "key_repeatedUp"
 		if self.keyLocked:
 			return
 		self.loadPicQueued()
@@ -284,59 +250,47 @@ class D4ME_FilmListeScreen(MPScreen, ThumbsHelper):
 		self['liste'].pageDown()
 
 	def keyPageDown(self):
-		#print "keyPageDown()"
 		self.keyPageDownFast(1)
 
 	def keyPageUp(self):
-		#print "keyPageUp()"
 		self.keyPageUpFast(1)
 
 	def keyPageUpFast(self,step):
 		if self.keyLocked:
 			return
-		#print "keyPageUpFast: ",step
 		oldpage = self.page
 		if (self.page + step) <= self.pages:
 			self.page += step
 		else:
 			self.page = 1
-		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()
 
 	def keyPageDownFast(self,step):
 		if self.keyLocked:
 			return
-		print "keyPageDownFast: ",step
 		oldpage = self.page
 		if (self.page - step) >= 1:
 			self.page -= step
 		else:
 			self.page = self.pages
-		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()
 
 	def key_1(self):
-		#print "keyPageDownFast(2)"
 		self.keyPageDownFast(2)
 
 	def key_4(self):
-		#print "keyPageDownFast(5)"
 		self.keyPageDownFast(5)
 
 	def key_7(self):
-		#print "keyPageDownFast(10)"
 		self.keyPageDownFast(10)
 
 	def key_3(self):
-		#print "keyPageUpFast(2)"
 		self.keyPageUpFast(2)
 
 	def key_6(self):
-		#print "keyPageUpFast(5)"
 		self.keyPageUpFast(5)
 
 	def key_9(self):
-		#print "keyPageUpFast(10)"
 		self.keyPageUpFast(10)

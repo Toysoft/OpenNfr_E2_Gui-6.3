@@ -211,4 +211,4 @@ class vids(MPScreen):
 		video = re.findall('"width":\d+,"src":"(.*?)",', data, re.S)
 		title = self['liste'].getCurrent()[0][0]
 		self['name'].setText(title)
-		self.session.open(SimplePlayer, [(title, video[-1])], showPlaylist=False, ltype='pokerstars', forceGST=True)
+		self.session.open(SimplePlayer, [(title, video[-1])], showPlaylist=False, ltype='pokerstars')

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from twisted import __version__
 tmp = tuple([x for x in __version__.split('.')])
@@ -61,8 +62,6 @@ try:
 	from twisted.internet._sslverify import ClientTLSOptions
 except ImportError:
 	ClientTLSOptions = None
-
-from Components.config import config
 
 import twisted
 from twisted.web import http

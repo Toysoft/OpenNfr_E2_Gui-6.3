@@ -232,6 +232,6 @@ class cam4FilmScreen(MPScreen, ThumbsHelper):
 			title = self['liste'].getCurrent()[0][0]
 			self['name'].setText(title)
 			mp_globals.player_agent = cam4Agent
-			self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='cam4', forceGST=True)
+			self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='cam4')
 		else:
 			self.session.open(MessageBoxExt, _("Cam is currently offline."), MessageBoxExt.TYPE_INFO)

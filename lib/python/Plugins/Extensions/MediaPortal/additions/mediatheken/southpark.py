@@ -271,7 +271,7 @@ class SouthparkAktScreen(MPScreen):
 			return
 		self.keyLocked = True
 		self.link = self['liste'].getCurrent()[0][1]
-		if config_mp.mediaportal.use_hls_proxy.value or config_mp.mediaportal.southparkquality.value == "SD":
+		if config_mp.mediaportal.hlsp_enable.value or config_mp.mediaportal.southparkquality.value == "SD":
 			getPage(self.link).addCallback(self.StartStream).addErrback(self.dataError)
 		else:
 			message = self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO, timeout=5)
@@ -289,7 +289,7 @@ class SouthparkAktScreen(MPScreen):
 class SouthparkPlayer(SimplePlayer):
 
 	def __init__(self, session, playList, playIdx=0, playAll=True, showPlaylist=False):
-		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, showPlaylist=showPlaylist, ltype='southpark')
+		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, showPlaylist=showPlaylist, ltype='southpark', forceGST=False)
 
 	def getVideo(self):
 		self.title = self.playList[self.playIdx][0]

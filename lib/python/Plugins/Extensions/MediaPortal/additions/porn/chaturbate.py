@@ -212,7 +212,7 @@ class chaturbateFilmScreen(MPScreen, ThumbsHelper):
 	def loadPageData(self, data):
 		self.ml.moveToIndex(0)
 		self.getLastPage(data, 'class="paging">(.*?)</ul>')
-		Movies = re.findall('<li class="room_list_room" data-slug=".*?">.<a\shref="(.*?)".*?<img\ssrc=".*?".*?gender(\w)">(\d+)</span>.*?<li\stitle(?:="(.*?)"|)>.*?location.*?>(.*?)</li>.*?class="cams">(.*?)</li>.*?</div>.*?</li>', data, re.S)
+		Movies = re.findall('<li class="room_list_room.*?>.<a\shref="(.*?)".*?<img\ssrc=".*?".*?gender(\w)">(\d+)</span>.*?<li\stitle(?:="(.*?)"|)>.*?location.*?>(.*?)</li>.*?class="cams">(.*?)</li>.*?</div>.*?</li>', data, re.S)
 		if Movies:
 			for (Url, Gender, Age, Description, Location, Viewers) in Movies:
 				if not Description:
@@ -291,4 +291,4 @@ class chaturbateFilmScreen(MPScreen, ThumbsHelper):
 		url = baseurl.replace('playlist.m3u8','') + best[1]
 		title = self['liste'].getCurrent()[0][0]
 		self['name'].setText(title)
-		self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='chaturbate', forceGST=True)
+		self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='chaturbate')

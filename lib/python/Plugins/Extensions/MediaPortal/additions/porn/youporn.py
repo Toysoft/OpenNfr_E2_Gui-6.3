@@ -40,7 +40,6 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.configlistext import ConfigListScreenExt
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
-from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
 config_mp.mediaportal.youporn_username = ConfigText(default="youpornUserName", fixed_size=False)

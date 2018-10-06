@@ -942,7 +942,6 @@ lib/python/Plugins/Extensions/MediaPortal/skins_1080/clean_fhd/images/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/NFR_MP_FHD/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/NFR_MP_FHD/simpleplayer/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_1080/NFR_MP_FHD/images/Makefile
-lib/python/Plugins/Extensions/MediaPortal/userfiles/Makefile
 lib/python/Plugins/Extensions/mpgz/Makefile
 lib/python/Plugins/SystemPlugins/Makefile
 lib/python/Plugins/SystemPlugins/CableScan/Makefile

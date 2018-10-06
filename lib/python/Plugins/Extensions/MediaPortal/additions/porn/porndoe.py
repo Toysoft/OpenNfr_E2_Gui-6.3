@@ -182,15 +182,15 @@ class porndoeFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="paginator"(.*?)</ul>', '.*(?:page=|<span>)(\d+)(?:"|</span>)')
-		Movies = re.findall('data-title="(.*?)".*?href="(.*?)".*?data-src="(.*?)".*?class="item-stat right duration".*?txt">(.*?)</span.*?class="item-stat date".*?txt">(.*?)</span.*?class="item-stat views".*?txt">(.*?)</span', data, re.S)
+		Movies = re.findall('data-title="(.*?)".*?href="(.*?)".*?data-src="(.*?)".*?class="item-stat right duration".*?txt">(.*?)</span.*?class="item-stat views".*?txt">(.*?)</span', data, re.S)
 		if Movies:
-			for (Title, Url, Image, Runtime, Added, Views) in Movies:
+			for (Title, Url, Image, Runtime, Views) in Movies:
 				Url = "https://www.porndoe.com" + Url
 				if Image.startswith('//'):
 					Image = 'http:' + Image
 				Runtime = Runtime.strip()
 				Views = Views.strip()
-				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, Added))
+				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), '', None, '', ''))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -204,9 +204,8 @@ class porndoeFilmScreen(MPScreen, ThumbsHelper):
 		pic = self['liste'].getCurrent()[0][2]
 		runtime = self['liste'].getCurrent()[0][3]
 		views = self['liste'].getCurrent()[0][4]
-		added = self['liste'].getCurrent()[0][5]
 		self['name'].setText(title)
-		self['handlung'].setText("%s: %s\nRuntime: %s\nViews: %s\nAdded: %s" % (_("Sort order"),self.sorttext,runtime, views, added))
+		self['handlung'].setText("%s: %s\nRuntime: %s\nViews: %s" % (_("Sort order"),self.sorttext,runtime, views))
 		CoverHelper(self['coverArt']).getCover(pic, agent=agent, headers={'Referer':'https://www.porndoe.com'})
 
 	def keySort(self):

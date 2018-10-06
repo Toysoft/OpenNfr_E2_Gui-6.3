@@ -203,7 +203,7 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 						title = "Thema: " + str(node["title"])
 						code = str(node["code"])
 						url = 'http://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/videos/subcategory/%s/page/1/limit/100/de' % code
-						self.filmliste.append((title, url, default_cover, "", "subcat"))
+						self.filmliste.append((decodeHtml(title), url, default_cover, "", "subcat"))
 				self.filmliste.sort()
 			if json_data.has_key('teasers'):
 				if json_data["teasers"].has_key('highlights') and len(json_data["teasers"]["highlights"]) > 0:
@@ -223,7 +223,7 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 							descr = str(node['teaserText'])
 						else:
 							descr = ""
-						self.filmliste.append((title, url, image, descr, kind))
+						self.filmliste.append((decodeHtml(title), url, image, descr, kind))
 					self.filmliste.sort()
 				if json_data["teasers"].has_key('collections') and len(json_data["teasers"]["collections"]) > 0:
 					for node in json_data["teasers"]["collections"]:
@@ -239,7 +239,7 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 							descr = str(node['teaserText'])
 						else:
 							descr = ""
-						self.filmliste.append((title, programid, image, descr, kind))
+						self.filmliste.append((decodeHtml(title), programid, image, descr, kind))
 					self.filmliste.sort()
 				if json_data["teasers"].has_key('playlists') and len(json_data["teasers"]["playlists"]) > 0:
 					for node in json_data["teasers"]["playlists"]:
@@ -255,14 +255,14 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 							descr = str(node['teaserText'])
 						else:
 							descr = ""
-						self.filmliste.append((title, programid, image, descr, kind))
+						self.filmliste.append((decodeHtml(title), programid, image, descr, kind))
 					self.filmliste.sort()
 				if json_data["teasers"].has_key('magazines') and len(json_data["teasers"]["magazines"]) > 0:
 					for node in json_data["teasers"]["magazines"]:
 						title = "Sendung: " + str(node["label"]["de"])
 						url = str(node["url"])
 						image = default_cover
-						self.filmliste.append((title, url, image, "", "sendung"))
+						self.filmliste.append((decodeHtml(title), url, image, "", "sendung"))
 					self.filmliste.sort()
 		else:
 			if json_data.has_key('programs'):
@@ -296,7 +296,7 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 						handlung = "%s%s\n\n%s" % (date, Runtime, descr)
 						image = str(node['video']['imageUrl'])
 						url = "https://api.arte.tv/api/player/v1/config/de/%s" % str(node['video']['programId'])
-						self.filmliste.append((title, url, image, handlung, ""))
+						self.filmliste.append((decodeHtml(title), url, image, handlung, ""))
 			elif json_data.has_key('videos'):
 				if json_data.has_key('meta'):
 					self.lastpage = json_data["meta"]["pages"]
@@ -330,7 +330,7 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 					handlung = "%s%s\n\n%s" % (date, Runtime, descr)
 					image = str(node['imageUrl'])
 					url = "https://api.arte.tv/api/player/v1/config/de/%s" % str(node['programId'])
-					self.filmliste.append((title, url, image, handlung, ""))
+					self.filmliste.append((decodeHtml(title), url, image, handlung, ""))
 			elif json_data.has_key('magazines'):
 				for node in json_data["magazines"]:
 					if node['subtitle']:
@@ -344,7 +344,7 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 					image = str(node['imageUrl'])
 					kind = str(node['kind'])
 					url = str(node['programId'])
-					self.filmliste.append((title, url, image, descr, kind))
+					self.filmliste.append((decodeHtml(title), url, image, descr, kind))
 			elif json_data.has_key('data'):
 				if json_data.has_key('nextPage'):
 					if json_data["nextPage"]:
@@ -364,7 +364,7 @@ class arteSecondScreen(MPScreen, ThumbsHelper):
 						continue
 					handlung = "%s\n\n%s" % (Runtime, str(node['description']))
 					url = "https://api.arte.tv/api/player/v1/config/de/%s" % str(node['programId'])
-					self.filmliste.append((title, url, str(node['images']['landscape']['resolutions'][-1]['url']), handlung, ""))
+					self.filmliste.append((decodeHtml(title), url, str(node['images']['landscape']['resolutions'][-1]['url']), handlung, ""))
 
 			if len(self.filmliste) == 0:
 				self.filmliste.append((_("No videos found!"), '','','','',''))

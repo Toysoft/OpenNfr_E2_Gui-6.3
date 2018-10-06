@@ -168,10 +168,9 @@ class extremetubeFilmScreen(MPScreen, ThumbsHelper):
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
 
-		self['Page'] = Label(_("Page:"))
-
 		self.keyLocked = True
 		self.page = 1
+		self.lastpage = 1
 
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -191,21 +190,30 @@ class extremetubeFilmScreen(MPScreen, ThumbsHelper):
 		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		data = data.replace('\/','/')
-		self.getLastPage(data, '', 'lastPage":(.*?),"')
-		Movies = re.findall('"id".*?real_times_viewed":(.*?),".*?specialchars_title":"(.*?)","duration":"(.*?)".*?"video_link":"(.*?)","thumb_url":"(.*?)"', data, re.S)
-		if Movies:
-			for (Views, Title, Runtime, Url, Image) in Movies:
-				if Url.startswith('//'):
-					Url = 'http:' + Url
-				if Image.startswith('//'):
-					Image = 'http:' + Image
-				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views.replace('"','').replace(',','')))
-			self.ml.setList(map(self._defaultlistleft, self.filmliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
-			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
-			self.showInfos()
+		json_data = json.loads(data)
+		if json_data["1"]["navigation"].has_key('lastPage'):
+			self.lastpage = json_data["1"]["navigation"]["lastPage"]
+		if self.lastpage > 1:
+			self['Page'].setText(_("Page:"))
+			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+		for node in json_data["1"]["items"]:
+			Views = str(node["real_times_viewed"]).replace(',','')
+			Title = str(node["specialchars_title"])
+			Runtime = str(node["duration"])
+			Url = str(node["video_link"])
+			Image = str(node["thumb_url"])
+			if Url.startswith('//'):
+				Url = 'http:' + Url
+			if Image.startswith('//'):
+				Image = 'http:' + Image
+			self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('No videos found!'), None, None, '', ''))
+		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		self.ml.moveToIndex(0)
+		self.keyLocked = False
+		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
+		self.showInfos()
 
 	def showInfos(self):
 		title = self['liste'].getCurrent()[0][0]
@@ -220,8 +228,9 @@ class extremetubeFilmScreen(MPScreen, ThumbsHelper):
 		if self.keyLocked:
 			return
 		Link = self['liste'].getCurrent()[0][1]
-		self.keyLocked = True
-		getPage(Link).addCallback(self.getVideoPage).addErrback(self.dataError)
+		if Link:
+			self.keyLocked = True
+			getPage(Link).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
 		videoPage = re.findall('"quality_\d+p":"(.*?)","', data, re.S)

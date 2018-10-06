@@ -193,7 +193,7 @@ class wrestlingnetworkPlayer(MPScreen):
 		title = self.Name + " - " + title
 		stream_url = re.findall('"(240|380|480|720)".*?url":"(http[s]?://www.dailymotion.com/cdn/.*?)"', data, re.S)
 		if stream_url:
-			self.session.open(SimplePlayer, [(title, stream_url[-1][1])], showPlaylist=False, ltype='wrestling', forceGST=True)
+			self.session.open(SimplePlayer, [(title, stream_url[-1][1])], showPlaylist=False, ltype='wrestling')
 
 	def got_link(self, stream_url):
 		self.session.open(SimplePlayer, [(self.Name, stream_url)], showPlaylist=False, ltype='wrestling')
