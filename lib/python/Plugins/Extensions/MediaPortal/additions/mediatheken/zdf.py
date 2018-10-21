@@ -327,8 +327,6 @@ class ZDFPostSelect(MPScreen, ThumbsHelper):
 								if genre != "":
 									handlung = handlung + "\nKontext: "+genre
 							self.genreliste.append((title,url,handlung,image))
-			else:
-				self.genreliste.append(("Keine abspielbaren Inhalte verfügbar",None,"",default_cover))
 			if len(self.genreliste) == 0:
 				self.genreliste.append(("Keine abspielbaren Inhalte verfügbar",None,"",default_cover))
 		self.ml.setList(map(self._defaultlistleft, self.genreliste))
@@ -467,12 +465,10 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 					handlung = "Kanal: Podcast"+"\nDatum: "+airtime+"\nLaufzeit: "+dur+"\n\n"+info
 					self.filmliste.append((title,streamLink,handlung,image,title,''))
 		else:
-			articles = re.findall('(<article.*?</article>)', data, re.S)
+			articles = re.findall('(<article.*?</article>|class="content-box".*?<article)', data, re.S)
 			for article in articles:
 				data = re.sub('<div class="img-container x-large-8 x-column">','<source class="m-16-9" data-srcset="/static~Trash">',article, flags=re.S)
 				data = re.sub('itemprop="image" content=""','',data,flags=re.S)
-				if not "<article" in data:
-					continue
 				airtimedata = None
 				dur = ""
 				sender = ""
@@ -491,7 +487,7 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 					airtime = airtimedata.group(1)
 				else:
 					airtime = '---'
-				if "m-border\">" in data:
+				if 'm-border">' in data:
 					dur = re.search('m-border\">(.*?)<',data).group(1)
 					if "Bilder" in dur:
 						continue
@@ -564,7 +560,7 @@ class ZDFStreamScreen(MPScreen, ThumbsHelper):
 						genre = " ("+re.search('class="teaser-cat\s{0,1}">.*?class="teaser-cat-category">(.*?)</span',data,re.S).group(1).strip().split("|")[0].strip()+")"
 					except:
 						pass
-				handlung = "Sendung: "+decodeHtml(sendung)+genre+"\nDatum: "+airtime+"\nLaufzeit: "+dur+"\n\n"+info
+				handlung = "Sendung: "+decodeHtml(sendung)+genre+"\nSender: "+sender+"\nDatum: "+airtime+"\nLaufzeit: "+dur+"\n\n"+info
 				assetId = "https://api.zdf.de/content/documents/zdf/"+assetId+".json?profile=player"
 				assetPath = BASE_URL + assetPath
 				self.filmliste.append((decodeHtml(title),assetId,handlung,image,sendung,assetPath))

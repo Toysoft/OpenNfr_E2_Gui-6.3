@@ -91,7 +91,7 @@ class get_stream_link:
 	from hosters.mega3x import mega3x
 	from hosters.mp4upload import mp4upload
 	from hosters.okru import okru
-	from hosters.openload import openloadApi
+	from hosters.openload import openload
 	from hosters.powvideo import powvideo
 	from hosters.rapidvideocom import rapidvideocom
 	from hosters.streamango import streamango
@@ -669,9 +669,9 @@ class get_stream_link:
 						link = "http://rapidvideo.com/embed/%s" % id[0]
 					getPage(link).addCallback(self.rapidvideocom).addErrback(self.errorload)
 
-			elif re.search('openload', data, re.S):
+			elif re.search('openload\.(?:co|io|link)|oload\.(?:tv|stream|site|xyz|win|download|cloud|cc)', data, re.S):
 				link = data
-				id = re.search('http[s]?://openload\...\/[^/]+\/(.*?)(\/.*?)?$', link, re.S)
+				id = re.search('http[s]?://(?:openload\.(?:co|io|link)|oload\.(?:tv|stream|site|xyz|win|download|cloud|cc))\/[^/]+\/(.*?)(\/.*?)?$', link, re.S)
 				if id:
 					link = 'https://openload.co/embed/' + id.group(1)
 				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
@@ -679,8 +679,8 @@ class get_stream_link:
 					self.prz = 1
 					self.callPremium(link)
 				else:
-					link = "https://api.openload.co/1/streaming/get?file=" + id.group(1)
-					getPage(link).addCallback(self.openloadApi, id.group(1)).addErrback(self.errorload)
+					url = "https://api.openload.co/1/streaming/get?file=" + id.group(1)
+					getPage(url).addCallback(self.openload, link).addErrback(self.errorload)
 
 			elif re.search('thevideo\.me|thevideo\.cc', data, re.S):
 				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:

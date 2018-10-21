@@ -57,7 +57,7 @@
 		<color color="#00ffffff" name="ThumbViewTextForeground" />
 		<color color="#20000000" name="ThumbViewTextBackground" />
 		<pagebar_posy value="655" />
-		<sp_seekbar_factor value="7.28" />
+		<sp_seekbar_factor value="8.38" />
 		<!--<overridefont font="Regular" />-->
 		<!--<overridefontsize value="20" />-->
 		<!--<overridesizefactor value="2" />-->

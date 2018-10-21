@@ -22,6 +22,8 @@ json_headers = {
 	}
 agent="Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0"
 
+default_cover = "file://%s/jukebox.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class show_JBTO_Genre(MenuHelper):
 
 	def __init__(self, session, genre_url=None, genre_title="Genres"):
@@ -41,6 +43,7 @@ class show_JBTO_Genre(MenuHelper):
 		self.onLayoutFinish.append(self.mh_initMenu)
 
 	def mh_initMenu(self):
+		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.mh_buildMenu(self.genre_url, agent=agent, headers=json_headers)
 
 	def mh_parseCategorys(self, data):
@@ -160,7 +163,7 @@ class JBTO_ListScreen(MPScreen, ThumbsHelper):
 		self.genreName = genreName
 		self.genreData = data
 		self.genreImg = data[3] if data else None
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {

@@ -190,15 +190,39 @@ class ivhunterFilmScreen(MPScreen, ThumbsHelper):
 			twAgentGetPage(url, agent=ivhagent).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		streams = re.findall('<iframe src="(https://openload.co/embed/[a-zA-Z0-9]+\/)"', data, re.S)
+		streams = re.findall('<iframe\ssrc="((?:http[s]?|)//javdos.com/embed.*?)"', data, re.S)
 		if streams:
-			get_stream_link(self.session).check_link(streams[0], self.got_link)
+			url = streams[0]
+			if url.startswith('//'):
+				url = 'http:' + url
+			twAgentGetPage(url, agent=ivhagent).addCallback(self.loadStreamData).addErrback(self.dataError)
+
+	def loadStreamData(self, data):
+		js = re.findall('<script type="text/javascript">(.*?)</script>', data, re.S)
+		if js:
+			for item in js:
+				if "monday" in item:
+					js = item
+					break
+			monday = re.findall('clientSide.init\((monday.*?\))\);', data, re.S)
+			if monday:
+				js = js + "vidurl = " + monday[0] + ";return vidurl;"
+				try:
+					import execjs
+					node = execjs.get("Node")
+					url = str(node.exec_(js))
+					get_stream_link(self.session).check_link(url, self.got_link)
+					self.keyLocked = False
+				except:
+					self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
+			else:
+				message = self.session.open(MessageBoxExt, _("No supported streams found!"), MessageBoxExt.TYPE_INFO, timeout=3)
+				self.keyLocked = False
 		else:
 			message = self.session.open(MessageBoxExt, _("No supported streams found!"), MessageBoxExt.TYPE_INFO, timeout=3)
 			self.keyLocked = False
 
 	def got_link(self, stream_url):
-		self.keyLocked = False
 		title = self['liste'].getCurrent()[0][0]
 		self['name'].setText(title)
 		mp_globals.player_agent = ivhagent

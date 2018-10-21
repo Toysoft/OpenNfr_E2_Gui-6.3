@@ -43,11 +43,12 @@ class CoverHelper:
 			self.COVER_PIC_PATH = "/tmp/.Icon%d.jpg"
 			if self.bgcover:
 				self.NO_COVER_PIC_PATH = "/images/none.png"
+				self._no_picPath = "%s%s" % (mp_globals.pluginPath, self.NO_COVER_PIC_PATH)
 			else:
 				self.NO_COVER_PIC_PATH = "/images/no_coverArt.png"
-			self._no_picPath = "%s%s/%s%s" % (mp_globals.pluginPath, mp_globals.skinsPath, mp_globals.currentskin, self.NO_COVER_PIC_PATH)
-			if not fileExists(self._no_picPath):
-				self._no_picPath = "%s%s%s%s" % (mp_globals.pluginPath, mp_globals.skinsPath, mp_globals.skinFallback, self.NO_COVER_PIC_PATH)
+				self._no_picPath = "%s%s/%s%s" % (mp_globals.pluginPath, mp_globals.skinsPath, mp_globals.currentskin, self.NO_COVER_PIC_PATH)
+				if not fileExists(self._no_picPath):
+					self._no_picPath = "%s%s%s%s" % (mp_globals.pluginPath, mp_globals.skinsPath, mp_globals.skinFallback, self.NO_COVER_PIC_PATH)
 		global glob_screensaver_num
 		global glob_icon_num
 		global glob_last_cover

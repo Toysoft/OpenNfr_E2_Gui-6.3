@@ -45,7 +45,7 @@ headers = {
 	'Accept-Encoding':'deflate',
 }
 
-BASE_URL = 'https://www.funk.net/api/v3.1'
+BASE_URL = 'https://www.funk.net/api/v4.0'
 
 class funkGenreScreen(MPScreen):
 
@@ -82,7 +82,7 @@ class funkGenreScreen(MPScreen):
 	def loadPage(self):
 		self.filmliste = []
 		self.keyLocked = True
-		url = BASE_URL + "/content/channels/?size=100&page=%s" % str(self.page-1)
+		url = BASE_URL + "/channels/?size=100&page=%s" % str(self.page-1)
 		getPage(url, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -92,7 +92,7 @@ class funkGenreScreen(MPScreen):
 				self.lastpage = int(json_data["page"]["totalPages"])
 				self['Page'].setText(_("Page:"))
 				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		for item in json_data["_embedded"]["channelModels"]:
+		for item in json_data["_embedded"]["channelDTOList"]:
 			if item.has_key('imageUrlOrigin') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlOrigin"]:
 				image = str(item["imageUrlOrigin"])
 			elif item.has_key('imageUrlLandscape') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlLandscape"]:
@@ -103,12 +103,12 @@ class funkGenreScreen(MPScreen):
 				image = str(item["imageUrlSquare"])
 			else:
 				image = None
-			title = str(item["title"])
+			title = decodeHtml(str(item["title"]))
 			if item.has_key('description'):
 				descr = decodeHtml(str(item["description"]))
 			else:
 				descr = ""
-			url = BASE_URL + "/webapp/playlists/byChannelAlias/" + str(item["alias"]) + "?sort=language,ASC"
+			url = BASE_URL + "/playlists/byChannelAlias/" + str(item["alias"]) + "?sort=language,ASC"
 			if title not in ("Doctor Who", "Uncle", "Threesome", "Orange is the new Black", "The Job Lot"):
 				self.filmliste.append((title, image, url, descr))
 		self.filmliste.sort(key=lambda t : t[0].lower())
@@ -190,15 +190,15 @@ class funkSeasonsScreen(MPScreen):
 				image = str(json_data["parent"]["imageUrlSquare"])
 			else:
 				image = None
-			title = str(json_data["parent"]["title"])
+			title = decodeHtml(str(json_data["parent"]["title"]))
 			if json_data["parent"].has_key('description'):
 				descr = decodeHtml(str(json_data["parent"]["description"]))
 			else:
 				descr = ""
-			url = BASE_URL + "/webapp/videos/byChannelAlias/" + str(json_data["parent"]["alias"]) + "?filterFsk=false&sort=creationDate,desc&size=100"
+			url = BASE_URL + "/videos/byChannelAlias/" + str(json_data["parent"]["alias"]) + "?filterFsk=false&sort=creationDate,desc&size=100"
 			self.filmliste.append((title, image, url, descr))
 		else:
-			for item in json_data["_embedded"]["playlistList"]:
+			for item in json_data["_embedded"]["playlistDTOList"]:
 				if item.has_key('imageUrlOrigin') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlOrigin"]:
 					image = str(item["imageUrlOrigin"])
 				elif item.has_key('imageUrlLandscape') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlLandscape"]:
@@ -209,12 +209,12 @@ class funkSeasonsScreen(MPScreen):
 					image = str(item["imageUrlSquare"])
 				else:
 					image = None
-				title = str(item["title"])
+				title = decodeHtml(str(item["title"]))
 				if item.has_key('description'):
 					descr = decodeHtml(str(item["description"]))
 				else:
 					descr = ""
-				url = BASE_URL + "/webapp/videos/byPlaylistAlias/" + str(item["alias"]) + "?filterFsk=false&size=100&sort=episodeNr,ASC"
+				url = BASE_URL + "/videos/byPlaylistAlias/" + str(item["alias"]) + "?filterFsk=false&size=100&sort=episodeNr,ASC"
 				self.filmliste.append((title, image, url, descr))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
@@ -282,7 +282,7 @@ class funkEpisodesScreen(MPScreen):
 				self['Page'].setText(_("Page:"))
 				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		try:
-			for item in json_data["_embedded"]["videoList"]:
+			for item in json_data["_embedded"]["videoDTOList"]:
 				if item.has_key('imageUrlOrigin') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlOrigin"]:
 					image = str(item["imageUrlOrigin"])
 				elif item.has_key('imageUrlLandscape') and not "8415ad90686d2c75aca239372903a45e" in item["imageUrlLandscape"]:
@@ -293,7 +293,7 @@ class funkEpisodesScreen(MPScreen):
 					image = str(item["imageUrlSquare"])
 				else:
 					image = None
-				title = str(item["title"])
+				title = decodeHtml(str(item["title"]))
 				if item.has_key('description'):
 					descr = decodeHtml(str(item["description"]))
 				else:
@@ -319,8 +319,8 @@ class funkEpisodesScreen(MPScreen):
 						epi = ""
 				else:
 					epi = ""
-				if item.has_key('sourceId'):
-					id = str(item["sourceId"])
+				if item.has_key('entityId'):
+					id = str(item["entityId"])
 				else:
 					id = None
 				if item.has_key('downloadUrl'):
@@ -329,8 +329,8 @@ class funkEpisodesScreen(MPScreen):
 					downld = None
 
 				self.filmliste.append((title, image, id, descr, epi, duration, downld))
-		except:
-			pass
+		except Exception as e:
+			printl(e,self,"E")
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No episodes found!'), None, None, "", "", "", None))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))

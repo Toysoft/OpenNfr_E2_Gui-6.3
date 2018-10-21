@@ -39,10 +39,12 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
+default_cover = "file://%s/e2world.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class e2world(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -81,7 +83,7 @@ class e2worldMain(MPScreen):
 	def __init__(self, session, Link, Name):
 		self.link = Link
 		self.name = Name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,

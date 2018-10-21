@@ -1,4 +1,41 @@
 ﻿# -*- coding: utf-8 -*-
+###############################################################################################
+#
+#    MediaPortal for Dreambox OS
+#
+#    Coded by MediaPortal Team (c) 2013-2018
+#
+#  This plugin is open source but it is NOT free software.
+#
+#  This plugin may only be distributed to and executed on hardware which
+#  is licensed by Dream Property GmbH. This includes commercial distribution.
+#  In other words:
+#  It's NOT allowed to distribute any parts of this plugin or its source code in ANY way
+#  to hardware which is NOT licensed by Dream Property GmbH.
+#  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
+#  on hardware which is NOT licensed by Dream Property GmbH.
+#
+#  This applies to the source code as a whole as well as to parts of it, unless
+#  explicitely stated otherwise.
+#
+#  If you want to use or modify the code or parts of it,
+#  you have to keep OUR license and inform us about the modifications, but it may NOT be
+#  commercially distributed other than under the conditions noted above.
+#
+#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
+#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
+#
+#  As an exception regarding modifcations, you are NOT permitted to remove
+#  any copy protections implemented in this plugin or change them for means of disabling
+#  or working around the copy protections, unless the change has been explicitly permitted
+#  by the original authors. Also decompiling and modification of the closed source
+#  parts is NOT permitted.
+#
+#  Advertising with this plugin is NOT allowed.
+#  For other uses, permission from the authors is necessary.
+#
+###############################################################################################
+
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 import Queue
@@ -7,14 +44,12 @@ from Plugins.Extensions.MediaPortal.resources.youtubelink import YoutubeLink
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
-LMDE_Version = "Lachmeister"
-
 class show_LMDE_Genre(MenuHelper):
 
 	def __init__(self, session):
-		MenuHelper.__init__(self, session, 0, [[]], "https://www.lachmeister.de/lustige-filme", "/index-seite-%d.html", self._defaultlistcenter)
+		MenuHelper.__init__(self, session, 0, [[]], "https://www.lachmeister.de/lustige-filme", "/index-seite-%d.html", self._defaultlistcenter)
 
-		self['title'] = Label(LMDE_Version)
+		self['title'] = Label("Lachmeister")
 		self['ContentTitle'] = Label("Genres")
 
 		self.onLayoutFinish.append(self.mh_initMenu)
@@ -28,7 +63,6 @@ class show_LMDE_Genre(MenuHelper):
 			entrys = re.findall('<a href="https://www.lachmeister.de/lustige-filme(.*?)/index.html".*?title="(.*?)"', menu.group(1))
 		else:
 			entrys = []
-
 		return entrys
 
 	def mh_callGenreListScreen(self):
@@ -77,7 +111,7 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.sortOrderStrAZ = ""
 		self.sortOrderStrIMDB = ""
 		self.sortOrderStrGenre = ""
-		self['title'] = Label(LMDE_Version)
+		self['title'] = Label("Lachmeister")
 
 		self['Page'] = Label(_("Page:"))
 
@@ -90,7 +124,7 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self.dokusListe = []
 		self.page = 0
-		self.pages = 0;
+		self.pages = 0
 
 		self.setGenreStrTitle()
 
@@ -105,10 +139,8 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 
 	def loadPage(self):
 		url = self.genreLink % max(1,self.page)
-
 		if self.page:
 			self['page'].setText("%d / %d" % (self.page,self.pages))
-
 		self.filmQ.put(url)
 		if not self.eventL.is_set():
 			self.eventL.set()
@@ -146,7 +178,6 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 					self.dokusListe.append((decodeHtml(d.group(3)), d.group(1), d.group(2), desc, vid))
 			else:
 				break
-
 		if self.dokusListe:
 			if not self.page:
 				self.page = 1
@@ -170,7 +201,6 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 				self.loadPageQueued()
 
 	def loadPic(self):
-
 		if self.picQ.empty():
 			self.eventP.clear()
 			return
@@ -220,19 +250,16 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 			)
 
 	def keyUpRepeated(self):
-		#print "keyUpRepeated"
 		if self.keyLocked:
 			return
 		self['liste'].up()
 
 	def keyDownRepeated(self):
-		#print "keyDownRepeated"
 		if self.keyLocked:
 			return
 		self['liste'].down()
 
 	def key_repeatedUp(self):
-		#print "key_repeatedUp"
 		if self.keyLocked:
 			return
 		self.loadPicQueued()
@@ -248,23 +275,19 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		self['liste'].pageDown()
 
 	def keyPageDown(self):
-		#print "keyPageDown()"
 		self.keyPageDownFast(1)
 
 	def keyPageUp(self):
-		#print "keyPageUp()"
 		self.keyPageUpFast(1)
 
 	def keyPageUpFast(self,step):
 		if self.keyLocked:
 			return
-		#print "keyPageUpFast: ",step
 		oldpage = self.page
 		if (self.page + step) <= self.pages:
 			self.page += step
 		else:
 			self.page = 1
-		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()
 
@@ -276,32 +299,25 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 			self.page -= step
 		else:
 			self.page = self.pages
-		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()
 
 	def key_1(self):
-		#print "keyPageDownFast(2)"
 		self.keyPageDownFast(2)
 
 	def key_4(self):
-		#print "keyPageDownFast(5)"
 		self.keyPageDownFast(5)
 
 	def key_7(self):
-		#print "keyPageDownFast(10)"
 		self.keyPageDownFast(10)
 
 	def key_3(self):
-		#print "keyPageUpFast(2)"
 		self.keyPageUpFast(2)
 
 	def key_6(self):
-		#print "keyPageUpFast(5)"
 		self.keyPageUpFast(5)
 
 	def key_9(self):
-		#print "keyPageUpFast(10)"
 		self.keyPageUpFast(10)
 
 class LMDEPlayer(SimplePlayer):

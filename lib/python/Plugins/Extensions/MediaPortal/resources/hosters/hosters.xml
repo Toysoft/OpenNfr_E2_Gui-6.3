@@ -1,4 +1,4 @@
-﻿<hoster>streamcloud</hoster><regex>streamcloud.eu</regex>
+<hoster>streamcloud</hoster><regex>streamcloud.eu</regex>
 <hoster>flashx</hoster><regex>flashx.co</regex>
 <hoster>youwatch</hoster><regex>youwatch.org</regex>
 <hoster>rapidgator</hoster><regex>rapidgator.net</regex>
@@ -46,7 +46,7 @@
 <hoster>thevideo</hoster><regex>thevideo.me</regex>
 <hoster>exashare</hoster><regex>exashare.com</regex>
 <hoster>vidoza</hoster><regex>vidoza.net</regex>
-<hoster>openload</hoster><regex>openload.co</regex>
+<hoster>openload</hoster><regex>openload\.(?:co|io|link)|oload\.(?:tv|stream|site|xyz|win|download|cloud|cc)</regex>
 <hoster>fembed</hoster><regex>fembed.com</regex>
 <hoster>powvideo</hoster><regex>powvideo.net</regex>
 <hoster>youtube</hoster><regex>youtube.com</regex>

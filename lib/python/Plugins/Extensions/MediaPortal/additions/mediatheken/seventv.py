@@ -381,19 +381,24 @@ class sevenStreamScreen(MPScreen):
 		if Link:
 			twAgentGetPage(Link, agent=sevenAgent, cookieJar=sevenCookies).addCallback(self.parseData2, Link).addErrback(self.dataError)
 
-	def parseData2(self, data, client_location):
+	def parseData2(self, data, client_location, web=False):
 		self.client_location = client_location
 		cid = re.findall('"cid":(\d+),', data, re.S)
 		if cid:
 			self.video_id = cid[0]
-			self.access_token = 'hbbtv'
-			self.client_name = 'hbbtv'
+			if web: # fallback sources website
+				self.access_token = 'seventv-web'
+				self.client_name = ''
+				self.salt = '01!8d8F_)r9]4s[qeuXfP%'
+			else: # HD sources hbbtv
+				self.access_token = 'hbbtv'
+				self.client_name = 'hbbtv'
+				self.salt = '01ree6eLeiwiumie7ieV8pahgeiTui3B'
 			json_url = 'http://vas.sim-technik.de/vas/live/v2/videos/%s?access_token=%s&client_location=%s&client_name=%s' % (self.video_id, self.access_token, client_location, self.client_name)
 			twAgentGetPage(json_url, agent=sevenAgent, cookieJar=sevenCookies).addCallback(self.parseData3).addErrback(self.dataError)
 
 	def parseData3(self, data):
 		json_data = json.loads(data)
-		self.salt = '01ree6eLeiwiumie7ieV8pahgeiTui3B'
 		self.source_id = 0
 		if json_data["is_protected"]:
 			message = self.session.open(MessageBoxExt, _("This episode/clip can't be played it's protected with DRM."), MessageBoxExt.TYPE_INFO, timeout=5)
@@ -416,17 +421,17 @@ class sevenStreamScreen(MPScreen):
 
 	def parseData5(self, data):
 		json_data = json.loads(data)
-		max_id = 0
-		for stream in json_data["sources"]:
-			url = stream["url"]
-			try:
-				sid=re.findall('-tp([0-9]+).mp4', url, re.S)[0]
-				id = int(sid)
-				if max_id < id:
-					max_id = id
+		if int(json_data["status_code"]) == 14:
+			Link = self['liste'].getCurrent()[0][1]
+			twAgentGetPage(Link, agent=sevenAgent, cookieJar=sevenCookies).addCallback(self.parseData2, Link, web=True).addErrback(self.dataError)
+		else:
+			max_bw = 0
+			for stream in json_data["sources"]:
+				url = stream["url"]
+				bw = int(stream["bitrate"])
+				if max_bw < bw:
+					max_bw = bw
 					stream_url = str(url)
-			except:
-				stream_url = str(url)
-		mp_globals.player_agent = sevenAgent
-		Name = self['liste'].getCurrent()[0][0]
-		self.session.open(SimplePlayer, [(Name, stream_url)], showPlaylist=False, ltype='7tv')
+			mp_globals.player_agent = sevenAgent
+			Name = self['liste'].getCurrent()[0][0]
+			self.session.open(SimplePlayer, [(Name, stream_url)], showPlaylist=False, ltype='7tv')

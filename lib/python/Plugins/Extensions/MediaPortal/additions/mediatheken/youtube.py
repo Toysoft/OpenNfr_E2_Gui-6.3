@@ -350,6 +350,8 @@ class youtubeGenreScreen(MenuHelper):
 			('E2WORLD', 'https://www.youtube.com/channel/UC95hFgcA4hzKcOQHiEFX3UA'),
 			('The HDR Channel', 'https://www.youtube.com/channel/UCve7_yAZHFNipzeAGBI5t9g'),
 			('4K Relaxation Channel', 'https://www.youtube.com/channel/UCg72Hd6UZAgPBAUZplnmPMQ'),
+			('La Belle Musique', 'https://www.youtube.com/user/LaBelleChannel'),
+			
 			]
 		self.SelectedChannels.sort(key=lambda t : t[0].lower())
 		self.subCatSelectedChannels = []

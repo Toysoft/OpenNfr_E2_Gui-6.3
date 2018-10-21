@@ -32,8 +32,8 @@ class txxxcrypt:
 			"return unescape(_0xf4bdx7)"\
 			"};"
 		video_url = re.findall('var video_url\s{0,1}={0,1}(.*?);', data, re.S)
-		hash = re.findall('video_url\s{0,1}\+\=\s{0,1}\"\|\|/get_file/(\d+/[a-f0-9]+)/', data, re.S)
-		hash2 = re.findall('video_url\s{0,1}\+\=\s{0,1}\"\|\|/get_file/(\d+/[a-f0-9]+)/\|\|(.*?)\|\|(.*?)";', data, re.S)
+		hash = re.findall('video_url\s{0,1}\+\=\s{0,1}(?:\"|\')\|\|/get_file/(\d+/[a-f0-9]+)/', data, re.S)
+		hash2 = re.findall('video_url\s{0,1}\+\=\s{0,1}(?:\"|\')\|\|/get_file/(\d+/[a-f0-9]+)/\|\|(.*?)\|\|(.*?)(?:\"|\');', data, re.S)
 		js = decoder + "\n" + 'video_url=decrypt('+video_url[0]+');' + "return video_url;"
 		url = str(node.exec_(js))
 		if hash:

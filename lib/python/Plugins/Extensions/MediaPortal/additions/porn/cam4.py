@@ -228,10 +228,33 @@ class cam4FilmScreen(MPScreen, ThumbsHelper):
 	def play_stream(self, data):
 		url = re.findall('hlsUrl: \'(http.*?)\'', data, re.S)
 		if url:
-			url = url[-1] + '?referer=cam4.com&timestamp=%s' % str(int(time()*1000))
-			title = self['liste'].getCurrent()[0][0]
-			self['name'].setText(title)
-			mp_globals.player_agent = cam4Agent
-			self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='cam4')
+			playlisturl = url[-1] + '?referer=cam4.com&timestamp=%s' % str(int(time()*1000))
+			getPage(playlisturl, agent=cam4Agent).addCallback(self.loadplaylist, url[-1]).addErrback(self.dataError)
 		else:
 			self.session.open(MessageBoxExt, _("Cam is currently offline."), MessageBoxExt.TYPE_INFO)
+
+	def loadplaylist(self, data, baseurl):
+		print baseurl
+		self.bandwith_list = []
+		match_sec_m3u8=re.findall('BANDWIDTH=(\d+).*?\n(.*?m3u8)', data, re.S)
+		max = 0
+		for x in match_sec_m3u8:
+			if int(x[0]) > max:
+				max = int(x[0])
+		videoPrio = int(config_mp.mediaportal.videoquali_others.value)
+		if videoPrio == 2:
+			bw = max
+		elif videoPrio == 1:
+			bw = max/2
+		else:
+			bw = max/3
+		for each in match_sec_m3u8:
+			bandwith,url = each
+			self.bandwith_list.append((int(bandwith),url))
+		_, best = min((abs(int(x[0]) - bw), x) for x in self.bandwith_list)
+
+		url = baseurl.replace('playlist.m3u8','') + best[1]
+		title = self['liste'].getCurrent()[0][0]
+		self['name'].setText(title)
+		mp_globals.player_agent = cam4Agent
+		self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='cam4')

@@ -56,6 +56,7 @@ class show_LSDE_Genre(MenuHelper):
 
 		self['title'] = Label(LSDE_Version)
 		self['ContentTitle'] = Label("Genres")
+		self.suchString = ''
 
 		self.onLayoutFinish.append(self.parseCats)
 
@@ -64,39 +65,35 @@ class show_LSDE_Genre(MenuHelper):
 
 	def mh_parseCategorys(self, data):
 		menu = []
-		menu.append((0, '', 'KATEGORIEN'))
+		menu.append((0, '', 'Kategorien'))
 		menu.append((1, '/gallery/trend/?', 'Trend'))
 		menu.append((1, '/gallery/new/?', 'Neue'))
 		menu.append((1, '/gallery/all/?', 'Alles'))
 		menu.append((1, '/gallery/toprecent/?', 'Top'))
 		menu.append((1, '/gallery/floprecent/?', 'Flop'))
-		menu.append((0, '', 'TOP & FLOP'))
+		menu.append((0, '', 'Top & Flop'))
 		menu.append((1, '/gallery/premium/?', 'Premium'))
+		menu.append((1, '/gallery/trash/?', 'Müllhalde'))
 		menu.append((1, '/gallery/top/?', 'Hall of Fame'))
 		menu.append((1, '/gallery/flop/?', 'Hall of Shame'))
 		menu.append((1, '/gallery/mostvoted/?', 'Stimmen'))
 		menu.append((1, '/gallery/mostfavs/?', 'Favs'))
-		menu.append((0, '/gallery/search_item/?q=%s&x=0&y=0&', 'Suche...'))
+		menu.append((0, '/gallery/search_item/?q=%s&x=0&y=0&', 'Suche'))
 		self.mh_genMenu2(menu)
 
 	def mh_callGenreListScreen(self):
-		if re.search('Suche...', self.mh_genreTitle):
-			self.paraQuery()
+		if re.search('Suche', self.mh_genreTitle):
+			self.suchen()
 		else:
 			genreurl = self.mh_baseUrl+self.mh_genreUrl[self.mh_menuLevel]+'set_gallery_type=video'
 			self.session.open(LSDE_FilmListeScreen, genreurl, self.mh_genreTitle)
 
-	def paraQuery(self):
-		self.param_qr = ''
-		self.session.openWithCallback(self.cb_paraQuery, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.param_qr, is_dialog=True)
-
-	def cb_paraQuery(self, callback = None, entry = None):
-		if callback != None:
-			self.param_qr = callback.strip()
-			if len(self.param_qr) > 0:
-				qr = self.param_qr.replace(' ','+')
-				genreurl = self.mh_baseUrl+(self.mh_genreUrl[self.mh_menuLevel] % qr)+'set_gallery_type=video'
-				self.session.open(LSDE_FilmListeScreen, genreurl, self.mh_genreTitle)
+	def SuchenCallback(self, callback = None):
+		if callback is not None and len(callback):
+			self.suchString = callback
+			qr = self.suchString.replace(' ','+')
+			genreurl = self.mh_baseUrl+(self.mh_genreUrl[self.mh_menuLevel] % qr)+'set_gallery_type=video'
+			self.session.open(LSDE_FilmListeScreen, genreurl, self.mh_genreTitle)
 
 class LSDE_FilmListeScreen(MPScreen, ThumbsHelper):
 
@@ -177,13 +174,6 @@ class LSDE_FilmListeScreen(MPScreen, ThumbsHelper):
 			url = self.filmQ.get_nowait()
 		twAgentGetPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
-	def dataError(self, error):
-		self.eventL.clear()
-		printl(error,self,"E")
-		self.dokusListe = []
-		self.dokusListe.append(("Keine Videos / Streams gefunden!","","",""))
-		self.ml.setList(map(self._defaultlistleft, self.dokusListe))
-
 	def loadPageData(self, content):
 		m = re.search('="pageselection(.*?)</div>', content, re.S)
 		self.dokusListe = []
@@ -196,7 +186,7 @@ class LSDE_FilmListeScreen(MPScreen, ThumbsHelper):
 				url=match[0]
 			else:
 				continue
-			match=re.compile('src="(.+?)"', re.S).findall(entry)
+			match=re.compile('class="previewitem".*?src="(.+?)"', re.S).findall(entry)
 			if match:
 				thumb=match[0]
 				if thumb.startswith('//'):
@@ -212,29 +202,27 @@ class LSDE_FilmListeScreen(MPScreen, ThumbsHelper):
 			title=decodeHtml(title).strip()
 			if rating!=-1:
 				title=title+(" (%.1f / 10)" % float(rating))
-			self.dokusListe.append((title, "http://www.lachschon.de"+url, thumb, None))
-
+			self.dokusListe.append((title, "http://www.lachschon.de"+url, thumb.replace('-medium',''), None))
 		if self.dokusListe:
 			if not self.lastpage:
 				try:
 					pgs = re.findall('"\?page=.*?">(\d+)</a', m.group(1), re.S)
-					lastpage = min(int(pgs[-1]), 999)
+					lastpage = int(pgs[-1])
 				except:
 					lastpage = 1
 
 				if lastpage > self.lastpage:
 					self.lastpage = lastpage
-
 			if not self.page:
 				self.page = 1
 			self['page'].setText("%d / %d" % (self.page,self.lastpage))
 
 			self.ml.setList(map(self._defaultlistleft, self.dokusListe))
 			self['liste'].moveToIndex(0)
-			self.th_ThumbsQuery(self.dokusListe,0,1,2,None,None, self.page, self.lastpage)
+			self.th_ThumbsQuery(self.dokusListe,0,1,2,None,None, self.page, self.lastpage, mode=1)
 			self.loadPicQueued()
 		else:
-			self.dokusListe.append(("Keine Videos gefunden!","","",""))
+			self.dokusListe.append((_("No videos found!"),"","",""))
 			self.ml.setList(map(self._defaultlistleft, self.dokusListe))
 			self['liste'].moveToIndex(0)
 			if self.filmQ.empty():

@@ -42,11 +42,13 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 baseurl ="http://www.pokerstars.tv"
 ptvAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
 
+default_cover = "file://%s/pokerstars.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class pokerGenreScreen(MPScreen):
 
 	def __init__(self, session):
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -100,7 +102,7 @@ class subnav(MPScreen):
 	def __init__(self, session,name,url):
 		self.url = url
 		self.name = name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -150,7 +152,7 @@ class vids(MPScreen):
 	def __init__(self, session,name,url):
 		self.url = url
 		self.name = name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,

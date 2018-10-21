@@ -538,6 +538,8 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 				parse = re.search('class="iframe-container(.*?)</html>', data, re.S)
 				if not parse:
 					parse = re.search('class="category-title"(.*?)</html>', data, re.S)
+					if not parse:
+						parse = re.search('Video Search Results</h1>(.*?)</html>', data, re.S)
 			if parse:
 				Liste = re.findall('class="thumb-container"\sdata-href="(.*?)"\sdata-thumb="(.*?)".*?class="duration">(.*?)</div>.*?class="name">(.*?)</div>.*?class="views">(.*?)</div>.*?class="rating">(.*?)</div>', parse.group(1), re.S)
 				if not Liste:

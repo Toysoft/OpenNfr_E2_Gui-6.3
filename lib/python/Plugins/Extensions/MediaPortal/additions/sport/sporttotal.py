@@ -97,5 +97,27 @@ class sporttotalGenreScreen(MPScreen):
 		if not streams:
 			streams = re.findall('<source\ssrc="(.*?)"\stype="', data, re.S)
 		if streams:
-			name = self['liste'].getCurrent()[0][0]
-			self.session.open(SimplePlayer, [(name, streams[0])], showPlaylist=False, ltype='sporttotal')
+			url = streams[0]
+			getPage(url).addCallback(self.loadplaylist, url).addErrback(self.dataError)
+
+	def loadplaylist(self, data, baseurl):
+		self.bandwith_list = []
+		match_sec_m3u8=re.findall('#EXT-X-STREAM-INF:BANDWIDTH=(\d+).*?\n(.*?m3u8.*?)\n', data, re.S)
+		max = 0
+		for x in match_sec_m3u8:
+			if int(x[0]) > max:
+				max = int(x[0])
+		videoPrio = int(config_mp.mediaportal.videoquali_others.value)
+		if videoPrio == 2:
+			bw = max
+		elif videoPrio == 1:
+			bw = max/2
+		else:
+			bw = max/3
+		for each in match_sec_m3u8:
+			bandwith,url = each
+			self.bandwith_list.append((int(bandwith),url))
+		_, best = min((abs(int(x[0]) - bw), x) for x in self.bandwith_list)
+		url = baseurl.split('/RECORD')[0] + best[1]
+		Name = self['liste'].getCurrent()[0][0]
+		self.session.open(SimplePlayer, [(Name, url)], showPlaylist=False, ltype='sporttotal')

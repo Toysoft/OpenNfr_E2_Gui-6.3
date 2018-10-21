@@ -56,7 +56,7 @@ class ORFGenreScreen(MPScreen):
 		}, -1)
 
 		self['title'] = Label("ORF TVthek")
-		self['ContentTitle'] = Label("Auswahl der Sendung")
+		self['ContentTitle'] = Label(_("Genre:"))
 
 		self.genreliste = []
 		self.keyLocked = True
@@ -66,29 +66,27 @@ class ORFGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		self.genreliste = []
-		for c in xrange(26):
-			self.genreliste.append((chr(ord('A') + c), chr(ord('A') + c)))
-		self.genreliste.insert(0, ('0-9', '0'))
+		self.genreliste.append(('Sendungen A-Z', 'https://tvthek.orf.at/profiles/a-z'))
+		self.genreliste.append(('Thema', 'https://tvthek.orf.at/profiles'))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		streamGenreLink = self['liste'].getCurrent()[0][1]
-		self.session.open(ORFSubGenreScreen, streamGenreLink)
+		Name = self['liste'].getCurrent()[0][0]
+		Link = self['liste'].getCurrent()[0][1]
+		self.session.open(ORFSubGenreScreen, Name, Link)
 
-class ORFSubGenreScreen(MPScreen, ThumbsHelper):
+class ORFSubGenreScreen(MPScreen):
 
-	def __init__(self, session, streamGenreLink):
-		self.streamGenreLink = streamGenreLink
+	def __init__(self, session, Name, Link):
+		self.Name = Name
+		self.Link = Link
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
-		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
-			"5" : self.keyShowThumb,
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
 			"up" : self.keyUp,
@@ -98,7 +96,7 @@ class ORFSubGenreScreen(MPScreen, ThumbsHelper):
 		}, -1)
 
 		self['title'] = Label("ORF TVthek")
-		self['ContentTitle'] = Label("Auswahl der Sendung")
+		self['ContentTitle'] = Label(_("Genre:") + " %s" % self.Name)
 
 
 		self.genreliste = []
@@ -109,34 +107,56 @@ class ORFSubGenreScreen(MPScreen, ThumbsHelper):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
+		self['name'].setText(_('Please wait...'))
 		self.keyLocked = True
-		self.url = "http://tvthek.orf.at/profiles/letter/%s" % self.streamGenreLink
-		getPage(self.url).addCallback(self.loadPageData).addErrback(self.dataError)
+		getPage(self.Link).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		parse = re.search('subheadline">Verfügbare\sSendungen(.*?)<footer', data, re.S)
-		sendungen = re.findall('base_list_item_headline">(.*?)</.*?class="episode_image">.*?src="(.*?)".*?</figure>', parse.group(1), re.S)
-		if sendungen:
-			self.genreliste = []
-			for (title, image) in sendungen:
-				self.genreliste.append((decodeHtml(title),title,image.replace('&amp;','&')))
-			self.genreliste.sort(key=lambda t : t[0].lower())
+		if self.Name == "Sendungen A-Z":
+			preparse = re.findall('letter_group_headline">(.*?)</h3(.*?)</div', data, re.S)
+			for (letter, data) in preparse:
+				sendungen = re.findall('<article class="item">.*?img\ssrc="(.*?)".*?item_title">(.*?)</h4', data, re.S)
+				if sendungen:
+					for (image, title) in sendungen:
+						if letter == "#":
+							letter = "0"
+						self.genreliste.append((decodeHtml(title), letter, title, image))
+				self.genreliste.sort(key=lambda t : t[0].lower())
+		elif self.Name == "Thema":
+			themen = re.findall('<li class="base_list_item(?: current|) js_filter_element">.*?href="(.*?)".*?base_list_item_headline">(.*?)</h4>', data, re.S)
+			if themen:
+				for (url, title) in themen:
+					self.genreliste.append((decodeHtml(title), url, url, default_cover))
+				self.genreliste.sort(key=lambda t : t[0].lower())
 		else:
-			self.genreliste.append(('Keine Sendungen mit diesem Buchstaben vorhanden.', None, None, None))
+			parse = re.search('subheadline">Verfügbare\sSendungen(.*?)<footer', data, re.S)
+			sendungen = re.findall('base_list_item_headline">(.*?)</.*?class="episode_image">.*?src="(.*?)".*?</figure>', parse.group(1), re.S)
+			if sendungen:
+				self.genreliste = []
+				for (title, image) in sendungen:
+					self.genreliste.append((decodeHtml(title), self.Link, title, image))
+				self.genreliste.sort(key=lambda t : t[0].lower())
+		if len(self.genreliste) == 0:
+			self.genreliste.append(('Keine Sendungen gefunden!', None, None, None))
 		self.ml.setList(map(self._defaultlistleft, self.genreliste))
 		self.keyLocked = False
-		self.th_ThumbsQuery(self.genreliste, 0, 1, 2, None, None, 1, 1, mode=1)
 		self.showInfos()
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		self.Name = self['liste'].getCurrent()[0][1]
-		if self.Name != None:
-			self.session.open(ORFFilmeListeScreen, self.url, self.Name)
+		Name = self['liste'].getCurrent()[0][0]
+		Letter = self['liste'].getCurrent()[0][1]
+		Link = self['liste'].getCurrent()[0][2]
+		if Letter:
+			if Letter.startswith('/profiles'):
+				Link = "http://tvthek.orf.at" + Link
+				self.session.open(ORFSubGenreScreen, Name, Link)
+			else:
+				self.session.open(ORFFilmeListeScreen, Link, Letter, Name)
 
 	def showInfos(self):
-		streamPic = self['liste'].getCurrent()[0][2]
+		streamPic = self['liste'].getCurrent()[0][3]
 		if streamPic == None:
 			return
 		streamName = self['liste'].getCurrent()[0][0]
@@ -145,9 +165,10 @@ class ORFSubGenreScreen(MPScreen, ThumbsHelper):
 
 class ORFFilmeListeScreen(MPScreen):
 
-	def __init__(self, session, Link, Name):
+	def __init__(self, session, Link, Letter, Name):
 		self.Link = Link
-		self.Name= Name
+		self.Letter = Letter
+		self.Name = Name
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -157,7 +178,7 @@ class ORFFilmeListeScreen(MPScreen):
 		}, -1)
 
 		self['title'] = Label("ORF TVthek")
-		self['ContentTitle'] = Label("Auswahl: %s" % decodeHtml(self.Name))
+		self['ContentTitle'] = Label(_("Genre:") + " %s" % self.Name)
 
 		self.keyLocked = True
 		self.filmliste = []
@@ -167,12 +188,16 @@ class ORFFilmeListeScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		getPage(self.Link).addCallback(self.loadPageData).addErrback(self.dataError)
+		self['name'].setText(_('Please wait...'))
+		if self.Letter.startswith('http'):
+			url = self.Letter
+		else:
+			url = "http://tvthek.orf.at/profiles/letter/%s" % self.Letter
+		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		suchstring = self.Name
-		suchstring = suchstring.replace('(','\(').replace(')','\)').replace('[','\[').replace(']','\]').replace('|','\|')
-		parse = re.search('base_list_item_headline">'+suchstring+'(.*?)</ul>', data, re.S)
+		Link = self.Link.replace('(','\(').replace(')','\)').replace('[','\[').replace(']','\]').replace('|','\|')
+		parse = re.search('base_list_item_headline">'+Link+'(.*?)</ul>', data, re.S)
 		folgen = re.findall('a\shref="(.*?)".*?meta_date">(.*?)</span.*?meta_time">(.*?)</span', parse.group(1), re.S)
 		self.filmliste = []
 		if folgen:
@@ -182,6 +207,7 @@ class ORFFilmeListeScreen(MPScreen):
 			self.filmliste.append(('Momentan ist keine Sendung in der TVthek vorhanden.', None))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.keyLocked = False
+		self['name'].setText('')
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -190,16 +216,14 @@ class ORFFilmeListeScreen(MPScreen):
 		if url:
 			self.session.open(ORFStreamListeScreen, url)
 
-class ORFStreamListeScreen(MPScreen, ThumbsHelper):
+class ORFStreamListeScreen(MPScreen):
 
 	def __init__(self, session, Link):
 		self.Link = Link
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
-		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
-			"5" : self.keyShowThumb,
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
 			"up" : self.keyUp,
@@ -220,6 +244,7 @@ class ORFStreamListeScreen(MPScreen, ThumbsHelper):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
+		self['name'].setText(_('Please wait...'))
 		getPage(self.Link).addCallback(self.gotPageData).addErrback(self.dataError)
 
 	def gotPageData(self, data):
@@ -239,7 +264,6 @@ class ORFStreamListeScreen(MPScreen, ThumbsHelper):
 				self.streamliste.append((decodeHtml(title),url.group(1).replace('\/','/').replace('https','http'),image.replace('\/','/'),desc))
 			self.ml.setList(map(self._defaultlistleft, self.streamliste))
 			self.keyLocked = False
-			self.th_ThumbsQuery(self.streamliste, 0, 1, 2, None, None, 1, 1, mode=1)
 			self.showInfos()
 
 	def keyOK(self):

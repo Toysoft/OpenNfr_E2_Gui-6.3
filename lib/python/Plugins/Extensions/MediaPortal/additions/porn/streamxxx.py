@@ -227,7 +227,6 @@ class streamxxxStreamListeScreen(MPScreen):
 		self['ContentTitle'] = Label("Streams:")
 		self['name'] = Label(_("Please wait..."))
 
-		self.captchainfo = {}
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
@@ -249,36 +248,11 @@ class streamxxxStreamListeScreen(MPScreen):
 					hostername = hostername.replace('www.','')
 					self.filmliste.append((hostername, stream))
 		if len(self.filmliste) == 0:
-			if re.search('data:image/jpeg;base64', data,re.S):
-				self.getCaptchaCookie(data)
-			else:
-				self.filmliste.append((_("No supported streams found!"), None))
+			self.filmliste.append((_("No supported streams found!"), None))
 		self.filmliste = list(set(self.filmliste))
 		self.ml.setList(map(self._defaultlisthoster, self.filmliste))
 		self.keyLocked = False
 		self['name'].setText(self.streamName)
-
-	def getCaptchaCookie(self, data):
-		p1 = re.search('content-protector-token.*?value="(.*?)"', data, re.S)
-		p2 = re.search('content-protector-ident-(.*?)"', data, re.S)
-		p3 = re.search('src="data:image/jpeg;base64,(.*?)"', data, re.S)
-		if p1 and p2 and p3:
-			jpgfile = ('/tmp/captcha.jpg')
-			g = open(jpgfile, "w")
-			g.write(base64.decodestring(p3.group(1)))
-			g.close()
-			self.captchainfo = {
-				'content-protector-expires': "0",
-				'content-protector-token': p1.group(1),
-				'content-protector-ident': p2.group(1),
-				'content-protector-submit':'Submit'
-				}
-			self.session.openWithCallback(self.captchaCallback, VirtualKeyBoardExt, title = (_("Captcha input:")), text = "", captcha = "/tmp/captcha.jpg", is_dialog=True)
-
-	def captchaCallback(self, callback=None, entry=None):
-		if callback != None or callback != "":
-			self.captchainfo.update({'content-protector-password': callback})
-			twAgentGetPage(self.streamFilmLink, cookieJar=glob_cookies, method='POST', postdata=urlencode(self.captchainfo), agent=myagent, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def keyOK(self):
 		if self.keyLocked:

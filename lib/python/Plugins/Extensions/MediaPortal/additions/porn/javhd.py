@@ -34,7 +34,7 @@ class javhdGenreScreen(MPScreen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		url = "http://javhd.today/categories/"
-		getPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		Cats = re.findall('class="category".*?href="(.*?)".*?img\ssrc="(.*?)".*?title">(.*?)</div', data, re.S)
@@ -131,7 +131,7 @@ class javhdFilmScreen(MPScreen, ThumbsHelper):
 				url = self.Link + cat + str(self.page) + "/"
 			else:
 				url = self.Link
-		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</ul>')
@@ -169,13 +169,13 @@ class javhdFilmScreen(MPScreen, ThumbsHelper):
 		image = self['liste'].getCurrent()[0][2]
 		if url:
 			self.keyLocked = True
-			getPage(url, agent=myagent).addCallback(self.loadStream).addErrback(self.dataError)
+			twAgentGetPage(url, agent=myagent).addCallback(self.loadStream).addErrback(self.dataError)
 
 	def loadStream(self, data):
 		streams = re.findall('<iframe.*?src="https://www.fembed.com/v/(.*?)\s{0,1}"', data, re.S)
 		if streams:
 			url = "https://www.fembed.com/api/sources/" + streams[0]
-			getPage(url, agent=myagent, method='POST', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_link).addErrback(self.dataError)
+			twAgentGetPage(url, agent=myagent, method='POST', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_link).addErrback(self.dataError)
 		else:
 			streams = re.findall('(?:src|href)=[\'|"](http[s]?://(?!(?:www.|m.|)javhd.today)(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
 			if streams:

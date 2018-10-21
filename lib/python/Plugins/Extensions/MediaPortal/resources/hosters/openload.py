@@ -4,27 +4,43 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.messageboxext import MessageBoxExt
 import requests
 
-def openloadApi(self, data, id):
-	try:
-		s = requests.session()
-		t = s.get('https://api.openload.co/1/file/dlticket', params={'file': id, 'login': 'c255c81fad52a08f', 'key': 'lc7xiQ46'}, timeout=15)
-		ticket = re.findall('"ticket":"(.*?)"', t.text)
-		if ticket:
-			ticket = str(ticket[0])
-			ok = s.get('https://api.openload.co/1/file/dl', params={'file': id, 'ticket': ticket}, timeout=15)
-			stream = re.findall('url":"(.*?)"', ok.text)
-			if stream:
-				stream_url = str(stream[0].replace('\\',''))
-				self._callback(stream_url)
-			else:
+try:
+	from youtube_dl import YoutubeDL
+	youtubedl = True
+except:
+	youtubedl = False
+
+if os.path.exists("/usr/bin/phantomjs"):
+	phantomjs = True
+else:
+	phantomjs = False
+
+def openload(self, data, link):
+
+	stream_url = re.findall('"url":"(.*?)"', data)
+	if stream_url:
+		self._callback(stream_url[0].replace('\\',''))
+	elif youtubedl and phantomjs:
+		result = None
+		try:
+			os.environ["QT_QPA_PLATFORM"] = "phantom"
+			ytdl = YoutubeDL({'nocheckcertificate':True, 'restrictfilenames':True, 'no_warnings':True})
+			result = ytdl.extract_info(link, ie_key="Openload", download=False, process=True)
+			os.environ["QT_QPA_PLATFORM"] = ""
+		except Exception as e:
+			os.environ["QT_QPA_PLATFORM"] = ""
+			if re.search('File not found', str(e), re.S):
 				self.stream_not_found()
-		elif re.search('IP address not authorized', data):
-			message = self.session.open(MessageBoxExt, _("IP address not authorized. Visit https://openload.co/pair"), MessageBoxExt.TYPE_ERROR)
+			else:
+				printl("[openload]: %s" % e,'',"E")
+				self.session.open(MessageBoxExt, _("youtube-dl: unable to extract URL. This error occasionally occurs, please try again.\nIf this error persists a youtube-dl upgrade may be needed.\n\nAlternatively you may visit https://olpair.com to pair your IP."), MessageBoxExt.TYPE_INFO, timeout=5)
 		else:
-			stream_url = re.findall('"url":"(.*?)"', data)
-			if stream_url:
-				self._callback(stream_url[0].replace('\\',''))
+			if result:
+				self._callback(str(result['url']).replace('https','http'))
 			else:
 				self.stream_not_found()
-	except:
+	elif re.search('IP address not authorized', data):
+		message = self.session.open(MessageBoxExt, _("IP address not authorized. Visit https://olpair.com to pair your IP.\n\nAlternatively you may install youtube-dl and phantomjs to extend resolver functionality."), MessageBoxExt.TYPE_ERROR)
+	else:
 		self.stream_not_found()
+

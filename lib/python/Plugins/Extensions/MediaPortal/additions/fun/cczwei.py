@@ -40,10 +40,12 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 
+default_cover = "file://%s/cczwei.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class cczwei(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,

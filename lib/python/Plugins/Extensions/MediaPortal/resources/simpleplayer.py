@@ -215,7 +215,7 @@ class CoverSearchHelper:
 		try:
 			jdata = json.loads(jdata)
 			url = jdata['results'][0]['artworkUrl100'].encode('utf-8')
-			url = url.replace('100x100', '400x400').replace('https', 'http')
+			url = url.replace('100x100', '450x450').replace('https', 'http')
 			self.hasGoogleCoverArt = True
 		except:
 			if not retry:
@@ -340,11 +340,21 @@ class SimpleSeekHelper:
 		else:
 			self.RadioBg['background'].show()
 		self.RadioBg['BgCover'].show()
+		self.RadioBg['BgTitle'].hide()
+		self.RadioBg['cover'].hide()
+		if MerlinMusicPlayerPresent:
+				self.RadioBg['rms0'].hide()
+				self.RadioBg['rms1'].hide()
 		InfoBarShowHide.lockShow(self)
 
 	def __BgCoverHide(self):
 		self.RadioBg['background'].hide()
 		self.RadioBg['BgCover'].hide()
+		self.RadioBg['BgTitle'].show()
+		self.RadioBg['cover'].show()
+		if MerlinMusicPlayerPresent:
+				self.RadioBg['rms0'].show()
+				self.RadioBg['rms1'].show()
 		InfoBarShowHide.unlockShow(self)
 
 	def __seekBarShown(self):
@@ -776,40 +786,52 @@ class RadioBackground(Screen):
 		Screen.__init__(self, session)
 
 		self['BgCover'] = Pixmap()
+		self['BgTitle'] = Label()
+		self["cover"] = Pixmap()
 		self['background'] = Label()
 		self['screenSaver'] = Pixmap()
 		self['screenSaverBg'] = Label()
 		self.playerMode = playerMode
 		if MerlinMusicPlayerPresent:
-			self["cover"] = MerlinMusicPlayerWidget()
+			self["coverGL"] = MerlinMusicPlayerWidget()
 			self["visu"] = MerlinMusicPlayerWidget()
 			self["rms0"] = MerlinMusicPlayerRMS()
 			self["rms1"] = MerlinMusicPlayerRMS()
 			if config_mp.mediaportal.sp_radio_visualization.value == "0":
-				self["cover"].hide()
 				self["visu"].hide()
 				self["rms0"].hide()
 				self["rms1"].hide()
+		if config_mp.mediaportal.sp_radio_visualization.value == "0":
+			self["cover"].hide()
+			self['BgTitle'].hide()
 
+		# internalSize 0 = original, 1 = 1440, 2 = 2160, 3 = 2880, 4 = 800
 		if mp_globals.videomode == 2:
 			self.skin = '''<screen backgroundColor="transparent" flags="wfNoBorder" name="RadioBackground" position="0,0" size="1920,1080" zPosition="-1">
 					<widget name="background" position="0,0" size="1920,1080" transparent="0" backgroundColor="#00202020" />
 					<widget name="screenSaverBg" position="0,0" size="1920,1080" transparent="0" backgroundColor="#00000000" zPosition="1" />
 					<widget name="screenSaver" position="0,0" size="1920,1080" zPosition="2" />
-					<widget alphatest="blend" name="BgCover" position="648,10" size="800,800" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="15" />'''
+					<widget alphatest="blend" name="BgCover" position="648,10" size="800,800" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="15" />
+					<widget name="BgTitle" position="center,110" size="1600,50" halign="center" valign="center" font="mediaportal_clean;38" foregroundColor="#00ffffff" backgroundColor="#00000000" transparent="1" shadowColor="#00000000" shadowOffset="-2,-2" zPosition="11" />'''
 
 			if MerlinMusicPlayerPresent:
 				if config_mp.mediaportal.sp_radio_visualization.value == "3":
-					self.skin += '''<widget name="cover" position="0,0" size="1920,1080" transparent="0" backgroundColor="#00000000" mode="visGLRandom" noCoverAvailablePic="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png"/>'''
+					self.skin += '''<widget name="coverGL" position="0,0" size="1920,1080" transparent="0" backgroundColor="#00000000" mode="visGLRandom" noCoverAvailablePic="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png"/>'''
 				else:
-					self.skin += '''<widget name="cover" position="735,270" size="450,450" transparent="1" mode="cover" noCoverAvailablePic="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="13" />
-					<widget name="rms0" channel="0" backgroundColor="#404040" zPosition="13" position="650,251" size="70,495" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_90x60_h9.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="0" pixmapBackgroundColor1="#080808" distance="15" maxValue="60" fadeOutTime="500" smoothing="0.8" />
-					<widget name="rms1" channel="1" backgroundColor="#404040" zPosition="13" position="1200,251" size="70,495" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_90x60_h9.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="0" pixmapBackgroundColor1="#080808" distance="15" maxValue="60" fadeOutTime="500" smoothing="0.8" />'''
+					self.skin += '''<widget name="cover" position="735,270" size="450,450" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="13" />
+					<widget name="rms0" channel="0" backgroundColor="#404040" zPosition="13" position="650,251" size="70,495" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_90x60_h9.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="0" pixmapBackgroundColor1="#080808" distance="15" maxValue="40" fadeOutTime="500" smoothing="0.9" />
+					<widget name="rms1" channel="1" backgroundColor="#404040" zPosition="13" position="1200,251" size="70,495" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_90x60_h9.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="0" pixmapBackgroundColor1="#080808" distance="15" maxValue="40" fadeOutTime="500" smoothing="0.9" />'''
 
 				if config_mp.mediaportal.sp_radio_visualization.value == "1":
-					self.skin += '''<widget name="visu" position="0,741" size="1920,339" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="0" blendColor="#fcc000" smoothing="0.4" />'''
+					if model in ["dm900","dm920"]:
+						self.skin += '''<widget name="visu" position="0,741" size="1920,339" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="2" blendColor="#fcc000" smoothing="0.4" />'''
+					else:
+						self.skin += '''<widget name="visu" position="0,741" size="1920,339" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="0" blendColor="#fcc000" smoothing="0.4" />'''
 				if config_mp.mediaportal.sp_radio_visualization.value == "2":
-					self.skin += '''<widget name="visu" position="0,880" size="1920,200" transparent="1" zPosition="11" pixmapBackground2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmap2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_30x20_h8.png" distance1="18" distance2="8" mode="visImagesUp" maxValue ="25" fadeOutTime="0" internalSize="0" pixmapBackgroundColor1="#080808" drawBackground="0" smoothing="0.3" />'''
+					if model in ["dm900","dm920"]:
+						self.skin += '''<widget name="visu" position="0,930" size="1920,150" transparent="1" zPosition="11" pixmapBackground2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmap2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_30x20_h8.png" distance1="18" distance2="8" mode="visImagesUp" maxValue="20" fadeOutTime="0" internalSize="2" pixmapBackgroundColor1="#080808" drawBackground="0" smoothing="0.6" />'''
+					else:
+						self.skin += '''<widget name="visu" position="0,930" size="1920,150" transparent="1" zPosition="11" pixmapBackground2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmap2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_30x20_h8.png" distance1="18" distance2="8" mode="visImagesUp" maxValue="15" fadeOutTime="0" internalSize="1" pixmapBackgroundColor1="#080808" drawBackground="0" smoothing="0.6" />'''
 
 			self.skin += '''</screen>'''
 		else:
@@ -817,16 +839,27 @@ class RadioBackground(Screen):
 					<widget name="background" position="0,0" size="1280,720" transparent="0" backgroundColor="#00202020" />
 					<widget name="screenSaverBg" position="0,0" size="1280,720" transparent="0" backgroundColor="#00000000" zPosition="1" />
 					<widget name="screenSaver" position="0,0" size="1280,720" zPosition="2" />
-					<widget alphatest="blend" name="BgCover" position="430,6" size="534,534" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="15" />'''
+					<widget alphatest="blend" name="BgCover" position="430,6" size="534,534" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="15" />
+					<widget name="BgTitle" position="center,75" size="1070,35" halign="center" valign="center" font="mediaportal_clean;24" foregroundColor="#00ffffff" backgroundColor="#00000000" transparent="1" shadowColor="#00000000" shadowOffset="-2,-2" zPosition="11" />'''
 
 			if MerlinMusicPlayerPresent:
-				self.skin += '''<!--<widget name="cover" position="0,0" size="1280,720" transparent="0" backgroundColor="#00000000" mode="visGLRandom" noCoverAvailablePic="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png"/>-->
-					<widget name="cover" position="490,180" size="300,300" transparent="1" mode="cover" noCoverAvailablePic="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="13" />
-					<widget name="rms0" channel="0" backgroundColor="#404040" zPosition="13" position="420,167" size="60,330" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_60x40_h6.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="1" pixmapBackgroundColor1="#080808" distance="10" maxValue="60" fadeOutTime="500" smoothing="0.8" />
-					<widget name="rms1" channel="1" backgroundColor="#404040" zPosition="13" position="800,167" size="60,330" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_60x40_h6.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="1" pixmapBackgroundColor1="#080808" distance="10" maxValue="60" fadeOutTime="500" smoothing="0.8" />'''
+				if config_mp.mediaportal.sp_radio_visualization.value == "3":
+					self.skin += '''<widget name="coverGL" position="0,0" size="1280,720" transparent="0" backgroundColor="#00000000" mode="visGLRandom" noCoverAvailablePic="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png"/>'''
+				else:
+					self.skin += '''<widget name="cover" position="490,180" size="300,300" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="13" />
+					<widget name="rms0" channel="0" backgroundColor="#404040" zPosition="13" position="420,167" size="60,330" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_60x40_h6.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="0" pixmapBackgroundColor1="#080808" distance="10" maxValue="40" fadeOutTime="500" smoothing="0.9" />
+					<widget name="rms1" channel="1" backgroundColor="#404040" zPosition="13" position="800,167" size="60,330" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_60x40_h6.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="0" pixmapBackgroundColor1="#080808" distance="10" maxValue="40" fadeOutTime="500" smoothing="0.9" />'''
 
 				if config_mp.mediaportal.sp_radio_visualization.value == "1":
-					self.skin += '''<widget name="visu" position="0,494" size="1280,226" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="2" blendColor="#fcc000" smoothing="0.4" />'''
+					if model in ["dm900","dm920"]:
+						self.skin += '''<widget name="visu" position="0,494" size="1280,226" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="2" blendColor="#fcc000" smoothing="0.4" />'''
+					else:
+						self.skin += '''<widget name="visu" position="0,494" size="1280,226" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="1" blendColor="#fcc000" smoothing="0.4" />'''
+				if config_mp.mediaportal.sp_radio_visualization.value == "2":
+					if model in ["dm900","dm920"]:
+						self.skin += '''<widget name="visu" position="0,620" size="1280,100" transparent="1" zPosition="11" pixmapBackground2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmap2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_20x13_h5.png" distance1="12" distance2="5" mode="visImagesUp" maxValue="20" fadeOutTime="0" internalSize="2" pixmapBackgroundColor1="#080808" drawBackground="0" smoothing="0.6" />'''
+					else:
+						self.skin += '''<widget name="visu" position="0,570" size="1280,150" transparent="1" zPosition="11" pixmapBackground2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmap2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_20x13_h5.png" distance1="12" distance2="5" mode="visImagesUp" maxValue="15" fadeOutTime="0" internalSize="1" pixmapBackgroundColor1="#080808" drawBackground="0" smoothing="0.6" />'''
 
 			self.skin += '''</screen>'''
 
@@ -839,22 +872,54 @@ class RadioBackground(Screen):
 			self.fadeouttimer.callback.append(self.initCallNewPicture)
 			self.changetimer.callback.append(self.changetimerAppend)
 		self.onLayoutFinish.append(self.startRun)
+		self.onClose.append(self.resetFrameTime)
+
+	def resetFrameTime(self):
+		try:
+			from enigma import TIME_PER_FRAME
+			getDesktop(0).setFrameTime(TIME_PER_FRAME)
+			printl('[SP]: FrameTime set to %sms' % str(TIME_PER_FRAME),self,"I")
+		except:
+			pass
+		if mp_globals.isDreamOS and MerlinMusicPlayerPresent:
+			try:
+				open("/proc/stb/audio/ac3", "w").write(config.av.ac3.value)
+			except:
+				pass
 
 	def startRun(self):
+		if mp_globals.isDreamOS and MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value in ["1", "2", "3"]:
+			try:
+				open("/proc/stb/audio/ac3", "w").write("downmix")
+			except:
+				pass
 		if MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value != "3":
 			self['background'].show()
 		self['screenSaverBg'].hide()
 		self['screenSaver'].hide()
 
-		if MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value == "3":
-			return
 
 		if self.playerMode == "RADIO":
 			try:
-				self['screenSaver'].instance.setShowHideAnimation("mp_screensaver")
-				self['BgCover'].instance.setShowHideAnimation("mp_quick_fade")
+				frametime = 20
+				getDesktop(0).setFrameTime(frametime)
+				printl('[SP]: FrameTime set to %sms' % str(frametime),self,"I")
 			except:
 				pass
+
+			if MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value == "3":
+				return
+
+			try:
+				if model in ["dm900","dm920"]:
+					self['screenSaver'].instance.setShowHideAnimation("mp_screensaver")
+				elif config_mp.mediaportal.sp_radio_visualization.value not in ["1", "2"]:
+					self['screenSaver'].instance.setShowHideAnimation("mp_screensaver")
+				self['BgCover'].instance.setShowHideAnimation("mp_quick_fade")
+				self['cover'].instance.setShowHideAnimation("mp_quick_fade")
+			except:
+				pass
+
 			self.mode = config_mp.mediaportal.sp_radio_bgsaver.value
 			if self.mode != "0":
 				if mp_globals.videomode == 2:
@@ -879,7 +944,10 @@ class RadioBackground(Screen):
 			self.val += 1
 			self.timestamp = self.getTimestamp()
 		if self.val == self.offset:
-			self['screenSaver'].hide()
+			if model in ["dm900","dm920"]:
+				self['screenSaver'].hide()
+			elif config_mp.mediaportal.sp_radio_visualization.value not in ["1", "2"]:
+				self['screenSaver'].hide()
 			self.fadeouttimer.start(500, 1)
 		else:
 			self.changetimer.start(5, 1)
@@ -1054,7 +1122,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 		Screen.__init__(self, session)
 		self.skin_path = mp_globals.pluginPath + mp_globals.skinsPath
-		self.wallicon_path = config_mp.mediaportal.iconcachepath.value + "icons/"
 		path = "%s/%s/simpleplayer/SimplePlayer.xml" % (self.skin_path, mp_globals.currentskin)
 		if not fileExists(path):
 			path = self.skin_path + mp_globals.skinFallback + "/simpleplayer/SimplePlayer.xml"
@@ -1119,6 +1186,8 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self.RadioBg = self.session.instantiateDialog(RadioBackground,playerMode)
 		if playerMode == 'RADIO':
 			self.RadioBg.show()
+			if mp_globals.isDreamOS:
+				self.RadioBg['BgCover'].hide()
 			self._BgCover = CoverHelper(self.RadioBg['BgCover'])
 
 		self.allowPiP = False
@@ -1179,7 +1248,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		# load default cover
 		self['Cover'] = Pixmap()
 		self['noCover'] = Pixmap()
-		self['title'] = Label()
 
 		self._Cover = CoverHelper(self['Cover'], nc_callback=self.hideSPCover)
 		self.coverBGisHidden = False
@@ -1269,6 +1337,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			currPlay=self.session.nav.getCurrentService()
 			if currPlay is not None:
 				sTitle=currPlay.info().getInfoString(iServiceInformation.sTagTitle)
+				self.RadioBg['BgTitle'].setText(sTitle)
 				self.cleanTitleRadio(sTitle)
 
 	def __evAudioDecodeError(self):
@@ -1892,29 +1961,48 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			if config_mp.mediaportal.sp_radio_cover.value != "off" or fallback != "file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png":
 				self.showSPCover()
 		if CoverSize == "large" and self.playerMode == 'RADIO':
-			if cover:
-				self._BgCover.getCover(cover.replace('400x400','800x800'), bgcover=True)
-			if not "none.png" in cover and mp_globals.isDreamOS:
-				downloadPage(cover, '/tmp/.RadioCover.jpg').addCallback(self.showCover2)
-			elif mp_globals.isDreamOS:
-				downloadPage(fallback, '/tmp/.RadioCover.jpg').addCallback(self.showCover2)
+			if mp_globals.isDreamOS:
+				self.RadioBg['BgCover'].hide()
+			if self.seekBarShown:
+				self._BgCover.getCover(cover.replace('450x450','800x800'))
+			else:
+				self._BgCover.getCover(cover.replace('450x450','800x800'), bgcover=True)
+			if mp_globals.isDreamOS:
+				if "static.rad.io" in cover or "static.radio" in cover:
+					cover = "file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png"
+				if cover.startswith('file://'):
+					shutil.copyfile(cover[7:], '/tmp/.RadioCover.jpg')
+					self.showCover2('', cover)
+				else:
+					downloadPage(cover, '/tmp/.RadioCover.jpg').addCallback(self.showCover2, cover)
 		elif CoverSize == "small" and self.playerMode == 'RADIO':
+			if mp_globals.isDreamOS:
+				self['Cover'].hide()
 			self._Cover.getCover(cover, download_cb=download_cb)
 			if mp_globals.isDreamOS:
-				downloadPage(cover, '/tmp/.RadioCover.jpg').addCallback(self.showCover2)
+				if "static.rad.io" in cover or "static.radio" in cover:
+					cover = "file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png"
+				if cover.startswith('file://'):
+					shutil.copyfile(cover[7:], '/tmp/.RadioCover.jpg')
+					self.showCover2('', cover)
+				else:
+					downloadPage(cover, '/tmp/.RadioCover.jpg').addCallback(self.showCover2, cover)
 		elif self.playerMode != 'RADIO':
+			if mp_globals.isDreamOS:
+				self['Cover'].hide()
 			self._Cover.getCover(cover, download_cb=download_cb)
 
-	def showCover2(self, ret):
+	def showCover2(self, ret, cover=None):
 		if model in ["dm7080","dm900","dm920"]:
-			try:
-				self.summaries.updateCover('/tmp/.RadioCover.jpg')
-			except:
-				pass
-		try:
-			self.RadioBg['cover'].setCover('/tmp/.RadioCover.jpg')
-		except:
-			pass
+			self.summaries.updateCover('file:///tmp/.RadioCover.jpg')
+		if config_mp.mediaportal.sp_radio_visualization.value == "3":
+			self.RadioBg['coverGL'].setCover('/tmp/.RadioCover.jpg')
+		else:
+			self.RadioBg['cover'].hide()
+			if self.seekBarShown:
+				CoverHelper(self.RadioBg['cover']).getCover(cover, bgcover=True)
+			else:
+				CoverHelper(self.RadioBg['cover']).getCover(cover)
 
 	def showIcon(self):
 		self['dwnld_progressbar'].setValue(0)
@@ -1922,7 +2010,11 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		if mp_globals.activeIcon == "simplelist":
 			pm_file = mp_globals.pluginPath + "/images/simplelist.png"
 		else:
-			pm_file = self.wallicon_path + mp_globals.activeIcon + ".png"
+			logo_path = config_mp.mediaportal.iconcachepath.value + "logos/"
+			pm_file = logo_path + mp_globals.activeIcon + ".png"
+		if not fileExists(pm_file):
+			icon_path = config_mp.mediaportal.iconcachepath.value + "icons/"
+			pm_file = icon_path + mp_globals.activeIcon + ".png"
 		if not fileExists(pm_file):
 			pm_file = mp_globals.pluginPath + "/images/comingsoon.png"
 		self._Icon.showCoverFile(pm_file, showNoCoverart=False)
@@ -1966,7 +2058,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		self.configSaver()
 
 	def createSummary(self):
-		if MerlinMusicPlayerPresent and self.playerMode == "RADIO" and model in ["dm7080","dm900","dm920"]:
+		if self.playerMode == "RADIO" and model in ["dm7080","dm900","dm920"]:
 			return SimplePlayerLCDScreen
 		else:
 			return SimplePlayerSummary
@@ -2035,7 +2127,7 @@ class SimpleConfig(Screen, ConfigListScreenExt):
 
 		self.configlist = []
 
-		ConfigListScreenExt.__init__(self, self.configlist)
+		ConfigListScreenExt.__init__(self, self.configlist, enableWrapAround=True)
 
 		self['title'] = Label(_("SimplePlayer Configuration"))
 		self.setTitle(_("SimplePlayer Configuration"))
@@ -2380,21 +2472,17 @@ class SimplePlayerLCDScreen(Screen):
 
         def __init__(self, session, parent):
                 Screen.__init__(self, session)
-		self["cover"] = MerlinMusicPlayerWidget()
-                self["rms0"] = MerlinMusicPlayerRMS()
-                self["rms1"] = MerlinMusicPlayerRMS()
+		self["cover"] = Pixmap()
 
 		self.skin = '''<screen name="SimplePlayerLCDScreen" backgroundColor="#00000000" position="0,0" size="400,240" id="3">
 				<widget position="10,0" render="Label" size="390,60" source="session.CurrentService" halign="center" valign="center" font="mediaportal_clean;22" foregroundColor="#fcc000" transparent="1">
 					<convert type="MPServiceName">NameLCD</convert>
 				</widget>
-				<widget name="rms0" channel="0" position="69,66" size="60,140" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_30x20_d6.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmapBackgroundColor1="#141414" drawBackground="1" distance="6" maxValue="30" smoothing="0.8" fadeOutTime="500" />
-				<widget name="rms1" channel="1" position="281,66" size="60,140" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_30x20_d6.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmapBackgroundColor1="#141414" drawBackground="1" distance="6" maxValue="30" smoothing="0.8" fadeOutTime="500" />
-				<widget name="cover" position="137,68" size="136,136" transparent="1" mode="cover" noCoverAvailablePic="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" />
-				<widget source="session.CurrentService" render="Label" position="10,210" size="390,30" font="mediaportal_clean;22" halign="center" valign="center" foregroundColor="#f0f0f0" transparent="1" >
-					<convert type="MPServicePosition">Position,ShowHours</convert>
+				<widget name="cover" position="142,63" size="126,126" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" transparent="1" alphatest="blend" />
+				<widget source="session.CurrentService" render="Label" position="10,192" size="390,30" font="mediaportal_clean;22" halign="center" valign="center" foregroundColor="#f0f0f0" transparent="1" >
+				<convert type="MPServicePosition">Position,ShowHours</convert>
 				</widget>
 				</screen>'''
 
-        def updateCover(self, filename):
-                self["cover"].setCover(filename)
+	def updateCover(self, filename):
+                CoverHelper(self['cover']).getCover(filename)

@@ -649,7 +649,7 @@ class pornhubPornstarScreen(MPScreen, ThumbsHelper):
 	def loadPageData(self, data):
 		self.getLastPage(data, 'class="pagination3">(.*?)</div>')
 		parse = re.search('class="textFilter">.*?</span>(.*)', data, re.S)
-		Cats = re.findall('rank_number">(.*?)<.*?src="(.*?)".*?href="(.*?)".*?class="title.*?>(.*?)<.*?videosNumber">(.*?)\sVideos', parse.group(1), re.S)
+		Cats = re.findall('rank_number">(.*?)<.*?data-thumb_url="(.*?)".*?href="(.*?)".*?class="title.*?>(.*?)<.*?videosNumber">(.*?)\sVideos', parse.group(1), re.S)
 		if Cats:
 			for Rank, Image, Url, Title, Videos in Cats:
 				Url = base_url + Url + "?page="

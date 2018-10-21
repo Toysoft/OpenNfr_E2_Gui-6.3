@@ -75,6 +75,10 @@ try:
 except:
 	mp_globals.isDreamOS = False
 
+if mp_globals.isDreamOS:
+	if fileExists('/etc/apt/sources.list.d/mediaportal.list'):
+		os.remove('/etc/apt/sources.list.d/mediaportal.list')
+
 try:
 	f = open("/proc/stb/info/model", "r")
 	model = ''.join(f.readlines()).strip()
@@ -193,8 +197,8 @@ config_mp.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choice
 		])
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2018100401"))
-config.mediaportal.version = NoSave(ConfigText(default="2018100401"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2018101701"))
+config.mediaportal.version = NoSave(ConfigText(default="2018101701"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 
@@ -450,6 +454,10 @@ class CheckPathes:
 			config_mp.mediaportal.iconcachepath.value = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/"
 			config_mp.mediaportal.iconcachepath.save()
 			configfile_mp.save()
+		elif "/usr/share/" in config_mp.mediaportal.iconcachepath.value:
+			config_mp.mediaportal.iconcachepath.value = "/media/hdd/mediaportal/"
+			config_mp.mediaportal.iconcachepath.save()
+			configfile_mp.save()
 
 		res, msg = SimplePlaylistIO.checkPath(config_mp.mediaportal.iconcachepath.value + "icons/", '', True)
 		if not res:
@@ -561,7 +569,7 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 
 		self.configlist = []
 
-		ConfigListScreenExt.__init__(self, self.configlist, on_change = self._onKeyChange)
+		ConfigListScreenExt.__init__(self, self.configlist, on_change=self._onKeyChange, enableWrapAround=True)
 
 		skins = []
 		if mp_globals.videomode == 2:
@@ -4225,12 +4233,6 @@ def _stylemanager(mode):
 		desktop = getDesktop(0)
 		styleskinned = eWindowStyleSkinned()
 
-		try:
-			stylescrollbar = eWindowStyleScrollbar()
-			skinScrollbar = True
-		except:
-			skinScrollbar = False
-
 		if mode == 0:
 			skin_path = resolveFilename(SCOPE_CURRENT_SKIN) + "skin.xml"
 			skin_path_font = skin_path
@@ -4279,17 +4281,26 @@ def _stylemanager(mode):
 			conf = xml.etree.cElementTree.parse(skin_path_colors)
 			for x in conf.getroot():
 				if x.tag == "windowstylescrollbar":
+					try:
+						stylescrollbar = eWindowStyleScrollbar()
+						skinScrollbar = True
+					except:
+						skinScrollbar = False
 					if skinScrollbar:
+						try:
+							id = int(x.get("id"))
+						except:
+							id = 4
 						windowstylescrollbar =  x
 						for x in windowstylescrollbar:
 							if x.tag == "value":
-								if x.get("name") == "BackgroundPixmapTopHeight":
+								if x.get("name") in ("BackgroundPixmapTopHeight", "BackgroundPixmapBeginSize"):
 									stylescrollbar.setBackgroundPixmapTopHeight(int(x.get("value")))
-								elif x.get("name") == "BackgroundPixmapBottomHeight":
+								elif x.get("name") in ("BackgroundPixmapBottomHeight", "BackgroundPixmapEndSize"):
 									stylescrollbar.setBackgroundPixmapBottomHeight(int(x.get("value")))
-								elif x.get("name") == "ValuePixmapTopHeight":
+								elif x.get("name") in ("ValuePixmapTopHeight", "ValuePixmapBeginSize"):
 									stylescrollbar.setValuePixmapTopHeight(int(x.get("value")))
-								elif x.get("name") == "ValuePixmapBottomHeight":
+								elif x.get("name") in ("ValuePixmapBottomHeight", "ValuePixmapEndSize"):
 									stylescrollbar.setValuePixmapBottomHeight(int(x.get("value")))
 								elif x.get("name") == "ScrollbarWidth":
 									stylescrollbar.setScrollbarWidth(int(x.get("value")))
@@ -4300,6 +4311,10 @@ def _stylemanager(mode):
 									stylescrollbar.setBackgroundPixmap(LoadPixmap(file_path + x.get("filename"), desktop))
 								elif x.get("name") == "ValuePixmap":
 									stylescrollbar.setValuePixmap(LoadPixmap(file_path + x.get("filename"), desktop))
+						try:
+							stylemgr.setStyle(id, stylescrollbar)
+						except:
+							pass
 				elif x.tag == "windowstyle" and x.get("id") == "0":
 					font = gFont("Regular", 20)
 					offset = eSize(20, 5)
@@ -4401,10 +4416,6 @@ def _stylemanager(mode):
 						elif x.tag == "sp_seekbar_factor":
 							mp_globals.sp_seekbar_factor = float(x.get("value"))
 			stylemgr.setStyle(0, styleskinned)
-			try:
-				stylemgr.setStyle(4, stylescrollbar)
-			except:
-				pass
 		else:
 			pass
 	except:

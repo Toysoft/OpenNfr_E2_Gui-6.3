@@ -3,7 +3,12 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
-BASEURL = 'http://filmpalast.to'
+try:
+	from Plugins.Extensions.MediaPortal.resources import cfscrape
+except:
+	cfscrapeModule = False
+else:
+	cfscrapeModule = True
 
 try:
 	import requests
@@ -12,19 +17,14 @@ except:
 else:
 	requestsModule = True
 
-def fp_grabpage(pageurl, method='GET', postdata={}, headers={}):
-	if requestsModule:
-		try:
-			import urlparse
-			s = requests.session()
-			url = urlparse.urlparse(pageurl)
-			if method == 'GET':
-				page = s.get(url.geturl(), timeout=15)
-			elif method == 'POST':
-				page = s.post(url.geturl(), data=postdata, headers=headers, timeout=15)
-			return page.content
-		except:
-			pass
+import urlparse
+import thread
+
+BASEURL = 'https://filmpalast.to'
+
+fp_cookies = CookieJar()
+fp_ck = {}
+fp_agent = ''
 
 class filmPalastMain(MPScreen):
 
@@ -54,6 +54,10 @@ class filmPalastMain(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
+		thread.start_new_thread(self.get_tokens,("GetTokens",))
+		self['name'].setText(_("Please wait..."))
+
+	def getGenres(self):
 		self.streamList.append(("--- Search ---", "callSuchen"))
 		self.streamList.append(("Neueste Filme", "/movies/new/page/"))
 		self.streamList.append(("Neueste Episoden", "/serien/view/page/"))
@@ -88,6 +92,34 @@ class filmPalastMain(MPScreen):
 		self.ml.setList(map(self._defaultlistcenter, self.streamList))
 		self.keyLocked = False
 		self.showInfos()
+
+	def get_tokens(self, threadName):
+		if requestsModule and cfscrapeModule:
+			printl("Calling thread: %s" % threadName,self,'A')
+			global fp_ck
+			global fp_agent
+			if fp_ck == {} or fp_agent == '':
+				fp_ck, fp_agent = cfscrape.get_tokens(BASEURL)
+				requests.cookies.cookiejar_from_dict(fp_ck, cookiejar=fp_cookies)
+			else:
+				try:
+					s = requests.session()
+					url = urlparse.urlparse(BASEURL)
+					headers = {'user-agent': fp_agent}
+					page = s.get(url.geturl(), cookies=fp_cookies, headers=headers)
+					if page.status_code == 503 and page.headers.get("Server", "").startswith("cloudflare") and b"jschl_vc" in page.content and b"jschl_answer" in page.content:
+						fp_ck, fp_agent = cfscrape.get_tokens(BASEURL)
+						requests.cookies.cookiejar_from_dict(fp_ck, cookiejar=fp_cookies)
+				except:
+					pass
+			self.keyLocked = False
+			reactor.callFromThread(self.getGenres)
+		else:
+			reactor.callFromThread(self.fp_error)
+
+	def fp_error(self):
+		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or python-pyexecjs and nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
+		self.keyCancel()
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
@@ -139,11 +171,8 @@ class filmPalastSerieParsing(MPScreen, ThumbsHelper):
 
 	def loadPage(self):
 		self.streamList = []
-		if not mp_globals.requests:
-			twAgentGetPage(self.url).addCallback(self.parseData).addErrback(self.dataError)
-		else:
-			data = fp_grabpage(self.url)
-			self.parseData(data)
+		self['name'].setText(_("Please wait..."))
+		twAgentGetPage(self.url, agent=fp_agent, cookieJar=fp_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		raw = re.findall('<section id="serien">(.*?)</section>', data, re.S)
@@ -165,7 +194,7 @@ class filmPalastSerieParsing(MPScreen, ThumbsHelper):
 		self['name'].setText(filmName)
 		url = self['liste'].getCurrent()[0][1]
 		coverUrl = url.replace('%smovies/view/' % BASEURL, '%s/files/movies/450/' % BASEURL) + '.jpg'
-		CoverHelper(self['coverArt']).getCover(coverUrl)
+		CoverHelper(self['coverArt']).getCover(coverUrl, agent=fp_agent, cookieJar=fp_cookies)
 
 	def keyOK(self):
 		exist = self['liste'].getCurrent()
@@ -206,11 +235,8 @@ class filmPalastEpisodenParsing(MPScreen, ThumbsHelper):
 
 	def loadPage(self):
 		self.streamList = []
-		if not mp_globals.requests:
-			twAgentGetPage(self.url).addCallback(self.parseData).addErrback(self.dataError)
-		else:
-			data = fp_grabpage(self.url)
-			self.parseData(data)
+		self['name'].setText(_("Please wait..."))
+		twAgentGetPage(self.url, agent=fp_agent, cookieJar=fp_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		episoden = re.findall('<a id="staffId_" href="(%s/movies/view/.*?)" class="getStaffelStream".*?</i>(.*?)&' % BASEURL, data, re.S)
@@ -231,7 +257,7 @@ class filmPalastEpisodenParsing(MPScreen, ThumbsHelper):
 		filmName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(filmName)
 		coverUrl = self['liste'].getCurrent()[0][2]
-		CoverHelper(self['coverArt']).getCover(coverUrl)
+		CoverHelper(self['coverArt']).getCover(coverUrl, agent=fp_agent, cookieJar=fp_cookies)
 
 	def keyOK(self):
 		exist = self['liste'].getCurrent()
@@ -279,19 +305,16 @@ class filmPalastParsing(MPScreen, ThumbsHelper):
 
 	def loadPage(self):
 		self.streamList = []
+		self['name'].setText(_("Please wait..."))
 		url = self.url+str(self.page)
-		if not mp_globals.requests:
-			twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
-		else:
-			data = fp_grabpage(url)
-			self.parseData(data)
+		twAgentGetPage(url, agent=fp_agent, cookieJar=fp_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		self.getLastPage(data, 'id="paging">(.*?)</div>')
 		movies = re.findall('<a href="(%s/.*?)" title="(.*?)"> <img src="(.*?.jpg)"' % BASEURL, data)
 		if movies:
 			for (Url, Title, Image) in movies:
-				Image = "http://www.filmpalast.to" + Image
+				Image = "https://www.filmpalast.to" + Image
 				self.streamList.append((decodeHtml(Title), Url, Image))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No movies found!'), None, None))
@@ -306,7 +329,7 @@ class filmPalastParsing(MPScreen, ThumbsHelper):
 		filmName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(filmName)
 		coverUrl = self['liste'].getCurrent()[0][2]
-		CoverHelper(self['coverArt']).getCover(coverUrl)
+		CoverHelper(self['coverArt']).getCover(coverUrl, agent=fp_agent, cookieJar=fp_cookies)
 
 	def keyOK(self):
 		exist = self['liste'].getCurrent()
@@ -347,11 +370,7 @@ class filmPalastStreams(MPScreen):
 
 	def loadPage(self):
 		self.streamList = []
-		if not mp_globals.requests:
-			twAgentGetPage(self.url).addCallback(self.parseData).addErrback(self.dataError)
-		else:
-			data = fp_grabpage(self.url)
-			self.parseData(data)
+		twAgentGetPage(self.url, agent=fp_agent, cookieJar=fp_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		self.streamList = []
@@ -363,7 +382,7 @@ class filmPalastStreams(MPScreen):
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No supported streams found!'), None))
 		self.ml.setList(map(self._defaultlisthoster, self.streamList))
-		CoverHelper(self['coverArt']).getCover(self.cover)
+		CoverHelper(self['coverArt']).getCover(self.cover, agent=fp_agent, cookieJar=fp_cookies)
 		self.keyLocked = False
 
 	def keyOK(self):
@@ -374,11 +393,7 @@ class filmPalastStreams(MPScreen):
 		if urlId:
 			url = "%s/stream/%s/1" % (BASEURL, urlId)
 			IDdata = {'streamID': urlId}
-			if not mp_globals.requests:
-				twAgentGetPage(url, method='POST', postdata=urlencode(IDdata), headers={'Accept':'*/*', 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}).addCallback(self.get_stream).addErrback(self.dataError)
-			else:
-				data = fp_grabpage(url, method='POST', postdata=IDdata, headers={'Accept':'*/*', 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'})
-				self.get_stream(data)
+			twAgentGetPage(url, agent=fp_agent, cookieJar=fp_cookies, method='POST', postdata=urlencode(IDdata), headers={'Accept':'*/*', 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}).addCallback(self.get_stream).addErrback(self.dataError)
 
 	def get_stream(self, data):
 		streams = re.search('"url":"(.*?)"', data, re.S)

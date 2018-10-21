@@ -10,7 +10,7 @@ from Components.ActionMap import NumberActionMap, ActionMap
 from enigma import eListbox, eListboxPythonConfigContent, eTimer
 
 class ConfigListExt(HTMLComponent, GUIComponent, object):
-	def __init__(self, list, session = None):
+	def __init__(self, list, session = None, enableWrapAround=False):
 		GUIComponent.__init__(self)
 		self.l = eListboxPythonConfigContent()
 		try:
@@ -26,6 +26,7 @@ class ConfigListExt(HTMLComponent, GUIComponent, object):
 		self.onSelectionChanged = [ ]
 		self.current = None
 		self.session = session
+		self.enableWrapAround = enableWrapAround
 
 	def execBegin(self):
 		if mp_globals.isDreamOS:
@@ -88,6 +89,7 @@ class ConfigListExt(HTMLComponent, GUIComponent, object):
 		else:
 			instance.selectionChanged.get().append(self.selectionChanged)
 		instance.setContent(self.l)
+		self.instance.setWrapAround(self.enableWrapAround)
 
 	def preWidgetRemove(self, instance):
 		if isinstance(self.current,tuple) and len(self.current) > 1:
@@ -181,7 +183,7 @@ class ConfigListExt(HTMLComponent, GUIComponent, object):
 		return is_changed
 
 class ConfigListScreenExt:
-	def __init__(self, list, session = None, on_change = None):
+	def __init__(self, list, session=None, on_change=None, enableWrapAround=False):
 		self["config_actions"] = NumberActionMap(["SetupActions", "InputAsciiActions", "KeyboardInputActions"],
 		{
 			"gotAsciiCode": self.keyGotAscii,
@@ -215,7 +217,7 @@ class ConfigListScreenExt:
 		}, -2)
 		self["VirtualKB"].setEnabled(False)
 
-		self["config"] = ConfigListExt(list, session = session)
+		self["config"] = ConfigListExt(list, session=session, enableWrapAround=enableWrapAround)
 
 		if on_change is not None:
 			self.__changed = on_change

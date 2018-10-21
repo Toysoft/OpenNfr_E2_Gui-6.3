@@ -174,6 +174,13 @@ class teamskeetFilmScreen(MPScreen, ThumbsHelper):
 			Movies = re.findall('class="play.*?window.location=\'(.*?)\'.*?img\ssrc="(.*?)".*?class="info".*?12px;"\s{0,2}>(.*?)</a', data, re.S)
 		if Movies:
 			for (Url, Image, Title) in Movies:
+				if "join.teamskeet" in Url:
+					continue
+				if Title.endswith('...'):
+					tmp1 = stripAllTags(Title).split(' ')[0]
+					tmp2 = Url.split('/view/')[1].split('/')[0].lower().replace(tmp1.lower(),'').replace('_',' ').strip()
+					Title = tmp1 + " " + tmp2
+					Title = ' '.join(s[:1].upper() + s[1:] for s in stripAllTags(Title).split(' '))
 				self.filmliste.append((decodeHtml(Title.strip()), Url, Image))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), '', None))
