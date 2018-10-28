@@ -182,7 +182,7 @@ class filmPalastSerieParsing(MPScreen, ThumbsHelper):
 				for url,title in serien:
 					self.streamList.append((decodeHtml(title), url))
 		if len(self.streamList) == 0:
-			self.streamList.append((_('No movies found!'), ''))
+			self.streamList.append((_('No movies found!'), None))
 		self.ml.setList(map(self._defaultlistleft, self.streamList))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -202,7 +202,8 @@ class filmPalastSerieParsing(MPScreen, ThumbsHelper):
 			return
 		stream_name = self['liste'].getCurrent()[0][0]
 		url = self['liste'].getCurrent()[0][1]
-		self.session.open(filmPalastEpisodenParsing, stream_name, url)
+		if url:
+			self.session.open(filmPalastEpisodenParsing, stream_name, url)
 
 class filmPalastEpisodenParsing(MPScreen, ThumbsHelper):
 
@@ -338,9 +339,9 @@ class filmPalastParsing(MPScreen, ThumbsHelper):
 		stream_name = self['liste'].getCurrent()[0][0]
 		url = self['liste'].getCurrent()[0][1]
 		cover = self['liste'].getCurrent()[0][2]
-		if self.genre == "Neueste Episoden":
+		if url and self.genre == "Neueste Episoden":
 			self.session.open(filmPalastEpisodenParsing, stream_name, url)
-		else:
+		elif url:
 			self.session.open(filmPalastStreams, stream_name, url, cover)
 
 class filmPalastStreams(MPScreen):
@@ -374,11 +375,11 @@ class filmPalastStreams(MPScreen):
 
 	def parseData(self, data):
 		self.streamList = []
-		streams = re.findall('currentStreamLinks.*?class="hostName">(.*?)<.*?data-id="(.*?)"', data, re.S)
+		streams = re.findall('currentStreamLinks.*?class="hostName">(.*?)<.*?href="(.*?)"', data, re.S)
 		if streams:
-			for (Hoster, UrlID) in streams:
+			for (Hoster, Url) in streams:
 					if isSupportedHoster(Hoster, True):
-						self.streamList.append((Hoster, UrlID))
+						self.streamList.append((Hoster, Url))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No supported streams found!'), None))
 		self.ml.setList(map(self._defaultlisthoster, self.streamList))
@@ -389,16 +390,9 @@ class filmPalastStreams(MPScreen):
 		exist = self['liste'].getCurrent()
 		if self.keyLocked or exist == None:
 			return
-		urlId = self['liste'].getCurrent()[0][1]
-		if urlId:
-			url = "%s/stream/%s/1" % (BASEURL, urlId)
-			IDdata = {'streamID': urlId}
-			twAgentGetPage(url, agent=fp_agent, cookieJar=fp_cookies, method='POST', postdata=urlencode(IDdata), headers={'Accept':'*/*', 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}).addCallback(self.get_stream).addErrback(self.dataError)
-
-	def get_stream(self, data):
-		streams = re.search('"url":"(.*?)"', data, re.S)
-		if streams:
-			get_stream_link(self.session).check_link(streams.group(1).replace('\/','/'), self.playfile)
+		url = self['liste'].getCurrent()[0][1]
+		if url:
+			get_stream_link(self.session).check_link(url, self.playfile)
 		else:
 			message = self.session.open(MessageBoxExt, _("Broken URL parsing, please report to the developers."), MessageBoxExt.TYPE_INFO, timeout=3)
 

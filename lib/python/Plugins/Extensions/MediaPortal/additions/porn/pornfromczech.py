@@ -86,8 +86,8 @@ class pornCzechGenreScreen(MPScreen):
 		twAgentGetPage(url, agent=pfcz_agent, cookieJar=pfcz_cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('id="categories-2"(.*?)id="text-6"', data, re.S)
-		Cats = re.findall('<a href="(.*?)"\s>(.*?)</a>', parse.group(1), re.S)
+		parse = re.search('<ul id="menu-category"(.*?)</ul>', data, re.S)
+		Cats = re.findall('<a href="(.*?)">(.*?)</a>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
 				Url = Url + "page/"

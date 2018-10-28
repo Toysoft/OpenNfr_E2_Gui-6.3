@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-###############################################################################################
+#############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-###############################################################################################
+#############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -269,6 +269,7 @@ class toSearchForPornBrowse(MPScreen):
 										Name = "2Search4Porn - %s" % self.suchString
 										Link = x.get("searchurl").replace("&amp;","&") % self.suchString.replace(" ",x.get("delim"))
 										modfile = "Plugins.Extensions.MediaPortal.additions."+x.get("modfile")
+										mp_globals.activeIcon = x.get("icon")
 										exec("from "+modfile+" import *")
 										exec("self.session.open("+x.get("searchscreen")+", Link, Name"+x.get("searchparam").replace("&quot;","\"")+")")
 		try:
@@ -289,6 +290,7 @@ class toSearchForPornBrowse(MPScreen):
 													Name = "2Search4Porn - %s" % self.suchString
 													Link = x.get("searchurl").replace("&amp;","&") % self.suchString.replace(" ",x.get("delim"))
 													modfile = "Plugins.Extensions.MediaPortal.additions."+x.get("modfile")
+													mp_globals.activeIcon = x.get("icon")
 													exec("from "+modfile+" import *")
 													exec("self.session.open("+x.get("searchscreen")+", Link, Name"+x.get("searchparam").replace("&quot;","\"")+")")
 		except:

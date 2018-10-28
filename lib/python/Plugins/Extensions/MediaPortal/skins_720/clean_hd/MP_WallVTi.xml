@@ -6,7 +6,7 @@
   <widget backgroundColor="#20000000" font="mediaportal_clean;20" position="1113,6" render="Label" size="153,60" source="global.CurrentTime" transparent="1" valign="center">
     <convert type="ClockToText">Format:%A                   %d. %B</convert>
   </widget>
-  <eLabel backgroundColor="#20000000" text="MediaPortal" font="mediaportal_clean;33" halign="left" valign="center" position="33,6" shadowColor="#00000000" shadowOffset="2,2" size="800,60" transparent="1" />
+  <eLabel backgroundColor="#20000000" text="MediaPortal" font="mediaportal_clean;33" halign="left" valign="center" position="33,6" shadowColor="#00000000" shadowOffset="2,2" size="186,60" transparent="1" />
   <widget name="version" backgroundColor="#20000000" font="mediaportal_clean;13" halign="left" valign="bottom" position="220,35" shadowColor="#00000000" shadowOffset="2,2" size="86,16" transparent="1" />
   <widget backgroundColor="#20000000" font="mediaportal_clean;33" valign="center" halign="center" name="name" position="0,80" size="1280,60" transparent="1" />
   <widget backgroundColor="#20000000" font="mediaportal;17" valign="center" halign="center" name="page" position="0,659" size="1280,22" transparent="1" />
@@ -29,5 +29,5 @@
   <eLabel name="button info bg" position="1106,689" size="42,20" backgroundColor="#00616161" zPosition="0" />
   <eLabel name="button help bg" position="1159,689" size="42,20" backgroundColor="#00616161" zPosition="0" />
   <eLabel name="button exit bg" position="1212,689" size="42,20" backgroundColor="#00616161" zPosition="0" />
-  <widget name="list" position="6,140" size="1266,520" itemSize="150,80" itemScale="130,130" itemSpace="13" useShadow="1" useOverlay="1" backgroundColorGlobal="#20000000" backgroundColor="#20000000" backgroundColorSelected="#20000000" transparent="0"/>
+  <widget name="list" position="6,135" size="1266,525" itemSize="144,77" itemScale="125,125" itemSpace="3" useShadow="1" useOverlay="1" backgroundColorGlobal="#20000000" backgroundColor="#20000000" backgroundColorSelected="#20000000" transparent="0"/>
   </screen>

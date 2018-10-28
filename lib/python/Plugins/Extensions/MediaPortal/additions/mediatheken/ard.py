@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-###############################################################################################
+#############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-###############################################################################################
+#############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -166,6 +166,10 @@ class ARDPreSelect(MPScreen):
 				self.genreliste.append((400 * "—","99"))
 				self.genreliste.append(("Tipps der Redaktion", "3"))
 				self.genreliste.append(("Hörspiel", "4"))
+				self.genreliste.append(("Kabarett & Comedy", "5"))
+				self.genreliste.append(("Feature & Hintergrund", "6"))
+				self.genreliste.append(("Wissen", "7"))
+				self.genreliste.append(("Gespräch", "8"))
 		elif self.gF == "3":	# Sendung verpasst?
 			for q in range (0, 7):
 				s2 = (datetime.date.today()+datetime.timedelta(days=-q)).strftime("%A %d. %B %Y")
@@ -240,6 +244,14 @@ class ARDPreSelect(MPScreen):
 				streamLink = "%s/radio/Tipps-der-Redaktion/mehr?documentId=21301892" % BASE_URL
 			elif extra == '4': # Hörspiel
 				streamLink = "%s/radio/Hörspiele/mehr?documentId=21301890" % BASE_URL
+			elif extra == '5': # Kabarett&Comedy
+				streamLink = "%s/radio/Kabarett-Comedy/mehr?documentId=37915182" % BASE_URL
+			elif extra == '6': # Feature&Hintergrund
+				streamLink = "%s/radio/Feature-und-Hintergrund/mehr?documentId=34835938" % BASE_URL
+			elif extra == '7': # Wissen
+				streamLink = "%s/radio/Wissen/mehr?documentId=34836128" % BASE_URL
+			elif extra == '8': # Gespräch
+				streamLink = "%s/radio/Gespräch/mehr?documentId=35293220" % BASE_URL
 			self.session.open(ARDStreamScreen,streamLink,auswahl,self.gF)
 		elif self.gF == "11": # Tagesschau
 			if extra == '1': # Tagesschau
@@ -366,7 +378,7 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 		else:
 			self.genreliste.append((isWeg,None))
 		self.ml.setList(map(self._defaultlistleft, self.genreliste))
-		self.th_ThumbsQuery(self.genreliste, 0, 1, None, None, '<meta name="gsaimg512" content="(.*?)"', self.page, self.lastpage, mode=1)
+		self.th_ThumbsQuery(self.genreliste, 0, 1, None, None, '<meta name="gsaimg512" content="(.*?)"', 1, 1, mode=1)
 		if self['liste'].getCurrent()[0][0] != isWeg:
 			self.showInfos()
 
@@ -389,7 +401,7 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 		if gefunden:
 			for (itxt,sender,streamPic,ausgaben) in gefunden:
 				itxttmp = itxt.split("|")
-				itxt = itxttmp[-1]
+				itxt = itxttmp[-2]
 				itxt = decodeHtml(itxt)
 				itxt = itxt.strip()
 				if not ausgaben:
@@ -483,7 +495,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 				url = "%s?m37862988=page.%s" % (self.streamLink,self.page)
 			elif self.gN == 'Unterhaltung & Comedy':
 				url = "%s?m39803570=page.%s" % (self.streamLink,self.page)
-			elif self.gN == 'Wissen':
+			elif self.gN == 'Wissen' and "/tv/" in self.streamLink:
 				url = "%s?m39348662=page.%s" % (self.streamLink,self.page)
 			elif self.gN == 'Politik':
 				url = "%s?m39593042=page.%s" % (self.streamLink,self.page)
@@ -661,28 +673,51 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 			return
 		else:
 			mediaid = self['liste'].getCurrent()[0][2]
-			url = BASE_URL+"/play/media/"+mediaid+"?devicetype=tablet&features=flash"
+			url = BASE_URL+"/play/media/"+mediaid+"?devicetype=pc&features=flash"
 			getPage(url).addCallback(self.getStreams).addErrback(self.dataError)
 
 	def getStreams(self, data):
-		q = 0
-		h = 0
-		stream = ""
-		qualitycheck = re.findall('"_quality":(.*?),.*?_width":(.*?),"_height":(.*?),"_stream":"(.*?)"', data, re.S)
-		if qualitycheck:
-			for (quality,width,height,url) in qualitycheck:
-				if int(quality) >= q:
-					q = int(quality)
-					if int(height) > h:
-						h = int(height)
-						stream = url
+		stream = None
+		json_data = json.loads(data)
+		if len(json_data["_mediaArray"]) > 1:
+			stream_data = json_data["_mediaArray"][1]
 		else:
-			qualitycheck = re.findall('"_quality":(.*?),.*?_stream":"(.*?)"', data, re.S)
-			if qualitycheck:
-				stream = qualitycheck[-1][1]
-		if stream.startswith('//'):
-			stream = 'http:' + stream
-		if stream != "":
+			stream_data = json_data["_mediaArray"][0]
+		if type(stream_data["_mediaStreamArray"][-1]["_stream"]) == list:
+			stream = str(stream_data["_mediaStreamArray"][-1]["_stream"][-1])
+		else:
+			stream = str(stream_data["_mediaStreamArray"][-1]["_stream"])
+
+		if "960-" in stream: # Das Erste
+			try:
+				import requests
+				request = requests.head(stream.replace('960-','1280-'))
+				if request.status_code == 200:
+					stream = stream.replace('960-','1280-')
+			except:
+				pass
+
+		if ".xl.mp4" in stream: # SWR
+			try:
+				import requests
+				request = requests.head(stream.replace('.xl.mp4','.xxl.mp4'))
+				if request.status_code == 200:
+					stream = stream.replace('.xl.mp4','.xxl.mp4')
+			except:
+				pass
+
+		if "_sd.mp4" in stream: # DW
+			try:
+				import requests
+				request = requests.head(stream.replace('_sd.mp4','_hd.mp4'))
+				if request.status_code == 200:
+					stream = stream.replace('_sd.mp4','_hd.mp4')
+			except:
+				pass
+				
+		if stream:
+			if stream.startswith('//'):
+				stream = 'http:' + stream
 			streamName = self['liste'].getCurrent()[0][0]
 			self['name'].setText(streamName)
 			self.session.open(SimplePlayer, [(self.streamName, stream)], showPlaylist=False, ltype='ard')

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-###############################################################################################
+#############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-###############################################################################################
+#############################################################################################################
 
 from Components.config import ConfigSubsection, config, configfile, ConfigText
 from Tools.Directories import resolveFilename, fileExists, SCOPE_CONFIG

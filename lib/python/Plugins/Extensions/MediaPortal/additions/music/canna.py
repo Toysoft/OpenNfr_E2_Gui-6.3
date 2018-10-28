@@ -280,7 +280,7 @@ class cannaJahreScreen(MPScreen):
 class CannaPlayer(SimplePlayer):
 
 	def __init__(self, session, playList, playIdx=0, playAll=True, listTitle=None):
-		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, listTitle=listTitle, ltype='canna')
+		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, listTitle=listTitle, ltype='canna', playerMode='RADIO', cover=True)
 		self.listTitle = listTitle
 
 	def getVideo(self):
@@ -304,4 +304,4 @@ class CannaPlayer(SimplePlayer):
 			artist = ''
 			title = cannaName
 
-		CannaLink(self.session).getLink(self.playStream, self.dataError, title, artist, self.listTitle, url, None)
+		CannaLink(self.session).getLink(self.playStream, self.dataError, title, artist, self.listTitle, url, 'file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png')

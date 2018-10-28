@@ -120,6 +120,24 @@ class CoverHelper:
 		return(self._no_picPath)
 
 	def showCoverFile(self, picPath, showNoCoverart=True):
+		if self.logofix and not mp_globals.isDreamOS:
+			try:
+				from PIL import Image
+				im = Image.open(picPath)
+				im.load()
+				size = self._cover.instance.size()
+				basewidth = size.width()
+				wpercent = (basewidth / float(im.size[0]))
+				hsize = int((float(im.size[1]) * float(wpercent)))
+				im = im.resize((basewidth, hsize), Image.ANTIALIAS)
+				alpha = im.split()[-1]
+				im = im.convert('RGB').convert('P', palette=Image.ADAPTIVE, colors=255)
+				mask = Image.eval(alpha, lambda a: 255 if a <=128 else 0)
+				im.paste(255, mask)
+				im.save("/tmp/conv.png", transparency=255, optimize=True)
+				picPath = "/tmp/conv.png"
+			except Exception as e:
+				printl(e,self,"E")
 		if fileExists(picPath):
 			try:
 				self._cover.instance.setPixmap(gPixmapPtr())

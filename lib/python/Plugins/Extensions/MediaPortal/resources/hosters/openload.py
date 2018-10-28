@@ -15,7 +15,7 @@ if os.path.exists("/usr/bin/phantomjs"):
 else:
 	phantomjs = False
 
-def openload(self, data, link):
+def openload(self, data, link, count=0):
 
 	stream_url = re.findall('"url":"(.*?)"', data)
 	if stream_url:
@@ -33,7 +33,12 @@ def openload(self, data, link):
 				self.stream_not_found()
 			else:
 				printl("[openload]: %s" % e,'',"E")
-				self.session.open(MessageBoxExt, _("youtube-dl: unable to extract URL. This error occasionally occurs, please try again.\nIf this error persists a youtube-dl upgrade may be needed.\n\nAlternatively you may visit https://olpair.com to pair your IP."), MessageBoxExt.TYPE_INFO, timeout=5)
+				if count < 3:
+					printl("[openload]: retry",'',"E")
+					count += 1
+					self.openload("", link, count)
+				else:
+					self.session.open(MessageBoxExt, _("youtube-dl: unable to extract URL. This error occasionally occurs, please try again.\nIf this error persists a youtube-dl upgrade may be needed.\n\nAlternatively you may visit https://olpair.com to pair your IP."), MessageBoxExt.TYPE_INFO, timeout=5)
 		else:
 			if result:
 				self._callback(str(result['url']).replace('https','http'))

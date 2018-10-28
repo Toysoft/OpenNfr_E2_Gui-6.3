@@ -1,5 +1,5 @@
-﻿# -*- coding: utf-8 -*-
-###############################################################################################
+# -*- coding: utf-8 -*-
+#############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-###############################################################################################
+#############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -253,9 +253,9 @@ class ORFStreamListeScreen(MPScreen):
 		if folgen:
 			self.streamliste = []
 			for (title, desc, image, urls) in folgen[:-1]:
-				url = re.search('"quality":"Q8C","quality_string":"Sehr hoch","src":"(http[s]?://apasfpd.apa.at.*?.mp4)",', urls, re.S)
+				url = re.search('"quality":"Q8C","quality_string":"Sehr hoch","src":"(http[s]?://apasfiis.sf.apa.at/ipad/.*?.mp4)', urls, re.S)
 				if not url:
-					url = re.search('"quality":"Q6A","quality_string":"Hoch","src":"(http[s]?://apasfpd.apa.at.*?.mp4)",', urls, re.S)
+					url = re.search('"quality":"Q6A","quality_string":"Hoch","src":"(http[s]?://apasfiis.sf.apa.at/ipad/.*?.mp4)', urls, re.S)
 				title = title.replace('\\"','"')
 				if desc == "null":
 					desc = ""

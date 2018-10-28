@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-###############################################################################################
+#############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-###############################################################################################
+#############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -978,11 +978,11 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 								if not parse:
 									parse = re.search('class="videos\srow-5-thumbs(.*?)class="pre-footer">', data, re.S)
 		if parse:
-			Movies = re.findall('(class="(?:js-pop |)videoblock.*?<var\sclass="added">.*?</var>)', parse.group(1), re.S)
+			Movies = re.findall('(class="(?:\s{0,1}js-pop |)videoblock.*?<var\sclass="added">.*?</var>)', parse.group(1), re.S)
 		if Movies:
 			for each in Movies:
 				if not ('class="price"' in each or 'class="premiumIcon' in each):
-					Movie = re.findall('class="(?:js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', each, re.S)
+					Movie = re.findall('class="(?:\s{0,1}js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', each, re.S)
 					for (Url, Title, Image, Runtime, Views, Added) in Movie:
 						Url = base_url + Url
 						Title = Title.replace('&amp;amp;','&')
@@ -1014,7 +1014,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		if parse:
 			for each in parse:
 				if not ('class="price"' in each or 'class="premiumIcon' in each):
-					Movies = re.findall('class="(?:js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', each, re.S)
+					Movies = re.findall('class="(?:\s{0,1}js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', each, re.S)
 					if Movies:
 						for (Url, Title, Image, Runtime, Views, Added) in Movies:
 							Url = base_url + Url

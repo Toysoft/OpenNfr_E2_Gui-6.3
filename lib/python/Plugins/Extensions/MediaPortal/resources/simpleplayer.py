@@ -792,6 +792,7 @@ class RadioBackground(Screen):
 		self['screenSaver'] = Pixmap()
 		self['screenSaverBg'] = Label()
 		self.playerMode = playerMode
+		self.audioMode = ''
 		if MerlinMusicPlayerPresent:
 			self["coverGL"] = MerlinMusicPlayerWidget()
 			self["visu"] = MerlinMusicPlayerWidget()
@@ -881,16 +882,19 @@ class RadioBackground(Screen):
 			printl('[SP]: FrameTime set to %sms' % str(TIME_PER_FRAME),self,"I")
 		except:
 			pass
-		if mp_globals.isDreamOS and MerlinMusicPlayerPresent:
+		if mp_globals.isDreamOS and MerlinMusicPlayerPresent and self.playerMode == "RADIO":
 			try:
-				open("/proc/stb/audio/ac3", "w").write(config.av.ac3.value)
+				if self.audioMode == "multichannel":
+					open("/proc/stb/audio/ac3", "w").write("multichannel")
 			except:
 				pass
 
 	def startRun(self):
-		if mp_globals.isDreamOS and MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value in ["1", "2", "3"]:
+		if mp_globals.isDreamOS and MerlinMusicPlayerPresent and self.playerMode == "RADIO" and config_mp.mediaportal.sp_radio_visualization.value in ["1", "2", "3"]:
 			try:
-				open("/proc/stb/audio/ac3", "w").write("downmix")
+				self.audioMode = open("/proc/stb/audio/ac3", "r").read().strip()
+				if self.audioMode == "multichannel":
+					open("/proc/stb/audio/ac3", "w").write("downmix")
 			except:
 				pass
 		if MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value != "3":
@@ -1192,7 +1196,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 		self.allowPiP = False
 		InfoBarSeek.__init__(self)
-		if not (mp_globals.isDreamOS and playerMode == 'RADIO' and config_mp.mediaportal.sp_radio_visualization.value != "0"):
+		if not playerMode == 'RADIO':
 			InfoBarPVRState.__init__(self, screen=SimplePlayerPVRState, force_show=True)
 
 		self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
@@ -2017,7 +2021,8 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			pm_file = icon_path + mp_globals.activeIcon + ".png"
 		if not fileExists(pm_file):
 			pm_file = mp_globals.pluginPath + "/images/comingsoon.png"
-		self._Icon.showCoverFile(pm_file, showNoCoverart=False)
+		pm_file = "file://" + pm_file
+		self._Icon.getCover(pm_file)
 
 	def _animation(self):
 		try:
