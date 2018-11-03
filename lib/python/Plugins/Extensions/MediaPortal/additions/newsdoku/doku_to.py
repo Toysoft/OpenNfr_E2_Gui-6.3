@@ -18,7 +18,7 @@ class show_DUTO_Genre(MenuHelper):
 	def __init__(self, session):
 
 		baseUrl = "http://doku.to"
-		MenuHelper.__init__(self, session, 0, None, baseUrl, "", self._defaultlistcenter)
+		MenuHelper.__init__(self, session, 0, None, baseUrl, "", self._defaultlistcenter, default_cover=default_cover)
 
 		self['title'] = Label("DOKU.to")
 		self['ContentTitle'] = Label("Genres")
@@ -26,7 +26,6 @@ class show_DUTO_Genre(MenuHelper):
 		self.onLayoutFinish.append(self.mh_initMenu)
 
 	def mh_parseCategorys(self, data):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		menu = [
 			(0, "/", "Letzte Beiträge"),
 			(0, "/", "Kategorien"),

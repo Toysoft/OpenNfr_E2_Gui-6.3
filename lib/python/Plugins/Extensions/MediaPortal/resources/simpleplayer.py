@@ -244,7 +244,7 @@ class CoverSearchHelper:
 				else:
 					url = fallback
 
-		if not self.hasEmbeddedCoverArt:
+		if not self.hasEmbeddedCoverArt or self.ltype == 'canna':
 			if self.url_prev != url:
 				self.url_prev = url
 				self.showCover(url, self.cb_coverDownloaded, CoverSize=CoverSize, fallback=fallback)
@@ -335,27 +335,24 @@ class SimpleSeekHelper:
 						self.cursorTimer.start(200, False)
 
 	def __BgCoverShow(self):
-		if MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value == "3":
-			self.RadioBg['background'].hide()
-		else:
-			self.RadioBg['background'].show()
 		self.RadioBg['BgCover'].show()
 		self.RadioBg['BgTitle'].hide()
 		self.RadioBg['cover'].hide()
 		if MerlinMusicPlayerPresent:
 				self.RadioBg['rms0'].hide()
 				self.RadioBg['rms1'].hide()
-		InfoBarShowHide.lockShow(self)
+		if self.ltype != 'canna':
+			InfoBarShowHide.lockShow(self)
 
 	def __BgCoverHide(self):
-		self.RadioBg['background'].hide()
 		self.RadioBg['BgCover'].hide()
 		self.RadioBg['BgTitle'].show()
 		self.RadioBg['cover'].show()
 		if MerlinMusicPlayerPresent:
 				self.RadioBg['rms0'].show()
 				self.RadioBg['rms1'].show()
-		InfoBarShowHide.unlockShow(self)
+		if self.ltype != 'canna':
+			InfoBarShowHide.unlockShow(self)
 
 	def __seekBarShown(self):
 		self.seekBarShown = True
@@ -788,7 +785,6 @@ class RadioBackground(Screen):
 		self['BgCover'] = Pixmap()
 		self['BgTitle'] = Label()
 		self["cover"] = Pixmap()
-		self['background'] = Label()
 		self['screenSaver'] = Pixmap()
 		self['screenSaverBg'] = Label()
 		self.playerMode = playerMode
@@ -809,7 +805,6 @@ class RadioBackground(Screen):
 		# internalSize 0 = original, 1 = 1440, 2 = 2160, 3 = 2880, 4 = 800
 		if mp_globals.videomode == 2:
 			self.skin = '''<screen backgroundColor="transparent" flags="wfNoBorder" name="RadioBackground" position="0,0" size="1920,1080" zPosition="-1">
-					<widget name="background" position="0,0" size="1920,1080" transparent="0" backgroundColor="#00202020" />
 					<widget name="screenSaverBg" position="0,0" size="1920,1080" transparent="0" backgroundColor="#00000000" zPosition="1" />
 					<widget name="screenSaver" position="0,0" size="1920,1080" zPosition="2" />
 					<widget alphatest="blend" name="BgCover" position="648,10" size="800,800" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="15" />
@@ -837,7 +832,6 @@ class RadioBackground(Screen):
 			self.skin += '''</screen>'''
 		else:
 			self.skin = '''<screen backgroundColor="transparent" flags="wfNoBorder" name="RadioBackground" position="0,0" size="1280,720" zPosition="-1">
-					<widget name="background" position="0,0" size="1280,720" transparent="0" backgroundColor="#00202020" />
 					<widget name="screenSaverBg" position="0,0" size="1280,720" transparent="0" backgroundColor="#00000000" zPosition="1" />
 					<widget name="screenSaver" position="0,0" size="1280,720" zPosition="2" />
 					<widget alphatest="blend" name="BgCover" position="430,6" size="534,534" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" zPosition="15" />
@@ -882,6 +876,11 @@ class RadioBackground(Screen):
 			printl('[SP]: FrameTime set to %sms' % str(TIME_PER_FRAME),self,"I")
 		except:
 			pass
+		try:
+			from Plugins.SystemPlugins.Screensaver.plugin import screenSaverHandler
+			screenSaverHandler.enable()
+		except:
+			pass
 		if mp_globals.isDreamOS and MerlinMusicPlayerPresent and self.playerMode == "RADIO":
 			try:
 				if self.audioMode == "multichannel":
@@ -890,6 +889,11 @@ class RadioBackground(Screen):
 				pass
 
 	def startRun(self):
+		try:
+			from Plugins.SystemPlugins.Screensaver.plugin import screenSaverHandler
+			screenSaverHandler.disable()
+		except:
+			pass
 		if mp_globals.isDreamOS and MerlinMusicPlayerPresent and self.playerMode == "RADIO" and config_mp.mediaportal.sp_radio_visualization.value in ["1", "2", "3"]:
 			try:
 				self.audioMode = open("/proc/stb/audio/ac3", "r").read().strip()
@@ -897,11 +901,8 @@ class RadioBackground(Screen):
 					open("/proc/stb/audio/ac3", "w").write("downmix")
 			except:
 				pass
-		if MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value != "3":
-			self['background'].show()
 		self['screenSaverBg'].hide()
 		self['screenSaver'].hide()
-
 
 		if self.playerMode == "RADIO":
 			try:
@@ -925,6 +926,7 @@ class RadioBackground(Screen):
 				pass
 
 			self.mode = config_mp.mediaportal.sp_radio_bgsaver.value
+			self['screenSaverBg'].show()
 			if self.mode != "0":
 				if mp_globals.videomode == 2:
 					self.res_x = 1920
@@ -934,8 +936,6 @@ class RadioBackground(Screen):
 					self.res_x = 1280
 					self.res_y = 720
 					self.offset = 266
-				self['screenSaverBg'].show()
-				self['background'].hide()
 				if self.mode != "3":
 					self.initCallNewPicture()
 
@@ -1107,7 +1107,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 	ALLOW_SUSPEND = True
 	ctr = 0
 
-	def __init__(self, session, playList, playIdx=0, playAll=False, listTitle=None, plType='local', title_inr=0, cover=False, ltype='', autoScrSaver=False, showPlaylist=True, listEntryPar=None, playList2=[], playerMode='VIDEO', useResume=True, bufferingOpt='None', googleCoverSupp=False, embeddedCoverArt=False, forceGST=True):
+	def __init__(self, session, playList, playIdx=0, playAll=False, listTitle=None, plType='local', title_inr=0, cover=False, ltype='', showPlaylist=True, listEntryPar=None, playList2=[], playerMode='VIDEO', useResume=True, bufferingOpt='None', googleCoverSupp=False, embeddedCoverArt=False, forceGST=True):
 
 		if playerMode == 'RADIO':
 			googleCoverSupp = True
@@ -1212,9 +1212,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		self.isTSVideo = False
 		self.showGlobalPlaylist = True
 		self.showPlaylist = showPlaylist
-		self.scrSaver = ''
-		self.saverActive = False
-		self.autoScrSaver = autoScrSaver
 		self.pl_open = False
 		self.playMode = [str(config_mp.mediaportal.sp_playmode.value)]
 		self.listTitle = listTitle
@@ -1268,12 +1265,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		self.youtubelive = False
 		self.dash = False
 
-		self.SaverTimer = eTimer()
-		if mp_globals.isDreamOS:
-			self.SaverTimer_conn = self.SaverTimer.timeout.connect(self.openSaver)
-		else:
-			self.SaverTimer.callback.append(self.openSaver)
-
 		self.EmbeddedCoverTimer = eTimer()
 		if mp_globals.isDreamOS:
 			self.EmbeddedCoverTimer_conn = self.EmbeddedCoverTimer.timeout.connect(self.checkEmbeddedCover)
@@ -1281,7 +1272,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self.EmbeddedCoverTimer.callback.append(self.checkEmbeddedCover)
 
 		self.hideSPCover()
-		self.configSaver()
 		self.onClose.append(self.playExit)
 
 		self.setPlayerAgent()
@@ -1315,6 +1305,13 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 				})
 
 	def cleanTitleRadio(self, sTitle):
+		if self.ltype == 'canna':
+			printl(sTitle,self,"I")
+			try:
+				self.searchCover(sTitle, fallback=self.playList[self.playIdx][2])
+			except:
+				self.searchCover(sTitle, fallback='')
+			return
 		if " - " in sTitle:
 			if " | " in sTitle:
 				sTitle = sTitle.split(' | ')[0]
@@ -1340,7 +1337,10 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		if self.playerMode == 'RADIO':
 			currPlay=self.session.nav.getCurrentService()
 			if currPlay is not None:
-				sTitle=currPlay.info().getInfoString(iServiceInformation.sTagTitle)
+				if self.ltype == 'canna':
+					sTitle = self.searchTitle
+				else:
+					sTitle = currPlay.info().getInfoString(iServiceInformation.sTagTitle)
 				self.RadioBg['BgTitle'].setText(sTitle)
 				self.cleanTitleRadio(sTitle)
 
@@ -1578,8 +1578,13 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 									self.dash = True
 								sref = eServiceReference(0x1001, 0, url)
 					sref.setName(video_title)
+					self.searchTitle = video_title
 
 				self.session.nav.playService(sref)
+				if mp_globals.isDreamOS:
+					from DelayedFunction import DelayedFunction
+					DelayedFunction(1000, self.fixSeek)
+
 				if self.pl_open:
 					self.playlistQ.put(self.pl_status)
 					self.pl_event.genEvent()
@@ -1599,6 +1604,19 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 				self.downloader.stop()
 				clearTmpBuffer()
 			playService(url)
+
+	def fixSeek(self):
+		service = self.session.nav.getCurrentService()
+		if service:
+			self.seek = service.seek()
+			if self.seek:
+				self.length = self.seek.getLength()
+				if int(float(self.length[1])) < 15000000:
+					self.isNumberSeek = True
+					self.initSeek()
+					self.numberKeySeek(-60)
+					self.doSeek(0)
+					self.setSeekState(self.SEEK_STATE_PLAY)
 
 	def playPrevStream(self, value):
 		if self.keyPlayNextLocked:
@@ -1764,8 +1782,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self.RadioBg = None
 
 		self.__class__.ctr -= 1
-		self.SaverTimer.stop()
-		del self.SaverTimer
 		self.EmbeddedCoverTimer.stop()
 		del self.EmbeddedCoverTimer
 		if mp_globals.yt_dwnld_agent:
@@ -1895,7 +1911,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		if data != []:
 			if data[0] == 1:
 				self.playMode[0] = config_mp.mediaportal.sp_playmode.value
-				self.configSaver()
 				if self.cover or self.cover2 or self.searchCoverSupp:
 					self.showCover(self.pl_status[4])
 				self.pl_name = 'mp_global_pl_%02d' % config_mp.mediaportal.sp_pl_number.value
@@ -2023,6 +2038,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			pm_file = mp_globals.pluginPath + "/images/comingsoon.png"
 		pm_file = "file://" + pm_file
 		self._Icon.getCover(pm_file)
+		CoverHelper(self['noCover']).getCover('file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/default_cover.png')
 
 	def _animation(self):
 		try:
@@ -2044,23 +2060,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self['spcoverfg'].show()
 			self['noCover'].hide()
 			self.coverBGisHidden = False
-
-	def configSaver(self):
-		self.scrSaver = config_mp.mediaportal.sp_scrsaver.value
-		if self.scrSaver == 'automatic' and self.autoScrSaver or self.scrSaver == 'on':
-			if not self.saverActive:
-				self.SaverTimer.start(1000*60, True)
-				self.saverActive = True
-		else:
-			self.SaverTimer.stop()
-			self.saverActive = False
-
-	def openSaver(self):
-		self.session.openWithCallback(self.cb_Saver, SimpleScreenSaver)
-
-	def cb_Saver(self):
-		self.saverActive = False
-		self.configSaver()
 
 	def createSummary(self):
 		if self.playerMode == "RADIO" and model in ["dm7080","dm900","dm920"]:
@@ -2138,7 +2137,6 @@ class SimpleConfig(Screen, ConfigListScreenExt):
 		self.setTitle(_("SimplePlayer Configuration"))
 		self.configlist.append(getConfigListEntry(_('Global playlist number:'), config_mp.mediaportal.sp_pl_number))
 		self.configlist.append(getConfigListEntry(_('Playmode:'), config_mp.mediaportal.sp_playmode))
-		self.configlist.append(getConfigListEntry(_('Screensaver:'), config_mp.mediaportal.sp_scrsaver))
 		self.configlist.append(getConfigListEntry(_('Highest resolution for playback (only YouTube):'), config_mp.mediaportal.youtubeprio))
 		self.configlist.append(getConfigListEntry(_('Videoquality:'), config_mp.mediaportal.videoquali_others))
 		self.configlist.append(getConfigListEntry(_('Save resume cache in flash memory:'), config_mp.mediaportal.sp_save_resumecache))
@@ -2431,41 +2429,6 @@ class SimplePlaylistIO:
 		except IOError, e:
 			f1.close()
 			return list
-
-class SimpleScreenSaver(Screen):
-
-	def __init__(self, session):
-		if mp_globals.videomode == 2:
-			self.skin = '<screen position="0,0" size="1920,1080" flags="wfNoBorder" zPosition="15" transparent="0" backgroundColor="#00000000"></screen>'
-		else:
-			self.skin = '<screen position="0,0" size="1280,720" flags="wfNoBorder" zPosition="15" transparent="0" backgroundColor="#00000000"></screen>'
-
-		Screen.__init__(self, session)
-
-		self["actions"] = ActionMap(["WizardActions", "DirectionActions", "ColorActions", "EventViewActions"],
-		{
-			"back": self.close,
-			"right": self.close,
-			"left": self.close,
-			"up": self.close,
-			"down": self.close,
-			"ok": self.close,
-			"pageUp": self.close,
-			"pageDown": self.close,
-			"yellow": self.close,
-			"blue": self.close,
-			"red": self.close,
-			"green": self.close,
-			"right": self.close,
-			"left": self.close,
-			"prevBouquet": self.close,
-			"nextBouquet": self.close,
-			"info": self.close
-
-		}, -1)
-
-	def createSummary(self):
-		return SimplePlayerSummary
 
 class SimplePlayerSummary(Screen):
 

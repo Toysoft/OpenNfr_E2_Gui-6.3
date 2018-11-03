@@ -141,7 +141,7 @@ class MPScreen(Screen, HelpableScreen):
 
 	DEFAULT_LM = 0
 
-	def __init__(self, session, parent=None, skin=None, widgets=None, default_cover=None, *ret_args):
+	def __init__(self, session, parent=None, skin=None, widgets=None, default_cover='file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/default_cover.png', *ret_args):
 		self.default_cover = default_cover
 		self.skinmsg = ''
 		if skin:

@@ -44,10 +44,12 @@ from Plugins.Extensions.MediaPortal.resources.youtubelink import YoutubeLink
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
+default_cover = "file://%s/lachmeister_de.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class show_LMDE_Genre(MenuHelper):
 
 	def __init__(self, session):
-		MenuHelper.__init__(self, session, 0, [[]], "https://www.lachmeister.de/lustige-filme", "/index-seite-%d.html", self._defaultlistcenter)
+		MenuHelper.__init__(self, session, 0, [[]], "https://www.lachmeister.de/lustige-filme", "/index-seite-%d.html", self._defaultlistcenter, default_cover=default_cover)
 
 		self['title'] = Label("Lachmeister")
 		self['ContentTitle'] = Label("Genres")
@@ -74,7 +76,7 @@ class LMDE_FilmListeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, genreLink, genreName):
 		self.genreLink = genreLink
 		self.genreName = genreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {

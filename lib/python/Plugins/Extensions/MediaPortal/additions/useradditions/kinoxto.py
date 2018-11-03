@@ -25,10 +25,12 @@ kx_cookies = CookieJar()
 kx_ck = {}
 kx_agent = ''
 
+default_cover = "file://%s/kinox.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class kxGenre(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -128,18 +130,18 @@ class kxGenre(MPScreen):
 		elif auswahl == "Watchlist":
 			self.session.open(kxWatchlist)
 
-	def searchCallback(self, callbackStr):
-		if callbackStr is not None:
-			self.searchStr = callbackStr
-			url = kx_url + "/Search.html?q="
-			self.searchData = self.searchStr
-			self.session.open(kxSucheScreen, url, self.searchData)
+	def searchCallback(self, callback):
+		if callback is not None and len(callback):
+			self.searchStr = callback
+			searchStr = urllib.quote(callback)
+			url = kx_url + "/Search.html?q=" + searchStr
+			self.session.open(kxSucheScreen, url)
 
 class kxKino(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -200,7 +202,7 @@ class kxNeuesteKino(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -271,7 +273,7 @@ class kxNeuesteOnline(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -344,7 +346,7 @@ class kxABC(MPScreen):
 	def __init__(self, session, kxGotLink, name):
 		self.kxGotLink = kxGotLink
 		self.Name = name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -387,7 +389,7 @@ class kxABCpage(MPScreen, ThumbsHelper):
 	def __init__(self, session, letter, name):
 		self.letter = letter
 		self.Name = name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -493,7 +495,7 @@ class kxNeueste(MPScreen, ThumbsHelper):
 	def __init__(self, session, kxGotLink, name):
 		self.kxGotLink = kxGotLink
 		self.Name = name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -567,7 +569,7 @@ class kxEpisoden(MPScreen):
 	def __init__(self, session, url, stream_name):
 		self.url = url
 		self.stream_name = stream_name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -676,7 +678,7 @@ class kxEpisoden(MPScreen):
 class kxWatchlist(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -750,7 +752,7 @@ class kxStreams(MPScreen):
 		self.kxGotLink = kxGotLink
 		self.stream_name = stream_name
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -888,7 +890,7 @@ class kxParts(MPScreen):
 	def __init__(self, session, parts, stream_name):
 		self.parts = parts
 		self.stream_name = stream_name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -940,9 +942,9 @@ class kxParts(MPScreen):
 
 class kxSucheScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, searchURL, searchData):
-		self.kxGotLink = searchURL + searchData
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+	def __init__(self, session, searchURL):
+		self.kxGotLink = searchURL
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -969,9 +971,8 @@ class kxSucheScreen(MPScreen, ThumbsHelper):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		if requestsModule and cfscrapeModule:
-			self.streamList = []
-			twAgentGetPage(self.kxGotLink, agent=kx_agent, cookieJar=kx_cookies).addCallback(self.parseData).addErrback(self.dataError)
+		self.streamList = []
+		twAgentGetPage(self.kxGotLink, agent=kx_agent, cookieJar=kx_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		movies = re.findall('<td\sclass="Icon"><img\swidth="16"\sheight="11"\ssrc="/gr/sys/lng/(.*?).png"\salt="language"></td>.*?title="(.*?)".*?<td\sclass="Title">(.*?)>(.*?)</a>', data, re.S)

@@ -1,4 +1,41 @@
 ﻿# -*- coding: utf-8 -*-
+#############################################################################################################
+#
+#    MediaPortal for Dreambox OS
+#
+#    Coded by MediaPortal Team (c) 2013-2018
+#
+#  This plugin is open source but it is NOT free software.
+#
+#  This plugin may only be distributed to and executed on hardware which
+#  is licensed by Dream Property GmbH. This includes commercial distribution.
+#  In other words:
+#  It's NOT allowed to distribute any parts of this plugin or its source code in ANY way
+#  to hardware which is NOT licensed by Dream Property GmbH.
+#  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
+#  on hardware which is NOT licensed by Dream Property GmbH.
+#
+#  This applies to the source code as a whole as well as to parts of it, unless
+#  explicitely stated otherwise.
+#
+#  If you want to use or modify the code or parts of it,
+#  you have to keep OUR license and inform us about the modifications, but it may NOT be
+#  commercially distributed other than under the conditions noted above.
+#
+#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
+#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
+#
+#  As an exception regarding modifcations, you are NOT permitted to remove
+#  any copy protections implemented in this plugin or change them for means of disabling
+#  or working around the copy protections, unless the change has been explicitly permitted
+#  by the original authors. Also decompiling and modification of the closed source
+#  parts is NOT permitted.
+#
+#  Advertising with this plugin is NOT allowed.
+#  For other uses, permission from the authors is necessary.
+#
+#############################################################################################################
+
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 import Queue
@@ -8,12 +45,13 @@ from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.additions.mediatheken.youtube import YT_ListScreen
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
+default_cover = "file://%s/videogold_de.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class show_VGDE_Genre(MenuHelper):
 
 	def __init__(self, session):
-
 		baseUrl = "https://videogold.de"
-		MenuHelper.__init__(self, session, 0, None, baseUrl, "", self._defaultlistcenter)
+		MenuHelper.__init__(self, session, 0, None, baseUrl, "", self._defaultlistcenter, default_cover=default_cover)
 
 		self['title'] = Label("VideoGold.de")
 		self['ContentTitle'] = Label("Genres")
@@ -38,7 +76,7 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, genreLink, genreName):
 		self.genreLink = genreLink
 		self.genreName = genreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -49,48 +87,24 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 			"down" : self.keyDown,
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
-			"upUp" : self.key_repeatedUp,
-			"rightUp" : self.key_repeatedUp,
-			"leftUp" : self.key_repeatedUp,
-			"downUp" : self.key_repeatedUp,
-			"upRepeated" : self.keyUpRepeated,
-			"downRepeated" : self.keyDownRepeated,
-			"rightRepeated" : self.keyRightRepeated,
-			"leftRepeated" : self.keyLeftRepeated,
 			"nextBouquet" : self.keyPageUp,
 			"prevBouquet" : self.keyPageDown,
-			"1" : self.key_1,
-			"3" : self.key_3,
-			"4" : self.key_4,
-			"6" : self.key_6,
-			"7" : self.key_7,
-			"9" : self.key_9,
 			"0" : self.closeAll
 		}, -1)
 
-		self.sortOrder = 0
-		self.genreTitle = ""
-		self.sortParIMDB = ""
-		self.sortParAZ = ""
-		self.sortOrderStrAZ = ""
-		self.sortOrderStrIMDB = ""
-		self.sortOrderStrGenre = ""
 		self['title'] = Label("VideoGold.de")
-
+		self['ContentTitle'] = Label(genreName)
 		self['Page'] = Label(_("Page:"))
 
 		self.filmQ = Queue.Queue(0)
-		self.hanQ = Queue.Queue(0)
 		self.picQ = Queue.Queue(0)
 		self.updateP = 0
 		self.eventL = threading.Event()
 		self.eventP = threading.Event()
 		self.keyLocked = True
 		self.dokusListe = []
-		self.page = 0
-		self.pages = 0;
-
-		self.setGenreStrTitle()
+		self.page = 1
+		self.lastpage = 1
 
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
@@ -101,15 +115,11 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		else:
 			self.genreLink += "/seite/%d/"
 
-	def setGenreStrTitle(self):
-		genreName = "%s%s" % (self.genreTitle,self.genreName)
-		self['ContentTitle'].setText(genreName)
-
 	def loadPage(self):
+		self.dokusListe = []
+		self['handlung'].setText("")
+		self.ml.setList(map(self._defaultlistleft, self.dokusListe))
 		url = self.genreLink % max(self.page,1)
-		if self.page:
-			self['page'].setText("%d / %d" % (self.page,self.pages))
-
 		self.filmQ.put(url)
 		if not self.eventL.is_set():
 			self.eventL.set()
@@ -130,31 +140,17 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 			message = self.session.open(MessageBoxExt, str(error), MessageBoxExt.TYPE_INFO)
 
 	def loadPageData(self, data):
-		self.dokusListe = []
 		for m in re.finditer('<article id=(.*?)</article>', data, re.S):
 			m2 = re.search('<a href="(.*?)" title="(.*?)">.*?data-lazy-src="(.*?)".*?<p>(.*?)</p>', m.group(1), re.S)
 			if m2:
 				url, nm, img, desc = m2.groups()
 				self.dokusListe.append((decodeHtml(nm), url, img, decodeHtml(desc)))
-
 		if self.dokusListe:
-			if not self.pages:
-				ps = re.findall("class='pages'>Seite \d+ von (\d+.{0,1}\d+)", data)
-				try:
-					pages = int(ps[-1].replace('.',''))
-				except:
-					pages = 1
-
-				if pages > self.pages:
-					self.pages = pages
-
-			if not self.page:
-				self.page = 1
-			self['page'].setText("%d / %d" % (self.page,self.pages))
+			self.getLastPage(data, "class='wp-pagenavi'(.*?)</div>")
 
 			self.ml.setList(map(self._defaultlistleft, self.dokusListe))
 			self['liste'].moveToIndex(0)
-			self.th_ThumbsQuery(self.dokusListe,0,1,2,None,None, self.page, self.pages)
+			self.th_ThumbsQuery(self.dokusListe,0,1,2,None,None, self.page, self.lastpage, mode=1)
 			self.loadPicQueued()
 		else:
 			self.dokusListe.append((_("No dokus found!"),"","",""))
@@ -166,17 +162,13 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 				self.loadPageQueued()
 
 	def loadPic(self):
-
 		if self.picQ.empty():
 			self.eventP.clear()
 			return
-
 		if self.updateP:
 			return
-
 		while not self.picQ.empty():
 			self.picQ.get_nowait()
-
 		streamName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(streamName)
 		streamPic = self['liste'].getCurrent()[0][2]
@@ -226,135 +218,10 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 				url = 'gdata.youtube.com/feeds/api/playlists/PL'+dhVideoId+'?'
 				self.session.open(YT_ListScreen, url, dhTitle, title="videogold")
 			else:
-				print dhVideoId
-				self.session.open(
-					YoutubePlayer,
-					[(dhTitle, dhVideoId, None)],
-					showPlaylist=False
-					)
-		else:
-			self.parseSRFStream(data)
-
-	def parseSRFStream(self, data):
-		m2 = re.search('//www.srf.ch/player/.*?id=(.*?)&', data)
-		if m2:
-			id = m2.group(1)
-			self.getSRFStream(id)
-		else:
-			self.session.open(MessageBoxExt,"Kein abspielbarer Stream gefunden!", MessageBoxExt.TYPE_INFO, timeout=10)
-
-	def getSRFStream(self, id):
-		self.srf_url = "http://www.srf.ch/webservice/cvis/segment/%s/.json?nohttperr=1;omit_video_segments_validity=1;omit_related_segments=1;nearline_data=1" % id
-		twAgentGetPage(self.srf_url).addCallback(self.get_srf_xml).addErrback(self.dataError)
-
-	def get_srf_xml(self, data):
-		master = re.findall('"streaming":"hls","quality":".*?","url":"(.*?)"}', data, re.S)
-		if master:
-			url = master[-1].replace("\/","/")
-			twAgentGetPage(url).addCallback(self.get_srf_master).addErrback(self.dataError)
-		else:
-			twAgentGetPage(self.srf_url).addCallback(self.get_srf_rtmp).addErrback(self.dataError)
-
-	def get_srf_master(self, data):
-		xml = re.findall('CODECS="avc.*?"\n(.*?)\n', data, re.S)
-		if xml:
-			if re.search('http://.*?', xml[-1], re.S):
-				url = xml[-1]
-				title = self['liste'].getCurrent()[0][0]
-				playlist = []
-				playlist.append((title, url))
-				self.session.open(SimplePlayer, playlist, showPlaylist=False, ltype='srf')
-			else:
-				url = self['liste'].getCurrent()[0][1]
-				twAgentGetPage(url).addCallback(self.get_rtmp).addErrback(self.dataError)
-
-	def get_srf_rtmp(self, data):
-		xml = re.findall('"url":"(rtmp:.*?)"', data, re.S)
-		if xml:
-			url = xml[-1].replace("\/","/")
-			host = url.split('mp4:')[0]
-			playpath = url.split('mp4:')[1]
-			title = self['liste'].getCurrent()[0][0]
-			final = "%s swfUrl=http://www.srf.ch/player/flash/srfplayer.swf playpath=mp4:%s swfVfy=1" % (host, playpath)
-			playlist = []
-			playlist.append((title, final))
-			self.session.open(SimplePlayer, playlist, showPlaylist=False, ltype='srf')
-		else:
-			message = self.session.open(MessageBoxExt, _("For legal reasons this video may be viewed only within Switzerland."), MessageBoxExt.TYPE_INFO, timeout=5)
+				self.session.open(YoutubePlayer, [(dhTitle, dhVideoId, None)], showPlaylist=False)
 
 	def keyOK(self):
 		if (self.keyLocked|self.eventL.is_set()):
 			return
 		streamLink = self['liste'].getCurrent()[0][1]
 		twAgentGetPage(streamLink, timeout=60).addCallback(self.parseYTStream).addErrback(self.dataError)
-
-	def keyUpRepeated(self):
-		if self.keyLocked:
-			return
-		self['liste'].up()
-
-	def keyDownRepeated(self):
-		if self.keyLocked:
-			return
-		self['liste'].down()
-
-	def key_repeatedUp(self):
-		if self.keyLocked:
-			return
-		self.loadPicQueued()
-
-	def keyLeftRepeated(self):
-		if self.keyLocked:
-			return
-		self['liste'].pageUp()
-
-	def keyRightRepeated(self):
-		if self.keyLocked:
-			return
-		self['liste'].pageDown()
-
-	def keyPageDown(self):
-		self.keyPageDownFast(1)
-
-	def keyPageUp(self):
-		self.keyPageUpFast(1)
-
-	def keyPageUpFast(self,step):
-		if self.keyLocked:
-			return
-		oldpage = self.page
-		if (self.page + step) <= self.pages:
-			self.page += step
-		else:
-			self.page = 1
-		if oldpage != self.page:
-			self.loadPage()
-
-	def keyPageDownFast(self,step):
-		if self.keyLocked:
-			return
-		oldpage = self.page
-		if (self.page - step) >= 1:
-			self.page -= step
-		else:
-			self.page = self.pages
-		if oldpage != self.page:
-			self.loadPage()
-
-	def key_1(self):
-		self.keyPageDownFast(2)
-
-	def key_4(self):
-		self.keyPageDownFast(5)
-
-	def key_7(self):
-		self.keyPageDownFast(10)
-
-	def key_3(self):
-		self.keyPageUpFast(2)
-
-	def key_6(self):
-		self.keyPageUpFast(5)
-
-	def key_9(self):
-		self.keyPageUpFast(10)

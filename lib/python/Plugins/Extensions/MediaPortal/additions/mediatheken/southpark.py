@@ -42,10 +42,12 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 config_mp.mediaportal.southparklang = ConfigText(default="de", fixed_size=False)
 config_mp.mediaportal.southparkquality = ConfigText(default="HD", fixed_size=False)
 
+default_cover = "file://%s/southpark.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class SouthparkGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -123,7 +125,7 @@ class SouthparkListScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -205,7 +207,7 @@ class SouthparkAktScreen(MPScreen):
 		self.Name = Name
 		self.Pic = Pic
 		self.Handlung = Handlung
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,

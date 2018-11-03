@@ -42,10 +42,12 @@ from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 
 BASE_URL = 'http://www.kindertube.de/'
 
+default_cover = "file://%s/kindertube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class kindertubeMain(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -64,38 +66,29 @@ class kindertubeMain(MPScreen):
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 
-		self.keyLocked = False
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		self.keyLocked = True
-		self.streamList.append(("0-2 Jährige", BASE_URL+'/kleinkind-filme-0-2-jahre.html'))
+		self.streamList.append(("0-2 jährige", BASE_URL+'/kleinkind-filme-0-2-jahre.html'))
 		self.streamList.append(("Kleinkinder", BASE_URL+'/serien-für-kleinkinder.html'))
 		self.streamList.append(("Lehrfilme", BASE_URL+'/lehrfilme-für-kinder.html'))
 		self.streamList.append(("Musik", BASE_URL+'/musik-für-kinder.html'))
 		self.streamList.append(("Alle Filme", BASE_URL+'/alle-filme-und-serien.html'))
-		self.streamList.append(("Kinderserien von früher", BASE_URL+'/alte-kinderserien.html'))
+		self.streamList.append(("Serien von früher", BASE_URL+'/alte-kinderserien.html'))
 		self.ml.setList(map(self._defaultlistcenter, self.streamList))
-		self.keyLocked = False
 		self.showInfos()
 
 	def keyOK(self):
-		exist = self['liste'].getCurrent()
-		if self.keyLocked or exist == None:
-			return
 		auswahl = self['liste'].getCurrent()[0][0]
 		url = self['liste'].getCurrent()[0][1]
 		self.session.open(kindertubeParsing, auswahl, url)
-
-	def keyCancel(self):
-		self.close()
 
 class kindertubeParsing(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, genre, url):
 		self.genre = genre
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -129,11 +122,12 @@ class kindertubeParsing(MPScreen, ThumbsHelper):
 		pls = re.findall('<a href="(.*?)" class="col.*?"><div class="thumb"><img src="(image.*?)" alt="" class="img-thumbnail"></div><span class="title">(.*?)\n</span></a>', data)
 		if pls:
 			for (url, image, title) in pls:
+				title = title.replace(' - alte kinderserien', '')
 				image = BASE_URL+'/'+image
 				self.streamList.append((decodeHtml(title), url, image))
 
 		if len(self.streamList) == 0:
-			self.streamList.append((_('Parsing error!'), None))
+			self.streamList.append((_('Parsing error!'), None, None))
 			self.keyLocked = True
 		else:
 			self.keyLocked = False
@@ -155,8 +149,6 @@ class kindertubeParsing(MPScreen, ThumbsHelper):
 	def showInfos(self):
 		filmName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(filmName)
-		coverUrl = self['liste'].getCurrent()[0][2]
-		CoverHelper(self['coverArt']).getCover(coverUrl)
 
 class kindertubeEpisoden(MPScreen, ThumbsHelper):
 
@@ -164,7 +156,7 @@ class kindertubeEpisoden(MPScreen, ThumbsHelper):
 		self.genre = genre
 		self.url = url
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -201,28 +193,25 @@ class kindertubeEpisoden(MPScreen, ThumbsHelper):
 			for (id, type, image, title) in videos:
 				image = BASE_URL+'/'+image
 				self.streamList.append((title, id, image, type))
-
 		if len(self.streamList) == 0:
-			self.streamList.append((_('Parsing error!'), None))
+			self.streamList.append((_('Parsing error!'), None, '', ''))
 			self.keyLocked = True
 		else:
 			self.keyLocked = False
-
 		self.ml.setList(map(self._defaultlistleft, self.streamList))
 		self.ml.moveToIndex(0)
 		self.th_ThumbsQuery(self.streamList, 0, 1, 2, None, None, 1, 1)
 		self.showInfos()
 
 	def keyOK(self):
-		exist = self['liste'].getCurrent()
-		if self.keyLocked or exist == None:
+		if self.keyLocked:
 			return
 		video_name = self['liste'].getCurrent()[0][0]
 		video_id = self['liste'].getCurrent()[0][1]
 		video_cover = self['liste'].getCurrent()[0][2]
 		video_type = self['liste'].getCurrent()[0][3]
-		if video_type == 'yt':
-			self.session.open(YoutubePlayer, [(video_name, video_id, video_cover)], playAll = False, showPlaylist=False, showCover=True)
+		if video_type == 'yt' and video_id:
+			self.session.open(YoutubePlayer, [(video_name, video_id, video_cover)], playAll = False, showPlaylist=False, showCover=False)
 
 		else:
 			self.session.open(MessageBoxExt, _("Stream not found, try another Stream Hoster."), MessageBoxExt.TYPE_INFO, timeout=5)

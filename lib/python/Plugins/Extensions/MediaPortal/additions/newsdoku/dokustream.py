@@ -51,7 +51,7 @@ class show_DS_Genre(MenuHelper):
 	def __init__(self, session):
 
 		baseUrl = "https://www.doku-stream.org"
-		MenuHelper.__init__(self, session, 0, None, baseUrl, "", self._defaultlistcenter)
+		MenuHelper.__init__(self, session, 0, None, baseUrl, "", self._defaultlistcenter, default_cover=default_cover)
 
 		self['title'] = Label("DokuStream")
 		self['ContentTitle'] = Label("Genres")
@@ -63,7 +63,6 @@ class show_DS_Genre(MenuHelper):
 		self.onLayoutFinish.append(self.mh_initMenu)
 
 	def mh_initMenu(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.mh_buildMenu(self.mh_baseUrl+'/kategorien/')
 
 	def mh_parseCategorys(self, data, category='Kategorien'):

@@ -5,11 +5,13 @@ from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPag
 
 myagent = 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0'
 
+default_cover = "file://%s/pornstreams.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class PornStreamsGenreScreen(MPScreen):
 
 	def __init__(self, session, mode=''):
 		self.mode = mode
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -86,7 +88,7 @@ class PornStreamsFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -165,7 +167,7 @@ class PornStreamsFilmAuswahlScreen(MPScreen):
 		self.genreLink = genreLink
 		self.genreName = genreName
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

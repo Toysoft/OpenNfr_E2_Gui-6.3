@@ -7,14 +7,17 @@ class wrestlingnetworkGenreScreen(MPScreen):
 	def __init__(self, session, mode):
 		self.mode = mode
 
+		global default_cover
 		if self.mode == "watchwrestling":
-			self.portal = "Watch Wrestling In"
+			self.portal = "Watch Wrestling.in"
 			self.baseurl = "http://watchwrestling.in"
+			default_cover = "file://%s/watchwrestling.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		if self.mode == "watchwrestlinguno":
-			self.portal = "Watch Wrestling Uno"
-			self.baseurl = "http://watchwrestling.uno"
+			self.portal = "Watch Wrestling.ac"
+			self.baseurl = "http://watchwrestling.ac"
+			default_cover = "file://%s/watchwrestlinguno.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -43,7 +46,8 @@ class wrestlingnetworkGenreScreen(MPScreen):
 		if raw:
 			parse = re.findall('<li.*?href="(.*?)">(.*?)</a>', raw[0], re.S)
 			for (url, title) in parse:
-				self.genreliste.append((decodeHtml(title), url))
+				if title != "Live 24/7":
+					self.genreliste.append((decodeHtml(title), url))
 			# remove duplicates
 			self.genreliste = list(set(self.genreliste))
 			#self.genreliste.sort()
@@ -65,7 +69,7 @@ class wrestlingnetworkListeScreen(MPScreen):
 		self.Link = Link
 		self.Name = Name
 		self.portal = portal
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -132,7 +136,7 @@ class wrestlingnetworkPlayer(MPScreen):
 		self.Name = Name
 		self.Url = Url
 		self.portal = portal
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,

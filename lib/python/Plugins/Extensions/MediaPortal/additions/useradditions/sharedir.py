@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+﻿	# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
@@ -12,6 +12,8 @@ config_mp.mediaportal.sharedir_hoster = ConfigText(default="all Hosters;0", fixe
 config_mp.mediaportal.sharedir_type = ConfigText(default="Video", fixed_size=False)
 
 hosters =[]
+
+default_cover = "file://%s/sharedir.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class sharedirHelper():
 
@@ -115,7 +117,7 @@ class sharedirMenueScreen(sharedirHelper, MPScreen):
 
 	def __init__(self, session):
 		self.Name = "--- Multi Search Engine ---"
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -220,7 +222,7 @@ class sharedirKeyword(MPScreen):
 
 	def __init__(self, session, type):
 		self.type = type
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -332,7 +334,7 @@ class sharedirListScreen(sharedirHelper, MPScreen):
 		self.sort = sort
 		self.size = size
 		self.hoster = hoster
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

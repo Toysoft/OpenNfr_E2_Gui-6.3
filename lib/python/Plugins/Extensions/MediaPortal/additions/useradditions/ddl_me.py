@@ -8,7 +8,7 @@ from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 
-DDLME_Version = "ddl.me"
+default_cover = "file://%s/ddl_me.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class show_DDLME_Genre(MenuHelper):
 
@@ -93,9 +93,9 @@ class show_DDLME_Genre(MenuHelper):
 			]
 			]
 
-		MenuHelper.__init__(self, session, 1, genreMenu, "http://de.ddl.me", genreBase, self._defaultlistcenter)
+		MenuHelper.__init__(self, session, 1, genreMenu, "http://de.ddl.me", genreBase, self._defaultlistcenter, default_cover=default_cover)
 
-		self['title'] = Label(DDLME_Version)
+		self['title'] = Label("ddl.me")
 		self['ContentTitle'] = Label("Genres")
 
 		self.param_qr = ''
@@ -130,7 +130,7 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.genreLink = genreLink
 		self.genreName = genreName
 		self.imgLink = imgLink
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -164,7 +164,7 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.sortOrderTxt = ['Letztem Update', 'Blockbuster', 'IMDb Rating', 'Jahr']
 		self.baseUrl = "http://de.ddl.me"
 		self.genreTitle = ""
-		self['title'] = Label(DDLME_Version)
+		self['title'] = Label("ddl.me")
 		self['F3'] = Label(_("Sorting"))
 		self['Page'] = Label(_("Page:"))
 
@@ -456,7 +456,7 @@ class DDLMEStreams(MPScreen):
 		self.filmName = filmName
 		self.imageUrl = imageLink
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"green" 	: self.keyTrailer,
@@ -465,7 +465,7 @@ class DDLMEStreams(MPScreen):
 			"cancel"	: self.keyCancel
 		}, -1)
 
-		self['title'] = Label(DDLME_Version)
+		self['title'] = Label("ddl.me")
 		self['ContentTitle'] = Label("Streams")
 
 		self['name'] = Label(filmName)

@@ -337,8 +337,8 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			self.url2 = None
 			if "$$PORNSTAR$$" in url:
 				self.counter = 2
-				self.url2 = url.replace('$$PORNSTAR$$', 'best')
-				url = url.replace('$$PORNSTAR$$', 'pornstar')
+				self.url2 = url.replace('$$PORNSTAR$$', 'new')
+				url = url.replace('$$PORNSTAR$$', 'pornstar-new')
 				twAgentGetPage(self.url2, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
 			twAgentGetPage(url, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -410,8 +410,17 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 					else:
 						Runtime = "-"
 					Url = "https://www.xvideos.com" + Url
+					profUrl = None
+					profTitle = None
+					profiledata = re.findall('href="(.*?)".*?>(.*?)</a', Meta, re.S)
+					if profiledata:
+						for (url, title) in profiledata:
+							profUrl = "https://www.xvideos.com" + url + "/videos/$$PORNSTAR$$/$$PAGE$$"
+							profTitle = decodeHtml(title)
+					if profTitle:
+						Title = profTitle + " - " + decodeHtml(Title)
 					Image = Image.replace('img-hw.xvideos-cdn', 'img-egc.xvideos-cdn').replace('thumbs169', 'thumbs169lll').replace('THUMBNUM.jpg', '15.jpg')
-					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
+					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, profUrl, profTitle))
 		if self.counter == 0:
 			if len(self.filmliste) == 0:
 				self.filmliste.append((_('No movies found!'), "", None, None, None))
@@ -480,8 +489,23 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 	def keyOK(self):
 		if self.keyLocked:
 			return
+		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		twAgentGetPage(Link, agent=agent, headers=headers).addCallback(self.parseData).addErrback(self.dataError)
+		if self.Name == "100% Verified":
+			rangelist = [ ['Video', 'video'], ['Profile', 'profile'] ]
+			self.session.openWithCallback(self.keyOKAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
+		else:
+			twAgentGetPage(Link, agent=agent, headers=headers).addCallback(self.parseData).addErrback(self.dataError)
+
+	def keyOKAction(self, result):
+		if result[1] == "profile":
+			Name = self['liste'].getCurrent()[0][6]
+			Link = self['liste'].getCurrent()[0][5]
+			if Link and Name:
+				self.session.open(xvideosFilmScreen, Link, Name, False)
+		else:
+			Link = self['liste'].getCurrent()[0][1]
+			twAgentGetPage(Link, agent=agent, headers=headers).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		match = re.findall("setVideo(?:UrlLow|UrlHigh|HLS)\('(.*?)'\);", data)

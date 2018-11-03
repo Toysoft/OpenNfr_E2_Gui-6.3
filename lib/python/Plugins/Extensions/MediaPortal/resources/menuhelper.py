@@ -8,20 +8,20 @@ from debuglog import printlog as printl
 MDEBUG = False
 
 class MenuHelper(MPScreen):
-	def __init__(self, session, menuMaxLevel, genreMenu, baseUrl, genreBase, menuListentry, skin_name='MP_Plugin', red_label=True, widgets_files=None, cookieJar=None):
+	def __init__(self, session, menuMaxLevel, genreMenu, baseUrl, genreBase, menuListentry, skin='MP_Plugin', default_cover='file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/default_cover.png', widgets_files=None, cookieJar=None):
 
 		self.mh_cookieJar = cookieJar
 
-		MPScreen.__init__(self, session, skin=skin_name, widgets=widgets_files)
+		MPScreen.__init__(self, session, skin=skin, default_cover=default_cover, widgets=widgets_files)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
-			"ok"    : self.mh_keyOK,
-			"cancel": self.mh_keyCancel,
-			"up"	: self.mh_keyUp,
-			"down"	: self.mh_keyDown,
-			"left"	: self.mh_keyLeft,
+			"ok"    	: self.mh_keyOK,
+			"cancel"	: self.mh_keyCancel,
+			"up"		: self.mh_keyUp,
+			"down"		: self.mh_keyDown,
+			"left"		: self.mh_keyLeft,
 			"0"		: self.closeAll,
-			"right"	: self.mh_keyRight,
+			"right"		: self.mh_keyRight,
 			"upUp" 		: self.key_repeatedUp,
 			"rightUp" 	: self.key_repeatedUp,
 			"leftUp" 	: self.key_repeatedUp,
@@ -33,13 +33,8 @@ class MenuHelper(MPScreen):
 		}, -1)
 
 		self['name'] = Label(_("Selection:"))
-		self['F1'] = Label("")
-		self['F2'] = Label("")
-		self['F3'] = Label("")
-		self['F4'] = Label("")
 
 		self.mh_keyLocked = True
-		self.mh_red_label = red_label
 		self.mh_On_setGenreStrTitle = []
 		self.mh_genreMenu = genreMenu
 		self.mh_menuListentry = menuListentry

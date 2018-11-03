@@ -29,10 +29,12 @@ ss_agent = ''
 config_mp.mediaportal.ss_username = ConfigText(default="ssEmail", fixed_size=False)
 config_mp.mediaportal.ss_password = ConfigPassword(default="ssPassword", fixed_size=False)
 
+default_cover = "file://%s/serienstream.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class ssMain(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -48,7 +50,7 @@ class ssMain(MPScreen):
 		self.username = str(config_mp.mediaportal.ss_username.value)
 		self.password = str(config_mp.mediaportal.ss_password.value)
 
-		self['title'] = Label("Serienstream.to")
+		self['title'] = Label("Serienstream")
 		self['ContentTitle'] = Label(_("Selection"))
 		self['F4'] = Label(_("Setup"))
 
@@ -145,9 +147,9 @@ class ssSetupScreen(MPSetupScreen, ConfigListScreenExt):
 	def __init__(self, session):
 		MPSetupScreen.__init__(self, session, skin='MP_PluginSetup')
 
-		self['title'] = Label("Serienstream.to " + _("Setup"))
+		self['title'] = Label("Serienstream " + _("Setup"))
 		self['F4'] = Label('')
-		self.setTitle("Serienstream.to " + _("Setup"))
+		self.setTitle("Serienstream " + _("Setup"))
 
 		self.list = []
 		ConfigListScreenExt.__init__(self, self.list)
@@ -175,7 +177,7 @@ class ssSetupScreen(MPSetupScreen, ConfigListScreenExt):
 class ssSerien(MPScreen, SearchHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin', widgets=('MP_widget_search',))
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover, widgets=('MP_widget_search',))
 		SearchHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -197,7 +199,7 @@ class ssSerien(MPScreen, SearchHelper):
 			"leftRepeated" : self.keyLeftRepeated
 		}, -1)
 
-		self['title'] = Label("Serienstream.to")
+		self['title'] = Label("Serienstream")
 		self['ContentTitle'] = Label("Serien A-Z")
 		self['F2'] = Label(_("Add to Watchlist"))
 
@@ -289,7 +291,7 @@ class ssSerien(MPScreen, SearchHelper):
 class ssNeueEpisoden(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
 			"0" : self.closeAll,
@@ -309,7 +311,7 @@ class ssNeueEpisoden(MPScreen):
 			"leftRepeated" : self.keyLeftRepeated
 		}, -1)
 
-		self['title'] = Label("Serienstream.to")
+		self['title'] = Label("Serienstream")
 		self['ContentTitle'] = Label("Neue Episoden")
 
 		self.streamList = []
@@ -409,7 +411,7 @@ class ssNeueEpisoden(MPScreen):
 class ssWatchlist(MPScreen, SearchHelper):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin', widgets=('MP_widget_search',))
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover, widgets=('MP_widget_search',))
 		SearchHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -431,7 +433,7 @@ class ssWatchlist(MPScreen, SearchHelper):
 			"leftRepeated" : self.keyLeftRepeated
 		}, -1)
 
-		self['title'] = Label("Serienstream.to")
+		self['title'] = Label("Serienstream")
 		self['ContentTitle'] = Label("Watchlist")
 		self['F1'] = Label(_("Delete"))
 
@@ -534,7 +536,7 @@ class ssStaffeln(MPScreen):
 		self.Url = Url
 		self.Title = Title
 		self.cover = Cover
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -542,7 +544,7 @@ class ssStaffeln(MPScreen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("Serienstream.to")
+		self['title'] = Label("Serienstream")
 		self['ContentTitle'] = Label(_("Season Selection"))
 		self['name'] = Label(self.Title)
 
@@ -599,7 +601,7 @@ class ssEpisoden(MPScreen):
 		self.Staffel = Staffel
 		self.Title = Title
 		self.cover = Cover
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -612,7 +614,7 @@ class ssEpisoden(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("Serienstream.to")
+		self['title'] = Label("Serienstream")
 		self['ContentTitle'] = Label(_("Episode Selection"))
 		self['name'] = Label(self.Title)
 		self['F2'] = Label(_("Toggle"))
@@ -771,7 +773,7 @@ class ssStreams(MPScreen):
 		self.cover = cover
 		self.Title = title
 		self.episode = episode
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,
@@ -779,7 +781,7 @@ class ssStreams(MPScreen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("Serienstream.to")
+		self['title'] = Label("Serienstream")
 		self['leftContentTitle'] = Label(_("Stream Selection"))
 		self['ContentTitle'] = Label(_("Stream Selection"))
 		self['name'] = Label(self.Title)

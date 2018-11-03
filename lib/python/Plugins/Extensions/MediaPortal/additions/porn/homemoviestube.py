@@ -48,11 +48,13 @@ json_headers = {
 	'X-Requested-With':'XMLHttpRequest',
 	'Content-Type':'application/x-www-form-urlencoded',
 	}
+	
+default_cover = "file://%s/homemoviestube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class homemoviestubeGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -141,7 +143,7 @@ class homemoviestubeFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -196,10 +198,11 @@ class homemoviestubeFilmScreen(MPScreen, ThumbsHelper):
 			parse = re.search('<!-- featured-end --(.*?</html>', data, re.S)
 		else:
 			parse = re.search('<head>(.*)</html>', data, re.S)
-		Liste = re.findall('class="film-item.*?<a\shref="(.*?)"\stitle="(.*?)".*?class="film-thumb.*?img\ssrc="(.*?)".*?class="film-time">(.*?)</span.*?stat-added">(.*?)</span>.*?stat-views">(.*?)</span.*?stat-rated">(.*?)</span', parse.group(1), re.S)
+		Liste = re.findall('class="film-item.*?-wrapper">(.*?)<a\shref="(.*?)"\stitle="(.*?)".*?class="film-thumb.*?img\ssrc="(.*?)".*?class="film-time">(.*?)</span.*?stat-added">(.*?)</span>.*?stat-views">(.*?)</span.*?stat-rated">(.*?)</span', parse.group(1), re.S)
 		if Liste:
-			for (Link, Name, Image, Runtime, Added, Views, Rated) in Liste:
-				self.streamList.append((decodeHtml(Name), Image, Link, Runtime, Added, Views, Rated))
+			for (Premium, Link, Name, Image, Runtime, Added, Views, Rated) in Liste:
+				if not "premium_star.png" in Premium:
+					self.streamList.append((decodeHtml(Name), Image, Link, Runtime, Added, Views, Rated))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No videos found!'), None, '', ''))
 		self.ml.setList(map(self._defaultlistleft, self.streamList))

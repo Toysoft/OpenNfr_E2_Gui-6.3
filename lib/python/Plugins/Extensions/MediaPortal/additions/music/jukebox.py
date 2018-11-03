@@ -31,7 +31,7 @@ class show_JBTO_Genre(MenuHelper):
 		self.param_qr = ''
 		self.moreButtonTxt = None
 		self.limit = 0
-		MenuHelper.__init__(self, session, 0, None, baseUrl, "", self._defaultlistcenter, cookieJar=cookies)
+		MenuHelper.__init__(self, session, 0, None, baseUrl, "", self._defaultlistcenter, cookieJar=cookies, default_cover=default_cover)
 
 		self['title'] = Label(JBTO_Version)
 		self['ContentTitle'] = Label(genre_title)
@@ -43,7 +43,6 @@ class show_JBTO_Genre(MenuHelper):
 		self.onLayoutFinish.append(self.mh_initMenu)
 
 	def mh_initMenu(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
 		self.mh_buildMenu(self.genre_url, agent=agent, headers=json_headers)
 
 	def mh_parseCategorys(self, data):

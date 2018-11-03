@@ -19,7 +19,7 @@
   <eLabel name="button blue" position="750,711" size="243,1" backgroundColor="#000064c7" zPosition="1" />
   <!-- select screen -->
   <widget name="handlung" position="860,440" size="406,233" backgroundColor="#20000000" font="mediaportal;18" transparent="1" />
-  <widget name="coverArt" pixmap="~/clean_hd/images/no_coverArt.png" position="860,80" size="406,266" transparent="1" alphatest="blend" />
+  <widget name="coverArt" position="860,80" size="406,266" transparent="1" alphatest="blend" />
   <widget name="ContentTitle" position="13,146" size="826,33" backgroundColor="#20000000" zPosition="5" font="mediaportal_clean;20" halign="center" transparent="1" />
   <widget name="name" position="860,366" size="406,66" backgroundColor="#20000000" transparent="1" zPosition="1" font="mediaportal;20" valign="center" halign="center" />
   <widget name="liste" position="13,200" size="826,437" backgroundColor="#20000000" scrollbarMode="showOnDemand" transparent="1" foregroundColorSelected="#ffffff" itemHeight="23" />

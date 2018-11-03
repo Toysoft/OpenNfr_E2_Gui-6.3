@@ -129,7 +129,7 @@ class focus(MPScreen, ThumbsHelper):
 				self.streamList.append((decodeHtml(Name), Image, Link))
 			self.ml.setList(map(self._defaultlistleft, self.streamList))
 			self.keyLocked = False
-			self.th_ThumbsQuery(self.streamList, 0, 2, 1, None, None, 1, mode=1)
+			self.th_ThumbsQuery(self.streamList, 0, 2, 1, None, None, 1, 1, mode=1)
 			self.showInfos()
 
 	def showInfos(self):

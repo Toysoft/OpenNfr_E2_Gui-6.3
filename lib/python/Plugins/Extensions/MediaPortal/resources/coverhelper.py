@@ -45,10 +45,8 @@ class CoverHelper:
 				self.NO_COVER_PIC_PATH = "/images/none.png"
 				self._no_picPath = "%s%s" % (mp_globals.pluginPath, self.NO_COVER_PIC_PATH)
 			else:
-				self.NO_COVER_PIC_PATH = "/images/no_coverArt.png"
-				self._no_picPath = "%s%s/%s%s" % (mp_globals.pluginPath, mp_globals.skinsPath, mp_globals.currentskin, self.NO_COVER_PIC_PATH)
-				if not fileExists(self._no_picPath):
-					self._no_picPath = "%s%s%s%s" % (mp_globals.pluginPath, mp_globals.skinsPath, mp_globals.skinFallback, self.NO_COVER_PIC_PATH)
+				self.NO_COVER_PIC_PATH = "/images/default_cover.png"
+				self._no_picPath = "%s%s" % (mp_globals.pluginPath, self.NO_COVER_PIC_PATH)
 		global glob_screensaver_num
 		global glob_icon_num
 		global glob_last_cover
@@ -122,20 +120,29 @@ class CoverHelper:
 	def showCoverFile(self, picPath, showNoCoverart=True):
 		if self.logofix and not mp_globals.isDreamOS:
 			try:
-				from PIL import Image
-				im = Image.open(picPath)
-				im.load()
-				size = self._cover.instance.size()
-				basewidth = size.width()
-				wpercent = (basewidth / float(im.size[0]))
-				hsize = int((float(im.size[1]) * float(wpercent)))
-				im = im.resize((basewidth, hsize), Image.ANTIALIAS)
-				alpha = im.split()[-1]
-				im = im.convert('RGB').convert('P', palette=Image.ADAPTIVE, colors=255)
-				mask = Image.eval(alpha, lambda a: 255 if a <=128 else 0)
-				im.paste(255, mask)
-				im.save("/tmp/conv.png", transparency=255, optimize=True)
-				picPath = "/tmp/conv.png"
+				conv_path = '/tmp/mediaportal/conv'
+				try:
+					os.makedirs(conv_path)
+				except OSError, e:
+					pass
+				cover_file = conv_path + '/' + picPath.split('/')[-1]
+				if not fileExists(cover_file):
+					from PIL import Image
+					im = Image.open(picPath)
+					im.load()
+					size = self._cover.instance.size()
+					basewidth = size.width()
+					wpercent = (basewidth / float(im.size[0]))
+					hsize = int((float(im.size[1]) * float(wpercent)))
+					im = im.resize((basewidth, hsize), Image.ANTIALIAS)
+					alpha = im.split()[-1]
+					im = im.convert('RGB').convert('P', palette=Image.ADAPTIVE, colors=255)
+					mask = Image.eval(alpha, lambda a: 255 if a <=128 else 0)
+					im.paste(255, mask)
+					im.save(cover_file, transparency=255, optimize=True)
+					picPath = cover_file
+				else:
+					picPath = cover_file
 			except Exception as e:
 				printl(e,self,"E")
 		if fileExists(picPath):

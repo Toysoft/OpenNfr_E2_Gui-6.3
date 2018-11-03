@@ -19,7 +19,7 @@
   <eLabel name="button yellow" position="503,711" size="243,1" backgroundColor="#00e5b243" zPosition="1" />
   <eLabel name="button blue" position="750,711" size="243,1" backgroundColor="#000064c7" zPosition="1" />
   <!-- select screen -->
-  <widget alphatest="on" name="coverArt" pixmap="~/clean_hd/images/no_coverArt.png" position="860,80" size="406,266" />
+  <widget alphatest="on" name="coverArt" position="860,80" size="406,266" />
   <widget backgroundColor="#20000000" font="mediaportal;20" name="artist" position="860,366" size="406,60" transparent="1" valign="center" halign="center" />
   <widget backgroundColor="#20000000" font="mediaportal;20" name="songtitle" position="860,433" size="406,80" transparent="1" valign="top" halign="center" />
   <eLabel backgroundColor="#00616161" position="860,526" size="406,1" foregroundColor="grey" />

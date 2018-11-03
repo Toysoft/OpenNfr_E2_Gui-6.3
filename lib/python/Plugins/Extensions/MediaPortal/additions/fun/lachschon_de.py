@@ -45,16 +45,16 @@ from Plugins.Extensions.MediaPortal.resources.youtubelink import YoutubeLink
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
-LSDE_Version = "LACHSCHON.DE"
+default_cover = "file://%s/lachschon_de.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class show_LSDE_Genre(MenuHelper):
 
 	def __init__(self, session):
 
 		baseUrl = "http://www.lachschon.de"
-		MenuHelper.__init__(self, session, 0, None, baseUrl, "", self._defaultlistcenter)
+		MenuHelper.__init__(self, session, 0, None, baseUrl, "", self._defaultlistcenter, default_cover=default_cover)
 
-		self['title'] = Label(LSDE_Version)
+		self['title'] = Label("LACHSCHON.DE")
 		self['ContentTitle'] = Label("Genres")
 		self.suchString = ''
 
@@ -100,7 +100,7 @@ class LSDE_FilmListeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, genreLink, genreName):
 		self.genreLink = genreLink
 		self.genreName = genreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -131,7 +131,7 @@ class LSDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.sortOrderStrAZ = ""
 		self.sortOrderStrIMDB = ""
 		self.sortOrderStrGenre = ""
-		self['title'] = Label(LSDE_Version)
+		self['title'] = Label("LACHSCHON.DE")
 
 		self['Page'] = Label(_("Page:"))
 

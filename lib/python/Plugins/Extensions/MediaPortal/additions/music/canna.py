@@ -3,11 +3,13 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.cannalink import CannaLink
 
+default_cover = "file://%s/canna.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class cannaGenreScreen(MPScreen):
 
 	def __init__(self, session):
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -16,7 +18,7 @@ class cannaGenreScreen(MPScreen):
 		}, -1)
 
 		self.keyLocked = True
-		self['title'] = Label("Canna.to")
+		self['title'] = Label("CannaPower")
 		self['ContentTitle'] = Label(_("Albums:"))
 
 		self.genreliste = []
@@ -66,7 +68,7 @@ class cannaGenreScreen(MPScreen):
 class cannaPlaylist(MPScreen):
 
 	def __init__(self, session, genreName):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		self.genreName = genreName
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -77,7 +79,7 @@ class cannaPlaylist(MPScreen):
 		}, -1)
 
 		self.keyLocked = True
-		self["title"] = Label("Canna.to")
+		self["title"] = Label("CannaPower")
 		self['ContentTitle'] = Label(self.genreName)
 		self['F1'] = Label(_("Delete"))
 
@@ -140,7 +142,7 @@ class cannaMusicListeScreen(MPScreen):
 		self.genreLink = genreLink
 		self.genreName = genreName
 		self.type = type
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -150,7 +152,7 @@ class cannaMusicListeScreen(MPScreen):
 		}, -1)
 
 		self.keyLocked = True
-		self["title"] = Label("Canna.to")
+		self["title"] = Label("CannaPower")
 		self['ContentTitle'] = Label(self.genreName)
 		self['F2'] = Label(_("Add to Playlist"))
 
@@ -238,7 +240,7 @@ class cannaJahreScreen(MPScreen):
 		self.genreLink = genreLink
 		self.genreName = genreName
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -247,7 +249,7 @@ class cannaJahreScreen(MPScreen):
 		}, -1)
 
 		self.keyLocked = True
-		self['title'] = Label("Canna.to")
+		self['title'] = Label("CannaPower")
 		self['ContentTitle'] = Label(_("Year:"))
 
 		self.filmliste = []

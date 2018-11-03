@@ -253,9 +253,9 @@ class ORFStreamListeScreen(MPScreen):
 		if folgen:
 			self.streamliste = []
 			for (title, desc, image, urls) in folgen[:-1]:
-				url = re.search('"quality":"Q8C","quality_string":"Sehr hoch","src":"(http[s]?://apasfiis.sf.apa.at/ipad/.*?.mp4)', urls, re.S)
+				url = re.search('"quality":"Q8C","quality_string":"Sehr hoch","src":"(http[s]?://apasfiis.sf.apa.at/ipad/.*?)"', urls, re.S)
 				if not url:
-					url = re.search('"quality":"Q6A","quality_string":"Hoch","src":"(http[s]?://apasfiis.sf.apa.at/ipad/.*?.mp4)', urls, re.S)
+					url = re.search('"quality":"Q6A","quality_string":"Hoch","src":"(http[s]?://apasfiis.sf.apa.at/ipad/.*?)"', urls, re.S)
 				title = title.replace('\\"','"')
 				if desc == "null":
 					desc = ""

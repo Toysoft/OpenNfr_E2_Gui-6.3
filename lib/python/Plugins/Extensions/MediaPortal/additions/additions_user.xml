@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
 	<set name="additions_user">
-		<plugin type="mod" modfile="sport.wrestlingnetwork" confopt="showWatchwrestling" default="False" confcat="sport" gz="1" name="Watch Wrestling In" icon="watchwrestling" filter="Sport" screen="wrestlingnetworkGenreScreen" param1="watchwrestling" param2=""/>
-		<plugin type="mod" modfile="sport.wrestlingnetwork" confopt="showWatchwrestlinguno" default="False" confcat="sport" gz="1" name="Watch Wrestling Uno" icon="watchwrestlinguno" filter="Sport" screen="wrestlingnetworkGenreScreen" param1="watchwrestlinguno" param2=""/>
-		<plugin type="mod" modfile="music.canna" confopt="showCanna" default="False" confcat="music" gz="1" name="Canna-Power" icon="canna" filter="Music" screen="cannaGenreScreen" param1="" param2=""/>
+		<plugin type="mod" modfile="sport.wrestlingnetwork" confopt="showWatchwrestling" default="False" confcat="sport" gz="1" name="Watch Wrestling.in" icon="watchwrestling" filter="Sport" screen="wrestlingnetworkGenreScreen" param1="watchwrestling" param2=""/>
+		<plugin type="mod" modfile="sport.wrestlingnetwork" confopt="showWatchwrestlinguno" default="False" confcat="sport" gz="1" name="Watch Wrestling.ac" icon="watchwrestlinguno" filter="Sport" screen="wrestlingnetworkGenreScreen" param1="watchwrestlinguno" param2=""/>
+		<plugin type="mod" modfile="music.canna" confopt="showCanna" default="False" confcat="music" gz="1" name="CannaPower" icon="canna" filter="Music" screen="cannaGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="music.eighties" confopt="showEighties" default="False" confcat="music" gz="1" name="80s &amp; 90s Music" icon="eighties" filter="Music" screen="eightiesGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="porn.hqporner" confopt="showhqporner" default="False" confcat="porn" gz="1" name="HQPORNER" icon="hqporner" filter="Porn" screen="hqpornerGenreScreen" param1="" param2="" search="1" delim="+" searchurl="%s" searchscreen="hqpornerListScreen" searchparam=""/>
 		<plugin type="mod" modfile="porn.porn00" confopt="showporn00" default="False" confcat="porn" gz="1" name="Porn00" icon="porn00" filter="Porn" screen="porn00GenreScreen" param1="" param2="" search="1" delim="+" searchurl="%s" searchscreen="porn00FilmScreen" searchparam=""/>

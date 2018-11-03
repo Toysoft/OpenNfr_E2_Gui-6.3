@@ -3,6 +3,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from imports import *
 from keyboardext import VirtualKeyBoardExt
 from Components.Sources.StaticText import StaticText
+from Components.Pixmap import MovingPixmap
 from thread import allocate_lock
 from debuglog import printlog as printl
 import mp_globals
@@ -118,8 +119,6 @@ class ThumbsHelper:
 
 class ShowThumbscreen(MPScreen):
 
-	NO_COVER_PIC_PATH = "/images/no_coverArt.png"
-
 	def __init__(self, session, callbacknewpage=None, filmList=[], filmnamePos=0, filmurlPos=1, filmimageurlPos=2, filmnameaddPos=3, pageregex=None, filmpage=1, filmpages=999, **kwargs):
 		self._callbacknewpage = callbacknewpage
 		self.filmList = filmList
@@ -131,7 +130,7 @@ class ShowThumbscreen(MPScreen):
 		self.pageregex = pageregex
 		self.filmpage = filmpage
 		self.filmpages = filmpages
-		self._no_picPath = "%s/skins/%s%s" % (mp_globals.pluginPath, mp_globals.currentskin, self.NO_COVER_PIC_PATH)
+		self._no_picPath = "%s/images/default_cover.png" % mp_globals.pluginPath
 
 		mode = kwargs.get('mode', 0)
 		self.method = kwargs.get('method', None)
@@ -160,7 +159,7 @@ class ShowThumbscreen(MPScreen):
 				yoffset = 103
 				fontsize = 17
 				textsize = 20
-			self.coverframe = 'pic_frame_mode1_%s.png' % config_mp.mediaportal.selektor.value
+			self.coverframe = 'pic_frame_mode1.png'
 
 		else:
 			if mp_globals.videomode == 2:
@@ -181,7 +180,7 @@ class ShowThumbscreen(MPScreen):
 				yoffset = 103
 				fontsize = 17
 				textsize = 20
-			self.coverframe = 'pic_frame_%s.png' % config_mp.mediaportal.selektor.value
+			self.coverframe = 'pic_frame_mode0.png'
 
 		# Thumbs Geometrie, groesse und Anzahl berechnen
 		if mp_globals.videomode == 2:
@@ -224,10 +223,12 @@ class ShowThumbscreen(MPScreen):
 		self["hidePig"] = Boolean()
 		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
 
+		self["thumb_actions"] = HelpableActionMap(self, "MP_Actions", {
+			"deleteBackward" : (self.key_deleteBackward, _("Section back")),
+			"deleteForward"  : (self.key_deleteForward, _("Section forward"))
+		}, -2)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
-			"deleteBackward" : self.key_deleteBackward,
-			"deleteForward" : self.key_deleteForward,
 			"0"		: self.closeAll,
 			"5"		: self.keyCancelThumbmode,
 			"cancel": self.keyCancel,
@@ -648,6 +649,7 @@ class ShowThumbscreen(MPScreen):
 						self['thumb'].setText("%d / %d" % (self.loadnumcounter , self.filmnummer))
 
 	def download(self, image, jpg_store):
+		print image
 		if not image:
 			return ('no_cover')
 		else:

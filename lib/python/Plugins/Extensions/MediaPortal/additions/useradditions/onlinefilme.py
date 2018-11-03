@@ -15,10 +15,12 @@ BASE_URL = "http://onlinefilme.to"
 BASE_URL2 = "http://onlinefilme.biz"
 glob_cookies = CookieJar()
 
+default_cover = "file://%s/onlinefilme.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class show_SKTO_Genre(MenuHelper):
 
 	def __init__(self, session):
-		MenuHelper.__init__(self, session, 0, None, BASE_URL, "", self._defaultlistcenter, cookieJar=glob_cookies)
+		MenuHelper.__init__(self, session, 0, None, BASE_URL, "", self._defaultlistcenter, cookieJar=glob_cookies, default_cover=default_cover)
 
 		self['title'] = Label(SKTO_Version)
 		self['ContentTitle'] = Label("Genres")
@@ -106,7 +108,7 @@ class SKTO_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.genreName = genreName
 		self.searchForm = searchForm
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -231,7 +233,7 @@ class SKTO_FilmListeScreen(MPScreen, ThumbsHelper):
 				self.dokusListe.append((name, url, BASE_URL+img, infos, imdb))
 
 			if not self.pages:
-				ps = re.findall('href=\".*?page=.*?\">(\d+)</a>', data)
+				ps = re.findall("href='.*?page=.*?'>(\d+)</a>", data)
 				try:
 					pages = int(ps[-1])
 				except:
@@ -421,7 +423,7 @@ class SKTO_Streams(MPScreen):
 		self.imageUrl = imageLink
 		self.infos = infos
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"green" 	: self.keyTrailer,

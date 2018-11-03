@@ -21,7 +21,7 @@
 	</widget>
 	<eLabel name="bgbg bar" position="116,0" size="1150,166" zPosition="-2" backgroundColor="#20000000" />
 	<eLabel name="bg cover" position="0,0" size="113,166" zPosition="-1" backgroundColor="#20000000" />
-	<widget name="noCover" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/clean_hd/simpleplayer/spbar_nocover.png" position="3,3" size="106,160" zPosition="0" alphatest="blend" />
+	<widget name="noCover" position="3,3" size="106,160" zPosition="0" alphatest="blend" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/clean_hd/simpleplayer/clock.png" position="123,133" size="26,26" zPosition="1" alphatest="blend" />
 	<widget source="global.CurrentTime" render="Label" position="156,132" size="66,26" font="mediaportal_clean;23" transparent="1" backgroundColor="#00616161" halign="left" foregroundColor="#00ffffff" zPosition="1">
 		<convert type="ClockToText">Default</convert>
@@ -34,11 +34,11 @@
 		<convert type="MPServicePosition">EndTime,ShowNoSeconds</convert>
 	</widget>
 	<widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/clean_hd/simpleplayer/resicon.png" position="350,133" size="26,26" zPosition="1" alphatest="blend">
-		<convert type="MPServiceInfo">VideoParams</convert>
+		<convert type="MPServiceInfo">VideoInfo</convert>
 		<convert type="ConditionalShowHide" />
 	</widget>
-	<widget source="session.CurrentService" render="Label" position="383,132" size="186,26" backgroundColor="#00616161" transparent="1" font="mediaportal_clean;23" halign="left" foregroundColor="#00ffffff">
-		<convert type="MPServiceInfo">VideoParams</convert>
+	<widget source="session.CurrentService" render="Label" position="383,132" size="320,26" backgroundColor="#00616161" transparent="1" font="mediaportal_clean;23" halign="left" foregroundColor="#00ffffff">
+		<convert type="MPServiceInfo">VideoInfoCodec</convert>
 	</widget>
 	<widget source="session.CurrentService" render="mp_AudioIcon" position="1146,136" zPosition="1" path="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins_720/clean_hd/simpleplayer" size="53,23" alphatest="blend">
 		<convert type="mp_audioinfo">AudioIcon</convert>

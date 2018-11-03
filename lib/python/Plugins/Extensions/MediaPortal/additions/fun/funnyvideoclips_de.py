@@ -7,16 +7,14 @@ from Plugins.Extensions.MediaPortal.resources.youtubelink import YoutubeLink
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
-FVCDE_Version = "Funny Videoclips"
-
-FVCDE_siteEncoding = 'utf-8'
+default_cover = "file://%s/funnyvideoclips_de.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class show_FVCDE_Genre(MenuHelper):
 
 	def __init__(self, session):
-		MenuHelper.__init__(self, session, 0, [[]], "http://www.funny-videoclips.de", "", self._defaultlistcenter)
+		MenuHelper.__init__(self, session, 0, [[]], "http://www.funny-videoclips.de", "", self._defaultlistcenter, default_cover=default_cover)
 
-		self['title'] = Label(FVCDE_Version)
+		self['title'] = Label("Funny Videoclips")
 		self['ContentTitle'] = Label("Genres")
 
 		self.onLayoutFinish.append(self.mh_initMenu)
@@ -38,7 +36,7 @@ class FVCDE_FilmListeScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, genreLink, genreName):
 		self.genreLink = genreLink
 		self.genreName = genreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
@@ -76,7 +74,7 @@ class FVCDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.sortOrderStrAZ = ""
 		self.sortOrderStrIMDB = ""
 		self.sortOrderStrGenre = ""
-		self['title'] = Label(FVCDE_Version)
+		self['title'] = Label("Funny Videoclips")
 
 		self['Page'] = Label(_("Page:"))
 

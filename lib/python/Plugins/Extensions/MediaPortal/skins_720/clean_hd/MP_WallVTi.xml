@@ -29,5 +29,5 @@
   <eLabel name="button info bg" position="1106,689" size="42,20" backgroundColor="#00616161" zPosition="0" />
   <eLabel name="button help bg" position="1159,689" size="42,20" backgroundColor="#00616161" zPosition="0" />
   <eLabel name="button exit bg" position="1212,689" size="42,20" backgroundColor="#00616161" zPosition="0" />
-  <widget name="list" position="6,135" size="1266,525" itemSize="144,77" itemScale="125,125" itemSpace="3" useShadow="1" useOverlay="1" backgroundColorGlobal="#20000000" backgroundColor="#20000000" backgroundColorSelected="#20000000" transparent="0"/>
+  <widget name="list" position="6,135" size="1266,525" itemSize="144,77" itemScale="125,125" itemSpace="3" useShadow="1" useOverlay="0" backgroundColorGlobal="#20000000" backgroundColor="#20000000" backgroundColorSelected="#20000000" transparent="0"/>
   </screen>

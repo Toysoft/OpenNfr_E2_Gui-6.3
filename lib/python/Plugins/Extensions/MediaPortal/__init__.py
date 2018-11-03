@@ -11,8 +11,6 @@ def localeInit():
 
 def _(txt):
 	t = gettext.dgettext("MediaPortal", txt)
-	if t == txt:
-		t = gettext.gettext(txt)
 	return t
 
 localeInit()

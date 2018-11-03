@@ -47,7 +47,7 @@ from Components.Label import Label
 from Components.Language import language
 from Components.MenuList import MenuList
 from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaBlend
-from Components.Pixmap import Pixmap, MovingPixmap
+from Components.Pixmap import Pixmap
 from Components.ScrollLabel import ScrollLabel
 from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
 from Components.Sources.Boolean import Boolean

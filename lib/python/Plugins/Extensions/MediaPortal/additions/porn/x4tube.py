@@ -103,7 +103,7 @@ class fourtubeGenreScreen(MPScreen):
 		getPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		if self.portal == "PornTube.com":
+		if self.portal in ["PornTube.com","fux.com"]:
 			data = re.search(".*?window.INITIALSTATE = '(.*?)'", data, re.S).group(1)
 			import base64
 			data = urllib.unquote(base64.b64decode(data))
@@ -161,7 +161,7 @@ class fourtubeGenreScreen(MPScreen):
 			self.session.open(fourtubeFilmScreen, Link, Name, self.portal, self.baseurl)
 
 	def getSuggestions(self, text, max_res):
-		if self.portal == "PornTube.com":
+		if self.portal in ["PornTube.com","fux.com"]:
 			url = "https://%s/api/search/suggestions?q=%s&orientation=straight" % (self.baseurl, urllib.quote_plus(text))
 		else:
 			url = "https://%s/search_suggestions_remote?q=%s&type=related" % (self.baseurl, urllib.quote_plus(text))
@@ -174,11 +174,18 @@ class fourtubeGenreScreen(MPScreen):
 		list = []
 		if not err and type(suggestions) in (str, buffer):
 			suggestions = json.loads(suggestions)
-			for item in suggestions:
-				li = item['value']
-				list.append(str(li))
-				max_res -= 1
-				if not max_res: break
+			if self.portal in ["PornTube.com","fux.com"]:
+				for item in suggestions['popularSearches']:
+					li = item['text']
+					list.append(str(li))
+					max_res -= 1
+					if not max_res: break
+			else:
+				for item in suggestions:
+					li = item['value']
+					list.append(str(li))
+					max_res -= 1
+					if not max_res: break
 		elif err:
 			printl(str(suggestions),self,'E')
 		return list
@@ -216,7 +223,7 @@ class fourtubeSitesScreen(MPScreen, ThumbsHelper):
 		self['Page'] = Label(_("Page:"))
 		self.keyLocked = True
 		self.page = 1
-		if self.portal == "PornTube.com" and self.Name == "Channels":
+		if self.portal in ["PornTube.com","fux.com"] and self.Name == "Channels":
 			self.sort = 'subscribers'
 		else:
 			self.sort = 'likes'
@@ -235,7 +242,7 @@ class fourtubeSitesScreen(MPScreen, ThumbsHelper):
 		getPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		if self.portal == "PornTube.com":
+		if self.portal in ["PornTube.com","fux.com"]:
 			data = re.search(".*?window.INITIALSTATE = '(.*?)'", data, re.S).group(1)
 			import base64
 			data = urllib.unquote(base64.b64decode(data))
@@ -273,7 +280,7 @@ class fourtubeSitesScreen(MPScreen, ThumbsHelper):
 		if self.Name == 'Pornstars':
 			rangelist = [['Likes', 'likes'], ['Popularity','popularity'], ['Twitter','twitter'], ['Videos','videos'], ['Name','name'], ['Date','date'], ['Subscribers','subscribers']]
 		else:
-			if self.portal == "PornTube.com":
+			if self.portal in ["PornTube.com","fux.com"]:
 				rangelist = [['Videos','video'], ['Name','name'], ['Date','date'], ['Subscribers','subscribers']]
 			else:
 				rangelist = [['Likes', 'likes'], ['Videos','videos'], ['Name','name'], ['Date','date'], ['Subscribers','subscribers']]
@@ -372,7 +379,7 @@ class fourtubeFilmScreen(MPScreen, ThumbsHelper):
 		getPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		if self.portal == "PornTube.com":
+		if self.portal in ["PornTube.com","fux.com"]:
 			data = re.search(".*?window.INITIALSTATE = '(.*?)'", data, re.S).group(1)
 			import base64
 			data = urllib.unquote(base64.b64decode(data))
@@ -444,7 +451,7 @@ class fourtubeFilmScreen(MPScreen, ThumbsHelper):
 		getPage(Link, agent=agent).addCallback(self.getVideoID).addErrback(self.dataError)
 
 	def getVideoID(self, data):
-		if self.portal == "PornTube.com":
+		if self.portal in ["PornTube.com","fux.com"]:
 			json_data = json.loads(data)
 			videoID = json_data["video"]["mediaId"]
 			info = {}

@@ -4,10 +4,12 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 
 ws_url = "www1.swatchseries.to"
 
+default_cover = "file://%s/watchseries.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class watchseriesGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -46,7 +48,7 @@ class watchseriesNewSeriesScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -88,7 +90,7 @@ class watchseriesSeriesLetterScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -124,7 +126,7 @@ class watchseriesSeriesScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -191,7 +193,7 @@ class watchseriesEpisodeListeScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
@@ -254,7 +256,7 @@ class watchseriesStreamListeScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,

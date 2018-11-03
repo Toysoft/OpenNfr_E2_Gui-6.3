@@ -157,7 +157,7 @@ class gigatvFilmScreen(MPScreen, ThumbsHelper):
 		Movies = re.findall('<article\sclass=.*?<img title="(.*?)".*?src="(https://static.giga.de/.*?)".*?<a\shref="(.*?)"', data, re.S|re.I)
 		if Movies:
 			for (Title, Image, Url) in Movies:
-				self.filmliste.append((decodeHtml(Title).strip(), Image, Url))
+				self.filmliste.append((decodeHtml(Title).strip(), Url, Image))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.ml.moveToIndex(0)
 			self.keyLocked = False
@@ -166,14 +166,14 @@ class gigatvFilmScreen(MPScreen, ThumbsHelper):
 
 	def showInfos(self):
 		Title = self['liste'].getCurrent()[0][0]
-		Image = self['liste'].getCurrent()[0][1]
+		Image = self['liste'].getCurrent()[0][2]
 		self['name'].setText(Title)
 		CoverHelper(self['coverArt']).getCover(Image)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		url = self['liste'].getCurrent()[0][2]
+		url = self['liste'].getCurrent()[0][1]
 		getPage(url).addCallback(self.getID).addErrback(self.dataError)
 
 	def getID(self, data):
@@ -191,7 +191,8 @@ class gigatvFilmScreen(MPScreen, ThumbsHelper):
 				message = self.session.open(MessageBoxExt, _("This video is not available."), MessageBoxExt.TYPE_INFO, timeout=5)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('src.":."(http[s]?://(?:lx\d+.spieletips.de|vid-cdn\d+.stroeermb.de)/\d+(?:_v\d+|)/(?:1080|720|480|360)+p.mp4)."', data, re.S)
+		data = data.replace('\/','/')
+		videoPage = re.findall('src":"(http[s]?:\/\/(?:lx\d+.spieletips.de|vid-cdn\d+.stroeermb.de)/\d+(?:_v\d+|)/(?:1080|720|480|360)+p.mp4)"', data, re.S)
 		if videoPage:
 			url = videoPage[0]
 			self.play(url)

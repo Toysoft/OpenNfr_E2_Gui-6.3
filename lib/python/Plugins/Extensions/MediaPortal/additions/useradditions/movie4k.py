@@ -6,7 +6,7 @@ from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPag
 from Plugins.Extensions.MediaPortal.resources.pininputext import PinInputExt
 
 config_mp.mediaportal.movie4klang2 = ConfigText(default="de", fixed_size=False)
-config_mp.mediaportal.movie4kdomain3 = ConfigText(default="https://movie4k.io", fixed_size=False)
+config_mp.mediaportal.movie4kdomain3 = ConfigText(default="https://movie4k.lol", fixed_size=False)
 
 m4k = config_mp.mediaportal.movie4kdomain3.value.replace('https://','').replace('http://','')
 m4k_url = "%s/" % config_mp.mediaportal.movie4kdomain3.value
@@ -35,6 +35,8 @@ m4k_cookies = CookieJar()
 m4k_ck = {}
 m4k_agent = ''
 
+default_cover = "file://%s/movie4k.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 def m4kcancel_defer(deferlist):
 	try:
 		[x.cancel() for x in deferlist]
@@ -45,7 +47,7 @@ class m4kGenreScreen(MPScreen):
 
 	def __init__(self, session, mode=""):
 		self.showM4kPorn = mode
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -102,10 +104,14 @@ class m4kGenreScreen(MPScreen):
 						requests.cookies.cookiejar_from_dict(m4k_ck, cookiejar=m4k_cookies)
 				except:
 					pass
-			if self.locale == "de":
-				m4k_ck.update({'lang':'de'})
-				requests.cookies.cookiejar_from_dict(m4k_ck, cookiejar=m4k_cookies)
-			elif self.locale == "en":
+			if self.showM4kPorn != "porn":
+				if self.locale == "de":
+					m4k_ck.update({'lang':'de'})
+					requests.cookies.cookiejar_from_dict(m4k_ck, cookiejar=m4k_cookies)
+				elif self.locale == "en":
+					m4k_ck.update({'lang':'en'})
+					requests.cookies.cookiejar_from_dict(m4k_ck, cookiejar=m4k_cookies)
+			else:
 				m4k_ck.update({'lang':'en'})
 				requests.cookies.cookiejar_from_dict(m4k_ck, cookiejar=m4k_cookies)
 			self.keyLocked = False
@@ -120,14 +126,14 @@ class m4kGenreScreen(MPScreen):
 	def getGenres(self):
 		self.list = []
 		if self.showM4kPorn == "porn":
-			self.list.append(("Letzte Updates", m4k_url+"xxx-updates.html"))
+			self.list.append(("Latest Updates", m4k_url+"xxx-updates.html"))
 			self.list.append(('Genres', m4k_url+"genres-xxx.html"))
-			self.list.append(("Alle Filme A-Z", "XXXAZ"))
+			self.list.append(("All Movies", "XXXAZ"))
 		else:
 			self.list.append(("Kinofilme", m4k_url+"index.php"))
 			self.list.append(("Videofilme", m4k_url+"index.php"))
 			self.list.append(("Letzte Updates", m4k_url+"index.php"))
-			self.list.append(("Alle Filme A-Z", "FilmeAZ"))
+			self.list.append(("Alle Filme", "FilmeAZ"))
 			self.list.append(("Suche...", m4k_url+"movies.php?list=search"))
 			self.list.append(("Abenteuer", g_url+"4-"))
 			self.list.append(("Action", g_url+"1-"))
@@ -169,9 +175,9 @@ class m4kGenreScreen(MPScreen):
 			self.session.open(m4kFilme, self.url, name)
 		elif "xxx-updates.html" in self.url:
 			self.session.open(m4kXXXListeScreen, self.url, name, '')
-		elif name == "Letzte Updates":
+		elif (name == "Letzte Updates" or name == "Latest Updates"):
 			self.session.open(m4kupdateFilme, self.url, name)
-		elif "Alle Filme A-Z" in name:
+		elif (name == "Alle Filme" or name == "All Movies"):
 			self.session.open(m4kABCAuswahl, self.url, name)
 		elif name == "Suche...":
 			self.session.openWithCallback(self.searchCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = "", is_dialog=True)
@@ -244,18 +250,18 @@ class m4kGenreScreen(MPScreen):
 			self['F3'].setText(self.locale)
 			self.layoutFinished()
 
-	def searchCallback(self, callbackStr):
-		if callbackStr is not None:
-			self.searchStr = callbackStr
-			self.searchData = self.searchStr
-			self.session.open(m4kSucheAlleFilmeListeScreen, self.url, self.searchData)
+	def searchCallback(self, callback):
+		if callback is not None and len(callback):
+			self.searchStr = callback
+			searchStr = urllib.quote(callback)
+			url = m4k_url + "movies.php?list=search&search=" + searchStr
+			self.session.open(m4kSucheAlleFilmeListeScreen, url)
 
 class m4kSucheAlleFilmeListeScreen(MPScreen):
 
-	def __init__(self, session, searchUrl, searchData):
+	def __init__(self, session, searchUrl):
 		self.searchUrl = searchUrl
-		self.searchData = searchData
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -268,7 +274,7 @@ class m4kSucheAlleFilmeListeScreen(MPScreen):
 		}, -1)
 
 		self['title'] = Label(m4k)
-		self['ContentTitle'] = Label("Suche nach: %s" % self.searchData)
+		self['ContentTitle'] = Label("Suche")
 
 		self.deferreds = []
 		self.keyLocked = True
@@ -280,7 +286,7 @@ class m4kSucheAlleFilmeListeScreen(MPScreen):
 
 	def loadPage(self):
 		self['name'].setText(_("Please wait..."))
-		url = "%s&search=%s" % (self.searchUrl, self.searchData)
+		url = self.searchUrl
 		twAgentGetPage(url, agent=m4k_agent, cookieJar=m4k_cookies, timeout=30).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
@@ -325,7 +331,7 @@ class m4kKinoAlleFilmeListeScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -451,7 +457,7 @@ class m4kupdateFilme(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -526,7 +532,7 @@ class m4kFilme(MPScreen):
 	def __init__(self, session, streamGenreLink, streamGenreName):
 		self.streamGenreLink = streamGenreLink
 		self.streamGenreName = streamGenreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -601,7 +607,7 @@ class m4kStreamListeScreen(MPScreen):
 	def __init__(self, session, streamGenreLink, streamName):
 		self.streamGenreLink = streamGenreLink
 		self.streamName = streamName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -738,7 +744,7 @@ class m4kPartListeScreen(MPScreen):
 	def __init__(self, session, data, streamName):
 		self.data = data
 		self.streamName = streamName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -832,7 +838,7 @@ class m4kXXXListeScreen(MPScreen):
 		self.genre = False
 		if genre == 'X':
 			self.genre = True
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,
@@ -945,7 +951,7 @@ class m4kABCAuswahl(MPScreen):
 	def __init__(self, session, url, name):
 		self.url = url
 		self.name = name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"	: self.keyOK,

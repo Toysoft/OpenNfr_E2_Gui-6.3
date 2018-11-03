@@ -5,10 +5,12 @@ from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 
 BASE_URL="http://flimmerstube.com"
 
+default_cover = "file://%s/flimmerstube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class flimmerstubeGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -58,7 +60,7 @@ class flimmerstubeFilmScreen(MPScreen):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,

@@ -197,8 +197,8 @@ config_mp.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choice
 		])
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2018102601"))
-config.mediaportal.version = NoSave(ConfigText(default="2018102601"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2018110301"))
+config.mediaportal.version = NoSave(ConfigText(default="2018110301"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 
@@ -259,7 +259,6 @@ else:
 	config_mp.mediaportal.ansicht = ConfigSelection(default = "wall", choices = [("wall", _("Wall")), ("liste", _("List"))])
 config_mp.mediaportal.wallmode = ConfigSelection(default = "color_zoom", choices = [("color_zoom", _("Color")),("bw_zoom", _("Black&White"))])
 config_mp.mediaportal.wall2mode = ConfigSelection(default = "color", choices = [("color", _("Color")),("bw", _("Black&White"))])
-config_mp.mediaportal.selektor = ConfigSelection(default = "white", choices = [("white", _("White"))])
 config_mp.mediaportal.hlsp_enable = ConfigYesNo(default = True)
 config_mp.mediaportal.hls_proxy_ip = ConfigIP(default = [127,0,0,1], auto_jump = True)
 config_mp.mediaportal.hls_proxy_port = ConfigInteger(default = 0, limits = (0,65535))
@@ -274,7 +273,6 @@ config_mp.mediaportal.youtubeenabledash = ConfigYesNo(default = False)
 config_mp.mediaportal.youtubeenabledash480p = ConfigYesNo(default = False)
 config_mp.mediaportal.youtubeprio = ConfigSelection(default = "2", choices = [("0", "360p"),("1", "480p"),("2", "720p"),("3", "1080p"),("4", "1440p"),("5", "2160p")])
 config_mp.mediaportal.videoquali_others = ConfigSelection(default = "2", choices = [("0", _("Low")),("1", _("Medium")),("2", _("High"))])
-config_mp.mediaportal.youtube_max_items_pp = ConfigInteger(default = 50, limits = (50,50))
 config_mp.mediaportal.pornpin = ConfigYesNo(default = True)
 config_mp.mediaportal.pornpin_cache = ConfigSelection(default = "0", choices = [("0", _("never")), ("5", _("5 minutes")), ("15", _("15 minutes")), ("30", _("30 minutes")), ("60", _("60 minutes"))])
 config_mp.mediaportal.kidspin = ConfigYesNo(default = False)
@@ -291,7 +289,6 @@ config_mp.mediaportal.minitv = ConfigYesNo(default = True)
 
 # Konfiguration erfolgt in SimplePlayer
 config_mp.mediaportal.sp_playmode = ConfigSelection(default = "forward", choices = [("forward", _("Forward")),("backward", _("Backward")),("random", _("Random")),("endless", _("Endless"))])
-config_mp.mediaportal.sp_scrsaver = ConfigSelection(default = "off", choices = [("on", _("On")),("off", _("Off")),("automatic", _("Automatic"))])
 config_mp.mediaportal.sp_on_movie_stop = ConfigSelection(default = "quit", choices = [("ask", _("Ask user")), ("quit", _("Return to previous service"))])
 config_mp.mediaportal.sp_on_movie_eof = ConfigSelection(default = "quit", choices = [("ask", _("Ask user")), ("quit", _("Return to previous service")), ("pause", _("Pause movie at end"))])
 config_mp.mediaportal.sp_seekbar_sensibility = ConfigInteger(default = 10, limits = (1,50))
@@ -306,7 +303,7 @@ if model in ["dm900","dm920"]:
 	config_mp.mediaportal.sp_radio_visualization = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Mode 1")), ("2", _("Mode 2")), ("3", _("Mode 3"))])
 else:
 	config_mp.mediaportal.sp_radio_visualization = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Mode 1")), ("2", _("Mode 2"))])
-config_mp.mediaportal.sp_radio_bgsaver = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Ken Burns effect")), ("2", _("Just photos")), ("3", _("Black screen"))])
+config_mp.mediaportal.sp_radio_bgsaver = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Ken Burns effect")), ("2", _("Just photos"))])
 config_mp.mediaportal.sp_radio_bgsaver_keywords = ConfigText(default="music", fixed_size=False)
 config_mp.mediaportal.yt_proxy_username = ConfigText(default="user!", fixed_size=False)
 config_mp.mediaportal.yt_proxy_password = ConfigPassword(default="pass!", fixed_size=False)
@@ -459,10 +456,6 @@ class CheckPathes:
 			self.session.openWithCallback(self._callback, MessageBoxExt, msg, MessageBoxExt.TYPE_ERROR)
 
 		res, msg = SimplePlaylistIO.checkPath(config_mp.mediaportal.iconcachepath.value + "icons_bw/", '', True)
-		if not res:
-			self.session.openWithCallback(self._callback, MessageBoxExt, msg, MessageBoxExt.TYPE_ERROR)
-
-		res, msg = SimplePlaylistIO.checkPath(config_mp.mediaportal.iconcachepath.value + "icons_zoom/", '', True)
 		if not res:
 			self.session.openWithCallback(self._callback, MessageBoxExt, msg, MessageBoxExt.TYPE_ERROR)
 
@@ -629,7 +622,6 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		if config_mp.mediaportal.ansicht.value == "wall2":
 			self.configlist.append(getConfigListEntry(_("Wall 2.0 Mode:"), config_mp.mediaportal.wall2mode, False))
 		if (config_mp.mediaportal.ansicht.value == "wall" or config_mp.mediaportal.ansicht.value == "wall2"):
-			#self.configlist.append(getConfigListEntry(_("Wall-Selector-Color:"), config_mp.mediaportal.selektor, False))
 			self.configlist.append(getConfigListEntry(_("Page Display Style:"), config_mp.mediaportal.pagestyle, False))
 		self.configlist.append(getConfigListEntry(_("Skin:"), config_mp.mediaportal.skin2, False))
 		#self.configlist.append(getConfigListEntry(_("ShowAsThumb as Default:"), config_mp.mediaportal.showAsThumb, False))
@@ -677,7 +669,6 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			self.configlist.append(getConfigListEntry(_("Use DASH format for 480p:"), config_mp.mediaportal.youtubeenabledash480p, False))
 		if config_mp.mediaportal.youtubeenabledash.value:
 			self.configlist.append(getConfigListEntry(_("Enable VP9 codec (required for resolutions >1080p):"), config_mp.mediaportal.youtubeenablevp9, False))
-		#self.configlist.append(getConfigListEntry(_("Max. count results/page:"), config_mp.mediaportal.youtube_max_items_pp, False))
 		self.configlist.append(getConfigListEntry(_("Show USER-Channels Help:"), config_mp.mediaportal.show_userchan_help, False))
 		self.configlist.append(getConfigListEntry(_('Use Proxy:'), config_mp.mediaportal.sp_use_yt_with_proxy, True))
 		if config_mp.mediaportal.sp_use_yt_with_proxy.value == "proxy":
@@ -1777,10 +1768,6 @@ class MPWall(Screen, HelpableScreen):
 					start_pagebar += 30
 
 		self.skin_dump = ""
-		if self.wallzoom:
-			pass
-		else:
-			self.skin_dump += "<widget name=\"frame\" position=\"" + str(posxstart) + "," + str(posystart) + "\" size=\"" + iconsize + "\" zPosition=\"3\" transparent=\"1\" alphatest=\"blend\" />"
 		self.skin_dump += skincontent
 		self.skin_dump += "</screen>"
 
@@ -1855,7 +1842,6 @@ class MPWall(Screen, HelpableScreen):
 		self['Help'] = Label(_("Help"))
 		self['Menu'] = Label(_("Menu"))
 		self['page'] = Label("")
-		self["frame"] = MovingPixmap()
 
 		for x in range(1,len(self.plugin_liste)+1):
 			if self.wallbw or self.wallzoom:
@@ -1990,23 +1976,6 @@ class MPWall(Screen, HelpableScreen):
 			self.plugin_liste.sort(key=lambda t : t[0].lower())
 		elif config_mp.mediaportal.sortplugins.value == "user":
 			self.plugin_liste.sort(key=lambda x: int(x[4]))
-
-		poster_path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/Selektor_%s.png" % config_mp.mediaportal.selektor.value
-
-		scale = AVSwitch().getFramebufferScale()
-		if mp_globals.videomode == 2:
-			self.picload.setPara((210, 112, scale[0], scale[1], True, 1, "#FF000000"))
-		else:
-			self.picload.setPara((150, 80, scale[0], scale[1], True, 1, "#FF000000"))
-		if mp_globals.isDreamOS:
-			self.picload.startDecode(poster_path, False)
-		else:
-			self.picload.startDecode(poster_path, 0, 0, False)
-
-		self["frame"].instance.setPixmap(gPixmapPtr())
-		pic = self.picload.getData()
-		if pic != None:
-			self["frame"].instance.setPixmap(pic)
 
 		icon_url = getIconUrl()
 		if self.wallbw:
@@ -2224,11 +2193,6 @@ class MPWall(Screen, HelpableScreen):
 		select_nr = self.mainlist[int(self.select_list)][int(self.selektor_index)-1]
 		plugin_name = self.plugin_liste[int(select_nr)-1][0]
 		self['name'].setText(plugin_name)
-		if not self.wallzoom:
-			position = self["zeile"+str(self.selektor_index)].instance.position()
-			self["frame"].moveTo(position.x(), position.y(), 1)
-			self["frame"].show()
-			self["frame"].startMoving()
 
 	def keyOK(self):
 		if not testWebConnection():
@@ -2389,7 +2353,7 @@ class MPWall(Screen, HelpableScreen):
 			return
 		if self.selektor_index-8 > 1:
 			self.hideshow()
-			self.selektor_index -=8
+			self.selektor_index -= 8
 			self.move_selector()
 			self.hideshow2()
 		else:
@@ -2403,7 +2367,7 @@ class MPWall(Screen, HelpableScreen):
 			return
 		if self.selektor_index+8 <= len(self.mainlist[int(self.select_list)]):
 			self.hideshow()
-			self.selektor_index +=8
+			self.selektor_index += 8
 			self.move_selector()
 			self.hideshow2()
 		else:
@@ -2433,7 +2397,6 @@ class MPWall(Screen, HelpableScreen):
 	def check_empty_list(self):
 		if len(self.plugin_liste) == 0:
 			self['name'].setText('Keine Plugins der Kategorie %s aktiviert!' % config_mp.mediaportal.filter.value)
-			self["frame"].hide()
 			return True
 		else:
 			return False
@@ -3246,6 +3209,13 @@ class MPWall2(Screen, HelpableScreen):
 					self['page'].setText(pageinfo)
 		else:
 			if self["list"].getCurrentIndex() >=0:
+				totalPages = self["list"].getPageCount()
+
+				if totalPages != self.counting_pages:
+					msg = "Fatal MP_WallVTi.xml error! Wrong coverwall size!"
+					printl(msg,'','E')
+					raise Exception(msg)
+
 				item = self['list'].getcurrentselection()
 				(p_name, p_picname, p_picpath, p_genre, p_hits, p_sort) = item
 				self['name'].setText(p_name)

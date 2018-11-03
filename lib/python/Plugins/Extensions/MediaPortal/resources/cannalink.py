@@ -13,7 +13,7 @@ class CannaLink:
 		self._errback = None
 		self._callback = None
 
-	def getLink(self, cb_play, cb_err, sc_title, sc_artist, sc_album, url, imgurl):
+	def getLink(self, cb_play, cb_err, sc_title, sc_artist, sc_album, url, imgurl, retry=0):
 		self._errback = cb_err
 		self._callback = cb_play
 
@@ -21,7 +21,11 @@ class CannaLink:
 		if stream_url:
 			cb_play(sc_title, stream_url, album=sc_album, artist=sc_artist, imgurl=imgurl)
 		else:
-			cb_err(_('No URL found!'))
+			if retry < 3:
+				retry += 1
+				self.getLink(cb_play, cb_err, sc_title, sc_artist, sc_album, url, imgurl, retry)
+			else:
+				cb_err(_('No URL found!'))
 
 	def getDLurl(self, url):
 		try:
@@ -47,12 +51,10 @@ class CannaLink:
 
 		except urllib2.HTTPError, error:
 			printl(error,self,"E")
-			message = self.session.open(MessageBoxExt, (_("Error: %s") % error), MessageBoxExt.TYPE_INFO, timeout=3)
 			return False
 
 		except urllib2.URLError, error:
 			printl(error.reason,self,"E")
-			message = self.session.open(MessageBoxExt, (_("Error: %s") % error), MessageBoxExt.TYPE_INFO, timeout=3)
 			return False
 
 	def getUrl(self,url):

@@ -3,10 +3,12 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 import base64
 
+default_cover = "file://%s/genxanime.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class gAnimeMain(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -51,7 +53,7 @@ class gAnimeParsing(MPScreen, ThumbsHelper):
 	def __init__(self, session, genre, url):
 		self.genre = genre
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -122,7 +124,7 @@ class gAnimeFolgen(MPScreen):
 		self.stream_name = stream_name
 		self.url = url
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -171,7 +173,7 @@ class gAnimeStreams(MPScreen):
 		self.stream_name = stream_name
 		self.streams = streams
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,

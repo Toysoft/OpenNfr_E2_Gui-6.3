@@ -26,10 +26,12 @@ fp_cookies = CookieJar()
 fp_ck = {}
 fp_agent = ''
 
+default_cover = "file://%s/filmpalast.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class filmPalastMain(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,
@@ -61,7 +63,7 @@ class filmPalastMain(MPScreen):
 		self.streamList.append(("--- Search ---", "callSuchen"))
 		self.streamList.append(("Neueste Filme", "/movies/new/page/"))
 		self.streamList.append(("Neueste Episoden", "/serien/view/page/"))
-		self.streamList.append(("Serien", "/serien/view/"))
+		self.streamList.append(("Serien", "/serien/view/page/"))
 		self.streamList.append(("Abenteuer", "/search/genre/Abenteuer/"))
 		self.streamList.append(("Action", "/search/genre/Action/"))
 		self.streamList.append(("Adventure", "/search/genre/Adventure/"))
@@ -136,7 +138,7 @@ class filmPalastMain(MPScreen):
 		if auswahl == "--- Search ---":
 			self.suchen()
 		elif auswahl == "Serien":
-			self.session.open(filmPalastSerieParsing, auswahl, url)
+			self.session.open(filmPalastSerieParsing, auswahl, url + "1")
 		else:
 			self.session.open(filmPalastParsing, auswahl, url)
 
@@ -145,7 +147,7 @@ class filmPalastSerieParsing(MPScreen, ThumbsHelper):
 	def __init__(self, session, genre, url):
 		self.genre = genre
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -177,12 +179,12 @@ class filmPalastSerieParsing(MPScreen, ThumbsHelper):
 	def parseData(self, data):
 		raw = re.findall('<section id="serien">(.*?)</section>', data, re.S)
 		if raw:
-			serien = re.findall('<a href="(%s/movies/view/.*?)">(.*?)<' % BASEURL, raw[0])
+			serien = re.findall('<a href="(%s/movies/view/.*?)">(.*?)<' % BASEURL, raw[0], re.S)
 			if serien:
 				for url,title in serien:
 					self.streamList.append((decodeHtml(title), url))
 		if len(self.streamList) == 0:
-			self.streamList.append((_('No movies found!'), None))
+			self.streamList.append((_('No shows found!'), None))
 		self.ml.setList(map(self._defaultlistleft, self.streamList))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -193,8 +195,9 @@ class filmPalastSerieParsing(MPScreen, ThumbsHelper):
 		filmName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(filmName)
 		url = self['liste'].getCurrent()[0][1]
-		coverUrl = url.replace('%smovies/view/' % BASEURL, '%s/files/movies/450/' % BASEURL) + '.jpg'
-		CoverHelper(self['coverArt']).getCover(coverUrl, agent=fp_agent, cookieJar=fp_cookies)
+		if url:
+			coverUrl = url.replace('%smovies/view/' % BASEURL, '%s/files/movies/450/' % BASEURL) + '.jpg'
+			CoverHelper(self['coverArt']).getCover(coverUrl, agent=fp_agent, cookieJar=fp_cookies)
 
 	def keyOK(self):
 		exist = self['liste'].getCurrent()
@@ -210,7 +213,7 @@ class filmPalastEpisodenParsing(MPScreen, ThumbsHelper):
 	def __init__(self, session, genre, url):
 		self.genre = genre
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -240,11 +243,13 @@ class filmPalastEpisodenParsing(MPScreen, ThumbsHelper):
 		twAgentGetPage(self.url, agent=fp_agent, cookieJar=fp_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		episoden = re.findall('<a id="staffId_" href="(%s/movies/view/.*?)" class="getStaffelStream".*?</i>(.*?)&' % BASEURL, data, re.S)
+		episoden = re.findall('<a id="staffId_" href="((?:https:|)//filmpalast.to/stream/.*?)" class="getStaffelStream".*?</i>(.*?)&', data, re.S)
 		if episoden:
-			for (url, title) in episoden:
-				cover = url.replace('%s/movies/view/' % BASEURL, '%s/files/movies/450/' % BASEURL) + '.jpg'
-				self.streamList.append((decodeHtml(title), url, cover))
+			for (Url, title) in episoden:
+				if Url.startswith('//'):
+					Url = "https:" + Url
+				cover = Url.replace('%s/stream/' % BASEURL, '%s/files/movies/450/' % BASEURL) + '.jpg'
+				self.streamList.append((decodeHtml(title).strip(), Url, cover))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No movies found!'), '', ''))
 		self.streamList.sort()
@@ -274,7 +279,7 @@ class filmPalastParsing(MPScreen, ThumbsHelper):
 	def __init__(self, session, genre, url):
 		self.genre = genre
 		self.url = url
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -312,10 +317,12 @@ class filmPalastParsing(MPScreen, ThumbsHelper):
 
 	def parseData(self, data):
 		self.getLastPage(data, 'id="paging">(.*?)</div>')
-		movies = re.findall('<a href="(%s/.*?)" title="(.*?)"> <img src="(.*?.jpg)"' % BASEURL, data)
+		movies = re.findall('<small class="rb">.*?<a href="((?:https:|)//filmpalast.to/.*?)" title="(.*?)"> <img(?: width="236px" height="338px"|) src="(.*?.jpg)"', data, re.S)
 		if movies:
 			for (Url, Title, Image) in movies:
-				Image = "https://www.filmpalast.to" + Image
+				Image = BASEURL + Image
+				if Url.startswith('//'):
+					Url = "https:" + Url
 				self.streamList.append((decodeHtml(Title), Url, Image))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No movies found!'), None, None))
@@ -350,7 +357,7 @@ class filmPalastStreams(MPScreen):
 		self.stream_name = stream_name
 		self.url = url
 		self.cover = cover
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0": self.closeAll,

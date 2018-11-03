@@ -42,11 +42,13 @@ from Plugins.Extensions.MediaPortal.resources.mtvdelink import MTVdeLink
 
 config_mp.mediaportal.mtvquality = ConfigText(default="HD", fixed_size=False)
 
+default_cover = "file://%s/mtvdecharts.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class MTVdeChartsGenreScreen(MPScreen):
 
 	def __init__(self, session):
 
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -158,7 +160,7 @@ class MTVdeChartsSongListeScreen(MPScreen):
 	def __init__(self, session, genreName, genreLink):
 		self.genreLink = genreLink
 		self.genreName = genreName
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0" : self.closeAll,

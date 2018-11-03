@@ -393,7 +393,7 @@ class youtubeGenreScreen(MenuHelper):
 			else:
 				self.subCatUserChannels.append(None)
 
-		MenuHelper.__init__(self, session, 2, None, "", "", self._defaultlistcenter, 'MP_Plugin', widgets_files=('MP_widget_youtube',))
+		MenuHelper.__init__(self, session, 2, None, "", "", self._defaultlistcenter, 'MP_Plugin', default_cover=default_cover, widgets_files=('MP_widget_youtube',))
 
 		self["yt_actions"] = ActionMap(["MP_Actions"], {
 			"yellow": self.keyYellow,
@@ -437,8 +437,6 @@ class youtubeGenreScreen(MenuHelper):
 		self.channelId = None
 
 	def initSubCat(self):
-		CoverHelper(self['coverArt']).getCover(default_cover)
-
 		hl = param_hl[config_mp.mediaportal.yt_param_meta_idx.value]
 
 		rc = self.param_regionid[config_mp.mediaportal.yt_param_regionid_idx.value][1].split('=')[-1]
@@ -855,7 +853,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		self.keckse = CookieJar()
 		self.filmliste = []
 		self.start_idx = 1
-		self.max_res = int(config_mp.mediaportal.youtube_max_items_pp.value)
+		self.max_res = 50
 		self.max_pages = 1000 / self.max_res
 		self.total_res = 0
 		self.pages = 0

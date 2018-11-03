@@ -41,10 +41,12 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.simpleplayer import SimplePlayer, SimplePlaylist
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
+default_cover = "file://%s/germanytv.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 class germanytvChannelScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -87,7 +89,7 @@ class germanytvGenreScreen(MPScreen):
 	def __init__(self, session, baseurl, name):
 		self.baseurl = baseurl
 		self.name = name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"		: self.closeAll,
@@ -144,7 +146,7 @@ class germanytvListScreen(MPScreen):
 		self.genreName = stvGenre
 		self.name = name
 		self.baseurl = baseurl
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"0"	: self.closeAll,

@@ -48,10 +48,12 @@ json_headers = {
 	'Content-Type':'application/x-www-form-urlencoded',
 	}
 
+default_cover = "file://%s/ahme.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+	
 class ahmeGenreScreen(MPScreen):
 
 	def __init__(self, session):
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
@@ -86,12 +88,12 @@ class ahmeGenreScreen(MPScreen):
 			for (Url, Pic, Title) in Cats:
 				self.genreliste.append((decodeHtml(Title), Url, Pic))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("High Definition", "http://www.ah-me.com/high-definition/", None))
-			self.genreliste.insert(0, ("Longest", "http://www.ah-me.com/long-movies/", None))
-			self.genreliste.insert(0, ("Top Rated", "http://www.ah-me.com/top-rated/", None))
-			self.genreliste.insert(0, ("Most Popular", "http://www.ah-me.com/most-viewed/", None))
-			self.genreliste.insert(0, ("Most Recent", "http://www.ah-me.com/", None))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
+			self.genreliste.insert(0, ("High Definition", "http://www.ah-me.com/high-definition/", default_cover))
+			self.genreliste.insert(0, ("Longest", "http://www.ah-me.com/long-movies/", default_cover))
+			self.genreliste.insert(0, ("Top Rated", "http://www.ah-me.com/top-rated/", default_cover))
+			self.genreliste.insert(0, ("Most Popular", "http://www.ah-me.com/most-viewed/", default_cover))
+			self.genreliste.insert(0, ("Most Recent", "http://www.ah-me.com/", default_cover))
+			self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.ml.moveToIndex(0)
 			self.keyLocked = False
@@ -144,7 +146,7 @@ class ahmeFilmScreen(MPScreen, ThumbsHelper):
 	def __init__(self, session, Link, Name):
 		self.Link = Link
 		self.Name = Name
-		MPScreen.__init__(self, session, skin='MP_Plugin')
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
