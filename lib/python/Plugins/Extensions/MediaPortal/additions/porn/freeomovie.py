@@ -87,8 +87,8 @@ class freeomovieGenreScreen(MPScreen):
 		twAgentGetPage(url, agent=free_agent, cookieJar=free_cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('Categories</h3>(.*?)</div>', data, re.S)
-		Cat = re.findall('href="(.*?)".*?>(.*?)</a></li>', parse.group(1), re.S)
+		parse = re.search('Categories</h2>(.*?)</div>', data, re.S)
+		Cat = re.findall('href="(.*?)".*?>(.*?)</a>', parse.group(1), re.S)
 		if Cat:
 			for (Url, Title) in Cat:
 				Url = Url + "page/"
@@ -165,7 +165,7 @@ class freeomovieFilmListeScreen(MPScreen, ThumbsHelper):
 		twAgentGetPage(url, agent=free_agent, cookieJar=free_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		self.getLastPage(data, 'class=[\"|\']wp-pagenavi[\"|\']>(.*?)</div>')
+		self.getLastPage(data, 'class=[\"|\']wp-pagenavi[\"|\'](.*?)</div>')
 		movies = re.findall('class="boxtitle">.*?<a href="(.*?)".*?title="(.*?)".*?<img src="(.*?)"', data, re.S)
 		if movies:
 			self.filmliste = []
