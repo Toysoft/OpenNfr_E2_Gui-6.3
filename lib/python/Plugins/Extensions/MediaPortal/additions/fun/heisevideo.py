@@ -162,7 +162,7 @@ class HeiseTvListScreen(MPScreen, ThumbsHelper):
 			stvDaten = re.findall('class=\"rahmen\">.*?<img src=\"(.*?)\".*?<h3><a href=\"(.*?)\">(.*?)</a>.*?<p>(.*?)<a href=\"', str(json_data['actions'][1]['html']), re.S)
 			if stvDaten:
 				for (img,href,title,desc) in stvDaten:
-					title = decodeHtml(title)
+					title = decodeHtml(title).strip()
 					desc = decodeHtml(desc).strip()
 					img = baseUrl + img
 					self.filmliste.append((title, href, img, desc))

@@ -163,7 +163,7 @@ def getIconUrl():
 	]
 	return random.choice(iconurls)
 
-def testWebConnection(host="8.8.8.8", port=53, timeout=3):
+def testWebConnection(host="www.google.de", port=80, timeout=3):
 	import socket
 
 	try:

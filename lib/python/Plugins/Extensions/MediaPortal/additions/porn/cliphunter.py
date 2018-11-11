@@ -296,15 +296,19 @@ class cliphunterFilmScreen(MPScreen, ThumbsHelper):
 	def getVideoPage(self, data):
 		url = re.findall('"url":"(.*?)"}', data, re.S)
 		if url:
-			url = url[-1]
-			url = url.replace('\u0026', '.')
-			translation_table = {
-			    'a': 'h', 'd': 'e', 'e': 'v', 'f': 'o', 'g': 'f', 'i': 'd', 'l': 'n',
-			    'm': 'a', 'n': 'm', 'p': 'u', 'q': 't', 'r': 's', 'v': 'p', 'x': 'r',
-			    'y': 'l', 'z': 'i',
-			    '$': ':', '&': '.', '(': '=', '^': '&', '=': '/',
-			}
-			url = ''.join(translation_table.get(c, c) for c in url)
+			if url[-1].startswith('http'):
+				url = url[-1]
+				url = url.replace('\u0026', '.').replace('\/', '/')
+			else:
+				url = url[-1]
+				url = url.replace('\u0026', '.')
+				translation_table = {
+				    'a': 'h', 'd': 'e', 'e': 'v', 'f': 'o', 'g': 'f', 'i': 'd', 'l': 'n',
+				    'm': 'a', 'n': 'm', 'p': 'u', 'q': 't', 'r': 's', 'v': 'p', 'x': 'r',
+				    'y': 'l', 'z': 'i',
+				    '$': ':', '&': '.', '(': '=', '^': '&', '=': '/',
+				}
+				url = ''.join(translation_table.get(c, c) for c in url)
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]
 			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='cliphunter')

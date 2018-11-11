@@ -59,7 +59,9 @@ headers = {
 
 class xvideosGenreScreen(MPScreen):
 
-	def __init__(self, session):
+	def __init__(self, session, Link=None, Name=None):
+		self.Link = Link
+		self.Name = Name
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -73,7 +75,10 @@ class xvideosGenreScreen(MPScreen):
 		}, -1)
 
 		self['title'] = Label("XVideos.com")
-		self['ContentTitle'] = Label("Genre:")
+		if self.Name:
+			self['ContentTitle'] = Label("Genre: %s" % self.Name)
+		else:
+			self['ContentTitle'] = Label("Genre:")
 		self.keyLocked = True
 		self.suchString = ''
 
@@ -85,26 +90,41 @@ class xvideosGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		self.url = "https://www.xvideos.com/lang"
+		if self.Link:
+			self.url = self.Link
+		else:
+			self.url = "https://www.xvideos.com/lang"
 		twAgentGetPage(self.url, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		Cats = re.findall('class="dyn.*?href="/c/(.*?)">(.*?)</a', data, re.S)
-		if Cats:
-			for (Url, Title) in Cats:
-				Url = "https://www.xvideos.com/c/$$AGE$$$$PAGE$$/" + Url
-				self.filmliste.append((Title, Url, default_cover, False))
-		Cats = re.findall('li><a href="/lang/(.*?)"\stitle="(.*?)"', data, re.S)
-		if Cats:
-			for (Url, Title) in Cats:
-				Url = "https://www.xvideos.com/porn/" + Url + "/$$PAGE$$"
-				self.filmliste.append((Title, Url, default_cover, False))
-		self.filmliste.sort()
-
-		self.filmliste.insert(0, ("Pornstars", "https://www.xvideos.com/pornstars-index/$$AGE$$$$PAGE$$", default_cover, False))
-		self.filmliste.insert(0, ("100% Verified", "https://www.xvideos.com/verified/videos/$$PAGE$$", default_cover, False))
-		self.filmliste.insert(0, ("Newest", "https://www.xvideos.com/new/$$PAGE$$", default_cover, False))
-		self.filmliste.insert(0, ("--- Search ---", "callSuchen", default_cover, True))
+		if self.Name:
+			Cats = re.findall('<li(?: class="hidden"|)><a href="(.*?)" class="btn btn-default.*?">(.*?)</a></li>', data, re.S)
+			if Cats:
+				for (Url, Title) in Cats:
+					Url = "https://www.xvideos.com" + Url + "/$$PAGE$$"
+					self.filmliste.append((Title, Url, default_cover, False))
+		else:
+			Cats = re.findall('class="dyn.*?href="/c/(.*?)">(.*?)</a', data, re.S)
+			if Cats:
+				for (Url, Title) in Cats:
+					Url = "https://www.xvideos.com/c/$$AGE$$$$PAGE$$/" + Url
+					self.filmliste.append((Title, Url, default_cover, False))
+			Cats = re.findall('li><a href="/lang/(.*?)"\stitle="(.*?)"', data, re.S)
+			if Cats:
+				for (Url, Title) in Cats:
+					Url = "https://www.xvideos.com/porn/" + Url + "/$$PAGE$$"
+					self.filmliste.append((Title, Url, default_cover, False))
+			self.filmliste.sort()
+			self.filmliste.insert(0, ("Channels", "https://www.xvideos.com/channels-index/$$AGE$$$$PAGE$$", default_cover, False))
+			self.filmliste.insert(0, ("Amateurs", "https://www.xvideos.com/amateurs-index/$$AGE$$$$PAGE$$", default_cover, False))
+			self.filmliste.insert(0, ("Erotic Models", "https://www.xvideos.com/erotic-models-index/$$AGE$$$$PAGE$$", default_cover, False))
+			self.filmliste.insert(0, ("Cam Girls", "https://www.xvideos.com/webcam-models-index/$$AGE$$$$PAGE$$", default_cover, False))
+			self.filmliste.insert(0, ("Porn Actresses", "https://www.xvideos.com/porn-actresses-index/$$AGE$$$$PAGE$$", default_cover, False))
+			self.filmliste.insert(0, ("Pornstars", "https://www.xvideos.com/pornstars-index/$$AGE$$$$PAGE$$", default_cover, False))
+			self.filmliste.insert(0, ("100% Verified", "https://www.xvideos.com/verified/videos/$$PAGE$$", default_cover, False))
+			self.filmliste.insert(0, ("Best Videos", "https://www.xvideos.com/best", default_cover, False))
+			self.filmliste.insert(0, ("Newest", "https://www.xvideos.com/new/$$PAGE$$", default_cover, False))
+			self.filmliste.insert(0, ("--- Search ---", "callSuchen", default_cover, True))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -122,8 +142,12 @@ class xvideosGenreScreen(MPScreen):
 		Sort = self['liste'].getCurrent()[0][3]
 		if Name == "--- Search ---":
 			self.suchen(suggest_func=self.getSuggestions)
-		elif Name == "Pornstars":
+		elif Name == "Best Videos":
+			self.session.open(xvideosGenreScreen, Link, Name)
+		elif Name in ["Pornstars", "Channels", "Amateurs", "Erotic Models", "Cam Girls", "Porn Actresses"]:
 			self.session.open(xvideosPornstarsScreen, Link, Name, Sort)
+		elif self.Name and self.Name.endswith("Best Videos"):
+			self.session.open(xvideosFilmScreen, Link, Name, Sort, Best=True)
 		else:
 			self.session.open(xvideosFilmScreen, Link, Name, Sort)
 
@@ -175,19 +199,26 @@ class xvideosPornstarsScreen(MPScreen, ThumbsHelper):
 			"nextBouquet" : self.keyPageUp,
 			"prevBouquet" : self.keyPageDown,
 			"green" : self.keyPageNumber,
+			"yellow" : self.keyRegion,
 			"blue" : self.keyAge
 		}, -1)
 
 		self['title'] = Label("XVideos.com")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
+		self['F3'] = Label(_("Region"))
 		self['F4'] = Label(_("Filter"))
 		self['Page'] = Label(_("Page:"))
 		self.keyLocked = True
 		self.page = 1
 		self.lastpage = 1
 		self.age = ''
-		self.agename = '1 Month'
+		if self.Name == "Channels":
+			self.agename = 'Watched Recently'
+		else:
+			self.agename = '1 Year'
+		self.region = ''
+		self.regionname = 'World'
 
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -199,20 +230,31 @@ class xvideosPornstarsScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
-		url = self.Link.replace('$$PAGE$$', str(self.page-1)).replace('$$AGE$$', self.age)
+		if self.page > 1:
+			page = str(self.page-1)
+		else:
+			page = ''
+		url = self.Link.replace('$$PAGE$$', page).replace('$$AGE$$', self.region + self.age)
 		twAgentGetPage(url, agent=agent, headers=headers).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		lastp = re.search('label">.*?Top\s(.*?)\spornstars', data, re.S)
+		lastp = re.search('label">.*?Top\s(.*?)\s(?:pornstars|porn actresses|cam girls|erotic models|female amateurs)', data, re.S)
 		if lastp:
 			lastp = lastp.group(1).replace(',','')
 			lastp = round((float(lastp) / 100) + 0.5)
 			self.lastpage = int(lastp)
 			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		else:
-			self.lastpage = 999
-			self['page'].setText(str(self.page))
-		Movies = re.findall('class="thumb"><a href="(.*?)">.*?<img src="(.*?)".*?class="flag(.*?)</p></div>', data, re.S)
+			lastp = re.search('grey"\s{0,1}>.(.*?)\schannels', data, re.S)
+			if lastp:
+				lastp = lastp.group(1).replace(',','')
+				lastp = round((float(lastp) / 80) + 0.5)
+				self.lastpage = int(lastp)
+				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+			else:
+				self.lastpage = 999
+				self['page'].setText(str(self.page))
+		Movies = re.findall('class="thumb"><a href="(.*?)">.*?<img src="(.*?)".*?(class="profile-name".*?)</p></div>', data, re.S)
 		if Movies:
 			for (Url, Image, Meta) in Movies:
 				Title = re.findall('class="profile-name">.*?<a href=".*?">(.*?)</a>', Meta, re.S)
@@ -221,9 +263,14 @@ class xvideosPornstarsScreen(MPScreen, ThumbsHelper):
 				else:
 					Title = "---"
 				Url = "https://www.xvideos.com" + Url + "/videos/$$PORNSTAR$$/$$PAGE$$"
+				Image = Image.replace('img-hw.xvideos-cdn', 'img-egc.xvideos-cdn').replace('thumbs169/', 'thumbs169lll/').replace('thumbs169ll/', 'thumbs169lll/')
 				self.filmliste.append((decodeHtml(Title), Url, Image))
-		if len(self.filmliste) == 0:
-			self.filmliste.append((_('No pornstars found!'), "", None, None, None))
+		if self.Name == "Channels":
+			if len(self.filmliste) == 0:
+				self.filmliste.append((_('No channels found!'), "", None, None, None))
+		else:
+			if len(self.filmliste) == 0:
+				self.filmliste.append((_('No pornstars found!'), "", None, None, None))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -233,7 +280,10 @@ class xvideosPornstarsScreen(MPScreen, ThumbsHelper):
 	def keyAge(self):
 		if self.keyLocked:
 			return
-		rangelist = [ ['Ever', 'ever/'], ['1 Year', ''], ['3 Months', '3months/'], ['New', 'new/'] ]
+		if self.Name == "Channels":
+			rangelist = [ ['Watched Recently', ''], ['Top Rankings', 'top/'], ['New', 'new/'] ]
+		else:
+			rangelist = [ ['Ever', 'ever/'], ['1 Year', ''], ['3 Months', '3months/'], ['New', 'new/'] ]
 		self.session.openWithCallback(self.keyAgeAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
 
 	def keyAgeAction(self, result):
@@ -242,27 +292,89 @@ class xvideosPornstarsScreen(MPScreen, ThumbsHelper):
 			self.agename = result[0]
 			self.loadPage()
 
+	def keyRegion(self):
+		if self.keyLocked:
+			return
+		rangelist = [ ['World', ''], ['Germany', 'germany/'], ['Europe', 'europe/'], ['North America', 'north_america/'], ['South America', 'latin/'], ['Asia', 'asia/'], ['Africa', 'africa/'] ]
+		self.session.openWithCallback(self.keyRegionAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
+
+	def keyRegionAction(self, result):
+		if result:
+			self.region = result[1]
+			self.regionname = result[0]
+			self.loadPage()
+
 	def showInfos(self):
 		title = self['liste'].getCurrent()[0][0]
-		pic = self['liste'].getCurrent()[0][2]
+		Link = self['liste'].getCurrent()[0][1].replace('/videos/$$PORNSTAR$$/$$PAGE$$', '')
 		self['name'].setText(title)
-		self['handlung'].setText("%s: %s" % (_("Filter"), self.agename))
-		CoverHelper(self['coverArt']).getCover(pic)
+		twAgentGetPage(Link, agent=agent, headers=headers).addCallback(self.showInfos2).addErrback(self.dataError)
+
+	def showInfos2(self, data):
+		infos = re.findall('class="profile-pic">(.*?)class="user-subscribe', data, re.S)
+		if infos:
+			for meta in infos:
+				image = re.findall('<img src="(.*?)"', meta, re.S)
+				if image:
+					image = image[0]
+				else:
+					image = self['liste'].getCurrent()[0][2]
+				CoverHelper(self['coverArt']).getCover(image)
+
+				modelinfo = re.findall('class="after-aka mobile-hide">(.*?)</small', meta, re.S)
+				if modelinfo:
+					modelinfo = modelinfo[0].strip()
+				else:
+					modelinfo = ''
+
+				country = re.findall('class="flag.*?title="(.*?)">', meta, re.S)
+				if country:
+					country = country[0].strip()
+				else:
+					country = ''
+
+				aka = re.findall('class="aka mobile-hide">.*?AKA (.*?)</small', meta, re.S)
+				if aka:
+					aka = re.sub(r"\s+", " ", stripAllTags(aka[0])).replace(' -','').strip()
+				else:
+					aka = ''
+
+				info = ''
+				if aka:
+					info = "AKA: " + decodeHtml(aka) + "\n"
+
+				if modelinfo:
+					info = info + "Info: " + decodeHtml(modelinfo) + "\n"
+
+				if country:
+					info = info + "Country: " + decodeHtml(country) + "\n"
+
+				if info:
+					info = info + "\n"
+
+				self['handlung'].setText("%s%s: %s\n%s: %s" % (info, _("Filter"), self.agename, _("Region"), self.regionname))
+		else:
+			title = self['liste'].getCurrent()[0][0]
+			pic = self['liste'].getCurrent()[0][2]
+			self['name'].setText(title)
+			self['handlung'].setText("%s: %s" % (_("Filter"), self.agename))
+			CoverHelper(self['coverArt']).getCover(pic)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		self.session.open(xvideosFilmScreen, Link, Name, False)
+		self.session.open(xvideosFilmScreen, Link, Name, False, Best=True)
 
 class xvideosFilmScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name, Sort, Related=False):
+	def __init__(self, session, Link, Name, Sort, Related=False, Best=False):
 		self.Link = Link
 		self.Name = Name
 		self.Sort = Sort
 		self.Related = Related
+		self.Best = Best
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -289,7 +401,7 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 		if self.Sort:
 			self['F3'] = Label(_("Sort"))
 			self['F4'].setText(_("Filter"))
-		elif not self.Related and not self.Sort and self.Name != "Newest" and self.Name != "100% Verified" and not "Porn in" in self.Name and not "$$PORNSTAR$$" in self.Link:
+		elif not self.Related and not self.Best and not self.Sort and self.Name != "Newest" and self.Name != "100% Verified" and not "Porn in" in self.Name and not "$$PORNSTAR$$" in self.Link:
 			self['F4'].setText(_("Filter"))
 		if not self.Sort:
 			self['F3'] = Label(_("Show Related"))
@@ -304,7 +416,7 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			self.age = 'all'
 			self.agename = 'All time'
 		else:
-			self.sortname = 'Newest'
+			self.sortname = ''
 			self.sort = ''
 			self.age = ''
 			self.agename = 'All time'
@@ -394,8 +506,11 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 						self.lastpage = int(lastp)
 						self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 					else:
-						self.lastpage = 999
-						self['page'].setText(str(self.page))
+						if self.Best:
+							self.getLastPage(data, 'class="pagination(.*?)</div>')
+						else:
+							self.lastpage = 20000
+							self['page'].setText(str(self.page))
 			Movies = re.findall('id="video_\d+"\sclass="thumb-block\s{0,1}">.*?class="thumb"><a href="(.*?)"><img src=".*?data-src="(.*?)".*?<a href.*?title="(.*?)">.*?</a></p><p class="metadata">(.*?)</div>', data, re.S)
 			if Movies:
 				for (Url, Image, Title, Meta) in Movies:
@@ -419,7 +534,7 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 							profTitle = decodeHtml(title)
 					if profTitle:
 						Title = profTitle + " - " + decodeHtml(Title)
-					Image = Image.replace('img-hw.xvideos-cdn', 'img-egc.xvideos-cdn').replace('thumbs169', 'thumbs169lll').replace('THUMBNUM.jpg', '15.jpg')
+					Image = Image.replace('img-hw.xvideos-cdn', 'img-egc.xvideos-cdn').replace('thumbs169/', 'thumbs169lll/').replace('thumbs169ll/', 'thumbs169lll/').replace('THUMBNUM.jpg', '15.jpg')
 					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, profUrl, profTitle))
 		if self.counter == 0:
 			if len(self.filmliste) == 0:
@@ -450,7 +565,7 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			self.session.openWithCallback(self.keySortAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
 		else:
 			Link = self['liste'].getCurrent()[0][1]
-			self.session.open(xvideosFilmScreen, Link, "Related", False, True)
+			self.session.open(xvideosFilmScreen, Link, "Related", False, Related=True)
 
 	def keySortAction(self, result):
 		if result:
@@ -463,7 +578,7 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			return
 		elif not self.Sort and (self.Name == "Newest" or self.Name == "100% Verified" or "Porn in" in self.Name or "$$PORNSTAR$$" in self.Link):
 			return
-		if self.Related:
+		if self.Related or self.Best:
 			return
 		if re.match(".*Search", self.Name):
 			rangelist = [ ['Today', 'today'], ['This week', 'week'], ['This month', 'month'], ['Last 3 month', '3month'], ['Last 6 month', '6month'], ['All time', 'all'] ]
@@ -483,7 +598,15 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 		runtime = self['liste'].getCurrent()[0][3]
 		views = self['liste'].getCurrent()[0][4]
 		self['name'].setText(title)
-		self['handlung'].setText("Runtime: %s\nViews: %s\n%s: %s\n%s: %s" % (runtime, views, _("Sort order"), self.sortname, _("Filter"), self.agename))
+		if self.agename and self.Name != "Newest" and not self.Best:
+			agename = "\n%s: %s" % (_("Filter"), self.agename)
+		else:
+			agename = ''
+		if self.sortname:
+			sort = "\n%s: %s" % (_("Sort order"), self.sortname)
+		else:
+			sort = ''
+		self['handlung'].setText("Runtime: %s\nViews: %s%s%s" % (runtime, views, agename, sort))
 		CoverHelper(self['coverArt']).getCover(pic)
 
 	def keyOK(self):
@@ -498,14 +621,15 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			twAgentGetPage(Link, agent=agent, headers=headers).addCallback(self.parseData).addErrback(self.dataError)
 
 	def keyOKAction(self, result):
-		if result[1] == "profile":
-			Name = self['liste'].getCurrent()[0][6]
-			Link = self['liste'].getCurrent()[0][5]
-			if Link and Name:
-				self.session.open(xvideosFilmScreen, Link, Name, False)
-		else:
-			Link = self['liste'].getCurrent()[0][1]
-			twAgentGetPage(Link, agent=agent, headers=headers).addCallback(self.parseData).addErrback(self.dataError)
+		if result:
+			if result[1] == "profile":
+				Name = self['liste'].getCurrent()[0][6]
+				Link = self['liste'].getCurrent()[0][5]
+				if Link and Name:
+					self.session.open(xvideosFilmScreen, Link, Name, False)
+			else:
+				Link = self['liste'].getCurrent()[0][1]
+				twAgentGetPage(Link, agent=agent, headers=headers).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		match = re.findall("setVideo(?:UrlLow|UrlHigh|HLS)\('(.*?)'\);", data)
