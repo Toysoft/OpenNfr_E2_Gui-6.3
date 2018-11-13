@@ -354,8 +354,8 @@ void eDVBServicePMTHandler::AITready(int error)
 							ApplicationNameConstIterator interactionit = nameDescriptor->getApplicationNames()->begin();
 							for(; interactionit != nameDescriptor->getApplicationNames()->end(); ++interactionit)
 							{
-								applicaionName = (*interactionit)->getApplicationName();
-								if(controlCode == 1) m_ApplicationName = applicaionName;
+								applicationName = (*interactionit)->getApplicationName();
+								if(controlCode == 1) m_ApplicationName = applicationName;
 								break;
 							}
 							break;
