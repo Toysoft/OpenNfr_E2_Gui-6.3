@@ -4,7 +4,7 @@ ORF III HD
 ORF SPORT+ HD
 ATV HD
 PULS 4 HD Austria
-NICKELODEON HD
+NICKELODEON HD AT
 ServusTV HD Oesterreich
 ORF2B HD
 ORF2S HD
@@ -16,18 +16,18 @@ ORF2V HD
 ORF2W HD
 Sky Select HD
 Sky 1 HD
-Sky 1 +1 HD
 Sky Arts HD
 Sky Atlantic HD
 Sky Cinema HD
 Sky Cinema +1 HD
 Sky Cinema +24 HD
 Sky Cinema Action HD
-Sky Cinema Hits HD
-Sky Cinema Family Adventure HD
+Sky Cinema Harry Potter HD
+Sky Cinema Family HD
 13th Street HD
 Fox HD
 SYFY HD
+TNT Film HD
 TNT Serie HD
 TNT Comedy HD
 TLC HD
@@ -79,6 +79,7 @@ Eurosport360HD 7
 Eurosport360HD 8
 Eurosport360HD 9
 BLUE MOVIE HD
+Beate-Uhse.TV HD
 Das Erste HD
 ZDF HD
 kabel eins HD

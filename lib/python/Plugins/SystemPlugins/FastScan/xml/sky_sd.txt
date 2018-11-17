@@ -1,37 +1,25 @@
 Sky 1
-Sky Atlantic
 Sky Cinema
 Sky Cinema +1
 Sky Cinema +24
 Sky Cinema Action
 Sky Cinema Comedy
 Sky Cinema Emotion
-Sky Cinema Hits
-Sky Cinema Family Adventure
+Sky Cinema Harry Potter
+Sky Cinema Family
 Sky Cinema Nostalgie
 Sky Krimi
-13th Street
 A&E
-Fox Serie
 Heimatkanal
 kabel eins classics
 Kinowelt TV
 Romance TV
 SAT.1 emotions
-SYFY
-TNT Serie
-TNT Film
 TLC
 Boomerang
 Cartoon Network
-Disney Cinemagic
 Disney XD
-Disney Junior
 Junior
-Discovery Channel
-National Geographic
-NatGeo Wild
-Spiegel Geschichte
 Motorvision TV
 Sky Sport News
 Sky Sport Austria
@@ -56,7 +44,6 @@ Sky Sport Bundesliga 7
 Sky Sport Bundesliga 8
 Sky Sport Bundesliga 9
 Sky Sport Bundesliga 10
-Beate-Uhse.TV
 Blue Movie
 Blue Movie 1
 Blue Movie 2
