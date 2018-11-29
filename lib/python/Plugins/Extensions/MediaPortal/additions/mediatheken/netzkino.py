@@ -73,7 +73,7 @@ class netzKinoGenreScreen(MPScreen):
 		self.genreliste.append(('Meistgesehene Filme', 'meisgesehene_filme'))
 		self.genreliste.append(('Filme mit Auszeichnungen', 'filme_mit_auszeichnungen'))
 		self.genreliste.append(('Letzte Chance - Nur noch kurze Zeit verfügbar', 'letzte-chance'))
-		self.genreliste.append(('Top 20 - Teenie Komödien', 'top-20-frontpage'))
+		self.genreliste.append(('Top 20', 'top-20-frontpage'))
 		self.genreliste.append(('Beliebte Animes', 'beliebte-animes'))
 		self.genreliste.append(('Kurzfilme', 'frontpage-kurzfilme'))
 		self.genreliste.append(('Starkino', 'starkino-frontpage'))

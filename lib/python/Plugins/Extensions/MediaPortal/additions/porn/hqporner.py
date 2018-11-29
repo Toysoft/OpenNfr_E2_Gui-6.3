@@ -33,6 +33,7 @@ class hqpornerGenreScreen(MPScreen):
 		self.filmliste.append(("Newest", "http://hqporner.com/hdporn"))
 		self.filmliste.append(("Most Viewed (Week)", "http://hqporner.com/top/week"))
 		self.filmliste.append(("Most Viewed (Month)", "http://hqporner.com/top/month"))
+		self.filmliste.append(("Most Viewed (All Time)", "http://hqporner.com/top"))
 		self.filmliste.append(("Genres", "categories"))
 		self.filmliste.append(("Studios", "studios"))
 		self.filmliste.append(("Girls", "girls"))
@@ -91,11 +92,12 @@ class hqpornerSubGenreScreen(MPScreen):
 		getPage(url, agent=hqAgent).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		raw = re.findall('class="box\sfeature">\s+<a href="(.*?)".*?img\ssrc="(.*?)"[\s]?alt="(.*?)"', data, re.S)
+		raw = re.findall('class="box\sfeature"><a href="(.*?)".*?img\ssrc="(.*?)"[\s]?alt="(.*?)"', data, re.S)
 		if raw:
 			for (Url, Image, Title) in raw:
 				Url = "http://hqporner.com" + Url
-				Image = "http://hqporner.com/" + Image
+				if Image.startswith('//'):
+					Image = "http:" + Image
 				self.filmliste.append((decodeHtml(Title.title()), Url, Image))
 			self.filmliste.sort()
 			self.ml.setList(map(self._defaultlistcenter, self.filmliste))

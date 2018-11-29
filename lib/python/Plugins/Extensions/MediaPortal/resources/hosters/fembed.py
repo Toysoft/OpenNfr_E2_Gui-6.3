@@ -3,9 +3,11 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
 def fembed(self, data):
-	json_data = json.loads(data)
-	stream_url = re.findall('file":"(.*?)"', json_data["data"])
+	stream_url = re.findall('[\'|\"]file[\'|\"]:\s{0,1}[\'|\"](.*?)[\'|\"]', data, re.S)
 	if stream_url:
-		self._callback(str(stream_url[-1]).replace('\/','/'))
+		url = str(stream_url[-1]).replace('\/','/')
+		if url.startswith('/api'):
+			url = "https://www.fembed.com" + url
+		self._callback(url)
 	else:
 		self.stream_not_found()

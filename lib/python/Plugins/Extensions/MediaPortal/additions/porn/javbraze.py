@@ -170,10 +170,9 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 			twAgentGetPage(url, agent=myagent).addCallback(self.loadStream).addErrback(self.dataError)
 
 	def loadStream(self, data):
-		streams = re.findall('<iframe.*?src="https://www.fembed.com/v/(.*?)\s{0,1}"', data, re.S)
+		streams = re.findall('<iframe.*?src="(https://www.fembed.com/v/.*?)\s{0,1}"', data, re.S)
 		if streams:
-			url = "https://www.fembed.com/api/sources/" + streams[0]
-			getPage(url, agent=myagent, method='POST', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_link).addErrback(self.dataError)
+			get_stream_link(self.session).check_link(streams[0], self.got_link)
 		else:
 			streams = re.findall('src="(/modules/video/player/config2.php\?id=\d+)"', data, re.S)
 			if streams:
@@ -187,11 +186,6 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 							url = stream.replace('&amp;','&').replace('&#038;','&')
 							get_stream_link(self.session).check_link(url, self.got_link)
 		self.keyLocked = False
-
-	def get_link(self, data):
-		vid = re.findall('[\'|\"]file[\'|\"]:\s{0,1}[\'|\"](.*?)[\'|\"]', data, re.S)
-		if vid:
-			self.got_link(vid[-1].replace('\/','/'))
 
 	def got_link(self, stream_url):
 		title = self['liste'].getCurrent()[0][0]

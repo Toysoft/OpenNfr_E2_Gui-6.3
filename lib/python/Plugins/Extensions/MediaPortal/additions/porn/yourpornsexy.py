@@ -381,7 +381,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 		videoUrl = re.findall('data-vnfo=\'\{"[0-9a-f]+":"(.*?)"\}\'', data, re.S)
 		if videoUrl:
 			url = videoUrl[-1].replace('\/','/')
-			url = 'https://yourporn.sexy' + url
+			url = 'https://yourporn.sexy' + url.replace('/cdn/','/cdn2/')
 			self.tw_agent_hlp.getRedirectedUrl(url).addCallback(self.getStream).addErrback(self.dataError)
 
 	def getStream(self, url):

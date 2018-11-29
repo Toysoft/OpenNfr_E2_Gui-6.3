@@ -502,7 +502,8 @@ class get_stream_link:
 
 			elif re.search('fembed.com', data, re.S):
 				link = 'http://www.fembed.com/api/source/' + data.split('/v/')[-1]
-				twAgentGetPage(link, method='POST', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.fembed).addErrback(self.errorload)
+				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+				twAgentGetPage(link, method='POST', agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.fembed).addErrback(self.errorload)
 
 			elif re.search('flashx.tv|flashx.pw|flashx.co|flashx.to', data, re.S):
 				link = data

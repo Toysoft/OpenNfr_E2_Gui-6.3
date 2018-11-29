@@ -38,8 +38,6 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-import Queue
-import threading
 from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 from Plugins.Extensions.MediaPortal.resources.menuhelper import MenuHelper
 from Plugins.Extensions.MediaPortal.additions.mediatheken.youtube import YT_ListScreen
@@ -79,7 +77,7 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
-		self["actions"] = ActionMap(["MP_Actions2", "MP_Actions"], {
+		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
 			"5" : self.keyShowThumb,
@@ -96,11 +94,6 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 		self['ContentTitle'] = Label(genreName)
 		self['Page'] = Label(_("Page:"))
 
-		self.filmQ = Queue.Queue(0)
-		self.picQ = Queue.Queue(0)
-		self.updateP = 0
-		self.eventL = threading.Event()
-		self.eventP = threading.Event()
 		self.keyLocked = True
 		self.dokusListe = []
 		self.page = 1
@@ -116,28 +109,11 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 			self.genreLink += "/seite/%d/"
 
 	def loadPage(self):
+		self['name'].setText(_('Please wait...'))
 		self.dokusListe = []
-		self['handlung'].setText("")
 		self.ml.setList(map(self._defaultlistleft, self.dokusListe))
 		url = self.genreLink % max(self.page,1)
-		self.filmQ.put(url)
-		if not self.eventL.is_set():
-			self.eventL.set()
-			self.loadPageQueued()
-
-	def loadPageQueued(self):
-		self['name'].setText(_('Please wait...'))
-		while not self.filmQ.empty():
-			url = self.filmQ.get_nowait()
 		twAgentGetPage(url, timeout=60).addCallback(self.loadPageData).addErrback(self.dataError)
-
-	def dataError(self, error):
-		self.eventL.clear()
-		printl(error,self,"E")
-		if not 'TimeoutError' in str(error):
-			message = self.session.open(MessageBoxExt, _("No dokus / streams found!"), MessageBoxExt.TYPE_INFO, timeout=5)
-		else:
-			message = self.session.open(MessageBoxExt, str(error), MessageBoxExt.TYPE_INFO)
 
 	def loadPageData(self, data):
 		for m in re.finditer('<article id=(.*?)</article>', data, re.S):
@@ -151,55 +127,20 @@ class VGDE_FilmListeScreen(MPScreen, ThumbsHelper):
 			self.ml.setList(map(self._defaultlistleft, self.dokusListe))
 			self['liste'].moveToIndex(0)
 			self.th_ThumbsQuery(self.dokusListe,0,1,2,None,None, self.page, self.lastpage, mode=1)
-			self.loadPicQueued()
+			self.showInfos()
 		else:
 			self.dokusListe.append((_("No dokus found!"),"","",""))
 			self.ml.setList(map(self._defaultlistleft, self.dokusListe))
 			self['liste'].moveToIndex(0)
-			if self.filmQ.empty():
-				self.eventL.clear()
-			else:
-				self.loadPageQueued()
+			self.showInfos()
 
-	def loadPic(self):
-		if self.picQ.empty():
-			self.eventP.clear()
-			return
-		if self.updateP:
-			return
-		while not self.picQ.empty():
-			self.picQ.get_nowait()
+	def showInfos(self):
 		streamName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(streamName)
-		streamPic = self['liste'].getCurrent()[0][2]
-		self.updateP = 1
-		CoverHelper(self['coverArt'], self.ShowCoverFileExit).getCover(streamPic)
-
-	def getHandlung(self, desc):
-		if desc == None:
-			self['handlung'].setText(_("No further information available!"))
-			return
-		self.setHandlung(desc)
-
-	def setHandlung(self, data):
-		self['handlung'].setText(data)
-
-	def ShowCoverFileExit(self):
-		self.updateP = 0;
-		self.keyLocked	= False
-		if not self.filmQ.empty():
-			self.loadPageQueued()
-		else:
-			self.eventL.clear()
-			self.loadPic()
-
-	def loadPicQueued(self):
-		self.picQ.put(None)
-		if not self.eventP.is_set():
-			self.eventP.set()
 		desc = self['liste'].getCurrent()[0][3]
-		self.getHandlung(desc)
-		self.loadPic()
+		self['handlung'].setText(desc)
+		streamPic = self['liste'].getCurrent()[0][2]
+		CoverHelper(self['coverArt'], self.ShowCoverFileExit).getCover(streamPic)
 
 	def parseYTStream(self, data):
 		m2 = re.search('//www.youtube.*?com/(embed|v|p)/(.*?)(\?|" |&amp)', data)

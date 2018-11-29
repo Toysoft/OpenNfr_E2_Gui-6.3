@@ -422,13 +422,21 @@ class VirtualKeyBoardExt(Screen, NumericalTextInput, HelpableScreen):
 		self.showActiveKey()
 
 	def backClicked(self):
-		txt = self.text.split(self.cursor)
+		if self.sms_txt:
+			txt = self.sms_txt.split(self.cursor)
+			self.sms_txt = None
+		else:
+			txt = self.text.split(self.cursor)
 		del_len = self.checkUnicode(txt[0][-1:])
 		self.text = txt[0][:-del_len] + self.cursor + txt[1]
 		self.set_GUI_Text()
 
 	def backSpace(self):
-		txt = self.text.split(self.cursor)
+		if self.sms_txt:
+			txt = self.sms_txt.split(self.cursor)
+			self.sms_txt = None
+		else:
+			txt = self.text.split(self.cursor)
 		del_len = self.checkUnicode(txt[1][:1])
 		self.text = txt[0] + self.cursor + txt[1][del_len:]
 		self.set_GUI_Text()
@@ -548,7 +556,11 @@ class VirtualKeyBoardExt(Screen, NumericalTextInput, HelpableScreen):
 
 	def ok(self):
 		global last_text
-		if self.suggestionsListEnabled:
+		if self.sms_txt:
+			text = self.sms_txt.encode("utf-8")
+			text = text.replace(self.cursor, "")
+			self.sms_txt = None
+		elif self.suggestionsListEnabled:
 			text = self.getSuggestion()
 		else:
 			text = self.text.encode("utf-8")

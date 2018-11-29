@@ -246,14 +246,21 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 			"down" : self.keyDown,
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
+			"nextBouquet" : self.keyPageUp,
+			"prevBouquet" : self.keyPageDown,
 			"cancel": self.keyCancel,
-			"green": self.keyAdd
+			"green": self.keyAdd,
+			"yellow" : self.keyPageNumber
 		}, -1)
 
 		self.keyLocked = True
 		self['title'] = Label(self.genre)
 		self['ContentTitle'] = Label(_("Stations:"))
 		self['F2'] = Label(_("Add to Favorites"))
+		self['F3'].setText(_("Page"))
+
+		self.page = 1
+		self.lastpage = 1
 
 		self.streamList = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -279,9 +286,12 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 			url = self.url
 			if self.value:
 				url = url + "&value=" + urllib.quote_plus(self.value)
+			if self.lastpage > 1:
+				url = url + "&start=" + str((self.page-1)*100)
 		getPage(url, agent="XBMC").addCallback(self.getStations).addErrback(self.dataError)
 
 	def getStations(self, data):
+		self.streamList = []
 		if self.genre in ['Radio.net', 'Radio.it', 'Radio.pt', 'Radio.dk', 'Radio.se', 'Radio.pl'] and self.sub == "topBroadcasts":
 			parse = re.search('.*?class="main-content"(.*?)search-footer', data, re.S)
 			stations = re.findall('<img\ssrc="(.*?\/)c\d+.png".*?alt="(.*?)".*?now-playing="(\d+)"', parse.group(1), re.S)
@@ -291,6 +301,11 @@ class RadioListeScreen(MPScreen, ThumbsHelper, SearchHelper):
 			jsondata = json.loads(data)
 			if self.sub != '':
 				jsondata = jsondata[self.sub]
+			if len(jsondata) == 100 and not "sizeoflists" in self.url:
+				self.lastpage = 999
+			if self.lastpage > 1:
+				self['Page'].setText(_("Page:"))
+				self['page'].setText(str(self.page))
 			for each in jsondata:
 				if str(each['broadcastType']) == "1":
 					self.streamList.append((str(each['name']).strip(), str(each['id']), str(each['pictureBaseURL'])+"c175.png"))

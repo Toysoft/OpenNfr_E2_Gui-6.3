@@ -461,7 +461,7 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			if datarel:
 				json_data = json.loads(datarel[0])
 				for item in json_data:
-					Title = str(item["t"])
+					Title = str(item["tf"])
 					Url = "https://www.xvideos.com" + str(item["u"])
 					Image = str(item["i"])
 					Runtime = str(item["d"])
@@ -532,7 +532,8 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 						for (url, title) in profiledata:
 							profUrl = "https://www.xvideos.com" + url + "/videos/$$PORNSTAR$$/$$PAGE$$"
 							profTitle = decodeHtml(title)
-					if profTitle:
+					if profTitle and self.Name == "100% Verified":
+						profTitle = stripAllTags(profTitle)
 						Title = profTitle + " - " + decodeHtml(Title)
 					Image = Image.replace('img-hw.xvideos-cdn', 'img-egc.xvideos-cdn').replace('thumbs169/', 'thumbs169lll/').replace('thumbs169ll/', 'thumbs169lll/').replace('THUMBNUM.jpg', '15.jpg')
 					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, profUrl, profTitle))

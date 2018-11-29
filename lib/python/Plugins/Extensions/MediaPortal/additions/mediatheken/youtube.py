@@ -152,6 +152,11 @@ class youtubeGenreScreen(MenuHelper):
 			(_('Playlists'), '/playlists?')
 			]
 
+		self.subCatUserChannelPopular2 = [
+			(_('Featured'), '/featured?'),
+			(_('Videos'), '/videos?')
+			]
+
 		self.subCatYourChannel = [
 			(_('Playlists'), 'https://www.googleapis.com/youtube/v3/playlists?part=snippet%2Cid&mine=true&access_token=%ACCESSTOKEN%'),
 			(_('Uploads'), 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true&access_token=%ACCESSTOKEN%%playlistId=uploads%'),
@@ -178,9 +183,7 @@ class youtubeGenreScreen(MenuHelper):
 			]
 
 		self.YTChannels = [
-			(_('Popular on YouTube') + " - " + _('Worldwide'), 'http://www.youtube.com/channel/UCgGzSIa8zIsJHbSs0bLplag'),
-			(_('Popular on YouTube') + " - " + _('Germany'), 'http://www.youtube.com/channel/UCK274iXLZhs8MFGLsncOyZQ'),
-			(_('Popular on YouTube') + " - " + _('USA'), 'http://www.youtube.com/channel/UCF0pVplsI8R5kcAqgtoRqoA'),
+			(_('Popular on YouTube'), 'http://www.youtube.com/channel/UCF0pVplsI8R5kcAqgtoRqoA'),
 			(_('News'), 'https://www.youtube.com/channel/UCYfdidRxbB8Qhf0Nx7ioOYw'),
 			(_('Music'), 'https://www.youtube.com/channel/UC-9-kyTW8ZkZNDHQJ6FgpwQ'),
 			(_('Gaming'), 'https://www.youtube.com/channel/UCOpNcN46UbXVtpKMrmU4Abg'),
@@ -351,7 +354,6 @@ class youtubeGenreScreen(MenuHelper):
 			('The HDR Channel', 'https://www.youtube.com/channel/UCve7_yAZHFNipzeAGBI5t9g'),
 			('4K Relaxation Channel', 'https://www.youtube.com/channel/UCg72Hd6UZAgPBAUZplnmPMQ'),
 			('La Belle Musique', 'https://www.youtube.com/user/LaBelleChannel'),
-			
 			]
 		self.SelectedChannels.sort(key=lambda t : t[0].lower())
 		self.subCatSelectedChannels = []
@@ -437,20 +439,17 @@ class youtubeGenreScreen(MenuHelper):
 		self.channelId = None
 
 	def initSubCat(self):
-		hl = param_hl[config_mp.mediaportal.yt_param_meta_idx.value]
-
-		rc = self.param_regionid[config_mp.mediaportal.yt_param_regionid_idx.value][1].split('=')[-1]
-		if not rc:
-			rc = 'US'
-
-		url = 'https://www.googleapis.com/youtube/v3/videoCategories?part=snippet%s&regionCode=%s&key=%s' % (hl, rc, APIKEYV3)
+		hl = 'en-US'
+		rc = 'US'
+		url = 'https://www.googleapis.com/youtube/v3/videoCategories?part=snippet&hl=%s&regionCode=%s&key=%s' % (hl, rc, APIKEYV3)
 		twAgentGetPage(url, agent=agent, headers=std_headers).addCallback(self.parseCats)
 
 	def parseCats(self, data):
 		data = json.loads(data)
+		strings = [_('Autos & Vehicles'), _('Comedy'), _('Education'), _('Entertainment'), _('Film & Animation'), _('Gaming'), _('Howto & Style'), _('Music'), _('News & Politics'), _('People & Blogs'), _('Pets & Animals'), _('Science & Technology'), _('Sports'), _('Travel & Events')]
 		for item in data.get('items', {}):
 			if item['snippet']['assignable']:
-				self.subCat.append((str(item['snippet']['title'].encode('utf-8')), '&videoCategoryId=%s' % str(item['id'])))
+				self.subCat.append((_(str(item['snippet']['title'].encode('utf-8'))), '&videoCategoryId=%s' % str(item['id'])))
 			self.subCat_L2.append(None)
 		self.subCat.sort(key=lambda t : t[0].lower())
 		self.subCat.insert(0, ((_('No Category'), '')))
@@ -485,7 +484,7 @@ class youtubeGenreScreen(MenuHelper):
 			None,
 			self.subCatUserChannels,
 			None,
-			[self.subCatUserChannelPopularWorldwide, self.subCatUserChannelPopular, self.subCatUserChannelPopular, self.subCatUserChannel, self.subCatUserChannel, self.subCatUserChannel, self.subCatUserChannel, self.subCatUserChannel, self.subCatUserChannel, self.subCatUserChannelPopular, self.subCatUserChannelPopular, self.subCatUserChannelPopular, self.subCatUserChannelPopular, self.subCatUserChannelPopular],
+			[self.subCatUserChannelPopularWorldwide, self.subCatUserChannelPopular2, self.subCatUserChannelPopular2, self.subCatUserChannelPopular2, self.subCatUserChannelPopularWorldwide, self.subCatUserChannelPopularWorldwide, self.subCatUserChannel, self.subCatUserChannelPopular, self.subCatUserChannelPopular, self.subCatUserChannelPopular, self.subCatUserChannelPopular, self.subCatUserChannelPopular],
 			self.subCatSelectedChannels,
 			self.subCatMusicChannels,
 			self.subCatGamingChannels,
@@ -737,6 +736,7 @@ class youtubeGenreScreen(MenuHelper):
 	def saveIdx(self):
 		config_mp.mediaportal.yt_param_time_idx.save()
 		config_mp.mediaportal.yt_param_meta_idx.save()
+		config_mp.mediaportal.yt_param_regionid_idx.save()
 		configfile_mp.save()
 		yt_oauth2._tokenExpired()
 
@@ -768,6 +768,8 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 		('&gl=US'),
 		('&gl=GB'),
 		('&gl=DE'),
+		('&gl=AT'),
+		('&gl=CH'),
 		('&gl=FR'),
 		('&gl=IT'),
 		('&gl=ES'),
@@ -835,7 +837,6 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 			self['F1'] = Label(_("Sort by"))
 			self.key_sort = True
 		else:
-			self['F1'] = Label(_("Exit"))
 			self.key_sort = False
 
 		self['Page'] = Label(_("Page:"))
@@ -1582,7 +1583,7 @@ class YT_ListScreen(MPScreen, ThumbsHelper):
 
 	def keyRed(self):
 		if not self.key_sort:
-			self.keyCancel()
+			return
 		elif not self.keyLocked:
 			self.changeSort()
 

@@ -57,7 +57,6 @@ class germanytvChannelScreen(MPScreen):
 		self['title'] = Label("Germany-TV")
 		self['ContentTitle'] = Label(_("Menu"))
 		self['name'] = Label(_("Selection:"))
-		self['F1'] = Label(_("Exit"))
 
 		self.genreliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)

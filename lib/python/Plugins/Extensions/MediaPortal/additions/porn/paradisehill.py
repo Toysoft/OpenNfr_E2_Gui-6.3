@@ -1,6 +1,9 @@
 ﻿# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
+from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
+
 default_cover = "file://%s/paradisehill.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class paradisehillGenreScreen(MPScreen):
@@ -37,15 +40,13 @@ class paradisehillGenreScreen(MPScreen):
 		Cat = re.findall('class="item".*?href="(.*?)".*?itemprop="name"><span>(.*?)</span>', parse.group(1), re.S)
 		if Cat:
 			for (Url, Title) in Cat:
-				Url = Url + "&page="
+				Url = Url.replace('created_at','$$SORT$$') + "&page="
 				self.genreliste.append((Title, Url))
 			self.genreliste.sort()
-		self.genreliste.insert(0, ("Popular (All Time)", "/popular/?filter=all&sort=by_likes&page="))
-		self.genreliste.insert(0, ("Popular (Year)", "/popular/?filter=year&sort=by_likes&page="))
-		self.genreliste.insert(0, ("Popular (Monthly)", "/popular/?filter=month&sort=by_likes&page="))
-		self.genreliste.insert(0, ("Popular (Weekly)", "/popular/?filter=week&sort=by_likes&page="))
-		self.genreliste.insert(0, ("Popular (Daily)", "/popular/?filter=day&sort=by_likes&page="))
-		self.genreliste.insert(0, ("Newest", "/all/?sort=created_at&page="))
+		self.genreliste.insert(0, ("Most Commented", "/popular/?filter=$$FILTER$$&sort=by_comment&page="))
+		self.genreliste.insert(0, ("Most Liked", "/popular/?filter=$$FILTER$$&sort=by_likes&page="))
+		self.genreliste.insert(0, ("Most Viewed", "/popular/?filter=all&sort=by_views&page="))
+		self.genreliste.insert(0, ("All Movies", "/all/?sort=$$SORT$$&page="))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -86,7 +87,9 @@ class paradisehillFilmListeScreen(MPScreen, ThumbsHelper):
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
 			"prevBouquet" : self.keyPageDown,
-			"green" : self.keyPageNumber
+			"green" : self.keyPageNumber,
+			"yellow" : self.keySort,
+			"blue" : self.keyFilter
 		}, -1)
 
 		self.keyLocked = True
@@ -96,8 +99,23 @@ class paradisehillFilmListeScreen(MPScreen, ThumbsHelper):
 		self['ContentTitle'] = Label("Genre: %s" % self.genreName)
 		self['name'] = Label("Film Auswahl")
 		self['F2'] = Label(_("Page"))
+		if "$$SORT$$" in self.genreLink:
+			self['F3'] = Label(_("Sort"))
+		if "$$FILTER$$" in self.genreLink:
+			self['F4'].setText(_("Filter"))
 
 		self['Page'] = Label(_("Page:"))
+
+		if self.genreName in ["Most Commented", "Most Liked"]:
+			self.sort = ''
+			self.sortname = ''
+			self.filter = 'all'
+			self.filtername = 'All time'
+		else:
+			self.sortname = 'By date added'
+			self.sort = 'created_at'
+			self.filter = ''
+			self.filtername = ''
 
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -115,13 +133,14 @@ class paradisehillFilmListeScreen(MPScreen, ThumbsHelper):
 				url = "http://en.paradisehill.cc/search/?pattern=%s&what=1&page=%s" % (self.genreLink,str(self.page))
 		else:
 			url = "http://en.paradisehill.cc%s%s" % (self.genreLink,str(self.page))
+			url = url.replace('$$SORT$$',self.sort).replace('$$FILTER$$',self.filter)
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</div>' , '.*page=(\d+)"')
 		movies = re.findall('list-film-item.*?href="(.*?)".*?temprop="name">(.*?)</.*?</span>.*?img\ssrc="(.*?)"', data, re.S)
+		self.filmliste = []
 		if movies:
-			self.filmliste = []
 			for (url,title,image) in movies:
 				url = "http://en.paradisehill.cc%s" % url
 				image = "http://en.paradisehill.cc%s" % image
@@ -140,6 +159,34 @@ class paradisehillFilmListeScreen(MPScreen, ThumbsHelper):
 		streamPic = self['liste'].getCurrent()[0][2]
 		self['name'].setText(streamTitle)
 		CoverHelper(self['coverArt']).getCover(streamPic)
+
+	def keySort(self):
+		if self.keyLocked:
+			return
+		if not "$$SORT$$" in self.genreLink:
+			return
+		rangelist = [ ['By date added', 'created_at'], ['By release date', 'release'], ['From A to Z', 'title_en'] ]
+		self.session.openWithCallback(self.keySortAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
+
+	def keySortAction(self, result):
+		if result:
+			self.sort = result[1]
+			self.sortname = result[0]
+			self.loadPage()
+
+	def keyFilter(self):
+		if self.keyLocked:
+			return
+		if not "$$FILTER$$" in self.genreLink:
+			return
+		rangelist = [ ['All time', 'all'], ['Year', 'year'], ['Month', 'month'], ['Week', 'week'], ['Today', 'day'] ]
+		self.session.openWithCallback(self.keyFilterAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
+
+	def keyFilterAction(self, result):
+		if result:
+			self.filter = result[1]
+			self.filtername = result[0]
+			self.loadPage()
 
 	def keyOK(self):
 		if self.keyLocked:

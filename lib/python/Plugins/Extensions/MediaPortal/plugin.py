@@ -95,7 +95,7 @@ except:
 
 try:
 	from Components.CoverCollection import CoverCollection
-	if mp_globals.isDreamOS:
+	if mp_globals.isDreamOS and model not in ["dm520","dm525"]:
 		mp_globals.covercollection = True
 	else:
 		mp_globals.covercollection = False
@@ -197,8 +197,8 @@ config_mp.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choice
 		])
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2018111101"))
-config.mediaportal.version = NoSave(ConfigText(default="2018111101"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2018112701"))
+config.mediaportal.version = NoSave(ConfigText(default="2018112701"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 
@@ -249,8 +249,13 @@ else:
 
 config_mp.mediaportal.skin = NoSave(ConfigText(default=config_mp.mediaportal.skin2.value))
 
+config_mp.mediaportal.debugMode = ConfigSelection(default="Silent", choices = ["High", "Normal", "Silent"])
+
 if mp_globals.covercollection or mp_globals.isVTi:
-	config_mp.mediaportal.ansicht = ConfigSelection(default = "wall2", choices = [("wall2", _("Wall 2.0")), ("wall", _("Wall")), ("liste", _("List"))])
+	if config_mp.mediaportal.debugMode.value == "High":
+		config_mp.mediaportal.ansicht = ConfigSelection(default = "wall2", choices = [("wall2", _("Wall 2.0")), ("wall", _("Wall")), ("liste", _("List"))])
+	else:
+		config_mp.mediaportal.ansicht = ConfigSelection(default = "wall2", choices = [("wall2", _("Wall 2.0")), ("liste", _("List"))])
 elif mp_globals.videomode == 2 and mp_globals.fakeScale:
 	config_mp.mediaportal.ansicht = ConfigSelection(default = "wall", choices = [("wall", _("Wall")), ("liste", _("List"))])
 elif mp_globals.videomode == 2 and not mp_globals.isDreamOS:
@@ -280,7 +285,6 @@ config_mp.mediaportal.setuppin = ConfigYesNo(default = False)
 config_mp.mediaportal.watchlistpath = ConfigText(default="/etc/enigma2/", fixed_size=False)
 config_mp.mediaportal.sortplugins = ConfigSelection(default = "abc", choices = [("hits", "Hits"), ("abc", "ABC"), ("user", "User")])
 config_mp.mediaportal.pagestyle = ConfigSelection(default="Graphic", choices = ["Graphic", "Text"])
-config_mp.mediaportal.debugMode = ConfigSelection(default="Silent", choices = ["High", "Normal", "Silent"])
 config_mp.mediaportal.font = ConfigSelection(default = "1", choices = [("1", "Mediaportal 1")])
 config_mp.mediaportal.showAsThumb = ConfigYesNo(default = False)
 config_mp.mediaportal.restorelastservice = ConfigSelection(default = "1", choices = [("1", _("after SimplePlayer quits")),("2", _("after MediaPortal quits"))])
@@ -2059,9 +2063,9 @@ class MPWall(Screen, HelpableScreen):
 
 			scale = AVSwitch().getFramebufferScale()
 			if mp_globals.videomode == 2:
-				self.picload.setPara((210, 112, scale[0], scale[1], True, 1, "#FF000000"))
+				self.picload.setPara((210, 112, scale[0], scale[1], False, 1, "#FF000000"))
 			else:
-				self.picload.setPara((150, 80, scale[0], scale[1], True, 1, "#FF000000"))
+				self.picload.setPara((150, 80, scale[0], scale[1], False, 1, "#FF000000"))
 			if mp_globals.isDreamOS:
 				self.picload.startDecode(poster_path, False)
 			else:
@@ -2096,9 +2100,9 @@ class MPWall(Screen, HelpableScreen):
 
 				scale = AVSwitch().getFramebufferScale()
 				if mp_globals.videomode == 2:
-					self.picload.setPara((272, 146, scale[0], scale[1], True, 1, "#FF000000"))
+					self.picload.setPara((272, 146, scale[0], scale[1], False, 1, "#FF000000"))
 				else:
-					self.picload.setPara((194, 104, scale[0], scale[1], True, 1, "#FF000000"))
+					self.picload.setPara((194, 104, scale[0], scale[1], False, 1, "#FF000000"))
 				if mp_globals.isDreamOS:
 					self.picload.startDecode(poster_path, False)
 				else:
@@ -2118,9 +2122,9 @@ class MPWall(Screen, HelpableScreen):
 
 				scale = AVSwitch().getFramebufferScale()
 				if mp_globals.videomode == 2:
-					self.picload.setPara((210, 112, scale[0], scale[1], True, 1, "#FF000000"))
+					self.picload.setPara((210, 112, scale[0], scale[1], False, 1, "#FF000000"))
 				else:
-					self.picload.setPara((150, 80, scale[0], scale[1], True, 1, "#FF000000"))
+					self.picload.setPara((150, 80, scale[0], scale[1], False, 1, "#FF000000"))
 				if mp_globals.isDreamOS:
 					self.picload.startDecode(poster_path, False)
 				else:

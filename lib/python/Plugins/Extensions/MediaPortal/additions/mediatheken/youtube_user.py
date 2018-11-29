@@ -21,7 +21,6 @@ class show_USER_Genre(MPScreen):
 		self['title'] = Label("YouTube")
 		self['ContentTitle'] = Label(_("User Channels"))
 		self['name'] = Label(_("Selection:"))
-		self['F1'] = Label(_("Exit"))
 		self['F2'] = Label(_("Load"))
 
 		self.user_path = config_mp.mediaportal.watchlistpath.value + "mp_userchan.xml"
