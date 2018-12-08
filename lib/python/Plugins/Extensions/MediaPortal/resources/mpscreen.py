@@ -10,6 +10,12 @@ from messageboxext import MessageBoxExt
 
 screenList = []
 
+try:
+	f = open("/proc/stb/info/model", "r")
+	model = ''.join(f.readlines()).strip()
+except:
+	model = ''
+
 class SearchHelper:
 
 	def __init__(self):
@@ -114,7 +120,8 @@ class SearchHelper:
 
 class MPSetupScreen(Screen):
 
-	def __init__(self, session, parent=None, skin=None, default_cover=None, *ret_args):
+	def __init__(self, session, parent=None, skin=None, default_cover='file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/default_cover.png', *ret_args):
+		self.default_cover = default_cover
 		self.skinmsg = ''
 		if skin:
 			self.skin_path = mp_globals.pluginPath + mp_globals.skinsPath
@@ -132,10 +139,18 @@ class MPSetupScreen(Screen):
 		screenList.append((self, ret_args))
 
 		self.onFirstExecBegin.append(self.skinMessage)
+		self.onFirstExecBegin.append(self.loadDisplayCover)
+		self.onFirstExecBegin.append(self.skinMessage)
+
+	def loadDisplayCover(self):
+		self.summaries.updateCover(self.default_cover)
 
 	def skinMessage(self):
 		if self.skinmsg != '':
 			self.session.open(MessageBoxExt, _("Mandatory skin file %s is missing!" % self.skinmsg), MessageBoxExt.TYPE_ERROR)
+
+	def createSummary(self):
+		return MPScreenSummary
 
 class MPScreen(Screen, HelpableScreen):
 
@@ -229,11 +244,15 @@ class MPScreen(Screen, HelpableScreen):
 			self.onLayoutFinish.append(self._animation)
 
 		self.onLayoutFinish.append(self.loadDefaultCover)
+		self.onFirstExecBegin.append(self.loadDisplayCover)
 		self.onFirstExecBegin.append(self.skinMessage)
 
 	def skinMessage(self):
 		if self.skinmsg != '':
 			self.session.open(MessageBoxExt, _("Mandatory skin file %s is missing!" % self.skinmsg), MessageBoxExt.TYPE_ERROR)
+
+	def loadDisplayCover(self):
+		self.summaries.updateCover(self.default_cover)
 
 	def loadDefaultCover(self):
 		CoverHelper(self['coverArt']).getCover(self.default_cover)
@@ -252,6 +271,7 @@ class MPScreen(Screen, HelpableScreen):
 			self.mp_hide = True
 			self.hide()
 			self.session.nav.playService(mp_globals.lastservice)
+			self.summaries.updateCover(None)
 		else:
 			self.mp_hide = False
 			self.show()
@@ -259,6 +279,7 @@ class MPScreen(Screen, HelpableScreen):
 				self.session.nav.playService(mp_globals.lastservice)
 			else:
 				self.session.nav.stopService()
+			self.summaries.updateCover(self.default_cover)
 
 	def close(self, *args):
 		if self.mp_hide:
@@ -533,6 +554,9 @@ class MPScreen(Screen, HelpableScreen):
 				return
 			screen.mp_close(*args)
 			i -= 1
+
+	def createSummary(self):
+		return MPScreenSummary
 
 ####### defaults
 
@@ -894,3 +918,42 @@ class MPScreen(Screen, HelpableScreen):
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, width - 180, 0, 180, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]))
 		return res
 ##################
+
+class MPScreenSummary(Screen):
+
+	def __init__(self, session, parent):
+		try:
+			displaysize = getDesktop(1).size()
+			if model in ["dm900","dm920"]:
+				disp_id = ' id="3"'
+				disp_size = str(displaysize.width()-8) + "," + str(displaysize.height())
+				disp_pos = "8,0"
+			elif model in ["dm7080"]:
+				disp_id = ' id="3"'
+				disp_size = str(displaysize.width()) + "," + str(displaysize.height()-14)
+				disp_pos = "0,0"
+			elif model in ["dm820"]:
+				disp_id = ' id="2"'
+				disp_size = str(displaysize.width()) + "," + str(displaysize.height())
+				disp_pos = "0,0"
+			else:
+				disp_id = ' id="1"'
+				disp_size = str(displaysize.width()) + "," + str(displaysize.height())
+				disp_pos = "0,0"
+
+		except:
+			disp_size = "1,1"
+			disp_id = ' id="1"'
+			disp_pos = "0,0"
+
+		self["cover"] = Pixmap()
+
+		self.skin = '''<screen name="MPScreenSummary" backgroundColor="#00000000" position="''' + disp_pos + '''" size="''' + disp_size  + '''"''' + disp_id + '''>
+				<widget name="cover" position="center,center" size="''' + disp_size + '''" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" transparent="1" alphatest="blend" />
+				</screen>'''
+
+		self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
+		Screen.__init__(self, session)
+
+	def updateCover(self, filename):
+		CoverHelper(self['cover']).getCover(filename)

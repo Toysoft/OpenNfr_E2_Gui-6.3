@@ -31,8 +31,8 @@ from Components.config import config, ConfigInteger, ConfigSelection, getConfigL
 
 yes_no_descriptions = {False: _("no"), True: _("yes")}
 class ConfigYesNo(ConfigBoolean):
-        def __init__(self, default = False):
-                ConfigBoolean.__init__(self, default = default, descriptions = yes_no_descriptions)
+	def __init__(self, default = False):
+		ConfigBoolean.__init__(self, default = default, descriptions = yes_no_descriptions)
 
 try:
 	from Components.config import ConfigPassword

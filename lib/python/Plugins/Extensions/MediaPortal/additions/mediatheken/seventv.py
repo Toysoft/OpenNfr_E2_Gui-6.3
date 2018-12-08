@@ -45,40 +45,9 @@ sevenAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 sevenCookies = CookieJar()
 default_cover = "file://%s/seventv.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
-logos = ["dmax", "tlc"]
-
-def getlogos():
-	ds = defer.DeferredSemaphore(tokens=5)
-
-	icon_url = getIconUrl()
-
-	logo_hashes = grabpage(icon_url+"logos/hashes")
-	if logo_hashes:
-		logo_data = re.findall('(.*?)\s\*(.*?\.png)', logo_hashes)
-	else:
-		logo_data = None
-
-	for logo in logos:
-		logo_path = "%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "logos", logo)
-		url = icon_url+"logos/" + logo + ".png"
-		if not fileExists(logo_path):
-			if logo_data:
-				for a,b in logo_data:
-					if b == logo+'.png':
-						ds.run(downloadPage, url, logo_path)
-		else:
-			if logo_data:
-				for a,b in logo_data:
-					if b == logo+'.png':
-						remote_hash = a
-						local_hash = hashlib.md5(open(logo_path, 'rb').read()).hexdigest()
-						if remote_hash != local_hash:
-							ds.run(downloadPage, url, logo_path)
-
 class sevenFirstScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session):
-		getlogos()
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -109,27 +78,26 @@ class sevenFirstScreen(MPScreen, ThumbsHelper):
 
 	def genreData(self, data):
 		stations = re.findall('<li class="brandgrid-item"><a class="brandgrid-link brandgrid-[A-Za-z0-9\s]+" title="[A-Za-z0-9\s]+" href="/[A-Za-z0-9\s]+">(.*?)</a></li>', data, re.S)
-		self.senderliste.append(("ProSieben", "ProSieben", "seventv"))
-		self.senderliste.append(("SAT.1", "SAT.1", "seventv"))
-		self.senderliste.append(("kabel eins", "kabel%20eins", "seventv"))
-		self.senderliste.append(("sixx", "sixx", "seventv"))
-		self.senderliste.append(("ProSieben MAXX", "ProSieben%20MAXX", "seventv"))
-		self.senderliste.append(("SAT.1 Gold", "SAT.1%20Gold", "seventv"))
-		self.senderliste.append(("kabel eins Doku", "kabel%20eins%20Doku", "seventv"))
+		self.senderliste.append(("ProSieben", "ProSieben"))
+		self.senderliste.append(("SAT.1", "SAT.1"))
+		self.senderliste.append(("kabel eins", "kabel%20eins"))
+		self.senderliste.append(("sixx", "sixx"))
+		self.senderliste.append(("ProSieben MAXX", "ProSieben%20MAXX"))
+		self.senderliste.append(("SAT.1 Gold", "SAT.1%20Gold"))
+		self.senderliste.append(("kabel eins Doku", "kabel%20eins%20Doku"))
 		if "DMAX" in stations:
-			self.senderliste.append(("DMAX", "DMAX", "dmax"))
+			self.senderliste.append(("DMAX", "DMAX"))
 		if "TLC" in stations:
-			self.senderliste.append(("TLC", "TLC",  "tlc"))
+			self.senderliste.append(("TLC", "TLC"))
 		if "Eurosport" in stations:
-			self.senderliste.append(("Eurosport", "Eurosport", "seventv"))
+			self.senderliste.append(("Eurosport", "Eurosport"))
 		self.ml.setList(map(self._defaultlistcenter, self.senderliste))
 		self.keyLocked = False
 		self.th_ThumbsQuery(self.senderliste, 0, 1, 2, None, None, 1, 1, mode=1)
 		self.showInfos()
 
 	def showInfos(self):
-		Image = "file://%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "logos", self['liste'].getCurrent()[0][2])
-		CoverHelper(self['coverArt']).getCover(Image)
+		CoverHelper(self['coverArt']).getCover(default_cover)
 		Name = self['liste'].getCurrent()[0][0]
 		self['name'].setText(_("Selection:") + " " + Name)
 
@@ -138,8 +106,6 @@ class sevenFirstScreen(MPScreen, ThumbsHelper):
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		global default_cover
-		default_cover = "file://%s/%s.png" % (config_mp.mediaportal.iconcachepath.value + "logos", self['liste'].getCurrent()[0][2])
 		self.session.open(sevenGenreScreen, Link, Name)
 
 class sevenGenreScreen(MPScreen):

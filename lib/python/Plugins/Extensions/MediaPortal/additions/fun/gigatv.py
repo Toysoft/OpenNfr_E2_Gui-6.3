@@ -71,8 +71,8 @@ class gigatvGenreScreen(MPScreen, ThumbsHelper):
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
-		self.genreliste.append(("Alle Videos", "http://www.giga.de/tv/alle-videos/", default_cover))
 		self.genreliste.append(("G-Log","http://www.giga.de/games/videos/g-log/", "http://static.giga.de/wp-content/uploads/2012/12/g-log2-rcm239x151.jpg"))
+		self.genreliste.append(("GIGA Games", "https://www.giga.de/games/videos/", default_cover))
 		self.genreliste.append(("GIGA Tech","http://www.giga.de/tech/videos/", default_cover))
 		self.genreliste.append(("GIGA Windows","http://www.giga.de/windows/videos/", default_cover))
 		self.genreliste.append(("GIGA Android/Apple","http://www.giga.de/android/videos-podcasts/", default_cover))

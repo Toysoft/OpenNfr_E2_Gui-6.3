@@ -177,8 +177,8 @@ def grabpage(pageurl, method='GET', postdata={}):
 from Components.config import ConfigClock, ConfigSequence
 
 class ConfigPORNPIN(ConfigInteger):
-        def __init__(self, default, len = 4, censor = ""):
-                ConfigSequence.__init__(self, seperator = ":", limits = [(1000, (10**len)-1)], censor_char = censor, default = default)
+	def __init__(self, default, len = 4, censor = ""):
+		ConfigSequence.__init__(self, seperator = ":", limits = [(1000, (10**len)-1)], censor_char = censor, default = default)
 
 config_mp.mediaportal = ConfigSubsection()
 config.mediaportal = ConfigSubsection()
@@ -197,8 +197,8 @@ config_mp.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choice
 		])
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2018112701"))
-config.mediaportal.version = NoSave(ConfigText(default="2018112701"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2018120701"))
+config.mediaportal.version = NoSave(ConfigText(default="2018120701"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 
@@ -598,6 +598,11 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			"red" : self.premium
 		}, -1)
 
+		self.onFirstExecBegin.append(self.loadDisplayCover)
+
+	def loadDisplayCover(self):
+		self.summaries.updateCover('file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/default_cover.png')
+
 	def _separator(self):
 		if mp_globals.isDreamOS:
 			pass
@@ -887,6 +892,9 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			config_mp.mediaportal.pinuseradditions.save()
 			self.keySave()
 
+	def createSummary(self):
+		return MPSummary
+
 class MPList(Screen, HelpableScreen):
 
 	def __init__(self, session, lastservice):
@@ -968,6 +976,10 @@ class MPList(Screen, HelpableScreen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		self.onFirstExecBegin.append(self.checkPathes)
 		self.onFirstExecBegin.append(self.status)
+		self.onFirstExecBegin.append(self.loadDisplayCover)
+
+	def loadDisplayCover(self):
+		self.summaries.updateCover('file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/default_cover.png')
 
 	def layoutFinished(self):
 		_hosters()
@@ -1487,6 +1499,9 @@ class MPList(Screen, HelpableScreen):
 					auswahl = self['liste'].getCurrent()[0][0]
 					self['name'].setText(auswahl)
 
+	def createSummary(self):
+		return MPSummary
+
 class MPSort(MPScreen):
 
 	def __init__(self, session):
@@ -1873,6 +1888,10 @@ class MPWall(Screen, HelpableScreen):
 		self.onFirstExecBegin.append(self._onFirstExecBegin)
 		self.onFirstExecBegin.append(self.checkPathes)
 		self.onFirstExecBegin.append(self.status)
+		self.onFirstExecBegin.append(self.loadDisplayCover)
+
+	def loadDisplayCover(self):
+		self.summaries.updateCover('file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/default_cover.png')
 
 	def checkPathes(self):
 		CheckPathes(self.session).checkPathes(self.cb_checkPathes)
@@ -2572,6 +2591,9 @@ class MPWall(Screen, HelpableScreen):
 				config_mp.mediaportal.filter.value = filter[1]
 				self.restartAndCheck()
 
+	def createSummary(self):
+		return MPSummary
+
 class MPWall2(Screen, HelpableScreen):
 
 	def __init__(self, session, lastservice, filter):
@@ -2843,6 +2865,10 @@ class MPWall2(Screen, HelpableScreen):
 		self.onFirstExecBegin.append(self._onFirstExecBegin)
 		self.onFirstExecBegin.append(self.checkPathes)
 		self.onFirstExecBegin.append(self.status)
+		self.onFirstExecBegin.append(self.loadDisplayCover)
+
+	def loadDisplayCover(self):
+		self.summaries.updateCover('file:///usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/default_cover.png')
 
 	def checkPathes(self):
 		CheckPathes(self.session).checkPathes(self.cb_checkPathes)
@@ -3424,6 +3450,48 @@ class MPWall2(Screen, HelpableScreen):
 			elif filter:
 				config_mp.mediaportal.filter.value = filter[1]
 				self.restartAndCheck()
+
+	def createSummary(self):
+		return MPSummary
+
+class MPSummary(Screen):
+
+	def __init__(self, session, parent):
+		try:
+			displaysize = getDesktop(1).size()
+			if model in ["dm900","dm920"]:
+				disp_id = ' id="3"'
+				disp_size = str(displaysize.width()-8) + "," + str(displaysize.height())
+				disp_pos = "8,0"
+			elif model in ["dm7080"]:
+				disp_id = ' id="3"'
+				disp_size = str(displaysize.width()) + "," + str(displaysize.height()-14)
+				disp_pos = "0,0"
+			elif model in ["dm820"]:
+				disp_id = ' id="2"'
+				disp_size = str(displaysize.width()) + "," + str(displaysize.height())
+				disp_pos = "0,0"
+			else:
+				disp_id = ' id="1"'
+				disp_size = str(displaysize.width()) + "," + str(displaysize.height())
+				disp_pos = "0,0"
+
+		except:
+			disp_size = "1,1"
+			disp_id = ' id="1"'
+			disp_pos = "0,0"
+
+		self["cover"] = Pixmap()
+
+		self.skin = '''<screen name="MPScreenSummary" backgroundColor="#00000000" position="''' + disp_pos + '''" size="''' + disp_size  + '''"''' + disp_id + '''>
+				<widget name="cover" position="center,center" size="''' + disp_size + '''" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/none.png" transparent="1" alphatest="blend" />
+				</screen>'''
+
+		self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
+		Screen.__init__(self, session)
+
+	def updateCover(self, filename):
+		CoverHelper(self['cover']).getCover(filename)
 
 def exit(session, result, lastservice):
 	global lc_stats

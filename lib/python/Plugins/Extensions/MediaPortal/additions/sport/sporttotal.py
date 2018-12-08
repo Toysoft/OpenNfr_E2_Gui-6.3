@@ -69,11 +69,11 @@ class sporttotalGenreScreen(MPScreen):
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		info = re.findall('class="table-link"\sdata-href="(.*?)".*?class="date">(.*?)</.*?class="Division">(.*?)</.*?class="teams">(.*?)</', data, re.S)
+		info = re.findall('class="table-link".*?tableLink\(\'(.*?)\'.*?class="date-filter">(.*?)</.*?class="teams">(.*?)</.*?class="division">(.*?)</', data, re.S)
 		if info:
 			self.genreliste = []
-			for (url, date, season, teams) in info:
-				match = "%s: %s, %s" % (season.strip(), date.strip(), teams.strip())
+			for (url, date, teams, season) in info:
+				match = "%s: %s, %s" % (season.strip(), date.strip(), stripAllTags(teams).strip())
 				url = 'http://www.sporttotal.tv' + url
 				self.genreliste.append((decodeHtml(match), url))
 		else:

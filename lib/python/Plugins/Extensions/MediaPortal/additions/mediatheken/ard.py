@@ -41,7 +41,8 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 
-BASE_URL = "http://www.ardmediathek.de"
+BASE_URL = "https://classic.ardmediathek.de"
+agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36'
 default_cover = "file://%s/ard.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 isWeg = "Nicht (oder nicht mehr) auf den ARD-Servern vorhanden!"
 
@@ -102,7 +103,6 @@ class ARDGenreScreen(MPScreen):
 				url = BASE_URL+"/suche?searchText="+searchStr+"&source=tv&sort="
 			elif self.gF == "6":
 				url = BASE_URL+"/suche?searchText="+searchStr+"&source=radio&sort="
-			print url
 			self.session.open(ARDStreamScreen,url,genreName,self.gF)
 
 class ARDPreSelect(MPScreen):
@@ -363,7 +363,7 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 			url = "%s/tv/sendungen-a-z?buchstabe=%s&mcontent=page.1" % (BASE_URL,self.auswahl)
 		if self.gF == "7":	# ABC - Radio
 			url = "%s/radio/sendungen-a-z?buchstabe=%s&mcontent=page.1" % (BASE_URL,self.auswahl)
-		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=agent).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
 		self.genreliste = []
@@ -390,7 +390,7 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 		if self.gF != "10":
 			url = self['liste'].getCurrent()[0][1]
 			if url:
-				getPage(url).addCallback(self.handlePicAndTxt).addErrback(self.dataError)
+				twAgentGetPage(url, agent=agent).addCallback(self.handlePicAndTxt).addErrback(self.dataError)
 
 	def handlePicAndTxt(self, data):
 		if self.keyLocked:
@@ -399,6 +399,7 @@ class ARDPostSelect(MPScreen, ThumbsHelper):
 		streamPic = default_cover
 		gefunden = re.findall('<meta name="description" content="(.*?)"/.*?<meta name="author" content="(.*?)".*?<meta name="gsaimg512" content="(.*?)"/>.*?<div class="box">.*?textWrapper.*?dachzeile">(.*?)[<|\s]', data, re.S)
 		if gefunden:
+			itxt = ''
 			for (itxt,sender,streamPic,ausgaben) in gefunden:
 				itxttmp = itxt.split("|")
 				itxt = itxttmp[-2]
@@ -481,7 +482,6 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		if self.blueTrigger == 0:
 			if self.gF == "1" or self.gF =="6":	# Suche
 				url = self.streamLink+self.suchTrigger+"&mresults=page."+str(self.page)	# Kein "%s" hier verwenden!! Gewandelte Umlaute aus searchCallBack enthalten "%"!
-				print url
 			elif self.gF == "4" or self.gF == "8":	# Kategorien
 				url = "%s&mcontent=page.%s" % (self.streamLink,self.page)
 			elif self.gF == "3":
@@ -514,7 +514,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 			self.blueMemory[0] = self.page
 			self.page = 1
 			url = self.blueURL+"&mpage=page.moreclips"
-		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=agent).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
 		if self.gN == "Sport":
@@ -580,7 +580,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 			return
 		self.blueURL = self['liste'].getCurrent()[0][1]
 		if self.blueURL:
-			getPage(self.blueURL).addCallback(self.handlePicAndTxt).addErrback(self.dataError)
+			twAgentGetPage(self.blueURL, agent=agent).addCallback(self.handlePicAndTxt).addErrback(self.dataError)
 
 	def handlePicAndTxt(self, data):
 		if self.keyLocked:
@@ -597,6 +597,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 			if self.future == 0:
 				ergebnis = re.findall('<meta name="description" content="(.*?)"/>.*?author" content="(.*?)"/.*?<meta name="gsaimg512" content="(.*?)"/>.*?dcterms.title" content="(.*?)"/>.*?dcterms.date" content="(.*?)"/>.*?<p class="subtitle">(.*?)</', data, re.S)
 		if ergebnis:
+			itxt = ''
 			for (itxt,sender,streamPic,sendung,uhr,meta) in ergebnis:
 				self.sendung = sendung
 				title = self['liste'].getCurrent()[0][0]
@@ -662,7 +663,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 			self['name'].setText(streamName)
 			return
 		else:
-			getPage(url).addCallback(self.get_Link).addErrback(self.dataError)
+			twAgentGetPage(url, agent=agent).addCallback(self.get_Link).addErrback(self.dataError)
 
 	def get_Link(self, data):
 		fsk = re.search('<div class="box fsk.*?"teasertext">\s+(.*?)\s+</p>', data, re.S)
@@ -674,7 +675,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 		else:
 			mediaid = self['liste'].getCurrent()[0][2]
 			url = BASE_URL+"/play/media/"+mediaid+"?devicetype=pc&features=flash"
-			getPage(url).addCallback(self.getStreams).addErrback(self.dataError)
+			twAgentGetPage(url, agent=agent).addCallback(self.getStreams).addErrback(self.dataError)
 
 	def getStreams(self, data):
 		stream = None
@@ -714,7 +715,7 @@ class ARDStreamScreen(MPScreen, ThumbsHelper):
 					stream = stream.replace('_sd.mp4','_hd.mp4')
 			except:
 				pass
-				
+
 		if stream:
 			if stream.startswith('//'):
 				stream = 'http:' + stream

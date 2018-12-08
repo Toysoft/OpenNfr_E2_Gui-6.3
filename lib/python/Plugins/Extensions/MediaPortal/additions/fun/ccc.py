@@ -36,7 +36,7 @@ class CccOverviewScreen(MPScreen):
 	def loadConferences(self):
 		getPage('https://api.media.ccc.de/public/conferences', agent=std_headers, headers={'Content-Type': 'application/json'}).addCallback(self.parseConferences).addErrback(self.dataError)
 
-        def parseConferences(self, data):
+	def parseConferences(self, data):
 		watcheduids = self.watchdb.getWatched(3)
 
 		recent = []

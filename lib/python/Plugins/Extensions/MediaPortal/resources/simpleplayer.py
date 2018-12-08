@@ -2436,10 +2436,12 @@ class SimplePlayerSummary(Screen):
 		Screen.__init__(self, session)
 		self.skinName = "InfoBarMoviePlayerSummary"
 
+	def updateCover(self, filename):
+		pass
+		
 class SimplePlayerLCDScreen(Screen):
 
-        def __init__(self, session, parent):
-                Screen.__init__(self, session)
+	def __init__(self, session, parent):
 		self["cover"] = Pixmap()
 
 		self.skin = '''<screen name="SimplePlayerLCDScreen" backgroundColor="#00000000" position="0,0" size="400,240" id="3">
@@ -2452,5 +2454,8 @@ class SimplePlayerLCDScreen(Screen):
 				</widget>
 				</screen>'''
 
+		self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
+		Screen.__init__(self, session)
+
 	def updateCover(self, filename):
-                CoverHelper(self['cover']).getCover(filename)
+		CoverHelper(self['cover']).getCover(filename)
