@@ -583,6 +583,8 @@ class ssStaffeln(MPScreen):
 		title = self['liste'].getCurrent()[0][0]
 		if self.descr:
 			self['handlung'].setText(stripAllTags(decodeHtml(self.descr.group(1))).strip())
+		else:
+			self['handlung'].setText('')
 		CoverHelper(self['coverArt']).getCover(self.cover, agent=ss_agent, cookieJar=ss_cookies)
 		self['name'].setText(self.Title)
 
@@ -692,6 +694,8 @@ class ssEpisoden(MPScreen):
 		descr = re.search('class="descriptionSpoiler".*?>(.*?)</p>', data, re.S)
 		if descr:
 			self['handlung'].setText(stripAllTags(decodeHtml(descr.group(1))).strip())
+		else:
+			self['handlung'].setText('')
 
 	def keyOK(self):
 		exist = self['liste'].getCurrent()
@@ -824,7 +828,8 @@ class ssStreams(MPScreen):
 				url = BASE_URL + url
 				headers = {'User-Agent': ss_agent}
 				try:
-					response = requests.get(url, cookies=ss_cookies, headers=headers, timeout=30)
+					s = requests.session()
+					response = s.get(url, cookies=ss_cookies, headers=headers, timeout=30)
 					if response.history:
 						get_stream_link(self.session).check_link(str(response.url), self.playfile)
 					else:
