@@ -192,7 +192,7 @@ class youtubeUrl(object):
   def parseVInfo(self, videoinfo, watch_url):
 	flashvars = self.extractFlashVars(videoinfo, 0)
 	if not flashvars.has_key(u"url_encoded_fmt_stream_map"):
-		playerUrl = re.search('.*src="(.*?)"\s+name="player/base"', videoinfo, re.S)
+		playerUrl = re.search('.*src="(.*?)"\s+(?:type="text/javascript"\s|)name="player(?:_ias|)/base"', videoinfo, re.S)
 		if playerUrl:
 			playerUrl = playerUrl.group(1).replace('\/','/')
 		else:

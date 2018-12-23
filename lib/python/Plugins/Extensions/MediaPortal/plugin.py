@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 SHOW_HANG_STAT = False
 
@@ -197,8 +197,8 @@ config_mp.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choice
 		])
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2018120701"))
-config.mediaportal.version = NoSave(ConfigText(default="2018120701"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2018121901"))
+config.mediaportal.version = NoSave(ConfigText(default="2018121901"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 
@@ -355,7 +355,7 @@ autoStartTimer = None
 _session = None
 
 # eUriResolver Imports for DreamOS
-#############################################################################################################
+##############################################################################################################
 try:
 	from enigma import eUriResolver
 
@@ -373,7 +373,7 @@ try:
 
 except ImportError:
 	pass
-#############################################################################################################
+##############################################################################################################
 
 
 conf = xml.etree.cElementTree.parse(CONFIG)

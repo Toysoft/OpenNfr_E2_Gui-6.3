@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -199,7 +199,7 @@ class myspassFolgenListeScreen(MPScreen):
 
 	def loadPageData(self, data):
 		myspassdata = json.loads(data)
-		folgen = re.findall('href=".*?--/(\d+)/".*?class="title">(.*?)<small.*?lass="subTitle">(.*?)</.*?class="desc">(.*?)</', myspassdata["slider"], re.S)
+		folgen = re.findall('href=".*?--/(\d+)/".*?class="title".*?>(.*?)(?:</h2|<small).*?class="subTitle">(.*?)</.*?class="desc".*?>(.*?)</', myspassdata["slider"], re.S)
 		if folgen:
 			for (id, title, meta, desc) in folgen:
 				link = "http://www.myspass.de/includes/apps/video/getvideometadataxml.php?id=%s" % str(id)

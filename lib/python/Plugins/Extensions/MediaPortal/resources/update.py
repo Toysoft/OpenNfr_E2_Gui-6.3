@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from imports import *
@@ -131,13 +131,13 @@ class MPUpdateScreen(MPScreen):
 
 			f = open("/etc/apt/apt.conf", "r")
 			arch = ''.join(f.readlines()).strip()
-			arch = re.findall('"(.*?)";', arch, re.S)[0]
+			arch = re.findall('Architecture "(.*?)";', arch, re.S)[0]
 
 			tmp_infolines = self.html.splitlines()
 			files = ''
 			for i in range(0, len(tmp_infolines)):
 				if re.match(".*?/update/",tmp_infolines[i], re.S):
-					file = "wget -q -O /tmp/mediaportal/update/%s %s" % (tmp_infolines[i].split('/update/')[-1].replace('&&ARCH&&', arch), tmp_infolines[i].replace('&&ARCH&&', arch))
+					file = "wget -nv -O /tmp/mediaportal/update/%s %s" % (tmp_infolines[i].split('/update/')[-1].replace('&&ARCH&&', arch), tmp_infolines[i].replace('&&ARCH&&', arch))
 					files = files + ' && ' + file
 			download = files.strip(' && ')
 

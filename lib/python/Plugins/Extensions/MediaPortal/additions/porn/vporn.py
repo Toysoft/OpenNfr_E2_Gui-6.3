@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -119,10 +119,10 @@ class vpornGenreScreen(MPScreen):
 		#if not self.loggedin:
 		#	message = self.session.open(MessageBoxExt, _("Login data is required for HD video playback!"), MessageBoxExt.TYPE_INFO, timeout=5)
 		parse = re.search('class="cats-all categories-list">(.*?)</div>', data, re.S)
-		Cats = re.findall('<li>\s<a\shref="/cat/(.*?)".*?>(.*?)</a></li>', parse.group(1), re.S)
+		Cats = re.findall('<li>\s<a\shref="(?!search)(.*?)".*?>(.*?)</a></li>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
-				Url = "https://www.vporn.com/cat/" + Url
+				Url = "https://www.vporn.com" + Url
 				Title = Title.strip()
 				self.genreliste.append((Title, Url, None, False))
 			self.genreliste.sort()

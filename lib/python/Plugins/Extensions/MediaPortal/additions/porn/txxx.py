@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -83,10 +83,11 @@ class txxxGenreScreen(MPScreen):
 		getPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		Cats = re.findall('class="c-thumb"><a href="(.*?)".*?img\ssrc="(.*?)".*?c-thumb--overlay-title">(.*?)</', data, re.S)
+		Cats = re.findall(' class="categories-list__item" data-name=".*?href="(.*?)".*?data-title=.*?span>(.*?)</', data, re.S)
 		if Cats:
-			for (Url, Image, Title) in Cats:
-				self.genreliste.append((Title, Url, Image))
+			for (Url, Title) in Cats:
+				Url = "http://www.txxx.com" + Url
+				self.genreliste.append((Title, Url, default_cover))
 			self.genreliste.sort()
 			self.genreliste.insert(0, ("Longest", "http://www.txxx.com/longest/", default_cover))
 			self.genreliste.insert(0, ("Most Popular", "http://www.txxx.com/most-popular/", default_cover))

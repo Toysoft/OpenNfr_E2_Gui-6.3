@@ -227,14 +227,17 @@ class porntrexFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "%s/search/%s/?mode=async&function=get_block&block_id=list_videos_videos_list_search_result&from_videos=%s" % (self.baseurl, self.Link, str(self.page))
+			if self.portal == "Porntrex.com":
+				url = "%s/search/%s/?mode=async&function=get_block&block_id=list_videos_videos&q=%s&category_ids=&sort_by=relevance&from_videos=%s" % (self.baseurl, self.Link, self.Link.replace('-','+'), str(self.page))
+			else:
+				url = "%s/search/%s/?mode=async&function=get_block&block_id=list_videos_videos_list_search_result&from_videos=%s" % (self.baseurl, self.Link, str(self.page))
 		else:
 			url = "%s%s/" % (self.Link, str(self.page))
 		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination"(.*?)</ul>')
-		Movies = re.findall('class="video-item.*?href="(.*?)"\stitle="(.*?)".*?data-original="(.*?)".*?</a>(.*?)class="ico.*?class="viewsthumb">(.*?)\sviews.*?clock-o"></i>(.*?)</div.*?list-unstyled">.*?<li>(.*?)</li', data, re.S)
+		Movies = re.findall('class="video-item.*?href="(.*?)"\stitle="(.*?)".*?data-(?:original|src)="(.*?)".*?</a>(.*?)class="ico.*?class="viewsthumb">(.*?)\sviews.*?clock-o"></i>(.*?)</div.*?list-unstyled">.*?<li>(.*?)</li', data, re.S)
 		if Movies:
 			for (url, title, image, private, views, runtime, added) in Movies:
 				if image.startswith('//'):

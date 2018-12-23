@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -308,10 +308,7 @@ class MTVdeChartsSongListeScreen(MPScreen):
 		if self.keyLocked:
 			return
 		idx = self['liste'].getSelectedIndex()
-		if config_mp.mediaportal.hlsp_enable.value or config_mp.mediaportal.mtvquality.value == "SD":
-			self.session.open(MTVdeChartsPlayer, self.filmliste, int(idx) , True, self.genreName)
-		else:
-			message = self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO, timeout=5)
+		self.session.open(MTVdeChartsPlayer, self.filmliste, int(idx) , True, self.genreName)
 
 class MTVdeChartsPlayer(SimplePlayer):
 

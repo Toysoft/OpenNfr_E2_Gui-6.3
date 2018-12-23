@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -273,10 +273,7 @@ class SouthparkAktScreen(MPScreen):
 			return
 		self.keyLocked = True
 		self.link = self['liste'].getCurrent()[0][1]
-		if config_mp.mediaportal.hlsp_enable.value or config_mp.mediaportal.southparkquality.value == "SD":
-			getPage(self.link).addCallback(self.StartStream).addErrback(self.dataError)
-		else:
-			message = self.session.open(MessageBoxExt, _("If you want to play this stream, you have to activate the HLS-Player in the MP-Setup"), MessageBoxExt.TYPE_INFO, timeout=5)
+		getPage(self.link).addCallback(self.StartStream).addErrback(self.dataError)
 
 	def StartStream(self, data):
 		title = self['liste'].getCurrent()[0][0]

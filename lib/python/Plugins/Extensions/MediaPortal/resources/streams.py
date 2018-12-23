@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from imports import *
@@ -798,7 +798,7 @@ class get_stream_link:
 		printl('[streams]: ' + str(error),'','E')
 		message = self.session.open(MessageBoxExt, _("Unknown error, check MP logfile."), MessageBoxExt.TYPE_INFO, timeout=5)
 
-#############################################################################################################
+##############################################################################################################
 
 	def mypcloud(self, data):
 		m = re.search('publink.set_download_link\(\'(.*?)\'\)', data)

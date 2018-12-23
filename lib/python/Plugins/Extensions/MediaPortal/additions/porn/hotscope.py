@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -163,19 +163,15 @@ class hotscopeFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*Search", self.Name):
-			url = BASE_URL + "search/all"
-			postdata = {'query': self.Link, 'page': self.page}
-			postdata = json.dumps(postdata)
+			url = BASE_URL + "search/all" + "/" + str(self.page) + "/" + self.Link
 		else:
 			if not self.Link in ['recent', 'popular', 'snapchat', 'periscope', 'porn']:
-				url = BASE_URL + "category/all"
-				postdata = {'category': self.Link, 'page': self.page, 'sort': '-date'}
-				postdata = json.dumps(postdata)
+				url = BASE_URL + "category/all/" + str(self.page) + "/" + self.Link + "/-date"
+			elif not self.Link in ['recent', 'popular']:
+				url = BASE_URL + self.Link + "/all/" + str(self.page) + "/-date"
 			else:
-				url = BASE_URL + self.Link + "/all"
-				postdata = {'page': self.page, 'sort': '-date'}
-				postdata = json.dumps(postdata)
-		twAgentGetPage(url, method='POST', postdata=postdata, agent=agent, headers=json_headers).addCallback(self.loadData).addErrback(self.dataError)
+				url = BASE_URL + self.Link + "/all/" + str(self.page)
+		twAgentGetPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		json_data = json.loads(data)

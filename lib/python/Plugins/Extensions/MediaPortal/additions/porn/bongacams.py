@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -168,7 +168,10 @@ class bongacamsFilmScreen(MPScreen, ThumbsHelper):
 		self.lastpage = int(lastp)
 		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		for node in jsondata["models"]:
-			Title = str(node["display_name"])
+			if node.has_key('display_name'):
+				Title = str(node["display_name"])
+			else:
+				continue
 			Url = str(node["username"])
 			Image = 'http:' + str(node["thumb_image"])
 			Status = str(node["about_me"])

@@ -2,7 +2,7 @@
 from update import *
 
 config.mpgz = ConfigSubsection()
-config.mpgz.version = NoSave(ConfigText(default="2018120901"))
+config.mpgz.version = NoSave(ConfigText(default="2018121901"))
 
 def autostart(reason, session=None, **kwargs):
 	if reason == 0:

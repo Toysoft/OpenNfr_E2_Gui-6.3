@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -75,7 +75,7 @@ class badoinkvrGenreScreen(MPScreen):
 		getPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		Cats = re.findall('class="video-categories__link\s{0,1}"\shref="(/category/.*?)">(.*?)</a>', data, re.S)
+		Cats = re.findall('href="(/category/.*?)"\s{0,1}>(.*?)</a>', data, re.S)
 		if Cats:
 			for (Url, Title) in Cats:
 				Url = "https://badoinkvr.com" + Url + "/%s"

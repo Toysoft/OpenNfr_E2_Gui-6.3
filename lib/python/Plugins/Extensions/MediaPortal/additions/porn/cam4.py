@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -178,7 +178,7 @@ class cam4FilmScreen(MPScreen, ThumbsHelper):
 		for node in jsondata["users"]:
 			Title = str(node["username"])
 			Url = BASEURL + str(node["username"])
-			Image = str(node["snapshotImageLink"]).replace('200x150','400x300')
+			Image = "https://snapshots.xcdnpro.com/thumbnails/%s?s=%s" % (str(node["username"]), str(node["thumbnailId"]))
 			Gender = str(node["gender"])
 			Location = str(node["countryCode"])
 			from Plugins.Extensions.MediaPortal.resources import iso3166

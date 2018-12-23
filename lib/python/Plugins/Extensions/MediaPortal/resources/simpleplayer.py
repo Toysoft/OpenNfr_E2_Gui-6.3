@@ -95,12 +95,11 @@ class M3U8Player:
 			pass
 
 	def _setM3U8BufferSize(self):
-		if config_mp.mediaportal.hlsp_enable.value:
-			service = self.session.nav.getCurrentService()
-			try:
-				service.streamed().setBufferSize(long(config_mp.mediaportal.hls_buffersize.value) * 1024 ** 2)
-			except:
-				pass
+		service = self.session.nav.getCurrentService()
+		try:
+			service.streamed().setBufferSize(long(config_mp.mediaportal.hls_buffersize.value) * 1024 ** 2)
+		except:
+			pass
 
 	def _getM3U8Video(self, title, url, **kwargs):
 		if self._check_cache:
@@ -1449,7 +1448,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self._initStream(title, url, **kwargs)
 		elif self.youtubelive:
 			self._initStream(title, url, **kwargs)
-		elif config_mp.mediaportal.hlsp_enable.value and not self.forceGST and ('.m3u8' in url or 'm3u8-aapl' in url):
+		elif not self.forceGST and ('.m3u8' in url or 'm3u8-aapl' in url):
 			self._getM3U8Video(title, url, **kwargs)
 		else:
 			self._initStream(title, url, **kwargs)
@@ -2438,7 +2437,7 @@ class SimplePlayerSummary(Screen):
 
 	def updateCover(self, filename):
 		pass
-		
+
 class SimplePlayerLCDScreen(Screen):
 
 	def __init__(self, session, parent):

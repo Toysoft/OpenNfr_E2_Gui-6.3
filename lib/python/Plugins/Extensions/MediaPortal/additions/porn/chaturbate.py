@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -212,7 +212,8 @@ class chaturbateFilmScreen(MPScreen, ThumbsHelper):
 	def loadPageData(self, data):
 		self.ml.moveToIndex(0)
 		self.getLastPage(data, 'class="paging">(.*?)</ul>')
-		Movies = re.findall('<li class="room_list_room.*?>.<a\shref="(.*?)".*?<img\ssrc=".*?".*?gender(\w)">(\d+)</span>.*?<li\stitle(?:="(.*?)"|)>.*?location.*?>(.*?)</li>.*?class="cams">(.*?)</li>.*?</div>.*?</li>', data, re.S)
+		preparse = re.search('id="room_list"(.*?)class="banner">', data, re.S)
+		Movies = re.findall('<li class="room_list_room.*?>.<a\shref="(.*?)".*?<img\ssrc=".*?".*?gender(\w)">(\d+)</span>.*?<li\stitle(?:="(.*?)"|)>.*?location.*?>(.*?)</li>.*?class="cams">(.*?)</li>.*?</div>.*?</li>', preparse.group(1), re.S)
 		if Movies:
 			for (Url, Gender, Age, Description, Location, Viewers) in Movies:
 				if not Description:

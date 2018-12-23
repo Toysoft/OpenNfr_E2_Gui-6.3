@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -83,7 +83,7 @@ class tube8GenreScreen(MPScreen):
 		getPage(self.url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('categories-subnav-box(.*?)</div>', data,re.S)
+		parse = re.search('id="categories-subnav" class="gridList"(.*?)</div>', data,re.S)
 		Cats = re.findall('a\shref="(http[s]?://www.tube8.com/cat/.*?)">.*?class="category-thumb">.*?data-thumb="(.*?)".*?class="category-name">(.*?)</span>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
@@ -126,8 +126,10 @@ class tube8GenreScreen(MPScreen):
 			self.session.open(tube8FilmScreen, Link, Name)
 
 	def getSuggestions(self, text, max_res):
-		url = "http://www.tube8.com/ajax2/searchAutoComplete/?search_term=%s" % urllib.quote_plus(text)
-		d = twAgentGetPage(url, agent=agent, headers=json_headers, timeout=5)
+		url = "https://bnzmzkcxit-dsn.algolia.net/1/indexes/popular_queries_straight_de/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.31.0&x-algolia-application-id=BNZMZKCXIT&x-algolia-api-key=9302a0e4a33f91355c89c58789d32e6b"
+		postdata = {'params':'query='+text}
+		postdata = json.dumps(postdata)
+		d = twAgentGetPage(url, method='POST', postdata=postdata, agent=agent, headers=json_headers, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
 		d.addErrback(self.gotSuggestions, max_res, err=True)
 		return d
@@ -136,8 +138,8 @@ class tube8GenreScreen(MPScreen):
 		list = []
 		if not err and type(suggestions) in (str, buffer):
 			suggestions = json.loads(suggestions)
-			for item in suggestions['queries']:
-				li = item
+			for item in suggestions['hits']:
+				li = item['query']
 				list.append(str(li))
 				max_res -= 1
 				if not max_res: break
@@ -223,7 +225,8 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 					Views = str(node["attributes"]["stats"]["views"])
 					self.filmliste.append((Title, Url, Image, Runtime, Views))
 		else:
-			Movies = re.findall('id="video_.*?a\shref="(.*?)".*?data-thumb="(http[s]?://.*?\.jpg)".*?title="(.*?)".*?video_duration">(.*?)</div>.*?video_views">(.*?)\sviews', data, re.S)
+			preparse = re.search('id="category_video_list"(.*?)$', data, re.S)
+			Movies = re.findall('id="video_.*?a\shref="(.*?)".*?data-thumb="(http[s]?://.*?\.jpg)".*?title="(.*?)".*?video_duration">(.*?)</div>.*?video_views">(.*?)\sviews', preparse.group(1), re.S)
 			if Movies:
 				for (Url, Image, Title, Runtime, Views) in Movies:
 					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views.strip()))

@@ -246,12 +246,14 @@ class porn00FilmAuswahlScreen(MPScreen):
 		else:
 			message = self.session.open(MessageBoxExt, _("Broken URL parsing, please report to the developers."), MessageBoxExt.TYPE_INFO, timeout=3)
 
-	def porn00directData(self,data, pageurl):
+	def porn00directData(self, data, pageurl):
 		link = re.findall('file:\s*["|\'](http.*?)["|\']', data)
 		if not link:
 			link = re.findall('var\szu\s=\s["|\'](http.*?)["|\']', data)
 			if not link:
 				link = re.findall('var\sro\s=\s["|\'](http.*?)["|\']', data)
+				if not link:
+					link = re.findall('var\sa\d+\s=\s["|\'](http.*?)["|\']', data)
 		if link:
 			mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
 			headers = '&Referer=' + pageurl

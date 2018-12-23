@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -197,5 +197,5 @@ class moviefapFilmScreen(MPScreen, ThumbsHelper):
 		if url:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]
-			url = "http://" + url[-1]
-			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='empflix')
+			url = "http://" + url[-1].replace('&amp;','&')
+			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='moviefap')

@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#############################################################################################################
+##############################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -34,7 +34,7 @@
 #  Advertising with this plugin is NOT allowed.
 #  For other uses, permission from the authors is necessary.
 #
-#############################################################################################################
+##############################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -44,6 +44,57 @@ default_cover = "file://%s/sporttotal.png" % (config_mp.mediaportal.iconcachepat
 class sporttotalGenreScreen(MPScreen):
 
 	def __init__(self, session):
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
+
+		self["actions"] = ActionMap(["MP_Actions"], {
+			"ok"	: self.keyOK,
+			"0" : self.closeAll,
+			"cancel": self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft
+		}, -1)
+
+		self['title'] = Label("sporttotal.tv")
+		self['ContentTitle'] = Label("Genre:")
+		self['name'] = Label(_("Please wait..."))
+
+		self.keyLocked = True
+
+		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self['liste'] = self.ml
+
+		self.onLayoutFinish.append(self.loadPage)
+
+	def loadPage(self):
+		self.filmliste = []
+		url = "http://www.sporttotal.tv/live"
+		getPage(url).addCallback(self.parseData).addErrback(self.dataError)
+
+	def parseData(self, data):
+		preparse = re.search('<nav class="sport-selector">(.*?)</nav>', data, re.S)
+		raw = re.findall('a\shref="(.*?)">(.*?)</a>', preparse.group(1), re.S)
+		if raw:
+			for (Url, Title) in raw:
+				Url = "https://www.sporttotal.tv/live" + Url
+				self.filmliste.append((decodeHtml(Title.strip()), Url))
+			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
+			self.keyLocked = False
+		self['name'].setText('')
+
+	def keyOK(self):
+		if self.keyLocked:
+			return
+		Name = self['liste'].getCurrent()[0][0]
+		Link = self['liste'].getCurrent()[0][1]
+		self.session.open(sporttotalSubGenreScreen, Link, Name)
+
+class sporttotalSubGenreScreen(MPScreen):
+
+	def __init__(self, session, Link, Name):
+		self.Link = Link
+		self.Name = Name
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
@@ -55,7 +106,7 @@ class sporttotalGenreScreen(MPScreen):
 
 		self.keyLocked = True
 		self['title'] = Label("sporttotal.tv")
-		self['ContentTitle'] = Label("Livespiele:")
+		self['ContentTitle'] = Label("%s Livespiele:" % self.Name)
 
 		self.genreliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -65,18 +116,27 @@ class sporttotalGenreScreen(MPScreen):
 
 	def loadPage(self):
 		self['name'].setText(_('Please wait...'))
-		url = "http://www.sporttotal.tv/live"
+		url = self.Link
 		getPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		info = re.findall('class="table-link".*?tableLink\(\'(.*?)\'.*?class="date-filter">(.*?)</.*?class="teams">(.*?)</.*?class="division">(.*?)</', data, re.S)
-		if info:
-			self.genreliste = []
-			for (url, date, teams, season) in info:
-				match = "%s: %s, %s" % (season.strip(), date.strip(), stripAllTags(teams).strip())
-				url = 'http://www.sporttotal.tv' + url
-				self.genreliste.append((decodeHtml(match), url))
-		else:
+		pre1 = re.findall('id="livegames" class="livegame-table">(.*?)class="pagination live-pagnation">', data, re.S)
+		pre2 = re.findall('id="upcoming-games" class="livegame-table">(.*?)class="pagination upcoming-pagnation">', data, re.S)
+		if pre1:
+			info = re.findall('class="table-link".*?tableLink\(\'(.*?)\'.*?class="date-filter">(.*?)</.*?class="teams">(.*?)</.*?class="division">(.*?)</', pre1[0], re.S)
+			if info:
+				for (url, date, teams, season) in info:
+					match = "%s: %s, %s" % (season.strip(), date.strip(), stripAllTags(teams).strip())
+					url = 'http://www.sporttotal.tv' + url
+					self.genreliste.append((decodeHtml(match), url))
+		if pre2:
+			info = re.findall('class="table-link".*?tableLink\(\'(.*?)\'.*?class="date-filter">(.*?)</.*?class="teams">(.*?)</.*?class="division">(.*?)</', pre2[0], re.S)
+			if info:
+				for (url, date, teams, season) in info:
+					match = "%s: %s, %s" % (season.strip(), date.strip(), stripAllTags(teams).strip())
+					url = 'http://www.sporttotal.tv' + url
+					self.genreliste.append((decodeHtml(match), url))
+		if not pre1 and not pre2:
 			self.genreliste.append((_("Currently no streams available"), None))
 		self.ml.setList(map(self._defaultlistleft, self.genreliste))
 		self.keyLocked = False
@@ -118,6 +178,9 @@ class sporttotalGenreScreen(MPScreen):
 			bandwith,url = each
 			self.bandwith_list.append((int(bandwith),url))
 		_, best = min((abs(int(x[0]) - bw), x) for x in self.bandwith_list)
-		url = baseurl.split('/RECORD')[0] + best[1]
+		if '/RECORD' in baseurl:
+			url = baseurl.split('/RECORD')[0] + best[1]
+		else:
+			url = baseurl.split('index.m3u8')[0] + best[1]
 		Name = self['liste'].getCurrent()[0][0]
 		self.session.open(SimplePlayer, [(Name, url)], showPlaylist=False, ltype='sporttotal')
