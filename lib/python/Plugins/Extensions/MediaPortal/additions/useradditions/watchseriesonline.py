@@ -382,7 +382,13 @@ class wsoStreams(MPScreen):
 			return
 		url = current[0][1]
 		if url:
-			self.tw_agent_hlp.getRedirectedUrl(url).addCallback(self.getStream).addErrback(self.dataError)
+			if "linkOut?id=" in url:
+				import base64
+				url = url.split('id=')[-1]
+				url = base64.b64decode(url)
+				get_stream_link(self.session).check_link(url, self.playfile)
+			else:
+				self.tw_agent_hlp.getRedirectedUrl(url).addCallback(self.getStream).addErrback(self.dataError)
 
 	def getStream(self, url):
 		get_stream_link(self.session).check_link(url, self.playfile)

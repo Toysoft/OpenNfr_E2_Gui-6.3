@@ -1,9 +1,9 @@
 ﻿# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-default_cover = "file://%s/pandamovie.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/123pandamovie.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
-class pandamovieGenreScreen(MPScreen):
+class x123pandamovieGenreScreen(MPScreen):
 
 	def __init__(self, session, mode='Genres'):
 		self.mode = mode
@@ -15,7 +15,7 @@ class pandamovieGenreScreen(MPScreen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("pandamovie")
+		self['title'] = Label("123pandamovie")
 		self['ContentTitle'] = Label("Genre:")
 		self['name'] = Label(_("Please wait..."))
 
@@ -29,35 +29,24 @@ class pandamovieGenreScreen(MPScreen):
 
 	def loadPage(self):
 		self.filmliste = []
-		url = "https://pandamovies.pw/"
+		url = "https://123pandamovie.me/adult/"
 		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		parse = re.search('<a href="#">%s</a>(.*?)</ul>' % self.mode, data, re.S)
+		parse = re.search('(?:<h2>|<a href="#">)%s(?:</h2>|</a>)(.*?)</ul>' % self.mode, data, re.S)
 		if parse:
-			raw = re.findall('href="(.*?)">(.*?)</a', parse.group(1), re.S)
+			raw = re.findall('href="(.*?)"\s{0,1}>(.*?)</a', parse.group(1), re.S)
 			if raw:
 				for (Url, Title) in raw:
 					if Url.startswith('//'):
 						Url = "https:" + Url
-					Url = Url + "/page/"
+					Url = Url.strip('/') + "/page/"
 					self.filmliste.append((decodeHtml(Title), Url))
 				self.filmliste.sort()
 		if self.mode == "Genres":
-			self.filmliste.insert(0, ("Years", "Years", None))
+			self.filmliste.insert(0, ("Years", "Release Year", None))
 			self.filmliste.insert(0, ("Studios", "Studios", None))
-			self.filmliste.insert(0, ("HD", "https://pandamovies.pw/watch-hd-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Most Popular (All Time)", "https://pandamovies.pw/popular-movies/page/", None))
-			self.filmliste.insert(0, ("Most Popular (Monthly)", "https://pandamovies.pw/popular-movies-in-last-30-days/page/", None))
-			self.filmliste.insert(0, ("Most Popular (Weekly)", "https://pandamovies.pw/popular-movies-last-7-days/page/", None))
-			self.filmliste.insert(0, ("Most Popular (Daily)", "https://pandamovies.pw/popular-movies-in-last-24-hours/page/", None))
-			self.filmliste.insert(0, ("Featured", "https://pandamovies.pw/watch-featured-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Clips & Scenes", "https://pandamovies.pw/watch-clips-scenes-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Japanese Movies", "https://pandamovies.pw/watch-japanese-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Italian Movies", "https://pandamovies.pw/watch-italian-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Spanish Movies", "https://pandamovies.pw/watch-spanish-porn-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("German Movies", "https://pandamovies.pw/watch-german-porns-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Newest Movies", "https://pandamovies.pw/list-movies/page/", None))
+			self.filmliste.insert(0, ("Newest Movies", "https://123pandamovie.me/adult/movies/page/", None))
 			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
@@ -68,7 +57,7 @@ class pandamovieGenreScreen(MPScreen):
 			self.suchString = callback.replace(' ', '+')
 			Link = self.suchString
 			Name = self['liste'].getCurrent()[0][0]
-			self.session.open(pandamovieListScreen, Link, Name)
+			self.session.open(x123pandamovieListScreen, Link, Name)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -79,11 +68,11 @@ class pandamovieGenreScreen(MPScreen):
 		else:
 			Link = self['liste'].getCurrent()[0][1]
 			if Name == "Studios" or Name == "Years":
-				self.session.open(pandamovieGenreScreen, Link)
+				self.session.open(x123pandamovieGenreScreen, Link)
 			else:
-				self.session.open(pandamovieListScreen, Link, Name)
+				self.session.open(x123pandamovieListScreen, Link, Name)
 
-class pandamovieListScreen(MPScreen, ThumbsHelper):
+class x123pandamovieListScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
@@ -105,7 +94,7 @@ class pandamovieListScreen(MPScreen, ThumbsHelper):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("pandamovie")
+		self['title'] = Label("123pandamovie")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
 
@@ -123,36 +112,29 @@ class pandamovieListScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://pandamovies.pw/page/%s?s=%s" % (str(self.page), self.Link)
+			url = "https://123pandamovie.me/adult/page/%s/?s=%s" % (str(self.page), self.Link)
 		else:
 			url = self.Link + str(self.page)
+		print url
 		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		if "results for your search" in data:
-			lastp = re.search('About\s(.*?)\sresults for your search', data, re.S)
-			if lastp:
-				lastp = lastp.group(1).replace(',','')
-				lastp = round((float(lastp) / 18) + 0.5)
-				self.lastpage = int(lastp)
-				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		elif "/director" in self.Link:
-			lastp = re.search('- Page \d+ of (\d+) -', data, re.S)
-			if lastp:
-				lastp = lastp.group(1)
-				self.lastpage = int(lastp)
-			else:
-				self.lastpage = self.page + 1
-			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		else:
-			self.getLastPage(data, '', "class='pages'>.*?of\s(.*?)<")
-		preparse = re.search('(class="h1catname.*?$)', data, re.S)
-		raw = re.findall('class="item.*?.*?class="clip-link".*?title="(.*?)".*?href="(.*?)".*?src="(.*?)"', preparse.group(1), re.S)
+		self.getLastPage(data, 'class="pagination">(.*?)</div>', 'Page \d+ of (\d+)')
+		if "<h2>Featured Movies</h2>" in data:
+			data = re.search('<h2>Featured Movies</h2>.*?archive_post(.*?)$', data, re.S).group(1)
+		raw = re.findall('class="item movies".*?<img src="(.*?)".*?alt="(.*?)".*?href="(.*?)"', data, re.S)
 		if raw:
-			for (title, link, image) in raw:
+			for (image, title, link) in raw:
 				self.filmliste.append((decodeHtml(title), link, image))
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.ml.moveToIndex(0)
+		else:
+			raw = re.findall('class="result-item".*?href="(.*?)".*?<img src="(.*?)".*?alt="(.*?)"', data, re.S)
+			if raw:
+				for (link, image, title) in raw:
+					self.filmliste.append((decodeHtml(title), link, image))
+				self.ml.setList(map(self._defaultlistleft, self.filmliste))
+				self.ml.moveToIndex(0)
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), None, None))
 		self.keyLocked = False
@@ -188,7 +170,7 @@ class StreamAuswahl(MPScreen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("pandamovie")
+		self['title'] = Label("123pandamovie")
 		self['ContentTitle'] = Label("%s" %self.Title)
 		self['name'] = Label(_("Please wait..."))
 

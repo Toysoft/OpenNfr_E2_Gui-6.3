@@ -324,7 +324,8 @@ class ssNeueEpisoden(MPScreen):
 
 	def loadPage(self):
 		self.streamList = []
-		twAgentGetPage(BASE_URL, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
+		url = BASE_URL + "/neue-episoden"
+		twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		self.watched_liste = []
@@ -340,18 +341,11 @@ class ssNeueEpisoden(MPScreen):
 					if line:
 						self.watched_liste.append("%s" % (line[0]))
 				self.updates_read.close()
-		parse = re.search('neusten Episoden</h2>(.*?)class="cf">', data, re.S)
-		neue = re.findall('<div class="col-md-12">.*?/public/img/(\w{2}).*?<a href="(.*?)">.*?<span class="listTag bigListTag blue2">(.*?)</span>.*?<span class="listTag bigListTag blue1">St.(.*?)</span>.*?<span class="listTag bigListTag grey">Ep.(.*?)</span>', parse.group(1), re.S)
+		neue = re.findall('<div class="col-md-12">.*?href="(.*?)".*?<strong>(.*?)</strong>.*?class="listTag bigListTag blue2">S(\d+)\sE(\d+)</span.*?img\ssrc="/public/img/(\w{2}).png', data, re.S)
 		if neue:
-			for flag, url, title, staffel, episode in neue:
-				if int(staffel) < 10:
-					staffel = "S0"+str(staffel)
-				else:
-					staffel = "S"+str(staffel)
-				if int(episode) < 10:
-					episode = "E0"+str(episode)
-				else:
-					episode = "E"+str(episode)
+			for url, title, staffel, episode, flag in neue:
+				staffel = "S"+str(staffel)
+				episode = "E"+str(episode)
 				Title = "%s - %s%s" % (title, staffel, episode)
 				url = BASE_URL + url
 				Flag = flag.upper()
@@ -827,15 +821,12 @@ class ssStreams(MPScreen):
 			if url.startswith('/redirect/'):
 				url = BASE_URL + url
 				headers = {'User-Agent': ss_agent}
-				try:
-					s = requests.session()
-					response = s.get(url, cookies=ss_cookies, headers=headers, timeout=30)
-					if response.history:
-						get_stream_link(self.session).check_link(str(response.url), self.playfile)
-					else:
-						self.parseStream(response.content)
-				except:
-					pass
+				s = requests.session()
+				response = s.get(url, cookies=ss_cookies, headers=headers)
+				if response.history:
+					get_stream_link(self.session).check_link(str(response.url), self.playfile)
+				else:
+					self.parseStream(response.content)
 			else:
 				get_stream_link(self.session).check_link(url, self.playfile)
 

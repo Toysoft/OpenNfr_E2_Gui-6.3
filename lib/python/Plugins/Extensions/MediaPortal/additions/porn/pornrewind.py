@@ -121,10 +121,10 @@ class pornrewindFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination">(.*?)</ul>')
-		Movies = re.findall('class="thumb"\shref="(.*?)"\stitle="(.*?)".*?data-src="(.*?)".*?humb-time">.<span>(.*?)</span.*?humb-added">.<span>(.*?)</span.*?humb-viewed">.<span>(.*?)</span', data, re.S)
+		Movies = re.findall('class="thumb"\shref="(.*?)"\stitle="(.*?)".*?data-src="(.*?)".*?thumb-time">[\t\n\r\s]+<span>(.*?)</span.*?thumb-added">[\t\n\r\s]+<span>(.*?)</span.*?thumb-viewed">[\t\n\r\s]+<span>(.*?)</span', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Runtime, Added, Views) in Movies:
-				Views = Views.strip()
+				Views = Views.strip().replace(' ','')
 				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Added, Views))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), None, None, None, None, None))

@@ -5,9 +5,9 @@ from Plugins.Extensions.MediaPortal.resources.DelayedFunction import DelayedFunc
 
 myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
 
-default_cover = "file://%s/mydirtyhobby.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/dirtymoviez.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
-class MDHtoGenreScreen(MPScreen):
+class dmvzGenreScreen(MPScreen):
 
 	def __init__(self, session):
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
@@ -22,7 +22,7 @@ class MDHtoGenreScreen(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("MyDirtyHobby")
+		self['title'] = Label("Dirty-MovieZ")
 		self['ContentTitle'] = Label("Genre:")
 		self.keyLocked = True
 		self.suchString = ''
@@ -34,14 +34,17 @@ class MDHtoGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.genreData)
 
 	def genreData(self):
-		self.genreliste.insert(0, ("Pornstars - Most Viewed", "https://www.mydirtyhobby.to/pornstars?o=mv&page="))
-		self.genreliste.insert(0, ("Pornstars - Top Rated", "https://www.mydirtyhobby.to/pornstars?o=tr&page="))
-		self.genreliste.insert(0, ("Pornstars - Most Recent", "https://www.mydirtyhobby.to/pornstars?o=mr&page="))
-		self.genreliste.insert(0, ("Movies", "https://moviez.mydirtyhobby.to/videos?o=mr&page="))
-		self.genreliste.insert(0, ("Being Watched", "https://www.mydirtyhobby.to/videos?o=bw&type=public&page="))
-		self.genreliste.insert(0, ("Most Viewed", "https://www.mydirtyhobby.to/videos?o=mv&type=public&page="))
-		self.genreliste.insert(0, ("Top Rated", "https://www.mydirtyhobby.to/videos?o=tr&type=public&page="))
-		self.genreliste.insert(0, ("Most Recent", "https://www.mydirtyhobby.to/videos?o=mr&type=public&page="))
+		self.genreliste.insert(0, ("Various", "https://dirty-moviez.com/videos/various?o=mr&page="))
+		self.genreliste.insert(0, ("Popp oder Hopp", "https://dirty-moviez.com/videos/popp-oder-hopp?o=mr&page="))
+		self.genreliste.insert(0, ("Magma", "https://dirty-moviez.com/videos/magma?o=mr&page="))
+		self.genreliste.insert(0, ("JAV", "https://dirty-moviez.com/videos/jav?o=mr&page="))
+		self.genreliste.insert(0, ("GGG", "https://dirty-moviez.com/videos/ggg?o=mr&page="))
+		self.genreliste.insert(0, ("German", "https://dirty-moviez.com/videos/german?o=mr&page="))
+		self.genreliste.insert(0, ("English", "https://dirty-moviez.com/videos/english?o=mr&page="))
+		self.genreliste.insert(0, ("Being Watched", "https://dirty-moviez.com/videos?o=bw&page="))
+		self.genreliste.insert(0, ("Most Viewed", "https://dirty-moviez.com/videos?o=mv&page="))
+		self.genreliste.insert(0, ("Top Rated", "https://dirty-moviez.com/videos?o=tr&page="))
+		self.genreliste.insert(0, ("Most Recent", "https://dirty-moviez.com/videos?o=mr&page="))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -54,16 +57,16 @@ class MDHtoGenreScreen(MPScreen):
 		if Name == "--- Search ---":
 			self.suchen()
 		else:
-			self.session.open(MDHtoFilmScreen, Link, Name)
+			self.session.open(dmvzFilmScreen, Link, Name)
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
 			Link = self.suchString.replace(' ', '+')
-			self.session.open(MDHtoFilmScreen, Link, Name)
+			self.session.open(dmvzFilmScreen, Link, Name)
 
-class MDHtoFilmScreen(MPScreen, ThumbsHelper):
+class dmvzFilmScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
@@ -83,14 +86,11 @@ class MDHtoFilmScreen(MPScreen, ThumbsHelper):
 			"nextBouquet" : self.keyPageUp,
 			"prevBouquet" : self.keyPageDown,
 			"green" : self.keyPageNumber,
-			"yellow" : self.keyRelated
 		}, -1)
 
-		self['title'] = Label("MyDirtyHobby")
+		self['title'] = Label("Dirty-MovieZ")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
-		if not (self.Name.startswith("Pornstar") or self.Name == "Movies"):
-			self['F3'] = Label(_("Related"))
 
 		self['Page'] = Label(_("Page:"))
 		self.keyLocked = True
@@ -108,10 +108,10 @@ class MDHtoFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://www.mydirtyhobby.to/search/videos?search_query=%s&type=public&page=%s" % (self.Link, str(self.page))
+			url = "https://dirty-moviez.com/search/videos?search_query=%s&type=public&page=%s" % (self.Link, str(self.page))
 		else:
 			url = self.Link + str(self.page)
-		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination">(.*?)</div>', '.*[>|=](\d+)[<|&|\/span]')
@@ -121,8 +121,8 @@ class MDHtoFilmScreen(MPScreen, ThumbsHelper):
 				for (Url, Image, Title, Count) in Pornstars:
 					if int(Count) < 1:
 						continue
-					Url = "https://www.mydirtyhobby.to" + Url + "?page="
-					Image = "https://www.mydirtyhobby.to" + Image
+					Url = "https://dirty-moviez.com" + Url + "?page="
+					Image = "https://dirty-moviez.com" + Image
 					self.filmliste.append((decodeHtml(Title), Url, Image, "star"))
 			if len(self.filmliste) == 0:
 				self.filmliste.append((_('No pornstars found!'), '', None, "star"))
@@ -130,10 +130,7 @@ class MDHtoFilmScreen(MPScreen, ThumbsHelper):
 			Movies = re.findall('class="well well-sm.*?href="(.*?)".*?img\ssrc="(.*?)"\stitle="(.*?)"', data, re.S)
 			if Movies:
 				for (Url, Image, Title) in Movies:
-					if self.Name == "Movies":
-						Url = "https://moviez.mydirtyhobby.to" + Url
-					else:
-						Url = "https://www.mydirtyhobby.to" + Url
+					Url = "https://dirty-moviez.com" + Url
 					self.filmliste.append((decodeHtml(Title), Url, Image, "video"))
 			if len(self.filmliste) == 0:
 				self.filmliste.append((_('No videos found!'), '', None, "video"))
@@ -157,18 +154,9 @@ class MDHtoFilmScreen(MPScreen, ThumbsHelper):
 		type = self['liste'].getCurrent()[0][3]
 		if type == "video":
 			self.keyLocked = True
-			getPage(Link, agent=myagent).addCallback(self.getVideoUrl).addErrback(self.dataError)
+			twAgentGetPage(Link, agent=myagent).addCallback(self.getVideoUrl).addErrback(self.dataError)
 		else:
-			self.session.open(MDHtoFilmScreen, Link, Name)
-
-	def keyRelated(self):
-		if (self.Name.startswith("Pornstar") or self.Name == "Movies"):
-			return
-		Link = self['liste'].getCurrent()[0][0]
-		if " - " in Link:
-			Link = Link.split(' - ')[0]
-			Name = "--- Search ---"
-			self.session.open(MDHtoFilmScreen, Link, Name)
+			self.session.open(dmvzFilmScreen, Link, Name)
 
 	def getVideoUrl(self, data):
 		if "This is a premium video" in data:
@@ -182,4 +170,4 @@ class MDHtoFilmScreen(MPScreen, ThumbsHelper):
 
 	def got_link(self, url):
 		Title = self['liste'].getCurrent()[0][0]
-		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='mydirtyhobby')
+		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='dirtymoviez')

@@ -151,7 +151,7 @@ class MDHFilmScreen(MPScreen, ThumbsHelper):
 		twAgentGetPage(url, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'https://www.stream-mydirtyhobby.co/'}).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		self.getLastPage(data, 'class="pagination">(.*?)</div>', '.*[>|=](\d+)[<|&|"]>\d')
+		self.getLastPage(data, 'class="pagination">(.*?)</div>', '.*[>|=](\d+)[<|&|\/span]')
 		Movies = re.findall('class="well well-sm.*?href="(.*?)".*?img\ssrc="(.*?)"\stitle="(.*?)"', data, re.S)
 		if Movies:
 			for (Url, Image, Title) in Movies:
