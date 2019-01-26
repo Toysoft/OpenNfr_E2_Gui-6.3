@@ -253,10 +253,11 @@ class youtubeUrl(object):
 				else:
 					continue
 
-		url = flashvars.get('hlsvp','')
+		hlsdata = videoinfo.replace('\\/','/').replace('\\"','"')
+		url = re.findall('hlsManifestUrl":"(http.*?\.m3u8)"}', hlsdata, re.S)
 		if url:
 			links = {}
-			links[0] = url
+			links[0] = url[-1]
 
 		#print "#####################################################################################"
 		#try:

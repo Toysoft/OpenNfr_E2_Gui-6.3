@@ -40,7 +40,7 @@ class adultbayGenreScreen(MPScreen):
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
-			self.suchString = callback.replace(' ', '+')
+			self.suchString = urllib.quote(callback).replace(' ', '+')
 			Link = self.suchString
 			Name = "--- Search ---"
 			self.session.open(adultbayListScreen, Link, Name)

@@ -1776,9 +1776,8 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 						self.setSeekState(self.SEEK_STATE_PLAY)
 
 	def playExit(self):
-		if self.playerMode == 'RADIO':
-			self.session.deleteDialog(self.RadioBg)
-			self.RadioBg = None
+		self.session.deleteDialog(self.RadioBg)
+		self.RadioBg = None
 
 		self.__class__.ctr -= 1
 		self.EmbeddedCoverTimer.stop()

@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2018
+#    Coded by MediaPortal Team (c) 2013-2019
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -167,7 +167,7 @@ class xhamsterGenreScreen(MPScreen):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
-			Link = '%s' % self.suchString.replace(' ', '+')
+			Link = '%s' % urllib.quote(self.suchString).replace(' ', '+')
 			self.session.open(xhamsterFilmScreen, Link, Name)
 
 	def getSuggestions(self, text, max_res):

@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2018
+#    Coded by MediaPortal Team (c) 2013-2019
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -141,10 +141,10 @@ class get_stream_link:
 			return "error"
 
 	def callPremium(self, link):
-		if self.prz == 1 and config_mp.mediaportal.premiumize_use.value:
-			r_getPage(self.papiurl+link).addCallback(self.papiCallback, link).addErrback(self.errorload)
-		elif self.rdb == 1 and config_mp.mediaportal.realdebrid_use.value:
+		if self.rdb == 1 and config_mp.mediaportal.realdebrid_use.value:
 			self.session.openWithCallback(self.rapiCallback, realdebrid_oauth2, str(link))
+		elif self.prz == 1 and config_mp.mediaportal.premiumize_use.value:
+			r_getPage(self.papiurl+link).addCallback(self.papiCallback, link).addErrback(self.errorload)
 
 	def callPremiumYT(self, link, val):
 		if val == "prz":

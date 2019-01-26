@@ -39,7 +39,6 @@
 		<plugin type="mod" modfile="useradditions.movie4k" confopt="showM4k" default="False" confcat="useradditions" gz="1" name="Movie4k" icon="movie4k" filter="User-additions" screen="m4kGenreScreen" param1="default" param2=""/>
 		<!--<plugin type="mod" modfile="useradditions.szenestreams" confopt="showSzeneStreams" default="False" confcat="useradditions" gz="1" name="Szene-Streamz" icon="szenestreams" filter="User-additions" screen="SzeneStreamsGenreScreen" param1="" param2=""/>-->
 		<plugin type="mod" modfile="useradditions.ddl_me" confopt="showDdlme" default="False" confcat="useradditions" gz="1" name="ddl.me" icon="ddl_me" filter="User-additions" screen="show_DDLME_Genre" param1="" param2=""/>
-		<!--<plugin type="mod" modfile="useradditions.hdfilme" confopt="showhdfilme" default="False" confcat="useradditions" gz="1" name="HDFilme" icon="hdfilme" filter="User-additions" screen="hdfilmeMain" param1="" param2=""/>-->
 		<plugin type="mod" modfile="useradditions.onlinefilme" confopt="showOnlineFilme" default="False" confcat="useradditions" gz="1" name="OnlineFilme" icon="onlinefilme" filter="User-additions" screen="show_SKTO_Genre" param1="" param2=""/>
 		<plugin type="mod" modfile="useradditions.filmpalast" confopt="showfilmpalast" default="False" confcat="useradditions" gz="1" name="FilmPalast" icon="filmpalast" filter="User-additions" screen="filmPalastMain" param1="" param2=""/>
 		<plugin type="mod" modfile="useradditions.tvnowgz" confopt="showtvnowgz" default="False" confcat="useradditions" gz="1" name="TVNOW GZ" icon="tvnow" filter="User-additions" screen="tvnowGZFirstScreen" param1="" param2=""/>
@@ -49,6 +48,5 @@
 		<plugin type="mod" modfile="useradditions.ganime" confopt="showganime" default="False" confcat="useradditions" gz="1" name="GenX-Anime" icon="genxanime" filter="User-additions" screen="gAnimeMain" param1="" param2=""/>
 		<plugin type="mod" modfile="useradditions.flimmerstube" confopt="showflimmerstube" default="False" confcat="useradditions" gz="1" name="FlimmerStube" icon="flimmerstube" filter="User-additions" screen="flimmerstubeGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="useradditions.sharedir" confopt="showsharedir" default="False" confcat="useradditions" gz="1" name="ShareDir" icon="sharedir" filter="User-additions" screen="sharedirMenueScreen" param1="" param2=""/>
-		<!--<plugin type="mod" modfile="useradditions.tata" confopt="showstata" default="False" confcat="useradditions" gz="1" name="tata" icon="tata" filter="User-additions" screen="tataMain" param1="" param2=""/>-->
 	</set>
 </plugins>

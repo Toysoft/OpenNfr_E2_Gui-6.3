@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2018
+#    Coded by MediaPortal Team (c) 2013-2019
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -123,7 +123,7 @@ class ZDFGenreScreen(MPScreen):
 		if callback is not None and len(callback):
 			self.suchString = callback
 			genreName = "Suche - " + self.suchString
-			streamLink = "%s/suche?q=%s&from=&to=&sender=alle+Sender&attrs=" % (BASE_URL,callback.replace(' ', '+'))
+			streamLink = "%s/suche?q=%s&from=&to=&sender=alle+Sender&attrs=" % (BASE_URL,urllib.quote(callback).replace(' ', '+'))
 			self.session.open(ZDFStreamScreen,streamLink,genreName,genreFlag,default_cover)
 
 class ZDFPreSelect(MPScreen):

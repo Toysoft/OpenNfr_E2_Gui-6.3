@@ -3,7 +3,7 @@
 #
 #    MediaPortal for Dreambox OS
 #
-#    Coded by MediaPortal Team (c) 2013-2018
+#    Coded by MediaPortal Team (c) 2013-2019
 #
 #  This plugin is open source but it is NOT free software.
 #
@@ -89,7 +89,8 @@ class redtubeGenreScreen(MPScreen):
 	def genreData(self, data):
 		global token
 		token = re.findall('page_params.token\s=\s"(.*?)";', data, re.S)[0]
-		Cats = re.findall('class="category_item_wrapper">.*?<a href="(.*?)".*?data-thumb_url="(.*?\.jpg).*?".*?alt="(.*?)"', data, re.S)
+		parse = re.search('id="categories_list_section"(.*?)$', data, re.S)
+		Cats = re.findall('class="category_item_wrapper">.*?<a href="(.*?)".*?data-thumb_url="(.*?\.jpg).*?".*?alt="(.*?)"', parse.group(1), re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
 				Url = "https://www.redtube.com" + Url
@@ -130,7 +131,7 @@ class redtubeGenreScreen(MPScreen):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
-			Link = self.suchString.replace(' ', '+')
+			Link = urllib.quote(self.suchString).replace(' ', '+')
 			self.session.open(redtubeFilmScreen, Link, Name, True)
 
 	def getSuggestions(self, text, max_res):
@@ -228,7 +229,7 @@ class redtubeFilmScreen(MPScreen, ThumbsHelper):
 		else:
 			self.lastpage = 1230
 		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		Movies = re.findall('class="video_block_wrapper">.*?<a\sclass="video_link.*?href="(\/\d+)".*?data-thumb_url\s{0,1}=\s{0,1}"(.*?)".*?duration">.*?(\d.*?)<div.*?a\stitle="(.*?)".*?video_count">(.*?)views', data, re.S)
+		Movies = re.findall('class="video_block_wrapper">.*?<a\sclass="video_link.*?href="(\/\d+)".*?data-thumb_url\s{0,1}=\s{0,1}"(.*?)".*?duration">.*?(\d.*?)</a.*?a\stitle="(.*?)".*?video_count">(.*?)views', data, re.S)
 		if Movies:
 			for (Url, Image, Runtime, Title, Views) in Movies:
 				if Image.startswith('//'):

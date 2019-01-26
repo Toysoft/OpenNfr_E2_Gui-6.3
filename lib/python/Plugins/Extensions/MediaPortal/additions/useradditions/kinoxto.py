@@ -304,15 +304,18 @@ class kxNeuesteOnline(MPScreen, ThumbsHelper):
 		twAgentGetPage(self.kxGotLink, agent=kx_agent, cookieJar=kx_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		neueste = re.findall('div class="Opt leftOpt Headlne"><h1>Neue Filme online vom(.*?)</table>', data, re.S)
+		neueste = re.search('div class="Opt leftOpt Headlne"><h1>Neue Filme online vom(.*?)</table>', data, re.S)
 		if neueste:
-			movies = re.findall(' class="Icon"><img src="/gr/sys/lng/(.*?).png".*?class="Title img_preview" rel="(.*?)"><a href="(/Stream/.*?)" title=".*?" class="OverlayLabel">(.*?)</a></td>', neueste[0], re.S)
+			movies = re.findall('<tr(.*?)</tr>', neueste.group(1), re.S)
 			if movies:
-				for (kxLang,kxImage,kxUrl,kxTitle) in movies:
-					kxUrl = kx_url + kxUrl
-					kxImage = kx_url + kxImage
-					self.streamList.append((decodeHtml(kxTitle),kxUrl,False,kxLang,kxImage))
-					self.ml.setList(map(self._defaultlistleftmarked, self.streamList))
+				for movie in movies:
+					mov = re.findall('class="Icon"><img src="/gr/sys/lng/(.*?).png".*?class="Title img_preview" rel="(.*?)"><a href="(/Stream/.*?)" title=".*?" class="OverlayLabel">(.*?)</a></td>', movie, re.S)
+					if mov:
+						for (kxLang,kxImage,kxUrl,kxTitle) in mov:
+							kxUrl = kx_url + kxUrl
+							kxImage = kx_url + kxImage
+							self.streamList.append((decodeHtml(kxTitle),kxUrl,False,kxLang,kxImage))
+				self.ml.setList(map(self._defaultlistleftmarked, self.streamList))
 				self.keyLocked = False
 				self.th_ThumbsQuery(self.streamList, 0, 1, None, None, '<div class="Grahpics">.*?<img src="(.*?)"', 1, 1)
 				self.showInfos()

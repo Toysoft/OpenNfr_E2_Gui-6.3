@@ -821,7 +821,16 @@ class ssStreams(MPScreen):
 			if url.startswith('/redirect/'):
 				url = BASE_URL + url
 				headers = {'User-Agent': ss_agent}
+
+				from requests.adapters import HTTPAdapter
+				from requests.packages.urllib3.util.retry import Retry
+
 				s = requests.session()
+				retry = Retry(connect=3, backoff_factor=0.5)
+				adapter = HTTPAdapter(max_retries=retry)
+				s.mount('http://', adapter)
+				s.mount('https://', adapter)
+
 				response = s.get(url, cookies=ss_cookies, headers=headers)
 				if response.history:
 					get_stream_link(self.session).check_link(str(response.url), self.playfile)
