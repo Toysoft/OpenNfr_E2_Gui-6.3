@@ -917,6 +917,14 @@ lib/python/Plugins/Extensions/MediaPortal/additions/newsdoku/Makefile
 lib/python/Plugins/Extensions/MediaPortal/additions/music/Makefile
 lib/python/Plugins/Extensions/MediaPortal/additions/porn/Makefile
 lib/python/Plugins/Extensions/MediaPortal/additions/sport/Makefile
+lib/python/Plugins/Extensions/MediaPortal/additions/additions/Makefile
+lib/python/Plugins/Extensions/MediaPortal/additions/additions/fun/Makefile
+lib/python/Plugins/Extensions/MediaPortal/additions/additions/useradditions/Makefile
+lib/python/Plugins/Extensions/MediaPortal/additions/additions/mediatheken/Makefile
+lib/python/Plugins/Extensions/MediaPortal/additions/additions/newsdoku/Makefile
+lib/python/Plugins/Extensions/MediaPortal/additions/additions/music/Makefile
+lib/python/Plugins/Extensions/MediaPortal/additions/additions/porn/Makefile
+lib/python/Plugins/Extensions/MediaPortal/additions/additions/sport/Makefile
 lib/python/Plugins/Extensions/MediaPortal/images/Makefile
 lib/python/Plugins/Extensions/MediaPortal/locale/Makefile
 lib/python/Plugins/Extensions/MediaPortal/locale/de/Makefile

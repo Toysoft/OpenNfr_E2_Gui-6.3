@@ -75,10 +75,6 @@ try:
 except:
 	mp_globals.isDreamOS = False
 
-if mp_globals.isDreamOS:
-	if fileExists('/etc/apt/sources.list.d/mediaportal.list'):
-		os.remove('/etc/apt/sources.list.d/mediaportal.list')
-
 try:
 	f = open("/proc/stb/info/model", "r")
 	model = ''.join(f.readlines()).strip()
@@ -197,8 +193,8 @@ config_mp.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choice
 		])
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2019012501"))
-config.mediaportal.version = NoSave(ConfigText(default="2019012501"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2019020301"))
+config.mediaportal.version = NoSave(ConfigText(default="2019020301"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 

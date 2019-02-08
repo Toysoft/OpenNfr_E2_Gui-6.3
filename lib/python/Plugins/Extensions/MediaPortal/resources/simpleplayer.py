@@ -314,7 +314,8 @@ class SimpleSeekHelper:
 						self.myspass_len = self.length[1]
 						self.mySpassPath = self.session.nav.getCurrentlyPlayingServiceReference().getPath()
 						if '/myspass' in self.mySpassPath:
-							self.isMySpass = True
+							#self.isMySpass = True
+							pass
 						elif 'file=retro-tv' in self.mySpassPath:
 							#self.isRetroTv = True
 							#self.isMySpass = True
