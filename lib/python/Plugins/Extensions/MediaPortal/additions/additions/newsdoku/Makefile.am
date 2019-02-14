@@ -1,3 +1,3 @@
 installdir = $(pkglibdir)/python/Plugins/Extensions/MediaPortal/additions/additions/newsdoku
-install_PYTHON = *.py *.pyo
+install_PYTHON = *.pyo
 
