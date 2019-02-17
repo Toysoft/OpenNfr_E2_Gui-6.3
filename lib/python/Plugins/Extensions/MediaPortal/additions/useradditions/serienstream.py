@@ -258,9 +258,11 @@ class ssSerien(MPScreen, SearchHelper):
 		twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.setCoverUrl).addErrback(self.dataError)
 
 	def setCoverUrl(self, data):
-		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://s.to/public/img/cover/.*?)"', data, re.S)
+		cover = re.findall('<div class=".*?picture">.*?<img src="((?:http[s]?://s.to|)/public/img/cover/.*?)"', data, re.S)
 		if cover:
 			self.cover = cover[0]
+			if self.cover.startswith('/'):
+				self.cover = BASE_URL + self.cover
 			CoverHelper(self['coverArt']).getCover(self.cover, agent=ss_agent, cookieJar=ss_cookies)
 
 	def keyOK(self):
@@ -393,9 +395,11 @@ class ssNeueEpisoden(MPScreen):
 		twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.setCoverUrl).addErrback(self.dataError)
 
 	def setCoverUrl(self, data):
-		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://s.to/public/img/cover/.*?)"', data, re.S)
+		cover = re.findall('<div class=".*?picture">.*?<img src="((?:http[s]?://s.to|)/public/img/cover/.*?)"', data, re.S)
 		if cover:
 			self.cover = cover[0]
+			if self.cover.startswith('/'):
+				self.cover = BASE_URL + self.cover
 			CoverHelper(self['coverArt']).getCover(self.cover, agent=ss_agent, cookieJar=ss_cookies)
 
 	def reloadList(self):
@@ -491,9 +495,11 @@ class ssWatchlist(MPScreen, SearchHelper):
 		twAgentGetPage(url, agent=ss_agent, cookieJar=ss_cookies).addCallback(self.setCoverUrl).addErrback(self.dataError)
 
 	def setCoverUrl(self, data):
-		cover = re.findall('<div class=".*?picture">.*?<img src="(http[s]?://s.to/public/img/cover/.*?)"', data, re.S)
+		cover = re.findall('<div class=".*?picture">.*?<img src="((?:http[s]?://s.to|)/public/img/cover/.*?)"', data, re.S)
 		if cover:
 			self.cover = cover[0]
+			if self.cover.startswith('/'):
+				self.cover = BASE_URL + self.cover
 			CoverHelper(self['coverArt']).getCover(self.cover, agent=ss_agent, cookieJar=ss_cookies)
 
 	def keyOK(self):

@@ -98,7 +98,7 @@ try:
 
 		def parseLive(self, data, service):
 			data = data.replace('\\/','/').replace('\\"','"')
-			urls = re.findall('hlsManifestUrl":"(http.*?\.m3u8)"}', data, re.S)
+			urls = re.findall('hlsManifestUrl":"(http.*?\.m3u8)"(?:}|,)', data, re.S)
 			if urls:
 				uri = urls[-1]
 				try:

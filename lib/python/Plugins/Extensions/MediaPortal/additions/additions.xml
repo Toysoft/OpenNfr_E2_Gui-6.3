@@ -8,7 +8,7 @@
 		<plugin type="mod" modfile="music.mtvdecharts" confopt="showMTVdeCharts" default="True" confcat="music" gz="0" name="MTV Charts" icon="mtvdecharts" filter="Music" screen="MTVdeChartsGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="music.radio" confopt="showradio" default="True" confcat="music" gz="0" name="Radio" icon="radio" filter="Music" screen="RadioGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="music.shoutcast" confopt="showshoutcast" default="True" confcat="music" gz="0" name="shoutcast" icon="shoutcast" filter="Music" screen="ShoutcastGenreScreen" param1="" param2=""/>
-		<plugin type="mod" modfile="music.jukebox" confopt="showJBTO" default="True" confcat="music" gz="0" name="JUKEBOX" icon="jukebox" filter="Music" screen="show_JBTO_Genre" param1="" param2=""/>
+		<!--<plugin type="mod" modfile="music.jukebox" confopt="showJBTO" default="True" confcat="music" gz="0" name="JUKEBOX" icon="jukebox" filter="Music" screen="show_JBTO_Genre" param1="" param2=""/>-->
 		<!--newsdoku section-->
 		<plugin type="mod" modfile="newsdoku.focus" confopt="showFocus" default="True" confcat="newsdoku" gz="0" name="Focus" icon="focus" filter="NewsDoku" screen="focusGenre" param1="" param2=""/>
 		<plugin type="mod" modfile="newsdoku.autobild" confopt="showAutoBild" default="True" confcat="newsdoku" gz="0" name="Autobild" icon="autobild" filter="NewsDoku" screen="autoBildGenreScreen" param1="" param2=""/>
@@ -55,7 +55,7 @@
 		<plugin type="mod" modfile="mediatheken.tvnow" confopt="showtvnow" default="True" confcat="mediatheken" gz="0" name="TVNOW" icon="tvnow" filter="Mediathek" screen="tvnowFirstScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.seventv" confopt="showseventv" default="True" confcat="mediatheken" gz="0" name="7TV" icon="seventv" filter="Mediathek" screen="sevenFirstScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.orf" confopt="showORF" default="True" confcat="mediatheken" gz="0" name="ORF TVthek" icon="orf" filter="Mediathek" screen="ORFGenreScreen" param1="" param2=""/>
-		<plugin type="mod" modfile="mediatheken.videogold_de" confopt="showVideoGold" default="True" confcat="mediatheken" gz="0" name="VideoGold.de" icon="videogold_de" filter="Mediathek" screen="show_VGDE_Genre" param1="" param2=""/>
+		<!--<plugin type="mod" modfile="mediatheken.videogold_de" confopt="showVideoGold" default="True" confcat="mediatheken" gz="0" name="VideoGold.de" icon="videogold_de" filter="Mediathek" screen="show_VGDE_Genre" param1="" param2=""/>-->
 		<plugin type="mod" modfile="mediatheken.watchbox" confopt="showwatchbox" default="True" confcat="mediatheken" gz="0" name="Watchbox" icon="watchbox" filter="Mediathek" screen="watchboxGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.youtube" confopt="showyoutube" default="True" confcat="mediatheken" gz="0" name="YouTube" icon="youtube" filter="Mediathek/Music/Sport" screen="youtubeGenreScreen" param1="" param2=""/>
 		<plugin type="mod" modfile="mediatheken.youtube_user" confopt="showyoutubeuser" default="True" confcat="mediatheken" gz="0" name="YouTube Channels" icon="userchannels" filter="Mediathek" screen="show_USER_Genre" param1="" param2=""/>

@@ -66,7 +66,7 @@ class germanytvChannelScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.genreliste.append(('Science-TV', 'http://www.science-tv.com'))
-		self.genreliste.append(('Medizin-TV', 'http://www.medizin-tv.tv.grid-tv.com'))
+		#self.genreliste.append(('Medizin-TV', 'http://www.medizin-tv.tv.grid-tv.com'))
 		#self.genreliste.append(('Opera-TV', 'http://www.opera-tv.tv.grid-tv.com'))
 		#self.genreliste.append(('Worldnews-TV', 'http://www.worldnews-tv.tv.grid-tv.com'))
 		#self.genreliste.append(('Lasershow-TV', 'http://www.lasershow-tv.germany-tv.com'))

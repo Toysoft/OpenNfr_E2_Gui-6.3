@@ -193,8 +193,8 @@ config_mp.mediaportal.epg_deepstandby = ConfigSelection(default = "skip", choice
 		])
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2019020301"))
-config.mediaportal.version = NoSave(ConfigText(default="2019020301"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2019021701"))
+config.mediaportal.version = NoSave(ConfigText(default="2019021701"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 
@@ -271,6 +271,7 @@ config_mp.mediaportal.filter = ConfigSelection(default = "ALL", choices = ["ALL"
 config.mediaportal.filter = NoSave(ConfigSelection(default = "ALL", choices = ["ALL"]))
 config_mp.mediaportal.youtubeenablevp9 = ConfigYesNo(default = False)
 config_mp.mediaportal.youtubeenabledash = ConfigYesNo(default = False)
+config_mp.mediaportal.youtubeenabledash720p = ConfigYesNo(default = False)
 config_mp.mediaportal.youtubeenabledash480p = ConfigYesNo(default = False)
 config_mp.mediaportal.youtubeprio = ConfigSelection(default = "2", choices = [("0", "360p"),("1", "480p"),("2", "720p"),("3", "1080p"),("4", "1440p"),("5", "2160p")])
 config_mp.mediaportal.videoquali_others = ConfigSelection(default = "2", choices = [("0", _("Low")),("1", _("Medium")),("2", _("High"))])
@@ -672,7 +673,7 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 		self.configlist.append(getConfigListEntry(_("Enable DASH format (no seeking possible):"), config_mp.mediaportal.youtubeenabledash, True))
 		if config_mp.mediaportal.youtubeenabledash.value:
 			self.configlist.append(getConfigListEntry(_("Use DASH format for 480p:"), config_mp.mediaportal.youtubeenabledash480p, False))
-		if config_mp.mediaportal.youtubeenabledash.value:
+			self.configlist.append(getConfigListEntry(_("Use DASH format for 720p:"), config_mp.mediaportal.youtubeenabledash720p, False))
 			self.configlist.append(getConfigListEntry(_("Enable VP9 codec (required for resolutions >1080p):"), config_mp.mediaportal.youtubeenablevp9, False))
 		self.configlist.append(getConfigListEntry(_("Show USER-Channels Help:"), config_mp.mediaportal.show_userchan_help, False))
 		self.configlist.append(getConfigListEntry(_('Use Proxy:'), config_mp.mediaportal.sp_use_yt_with_proxy, True))

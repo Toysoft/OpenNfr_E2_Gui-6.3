@@ -18,7 +18,6 @@ class tvnowGZFirstScreen(tvnowFirstScreen):
 		self.senderliste.append(("NITRO", "nitro",  default_cover))
 		self.senderliste.append(("SUPER RTL", "superrtl", default_cover))
 		self.senderliste.append(("RTLplus", "rtlplus",  default_cover))
-		self.senderliste.append(("RTLpassion", "passion",  default_cover))
 		self.senderliste.append(("RTLliving", "living",  default_cover))
 		self.ml.setList(map(self._defaultlistcenter, self.senderliste))
 		self.keyLocked = False

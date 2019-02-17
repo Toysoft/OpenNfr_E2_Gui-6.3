@@ -172,8 +172,15 @@ class get_stream_link:
 			if stream_url:
 				if "&sig=" in stream_url[0]:
 					url = stream_url[0].split('&sig=')
-					file = url[1].split('&f=')
-					url = url[0] + "&sig=" + file[0].replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B') + "&f=" + file[1]
+					sig = ''
+					filename = ''
+					if "&f=" in stream_url[0]:
+						file = url[1].split('&f=')
+						sig = "&sig=" + file[0].replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B')
+						filename = "&f=" + file[1]
+					else:
+						sig = "&sig=" + url[1].replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B')
+					url = url[0] + sig + filename
 				else:
 					url = stream_url[0]
 				mp_globals.premiumize = True
