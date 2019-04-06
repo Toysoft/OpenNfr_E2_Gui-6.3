@@ -5,7 +5,7 @@ default_cover = "file://%s/123pandamovie.png" % (config_mp.mediaportal.iconcache
 
 class x123pandamovieGenreScreen(MPScreen):
 
-	def __init__(self, session, mode='Genres'):
+	def __init__(self, session, mode='XXX Genres'):
 		self.mode = mode
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
@@ -29,7 +29,7 @@ class x123pandamovieGenreScreen(MPScreen):
 
 	def loadPage(self):
 		self.filmliste = []
-		url = "https://123pandamovie.me/adult/"
+		url = "https://123pandamovie.net/"
 		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
@@ -40,13 +40,17 @@ class x123pandamovieGenreScreen(MPScreen):
 				for (Url, Title) in raw:
 					if Url.startswith('//'):
 						Url = "https:" + Url
-					Url = Url.strip('/') + "/page/"
+					Url = Url.strip('/') + "/?page="
 					self.filmliste.append((decodeHtml(Title), Url))
 				self.filmliste.sort()
-		if self.mode == "Genres":
+		if self.mode == "XXX Genres":
 			self.filmliste.insert(0, ("Years", "Release Year", None))
 			#self.filmliste.insert(0, ("Studios", "Studios", None))
-			self.filmliste.insert(0, ("Newest Movies", "https://123pandamovie.me/adult/movies/page/", None))
+			self.filmliste.insert(0, ("Most Shared", "https://123pandamovie.net/sharing/?get=movies&page=", None))
+			self.filmliste.insert(0, ("Most Viewed", "https://123pandamovie.net/viewing/?get=movies&page=", None))
+			self.filmliste.insert(0, ("Top Rated", "https://123pandamovie.net/ratings/?get=movies&page=", None))
+			self.filmliste.insert(0, ("Trending", "https://123pandamovie.net/trending/?get=movies&page=", None))
+			self.filmliste.insert(0, ("Newest", "https://123pandamovie.net/genres/featured-movies/?page=", None))
 			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
@@ -54,7 +58,7 @@ class x123pandamovieGenreScreen(MPScreen):
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
-			self.suchString = urllib.quote(callback).replace(' ', '+')
+			self.suchString = urllib.quote(callback).replace(' ', '%20')
 			Link = self.suchString
 			Name = self['liste'].getCurrent()[0][0]
 			self.session.open(x123pandamovieListScreen, Link, Name)
@@ -112,7 +116,7 @@ class x123pandamovieListScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://123pandamovie.me/adult/page/%s/?s=%s" % (str(self.page), self.Link)
+			url = "https://123pandamovie.net/search/%s/?page=%s" % (self.Link, str(self.page))
 		else:
 			url = self.Link + str(self.page)
 		print url
@@ -129,7 +133,7 @@ class x123pandamovieListScreen(MPScreen, ThumbsHelper):
 			self.ml.setList(map(self._defaultlistleft, self.filmliste))
 			self.ml.moveToIndex(0)
 		else:
-			raw = re.findall('class="result-item".*?href="(.*?)".*?<img src="(.*?)".*?alt="(.*?)"', data, re.S)
+			raw = re.findall('<article.*?href="(.*?)".*?<img src="(.*?)".*?alt="(.*?)"', data, re.S)
 			if raw:
 				for (link, image, title) in raw:
 					self.filmliste.append((decodeHtml(title), link, image))

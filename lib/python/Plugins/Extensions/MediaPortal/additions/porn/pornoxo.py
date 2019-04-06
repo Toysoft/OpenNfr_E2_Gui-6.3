@@ -48,11 +48,26 @@ json_headers = {
 	}
 
 myagent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11'
-default_cover = "file://%s/pornoxo.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class pornoxoGenreScreen(MPScreen):
 
-	def __init__(self, session):
+	def __init__(self, session, mode):
+		self.mode = mode
+
+		global default_cover
+		if self.mode == "pornoxo":
+			self.portal = "PornoXO.com"
+			self.baseurl = "https://www.pornoxo.com"
+			default_cover = "file://%s/pornoxo.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "ashemaletube":
+			self.portal = "aShemaletube.com"
+			self.baseurl = "https://www.ashemaletube.com"
+			default_cover = "file://%s/ashemaletube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "fetishpapa":
+			self.portal = "Fetishpapa.com"
+			self.baseurl = "https://www.fetishpapa.com"
+			default_cover = "file://%s/fetishpapa.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -61,7 +76,7 @@ class pornoxoGenreScreen(MPScreen):
 			"cancel" : self.keyCancel
 		}, -1)
 
-		self['title'] = Label("pornoxo.com")
+		self['title'] = Label(self.portal)
 		self['ContentTitle'] = Label("Genre:")
 		self.keyLocked = True
 		self.suchString = ''
@@ -74,35 +89,35 @@ class pornoxoGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "https://www.pornoxo.com"
+		url = "%s/tags/" % self.baseurl
 		getPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('title="Main Page"(.*?)>Top Users</div>', data, re.S)
-		Cats = re.findall('href="(/videos/.*?)".*?title=".*?">(.*?)</a>', parse.group(1), re.S)
+		parse = re.search('<div id="maincolumn2"(.*?)$', data, re.S)
+		Cats = re.findall('href="(/videos/.*?)(?:most-popular/today/|)".*?class="tag-item.*?>(.*?)<span', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
-				Url = "https://www.pornoxo.com" + Url
-				self.genreliste.append((Title.title(), Url))
+				Url = self.baseurl + Url + "newest/"
+				self.genreliste.append((Title.strip(), Url))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Longest", "https://www.pornoxo.com/videos/longest/", None))
-			self.genreliste.insert(0, ("Best Recent", "https://www.pornoxo.com/videos/best-recent/", None))
-			self.genreliste.insert(0, ("Top Rated", "https://www.pornoxo.com/videos/top-rated/", None))
-			self.genreliste.insert(0, ("Most Popular", "https://www.pornoxo.com/videos/most-popular/today/", None))
-			self.genreliste.insert(0, ("Most Recent", "https://www.pornoxo.com/videos/newest/", None))
+			self.genreliste.insert(0, ("Longest", "%s/videos/longest/" % self.baseurl, None))
+			self.genreliste.insert(0, ("Best Recent", "%s/videos/best-recent/" % self.baseurl, None))
+			self.genreliste.insert(0, ("Top Rated", "%s/videos/top-rated/" % self.baseurl, None))
+			self.genreliste.insert(0, ("Most Popular", "%s/videos/most-popular/today/" % self.baseurl, None))
+			self.genreliste.insert(0, ("Most Recent", "%s/videos/newest/" % self.baseurl, None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.keyLocked = False
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
-			self.suchString = urllib.quote(callback).replace(' ', '_')
 			Name = "--- Search ---"
-			Link = '%s' % (self.suchString)
-			self.session.open(pornoxoFilmScreen, Link, Name)
+			self.suchString = callback
+			Link = '%s' % urllib.quote(self.suchString).replace(' ', '_')
+			self.session.open(pornoxoFilmScreen, Link, Name, self.portal, self.baseurl)
 
 	def getSuggestions(self, text, max_res):
-		url = "https://www.pornoxo.com/main-search.html?categoryValue=1&term=%s" % urllib.quote_plus(text)
+		url = "%s/main-search.html?categoryValue=1&term=%s" % (self.baseurl, urllib.quote_plus(text))
 		d = twAgentGetPage(url, agent=myagent, headers=json_headers, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
 		d.addErrback(self.gotSuggestions, max_res, err=True)
@@ -129,13 +144,24 @@ class pornoxoGenreScreen(MPScreen):
 			self.suchen(suggest_func=self.getSuggestions)
 		else:
 			Link = self['liste'].getCurrent()[0][1]
-			self.session.open(pornoxoFilmScreen, Link, Name)
+			self.session.open(pornoxoFilmScreen, Link, Name, self.portal, self.baseurl)
 
 class pornoxoFilmScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name):
+	def __init__(self, session, Link, Name, portal, baseurl):
 		self.Link = Link
 		self.Name = Name
+		self.portal = portal
+		self.baseurl = baseurl
+
+		global default_cover
+		if self.portal == "PornoXO.com":
+			default_cover = "file://%s/pornoxo.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "aShemaletube.com":
+			default_cover = "file://%s/ashemaletube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "Fetishpapa.com":
+			default_cover = "file://%s/fetishpapa.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -153,7 +179,7 @@ class pornoxoFilmScreen(MPScreen, ThumbsHelper):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("pornoxo.com")
+		self['title'] = Label(self.portal)
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
 
@@ -173,18 +199,19 @@ class pornoxoFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://www.pornoxo.com/search/%s/page%s.html" % (self.Link, str(self.page))
+			url = "%s/search/%s/page%s.html" % (self.baseurl, self.Link, str(self.page))
 		else:
 			url = self.Link + str(self.page) + '/'
 		getPage(url, agent=myagent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</div>')
-		Movies = re.findall('vidItem"\sdata-video-id="\d+">.{1,10}(?:<div class="thumb-inner-wrapper">|).*?<a\shref="(.*?)"\s{0,1}>.{0,10}<img\ssrc="(.*?)"\salt="(.*?)"', data, re.S)
+		parse = re.search('(.*?)class="top-tags-box"', data, re.S)
+		Movies = re.findall('vidItem"\sdata-video-id="\d+">.{1,10}(?:<div class="thumb-inner-wrapper">|).*?<a\shref="(.*?)"\s{0,1}>.{0,10}<img\ssrc="(.*?)"\salt="(.*?)"', parse.group(1), re.S)
 		if Movies:
 			for (Url, Image, Title) in Movies:
 				if Url.startswith('/'):
-					Url = "https://www.pornoxo.com" + Url
+					Url = self.baseurl + Url
 				self.filmliste.append((decodeHtml(Title), Url, Image))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), None, None))

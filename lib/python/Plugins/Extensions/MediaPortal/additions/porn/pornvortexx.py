@@ -33,7 +33,7 @@ class PornVortexxGenreScreen(MPScreen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		url = 'https://pornvortexx.com/browse.html'
-		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
+		twAgentGetPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('<ul class="pm-ul-browse-categories thumbnails">(.*?)</ul>', data, re.S)
@@ -122,7 +122,7 @@ class PornVortexxFilmScreen(MPScreen, ThumbsHelper):
 			url = "https://pornvortexx.com/search.php?keywords=%s&page=%s"  % (self.Link, str(self.page))
 		else:
 			url = "%s%s-date.html" % (self.Link, str(self.page))
-		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, '<div class="pagination pagination-centered">(.*?)</div>')
@@ -152,7 +152,7 @@ class PornVortexxFilmScreen(MPScreen, ThumbsHelper):
 			return
 		Link = self['liste'].getCurrent()[0][1]
 		if Link:
-			getPage(Link).addCallback(self.getVideoPage).addErrback(self.dataError)
+			twAgentGetPage(Link).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
 		videoPage = re.findall('<iframe src="(.*?)"', data, re.S|re.I)

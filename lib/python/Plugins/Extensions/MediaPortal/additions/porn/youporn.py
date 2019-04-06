@@ -274,7 +274,7 @@ class youpornCountryScreen(MPScreen):
 		getPage(url, agent=ypAgent, headers={'Cookie': 'age_verified=1'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('id="countryFlags">(.*?)heading4">Network\sSites</h2>', data, re.S)
+		parse = re.search('id="countryFlags">(.*?)<footer', data, re.S)
 		Cats = re.findall('<a\sclass="countryBox\sflag\sflag-.*?"\shref="(.*?)">.*?<span\sclass=\'countryTag\'>(.*?)</span', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
@@ -416,7 +416,7 @@ class youpornFilmScreen(MPScreen, ThumbsHelper):
 					if not parse:
 						parse = re.search('class=\'ad-bottom-text\'>(.*?)class=\'footer', data, re.S)
 		if parse:
-			Movies = re.findall('class=\'video-box.*?<a\shref="(.*?)".*?<img\ssrc=".*?"\salt=\'(.*?)\'.*?data-(?:thumbnail|echo)="(.*?)".*?class=\'video-box-percentage\sup\'>(.*?)</.*?class="video-duration">(.*?)</', parse.group(1), re.S)
+			Movies = re.findall('data-video-id="\d+".*?<a\shref="(.*?)".*?<img\ssrc=".*?"\salt=\'(.*?)\'.*?data-(?:thumbnail|echo)="(.*?)".*?class=\'video-box-percentage\sup\'>(.*?)</.*?class="video-duration">(.*?)</', parse.group(1), re.S)
 			if Movies:
 				for (Url, Title, Image, Rating, Runtime) in Movies:
 					Url = Url.replace("&amp;","&")

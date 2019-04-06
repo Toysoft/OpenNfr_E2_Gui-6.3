@@ -156,6 +156,8 @@ class drtuberGenreScreen(MPScreen):
 		return list
 
 	def keyScope(self):
+		if self.keyLocked:
+			return
 		self.genreliste = []
 		if self.scope == 0:
 			self.scope = 1

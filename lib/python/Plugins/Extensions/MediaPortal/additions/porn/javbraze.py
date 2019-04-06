@@ -135,13 +135,14 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</ul>')
-		Movies = re.findall('class="video".*?href="(.*?)"\stitle="(.*?)".*?img\ssrc="(.*?)".*?class="time-video.*?>(.*?)</span.*?class="video-view.*?>(.*?)\sviews', data, re.S)
+		parse = re.search('<div class="panel-body(.*?)$', data, re.S)
+		Movies = re.findall('class="well well-sm">.*?href="(.*?)"\stitle="(.*?)".*?img\s(?:class="img-responsive\s"\s|)src="(.*?)".*?class="time-video.*?>(.*?)</span.*?class="video-view.*?>(.*?)</span>', parse.group(1), re.S)
 		if Movies:
-			for (Url, Title, Image, Runtime, Views) in Movies:
+			for (Url, Title, Image, Runtime, Age) in Movies:
 				Url = "https://javbraze.com" + Url
 				Runtime = Runtime.strip()
-				Views = Views.strip()
-				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
+				Age = stripAllTags(Age).strip()
+				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Age))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), None, None, None, None))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -156,8 +157,8 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 		Url = self['liste'].getCurrent()[0][1]
 		pic = self['liste'].getCurrent()[0][2]
 		runtime = self['liste'].getCurrent()[0][3]
-		views = self['liste'].getCurrent()[0][4]
-		self['handlung'].setText("Runtime: %s\nViews: %s" % (runtime, views))
+		age = self['liste'].getCurrent()[0][4]
+		self['handlung'].setText("Runtime: %s\nAge: %s" % (runtime, age))
 		CoverHelper(self['coverArt']).getCover(pic)
 
 	def keyOK(self):
@@ -170,7 +171,7 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 			twAgentGetPage(url, agent=myagent).addCallback(self.loadStream).addErrback(self.dataError)
 
 	def loadStream(self, data):
-		streams = re.findall('<iframe.*?src="(https://www.fembed.com/v/.*?)\s{0,1}"', data, re.S)
+		streams = re.findall('<iframe.*?src="(https://(?:www.fembed.com|kissmovies.cc)/v/.*?)\s{0,1}"', data, re.S)
 		if streams:
 			get_stream_link(self.session).check_link(streams[0], self.got_link)
 		else:

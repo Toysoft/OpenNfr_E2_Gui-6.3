@@ -32,20 +32,20 @@ class Vidz7GenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = 'http://www.vidz7.com/tags/'
+		url = 'http://www.vidz72.com/tags/'
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		cats = re.findall('<li><a href="(.*?)(?:\?kd=4)">(.*?)</a><span>(.*?)</span></li>', data, re.S)
+		cats = re.findall('<li><a href="(.*?)(?:\?ky=5)">(.*?)</a><span>\((.*?)\)</span></li>', data, re.S)
 		if cats:
 			for (url, title, count) in cats:
 				if int(count.strip()) > 250:
 					url = url + "page/$$PAGE$$/"
 					self.genreliste.append((decodeHtml(title).title(), url, default_cover))
 		self.genreliste.sort()
-		self.genreliste.insert(0, ("Longest", "http://www.vidz7.com/page/$$PAGE$$/?orderby=duration", default_cover))
-		self.genreliste.insert(0, ("Most Viewed", "http://www.vidz7.com/page/$$PAGE$$/?orderby=view", default_cover))
-		self.genreliste.insert(0, ("Newest", "http://www.vidz7.com/page/$$PAGE$$/?orderby=date", default_cover))
+		self.genreliste.insert(0, ("Longest", "http://www.vidz72.com/page/$$PAGE$$/?orderby=duration", default_cover))
+		self.genreliste.insert(0, ("Most Viewed", "http://www.vidz72.com/page/$$PAGE$$/?orderby=view", default_cover))
+		self.genreliste.insert(0, ("Newest", "http://www.vidz72.com/page/$$PAGE$$/?orderby=date", default_cover))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -116,14 +116,14 @@ class Vidz7FilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "http://www.vidz7.com/page/%s/?s=%s"  % (str(self.page), self.Link)
+			url = "http://www.vidz72.com/page/%s/?s=%s"  % (str(self.page), self.Link)
 		else:
 			url = self.Link.replace('$$PAGE$$',str(self.page))
 		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, '<nav class="pagination(.*?)</nav>')
-		videos = re.findall('<article.*?href=\'(.*?)\'.*?image:url\("(.*?)"\).*?class="duration">(.*?)</div.*?class=\'info-card\'>(.*?)</a.*?class="video-date".*?">(.*?)</time.*?<span>(?:\s/\s)(.*?)\sviews</span', data, re.S)
+		videos = re.findall('video-listing\'>.*?href=\'(.*?)\'.*?image:url\("(.*?)"\).*?class=\'ico ico-time\'>(.*?)</span.*?class=\'video-title\'><a href=.*?>(.*?)</a.*?class="video-date".*?">(.*?)</time.*?class=\'video-views\'>(.*?)\sviews</span', data, re.S)
 		if videos:
 			for (url, image, runtime, title, date, views) in videos:
 				title = stripAllTags(title).strip()

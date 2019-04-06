@@ -439,6 +439,7 @@ class tvnowEpisodenScreen(MPScreen, ThumbsHelper):
 		url = str(dashclear.replace('dash', 'hls').replace('.mpd','fairplay.m3u8'))
 		if "?" in url:
 			url = url.split('?')[0]
+		url = url.replace('manifest','ngvod').replace('.secure.footprint.net','-a.akamaihd.net')
 		getPage(url, agent=nowAgent).addCallback(self.loadplaylist, url).addErrback(self.dataError)
 
 	def loadplaylist(self, data, baseurl):

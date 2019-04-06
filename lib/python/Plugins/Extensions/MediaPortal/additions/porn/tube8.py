@@ -95,6 +95,7 @@ class tube8GenreScreen(MPScreen):
 			self.filmliste.insert(0, ("Most Discussed", "http://www.tube8.com/most-discussed/page/", default_cover))
 			self.filmliste.insert(0, ("Most Favorited", "http://www.tube8.com/most-favorited/page/", default_cover))
 			self.filmliste.insert(0, ("Top Rated", "http://www.tube8.com/top/page/", default_cover))
+			self.filmliste.insert(0, ("Most Popular", "http://www.tube8.com/hottest/page/", default_cover))
 			self.filmliste.insert(0, ("Most Viewed", "http://www.tube8.com/most-viewed/page/", default_cover))
 			self.filmliste.insert(0, ("Featured", "http://www.tube8.com/latest/page/", default_cover))
 			self.filmliste.insert(0, ("Newest", "http://www.tube8.com/newest/page/", default_cover))
@@ -126,7 +127,7 @@ class tube8GenreScreen(MPScreen):
 			self.session.open(tube8FilmScreen, Link, Name)
 
 	def getSuggestions(self, text, max_res):
-		url = "https://bnzmzkcxit-dsn.algolia.net/1/indexes/popular_queries_straight_de/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.31.0&x-algolia-application-id=BNZMZKCXIT&x-algolia-api-key=9302a0e4a33f91355c89c58789d32e6b"
+		url = "https://bnzmzkcxit-dsn.algolia.net/1/indexes/popular_queries_straight_de/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.0&x-algolia-application-id=BNZMZKCXIT&x-algolia-api-key=3624454cb0b8c87da7f6100dde6ce062"
 		postdata = {'params':'query='+text}
 		postdata = json.dumps(postdata)
 		d = twAgentGetPage(url, method='POST', postdata=postdata, agent=agent, headers=json_headers, timeout=5)
@@ -181,7 +182,7 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self.page = 1
 		self.lastpage = 999
-		self.sort = None
+		self.sort = 'lt'
 		self.sortsearch = 'tube8_slave_featured'
 		self.filter = None
 		self.filtersearch = ''
@@ -200,11 +201,14 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 		self.filmliste = []
 		self['page'].setText(str(self.page))
 		if re.match(".*Search", self.Name):
-			url = "http://bnzmzkcxit-1.algolianet.com/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.19.2&x-algolia-application-id=BNZMZKCXIT&x-algolia-api-key=9302a0e4a33f91355c89c58789d32e6b"
+			url = "https://bnzmzkcxit-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.0&x-algolia-application-id=BNZMZKCXIT&x-algolia-api-key=3624454cb0b8c87da7f6100dde6ce062"
 			postdata = '{"requests":[{"indexName":"banned_words","params":"query=' + self.Link + '&optionalWords=%5B%22%22%5D&queryType=prefixNone&typoTolerance=false&optionalFacetFilters=%5B%22%22%5D&getRankingInfo=1&hitsPerPage=50"},{"indexName":"' + self.sortsearch + '","params":"query=' + self.Link + '&optionalWords=%5B%22%22%5D&facetFilters=%5B%22attributes.orientation%3Astraight%22' + self.filtersearch + '%5D&facets=*&page=' + str(self.page-1) +'"}]}'
 			getPage(url, method='POST', agent=agent, postdata=postdata, headers={'Content-Type': 'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 		else:
-			url = "%s%s/" % (self.Link, str(self.page))
+			if self.page == 1:
+				url = self.Link.replace('page/','')
+			else:
+				url = "%s%s/" % (self.Link, str(self.page))
 			if self.sort:
 				url = "%s?orderby=%s" % (url, self.sort)
 			if self.filter:
@@ -226,9 +230,12 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 					self.filmliste.append((Title, Url, Image, Runtime, Views))
 		else:
 			preparse = re.search('id="category_video_list"(.*?)$', data, re.S)
-			Movies = re.findall('id="video_.*?a\shref="(.*?)".*?data-thumb="(http[s]?://.*?\.jpg)".*?title="(.*?)".*?video_duration">(.*?)</div>.*?video_views">(.*?)\sviews', preparse.group(1), re.S)
+			Movies = re.findall('id="video_i\d+.*?data-thumb="(http[s]?://.*?\.jpg)".*?class="video_title">\s+<a\shref="(.*?)"\stitle="(.*?)".*?(class="video_info">.*?class="video_duration">.*?</div)', preparse.group(1), re.S)
 			if Movies:
-				for (Url, Image, Title, Runtime, Views) in Movies:
+				for (Image, Url, Title, Meta) in Movies:
+					Metadata = re.findall('video_views">(.*?)\sviews.*?video_duration">(.*?)</div', Meta, re.S)
+					Views = Metadata[0][0]
+					Runtime = Metadata[0][1]
 					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views.strip()))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), "", None, None, None))
@@ -241,7 +248,7 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 	def keySort(self):
 		if self.keyLocked:
 			return
-		rangelist = [ ['Featured', '', 'tube8_slave_featured'], ['Longest', 'ln', 'tube8_slave_longest'], ['Newest', 'nt', 'tube8_slave_newest'], ['Rating', 'tr', 'tube8_slave_rating'], ['Views', 'mv', 'tube8_slave_views'], ['Votes', 'mt', 'tube8_slave_votes'], ['Comments', 'md', 'tube8_slave_comments'], ['Favorites', 'mf', 'tube8_slave_favorites']]
+		rangelist = [ ['Featured', 'lt', 'tube8_slave_featured'], ['Longest', 'ln', 'tube8_slave_longest'], ['Newest', 'nt', 'tube8_slave_newest'], ['Rating', 'tr', 'tube8_slave_rating'], ['Views', 'mv', 'tube8_slave_views'], ['Hottest', 'rl', 'tube8_slave_magic'], ['Votes', 'mt', 'tube8_slave_votes'], ['Comments', 'md', 'tube8_slave_comments'], ['Favorites', 'mf', 'tube8_slave_favorites']]
 		self.session.openWithCallback(self.keySortAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
 
 	def keySortAction(self, result):

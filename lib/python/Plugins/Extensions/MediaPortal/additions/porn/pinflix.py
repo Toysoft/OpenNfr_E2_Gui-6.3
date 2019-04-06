@@ -41,8 +41,9 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 
-agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'
+agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'
 default_cover = None
+cookies = CookieJar()
 
 class pinflixGenreScreen(MPScreen):
 
@@ -52,15 +53,15 @@ class pinflixGenreScreen(MPScreen):
 		global default_cover
 		if self.mode == "pinflix":
 			self.portal = "Pinflix.com"
-			self.baseurl = "www.pinflix.com"
+			self.baseurl = "https://www.pinflix.com"
 			default_cover = "file://%s/pinflix.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "pornhd":
 			self.portal = "PornHD.com"
-			self.baseurl = "www.pornhd.com"
+			self.baseurl = "https://www.pornhd.com"
 			default_cover = "file://%s/pornhd.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "pornrox":
 			self.portal = "Pornrox.com"
-			self.baseurl = "www.pornrox.com"
+			self.baseurl = "https://www.pornrox.com"
 			default_cover = "file://%s/pornrox.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
@@ -88,24 +89,24 @@ class pinflixGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://%s/category" % self.baseurl
-		getPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
+		url = "%s/category" % self.baseurl
+		twAgentGetPage(url, agent=agent, cookieJar=cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		Cats = re.findall('class="(?:category|pfx-cat)"><a href="(.*?)".*?alt="(.*?)".*?data-original="(.*?)"', data, re.S)
 		if Cats:
 			for (Url, Title, Image) in Cats:
-				Url = 'http://' + self.baseurl + Url
+				Url = self.baseurl + Url
 				self.genreliste.append((Title, Url, Image))
 		self.genreliste.sort()
 		if not self.mode == "pinflix":
-			self.genreliste.insert(0, ("Channels", "http://%s/channel" % self.baseurl, default_cover))
-		self.genreliste.insert(0, ("Pornstars", "http://%s/pornstars" % self.baseurl, default_cover))
-		self.genreliste.insert(0, ("Longtest", "http://%s/?order=longest" % self.baseurl, default_cover))
-		self.genreliste.insert(0, ("Featured", "http://%s/?order=featured" % self.baseurl, default_cover))
-		self.genreliste.insert(0, ("Top Rated", "http://%s/?order=top-rated" % self.baseurl, default_cover))
-		self.genreliste.insert(0, ("Most Viewed", "http://%s/?order=most-popular" % self.baseurl, default_cover))
-		self.genreliste.insert(0, ("Newest", "http://%s/?order=newest" % self.baseurl, default_cover))
+			self.genreliste.insert(0, ("Channels", "%s/channel" % self.baseurl, default_cover))
+		self.genreliste.insert(0, ("Pornstars", "%s/pornstars" % self.baseurl, default_cover))
+		self.genreliste.insert(0, ("Longtest", "%s/?order=longest" % self.baseurl, default_cover))
+		self.genreliste.insert(0, ("Featured", "%s/?order=featured" % self.baseurl, default_cover))
+		self.genreliste.insert(0, ("Top Rated", "%s/?order=top-rated" % self.baseurl, default_cover))
+		self.genreliste.insert(0, ("Most Viewed", "%s/?order=most-popular" % self.baseurl, default_cover))
+		self.genreliste.insert(0, ("Newest", "%s/?order=newest" % self.baseurl, default_cover))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -182,21 +183,21 @@ class pinflixSitesScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		url = "%s?order=%s&page=%s" % (self.Link, self.sort, str(self.page))
-		getPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=agent, cookieJar=cookies).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'paging">(.*?)</ul>')
 		Movies = re.findall('class="(?:pfx-pornstar|pornstar)"><a href="(.*?)".*?data-original="(.*?)".*?alt="(.*?)"', data, re.S)
 		if Movies:
 			for (Url, Image, Title) in Movies:
-				Url = 'http://' + self.baseurl + Url
+				Url = self.baseurl + Url
 				self.filmliste.append((decodeHtml(Title), Url, Image))
 		else:
 			parse = re.search('class="jsFilter(.*?)class="page-footer"', data, re.S)
 			Movies = re.findall('<li><a href="(.*?)".*?img\ssrc="(.*?)"\salt="(.*?)"', parse.group(1), re.S)
 			if Movies:
 				for (Url, Image, Title) in Movies:
-					Url = 'http://' + self.baseurl + Url
+					Url = self.baseurl + Url
 					if "placeholder" in Image:
 						Image = default_cover
 					self.filmliste.append((decodeHtml(Title), Url, Image))
@@ -296,24 +297,24 @@ class pinflixFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "http://%s/search?search=%s&order=%s&page=%s" % (self.baseurl, self.Link, self.sort, str(self.page))
+			url = "%s/search?search=%s&order=%s&page=%s" % (self.baseurl, self.Link, self.sort, str(self.page))
 		else:
 			sortpart = re.findall('^(.*?)\?order=(.*?)$', self.Link)
 			if sortpart:
 				self.Link = sortpart[0][0]
 				self.sort = sortpart[0][1]
 			url = "%s?order=%s&page=%s" % (self.Link, self.sort, str(self.page))
-		getPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=agent, cookieJar=cookies).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		if "data-last-page=" in data:
 			self.getLastPage(data, '', 'data-last-page="(\d+)"')
 		else:
 			self.getLastPage(data, 'paging">(.*?)</ul>')
-		Movies = re.findall('class="thumb(?: videoThumb|)(?: popTrigger|)"\shref="(.*?)"><img\salt="(.*?)"\s+src="(.*?)"(\sclass="(?:pfx-|)lazy"\sdata-original=".*?"|).*?class="meta transition"><time>(.*?)</time', data, re.S)
+		Movies = re.findall('class="thumb(?: videoThumb|)(?: popTrigger|)"\shref="(/videos.*?)"><img\salt="(.*?)"\s+src="(.*?)"(\sclass="(?:pfx-|)lazy"\sdata-original=".*?"|).*?class="meta transition"><time>(.*?)</time', data, re.S)
 		if Movies:
 			for (Url, Title, Image, BackupImage, Runtime) in Movies:
-				Url = 'http://' + self.baseurl + Url
+				Url = self.baseurl + Url
 				Image = Image.replace('.webp','.jpg')
 				if BackupImage:
 					Image = re.search('data-original="(.*?)"', BackupImage, re.S).group(1).replace('.webp','.jpg')
@@ -352,11 +353,17 @@ class pinflixFilmScreen(MPScreen, ThumbsHelper):
 			return
 		Link = self['liste'].getCurrent()[0][1]
 		self.keyLocked = True
-		getPage(Link, agent=agent).addCallback(self.getVideoUrl).addErrback(self.dataError)
+		twAgentGetPage(Link, agent=agent, cookieJar=cookies).addCallback(self.getVideoUrl).addErrback(self.dataError)
 
 	def getVideoUrl(self, data):
 		videoUrl = re.findall('\d+p"."(.*?)"', data, re.S)
 		if videoUrl:
 			self.keyLocked = False
+			url = self.baseurl + videoUrl[-1].replace('\/','/')
+			tw_agent_hlp = TwAgentHelper(cookieJar=cookies)
+			tw_agent_hlp.getRedirectedUrl(url).addCallback(self.getStream).addErrback(self.dataError)
+
+	def getStream(self, url):
 			Title = self['liste'].getCurrent()[0][0]
-			self.session.open(SimplePlayer, [(Title, videoUrl[-1].replace('\/','/'))], showPlaylist=False, ltype='pinflix')
+			mp_globals.player_agent = agent
+			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='pinflix')

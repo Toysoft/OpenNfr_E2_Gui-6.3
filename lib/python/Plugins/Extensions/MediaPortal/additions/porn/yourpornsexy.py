@@ -165,7 +165,7 @@ class YourPornSexyPornstarsScreen(MPScreen):
 	def loadData(self, data):
 		self['page'].setText(str(self.page) + '/' +str(self.lastpage))
 		preparse = re.search('.*?pstars_container(.*?)d="center_control"', data, re.S)
-		Cats = re.findall("<a href='/(.*?).html' title='.*?PornStar Page'><div class='ps_el'>(.*?)</div></a>", preparse.group(1) , re.S)
+		Cats = re.findall("<a href='/(.*?).html(?:\?ps&sm=orgasmic|)' title='.*?PornStar Page'><div class='ps_el'>(.*?)</div></a>", preparse.group(1) , re.S)
 		if Cats:
 			for (Url, Title) in Cats:
 				self.genreliste.append((Title, Url))
@@ -353,7 +353,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 								self.filmliste.append((decodeHtml(Title), Url, Image, Views, Runtime, Added))
 
 		if len(self.filmliste) == 0:
-			self.filmliste.append((_('No videos found!'), '', None, '', '', ''))
+			self.filmliste.append((_('No videos found!'), None, None, '', '', ''))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
 		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
@@ -374,8 +374,9 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 		if self.keyLocked:
 			return
 		Link = self['liste'].getCurrent()[0][1]
-		self.keyLocked = True
-		twAgentGetPage(Link, agent=myagent, cookieJar=yps_cookies).addCallback(self.getVideoUrl).addErrback(self.dataError)
+		if Link:
+			self.keyLocked = True
+			twAgentGetPage(Link, agent=myagent, cookieJar=yps_cookies).addCallback(self.getVideoUrl).addErrback(self.dataError)
 
 	def getVideoUrl(self, data):
 		videoUrl = re.findall('data-vnfo=\'\{"[0-9a-f]+":"(.*?)"\}\'', data, re.S)

@@ -40,6 +40,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
+from Plugins.Extensions.MediaPortal.resources.debuglog import printlog as printl
 
 ck = {}
 favourites = []
@@ -72,11 +73,19 @@ class xhamsterGenreScreen(MPScreen):
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
 			"0" : self.closeAll,
-			"cancel" : self.keyCancel
+			"cancel" : self.keyCancel,
+			"yellow" : self.keyScope
 		}, -1)
+
+		self.scope = 0
+		self.scopeText = ['Straight', 'Gays', 'Transsexual']
+		self.scopeval = ['', 'gay/', 'shemale/']
+		self.scopefilter = ['s%3A8%3A%22straight%22%3B', 's%3A3%3A%22gay%22%3B', 's%3A7%3A%22shemale%22%3B']
 
 		self['title'] = Label("xHamster.com")
 		self['ContentTitle'] = Label("Genre:")
+		self['F3'] = Label(self.scopeText[self.scope])
+
 		self.keyLocked = True
 		self.suchString = ''
 
@@ -111,15 +120,19 @@ class xhamsterGenreScreen(MPScreen):
 			pass
 
 	def layoutFinished(self):
-		url = base_url + "/categories"
+		ck.update({'x_content_preference_index':self.scopefilter[self.scope]})
+		self['F3'].setText(self.scopeText[self.scope])
+		self.keyLocked = True
+		url = "%s/%scategories" % (base_url, self.scopeval[self.scope])
 		getPage(url, agent=xhAgent, cookies=ck).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('class="letter-blocks(.*?)class="footer-buffer">', data, re.S)
-		Cats = re.findall('<a\shref="(https://xhamster.com\/(?:channels\/|categories\/|tags\/).*?)(?:-1.html|)"\s{0,2}>(.*?)</a', parse.group(1), re.S)
+		Cats = re.findall('<a\shref="(https://xhamster.com(?:\/gay|\/shemale|)\/(?:channels\/|categories\/|tags\/).*?)(?:-1.html|)"\s{0,2}>(.*?)</a', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
-				Title = Title.strip(' ')
+				Title = stripAllTags(Title).strip(' ')
+				Url = Url + "$$HD$$/newest"
 				self.genreliste.append((decodeHtml(Title), Url))
 		self.genreliste.sort()
 		self.genreliste.insert(0, (400 * "—", None))
@@ -128,19 +141,19 @@ class xhamsterGenreScreen(MPScreen):
 		self.genreliste.insert(0, ("Favourite Videos", 'favs'))
 		self.genreliste.insert(0, (400 * "—", None))
 		self.genreliste.insert(0, ("Pornstars", '%s/pornstars' % base_url))
-		self.genreliste.insert(0, ("Most Commented (All Time)", '%s/most-commented' % base_url))
-		self.genreliste.insert(0, ("Most Commented (Monthly)", '%s/most-commented/monthly' % base_url))
-		self.genreliste.insert(0, ("Most Commented (Weekly)", '%s/most-commented/weekly' % base_url))
-		self.genreliste.insert(0, ("Most Commented (Daily)", '%s/most-commented/daily' % base_url))
-		self.genreliste.insert(0, ("Most Viewed (All Time)", '%s/most-viewed' % base_url))
-		self.genreliste.insert(0, ("Most Viewed (Monthly)", '%s/most-viewed/monthly' % base_url))
-		self.genreliste.insert(0, ("Most Viewed (Weekly)", '%s/most-viewed/weekly' % base_url))
-		self.genreliste.insert(0, ("Most Viewed (Daily)", '%s/most-viewed/daily' % base_url))
-		self.genreliste.insert(0, ("Top Rated (All Time)", '%s/best' % base_url))
-		self.genreliste.insert(0, ("Top Rated (Monthly)", '%s/best/monthly' % base_url))
-		self.genreliste.insert(0, ("Top Rated (Weekly)", '%s/best/weekly' % base_url))
-		self.genreliste.insert(0, ("Top Rated (Daily)", '%s/best/daily' % base_url))
-		self.genreliste.insert(0, ("Newest", '%s' % base_url))
+		self.genreliste.insert(0, ("Most Commented (All Time)", '%s$$HD$$/%smost-commented' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Most Commented (Monthly)", '%s$$HD$$/%smost-commented/monthly' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Most Commented (Weekly)", '%s$$HD$$/%smost-commented/weekly' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Most Commented (Daily)", '%s$$HD$$/%smost-commented/daily' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Most Viewed (All Time)", '%s$$HD$$/%smost-viewed' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Most Viewed (Monthly)", '%s$$HD$$/%smost-viewed/monthly' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Most Viewed (Weekly)", '%s$$HD$$/%smost-viewed/weekly' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Most Viewed (Daily)", '%s$$HD$$/%smost-viewed/daily' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Top Rated (All Time)", '%s$$HD$$/%sbest' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Top Rated (Monthly)", '%s$$HD$$/%sbest/monthly' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Top Rated (Weekly)", '%s$$HD$$/%sbest/weekly' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Top Rated (Daily)", '%s$$HD$$/%sbest/daily' % (base_url, self.scopeval[self.scope])))
+		self.genreliste.insert(0, ("Newest", '%s$$HD$$/%s' % (base_url, self.scopeval[self.scope])))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.ml.moveToIndex(0)
@@ -163,12 +176,24 @@ class xhamsterGenreScreen(MPScreen):
 			if Link:
 				self.session.open(xhamsterFilmScreen, Link, Name)
 
+	def keyScope(self):
+		if self.keyLocked:
+			return
+		self.genreliste = []
+		if self.scope == 0:
+			self.scope = 1
+		elif self.scope == 1:
+			self.scope = 2
+		else:
+			self.scope = 0
+		self.layoutFinished()
+
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
 			Link = '%s' % urllib.quote(self.suchString).replace(' ', '+')
-			self.session.open(xhamsterFilmScreen, Link, Name)
+			self.session.open(xhamsterFilmScreen, Link, Name, self.scope)
 
 	def getSuggestions(self, text, max_res):
 		url = "http://m.xhamster.com/ajax.php?act=search&q=%s" % urllib.quote_plus(text)
@@ -441,9 +466,12 @@ class xhamsterPornstarsScreen(MPScreen):
 
 class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name):
+	def __init__(self, session, Link, Name, scope=0):
 		self.Link = Link
 		self.Name = Name
+		self.scope = scope
+		self.scopesearch = ['MTM6OToKNQ', 'MTE6ODoCag', 'MTI6ODoEGw']
+
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -499,20 +527,9 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 					hd = "hd"
 				else:
 					hd = "all"
-				url = "https://xhamster.com/search?date=any&duration=any&sort=relevance&quality=%s&categories=MjM6ODoRrDU=&q=%s&p=%s" % (hd, self.Link, str(self.page))
+				url = "https://xhamster.com/search?date=any&duration=any&sort=relevance&quality=%s&categories=%s=&q=%s&p=%s" % (hd, self.scopesearch[self.scope], self.Link, str(self.page))
 			else:
-				if re.match('.*?\/channels\/', self.Link):
-					url = "%s-%s.html" % (self.Link, str(self.page))
-					if self.hd:
-						url = url.replace('/new-', '/hd-')
-				elif re.match('.*?\/rankings\/', self.Link):
-					url = "%s-%s.html" % (self.Link, str(self.page))
-				elif re.match('.*?\/new\/', self.Link):
-					if self.page == 1:
-						url = base_url
-					else:
-						url = "%s%s.html" % (self.Link, str(self.page))
-				elif self.Name == "Related":
+				if self.Name == "Related":
 					url = self.Link + str(self.page)
 				else:
 					if self.hd:
@@ -520,9 +537,10 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 					else:
 						hd = ''
 					if self.page == 1:
-						url = "%s%s" % (self.Link, hd)
+						url = self.Link.replace('$$HD$$', hd)
 					else:
-						url = "%s%s/%s" % (self.Link, hd, str(self.page))
+						url = "%s/%s" % (self.Link.replace('$$HD$$', hd), str(self.page))
+			print url
 			getPage(url, agent=xhAgent, cookies=ck).addCallback(self.pageData).addErrback(self.dataError)
 
 	def pageData(self, data):
@@ -543,7 +561,7 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 			if parse:
 				Liste = re.findall('class="thumb-container"\sdata-href="(.*?)"\sdata-thumb="(.*?)".*?class="duration">(.*?)</div>.*?class="name">(.*?)</div>.*?class="views">(.*?)</div>.*?class="rating">(.*?)</div>', parse.group(1), re.S)
 				if not Liste:
-					Liste = re.findall('class="video-thumb__image-container.*?href="(.*?)".*?image-container__image"\ssrc="(.*?)".*?container__duration">(.*?)</div>.*?video-thumb-info__name.*?>(.*?)</a>.*?thumb-info__views.*?>(.*?)</i>.*?thumb-info__rating.*?>(.*?)</i>', parse.group(1), re.S)
+					Liste = re.findall('class="video-thumb__image-container.*?href="(.*?)".*?image-container__image"\ssrc="(.*?)".*?container__duration">(.*?)</div>.*?video-thumb-info__name.*?>(.*?)</a>.*?thumb-info__views.*?>(.*?)(?:</i>|</div>).*?thumb-info__rating.*?>(.*?)</i>', parse.group(1), re.S)
 				if Liste:
 					for (Link, Image, Runtime, Name, Views, Rating) in Liste:
 						Name = stripAllTags(Name).strip()
@@ -568,17 +586,21 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 		self.reload = False
 		self.keyLocked = False
 		if self.Link == "favs":
-			self.th_ThumbsQuery(self.streamList, 0, 2, None, None, 'itemprop="thumbnailUrl" href="(.*?)">', 1, 1, mode=1)
+			self.th_ThumbsQuery(self.streamList, 0, 2, None, None, '"thumbnailUrl":"(.*?)",', 1, 1, mode=1)
 		else:
 			self.th_ThumbsQuery(self.streamList, 0, 2, 1, 3, None, self.page, self.lastpage, mode=1)
 		self.showInfos()
 
 	def showInfos(self):
 		Link = self['liste'].getCurrent()[0][2]
+		if self.Link != "favs":
+			pic = self['liste'].getCurrent()[0][1]
+			CoverHelper(self['coverArt']).getCover(pic)
 		if Link:
 			getPage(Link, agent=xhAgent, cookies=ck).addCallback(self.showInfos2).addErrback(self.dataError)
 
 	def dataError(self, error):
+		printl(error,self,"E")
 		self.showInfos2("error")
 
 	def showInfos2(self, data):
@@ -604,12 +626,11 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 				self['F2'].setText(_("Page"))
 			self['F3'].setText(_("Show Related"))
 			self.videoId = re.findall('"videoId":(\d+),', data, re.S)[0]
-			self.username = re.findall('"entity-author-container__name(?: link|)" (?:href="https://xhamster.com/users/(.*?)"\s|data-tooltip="User is retired").*?itemprop="name">(.*?)</span', data, re.S)
+			self.username = re.findall('"entity-author-container__name(?: link|)" (?:href="https://xhamster.com/users/(.*?)"|data-tooltip="User is retired")>.*?<span\s{0,1}>(.*?)</span', data, re.S)
 			title = self['liste'].getCurrent()[0][0]
 			if self.Link == "favs":
-				pic = re.findall('itemprop="thumbnailUrl" href="(.*?)">', data, re.S)[0]
-			else:
-				pic = self['liste'].getCurrent()[0][1]
+				pic = re.findall('"thumbnailUrl":"(.*?)",', data, re.S)[0]
+				CoverHelper(self['coverArt']).getCover(pic)
 			runtime = self['liste'].getCurrent()[0][3]
 			views = self['liste'].getCurrent()[0][4]
 			rating = self['liste'].getCurrent()[0][5]
@@ -647,7 +668,6 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 				self['handlung'].setText(submsg.strip('\n'))
 			else:
 				self['handlung'].setText("Runtime: %s\nViews: %s\nRating: %s%s%s" % (runtime, views, rating, submsg, favmsg))
-			CoverHelper(self['coverArt']).getCover(pic)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -659,10 +679,6 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 
 	def keyMenu(self):
 		if self.keyLocked:
-			return
-		if re.match('.*?\/rankings\/', self.Link):
-			return
-		elif re.match('.*?\/new\/', self.Link):
 			return
 		elif self.Name == "Related":
 			return
@@ -743,13 +759,20 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 		self.session.open(xhamsterFilmScreen, RelatedUrl, "Related")
 
 	def playerData(self, data):
-		playerData = re.findall('itemprop="embedUrl" href="(.*?)">', data, re.S)
+		playerData = re.findall('"embedUrl":"(.*?)",', data, re.S)
 		if playerData:
 			getPage(playerData[0], agent=xhAgent, cookies=ck).addCallback(self.playUrl).addErrback(self.dataError)
 
 	def playUrl(self, data):
 		Title = self['liste'].getCurrent()[0][0]
+		url = None
 		playUrl = re.findall('"\d+p":"(.*?)"', data, re.S)
 		if playUrl:
+			url = playUrl[-1]
+		else:
+			playUrl = re.findall('"(?:960|720)p","url":"(.*?)"', data, re.S)
+			if playUrl:
+				url = playUrl[0]
+		if url:
 			self.keyLocked = False
-			self.session.open(SimplePlayer, [(Title, playUrl[-1].replace('&amp;','&').replace('\/','/'))], showPlaylist=False, ltype='xhamster')
+			self.session.open(SimplePlayer, [(Title, url.replace('&amp;','&').replace('\/','/'))], showPlaylist=False, ltype='xhamster')

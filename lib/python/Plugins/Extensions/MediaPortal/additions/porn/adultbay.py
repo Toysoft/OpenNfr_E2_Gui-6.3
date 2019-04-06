@@ -166,6 +166,7 @@ class adultbayListScreen(MPScreen, ThumbsHelper):
 			if raw:
 				for (link, title, image) in raw:
 					if title != "Premium download":
+						title = stripAllTags(title)
 						self.filmliste.append((decodeHtml(title), link, image))
 				self.ml.setList(map(self._defaultlistleft, self.filmliste))
 				self.ml.moveToIndex(0)
@@ -219,7 +220,7 @@ class StreamAuswahl(MPScreen):
 		twAgentGetPage(url).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		parse = re.search('class="post-header">(.*?)Recommends:</strong>', data, re.S)
+		parse = re.search('class="post-header">(.*?)</article>', data, re.S)
 		streams = re.findall('(http[s]?://(?!adultbay.org)(.*?)\/.*?)[\'|"|\&|<]', parse.group(1), re.S)
 		if streams:
 			for (stream, hostername) in streams:

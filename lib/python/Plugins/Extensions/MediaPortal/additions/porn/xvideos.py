@@ -514,11 +514,15 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			Movies = re.findall('id="video_\d+"\sclass="thumb-block\s{0,1}">.*?class="thumb"><a href="(.*?)"><img src=".*?data-src="(.*?)".*?<a href.*?title="(.*?)">.*?</a></p><p class="metadata">(.*?)</div>', data, re.S)
 			if Movies:
 				for (Url, Image, Title, Meta) in Movies:
-					Views = re.findall('<span>\s-\s(.*?)\sViews</span>', Meta, re.S)
+					Views = re.findall('class="sprfluous"> - </span>\s(.*?)\s<span class="sprfluous">Views</span>', Meta, re.S)
 					if Views:
 						Views = Views[0]
 					else:
-						Views = "0"
+						Views = re.findall('</span>\s(.*?)\s<span class="sprfluous">Views</span>', Meta, re.S)
+						if Views:
+							Views = Views[0]
+						else:
+							Views = "0"
 					Runtime = re.findall('class="duration">(.*?)</span>', Meta, re.S)
 					if Runtime:
 						Runtime = Runtime[0]
@@ -637,15 +641,15 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 		if match:
 			url = match[-1].replace('\/','/').replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B')
 			if "/hls/" in url:
-				if len(url.split('hls.m3u8')[1]) > 0:
-					baseurl = url.split('hls.m3u8')[0]
-					twAgentGetPage(url, agent=agent).addCallback(self.loadplaylist, baseurl).addErrback(self.dataError)
-				else:
-					if len(match)>1:
-						url = match[-2].replace('\/','/').replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B')
-						self.playVideo(url)
-					else:
-						message = self.session.open(MessageBoxExt, _("Stream not found"), MessageBoxExt.TYPE_INFO, timeout=5)
+				#if len(url.split('hls.m3u8')[1]) > 0:
+				baseurl = url.split('hls.m3u8')[0]
+				twAgentGetPage(url, agent=agent).addCallback(self.loadplaylist, baseurl).addErrback(self.dataError)
+				#else:
+				#	if len(match)>1:
+				#		url = match[-2].replace('\/','/').replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B')
+				#		self.playVideo(url)
+				#	else:
+				#		message = self.session.open(MessageBoxExt, _("Stream not found"), MessageBoxExt.TYPE_INFO, timeout=5)
 			else:
 				self.playVideo(url)
 		else:

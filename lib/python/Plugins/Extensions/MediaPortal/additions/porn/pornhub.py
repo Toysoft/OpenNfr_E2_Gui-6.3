@@ -157,13 +157,14 @@ class pornhubGenreScreen(MPScreen, LoginFunc):
 
 	def genreData(self, data):
 		self.filmliste = []
-		Cats = re.findall('<div\sclass="category-wrapper\s{0,1}">.*?<a\shref="(.*?)".*?<img\s+src="(.*?)".*?alt="(.*?)"', data, re.S)
+		Cats = re.findall('<div\sclass="category-wrapper\s{0,1}">.*?<a\shref="(.*?)".*?<img.*?data-thumb_url="(.*?)".*?alt="(.*?)"', data, re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
 				if re.match(".*\?",Url):
 					Url = base_url + Url + "&page="
 				else:
 					Url = base_url + Url + "?page="
+				Image = re.sub(r"\(.*\)", "", Image)
 				self.filmliste.append((Title, Url, Image))
 			self.filmliste.sort()
 		if phLoggedIn:

@@ -41,10 +41,12 @@ class pandamovieGenreScreen(MPScreen):
 					if Url.startswith('//'):
 						Url = "https:" + Url
 					Url = Url + "/page/"
+					if self.mode == "Year" and Title == "201":
+						Title = "2017"
 					self.filmliste.append((decodeHtml(Title), Url))
 				self.filmliste.sort()
 		if self.mode == "Genres":
-			self.filmliste.insert(0, ("Years", "Years", None))
+			self.filmliste.insert(0, ("Years", "Year", None))
 			self.filmliste.insert(0, ("Studios", "Studios", None))
 			self.filmliste.insert(0, ("HD", "https://pandamovies.pw/watch-hd-movies-online-free/page/", None))
 			self.filmliste.insert(0, ("Most Popular (All Time)", "https://pandamovies.pw/popular-movies/page/", None))
@@ -57,7 +59,7 @@ class pandamovieGenreScreen(MPScreen):
 			self.filmliste.insert(0, ("Italian Movies", "https://pandamovies.pw/watch-italian-porn-movies-online-free/page/", None))
 			self.filmliste.insert(0, ("Spanish Movies", "https://pandamovies.pw/watch-spanish-porn-movies-online-free/page/", None))
 			self.filmliste.insert(0, ("German Movies", "https://pandamovies.pw/watch-german-porns-movies-online-free/page/", None))
-			self.filmliste.insert(0, ("Newest Movies", "https://pandamovies.pw/list-movies/page/", None))
+			self.filmliste.insert(0, ("Newest Movies", "https://pandamovies.pw/movies/page/", None))
 			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
@@ -146,7 +148,7 @@ class pandamovieListScreen(MPScreen, ThumbsHelper):
 			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		else:
 			self.getLastPage(data, "class='pagination'>(.*?)</nav>")
-		raw = re.findall('class="ml-item.*?href="(.*?)".*?img\ssrc="(.*?)".*?mli-info">(.*?)</span', data, re.S)
+		raw = re.findall('class="ml-item.*?href="(.*?)".*?img\sdata-original="(.*?)".*?mli-info">(.*?)</span', data, re.S)
 		if raw:
 			for (link, image, title) in raw:
 				title = stripAllTags(title).strip()
@@ -210,7 +212,7 @@ class StreamAuswahl(MPScreen):
 		if streams:
 			for (stream, dummy, hostername) in streams:
 				if isSupportedHoster(hostername, True):
-					hostername = hostername.replace('www.','').replace('embed.','').replace('play.','')
+					hostername = hostername.replace('www.','').replace('embed.','').replace('play.','').replace('.pandanetwork.club','')
 					self.filmliste.append((hostername, stream))
 			# remove duplicates
 			self.filmliste = list(set(self.filmliste))
@@ -225,7 +227,14 @@ class StreamAuswahl(MPScreen):
 			return
 		url = self['liste'].getCurrent()[0][1]
 		if url:
-			get_stream_link(self.session).check_link(url, self.got_link)
+			if ".pandanetwork.club" in url:
+				tw_agent_hlp = TwAgentHelper()
+				tw_agent_hlp.getRedirectedUrl(url).addCallback(self.getStream).addErrback(self.dataError)
+			else:
+				get_stream_link(self.session).check_link(url, self.got_link)
+
+	def getStream(self, url):
+		get_stream_link(self.session).check_link(url, self.got_link)
 
 	def got_link(self, stream_url):
 		title = self.Title

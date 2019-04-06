@@ -95,8 +95,9 @@ class porntrexGenreScreen(MPScreen):
 				self.showInfos()
 
 	def showInfos(self):
+		Link = self['liste'].getCurrent()[0][1]
 		Image = self['liste'].getCurrent()[0][2]
-		CoverHelper(self['coverArt']).getCover(Image, headers={'Referer':self.baseurl})
+		CoverHelper(self['coverArt']).getCover(Image, headers={'Referer':Link})
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -273,13 +274,14 @@ class porntrexFilmScreen(MPScreen, ThumbsHelper):
 
 	def showInfos(self):
 		title = self['liste'].getCurrent()[0][0]
+		url = self['liste'].getCurrent()[0][1]
 		pic = self['liste'].getCurrent()[0][2]
 		runtime = self['liste'].getCurrent()[0][3]
 		views = self['liste'].getCurrent()[0][4]
 		added = self['liste'].getCurrent()[0][5]
 		self['handlung'].setText("Runtime: %s\nAdded: %s\nViews: %s" % (runtime, added, views))
 		self['name'].setText(title)
-		CoverHelper(self['coverArt']).getCover(pic, headers={'Referer':self.baseurl})
+		CoverHelper(self['coverArt']).getCover(pic, headers={'Referer':url})
 
 	def keyOK(self):
 		if self.keyLocked:

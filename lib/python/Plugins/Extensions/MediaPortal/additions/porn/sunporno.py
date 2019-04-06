@@ -57,11 +57,21 @@ class sunpornoGenreScreen(MPScreen):
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok" : self.keyOK,
 			"0" : self.closeAll,
-			"cancel" : self.keyCancel
+			"cancel" : self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft,
+			"yellow" : self.keyScope
 		}, -1)
+
+		self.scope = 0
+		self.scopeText = ['Straight', 'Gay', 'Transgender']
+		self.scopeval = ['', 'gay/', 'shemale/']
 
 		self['title'] = Label("SunPorno.com")
 		self['ContentTitle'] = Label("Genre:")
+		self['F3'] = Label(self.scopeText[self.scope])
 
 		self.keyLocked = True
 		self.suchString = ''
@@ -74,30 +84,38 @@ class sunpornoGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
+		self['F3'].setText(self.scopeText[self.scope])
 		self['name'].setText(_('Please wait...'))
-		url = "https://www.sunporno.com/channels/"
+		url = "https://www.sunporno.com/%schannels/" % self.scopeval[self.scope]
 		getPage(url, agent=spAgent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('class="cat-container(.*?)class="clearfix">', data, re.S)
-		Cats = re.findall('<a\shref="https://www.sunporno.com/channels/(\d+).*?">(.*?)<', parse.group(1), re.S)
+		parse = re.search('class="cat-suggest"(.*?)$', data, re.S)
+		Cats = re.findall('<a\shref="https://www.sunporno.com/%schannels/(\d+).*?".*?<img.*?src="(.*?)".*?alt="(.*?)">' % self.scopeval[self.scope], parse.group(1), re.S)
 		if Cats:
-			for (Id, Title) in Cats:
-				Url = "https://www.sunporno.com/?area=ajaxMovieListViewer&nicheId=%s&dateAddedType=5&lengthType=0-50&orderBy=id&pageId=" % Id
+			for (Id, Image, Title) in Cats:
+				Url = "https://www.sunporno.com/?area=ajaxMovieListViewer&o=%s&nicheId=%s&dateAddedType=5&lengthType=0-50&orderBy=id&pageId=" % (self.scopeval[self.scope][:-1], Id)
 				Title = Title.strip()
-				self.genreliste.append((Title, Url))
+				self.genreliste.append((Title, Url, Image))
 			self.genreliste.sort()
-		self.genreliste.insert(0, ("High Definition", "https://www.sunporno.com/?area=ajaxMovieListViewer&dateAddedType=5&lengthType=0-50&orderBy=hd&pageId="))
-		self.genreliste.insert(0, ("Longest", "https://www.sunporno.com/?area=ajaxMovieListViewer&dateAddedType=5&lengthType=0-50&orderBy=longest&pageId="))
-		self.genreliste.insert(0, ("Most Favorited", "https://www.sunporno.com/?area=ajaxMovieListViewer&dateAddedType=5&lengthType=0-50&orderBy=favorited&pageId="))
-		self.genreliste.insert(0, ("Most Viewed", "https://www.sunporno.com/?area=ajaxMovieListViewer&dateAddedType=5&lengthType=0-50&orderBy=viewCount&pageId="))
-		self.genreliste.insert(0, ("Top Rated", "https://www.sunporno.com/?area=ajaxMovieListViewer&dateAddedType=5&lengthType=0-50&orderBy=rating&pageId="))
-		self.genreliste.insert(0, ("Newest", "https://www.sunporno.com/?area=ajaxMovieListViewer&dateAddedType=5&lengthType=0-50&orderBy=id&pageId="))
-		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
+		self.genreliste.insert(0, ("High Definition", "https://www.sunporno.com/?area=ajaxMovieListViewer&o=%s&dateAddedType=5&lengthType=0-50&orderBy=hd&pageId=" % self.scopeval[self.scope][:-1], default_cover))
+		self.genreliste.insert(0, ("Longest", "https://www.sunporno.com/?area=ajaxMovieListViewer&o=%s&dateAddedType=5&lengthType=0-50&orderBy=longest&pageId=" % self.scopeval[self.scope][:-1], default_cover))
+		self.genreliste.insert(0, ("Most Favorited", "https://www.sunporno.com/?area=ajaxMovieListViewer&o=%s&dateAddedType=5&lengthType=0-50&orderBy=favorited&pageId=" % self.scopeval[self.scope][:-1], default_cover))
+		self.genreliste.insert(0, ("Most Viewed", "https://www.sunporno.com/?area=ajaxMovieListViewer&o=%s&dateAddedType=5&lengthType=0-50&orderBy=viewCount&pageId=" % self.scopeval[self.scope][:-1], default_cover))
+		self.genreliste.insert(0, ("Top Rated", "https://www.sunporno.com/?area=ajaxMovieListViewer&o=%s&dateAddedType=5&lengthType=0-50&orderBy=rating&pageId=" % self.scopeval[self.scope][:-1], default_cover))
+		self.genreliste.insert(0, ("Newest", "https://www.sunporno.com/?area=ajaxMovieListViewer&o=%s&dateAddedType=5&lengthType=0-50&orderBy=id&pageId=" % self.scopeval[self.scope][:-1], default_cover))
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
 		self['name'].setText('')
+		self.showInfos()
+
+	def showInfos(self):
+		title = self['liste'].getCurrent()[0][0]
+		pic = self['liste'].getCurrent()[0][2]
+		self['name'].setText(title)
+		CoverHelper(self['coverArt']).getCover(pic)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -109,15 +127,27 @@ class sunpornoGenreScreen(MPScreen):
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(sunpornoFilmScreen, Link, Name)
 
+	def keyScope(self):
+		if self.keyLocked:
+			return
+		self.genreliste = []
+		if self.scope == 0:
+			self.scope = 1
+		elif self.scope == 1:
+			self.scope = 2
+		else:
+			self.scope = 0
+		self.layoutFinished()
+
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
 			Link = '%s' % (urllib.quote(self.suchString).replace(' ', '+'))
-			self.session.open(sunpornoFilmScreen, Link, Name)
+			self.session.open(sunpornoFilmScreen, Link, Name, self.scopeval[self.scope][:-1])
 
 	def getSuggestions(self, text, max_res):
-		url = "https://www.sunporno.com/?area=autocomplete&o=straight&q=%s" % urllib.quote_plus(text)
+		url = "https://www.sunporno.com/?area=autocomplete&o=%s&q=%s" % (self.scopeval[self.scope][:-1], urllib.quote_plus(text))
 		d = twAgentGetPage(url, agent=spAgent, headers=json_headers, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
 		d.addErrback(self.gotSuggestions, max_res, err=True)
@@ -138,9 +168,10 @@ class sunpornoGenreScreen(MPScreen):
 
 class sunpornoFilmScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name):
+	def __init__(self, session, Link, Name, scope=''):
 		self.Link = Link
 		self.Name = Name
+		self.scope = scope
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -178,7 +209,7 @@ class sunpornoFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://www.sunporno.com/?area=ajaxMovieListViewer&q=%s&dateAddedType=5&lengthType=0-50&orderBy=relevance&pageId=%s" % (self.Link, str(self.page))
+			url = "https://www.sunporno.com/?area=ajaxMovieListViewer&o=%s&q=%s&dateAddedType=5&lengthType=0-50&orderBy=relevance&pageId=%s" % (self.scope, self.Link, str(self.page))
 		else:
 			url = "%s%s" % (self.Link, str(self.page))
 		getPage(url, agent=spAgent).addCallback(self.loadData).addErrback(self.dataError)

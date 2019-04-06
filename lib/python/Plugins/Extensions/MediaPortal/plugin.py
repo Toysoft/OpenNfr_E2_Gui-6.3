@@ -193,8 +193,8 @@ config_mp.mediaportal.epg_deepstandby = ConfigSelectionExt(default = "skip", cho
 		])
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2019032402"))
-config.mediaportal.version = NoSave(ConfigText(default="2019032402"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2019040601"))
+config.mediaportal.version = NoSave(ConfigText(default="2019040601"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 

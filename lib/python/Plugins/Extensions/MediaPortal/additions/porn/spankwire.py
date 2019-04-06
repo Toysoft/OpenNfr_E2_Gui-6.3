@@ -39,14 +39,15 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
-from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 
-agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
-default_cover = "file://%s/porndoe.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+agent='Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0'
+headers = {
+	'Accept-Language':'de,en-US;q=0.7,en;q=0.3',
+	'X-Requested-With':'XMLHttpRequest',
+	}
+default_cover = "file://%s/spankwire.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
-ck = {}
-
-class porndoeGenreScreen(MPScreen):
+class spankwireGenreScreen(MPScreen):
 
 	def __init__(self, session):
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
@@ -61,7 +62,7 @@ class porndoeGenreScreen(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("Porndoe.com")
+		self['title'] = Label("Spankwire.com")
 		self['ContentTitle'] = Label("Genre:")
 
 		self.keyLocked = True
@@ -70,57 +71,87 @@ class porndoeGenreScreen(MPScreen):
 		self.genreliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
+		self.page = 1
+		self.lastpage = 5
 
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		ck.update({'__language':'en'})
-		url = "https://www.porndoe.com/categories"
-		getPage(url, agent=agent, cookies=ck).addCallback(self.genreData).addErrback(self.dataError)
+		self['name'].setText(_('Please wait...'))
+		url = "https://www.spankwire.com/api/categories/list.json?page=%s&segmentId=0&sort=recent&limit=100" % str(self.page)
+		twAgentGetPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		Cats = re.findall('class="item">.*?href="(.*?)".*?data-src="(.*?)".*?class="txt">(.*?)(?:</span|<span)', data, re.S)
-		if Cats:
-			for (Url, Image, Title) in Cats:
-				Url = "https://www.porndoe.com" + Url
-				if Image.startswith('//'):
-					Image = 'https:' + Image
-				self.genreliste.append((Title.replace('&amp;','&').strip(), Url, Image, True))
+		json_data = json.loads(data)
+		for item in json_data["items"]:
+			title = str(item["name"])
+			id = str(item["id"])
+			image = str(item["image"])
+			self.genreliste.append((title, id, "recent", image))
+		if self.page == self.lastpage:
+			# remove duplicates
+			self.genreliste = list(set(self.genreliste))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Longest", "https://www.porndoe.com/videos?sort=duration-down", default_cover, False))
-			self.genreliste.insert(0, ("Most Viewed", "https://www.porndoe.com/videos?sort=views-down", default_cover, False))
-			self.genreliste.insert(0, ("Top Rated", "https://www.porndoe.com/videos?sort=likes-down", default_cover, False))
-			self.genreliste.insert(0, ("Newest", "https://www.porndoe.com/videos", default_cover, False))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover, False))
+			self.genreliste.insert(0, ("Longest", "", "duration", default_cover))
+			self.genreliste.insert(0, ("Most Commented", "", "comments", default_cover))
+			self.genreliste.insert(0, ("Most Viewed", "", "views", default_cover))
+			self.genreliste.insert(0, ("Trending", "", "trending", default_cover))
+			self.genreliste.insert(0, ("Top Rated", "", "rating", default_cover))
+			self.genreliste.insert(0, ("Most Recent", "", "recent", default_cover))
+			self.genreliste.insert(0, ("--- Search ---", "", "callSuchen", default_cover))
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.ml.moveToIndex(0)
 			self.keyLocked = False
+			self['name'].setText('')
 			self.showInfos()
+		else:
+			self.page += 1
+			self.layoutFinished()
 
 	def showInfos(self):
-		Image = self['liste'].getCurrent()[0][2]
-		CoverHelper(self['coverArt']).getCover(Image, agent=agent, headers={'Referer':'https://www.porndoe.com'})
+		Image = self['liste'].getCurrent()[0][3]
+		CoverHelper(self['coverArt']).getCover(Image)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		if Name == "--- Search ---":
-			self.suchen()
+			self.suchen(suggest_func=self.getSuggestions)
 		else:
 			Link = self['liste'].getCurrent()[0][1]
-			Sort = self['liste'].getCurrent()[0][3]
-			self.session.open(porndoeFilmScreen, Link, Name, Sort)
+			Sort = self['liste'].getCurrent()[0][2]
+			self.session.open(spankwireFilmScreen, Link, Name, Sort)
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
-			Name = "--- Search ---"
+			Name = self['liste'].getCurrent()[0][0]
 			self.suchString = callback
-			Link = urllib.quote(self.suchString).replace(' ', '+')
-			self.session.open(porndoeFilmScreen, Link, Name, False)
+			Link = '%s' % urllib.quote(self.suchString).replace(' ', '+')
+			self.session.open(spankwireFilmScreen, Link, Name, "")
 
-class porndoeFilmScreen(MPScreen, ThumbsHelper):
+	def getSuggestions(self, text, max_res):
+		url = "http://www.pornmd.com/autosuggest?key=%s" % urllib.quote_plus(text)
+		d = twAgentGetPage(url, agent=agent, headers=headers, timeout=5)
+		d.addCallback(self.gotSuggestions, max_res)
+		d.addErrback(self.gotSuggestions, max_res, err=True)
+		return d
+
+	def gotSuggestions(self, suggestions, max_res, err=False):
+		list = []
+		if not err and type(suggestions) in (str, buffer):
+			suggestions = json.loads(suggestions)
+			for item in suggestions:
+				li = item
+				list.append(str(li))
+				max_res -= 1
+				if not max_res: break
+		elif err:
+			printl(str(suggestions),self,'E')
+		return list
+
+class spankwireFilmScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name, Sort):
 		self.Link = Link
@@ -140,25 +171,16 @@ class porndoeFilmScreen(MPScreen, ThumbsHelper):
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
 			"prevBouquet" : self.keyPageDown,
-			"green" : self.keyPageNumber,
-			"yellow" : self.keySort
+			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("Porndoe.com")
+		self['title'] = Label("Spankwire.com")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
-		if self.Sort:
-			self['F3'] = Label(_("Sort"))
 
-		self['Page'] = Label(_("Page:"))
 		self.keyLocked = True
 		self.page = 1
-		if not self.Sort:
-			self.sort = ''
-			self.sorttext = ''
-		else:
-			self.sort = ''
-			self.sorttext = 'Date'
+		self.lastpage = 1
 
 		self.filmliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -171,28 +193,33 @@ class porndoeFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = 'https://www.porndoe.com/search?keywords=%s&page=%s' % (self.Link, str(self.page))
+			url = "https://www.spankwire.com/api/video/search.json?segment=Straight&limit=50&page=%s&query=%s" % (str(self.page), self.Link)
 		else:
-			if '?' in self.Link or '?' in self.sort:
-				delim = '&'
-			else:
-				delim = '?'
-			url = "%s%s%spage=%s" % (self.Link, self.sort, delim, str(self.page))
-		getPage(url, agent=agent, cookies=ck).addCallback(self.loadData).addErrback(self.dataError)
+			url = "https://www.spankwire.com/api/video/list.json?segment=Straight&limit=50&page=%s&sortby=%s&sort=Relevance&period=All_Time" % (str(self.page), self.Sort)
+			if self.Link:
+				url = url + "&category=%s" % self.Link
+		twAgentGetPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		self.getLastPage(data, 'class="paginator"(.*?)</ul>', '.*(?:page=|<span>)(\d+)(?:"|</span>)')
-		Movies = re.findall('data-title="(.*?)".*?href="(.*?)".*?data-src="(.*?)".*?class="item-stat right duration".*?txt">(.*?)</span.*?class="item-stat views".*?txt">(.*?)</span', data, re.S)
-		if Movies:
-			for (Title, Url, Image, Runtime, Views) in Movies:
-				Url = "https://www.porndoe.com" + Url
-				if Image.startswith('//'):
-					Image = 'http:' + Image
-				Runtime = Runtime.strip()
-				Views = Views.strip()
-				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
+		json_data = json.loads(data)
+		if json_data.has_key('pages'):
+			self.lastpage = int(json_data["pages"])
+		if self.lastpage > 1:
+			self['Page'].setText(_("Page:"))
+			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+		for node in json_data["items"]:
+			Views = str(node["viewed"]).replace(',','')
+			Title = str(node["title"])
+			Seconds = int(node["duration"])
+			m, s = divmod(Seconds, 60)
+			Runtime = "%02d:%02d" % (m, s)
+			Url = str(node["videoId"])
+			Image = str(node["poster2x"])
+			if Image.startswith('//'):
+				Image = 'http:' + Image
+			self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
 		if len(self.filmliste) == 0:
-			self.filmliste.append((_('No videos found!'), '', None, '', ''))
+			self.filmliste.append((_('No videos found!'), None, None, '', ''))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -205,44 +232,30 @@ class porndoeFilmScreen(MPScreen, ThumbsHelper):
 		runtime = self['liste'].getCurrent()[0][3]
 		views = self['liste'].getCurrent()[0][4]
 		self['name'].setText(title)
-		self['handlung'].setText("%s: %s\nRuntime: %s\nViews: %s" % (_("Sort order"),self.sorttext,runtime, views))
-		CoverHelper(self['coverArt']).getCover(pic, agent=agent, headers={'Referer':'https://www.porndoe.com'})
-
-	def keySort(self):
-		if self.keyLocked:
-			return
-		if not self.Sort:
-			return
-		rangelist = [['Date', ''], ['Views','?sort=views-down'], ['Likes','?sort=likes-down'], ['Duration','?sort=duration-down']]
-		self.session.openWithCallback(self.keySortAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
-
-	def keySortAction(self, result):
-		if result:
-			self.sort = result[1]
-			self.sorttext = result[0]
-			self.loadPage()
+		self['handlung'].setText("Runtime: %s\nViews: %s" % (runtime, views))
+		CoverHelper(self['coverArt']).getCover(pic)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		Link = self['liste'].getCurrent()[0][1]
-		self.keyLocked = True
-		getPage(Link, agent=agent, cookies=ck).addCallback(self.getVideoPage).addErrback(self.dataError)
+		if Link:
+			self.keyLocked = True
+			url = "https://www.spankwire.com/api/video/%s.json" % Link
+			twAgentGetPage(url, agent=agent).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('<source.*?src="(.*?)".*?type="video/mp4".*?(?:label|quality)="(\d+)', data, re.S)
-		if videoPage:
-			maxres = 0
-			for (vidurl, res) in videoPage:
-				if int(res) > maxres:
-					maxres = int(res)
-					url = vidurl
-			if url.startswith('//'):
-				url = 'http:' + url
-			url = url.replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B')
-			self.keyLocked = False
-			Title = self['liste'].getCurrent()[0][0]
-			headers = '&Referer=' + self['liste'].getCurrent()[0][1]
-			url = url + '#User-Agent='+agent+headers
-			mp_globals.player_agent = agent
-			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='porndoe')
+		json_data = json.loads(data)
+		url = None
+		if json_data["videos"].has_key('quality_720p'):
+			url = str(json_data["videos"]["quality_720p"])
+		elif json_data["videos"].has_key('quality_480p'):
+			url = str(json_data["videos"]["quality_480p"])
+		elif json_data["videos"].has_key('quality_240p'):
+			url = str(json_data["videos"]["quality_240p"])
+		elif json_data["videos"].has_key('quality_180p'):
+			url = str(json_data["videos"]["quality_180p"])
+		self.keyLocked = False
+		Title = self['liste'].getCurrent()[0][0]
+		if url:
+			self.session.open(SimplePlayer, [(Title, url.replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B'))], showPlaylist=False, ltype='spankwire')
