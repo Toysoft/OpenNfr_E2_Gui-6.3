@@ -39,9 +39,11 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import TwAgentHelper
-
-agent='Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0'
+import requests
+agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'
 default_cover = "file://%s/xpaja.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+ck = {}
+cookies = CookieJar()
 
 class xpajaGenreScreen(MPScreen):
 
@@ -73,12 +75,12 @@ class xpajaGenreScreen(MPScreen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		url = "https://www.xpaja.net/categories"
-		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
+		getPage(url, agent=agent, cookies=ck).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('.*?Categorías de  Vídeos</h1>(.*?)separador', data, re.S)
 		if parse:
-			Cats = re.findall('class="col-md-3.*?<a href="(/category/(.*?))">.*?<img src="(.*?)">', parse.group(1), re.S)
+			Cats = re.findall('class="col-md-3.*?<a href="(/category/(.*?))">.*?<img src="(.*?)"', parse.group(1), re.S)
 			if Cats:
 				for (Url, Title, Image) in Cats:
 					Url = "https://www.xpaja.net" + Url
@@ -101,7 +103,8 @@ class xpajaGenreScreen(MPScreen):
 
 	def showInfos(self):
 		Image = self['liste'].getCurrent()[0][2]
-		CoverHelper(self['coverArt']).getCover(Image)
+		requests.cookies.cookiejar_from_dict(ck, cookiejar=cookies)
+		CoverHelper(self['coverArt']).getCover(Image, agent=agent, cookieJar=cookies)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -163,14 +166,14 @@ class xpajaFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://www.xpaja.net/search/videos/%s/page/%s" % (self.Link, str(self.page))
+			url = "https://www.xpaja.net/search/videos/%s/page/%s/" % (self.Link, str(self.page))
 		else:
 			url = "%s/page/%s" % (self.Link, str(self.page))
 		self.tw_agent_hlp.getWebPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination">(.*?)</ul>', '.*[\/|>](\d+)[\"|<]')
-		Movies = re.findall('class="preload".*?thumb-post"\ssrc="(.*?)"\salt="(.*?)".*?amount">(.*?)</div.*?href="(.*?)".*?post-inf">(.*?)\sVisi', data, re.S)
+		Movies = re.findall('class="preload".*?thumb-post"\ssrc="(.*?)"\salt="(.*?)".*?amount">(.*?)</div.*?href="(.*?)".*?post-inf">(.*?)\sVis', data, re.S)
 		if Movies:
 			for (Image, Title, Runtime, Url, Views) in Movies:
 				Url = "https://www.xpaja.net/" + Url
@@ -195,7 +198,8 @@ class xpajaFilmScreen(MPScreen, ThumbsHelper):
 		views = self['liste'].getCurrent()[0][4]
 		self['name'].setText(title)
 		self['handlung'].setText("Runtime: %s\nViews: %s" % (runtime, views))
-		CoverHelper(self['coverArt']).getCover(pic)
+		requests.cookies.cookiejar_from_dict(ck, cookiejar=cookies)
+		CoverHelper(self['coverArt']).getCover(pic, agent=agent, cookieJar=cookies, headers={'Referer':self.Link})
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -204,7 +208,7 @@ class xpajaFilmScreen(MPScreen, ThumbsHelper):
 		if Link == None:
 			return
 		self.keyLocked = True
-		getPage(Link).addCallback(self.getVideoPage).addErrback(self.dataError)
+		getPage(Link, agent=agent, cookies=ck).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
 		videoPage = re.findall("<source src=\"(.*?)\" type='video/mp4'", data, re.S)

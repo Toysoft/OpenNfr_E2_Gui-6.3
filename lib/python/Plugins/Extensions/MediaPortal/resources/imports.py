@@ -20,8 +20,6 @@ from zope.interface import implements
 
 from twagenthelper import TwAgentHelper, twAgentGetPage
 from tw_util import downloadPage, getPage
-from sepg.mp_epg import SimpleEPG, mpepg, mutex
-from sepg import log
 
 from Components.ActionMap import NumberActionMap, ActionMap, HelpableActionMap
 from Components.AVSwitch import AVSwitch
@@ -121,11 +119,6 @@ class InsensitiveDict(dict):
 	def __getitem__(self, key):
 		key = InsensitiveKey(key)
 		return super(InsensitiveDict, self).__getitem__(key)
-
-def r_getPage(url, *args, **kwargs):
-	def retry(err):
-		return getPage(url.replace('https:','http:'), *args, **kwargs)
-	return twAgentGetPage(url, *args, **kwargs).addErrback(retry)
 
 import mp_globals
 

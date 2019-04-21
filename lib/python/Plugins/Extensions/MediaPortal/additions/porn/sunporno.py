@@ -66,8 +66,8 @@ class sunpornoGenreScreen(MPScreen):
 		}, -1)
 
 		self.scope = 0
-		self.scopeText = ['Straight', 'Gay', 'Transgender']
-		self.scopeval = ['', 'gay/', 'shemale/']
+		self.scopeText = ['Straight', 'Shemale', 'Gay']
+		self.scopeval = ['', 'shemale/', 'gay/']
 
 		self['title'] = Label("SunPorno.com")
 		self['ContentTitle'] = Label("Genre:")

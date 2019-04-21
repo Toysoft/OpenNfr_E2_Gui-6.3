@@ -59,36 +59,48 @@ class spankwireGenreScreen(MPScreen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"yellow" : self.keyScope
 		}, -1)
+
+		self.scope = 0
+		self.scopeText = ['Straight', 'Shemale', 'Gay']
+		self.scopeval = ['Straight', 'Tranny', 'Gay']
 
 		self['title'] = Label("Spankwire.com")
 		self['ContentTitle'] = Label("Genre:")
+		self['F3'] = Label(self.scopeText[self.scope])
 
 		self.keyLocked = True
 		self.suchString = ''
 
 		self.genreliste = []
+		self.dupe = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 		self.page = 1
-		self.lastpage = 5
+		self.lastpage = 16
 
 		self.onLayoutFinish.append(self.layoutFinished)
 
 	def layoutFinished(self):
 		self.keyLocked = True
+		self['F3'].setText(self.scopeText[self.scope])
 		self['name'].setText(_('Please wait...'))
-		url = "https://www.spankwire.com/api/categories/list.json?page=%s&segmentId=0&sort=recent&limit=100" % str(self.page)
+		url = "https://www.spankwire.com/api/categories/list.json?page=%s&segmentId=%s&sort=recent&limit=100" % (str(self.page), str(self.scope))
 		twAgentGetPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		json_data = json.loads(data)
 		for item in json_data["items"]:
+			count = int(item["videosNumber"])
 			title = str(item["name"])
 			id = str(item["id"])
 			image = str(item["image"])
-			self.genreliste.append((title, id, "recent", image))
+			if not title in self.dupe:
+				if count > 250:
+					self.genreliste.append((title, id, "recent", image))
+					self.dupe.append((title))
 		if self.page == self.lastpage:
 			# remove duplicates
 			self.genreliste = list(set(self.genreliste))
@@ -122,14 +134,28 @@ class spankwireGenreScreen(MPScreen):
 		else:
 			Link = self['liste'].getCurrent()[0][1]
 			Sort = self['liste'].getCurrent()[0][2]
-			self.session.open(spankwireFilmScreen, Link, Name, Sort)
+			self.session.open(spankwireFilmScreen, Link, Name, Sort, Scope=self.scopeval[self.scope])
+
+	def keyScope(self):
+		if self.keyLocked:
+			return
+		self.genreliste = []
+		self.dupe = []
+		if self.scope == 0:
+			self.scope = 1
+		elif self.scope == 1:
+			self.scope = 2
+		else:
+			self.scope = 0
+		self.page = 1
+		self.layoutFinished()
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = self['liste'].getCurrent()[0][0]
 			self.suchString = callback
 			Link = '%s' % urllib.quote(self.suchString).replace(' ', '+')
-			self.session.open(spankwireFilmScreen, Link, Name, "")
+			self.session.open(spankwireFilmScreen, Link, Name, "", Scope=self.scopeval[self.scope])
 
 	def getSuggestions(self, text, max_res):
 		url = "http://www.pornmd.com/autosuggest?key=%s" % urllib.quote_plus(text)
@@ -153,10 +179,11 @@ class spankwireGenreScreen(MPScreen):
 
 class spankwireFilmScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name, Sort):
+	def __init__(self, session, Link, Name, Sort, Scope='Straight'):
 		self.Link = Link
 		self.Name = Name
 		self.Sort = Sort
+		self.Scope = Scope
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -193,9 +220,9 @@ class spankwireFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://www.spankwire.com/api/video/search.json?segment=Straight&limit=50&page=%s&query=%s" % (str(self.page), self.Link)
+			url = "https://www.spankwire.com/api/video/search.json?limit=50&page=%s&query=%s" % (str(self.page), self.Link)
 		else:
-			url = "https://www.spankwire.com/api/video/list.json?segment=Straight&limit=50&page=%s&sortby=%s&sort=Relevance&period=All_Time" % (str(self.page), self.Sort)
+			url = "https://www.spankwire.com/api/video/list.json?segment=%s&limit=50&page=%s&sortby=%s&sort=Relevance&period=All_Time" % (self.Scope, str(self.page), self.Sort)
 			if self.Link:
 				url = url + "&category=%s" % self.Link
 		twAgentGetPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)

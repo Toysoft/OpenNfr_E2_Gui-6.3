@@ -723,11 +723,7 @@ class SimplePlaylist(MPScreen):
 		else:
 			self['title'].setText("%s Playlist-%02d" % (self.plType, config_mp.mediaportal.sp_pl_number.value))
 
-		from sepg.mp_epg import mpepg
-		if self.playerMode == 'IPTV' and not mpepg.isImporting:
-			self.ml.setList(map(self.simpleListTVGListEntry, self.playList))
-		else:
-			self.ml.setList(map(self.playListEntry, self.playList))
+		self.ml.setList(map(self.playListEntry, self.playList))
 
 		if self.event:
 			self.event.addCallback(self.updateStatus)
@@ -1490,7 +1486,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		else:
 			callback(url, *args, **kwargs)
 
-	def _initStream(self, title, url, suburi=None, album='', artist='', imgurl='', buffering=False, proxy=None, epg_id=None):
+	def _initStream(self, title, url, suburi=None, album='', artist='', imgurl='', buffering=False, proxy=None):
 		self.hasGoogleCoverArt = self.hasEmbeddedCoverArt = False
 
 		if not mp_globals.yt_download_runs:
@@ -1539,8 +1535,6 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 		self.stopPlayPositionTracker()
 
-		if epg_id and not url.startswith('#SERVICE'):
-			url = "#SERVICE 4097:0:0:%s:1955:0:0:0:0:0:%s:%s" % (epg_id, url.replace(':','%3a'), video_title)
 		self._playing = False
 		self.isTSVideo = False
 		def playService(url):
@@ -1810,15 +1804,12 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		entry = self.playList[self.playIdx]
 		title = entry[0]
 		url = entry[1]
-		epg_id = None
 		l = len(entry)
 		if l >= 3:
 			iurl = entry[2]
-			if (l > 3):
-				epg_id = entry[3][2] if entry[3] and ('tvg-id' in entry[3]) and entry[3][2] and not entry[3][2].endswith('.ink') else None
 		else:
 			iurl = ''
-		self.playStream(title, url, imgurl=iurl, epg_id=epg_id)
+		self.playStream(title, url, imgurl=iurl)
 
 	def getVideo2(self):
 		if self.playLen > 0:
@@ -1856,9 +1847,9 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self.pl_event.genEvent()
 
 			if self.plType == 'local':
-				self.session.openWithCallback(self.cb_Playlist, pl_class, self.playList, self.playIdx, self.playMode, listTitle=self.listTitle, plType=self.plType, title_inr=self.title_inr, queue=self.playlistQ, mp_event=self.pl_event, listEntryPar=self.listEntryPar, playFunc=self.playSelectedVideo,playerMode=self.playerMode)
+				self.session.openWithCallback(self.cb_Playlist, pl_class, self.playList, self.playIdx, self.playMode, listTitle=self.listTitle, plType=self.plType, title_inr=self.title_inr, queue=self.playlistQ, mp_event=self.pl_event, listEntryPar=self.listEntryPar, playFunc=self.playSelectedVideo, playerMode=self.playerMode)
 			else:
-				self.session.openWithCallback(self.cb_Playlist, pl_class, self.playList2, self.playIdx, self.playMode, listTitle=None, plType=self.plType, title_inr=0, queue=self.playlistQ, mp_event=self.pl_event, listEntryPar=self.listEntryPar,playFunc=self.playSelectedVideo,playerMode=self.playerMode)
+				self.session.openWithCallback(self.cb_Playlist, pl_class, self.playList2, self.playIdx, self.playMode, listTitle=None, plType=self.plType, title_inr=0, queue=self.playlistQ, mp_event=self.pl_event, listEntryPar=self.listEntryPar, playFunc=self.playSelectedVideo, playerMode=self.playerMode)
 		elif not self.playLen:
 			self.session.open(MessageBoxExt, _("No entries in the playlist available!"), MessageBoxExt.TYPE_INFO, timeout=5)
 

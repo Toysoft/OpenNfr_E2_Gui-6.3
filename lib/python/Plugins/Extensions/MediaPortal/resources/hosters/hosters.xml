@@ -14,7 +14,6 @@
 <hoster>turbobit</hoster><regex>turbobit.net</regex>
 <hoster>vimeo</hoster><regex>vimeo.com</regex>
 <hoster>4shared</hoster><regex>4shared.com</regex>
-<hoster>uptobox</hoster><regex>uptobox.com</regex>
 <hoster>filerio</hoster><regex>filerio.com</regex>
 <hoster>filer.net</hoster><regex>filer.net</regex>
 <hoster>filefactory</hoster><regex>filefactory.com</regex>
@@ -61,3 +60,4 @@
 <hoster>streamcherry</hoster><regex>streamcherry.com</regex>
 <hoster>vidup.tv</hoster><regex>vidup.tv</regex>
 <hoster>clipwatching</hoster><regex>clipwatching.com</regex>
+<hoster>smartshare</hoster><regex>smartshare.tv</regex>

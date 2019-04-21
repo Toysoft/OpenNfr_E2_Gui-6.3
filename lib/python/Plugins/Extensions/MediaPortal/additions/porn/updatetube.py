@@ -138,9 +138,9 @@ class updatetubeGenreScreen(MPScreen):
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
-			self.suchString = urllib.quote(callback).replace(' ', '+')
 			Name = "--- Search ---"
-			Link = 'http://%s/search/?q=%s' % (self.baseurl, self.suchString)
+			self.suchString = callback
+			Link = '%s' % urllib.quote(self.suchString).replace(' ', '+')
 			self.session.open(updatetubeFilmScreen, Link, Name, self.portal, self.baseurl)
 
 class updatetubeFilmScreen(MPScreen, ThumbsHelper):
@@ -200,9 +200,8 @@ class updatetubeFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		cat = self.Link
-		search = re.search('/search/(.*)', cat, re.S)
-		if search:
-			url = 'http://%s/search/%s/%s' % (self.baseurl, str(self.page), str(search.group(1)))
+		if re.match(".*?Search", self.Name):
+			url = 'http://%s/search/%s/%s' % (self.baseurl, self.Link, str(self.page))
 		elif self.page == 1:
 			url = "%s" % (self.Link)
 		else:

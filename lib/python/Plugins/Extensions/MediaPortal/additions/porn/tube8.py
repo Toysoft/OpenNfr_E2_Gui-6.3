@@ -63,8 +63,13 @@ class tube8GenreScreen(MPScreen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"yellow" : self.keyScope
 		}, -1)
+
+		self.scope = 0
+		self.scopeText = ['Straight', 'Shemale', 'Gay']
+		self.scopeval = ['', 'shemale/', 'gay/']
 
 		self['title'] = Label("Tube8.com")
 		self['ContentTitle'] = Label("Genre:")
@@ -79,26 +84,27 @@ class tube8GenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		self.url = "http://www.tube8.com/categories.html"
+		self['F3'].setText(self.scopeText[self.scope])
+		self.url = "http://www.tube8.com/%scategories.html" % self.scopeval[self.scope]
 		getPage(self.url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('id="categories-subnav" class="gridList"(.*?)</div>', data,re.S)
-		Cats = re.findall('a\shref="(http[s]?://www.tube8.com/cat/.*?)">.*?class="category-thumb">.*?data-thumb="(.*?)".*?class="category-name">(.*?)</span>', parse.group(1), re.S)
+		Cats = re.findall('a\shref="(http[s]?://www.tube8.com/%scat/.*?)">.*?class="category-thumb">.*?data-thumb="(.*?)".*?class="category-name">(.*?)</span>' % self.scopeval[self.scope], parse.group(1), re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
 				Url = Url + "page/"
 				self.filmliste.append((Title, Url, Image))
 			self.filmliste.sort()
-			self.filmliste.insert(0, ("Longest", "http://www.tube8.com/longest/page/", default_cover))
-			self.filmliste.insert(0, ("Most Voted", "http://www.tube8.com/most-voted/page/", default_cover))
-			self.filmliste.insert(0, ("Most Discussed", "http://www.tube8.com/most-discussed/page/", default_cover))
-			self.filmliste.insert(0, ("Most Favorited", "http://www.tube8.com/most-favorited/page/", default_cover))
-			self.filmliste.insert(0, ("Top Rated", "http://www.tube8.com/top/page/", default_cover))
-			self.filmliste.insert(0, ("Most Popular", "http://www.tube8.com/hottest/page/", default_cover))
-			self.filmliste.insert(0, ("Most Viewed", "http://www.tube8.com/most-viewed/page/", default_cover))
-			self.filmliste.insert(0, ("Featured", "http://www.tube8.com/latest/page/", default_cover))
-			self.filmliste.insert(0, ("Newest", "http://www.tube8.com/newest/page/", default_cover))
+			self.filmliste.insert(0, ("Longest", "http://www.tube8.com/%slongest/page/" % self.scopeval[self.scope], default_cover))
+			self.filmliste.insert(0, ("Most Voted", "http://www.tube8.com/%smost-voted/page/" % self.scopeval[self.scope], default_cover))
+			self.filmliste.insert(0, ("Most Discussed", "http://www.tube8.com/%smost-discussed/page/" % self.scopeval[self.scope], default_cover))
+			self.filmliste.insert(0, ("Most Favorited", "http://www.tube8.com/%smost-favorited/page/" % self.scopeval[self.scope], default_cover))
+			self.filmliste.insert(0, ("Top Rated", "http://www.tube8.com/%stop/page/" % self.scopeval[self.scope], default_cover))
+			self.filmliste.insert(0, ("Most Popular", "http://www.tube8.com/%shottest/page/" % self.scopeval[self.scope], default_cover))
+			self.filmliste.insert(0, ("Most Viewed", "http://www.tube8.com/%smost-viewed/page/" % self.scopeval[self.scope], default_cover))
+			self.filmliste.insert(0, ("Featured", "http://www.tube8.com/%slatest/page/" % self.scopeval[self.scope], default_cover))
+			self.filmliste.insert(0, ("Newest", "http://www.tube8.com/%snewest/page/" % self.scopeval[self.scope], default_cover))
 			self.filmliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 			self.ml.moveToIndex(0)
@@ -119,15 +125,31 @@ class tube8GenreScreen(MPScreen):
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(tube8FilmScreen, Link, Name)
 
+	def keyScope(self):
+		if self.keyLocked:
+			return
+		self.filmliste = []
+		if self.scope == 0:
+			self.scope = 1
+		elif self.scope == 1:
+			self.scope = 2
+		else:
+			self.scope = 0
+		self.layoutFinished()
+
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
 			Link = urllib.quote(self.suchString).replace(' ', '%20')
-			self.session.open(tube8FilmScreen, Link, Name)
+			self.session.open(tube8FilmScreen, Link, Name, Scope=self.scopeval[self.scope][:-1])
 
 	def getSuggestions(self, text, max_res):
-		url = "https://bnzmzkcxit-dsn.algolia.net/1/indexes/popular_queries_straight_de/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.0&x-algolia-application-id=BNZMZKCXIT&x-algolia-api-key=3624454cb0b8c87da7f6100dde6ce062"
+		if self.scopeval[self.scope][:-1] == '':
+			scope = 'straight'
+		else:
+			scope = self.scopeval[self.scope][:-1]
+		url = "https://bnzmzkcxit-dsn.algolia.net/1/indexes/popular_queries_" + scope + "_de/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.0&x-algolia-application-id=BNZMZKCXIT&x-algolia-api-key=3624454cb0b8c87da7f6100dde6ce062"
 		postdata = {'params':'query='+text}
 		postdata = json.dumps(postdata)
 		d = twAgentGetPage(url, method='POST', postdata=postdata, agent=agent, headers=json_headers, timeout=5)
@@ -150,9 +172,13 @@ class tube8GenreScreen(MPScreen):
 
 class tube8FilmScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name):
+	def __init__(self, session, Link, Name, Scope=''):
 		self.Link = Link
 		self.Name = Name
+		if Scope == '':
+			self.Scope = 'straight'
+		else:
+			self.Scope = Scope
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -202,7 +228,7 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 		self['page'].setText(str(self.page))
 		if re.match(".*Search", self.Name):
 			url = "https://bnzmzkcxit-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.0&x-algolia-application-id=BNZMZKCXIT&x-algolia-api-key=3624454cb0b8c87da7f6100dde6ce062"
-			postdata = '{"requests":[{"indexName":"banned_words","params":"query=' + self.Link + '&optionalWords=%5B%22%22%5D&queryType=prefixNone&typoTolerance=false&optionalFacetFilters=%5B%22%22%5D&getRankingInfo=1&hitsPerPage=50"},{"indexName":"' + self.sortsearch + '","params":"query=' + self.Link + '&optionalWords=%5B%22%22%5D&facetFilters=%5B%22attributes.orientation%3Astraight%22' + self.filtersearch + '%5D&facets=*&page=' + str(self.page-1) +'"}]}'
+			postdata = '{"requests":[{"indexName":"banned_words","params":"query=' + self.Link + '&optionalWords=%5B%22%22%5D&queryType=prefixNone&typoTolerance=false&optionalFacetFilters=%5B%22%22%5D&getRankingInfo=1&hitsPerPage=50"},{"indexName":"' + self.sortsearch + '","params":"query=' + self.Link + '&optionalWords=%5B%22%22%5D&facetFilters=%5B%22attributes.orientation%3A' + self.Scope + '%22' + self.filtersearch + '%5D&facets=*&page=' + str(self.page-1) +'"}]}'
 			getPage(url, method='POST', agent=agent, postdata=postdata, headers={'Content-Type': 'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 		else:
 			if self.page == 1:

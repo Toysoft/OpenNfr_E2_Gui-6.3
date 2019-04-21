@@ -70,17 +70,32 @@ class cam4GenreScreen(MPScreen):
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['liste'] = self.ml
 
-		self.onLayoutFinish.append(self.genreData)
+		self.onLayoutFinish.append(self.layoutFinished)
 
-	def genreData(self):
-		self.genreliste.append(("Trending", ""))
-		self.genreliste.append(("Couple", ""))
-		self.genreliste.append(("USA", "&country=us"))
-		self.genreliste.append(("Germany", "&country=de"))
-		self.genreliste.append(("Brazil", "&country=br"))
-		self.genreliste.append(("Italy", "&country=it"))
-		self.genreliste.append(("Spain", "&country=es"))
-		self.genreliste.append(("France", "&country=fr"))
+	def layoutFinished(self):
+		if config_mp.mediaportal.cam4_filter.value == "all":
+			filter = ""
+		else:
+			filter = config_mp.mediaportal.cam4_filter.value
+		url = BASEURL + 'tags?json=true&index=0&count=100&category=' + filter
+		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
+
+	def genreData(self, data):
+		self.genreliste = []
+		json_data = json.loads(data)
+		for item in json_data:
+			Title = str(item["name"])
+			Url = str(item["name"])
+			self.genreliste.append(("#"+Title, Url))
+		self.genreliste.sort()
+		self.genreliste.insert(0, ("France", "&country=fr"))
+		self.genreliste.insert(0, ("Spain", "&country=es"))
+		self.genreliste.insert(0, ("Italy", "&country=it"))
+		self.genreliste.insert(0, ("Brazil", "&country=br"))
+		self.genreliste.insert(0, ("Germany", "&country=de"))
+		self.genreliste.insert(0, ("USA", "&country=us"))
+		self.genreliste.insert(0, ("Couple", ""))
+		self.genreliste.insert(0, ("Trending", ""))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
 
@@ -96,6 +111,9 @@ class cam4GenreScreen(MPScreen):
 			self.filter = "female"
 			config_mp.mediaportal.cam4_filter.value = "female"
 		elif self.filter == "female":
+			self.filter = "couple"
+			config_mp.mediaportal.cam4_filter.value = "couple"
+		elif self.filter == "couple":
 			self.filter = "male"
 			config_mp.mediaportal.cam4_filter.value = "male"
 		elif self.filter == "male":
@@ -104,10 +122,14 @@ class cam4GenreScreen(MPScreen):
 		elif self.filter == "shemale":
 			self.filter = "all"
 			config_mp.mediaportal.cam4_filter.value = "all"
+		else:
+			self.filter = "all"
+			config_mp.mediaportal.cam4_filter.value = "all"
 
 		config_mp.mediaportal.cam4_filter.save()
 		configfile_mp.save()
 		self['F3'].setText(self.filter)
+		self.layoutFinished()
 
 class cam4FilmScreen(MPScreen, ThumbsHelper):
 
@@ -162,7 +184,9 @@ class cam4FilmScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
-		if self.Name == "Couple":
+		if self.Name[:1] == "#":
+			url = BASEURL + "directoryCams?directoryJson=true&online=true&url=true&gender=%s&page=%s&showTag=%s" % (self.filter, self.page, self.Link)
+		elif self.Name == "Couple":
 			url = BASEURL + "directoryCams?directoryJson=true&online=true&url=true&broadcastType=male_female_group&page=%s" % self.page
 		else:
 			url = BASEURL + "directoryCams?directoryJson=true&online=true&url=true&gender=%s%s&page=%s" % (self.filter, self.Link, self.page)
@@ -234,7 +258,6 @@ class cam4FilmScreen(MPScreen, ThumbsHelper):
 			self.session.open(MessageBoxExt, _("Cam is currently offline."), MessageBoxExt.TYPE_INFO)
 
 	def loadplaylist(self, data, baseurl):
-		print baseurl
 		self.bandwith_list = []
 		match_sec_m3u8=re.findall('BANDWIDTH=(\d+).*?\n(.*?m3u8)', data, re.S)
 		max = 0

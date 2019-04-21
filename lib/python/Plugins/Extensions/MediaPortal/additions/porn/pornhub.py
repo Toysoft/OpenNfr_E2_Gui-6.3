@@ -903,6 +903,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		self.favkey = ""
 		self.favhash = ""
 		self.retry = False
+		self.feedpageurl = None
 
 		self.infoTimer = eTimer()
 		try:
@@ -923,7 +924,10 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		if re.match(".*Feed",self.Name):
-			url = self.Link + str(self.page)
+			if self.feedpageurl:
+				url = self.feedpageurl + str(self.page)
+			else:
+				url = self.Link + str(self.page)
 		elif re.match(".*\/playlist\/",self.Link):
 			self.lastpage = 1
 			url = "%s" % self.Link
@@ -1010,11 +1014,14 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		self.showInfos()
 
 	def loadFeedData(self, data):
+		pageurl = re.findall('onclick="loadMoreDataStream\(\'(/.*?)\',', data, re.S)
+		if pageurl:
+			self.feedpageurl = base_url + pageurl[0].replace('&amp;','&') + "&page="
 		self.filmliste = []
 		parse = re.findall('feedItemSection"(.*?)</section', data, re.S)
 		if parse:
 			for each in parse:
-				if not ('class="price"' in each or 'class="premiumIcon' in each):
+				if not ('class="price"' in each or 'class="premiumIcon' in each or 'class="privateOverlay"' in each):
 					Movies = re.findall('class="(?:\s{0,1}js-pop |)videoblock.*?<a\shref="(.*?)".*?title="(.*?)".*?data-(?:mediumthumb|image)="(.*?)".*?class="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)</var>', each, re.S)
 					if Movies:
 						for (Url, Title, Image, Runtime, Views, Added) in Movies:
@@ -1045,12 +1052,20 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		added = self['liste'].getCurrent()[0][5]
 		self['handlung'].setText("Runtime: %s\nViews: %s\nAdded: %s" % (runtime, views, added))
 		self.url = self['liste'].getCurrent()[0][1]
+		id = re.search('\/(\d+)\/(?:original|thumbs_)', pic, re.S)
+		if id:
+			self.id = id.group(1)
+		else:
+			self.id = ''
+		if not self.id == '':
+			self['F3'].setText(_("Show Related"))
+		else:
+			self['F3'].setText("")
 		if self.url:
 			self.lock = True
 			self['F1'].setText('')
-			self['F3'].setText('')
 			self['F4'].setText('')
-			self.infoTimer.start(2000, True)
+			self.infoTimer.start(4000, True)
 
 	def getInfos2(self):
 		twAgentGetPage(self.url, agent=phAgent, cookieJar=ph_cookies, headers={'Referer':base_url}).addCallback(self.showInfos2).addErrback(self.dataError)
@@ -1066,7 +1081,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		favparse = re.findall('favouriteUrl.*?itemId":\"{0,1}(\d+)\"{0,1},.*?isFavourite":(\d),.*?token=(.*?)",', data, re.S)
 		if favparse:
 			self.favtoken = str(favparse[0][2])
-			self.id = str(favparse[0][0])
+			#self.id = str(favparse[0][0])
 			self.favourited = str(favparse[0][1])
 		userinfo = re.findall('From:.*?data-type="(.*?)".*?bolded">(.*?)</', data, re.S)
 		if userinfo:
@@ -1102,10 +1117,6 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		else:
 			favmsg = ""
 			self['F4'].setText("")
-		if not self.id == '':
-			self['F3'].setText(_("Show Related"))
-		else:
-			self['F3'].setText("")
 		self.lock = False
 		self['handlung'].setText("Runtime: %s\nViews: %s\nAdded: %s%s%s" % (runtime, views, added, submsg, favmsg))
 
@@ -1142,8 +1153,6 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 
 	def keyRelated(self):
 		if self.keyLocked:
-			return
-		if self.lock:
 			return
 		if self.id == '':
 			return

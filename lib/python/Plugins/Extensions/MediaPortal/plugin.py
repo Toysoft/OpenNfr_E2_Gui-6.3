@@ -136,20 +136,6 @@ try:
 except:
 	MediaInfoPresent = False
 
-def lastMACbyte():
-	try:
-		return int(open('/sys/class/net/eth0/address').readline().strip()[-2:], 16)
-	except:
-		return 256
-
-def calcDefaultStarttime():
-	try:
-		# Use the last MAC byte as time offset (half-minute intervals)
-		offset = lastMACbyte() * 30
-	except:
-		offset = 7680
-	return (5 * 60 * 60) + offset
-
 def downloadPage(url, path):
 	agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.82 Safari/537.36"
 	return twDownloadPage(url, path, timeout=30, agent=agent)
@@ -182,19 +168,9 @@ config.mediaportal = ConfigSubsection()
 # Fake entry fuer die Kategorien
 config_mp.mediaportal.fake_entry = NoSave(ConfigNothing())
 
-# EPG Import
-config_mp.mediaportal.epg_enabled = ConfigOnOff(default = False)
-config_mp.mediaportal.epg_runboot = ConfigOnOff(default = False)
-config_mp.mediaportal.epg_wakeupsleep = ConfigOnOff(default = False)
-config_mp.mediaportal.epg_wakeup = ConfigClock(default = calcDefaultStarttime())
-config_mp.mediaportal.epg_deepstandby = ConfigSelectionExt(default = "skip", choices = [
-		("wakeup", _("Wake up and import")),
-		("skip", _("Skip the import"))
-		])
-
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2019040601"))
-config.mediaportal.version = NoSave(ConfigText(default="2019040601"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2019042101"))
+config.mediaportal.version = NoSave(ConfigText(default="2019042101"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 
@@ -318,9 +294,7 @@ config_mp.mediaportal.sp_use_hlsp_with_proxy = ConfigSelectionExt(default = "no"
 
 # premiumize.me
 config_mp.mediaportal.premiumize_use = ConfigYesNo(default = False)
-config_mp.mediaportal.premiumize_username = ConfigText(default="user!", fixed_size=False)
 config_mp.mediaportal.premiumize_password = ConfigPassword(default="pass!", fixed_size=False)
-config_mp.mediaportal.premiumize_proxy_config_url = ConfigText(default="", fixed_size=False)
 
 # real-debrid.com
 config_mp.mediaportal.realdebrid_use = ConfigYesNo(default = False)
@@ -367,6 +341,10 @@ try:
 	from resources.MPEuronewsUriResolver import MPEuronewsUriResolver
 	MPEuronewsUriResolver.instance = MPEuronewsUriResolver()
 	eUriResolver.addResolver(MPEuronewsUriResolver.instance)
+
+	from resources.MPLivestreamcomUriResolver import MPLivestreamcomUriResolver
+	MPLivestreamcomUriResolver.instance = MPLivestreamcomUriResolver()
+	eUriResolver.addResolver(MPLivestreamcomUriResolver.instance)
 
 except ImportError:
 	pass
@@ -494,45 +472,23 @@ class CheckPremiumize:
 
 	def premiumize(self):
 		if config_mp.mediaportal.premiumize_use.value:
-			self.puser = config_mp.mediaportal.premiumize_username.value
-			self.ppass = config_mp.mediaportal.premiumize_password.value
-			url = "https://api.premiumize.me/pm-api/v1.php?method=accountstatus&params[login]=%s&params[pass]=%s" % (self.puser, self.ppass)
-			r_getPage(url, timeout=15).addCallback(self.premiumizeData).addErrback(self.dataError)
+			papikey = config_mp.mediaportal.premiumize_password.value
+			url = "https://www.premiumize.me/api/account/info?apikey=%s" % papikey
+			twAgentGetPage(url, method='POST', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.premiumizeData).addErrback(self.dataError)
 		else:
 			self.session.open(MessageBoxExt, _("premiumize.me is not activated."), MessageBoxExt.TYPE_ERROR)
 
 	def premiumizeData(self, data):
-		if re.search('status":200', data):
-			infos = re.findall('"account_name":"(.*?)","type":"(.*?)","expires":(.*?),".*?trafficleft_gigabytes":(.*?)}', data, re.S|re.I)
-			if infos:
-				(a_name, a_type, a_expires, a_left) = infos[0]
-				deadline = datetime.datetime.fromtimestamp(int(a_expires)).strftime('%d-%m-%Y')
-				pmsg = "premiumize.me\n\nUser:\t%s\nType:\t%s\nExpires:\t%s\nPoints left:\t%4.2f" % (a_name, a_type, deadline, float(a_left))
-				self.session.open(MessageBoxExt, pmsg , MessageBoxExt.TYPE_INFO)
-			else:
-				self.session.open(MessageBoxExt, _("premiumize.me failed."), MessageBoxExt.TYPE_ERROR)
-		elif re.search('status":401', data):
-			self.session.open(MessageBoxExt, _("premiumize: Login failed."), MessageBoxExt.TYPE_INFO, timeout=3)
-
-	def premiumizeProxyConfig(self, msgbox=True):
-		return
-		url = config_mp.mediaportal.premiumize_proxy_config_url.value
-		if re.search('^https://.*?\.pac', url):
-			r_getPage(url, method="GET", timeout=15).addCallback(self.premiumizeProxyData, msgbox).addErrback(self.dataError)
-		else:
-			self.premiumize()
-
-	def premiumizeProxyData(self, data, msgbox):
-		m = re.search('PROXY (.*?):(\d{2}); PROXY', data)
-		if m:
-			mp_globals.premium_yt_proxy_host = m.group(1)
-			mp_globals.premium_yt_proxy_port = int(m.group(2))
-			print 'YT-Proxy:',m.group(1), ':', mp_globals.premium_yt_proxy_port
-			if msgbox:
-				self.session.open(MessageBoxExt, _("premiumize: YT ProxyHost found."), MessageBoxExt.TYPE_INFO)
-		else:
-			if msgbox:
-				self.session.open(MessageBoxExt, _("premiumize: YT ProxyHost not found!"), MessageBoxExt.TYPE_ERROR)
+		json_data = json.loads(data)
+		if json_data["status"] == "success":
+			customer_id = str(json_data["customer_id"])
+			premium_until = str(json_data["premium_until"])
+			limit_used = str(float(json_data["limit_used"]) * 100) + "%"
+			deadline = datetime.datetime.fromtimestamp(int(premium_until)).strftime('%Y-%m-%d')
+			pmsg = "premiumize.me\n\nUser:\t%s\nExpires:\t%s\nFair use balance:\t%s" % (customer_id, deadline, limit_used)
+			self.session.open(MessageBoxExt, pmsg , MessageBoxExt.TYPE_INFO)
+		elif json_data["status"] == "error":
+			self.session.open(MessageBoxExt, "premiumize: %s" % str(json_data["message"]), MessageBoxExt.TYPE_INFO, timeout=3)
 
 	def dataError(self, error):
 		printl(error,self,"E")
@@ -682,23 +638,12 @@ class MPSetup(Screen, CheckPremiumize, ConfigListScreenExt):
 			self.configlist.append(getConfigListEntry(_("HTTP-Proxy Port:"), config_mp.mediaportal.yt_proxy_port, False))
 			self.configlist.append(getConfigListEntry(_("HTTP-Proxy username:"), config_mp.mediaportal.yt_proxy_username, False))
 			self.configlist.append(getConfigListEntry(_("HTTP-Proxy password:"), config_mp.mediaportal.yt_proxy_password, False))
-		#self._spacer()
-		#self.configlist.append(getConfigListEntry("MP-EPG-IMPORTER", ))
-		#self._separator()
-		#self.configlist.append(getConfigListEntry(_("Enable import:"), config_mp.mediaportal.epg_enabled, True))
-		#if config_mp.mediaportal.epg_enabled.value:
-		#	self.configlist.append(getConfigListEntry(_("Automatic start time:"), config_mp.mediaportal.epg_wakeup, False))
-		#	self.configlist.append(getConfigListEntry(_("Standby at startup:"), config_mp.mediaportal.epg_wakeupsleep, False))
-		#	self.configlist.append(getConfigListEntry(_("When in deep standby:"), config_mp.mediaportal.epg_deepstandby, False))
-		#	self.configlist.append(getConfigListEntry(_("Start import after booting up:"), config_mp.mediaportal.epg_runboot, False))
 		self._spacer()
 		self.configlist.append(getConfigListEntry("PREMIUMIZE.ME", ))
 		self._separator()
 		self.configlist.append(getConfigListEntry(_("Activate premiumize.me:"), config_mp.mediaportal.premiumize_use, True))
 		if config_mp.mediaportal.premiumize_use.value:
-			self.configlist.append(getConfigListEntry(_("Customer ID:"), config_mp.mediaportal.premiumize_username, False))
-			self.configlist.append(getConfigListEntry(_("PIN:"), config_mp.mediaportal.premiumize_password, False))
-			#self.configlist.append(getConfigListEntry(_("Autom. Proxy-Config.-URL:"), config_mp.mediaportal.premiumize_proxy_config_url, False))
+			self.configlist.append(getConfigListEntry(_("API-Key:"), config_mp.mediaportal.premiumize_password, False))
 		self._spacer()
 		self.configlist.append(getConfigListEntry("REAL-DEBRID.COM", ))
 		self._separator()
@@ -3493,10 +3438,6 @@ class MPSummary(Screen):
 def exit(session, result, lastservice):
 	global lc_stats
 	if not result:
-		if config_mp.mediaportal.premiumize_use.value:
-			if not mp_globals.premium_yt_proxy_host:
-				CheckPremiumize(session).premiumizeProxyConfig(False)
-
 		mp_globals.currentskin = config_mp.mediaportal.skin2.value
 		mp_globals.font = 'mediaportal'
 		_stylemanager(1)
@@ -3861,11 +3802,6 @@ def startMP(session):
 		lc_stats = task.LoopingCall(watcher.print_stats)
 		lc_stats.start(60)
 
-	#if config_mp.mediaportal.epg_enabled.value and not config_mp.mediaportal.epg_runboot.value and not mpepg.has_epg:
-	#	def importFini(msg):
-	#		session.open(MessageBoxExt, msg, type = MessageBoxExt.TYPE_INFO, timeout=5)
-	#	mpepg.importEPGData().addCallback(importFini)
-
 	if config_mp.mediaportal.hideporn_startup.value and config_mp.mediaportal.showporn.value:
 		config_mp.mediaportal.showporn.value = False
 		if config_mp.mediaportal.filter.value == "Porn":
@@ -3873,10 +3809,6 @@ def startMP(session):
 		config_mp.mediaportal.showporn.save()
 		config_mp.mediaportal.filter.save()
 		configfile_mp.save()
-
-	if config_mp.mediaportal.premiumize_use.value:
-		if not mp_globals.premium_yt_proxy_host:
-			CheckPremiumize(session).premiumizeProxyConfig(False)
 
 	lastservice = session.nav.getCurrentlyPlayingServiceReference()
 
@@ -3887,121 +3819,25 @@ def startMP(session):
 	elif config_mp.mediaportal.ansicht.value == "wall2":
 		session.openWithCallback(exit, MPWall2, lastservice, config_mp.mediaportal.filter.value)
 
-##################################
-# Autostart section
-class AutoStartTimer:
-	def __init__(self, session):
-		import enigma
-
-		self.session = session
-		self.timer = enigma.eTimer()
-		if mp_globals.isDreamOS:
-			self.timer_conn = self.timer.timeout.connect(self.onTimer)
-		else:
-			self.timer.callback.append(self.onTimer)
-		self.update()
-
-	def getWakeTime(self):
-		import time
-		if config_mp.mediaportal.epg_enabled.value:
-			clock = config_mp.mediaportal.epg_wakeup.value
-			nowt = time.time()
-			now = time.localtime(nowt)
-			return int(time.mktime((now.tm_year, now.tm_mon, now.tm_mday,
-				clock[0], clock[1], lastMACbyte()/5, 0, now.tm_yday, now.tm_isdst)))
-		else:
-			return -1
-
-	def update(self, atLeast = 0):
-		import time
-		self.timer.stop()
-		wake = self.getWakeTime()
-		now = int(time.time())
-		if wake > 0:
-			if wake < now + atLeast:
-				# Tomorrow.
-				wake += 24*3600
-			next = wake - now
-			self.timer.startLongTimer(next)
-		else:
-			wake = -1
-		print>>log, "[MP EPGImport] WakeUpTime now set to", wake, "(now=%s)" % now
-		return wake
-
-	def runImport(self):
-		if config_mp.mediaportal.epg_enabled.value:
-			mpepg.getEPGData()
-
-	def onTimer(self):
-		import time
-		self.timer.stop()
-		now = int(time.time())
-		print>>log, "[MP EPGImport] onTimer occured at", now
-		wake = self.getWakeTime()
-		# If we're close enough, we're okay...
-		atLeast = 0
-		if wake - now < 60:
-			self.runImport()
-			atLeast = 60
-		self.update(atLeast)
-
-def onBootStartCheck():
-	import time
-	global autoStartTimer
-	print>>log, "[MP EPGImport] onBootStartCheck"
-	now = int(time.time())
-	wake = autoStartTimer.update()
-	print>>log, "[MP EPGImport] now=%d wake=%d wake-now=%d" % (now, wake, wake-now)
-	if (wake < 0) or (wake - now > 600):
-		print>>log, "[MP EPGImport] starting import because auto-run on boot is enabled"
-		autoStartTimer.runImport()
-	else:
-		print>>log, "[MP EPGImport] import to start in less than 10 minutes anyway, skipping..."
-
 def autostart(reason, session=None, **kwargs):
 	"called with reason=1 to during shutdown, with reason=0 at startup?"
-	#global autoStartTimer
 	global _session, watcher
-	#import time
-	#print>>log, "[MP EPGImport] autostart (%s) occured at" % reason, time.time()
 	if reason == 0:
 		if session is not None:
 			_session = session
 			CheckPathes(session).checkPathes(cb_checkPathes)
 		if watcher == None:
 			watcher = HangWatcher()
-		#if autoStartTimer is None:
-		#	autoStartTimer = AutoStartTimer(session)
-		#if config_mp.mediaportal.epg_runboot.value:
-		#	# timer isn't reliable here, damn
-		#	onBootStartCheck()
-		#if config_mp.mediaportal.epg_deepstandby.value == 'wakeup':
-		#	if config_mp.mediaportal.epg_wakeupsleep.value:
-		#		print>>log, "[MP EPGImport] Returning to standby"
-		#		from Tools import Notifications
-		#		Notifications.AddNotification(Screens.Standby.Standby)
-	#else:
-		#print>>log, "[MP EPGImport] Stop"
-		#if autoStartTimer:
-		#autoStartTimer.stop()
 
 def cb_checkPathes():
 	pass
-
-def getNextWakeup():
-	"returns timestamp of next time when autostart should be called"
-	if autoStartTimer:
-		if config_mp.mediaportal.epg_deepstandby.value == 'wakeup':
-			print>>log, "[MP EPGImport] Will wake up from deep sleep"
-			return autoStartTimer.update()
-	return -1
 
 def Plugins(path, **kwargs):
 	mp_globals.pluginPath = path
 	mp_globals.font = 'mediaportal'
 
 	result = [
-		PluginDescriptor(name="MediaPortal", description="MediaPortal - EPG Importer", where = [PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], fnc = autostart, wakeupfnc = getNextWakeup),
+		PluginDescriptor(name="MediaPortal", description="MediaPortal", where = [PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], fnc = autostart),
 		PluginDescriptor(name="MediaPortal", description="MediaPortal", where = [PluginDescriptor.WHERE_PLUGINMENU, PluginDescriptor.WHERE_EXTENSIONSMENU], icon="plugin.png", fnc=MPmain)
 	]
 	return result

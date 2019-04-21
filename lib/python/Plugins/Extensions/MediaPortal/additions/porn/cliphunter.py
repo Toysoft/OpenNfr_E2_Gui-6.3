@@ -268,7 +268,7 @@ class cliphunterFilmScreen(MPScreen, ThumbsHelper):
 		if Movies:
 			for (Url, TitleUrl, Image, Runtime, Title) in Movies:
 				Url = "http://www.cliphunter.com" + Url
-				self.filmliste.append((TitleUrl.replace('_',' '), Url, Image, Runtime))
+				self.filmliste.append((TitleUrl.replace('_',' ').strip(), Url, Image, Runtime))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), '', None, ''))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))

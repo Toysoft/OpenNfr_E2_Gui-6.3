@@ -95,6 +95,7 @@ class get_stream_link:
 	from hosters.openload import openload
 	from hosters.powvideo import powvideo
 	from hosters.rapidvideocom import rapidvideocom
+	from hosters.smartshare import smartshare
 	from hosters.streamango import streamango
 	from hosters.thevideome import thevideome
 	from hosters.uptostream import uptostream
@@ -117,39 +118,23 @@ class get_stream_link:
 	def __init__(self, session):
 		self._callback = None
 		self.session = session
-		useProxy = config_mp.mediaportal.premiumize_use.value
-		self.puser = config_mp.mediaportal.premiumize_username.value
-		self.ppass = config_mp.mediaportal.premiumize_password.value
-		self.papiurl = "https://api.premiumize.me/pm-api/v1.php?method=directdownloadlink&params[login]=%s&params[pass]=%s&params[link]=" % (self.puser, self.ppass)
+		self.papikey = config_mp.mediaportal.premiumize_password.value
+		self.papiurl = "https://www.premiumize.me/api/transfer/directdl?apikey=%s" % self.papikey
 		self.rdb = 0
 		self.prz = 0
 		self.fallback = False
-
-	def grabpage(self, pageurl, method='GET', postdata={}):
-		if requestsModule:
-			try:
-				import urlparse
-				s = requests.session()
-				url = urlparse.urlparse(pageurl)
-				if method == 'GET':
-					page = s.get(url.geturl(), timeout=15)
-				elif method == 'POST':
-					page = s.post(url.geturl(), data=postdata, timeout=15)
-				return page.content
-			except:
-				return "error"
-		else:
-			return "error"
 
 	def callPremium(self, link):
 		if self.rdb == 1 and config_mp.mediaportal.realdebrid_use.value:
 			self.session.openWithCallback(self.rapiCallback, realdebrid_oauth2, str(link))
 		elif self.prz == 1 and config_mp.mediaportal.premiumize_use.value:
-			r_getPage(self.papiurl+link).addCallback(self.papiCallback, link).addErrback(self.errorload)
+			postdata = {'src':link}
+			twAgentGetPage(self.papiurl, method='POST', postdata=urlencode(postdata), headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.papiCallback, link).addErrback(self.errorload)
 
 	def callPremiumYT(self, link, val):
 		if val == "prz":
-			r_getPage(self.papiurl+link).addCallback(self.papiCallback, link).addErrback(self.errorload)
+			postdata = {'src':link}
+			twAgentGetPage(self.papiurl, method='POST', postdata=urlencode(postdata), headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.papiCallback, link).addErrback(self.errorload)
 		if val == "rdb":
 			self.session.openWithCallback(self.rapiCallback, realdebrid_oauth2, str(link))
 
@@ -160,22 +145,22 @@ class get_stream_link:
 				self._callback(stream_url)
 		elif self.prz == 1 and config_mp.mediaportal.premiumize_use.value:
 			self.rdb = 0
-			r_getPage(self.papiurl+link).addCallback(self.papiCallback, link).addErrback(self.errorload)
+			postdata = {'src':link}
+			twAgentGetPage(self.papiurl, method='POST', postdata=urlencode(postdata), headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.papiCallback, link).addErrback(self.errorload)
 		else:
 			self.fallback = True
 			self.check_link(self.link, self._callback)
 
 	def papiCallback(self, data, link):
-		if re.search('status":200', data):
-			stream_url = re.findall('"stream_location":"(.*?)"', data, re.S|re.I)
-			if not stream_url:
-				stream_url = re.findall('"location":"(.*?)"', data, re.S|re.I)
+		json_data = json.loads(data)
+		if json_data["status"] == "success":
+			stream_url = str(json_data["location"])
 			if stream_url:
-				if "&sig=" in stream_url[0]:
-					url = stream_url[0].split('&sig=')
+				if "&sig=" in stream_url:
+					url = stream_url.split('&sig=')
 					sig = ''
 					filename = ''
-					if "&f=" in stream_url[0]:
+					if "&f=" in stream_url:
 						file = url[1].split('&f=')
 						sig = "&sig=" + file[0].replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B')
 						filename = "&f=" + file[1]
@@ -183,37 +168,20 @@ class get_stream_link:
 						sig = "&sig=" + url[1].replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B')
 					url = url[0] + sig + filename
 				else:
-					url = stream_url[0]
+					url = stream_url
 				mp_globals.premiumize = True
 				mp_globals.realdebrid = False
-				self._callback(url.replace('\\',''))
+				self._callback(url)
 			else:
 				self.fallback = True
 				self.check_link(self.link, self._callback)
 		elif self.rdb == 1 and config_mp.mediaportal.realdebrid_use.value:
 			self.prz = 0
 			self.session.openWithCallback(self.rapiCallback, realdebrid_oauth2, str(link))
+		elif json_data["status"] == "error":
+			self.session.openWithCallback(self.papiCallback2, MessageBoxExt, "premiumize: %s" % str(json_data["message"]), MessageBoxExt.TYPE_INFO, timeout=3)
 		else:
-			if re.search('status":400', data):
-				self.session.openWithCallback(self.papiCallback2, MessageBoxExt, _("premiumize: No valid link."), MessageBoxExt.TYPE_INFO, timeout=3)
-			elif re.search('status":401', data):
-				self.session.openWithCallback(self.papiCallback2, MessageBoxExt, _("premiumize: Login failed."), MessageBoxExt.TYPE_INFO, timeout=3)
-			elif re.search('status":402', data):
-				self.session.openWithCallback(self.papiCallback2, MessageBoxExt, _("premiumize: You are no Premium-User."), MessageBoxExt.TYPE_INFO, timeout=3)
-			elif re.search('status":403', data):
-				self.session.openWithCallback(self.papiCallback2, MessageBoxExt, _("premiumize: No Access."), MessageBoxExt.TYPE_INFO, timeout=3)
-			elif re.search('status":404', data):
-				self.session.openWithCallback(self.papiCallback2, MessageBoxExt, _("premiumize: File not found."), MessageBoxExt.TYPE_INFO, timeout=3)
-			elif re.search('status":428', data):
-				self.session.openWithCallback(self.papiCallback2, MessageBoxExt, _("premiumize: Hoster currently not available."), MessageBoxExt.TYPE_INFO, timeout=3)
-			elif re.search('status":502', data):
-				self.session.openWithCallback(self.papiCallback2, MessageBoxExt, _("premiumize: Unknown technical error."), MessageBoxExt.TYPE_INFO, timeout=3)
-			elif re.search('status":503', data):
-				self.session.openWithCallback(self.papiCallback2, MessageBoxExt, _("premiumize: Temporary technical error."), MessageBoxExt.TYPE_INFO, timeout=3)
-			elif re.search('status":509', data):
-				self.session.openWithCallback(self.papiCallback2, MessageBoxExt, _("premiumize: Fair use limit exhausted."), MessageBoxExt.TYPE_INFO, timeout=3)
-			else:
-				self.papiCallback2(True)
+			self.papiCallback2(True)
 
 	def papiCallback2(self, answer):
 		self.fallback = True
@@ -240,7 +208,7 @@ class get_stream_link:
 				link = data
 				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
-					self.prz = 1
+					self.prz = 0
 					self.callPremium(link)
 				else:
 					self.only_premium()
@@ -267,16 +235,7 @@ class get_stream_link:
 				link = data
 				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
-					self.prz = 1
-					self.callPremium(link)
-				else:
-					self.only_premium()
-
-			elif re.search('uptobox.com', data, re.S):
-				link = data
-				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
-					self.rdb = 1
-					self.prz = 1
+					self.prz = 0
 					self.callPremium(link)
 				else:
 					self.only_premium()
@@ -339,7 +298,7 @@ class get_stream_link:
 				link = data
 				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
-					self.prz = 1
+					self.prz = 0
 					self.callPremium(link)
 				else:
 					self.only_premium()
@@ -384,6 +343,15 @@ class get_stream_link:
 					self.only_premium()
 
 			elif re.search('brazzers.com', data, re.S):
+				link = data
+				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
+					self.rdb = 0
+					self.prz = 1
+					self.callPremium(link)
+				else:
+					self.only_premium()
+
+			elif re.search('ddfnetwork.com', data, re.S):
 				link = data
 				if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 					self.rdb = 0
@@ -508,6 +476,11 @@ class get_stream_link:
 				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
 				twAgentGetPage(link, agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36').addCallback(self.vidup).addErrback(self.errorload)
 
+			elif re.search('smartshare.tv', data, re.S):
+				link = 'https://smartshare.tv/api/source/' + data.split('/v/')[-1]
+				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+				twAgentGetPage(link, method='POST', agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.smartshare).addErrback(self.errorload)
+
 			elif re.search('fembed.com', data, re.S):
 				link = 'http://www.fembed.com/api/source/' + data.split('/v/')[-1]
 				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
@@ -525,7 +498,7 @@ class get_stream_link:
 				if id:
 					link = "https://www.flashx.co/%s.html" % id.group(3)
 					if config_mp.mediaportal.premiumize_use.value and not self.fallback:
-						self.rdb = 0
+						self.rdb = 1
 						self.prz = 1
 						TwAgentHelper().getRedirectedUrl(link).addCallback(self.flashx).addErrback(self.errorload)
 					else:
@@ -602,14 +575,7 @@ class get_stream_link:
 
 			elif re.search("vivo.sx", data, re.S):
 				link = data.replace('http:','https:')
-				if mp_globals.isDreamOS or not mp_globals.requests:
-					twAgentGetPage(link).addCallback(self.vivo, link).addErrback(self.errorload)
-				else:
-					data = self.grabpage(link)
-					if data == "error":
-						message = self.session.open(MessageBoxExt, _("Mandatory Python module python-requests is missing!"), MessageBoxExt.TYPE_ERROR)
-					else:
-						self.vivo(data, link)
+				twAgentGetPage(link).addCallback(self.vivo, link).addErrback(self.errorload)
 
 			elif re.search('bestreams\.net/', data, re.S):
 				link = data
@@ -763,14 +729,7 @@ class get_stream_link:
 					id = re.search('vidlox\.tv/(\w+)', data)
 					if id:
 						link = "https://vidlox.tv/embed-%s.html" % id.group(1)
-				if mp_globals.isDreamOS or not mp_globals.requests:
-					twAgentGetPage(link).addCallback(self.vidlox).addErrback(self.errorload)
-				else:
-					data = self.grabpage(link)
-					if data == "error":
-						message = self.session.open(MessageBoxExt, _("Mandatory Python module python-requests is missing!"), MessageBoxExt.TYPE_ERROR)
-					else:
-						self.vidlox(data)
+				twAgentGetPage(link).addCallback(self.vidlox).addErrback(self.errorload)
 
 			elif re.search('vidcloud\.co', data, re.S):
 				fid = re.search('vidcloud\.co/embed/(.*?)/', data, re.S)

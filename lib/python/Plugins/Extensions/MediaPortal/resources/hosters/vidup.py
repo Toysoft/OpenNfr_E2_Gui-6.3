@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
+import subprocess
 
 def vidup(self, data):
 	thief = re.search("var thief='(.*?)';", data, re.S)
@@ -13,18 +14,15 @@ def vidup(self, data):
 		self.stream_not_found()
 
 def vidup_thief(self, data, stream_url):
-
-	try:
-		import execjs
-		node = execjs.get("Node")
-	except:
-		printl('nodejs not found',self,'E')
-		self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
-		return
-
 	decoder = data.replace('eval','var foo = ')
-	js = decoder + ";\nreturn foo;"
-	sUnpacked = str(node.exec_(js))
+	js = decoder + ";\nconsole.log(foo);"
+	try:
+		sUnpacked = subprocess.check_output(["node", "-e", js]).strip()
+	except OSError as e:
+		if e.errno == 2:
+			self.session.open(MessageBoxExt, _("This plugin requires package nodejs."), MessageBoxExt.TYPE_INFO)
+	except Exception:
+		self.session.open(MessageBoxExt, _("Error executing Javascript, please report to the developers."), MessageBoxExt.TYPE_INFO)
 	if sUnpacked:
 		b = re.search('b="(.*?)",', sUnpacked)
 		c = re.search('c="(.*?)";', sUnpacked)

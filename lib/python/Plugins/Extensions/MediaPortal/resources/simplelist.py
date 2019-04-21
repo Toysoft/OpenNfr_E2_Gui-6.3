@@ -19,7 +19,6 @@ if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/SerienFilm/MovieSelect
 else:
 	from Screens.MovieSelection import MovieSelection
 from Plugins.Extensions.MediaPortal.resources.mp_hlsp import *
-from sepg.mp_epg import SimpleEPG, mpepg, mutex
 
 try:
 	from Plugins.Extensions.MediaInfo.plugin import MediaInfo
@@ -29,7 +28,6 @@ except:
 
 TVG_LOGO_BASE = "http://logo.tvip.ga/"
 TVG_INK_LOGO_BASE = "http://logo.iptv.ink/"
-TVG_WOW_LOGO_BASE = "http://wownet.ro/logo/"
 global colors
 colors = {
 		'orange': '0xFFA500',
@@ -42,99 +40,6 @@ colors = {
 		'red': '0xFF0000',
 	}
 DEFAULT_COLOR = '0xD3D3D3' # lightgrey
-
-tvg_conv = {
-	"AlJazeeraArabe.nws":"aljazeera.uk",
-	"AlJazeera.nws":"aljazeera.uk",
-	"AnixeHD.de":"anixe.de",
-	"ATV.de":"atv.at",
-	"mdrhd.de":"mdr.de",
-	"ORF1.de":"orfeins.at",
-	"ORF2.de":"orf2.at",
-	"ORF1.at":"orfeins.at",
-	"Nickelodeon.de":"nick.de",
-	"ARD.de":"daserste.de",
-	"BBC3.uk":"bbc3cbbc.uk",
-	"BBCWorldNews.nws":"bbcworld.uk",
-	"CanalAlpha":"canalalpha.fr",
-	"CHTVHD":"chtv.ch",
-	"CNN.nws":"cnn.uk",
-	"CNBC.nws":"cnbc.uk",
-	"DeLuxeMusic.de":"deluxe.de",
-	"DeutscheWelle.de":"dw.de",
-	"Euronews.nws":"euronews",
-	"FamilyTV.de":"family.de",
-	"ITV1London.uk":"itv.uk",
-	"EuSp":"eurosport.de",
-	"Kabel.de":"kabeleins.ch",
-	"MDRSachsen.de":"mdrsa.de",
-	"MTVit":"mtv.it",
-	"MTV":"mtv.de",
-	"Nickelodeon.de":"nick.de",
-	"Pro7.de":"prosieben.ch",
-	"TSI1.ch":"rsila1.it",
-	"TSI2.ch":"rsila2.it",
-	"RTL2.de":"rtl2.ch",
-	"RTL.de":"rtl.ch",
-	"TSR1.ch":"rts1.fr",
-	"TSR2.ch":"rts2.fr",
-	"SuperRTL.de":"superrtl.ch",
-	"SRTL.de":"superrtl.ch",
-	"Sat1.de":"sat1.ch",
-	"ServusHD.de":"servustv.de",
-	"Sport1HD.de":"sport1.de",
-	"SF1.ch":"srf1.ch",
-	"SF2.ch":"srfzwei.ch",
-	"SRF2.ch":"srfzwei.ch",
-	"TBasel":"telebasel.ch",
-	"TBärn":"telebarn.ch",
-	"Tele1":"tele1.ch",
-	"Tele5.at":"tele5.de",
-	"TeleBielingue":"telebielingue.ch",
-	"TeleTicino":"teleticino.it",
-	"TeleTop":"teletop.ch",
-	"TeleZurich.ch":"telezuri.ch",
-	"TRT1":"trt1.tr",
-	"TSO":"tso.ch",
-	"TV5":"tv5monde.fr",
-	"TV24":"tv24.ch",
-	"TZüri":"telezuri.ch",
-	"VIVA":"viva.ch",
-	"ComedyCentral/VIVA.de":"viva.de",
-	"VOXchHD":"vox.ch",
-	"Vox.de":"vox.ch",
-	"W9.ch":"w9.fr",
-	"ZDFtheater.de":"zdfkultur.de",
-	"TVO":"tvo.ch",
-	"ndr.de":"ndrns.de",
-	"MTV":"mtv.ch",
-	"MTVit":"mtv.it",
-	"disneychannel.de":"disney.de",
-	"3sat":"3sat.de",
-	"ard.de":"daserste.de",
-	"disneychannel":"disney.de",
-	"kabel.de":"kabeleins.ch",
-	"mdr":"mdrsa.de",
-	"ndr":"ndrns.de",
-	"nick":"nick.de",
-	"pro7.de":"prosieben.ch",
-	"ProSieben.Maxx":"prosiebenmaxx.de",
-	"rtl.de":"rtl.ch",
-	"rtl2.de":"rtl2.ch",
-	"sat1.de":"sat1.ch",
-	"sixx":"sixx.de",
-	"sport.1":"sport1.de",
-	"srtl.de":"superrtl.ch",
-	"vox.de":"vox.ch",
-	"zdfinfo":"zdfinfo.de",
-	"mtv":"mtv.ch",
-	"puls8":"puls8.ch",
-	"sf1.ch":"srf1.ch",
-	"sf2.ch":"srfzwei.ch",
-	"atv.de":"atv.at",
-	"orf1.de":"orfeins.at",
-	"orf2.de":"orf2.at",
-}
 
 class simplelistGenreScreen(MPScreen, ThumbsHelper):
 
@@ -341,8 +246,6 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 							tvg = ls[0] if len(ls) > 1 else ''
 							if 'tvg-id=' in tvg:
 								tid = re.search('tvg-id="(.*?)"', tvg).group(1).replace('.ink','.nix').replace('_','.')
-								cid = tvg_conv.get(tid)
-								if cid: tid = tid.replace(tid,cid)
 								epg_id = format(hash(tid.lower()) & sys.maxint, 'x')
 								self.enableThumbs = True
 								if 'tvg-logo=' in tvg:
@@ -446,13 +349,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 			self._update_task.start(60, False)
 
 	def updateChanList(self, blocking=False):
-		if mutex.acquire(blocking):
-			try:
-				self.ml.setList(map(self.simpleListTVGListEntry, self.filelist))
-			except:
-				printl('Unexpected exception',self,'E')
-			finally:
-				mutex.release()
+		self.ml.setList(map(self.simpleListTVGListEntry, self.filelist))
 
 	def getPL(self, path, m3u_file, options):
 		import urlparse, urllib
@@ -489,7 +386,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 					options.append(option)
 			options = ",".join(options)
 		agent = headers.pop('user-agent', 'Enigma2 MediaPlayer')
-		r_getPage(path, agent=agent, timeout=10, headers=headers.copy()).addCallback(self.gotPL, m3u_file, options).addErrback(self.gotPLError)
+		twAgentGetPage(path, agent=agent, timeout=10, headers=headers.copy()).addCallback(self.gotPL, m3u_file, options).addErrback(self.gotPLError)
 
 	def gotPL(self, pl, m3u_file, options):
 		if '$NOCACHE=' in options:
@@ -544,18 +441,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 						options += (opt,)
 				options = ",".join(options)
 
-			if conv == 'FILMON':
-				grp = grp or 'FilmOn'
-				f = open(m3u_file, 'w')
-				f.write(options+'\n')
-				for m in re.finditer('channel_id="(.*?)">.*?<img.*?src="(.*?)".*? title="(.*?)"', re.search('<ul id="channels_ul"(.*?)</ul>', pl, re.S).group(1), re.S):
-					cid, img, t = m.groups()
-					f.write('#EXTINF:-1 tvg-id="-1" group-title="%s" tvg-logo="%s", [COLOR lightgrey]%s[/COLOR]\n' % (grp, img, t))
-					f.write('http://www.filmon.tv/api-v2/channel/%s#filmon-stream#\n' % cid)
-				f.close()
-				self.loadM3UList(m3u_file)
-			else:
-				self.gotPLError(_('Error: No valid option in playlist'))
+			self.gotPLError(_('Error: No valid option in playlist'))
 		elif '#EXTM3U' in pl[:10]:
 			pl = re.sub('#EXTM3U.*', options, pl)
 			f = open(m3u_file, 'wb')
@@ -738,9 +624,7 @@ class simplelistGenreScreen(MPScreen, ThumbsHelper):
 
 	def wait_keyCancel(self):
 		self._stopUpdateLoop()
-		if not mpepg.isImporting:
-			with mutex as locked:
-				self.keyCancel()
+		self.keyCancel()
 
 	def keyCancel(self):
 		if self.menu_level == 0:
@@ -851,19 +735,4 @@ class SimplelistConfig(MPSetupScreen, ConfigListScreenExt):
 		{
 			'ok': 		self.keySave,
 			'cancel': 	self.keyCancel,
-			"blue": 	self.importEPG,
 		},-2)
-
-		if config_mp.mediaportal.epg_enabled.value:
-			self['F4'] = Label(_('Import EPG'))
-
-	def importEPG(self):
-		if config_mp.mediaportal.epg_enabled.value:
-			self['F4'].setText(_('EPG import started'))
-			mpepg.getEPGData().addCallback(self.importFini, self.session).addErrback(self.importFini, self.session, True)
-
-	def importFini(self, msg, session, err=False):
-		self['F4'].setText(_('EPG import finished'))
-		printl(str(msg),self)
-		msg = msg.replace('[MP EPG] ', '')
-		session.open(MessageBoxExt, str(msg), type = MessageBoxExt.TYPE_INFO)

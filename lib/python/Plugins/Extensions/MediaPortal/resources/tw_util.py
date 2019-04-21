@@ -9,31 +9,11 @@ del tmp
 
 import mp_globals
 import sys
-try:
-	from enigma import eMediaDatabase
-	mp_globals.isDreamOS = True
-except:
-	mp_globals.isDreamOS = False
-if __TW_VER__ >= [14, 0, 0]:
-	if mp_globals.isDreamOS:
-		mp_globals.requests = False
-	elif sys.version_info[:3] >= (2,7,9):
-		mp_globals.requests = False
-	else:
-		mp_globals.requests = True
-else:
-	mp_globals.requests = True
 
 if __TW_VER__ > [13, 0, 0]:
 	from twisted.web import client
 	from twisted.internet import endpoints
 	from twisted.web.iweb import IBodyProducer
-
-elif __TW_VER__ >= [11, 1, 0]:
-	import tx
-	from tx import client
-	from tx import endpoints
-	from tx.iweb import IBodyProducer
 else:
 	raise Exception("No HTTP 1.1 Support")
 

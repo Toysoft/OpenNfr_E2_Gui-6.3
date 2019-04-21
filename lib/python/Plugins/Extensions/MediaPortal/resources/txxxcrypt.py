@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
+import subprocess
 
 class txxxcrypt:
 
 	def getVideoPage(self, data):
-		try:
-			import execjs
-			node = execjs.get("Node")
-		except:
-			printl('nodejs not found',self,'E')
-			self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
-			return
 		decoder = "decrypt=function(_0xf4bdx6) {"\
 			"var _0xf4bdx7 = '',"\
 			"    _0xf4bdx8 = 0;"\
@@ -34,8 +28,14 @@ class txxxcrypt:
 		video_url = re.findall('var video_url\s{0,1}={0,1}(.*?);', data, re.S)
 		hash = re.findall('video_url\s{0,1}\+\=\s{0,1}(?:\"|\')\|\|/get_file/(\d+/[a-f0-9]+)/', data, re.S)
 		hash2 = re.findall('video_url\s{0,1}\+\=\s{0,1}(?:\"|\')\|\|/get_file/(\d+/[a-f0-9]+)/\|\|(.*?)\|\|(.*?)(?:\"|\');', data, re.S)
-		js = decoder + "\n" + 'video_url=decrypt('+video_url[0]+');' + "return video_url;"
-		url = str(node.exec_(js))
+		js = decoder + "\n" + 'video_url=decrypt('+video_url[0]+');' + "console.log(video_url);"
+		try:
+			url = subprocess.check_output(["node", "-e", js]).strip()
+		except OSError as e:
+			if e.errno == 2:
+				self.session.open(MessageBoxExt, _("This plugin requires package nodejs."), MessageBoxExt.TYPE_INFO)
+		except Exception:
+			self.session.open(MessageBoxExt, _("Error executing Javascript, please report to the developers."), MessageBoxExt.TYPE_INFO)
 		if hash:
 			mainurl = url.split('get_file/')[0]
 			tokenurl = url.split('get_file/')[1]

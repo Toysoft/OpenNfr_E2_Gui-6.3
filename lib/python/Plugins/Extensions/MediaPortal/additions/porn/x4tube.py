@@ -83,11 +83,17 @@ class fourtubeGenreScreen(MPScreen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"yellow" : self.keyScope
 		}, -1)
+
+		self.scope = 0
+		self.scopeText = ['Straight', 'Shemale', 'Gay']
+		self.scopeval = ['', 'shemale/', 'gay/']
 
 		self['title'] = Label(self.portal)
 		self['ContentTitle'] = Label("Genre:")
+		self['F3'] = Label(self.scopeText[self.scope])
 		self.keyLocked = True
 		self.suchString = ''
 
@@ -99,7 +105,8 @@ class fourtubeGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "https://%s/tag%s" % (self.baseurl, self.s)
+		self['F3'].setText(self.scopeText[self.scope])
+		url = "https://%s/%stag%s" % (self.baseurl, self.scopeval[self.scope], self.s)
 		getPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -109,28 +116,30 @@ class fourtubeGenreScreen(MPScreen):
 			data = urllib.unquote(base64.b64decode(data))
 			json_data = json.loads(data)
 			for item in json_data["page"]["embedded"]["topTags"]:
-				Url = "https://" + self.baseurl + "/tags/" + str(item["slug"])
+				Url = "https://" + self.baseurl + "/" + self.scopeval[self.scope] + "tags/" + str(item["slug"])
 				Title = str(item["name"]).title()
 				self.genreliste.append((Title, Url, default_cover))
 		else:
 			parse = re.search('categories_page">(.*?)class="footer">', data, re.S)
-			Cats = re.findall(' class="thumb-link" href="(.*?)".*?class="thumb-title">(.*?)</.*?img data-original="(.*?)"', parse.group(1), re.S)
+			Cats = re.findall('class="thumb-link" href="(.*?)".*?class="thumb-title">(.*?)</.*?img data-original="(.*?)"', parse.group(1), re.S)
 			if Cats:
 				for (Url, Title, Image) in Cats:
+					if Image.endswith('black-d2a0017e14.png'):
+						Image = default_cover
 					self.genreliste.append((Title, Url, Image))
 			parse = re.search('All\scategories(.*?)</div', data, re.S)
-			Cats = re.findall('<li><a\shref=".*?(\/tag.*?)"\stitle="(.*?)\ssex\smovies', parse.group(1), re.S)
+			Cats = re.findall('<li><a\shref=".*?((?:\/gay|\/shemale|)\/tag.*?)"\stitle="(.*?)\ssex\smovies', parse.group(1), re.S)
 			if Cats:
 				for (Url, Title) in Cats:
 					Url = "https://" + self.baseurl + Url
 					Title = Title.title()
 					self.genreliste.append((Title, Url, default_cover))
 		self.genreliste.sort()
-		self.genreliste.insert(0, ("Channels", "https://%s/channel%s" % (self.baseurl, self.s), default_cover))
-		self.genreliste.insert(0, ("Pornstars", "https://%s/pornstar%s" % (self.baseurl, self.s), default_cover))
-		self.genreliste.insert(0, ("Highest Rating", "https://%s/video%s?sort=rating&time=month" % (self.baseurl, self.s), default_cover))
-		self.genreliste.insert(0, ("Most Viewed", "https://%s/video%s?sort=views&time=month" % (self.baseurl, self.s), default_cover))
-		self.genreliste.insert(0, ("Latest", "https://%s/video%s?sort=date" % (self.baseurl, self.s), default_cover))
+		self.genreliste.insert(0, ("Channels", "https://%s/%schannel%s" % (self.baseurl, self.scopeval[self.scope], self.s), default_cover))
+		self.genreliste.insert(0, ("Pornstars", "https://%s/%spornstar%s" % (self.baseurl, self.scopeval[self.scope], self.s), default_cover))
+		self.genreliste.insert(0, ("Highest Rating", "https://%s/%svideo%s?sort=rating&time=month" % (self.baseurl, self.scopeval[self.scope], self.s), default_cover))
+		self.genreliste.insert(0, ("Most Viewed", "https://%s/%svideo%s?sort=views&time=month" % (self.baseurl, self.scopeval[self.scope], self.s), default_cover))
+		self.genreliste.insert(0, ("Latest", "https://%s/%svideo%s?sort=date" % (self.baseurl, self.scopeval[self.scope], self.s), default_cover))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -148,23 +157,40 @@ class fourtubeGenreScreen(MPScreen):
 			self.suchen(suggest_func=self.getSuggestions)
 		elif Name == "Channels" or Name == "Pornstars":
 			Link = self['liste'].getCurrent()[0][1]
-			self.session.open(fourtubeSitesScreen, Link, Name, self.portal, self.baseurl)
+			self.session.open(fourtubeSitesScreen, Link, Name, self.portal, self.baseurl, self.scopeval[self.scope])
 		else:
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(fourtubeFilmScreen, Link, Name, self.portal, self.baseurl)
+
+	def keyScope(self):
+		if self.keyLocked:
+			return
+		self.genreliste = []
+		if self.scope == 0:
+			self.scope = 1
+		elif self.scope == 1:
+			self.scope = 2
+		else:
+			self.scope = 0
+		self.layoutFinished()
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
 			Link = urllib.quote(self.suchString).replace(' ', '+')
-			self.session.open(fourtubeFilmScreen, Link, Name, self.portal, self.baseurl)
+			self.session.open(fourtubeFilmScreen, Link, Name, self.portal, self.baseurl, self.scopeval[self.scope])
 
 	def getSuggestions(self, text, max_res):
 		if self.portal in ["PornTube.com","fux.com","PornerBros.com"]:
-			url = "https://%s/api/search/suggestions?q=%s&orientation=straight" % (self.baseurl, urllib.quote_plus(text))
+			if self.scopeval[self.scope] == '':
+				scope = 'straight'
+			else:
+				#scope = self.scopeval[self.scope][:-1] # not working on website
+				scope = 'straight'
+			url = "https://%s/api/search/suggestions?q=%s&orientation=%s" % (self.baseurl, urllib.quote_plus(text), scope)
 		else:
-			url = "https://%s/search_suggestions_remote?q=%s&type=related" % (self.baseurl, urllib.quote_plus(text))
+			url = "https://%s/%ssearch_suggestions_remote?q=%s&type=related" % (self.baseurl, self.scopeval[self.scope], urllib.quote_plus(text))
 		d = twAgentGetPage(url, agent=agent, headers=headers, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
 		d.addErrback(self.gotSuggestions, max_res, err=True)
@@ -192,11 +218,12 @@ class fourtubeGenreScreen(MPScreen):
 
 class fourtubeSitesScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name, portal, baseurl):
+	def __init__(self, session, Link, Name, portal, baseurl, scope):
 		self.Link = Link
 		self.Name = Name
 		self.portal = portal
 		self.baseurl = baseurl
+		self.Scope = scope
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -256,7 +283,7 @@ class fourtubeSitesScreen(MPScreen, ThumbsHelper):
 			self.lastpage = node["pages"]
 			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 			for item in node["_embedded"]["items"]:
-				Url = "https://" + self.baseurl + "/" + type + "/" + str(item["slug"])
+				Url = "https://" + self.baseurl + "/" + self.Scope + type + "/" + str(item["slug"])
 				Title = str(item["name"])
 				Image = str(item["thumbUrl"])
 				self.filmliste.append((Title, Url, Image))
@@ -307,11 +334,12 @@ class fourtubeSitesScreen(MPScreen, ThumbsHelper):
 
 class fourtubeFilmScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name, portal, baseurl):
+	def __init__(self, session, Link, Name, portal, baseurl, scope=''):
 		self.Link = Link
 		self.Name = Name
 		self.portal = portal
 		self.baseurl = baseurl
+		self.Scope = scope
 
 		global default_cover
 		if self.portal == "4Tube.com":
@@ -366,7 +394,7 @@ class fourtubeFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://%s/search?q=%s&p=%s" % (self.baseurl, self.Link, str(self.page))
+			url = "https://%s/%ssearch?q=%s&p=%s" % (self.baseurl, self.Scope, self.Link, str(self.page))
 		else:
 			sortpart = re.findall('^(.*?)\?sort=(.*?)(\&.*?|)$', self.Link)
 			if sortpart:
@@ -459,7 +487,7 @@ class fourtubeFilmScreen(MPScreen, ThumbsHelper):
 			for item in json_data["video"]["encodings"]:
 				res += str(item["height"]) + "+"
 			res.strip('+')
-			posturl = "https://tkn.kodicdn.com/%s/desktop/%s" % (videoID, res)
+			posturl = "https://token.%s/%016i/desktop/%s" % (self.baseurl.replace('www.',''), int(videoID), res)
 			getPage(posturl, agent=std_headers, method='POST', postdata=info, headers={'Origin':'%s' % self.baseurl, 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoUrl).addErrback(self.dataError)
 		else:
 			videoID = re.findall('data-id="(\d+)"\sdata-name=.*?data-quality="(\d+)"', data, re.S)
@@ -469,7 +497,7 @@ class fourtubeFilmScreen(MPScreen, ThumbsHelper):
 				for x in videoID:
 					res += x[1] + "+"
 				res.strip('+')
-			posturl = "https://tkn.kodicdn.com/%s/desktop/%s" % (videoID[-1][0], res)
+			posturl = "https://token.%s/%016i/desktop/%s" % (self.baseurl.replace('www.',''), int(videoID[-1][0]), res)
 			getPage(posturl, agent=std_headers, method='POST', postdata=info, headers={'Origin':'%s' % self.baseurl, 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoUrl).addErrback(self.dataError)
 
 	def getVideoUrl(self, data):

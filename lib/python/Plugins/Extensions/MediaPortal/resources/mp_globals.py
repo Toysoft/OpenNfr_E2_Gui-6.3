@@ -15,8 +15,8 @@ covercollection = False
 ddlme_sortOrder = 0
 skto_sortOrder = 0
 streamit_sortOrder = 0
-premium_hosters_prz = '(streamclou|openload|oload|uploaded|ul.to|filefactory|rg.to|rapidgator|turbobit|1fichier|uptobox|depfile|flashx|rapidvideo|thevideo|vidto)'
-premium_hosters_rdb = '(openload|oload|uploaded|ul.to|filefactory|rapidgator|rg.to|turbobit|1fichier|uptobox|oboom|depfile|rapidvideo|thevideo)'
+premium_hosters_prz = '(streamclou|openload|oload|uploaded|ul.to|filefactory|rg.to|rapidgator|turbobit|1fichier|depfile|flashx|rapidvideo|thevideo|vidto)'
+premium_hosters_rdb = '(openload|oload|uploaded|ul.to|filefactory|rapidgator|rg.to|turbobit|1fichier|oboom|depfile|rapidvideo|thevideo)'
 premium_yt_proxy_host = ''
 premium_yt_proxy_port = 0
 hosters = []
@@ -33,7 +33,6 @@ ThumbViewTextForeground = '#00ffffff'
 ThumbViewTextBackground = '#20000000'
 bsp = None
 bdmt = None
-requests = False
 
 std_headers = {
 	'User-Agent': 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.6) Gecko/20100627 Firefox/3.6.6',

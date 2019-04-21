@@ -726,22 +726,13 @@ class MPScreen(Screen, HelpableScreen):
 
 	# simplelist - iptv
 	def simpleListTVGListEntry(self, entry):
-		import time
 		width = self['liste'].instance.size().width()
 		height = self['liste'].l.getItemSize().height()
 		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
 		self.ml.l.setFont(1, gFont(mp_globals.font, height - 7 * mp_globals.sizefactor))
 		res = [entry]
 		color = int(entry[3][-1], 0) if entry[3] else 0xD3D3D3
-		tvg_id = entry[3][2] if entry[3] and ('tvg-id' in entry[3]) and entry[3][2] and not entry[3][2].endswith('.ink') else None
 		event = ""
-		if tvg_id:
-			events=mpepg.getEvent(tvg_id)
-			if events:
-				ch, now, next = events
-				event = '%s - %s  %s' % (time.strftime('%H:%M',time.localtime(now[0])),time.strftime('%H:%M',time.localtime(now[1])),now[2])
-				r_tm = '%+d min' % int((now[1]-time.mktime(time.localtime())) / 60)
-
 		fhdoffset = 140 if mp_globals.videomode == 2 else 0
 		width2 = 190+fhdoffset if event else width+fhdoffset
 		icon_name = entry[2]

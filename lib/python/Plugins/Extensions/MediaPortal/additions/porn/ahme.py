@@ -49,7 +49,7 @@ json_headers = {
 	}
 
 default_cover = "file://%s/ahme.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
-	
+
 class ahmeGenreScreen(MPScreen):
 
 	def __init__(self, session):
@@ -62,11 +62,17 @@ class ahmeGenreScreen(MPScreen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"yellow" : self.keyScope
 		}, -1)
+
+		self.scope = 0
+		self.scopeText = ['Straight', 'Shemale', 'Gay']
+		self.scopeval = ['', 'shemale/', 'gay/']
 
 		self['title'] = Label("Ah-Me.com")
 		self['ContentTitle'] = Label("Genre:")
+		self['F3'] = Label(self.scopeText[self.scope])
 
 		self.keyLocked = True
 		self.suchString = ''
@@ -79,7 +85,8 @@ class ahmeGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.ah-me.com/channels/"
+		self['F3'].setText(self.scopeText[self.scope])
+		url = "http://www.ah-me.com/%schannels/" % self.scopeval[self.scope]
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -88,16 +95,16 @@ class ahmeGenreScreen(MPScreen):
 			for (Url, Pic, Title) in Cats:
 				self.genreliste.append((decodeHtml(Title), Url, Pic))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("High Definition", "http://www.ah-me.com/high-definition/", default_cover))
-			self.genreliste.insert(0, ("Longest", "http://www.ah-me.com/long-movies/", default_cover))
-			self.genreliste.insert(0, ("Top Rated", "http://www.ah-me.com/top-rated/", default_cover))
-			self.genreliste.insert(0, ("Most Popular", "http://www.ah-me.com/most-viewed/", default_cover))
-			self.genreliste.insert(0, ("Most Recent", "http://www.ah-me.com/", default_cover))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
-			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
-			self.showInfos()
+		self.genreliste.insert(0, ("High Definition", "http://www.ah-me.com/%shigh-definition/" % self.scopeval[self.scope], default_cover))
+		self.genreliste.insert(0, ("Longest", "http://www.ah-me.com/%slong-movies/" % self.scopeval[self.scope], default_cover))
+		self.genreliste.insert(0, ("Most Favourited", "http://www.ah-me.com/%smostfavorites/" % self.scopeval[self.scope], default_cover))
+		self.genreliste.insert(0, ("Top Rated", "http://www.ah-me.com/%stop-rated/" % self.scopeval[self.scope], default_cover))
+		self.genreliste.insert(0, ("Most Recent", "http://www.ah-me.com/%smost-recent/" % self.scopeval[self.scope], default_cover))
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
+		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
+		self.ml.moveToIndex(0)
+		self.keyLocked = False
+		self.showInfos()
 
 	def showInfos(self):
 		Image = self['liste'].getCurrent()[0][2]
@@ -114,15 +121,27 @@ class ahmeGenreScreen(MPScreen):
 			Link = self['liste'].getCurrent()[0][1]
 			self.session.open(ahmeFilmScreen, Link, Name)
 
+	def keyScope(self):
+		if self.keyLocked:
+			return
+		self.genreliste = []
+		if self.scope == 0:
+			self.scope = 1
+		elif self.scope == 1:
+			self.scope = 2
+		else:
+			self.scope = 0
+		self.layoutFinished()
+
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
-			self.suchString = urllib.quote(callback).replace(' ', '+')
-			Name = self['liste'].getCurrent()[0][0]
-			Link = 'http://www.ah-me.com/search/%s/' % (self.suchString)
-			self.session.open(ahmeFilmScreen, Link, Name)
+			Name = "--- Search ---"
+			self.suchString = callback
+			Link = '%s' % (urllib.quote(self.suchString).replace(' ', '+'))
+			self.session.open(ahmeFilmScreen, Link, Name, Scope=self.scopeval[self.scope])
 
 	def getSuggestions(self, text, max_res):
-		url = "http://www.ah-me.com/?area=autocomplete&o=straight&q=%s" % urllib.quote_plus(text)
+		url = "http://www.ah-me.com/?area=autocomplete&o=%s&q=%s" % (self.scopeText[self.scope].lower(), urllib.quote_plus(text))
 		d = twAgentGetPage(url, agent=agent, headers=json_headers, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
 		d.addErrback(self.gotSuggestions, max_res, err=True)
@@ -140,12 +159,13 @@ class ahmeGenreScreen(MPScreen):
 		elif err:
 			printl(str(suggestions),self,'E')
 		return list
-		
+
 class ahmeFilmScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name):
+	def __init__(self, session, Link, Name, Scope=''):
 		self.Link = Link
 		self.Name = Name
+		self.Scope = Scope
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -183,7 +203,10 @@ class ahmeFilmScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
-		url = "%spage%s.html" % (self.Link, str(self.page))
+		if re.match(".*?Search", self.Name):
+			url = "http://www.ah-me.com/%ssearch/%s/page%s.html" % (self.Scope, self.Link, str(self.page))
+		else:
+			url = "%spage%s.html" % (self.Link, str(self.page))
 		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
@@ -192,11 +215,13 @@ class ahmeFilmScreen(MPScreen, ThumbsHelper):
 		if Movies:
 			for (Url, Pic, Title, Runtime) in Movies:
 				self.filmliste.append((decodeHtml(Title), Url, Pic, Runtime))
-			self.ml.setList(map(self._defaultlistleft, self.filmliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
-			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
-			self.showInfos()
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('No videos found!'), None, None, '', '', ''))
+		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		self.ml.moveToIndex(0)
+		self.keyLocked = False
+		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
+		self.showInfos()
 
 	def showInfos(self):
 		title = self['liste'].getCurrent()[0][0]
@@ -211,8 +236,8 @@ class ahmeFilmScreen(MPScreen, ThumbsHelper):
 			return
 		url = self['liste'].getCurrent()[0][1]
 		self.keyLocked = True
-		print url
-		getPage(url).addCallback(self.getVideoPage).addErrback(self.dataError)
+		if url:
+			getPage(url).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
 		videoPage = re.findall('<video\ssrc="(.*?)"', data, re.S)

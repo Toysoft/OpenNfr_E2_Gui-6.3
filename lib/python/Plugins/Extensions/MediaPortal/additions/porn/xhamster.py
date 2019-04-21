@@ -78,9 +78,9 @@ class xhamsterGenreScreen(MPScreen):
 		}, -1)
 
 		self.scope = 0
-		self.scopeText = ['Straight', 'Gays', 'Transsexual']
-		self.scopeval = ['', 'gay/', 'shemale/']
-		self.scopefilter = ['s%3A8%3A%22straight%22%3B', 's%3A3%3A%22gay%22%3B', 's%3A7%3A%22shemale%22%3B']
+		self.scopeText = ['Straight', 'Shemale', 'Gays']
+		self.scopeval = ['', 'shemale/', 'gay/']
+		self.scopefilter = ['s%3A8%3A%22straight%22%3B', 's%3A7%3A%22shemale%22%3B', 's%3A3%3A%22gay%22%3B']
 
 		self['title'] = Label("xHamster.com")
 		self['ContentTitle'] = Label("Genre:")
@@ -266,12 +266,12 @@ class xhamsterSubscriptionsScreen(MPScreen):
 		self.showInfos2("error")
 
 	def showInfos2(self, data):
+		global subscriptions
 		if data == "error":
 			CoverHelper(self['coverArt']).getCover(default_cover)
 			self['handlung'].setText("User not found")
 			url = self['liste'].getCurrent()[0][2]
 			self.username = ((url.split('/')[-2], ""),)
-			global subscriptions
 			found = False
 			for t in subscriptions:
 				if t[0] == self.username[0][0]:
@@ -297,7 +297,6 @@ class xhamsterSubscriptionsScreen(MPScreen):
 			else:
 				pic = "https://static-ec.xhcdn.com/xh-tpl3/images/favicon/apple-touch-icon.png"
 			self['name'].setText(title)
-			global subscriptions
 			found = False
 			for t in subscriptions:
 				if t[0] == self.username[0][0]:
@@ -604,6 +603,7 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 		self.showInfos2("error")
 
 	def showInfos2(self, data):
+		global favourites
 		if data == "error":
 			CoverHelper(self['coverArt']).getCover(default_cover)
 			self['handlung'].setText("Video not found")
@@ -612,7 +612,6 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 			self['F3'].setText("")
 			url = self['liste'].getCurrent()[0][2]
 			self.videoId = url.split('/')[-1]
-			global favourites
 			for t in favourites:
 				if t[0] == self.videoId:
 					favmsg = "\nFavourited"
@@ -653,7 +652,6 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 					self['F1'].setText('')
 				self.subscribed = False
 			found = False
-			global favourites
 			for t in favourites:
 				if t[0] == self.videoId:
 					favmsg = "\nFavourited"

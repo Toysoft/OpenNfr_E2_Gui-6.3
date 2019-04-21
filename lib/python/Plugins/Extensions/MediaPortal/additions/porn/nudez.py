@@ -38,10 +38,18 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.twagenthelper import TwAgentHelper
 
-default_cover = "file://%s/wetplace.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+agent='Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0'
+json_headers = {
+	'Accept':'application/json',
+	'Accept-Language':'en,en-US;q=0.7,en;q=0.3',
+	'X-Requested-With':'XMLHttpRequest',
+	'Content-Type':'application/x-www-form-urlencoded',
+	}
+default_cover = "file://%s/nudez.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
-class wetplaceGenreScreen(MPScreen):
+class nudezGenreScreen(MPScreen):
 
 	def __init__(self, session):
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
@@ -56,7 +64,7 @@ class wetplaceGenreScreen(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("WetPlace.com")
+		self['title'] = Label("Nudez.com")
 		self['ContentTitle'] = Label("Genre:")
 
 		self.keyLocked = True
@@ -70,25 +78,27 @@ class wetplaceGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.wetplace.com/categories/"
+		url = "https://nudez.com/channels/"
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('class="cats">(.*?)</section>', data, re.S)
-		Cats = re.findall('class="icnt">.*?href="(.*?)".*?class="imgcnt".*?url\((.*?)\).*?class="info">.*?(\w.*?)</div>', parse.group(1), re.S)
-		if Cats:
-			for (Url, Image, Title) in Cats:
-				Title = Title.replace(' ','').replace('\n','')
-				self.genreliste.append((Title.title(), Url, Image))
-			self.genreliste.sort()
-			self.genreliste.insert(0, ("Most Popular", "http://www.wetplace.com/most-popular", default_cover))
-			self.genreliste.insert(0, ("Top Rated", "http://www.wetplace.com/top-rated", default_cover))
-			self.genreliste.insert(0, ("Newest", "http://www.wetplace.com", default_cover))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
-			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
-			self.showInfos()
+		parse = re.search('<h1>Categories(.*?)$', data, re.S)
+		if parse:
+			Cats = re.findall('class="item.*?href="(.*?)"\stitle="(.*?)".*?img\ssrc="(.*?)"', parse.group(1), re.S)
+			if Cats:
+				for (Url, Title, Image) in Cats:
+					Title = Title.replace('&amp;','&')
+					self.genreliste.append((Title, Url, Image))
+				self.genreliste.sort()
+		self.genreliste.insert(0, ("Longest", "https://nudez.com/longest/", default_cover))
+		self.genreliste.insert(0, ("Most Discussed", "https://nudez.com/most-discussed/", default_cover))
+		self.genreliste.insert(0, ("Most Viewed", "https://nudez.com/most-viewed/", default_cover))
+		self.genreliste.insert(0, ("Top Rated", "https://nudez.com/top-rated/", default_cover))
+		self.genreliste.insert(0, ("Most Recent", "https://nudez.com/most-recent/", default_cover))
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
+		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
+		self.keyLocked = False
+		self.showInfos()
 
 	def showInfos(self):
 		Image = self['liste'].getCurrent()[0][2]
@@ -99,20 +109,38 @@ class wetplaceGenreScreen(MPScreen):
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		if Name == "--- Search ---":
-			self.suchen()
-
+			self.suchen(suggest_func=self.getSuggestions)
 		else:
 			Link = self['liste'].getCurrent()[0][1]
-			self.session.open(wetplaceFilmScreen, Link, Name)
+			self.session.open(nudezFilmScreen, Link, Name)
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
-			Link = '%s' % urllib.quote(self.suchString).replace(' ', '+')
-			self.session.open(wetplaceFilmScreen, Link, Name)
+			Link = urllib.quote(callback).replace(' ', '+')
+			self.session.open(nudezFilmScreen, Link, Name)
 
-class wetplaceFilmScreen(MPScreen, ThumbsHelper):
+	def getSuggestions(self, text, max_res):
+		url = "https://nudez.com/includes/search_autocomplete.php?term=%s" % urllib.quote_plus(text)
+		d = twAgentGetPage(url, agent=agent, headers=json_headers, timeout=5)
+		d.addCallback(self.gotSuggestions, max_res)
+		d.addErrback(self.gotSuggestions, max_res, err=True)
+		return d
+
+	def gotSuggestions(self, suggestions, max_res, err=False):
+		list = []
+		if not err and type(suggestions) in (str, buffer):
+			suggestions = json.loads(suggestions)
+			for item in suggestions:
+				list.append(str(item))
+				max_res -= 1
+				if not max_res: break
+		elif err:
+			printl(str(suggestions),self,'E')
+		return list
+
+class nudezFilmScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
@@ -134,7 +162,7 @@ class wetplaceFilmScreen(MPScreen, ThumbsHelper):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("WetPlace.com")
+		self['title'] = Label("Nudez.com")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
 
@@ -153,41 +181,49 @@ class wetplaceFilmScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
-		cat = self.Link
 		if re.match(".*?Search", self.Name):
-			url = 'http://www.wetplace.com/search/%s/%s' % (self.Link, str(self.page))
+			url = "https://nudez.com/search/videos/%s/page%s.html" % (self.Link, str(self.page))
 		else:
-			url = "%s/%s" % (self.Link, str(self.page))
+			url = "%spage%s.html" % (self.Link, str(self.page))
 		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		self.getLastPage(data, 'id="pgn">(.*?)</nav>', '.*\/(\d+)')
-		Movies = re.findall('<article>.*?href="(.*?)"\stitle="(.*?)".*?data-src="(.*?)"', data, re.S)
+		self.getLastPage(data, 'class="pagination(.*?)</nav>', '.*[\/|>](\d+)[\"|<]')
+		Movies = re.findall('data-video=".*?href="(.*?)"\stitle="(.*?)".*?img\ssrc="(.*?)".*?class="time">(.*?)</span>', data, re.S)
 		if Movies:
-			for (Url, Title, Image) in Movies:
-				self.filmliste.append((decodeHtml(Title), Url, Image))
-			self.ml.setList(map(self._defaultlistleft, self.filmliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
-			self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
-			self.showInfos()
+			for (Url, Title, Image, Runtime) in Movies:
+				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime))
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('No movies found!'), None, None, None))
+		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		self.ml.moveToIndex(0)
+		self.keyLocked = False
+		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
+		self.showInfos()
 
 	def showInfos(self):
-		Title = self['liste'].getCurrent()[0][0]
-		Image = self['liste'].getCurrent()[0][2]
-		self['name'].setText(Title)
-		CoverHelper(self['coverArt']).getCover(Image)
+		Url = self['liste'].getCurrent()[0][1]
+		if Url == None:
+			return
+		title = self['liste'].getCurrent()[0][0]
+		pic = self['liste'].getCurrent()[0][2]
+		runtime = self['liste'].getCurrent()[0][3]
+		self['name'].setText(title)
+		self['handlung'].setText("Runtime: %s" % runtime)
+		CoverHelper(self['coverArt']).getCover(pic)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		Link = self['liste'].getCurrent()[0][1]
+		if Link == None:
+			return
 		self.keyLocked = True
 		getPage(Link).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('<source src="(.*?)"', data, re.S)
+		videoPage = re.findall("<source src=\"(.*?)\" type='video/mp4'", data, re.S)
 		if videoPage:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]
-			self.session.open(SimplePlayer, [(Title, videoPage[-1].replace('&amp;','&'))], showPlaylist=False, ltype='wetplace')
+			self.session.open(SimplePlayer, [(Title, videoPage[-1])], showPlaylist=False, ltype='nudez')

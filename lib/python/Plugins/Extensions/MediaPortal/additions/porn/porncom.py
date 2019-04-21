@@ -96,6 +96,8 @@ class porncomGenreScreen(MPScreen):
 				if Title not in dupelist:
 					Url = "https://www.porn.com" + Url + "?p="
 					self.filmliste.append((Title, Url, default_cover, True))
+		# remove duplicates
+		self.filmliste = list(set(self.filmliste))
 		self.filmliste.sort()
 		self.filmliste.insert(0, ("HD", "https://www.porn.com/videos/hd?p=", default_cover, True))
 		self.filmliste.insert(0, ("Playlists", "https://www.porn.com/playlists?p=", default_cover, True))
@@ -656,7 +658,10 @@ class porncomFilmScreen(MPScreen, ThumbsHelper):
 		lastp = re.search('<span>\((?:<span>|)(\d+.*?)(?:</span>|) (?:results|videos)\)', data, re.S)
 		if lastp:
 			lastp = lastp.group(1).replace(',','')
-			lastp = round((float(lastp) / 41) + 0.5)
+			if re.match(".*Search", self.Name):
+				lastp = round((float(lastp) / 40) + 0.5)
+			else:
+				lastp = round((float(lastp) / 25) + 0.5)
 			self.lastpage = int(lastp)
 			if self.lastpage > 244 and re.match(".*Search", self.Name):
 				self.lastpage = 244
