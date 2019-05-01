@@ -20,6 +20,7 @@ else:
 
 import urlparse
 import thread
+import subprocess
 
 pfcz_cookies = CookieJar()
 pfcz_ck = {}
@@ -78,7 +79,7 @@ class pornCzechGenreScreen(MPScreen):
 			reactor.callFromThread(self.pfcz_error)
 
 	def pfcz_error(self):
-		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or python-pyexecjs and nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
+		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
 		self.keyCancel()
 
 	def getGenres(self):
@@ -251,23 +252,28 @@ class pornCzechFilmAuswahlScreen(MPScreen):
 				get_stream_link(self.session).check_link(url, self.got_link)
 
 	def parseOL(self, data):
-		try:
-			import execjs
-			node = execjs.get("Node")
-		except:
-			printl('nodejs not found',self,'E')
-			self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
-			return
 		script = re.findall('<script language="JavaScript" type="text/javascript">(.*?)</script>', data, re.S)
 		if script:
 			func = re.findall('function\s(.*?)\(', data, re.S)[0]
-			js = script[0].replace(func, 'decrypt').replace('document.write', 'video_url=') + "return video_url;"
-			data = str(node.exec_(js))
+			js = script[0].replace(func, 'decrypt').replace('document.write', 'video_url=') + "console.log(video_url);"
+			try:
+				data = subprocess.check_output(["node", "-e", js]).strip()
+			except OSError as e:
+				if e.errno == 2:
+					self.session.open(MessageBoxExt, _("This plugin requires package nodejs."), MessageBoxExt.TYPE_INFO)
+			except Exception:
+				self.session.open(MessageBoxExt, _("Error executing Javascript, please report to the developers."), MessageBoxExt.TYPE_INFO)
 			script = re.findall('<script language="JavaScript" type="text/javascript">(.*?)</script>', data, re.S)
 			if script:
 				func = re.findall('function\s(.*?)\(', data, re.S)[0]
-				js = script[0].replace(func, 'decrypt').replace('document.write', 'video_url=') + "return video_url;"
-				data = str(node.exec_(js))
+				js = script[0].replace(func, 'decrypt').replace('document.write', 'video_url=') + "console.log(video_url);"
+				try:
+					data = subprocess.check_output(["node", "-e", js]).strip()
+				except OSError as e:
+					if e.errno == 2:
+						self.session.open(MessageBoxExt, _("This plugin requires package nodejs."), MessageBoxExt.TYPE_INFO)
+				except Exception:
+					self.session.open(MessageBoxExt, _("Error executing Javascript, please report to the developers."), MessageBoxExt.TYPE_INFO)
 				stream = re.findall('<iframe.*?src=[\'|"](http[s]?://.*?\/.*?)[\'|"|\&|<]', data, re.S|re.I)
 				get_stream_link(self.session).check_link(stream[0], self.got_link)
 

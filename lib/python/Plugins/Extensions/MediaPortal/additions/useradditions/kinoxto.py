@@ -20,7 +20,7 @@ else:
 import urlparse
 import thread
 
-kx_url = 'https://kinox.io'
+kx_url = 'https://kinos.to'
 kx_cookies = CookieJar()
 kx_ck = {}
 kx_agent = ''
@@ -82,7 +82,7 @@ class kxGenre(MPScreen):
 			reactor.callFromThread(self.kx_error)
 
 	def kx_error(self):
-		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or python-pyexecjs and nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
+		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
 		self.keyCancel()
 
 	def getGenres(self):

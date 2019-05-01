@@ -111,7 +111,7 @@ class retrotvFilmListeScreen(MPScreen, ThumbsHelper):
 		if ddDescription:
 			self['handlung'].setText(decodeHtml(ddDescription.group(1)))
 		else:
-			self['handlung'].setText(_("No further information available!"))
+			self['handlung'].setText('')
 
 	def keyOK(self):
 		if self.keyLocked:

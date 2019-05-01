@@ -32,7 +32,7 @@ class CoverHelper:
 		else:
 			return data
 
-	def getCover(self, url, download_cb=None, agent=None, cookieJar=None, screensaver=False, bgcover=False, headers=None):
+	def getCover(self, url, download_cb=None, agent=None, cookieJar=None, screensaver=False, bgcover=False, headers=None, default_cover=None):
 		self.bgcover = bgcover
 		self.screensaver = screensaver
 		if self.screensaver:
@@ -44,6 +44,8 @@ class CoverHelper:
 			if self.bgcover:
 				self.NO_COVER_PIC_PATH = "/images/none.png"
 				self._no_picPath = "%s%s" % (mp_globals.pluginPath, self.NO_COVER_PIC_PATH)
+			elif default_cover:
+				self._no_picPath = default_cover
 			else:
 				self.NO_COVER_PIC_PATH = "/images/default_cover.png"
 				self._no_picPath = "%s%s" % (mp_globals.pluginPath, self.NO_COVER_PIC_PATH)
@@ -113,7 +115,10 @@ class CoverHelper:
 			self._cover.hide()
 			self._nc_callback()
 		else:
-			self.showCoverFile(self._no_picPath)
+			if self._no_picPath.startswith('file://'):
+				self.showCoverFile(self._no_picPath[7:])
+			else:
+				self.showCoverFile(self._no_picPath)
 
 		return(self._no_picPath)
 

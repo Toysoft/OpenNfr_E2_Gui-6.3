@@ -172,7 +172,7 @@ class javhdFilmScreen(MPScreen, ThumbsHelper):
 			twAgentGetPage(url, agent=myagent).addCallback(self.loadStream).addErrback(self.dataError)
 
 	def loadStream(self, data):
-		streams = re.findall('<iframe.*?src="(https://www.fembed.com/v/.*?)\s{0,1}"', data, re.S)
+		streams = re.findall('<iframe.*?src="(https://(?:www.fembed.com|kissmovies.cc|smartshare.tv)/v/.*?)\s{0,1}"', data, re.S)
 		if streams:
 			get_stream_link(self.session).check_link(streams[0], self.got_link)
 		else:

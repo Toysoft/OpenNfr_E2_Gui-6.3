@@ -10,21 +10,12 @@ del tmp
 import mp_globals
 import sys
 
-if __TW_VER__ > [13, 0, 0]:
-	from twisted.web import client
-	from twisted.internet import endpoints
-	from twisted.web.iweb import IBodyProducer
-else:
-	raise Exception("No HTTP 1.1 Support")
-
 try:
 	from OpenSSL import SSL
 	from twisted.internet.ssl import ClientContextFactory
+	twAgent = True
 except:
 	twAgent = False
-	raise Exception("No SSL Support")
-else:
-	twAgent = True
 
 try:
 	from urlparse import urlunparse, urljoin, urldefrag
@@ -44,9 +35,10 @@ except ImportError:
 	ClientTLSOptions = None
 
 import twisted
-from twisted.web import http
+from twisted.web import http, client
+from twisted.web.iweb import IBodyProducer
 from twisted.internet.protocol import Protocol
-from twisted.internet import reactor
+from twisted.internet import reactor, endpoints
 from twisted.internet.defer import Deferred, succeed, fail
 from twisted.web.http_headers import Headers
 from twisted.web.http import PotentialDataLoss
@@ -61,8 +53,7 @@ def to_bytes(text, encoding=None, errors='strict'):
     if isinstance(text, bytes):
         return text
     if not isinstance(text, six.string_types):
-        raise TypeError('to_bytes must receive a unicode, str or bytes '
-                        'object, got %s' % type(text).__name__)
+        raise TypeError('to_bytes must receive a unicode, str or bytes object, got %s' % type(text).__name__)
     if encoding is None:
         encoding = 'utf-8'
     return text.encode(encoding, errors)

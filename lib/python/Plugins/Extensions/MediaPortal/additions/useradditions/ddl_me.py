@@ -23,8 +23,6 @@ class show_DDLME_Genre(MenuHelper):
 			],
 			[None,
 			[
-			("Neue Filme", "/update_0_1"),
-			("Neue Blockbuster", "/update_0_1"),
 			("Alle", "00_%d_1_%d"),
 			("Kinofilme", "23_%d_1_%d"),
 			("Abenteuer", "01_%d_1_%d"),
@@ -50,7 +48,6 @@ class show_DDLME_Genre(MenuHelper):
 			("Western", "22_%d_1_%d")
 			],
 			[
-			("Neue Serien", "/update_0_1"),
 			("Alle", "00_%d_1_%d"),
 			("Abenteuer", "01_%d_1_%d"),
 			("Action", "02_%d_1_%d"),
@@ -106,10 +103,7 @@ class show_DDLME_Genre(MenuHelper):
 		if re.search('Suche...', self.mh_genreTitle):
 			self.paraQuery()
 		else:
-			if re.search('Neue (Filme|Serien|Blockbuster)', self.mh_genreTitle):
-				genreurl = self.mh_baseUrl+self.mh_genreUrl[0]+self.mh_genreUrl[1]
-			else:
-				genreurl = self.mh_baseUrl+self.mh_genreBase[self.mh_menuIdx[0]]+self.mh_genreUrl[0]+self.mh_genreUrl[1]
+			genreurl = self.mh_baseUrl+self.mh_genreBase[self.mh_menuIdx[0]]+self.mh_genreUrl[0]+self.mh_genreUrl[1]
 			self.session.open(DDLME_FilmListeScreen, genreurl, self.mh_genreTitle)
 
 	def paraQuery(self):
@@ -171,6 +165,7 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 
 		self.timerStart = False
 		self.seekTimerRun = False
+		self.ddlme_sortOrder = 0
 		self.filmQ = Queue.Queue(0)
 		self.eventL = threading.Event()
 		self.keyLocked = True
@@ -182,8 +177,7 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 		self.genreSerien = re.search('Serien', self.genreName)
 		self.genreABook = re.search('Hörbücher', self.genreName)
 		self.genreSearch = re.search('Suche...', self.genreName)
-		self.genreUpdates = re.search('Neue (Filme|Serien|Blockbuster)', self.genreName)
-		self.genreSpecials = self.serienEpisoden or self.genreSearch or self.genreUpdates
+		self.genreSpecials = self.serienEpisoden or self.genreSearch
 
 		self.setGenreStrTitle()
 
@@ -198,7 +192,7 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 			self['F3'].hide()
 		else:
 			self['F3'].show()
-			genreName = "%s%s - Sortierung: %s" % (self.genreTitle,self.genreName,self.sortOrderTxt[mp_globals.ddlme_sortOrder])
+			genreName = "%s%s - Sortierung: %s" % (self.genreTitle,self.genreName,self.sortOrderTxt[self.ddlme_sortOrder])
 		self['ContentTitle'].setText(genreName)
 
 	def loadPage(self):
@@ -208,7 +202,7 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 			page = self.page
 			if page < 1:
 				page = 1
-			url = self.genreLink % (mp_globals.ddlme_sortOrder, page)
+			url = self.genreLink % (self.ddlme_sortOrder, page)
 
 		if self.page:
 			self['page'].setText("%d / %d" % (self.page,self.pages))
@@ -253,24 +247,6 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 						self.filmListe.append((t, h, self.imgLink, '', ''))
 					else:
 						a = l
-		elif self.genreUpdates:
-			m = None
-			if 'Neue Filme' in self.genreName:
-				m = re.search(">Neue Filme<.*?<div id='view' class='small one'>(.*?)</div><div class=.hr.", data)
-			elif 'Neue Serien' in self.genreName:
-				m = re.search(">Neue Serien<.*?<div id='view' class='small one'>(.*?)</div><div class=.hr.", data)
-			elif 'Neue Blockbuster' in self.genreName:
-				m = re.search(">Neue Blockbuster<.*?<div id='view' class='small one'>(.*?)</div><div class=.hr.", data)
-
-			if m:
-				m = re.findall('title=\'(.*?)\'.*?href=\'(.*?)\'.*?<img.*?((?:http[s]?:|)//.*?jpg)', m.group(1))
-				if m:
-					self.page = 1
-					self.pages = 1
-					for (t, h, i) in m:
-						if i.startswith('//'):
-							i = "https:" + i
-						self.filmListe.append((decodeHtml(t), "%s%s" % (self.baseUrl, h), i, '', ''))
 		else:
 			if self.genreSearch:
 				mg = re.search("<div id='view'(.*?)class=\"clear\">", data)
@@ -342,7 +318,7 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 
 	def getHandlung(self, desc):
 		if desc == None:
-			self['handlung'].setText(_("No further information available!"))
+			self['handlung'].setText('')
 			return
 		self.setHandlung(desc)
 
@@ -358,7 +334,7 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 		title = self['liste'].getCurrent()[0][0]
 		img = self['liste'].getCurrent()[0][2]
 		sm = self['liste'].getCurrent()[0][3]
-		genreSerien = self.genreSerien or sm == '>TV<' or re.search('Neue Serien', self.genreName)
+		genreSerien = self.genreSerien or sm == '>TV<'
 
 		if not genreSerien:
 			self.session.open(DDLMEStreams, url, title, img)
@@ -443,9 +419,9 @@ class DDLME_FilmListeScreen(MPScreen, ThumbsHelper):
 	def keyYellow(self):
 		if not (self.keyLocked or self.genreSpecials):
 			self.keyLocked = True
-			mp_globals.ddlme_sortOrder += 1
-			if mp_globals.ddlme_sortOrder > 3:
-				mp_globals.ddlme_sortOrder = 0
+			self.ddlme_sortOrder += 1
+			if self.ddlme_sortOrder > 3:
+				self.ddlme_sortOrder = 0
 			self.setGenreStrTitle()
 			self.loadPage()
 
@@ -487,7 +463,7 @@ class DDLMEStreams(MPScreen):
 			desc = mdesc.group(1).strip()
 			desc = stripAllTags(decodeHtml(desc))
 		else:
-			desc = _("No further information available!")
+			desc = ""
 
 		m = re.search('http[s]?://www.youtube.com/watch\?v=(.*?)\'', data)
 		if m:

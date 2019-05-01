@@ -38,19 +38,12 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-from Plugins.Extensions.MediaPortal.resources.txxxcrypt import txxxcrypt
+from Plugins.Extensions.MediaPortal.resources.twagenthelper import TwAgentHelper
 
-agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
-json_headers = {
-	'Accept':'*/*',
-	'Accept-Encoding':'deflate',
-	'Accept-Language':'de,en-US;q=0.7,en;q=0.3',
-	'X-Requested-With':'XMLHttpRequest',
-	'Content-Type':'application/x-www-form-urlencoded'
-	}
-default_cover = "file://%s/hotmovs.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'
+default_cover = "file://%s/fetishshrine.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
-class hotmovsGenreScreen(MPScreen):
+class fetishshrineGenreScreen(MPScreen):
 
 	def __init__(self, session):
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
@@ -65,7 +58,7 @@ class hotmovsGenreScreen(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("HotMovs.com")
+		self['title'] = Label("FetishShrine.com")
 		self['ContentTitle'] = Label("Genre:")
 
 		self.keyLocked = True
@@ -79,28 +72,28 @@ class hotmovsGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://hotmovs.com/categories/"
-		getPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
+		url = "https://www.fetishshrine.com/categories/"
+		twAgentGetPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		Cats = re.findall('class="item">.*?href="(.*?)"\stitle="(.*?)".*?img\ssrc="(.*?)"', data, re.S)
-		if Cats:
-			for (Url, Title, Image) in Cats:
-				self.genreliste.append((Title, Url, Image))
-			self.genreliste.sort()
-			self.genreliste.insert(0, ("Longest", "http://hotmovs.com/longest/", default_cover))
-			self.genreliste.insert(0, ("Most Popular", "http://hotmovs.com/most-popular/", default_cover))
-			self.genreliste.insert(0, ("Top Rated", "http://hotmovs.com/top-rated/", default_cover))
-			self.genreliste.insert(0, ("Newest", "http://hotmovs.com/latest-updates/", default_cover))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
-			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
-			self.showInfos()
+		parse = re.search('class="thumbs-list">(.*?)$', data, re.S)
+		if parse:
+			Cats = re.findall('class="thumb".*?href="(.*?)"\stitle="(.*?)".*?img\ssrc="(.*?)"', parse.group(1), re.S)
+			if Cats:
+				for (Url, Title, Image) in Cats:
+					self.genreliste.append((decodeHtml(Title), Url, Image))
+		self.genreliste.sort()
+		self.genreliste.insert(0, ("Most Viewed", "https://www.fetishshrine.com/most-popular/", default_cover))
+		self.genreliste.insert(0, ("Top Rated", "https://www.fetishshrine.com/top-rated/", default_cover))
+		self.genreliste.insert(0, ("Newest", "https://www.fetishshrine.com/latest-updates/", default_cover))
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
+		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
+		self.keyLocked = False
+		self.showInfos()
 
 	def showInfos(self):
 		Image = self['liste'].getCurrent()[0][2]
-		CoverHelper(self['coverArt']).getCover(Image)
+		CoverHelper(self['coverArt']).getCover(Image, agent=agent)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -110,16 +103,16 @@ class hotmovsGenreScreen(MPScreen):
 			self.suchen()
 		else:
 			Link = self['liste'].getCurrent()[0][1]
-			self.session.open(hotmovsFilmScreen, Link, Name)
+			self.session.open(fetishshrineFilmScreen, Link, Name)
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
-			Link = urllib.quote(self.suchString).replace(' ', '+')
-			self.session.open(hotmovsFilmScreen, Link, Name)
+			Link = urllib.quote(callback).replace(' ', '+')
+			self.session.open(fetishshrineFilmScreen, Link, Name)
 
-class hotmovsFilmScreen(MPScreen, ThumbsHelper, txxxcrypt):
+class fetishshrineFilmScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
@@ -141,7 +134,7 @@ class hotmovsFilmScreen(MPScreen, ThumbsHelper, txxxcrypt):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("HotMovs.com")
+		self['title'] = Label("FetishShrine.com")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
 
@@ -160,33 +153,33 @@ class hotmovsFilmScreen(MPScreen, ThumbsHelper, txxxcrypt):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
-		if re.match(".*Search", self.Name):
-			url = "http://hotmovs.com/search/"
-			postdata = {
-			'mode':'async',
-			'function':'get_block',
-			'block_id':'list_videos_videos_list_search_result',
-			'q':self.Link,
-			'from':str(self.page),
-			}
-			getPage(url, method='POST', agent=agent, postdata=urlencode(postdata), headers=json_headers).addCallback(self.loadData).addErrback(self.dataError)
+		if re.match(".*?Search", self.Name):
+			url = "https://www.fetishshrine.com/search/%s/?q=%s" % (str(self.page), self.Link)
 		else:
-			if self.page == 1:
-				url = self.Link
-			else:
+			if self.page > 1:
 				url = "%s%s/" % (self.Link, str(self.page))
-			getPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
+			else:
+				url = "%s" % self.Link
+		print url
+		twAgentGetPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		self.getLastPage(data, 'class="pagination(.*?)</div>', '.*>((?:\d+.|)\d+)<')
-		Movies = re.findall('data-video-id=.*?href="(.*?)".*?img.*?src="(.*?)"\s{0,1}alt="(.*?)(?:"|,).*?class="thumbnail__info__right">(.*?)</div', data, re.S)
+		self.getLastPage(data, 'class="paging">(.*?)</ul>')
+		Movies = re.findall('class="thumb"\sitemscope.*?href="(.*?)".*?(?:img\ssrc|data-original)="(.*?)"\salt="(.*?)">(.*?)</div', data, re.S)
 		if Movies:
-			for (Url, Image, Title, Runtime) in Movies:
-				if not Url.startswith('http'):
-					Url = 'http://www.hotmovs.com' + Url
-				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime))
+			for (Url, Image, Title, Meta) in Movies:
+				Runtime = '-'
+				Views = '-'
+				Age = '-'
+				metadata = re.findall('class="length">(.*?)</span.*?class="views">(.*?)</span', Meta, re.S)
+				if metadata:
+					Runtime = metadata[0][0].strip()
+					if "|" in metadata[0][1]:
+						Views = metadata[0][1].split("|")[0].replace('Views','').strip()
+						Age = metadata[0][1].split("|")[1].strip()
+				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views, Age))
 		if len(self.filmliste) == 0:
-			self.filmliste.append((_('No videos found!'), None, None, ''))
+			self.filmliste.append((_('No movies found!'), None, None, None, None, None))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -194,22 +187,31 @@ class hotmovsFilmScreen(MPScreen, ThumbsHelper, txxxcrypt):
 		self.showInfos()
 
 	def showInfos(self):
+		Url = self['liste'].getCurrent()[0][1]
+		if Url == None:
+			return
 		title = self['liste'].getCurrent()[0][0]
 		pic = self['liste'].getCurrent()[0][2]
 		runtime = self['liste'].getCurrent()[0][3]
+		views = self['liste'].getCurrent()[0][4]
+		age = self['liste'].getCurrent()[0][5]
 		self['name'].setText(title)
-		self['handlung'].setText("Runtime: %s" % runtime)
-		CoverHelper(self['coverArt']).getCover(pic)
+		self['handlung'].setText("Runtime: %s\nViews: %s\nAge: %s" % (runtime, views, age))
+		CoverHelper(self['coverArt']).getCover(pic, agent=agent)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		Link = self['liste'].getCurrent()[0][1]
-		if Link:
-			self.keyLocked = True
-			getPage(Link, agent=agent).addCallback(self.getVideoPage).addErrback(self.dataError)
+		if not Link:
+			return
+		self.keyLocked = True
+		twAgentGetPage(Link, agent=agent).addCallback(self.getVideoPage).addErrback(self.dataError)
 
-	def playVideo(self, url):
-		self.keyLocked = False
-		Title = self['liste'].getCurrent()[0][0]
-		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='hotmovs')
+	def getVideoPage(self, data):
+		videoPage = re.findall("video_url:\s'(.*?)',", data, re.S)
+		if videoPage:
+			self.keyLocked = False
+			Title = self['liste'].getCurrent()[0][0]
+			url = videoPage[-1]
+			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='fetishshrine')

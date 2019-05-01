@@ -6,11 +6,11 @@ from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPag
 from Plugins.Extensions.MediaPortal.resources.pininputext import PinInputExt
 
 config_mp.mediaportal.movie4klang2 = ConfigText(default="de", fixed_size=False)
-config_mp.mediaportal.movie4kdomain3 = ConfigText(default="https://movie4k.lol", fixed_size=False)
+config_mp.mediaportal.movie4kdomain4 = ConfigText(default="https://movie4k.pe", fixed_size=False)
 
-m4k = config_mp.mediaportal.movie4kdomain3.value.replace('https://','').replace('http://','')
-m4k_url = "%s/" % config_mp.mediaportal.movie4kdomain3.value
-g_url = "%s/movies-genre-" % config_mp.mediaportal.movie4kdomain3.value
+m4k = config_mp.mediaportal.movie4kdomain4.value.replace('https://','').replace('http://','')
+m4k_url = "%s/" % config_mp.mediaportal.movie4kdomain4.value
+g_url = "%s/movies-genre-" % config_mp.mediaportal.movie4kdomain4.value
 
 try:
 	from Plugins.Extensions.MediaPortal.resources import cfscrape
@@ -54,7 +54,7 @@ class m4kGenreScreen(MPScreen):
 		}, -1)
 
 		self.locale = config_mp.mediaportal.movie4klang2.value
-		self.domain = config_mp.mediaportal.movie4kdomain3.value
+		self.domain = config_mp.mediaportal.movie4kdomain4.value
 
 		self['title'] = Label(m4k)
 		self['ContentTitle'] = Label("Genre:")
@@ -112,7 +112,7 @@ class m4kGenreScreen(MPScreen):
 			reactor.callFromThread(self.m4k_error)
 
 	def m4k_error(self):
-		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or python-pyexecjs and nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
+		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
 		self.keyCancel()
 
 	def getGenres(self):
@@ -194,28 +194,28 @@ class m4kGenreScreen(MPScreen):
 
 	def keyDomain(self):
 		if self.domain == "http://movie4k.sg":
-			config_mp.mediaportal.movie4kdomain3.value = "https://movie4k.am"
+			config_mp.mediaportal.movie4kdomain4.value = "https://movie4k.am"
 		elif self.domain == "https://movie4k.am":
-			config_mp.mediaportal.movie4kdomain3.value = "https://movie.to"
+			config_mp.mediaportal.movie4kdomain4.value = "https://movie.to"
 		elif self.domain == "https://movie.to":
-			config_mp.mediaportal.movie4kdomain3.value = "https://movie4k.pe"
+			config_mp.mediaportal.movie4kdomain4.value = "https://movie4k.pe"
 		elif self.domain == "https://movie4k.pe":
-			config_mp.mediaportal.movie4kdomain3.value = "http://movie2k.cm"
+			config_mp.mediaportal.movie4kdomain4.value = "http://movie2k.cm"
 		elif self.domain == "http://movie2k.cm":
-			config_mp.mediaportal.movie4kdomain3.value = "http://movie4k.sh"
+			config_mp.mediaportal.movie4kdomain4.value = "http://movie4k.sh"
 		elif self.domain == "http://movie4k.sh":
-			config_mp.mediaportal.movie4kdomain3.value = "https://movie4k.lol"
+			config_mp.mediaportal.movie4kdomain4.value = "https://movie4k.lol"
 		elif self.domain == "https://movie4k.lol":
-			config_mp.mediaportal.movie4kdomain3.value = "http://movie4k.me"
+			config_mp.mediaportal.movie4kdomain4.value = "http://movie4k.me"
 		elif self.domain == "http://movie4k.me":
-			config_mp.mediaportal.movie4kdomain3.value = "https://movie4k.org"
+			config_mp.mediaportal.movie4kdomain4.value = "https://movie4k.org"
 		elif self.domain == "https://movie4k.org":
-			config_mp.mediaportal.movie4kdomain3.value = "http://movie4k.sg"
+			config_mp.mediaportal.movie4kdomain4.value = "http://movie4k.sg"
 		else:
-			config_mp.mediaportal.movie4kdomain3.value = "http://movie4k.sg"
-		config_mp.mediaportal.movie4kdomain3.save()
+			config_mp.mediaportal.movie4kdomain4.value = "http://movie4k.sg"
+		config_mp.mediaportal.movie4kdomain4.save()
 		configfile_mp.save()
-		self.domain = config_mp.mediaportal.movie4kdomain3.value
+		self.domain = config_mp.mediaportal.movie4kdomain4.value
 		global m4k, m4k_url, g_url
 		m4k = "%s" % self.domain.replace('https://','').replace('http://','')
 		m4k_url = "%s/" % self.domain

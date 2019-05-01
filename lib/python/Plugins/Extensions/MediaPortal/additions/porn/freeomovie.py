@@ -79,7 +79,7 @@ class freeomovieGenreScreen(MPScreen):
 			reactor.callFromThread(self.free_error)
 
 	def free_error(self):
-		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or python-pyexecjs and nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
+		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
 		self.keyCancel()
 
 	def getGenres(self):
@@ -102,10 +102,10 @@ class freeomovieGenreScreen(MPScreen):
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
-			self.suchString = urllib.quote(callback).replace(' ', '+')
-			freeomovieUrl = '%s' % (self.suchString)
-			freeomovieGenre = "--- Search ---"
-			self.session.open(freeomovieFilmListeScreen, freeomovieUrl, freeomovieGenre)
+			Name = "--- Search ---"
+			self.suchString = callback
+			Link = '%s' % urllib.quote(self.suchString).replace(' ', '+')
+			self.session.open(freeomovieFilmListeScreen, Link, Name)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -190,7 +190,7 @@ class freeomovieFilmListeScreen(MPScreen, ThumbsHelper):
 		if ddDescription:
 			self['handlung'].setText(decodeHtml(ddDescription.group(1)))
 		else:
-			self['handlung'].setText(_("No further information available!"))
+			self['handlung'].setText('')
 
 	def keyOK(self):
 		if self.keyLocked:

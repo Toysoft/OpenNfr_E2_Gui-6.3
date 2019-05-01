@@ -2,6 +2,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.DelayedFunction import DelayedFunction
+import subprocess
 
 myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
 
@@ -57,17 +58,16 @@ class MDHGenreScreen(MPScreen):
 		twAgentGetPage(url, agent=myagent, cookieJar=mdh_cookies, headers={'Referer':'https://www.stream-mydirtyhobby.co'}, timeout=30).addCallback(self.getJs2).addErrback(self.dataError)
 
 	def getJs2(self, data):
-		try:
-			import execjs
-			node = execjs.get("Node")
-		except:
-			printl('nodejs not found',self,'E')
-			self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
-			return
 		js = re.search('(.*?)if\(\$\(window', data, re.S).group(1)
 		js = js + "function go(){ cookie = toHex(BFCrypt.decrypt(c, 2, a, b)) };"
-		js = js + 'go(); return cookie;'
-		result = node.exec_(js)
+		js = js + 'go(); console.log(cookie);'
+		try:
+			result = subprocess.check_output(["node", "-e", js]).strip()
+		except OSError as e:
+			if e.errno == 2:
+				self.session.open(MessageBoxExt, _("This plugin requires package nodejs."), MessageBoxExt.TYPE_INFO)
+		except Exception:
+			self.session.open(MessageBoxExt, _("Error executing Javascript, please report to the developers."), MessageBoxExt.TYPE_INFO)
 		printl('BLAZINGFAST-WEB-PROTECT: '+result,self,'A')
 		mdh_ck.update({'BLAZINGFAST-WEB-PROTECT':str(result)})
 		import requests
@@ -127,7 +127,7 @@ class MDHFilmScreen(MPScreen, ThumbsHelper):
 		self['title'] = Label("Stream-MyDirtyHobby")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
-		self['F3'] = Label(_("Related"))
+		self['F3'] = Label(_("Show Related"))
 
 		self['Page'] = Label(_("Page:"))
 		self.keyLocked = True

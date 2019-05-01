@@ -120,7 +120,7 @@ class filmPalastMain(MPScreen):
 			reactor.callFromThread(self.fp_error)
 
 	def fp_error(self):
-		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or python-pyexecjs and nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
+		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
 		self.keyCancel()
 
 	def SuchenCallback(self, callback = None):

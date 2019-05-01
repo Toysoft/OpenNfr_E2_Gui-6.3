@@ -122,6 +122,12 @@ class InsensitiveDict(dict):
 
 import mp_globals
 
+try:
+	from enigma import eMediaDatabase
+	mp_globals.isDreamOS = True
+except:
+	mp_globals.isDreamOS = False
+
 #if mp_globals.isDreamOS:
 #	from pixmapext import PixmapExt as Pixmap
 

@@ -4,6 +4,28 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import TwAgentHelper
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
 
+try:
+	from Plugins.Extensions.MediaPortal.resources import cfscrape
+except:
+	cfscrapeModule = False
+else:
+	cfscrapeModule = True
+
+try:
+	import requests
+except:
+	requestsModule = False
+else:
+	requestsModule = True
+
+import urlparse
+import thread
+
+pw_url = 'https://www4.primewire.ac'
+pw_cookies = CookieJar()
+pw_ck = {}
+pw_agent = ''
+
 default_cover = "file://%s/primewire.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class PrimeWireGenreScreen(MPScreen):
@@ -30,25 +52,57 @@ class PrimeWireGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "https://www4.primewire.ac/"
-		twAgentGetPage(url).addCallback(self.genreData).addErrback(self.dataError)
+		thread.start_new_thread(self.get_tokens,("GetTokens",))
+		self['name'].setText(_("Please wait..."))
+
+	def get_tokens(self, threadName):
+		if requestsModule and cfscrapeModule:
+			printl("Calling thread: %s" % threadName,self,'A')
+			global pw_ck
+			global pw_agent
+			if pw_ck == {} or pw_agent == '':
+				pw_ck, pw_agent = cfscrape.get_tokens(pw_url)
+				requests.cookies.cookiejar_from_dict(pw_ck, cookiejar=pw_cookies)
+			else:
+				try:
+					s = requests.session()
+					url = urlparse.urlparse(pw_url)
+					headers = {'user-agent': pw_agent}
+					page = s.get(url.geturl(), cookies=pw_cookies, headers=headers, timeout=15, allow_redirects=False)
+					if page.status_code == 503 and page.headers.get("Server", "").startswith("cloudflare") and b"jschl_vc" in page.content and b"jschl_answer" in page.content:
+						pw_ck, pw_agent = cfscrape.get_tokens(pw_url)
+						requests.cookies.cookiejar_from_dict(pw_ck, cookiejar=pw_cookies)
+				except:
+					pass
+			reactor.callFromThread(self.getData)
+		else:
+			reactor.callFromThread(self.pw_error)
+
+	def pw_error(self):
+		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
+		self.keyCancel()
+
+	def getData(self):
+		self.keyLocked = True
+		url = pw_url
+		twAgentGetPage(url, agent=pw_agent, cookieJar=pw_cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('class="opener-menu-genre">(.*)class="opener-menu-section', data, re.S)
 		Cats = re.findall('<a\shref="(.*?)".*?>(.*?)</a>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
-				Url = "http://www.primewire.ac" + Url + "&page="
+				Url = pw_url + Url + "&page="
 				self.genreliste.append((Title, Url))
-			self.genreliste.sort()
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
-			self.genreliste.insert(1, ("Featured Movies", "https://www4.primewire.ac/index.php?sort=featured&page="))
-			self.genreliste.insert(2, ("Popular Movies", "https://www4.primewire.ac/index.php?sort=views&page="))
-			self.genreliste.insert(3, ("Top Rated Movies", "https://www4.primewire.ac/index.php?sort=ratings&page="))
-			self.genreliste.insert(4, ("Newly Released Movies", "https://www4.primewire.ac/index.php?sort=release&page="))
-			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
+		self.genreliste.sort()
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
+		self.genreliste.insert(1, ("Featured Movies", "%s/index.php?sort=featured&page=" % pw_url))
+		self.genreliste.insert(2, ("Popular Movies", "%s/index.php?sort=views&page=" % pw_url))
+		self.genreliste.insert(3, ("Top Rated Movies", "%s/index.php?sort=ratings&page=" % pw_url))
+		self.genreliste.insert(4, ("Newly Released Movies", "%s/index.php?sort=release&page=" % pw_url))
+		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
+		self.keyLocked = False
+		self.showInfos()
 
 	def keyOK(self):
 		exist = self['liste'].getCurrent()
@@ -65,7 +119,7 @@ class PrimeWireGenreScreen(MPScreen):
 		if callback is not None and len(callback):
 			self.suchString = urllib.quote(callback).replace(' ', '+')
 			auswahl = "--- Search ---"
-			url = "https://www4.primewire.ac/?keywords=%s&page=" % self.suchString
+			url = "%s/?keywords=%s&page=" % (pw_url, self.suchString)
 			self.session.open(PrimeWireFilmlisteScreen, url, auswahl)
 
 class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
@@ -119,7 +173,7 @@ class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 			url = "%s&sort=%s" % (url, self.sort)
 		if self.filter:
 			url = "%s&country=%s" % (url, self.filter)
-		twAgentGetPage(url).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(url, agent=pw_agent, cookieJar=pw_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		self.lastpage = re.findall('<div class="number_movies_result">(.*?)\sitems found</div>', data)
@@ -131,8 +185,8 @@ class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 		chMovies = re.findall('<div\sclass="index_item\sindex_item_ie">.*?<a\shref="(.*?)"\stitle="(.*?)"><img\ssrc="(.*?)"', data, re.S)
 		if chMovies:
 			for (chUrl,chTitle,chImage) in chMovies:
-				chUrl = "https://www4.primewire.ac/" + chUrl
-				chImage = "https://www4.primewire.ac" + chImage
+				chUrl = pw_url + "/" + chUrl
+				chImage = pw_url + chImage
 				self.streamList.append((decodeHtml(chTitle),chUrl,chImage))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No videos found!'), '', None))
@@ -143,9 +197,9 @@ class PrimeWireFilmlisteScreen(MPScreen, ThumbsHelper):
 
 	def showInfos(self):
 		self.image = self['liste'].getCurrent()[0][2]
-		CoverHelper(self['coverArt']).getCover(self.image)
+		CoverHelper(self['coverArt']).getCover(self.image, agent=pw_agent, cookieJar=pw_cookies)
 		url = self['liste'].getCurrent()[0][1]
-		twAgentGetPage(url, agent=std_headers).addCallback(self.showInfos2).addErrback(self.dataError)
+		twAgentGetPage(url, agent=pw_agent, cookieJar=pw_cookies).addCallback(self.showInfos2).addErrback(self.dataError)
 
 	def showInfos2(self, data):
 		Handlung = re.search('display:block;">(.*?)</p></td>', data, re.S)
@@ -216,14 +270,14 @@ class PrimeWireStreamsScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		twAgentGetPage(self.Link).addCallback(self.parseData).addErrback(self.dataError)
+		twAgentGetPage(self.Link, agent=pw_agent, cookieJar=pw_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		streams = re.findall('<a href="(/stream/.*?\.html)".*?version_host">(.*?)</', data, re.S)
 		if streams:
 			for (Url, StreamHoster) in streams:
 				if isSupportedHoster(StreamHoster, True):
-					Url = "https://www4.primewire.ac" + Url
+					Url = pw_url + Url
 					self.streamList.append((StreamHoster, Url))
 			if len(self.streamList) == 0:
 				self.streamList.append((_('No supported streams found!'), None))
@@ -233,14 +287,14 @@ class PrimeWireStreamsScreen(MPScreen):
 			self.streamList.append((_('No supported streams found!'), None))
 		self.ml.setList(map(self._defaultlisthoster, self.streamList))
 		self['handlung'].setText(self.handlung)
-		CoverHelper(self['coverArt']).getCover(self.image)
+		CoverHelper(self['coverArt']).getCover(self.image, agent=pw_agent, cookieJar=pw_cookies)
 
 	def keyOK(self):
 		exist = self['liste'].getCurrent()
 		if self.keyLocked or exist == None:
 			return
 		url = self['liste'].getCurrent()[0][1]
-		twAgentGetPage(url).addCallback(self.getStream).addErrback(self.dataError)
+		twAgentGetPage(url, agent=pw_agent, cookieJar=pw_cookies).addCallback(self.getStream).addErrback(self.dataError)
 
 	def getStream(self, data):
 		streams = re.findall('data-href="(.*?)"', data, re.S)

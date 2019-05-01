@@ -196,7 +196,7 @@ class FVCDE_FilmListeScreen(MPScreen, ThumbsHelper):
 
 	def getHandlung(self, desc):
 		if desc == None:
-			self['handlung'].setText(_("No further information available!"))
+			self['handlung'].setText('')
 			return
 		self.setHandlung(desc)
 

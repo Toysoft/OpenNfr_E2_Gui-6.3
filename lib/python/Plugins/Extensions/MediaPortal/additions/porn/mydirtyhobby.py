@@ -90,7 +90,7 @@ class MDHtoFilmScreen(MPScreen, ThumbsHelper):
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
 		if not (self.Name.startswith("Pornstar") or self.Name == "Movies"):
-			self['F3'] = Label(_("Related"))
+			self['F3'] = Label(_("Show Related"))
 
 		self['Page'] = Label(_("Page:"))
 		self.keyLocked = True

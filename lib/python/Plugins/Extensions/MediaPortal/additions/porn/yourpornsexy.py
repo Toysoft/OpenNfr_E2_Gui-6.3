@@ -45,7 +45,7 @@ class YourPornSexyGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://yourporn.sexy"
+		url = "https://sxyprn.com"
 		twAgentGetPage(url, agent=myagent, cookieJar=yps_cookies).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -57,22 +57,22 @@ class YourPornSexyGenreScreen(MPScreen):
 		Cats = re.findall('<a(?:\sclass=\'tdn\'|)\shref=[\'|"](/blog/.*?)[\'|"].*?<span(?:\sclass=\'htag_el_tag\'|)>#(.*?)</span>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
-				Url = "http://yourporn.sexy" + Url.replace('/0.html','/%s.html')
+				Url = "https://sxyprn.com" + Url.replace('/0.html','/%s.html')
 				Title = Title.lower().title()
 				self.genreliste.append((Title, Url))
 			self.genreliste.sort()
-		self.genreliste.insert(0, ("Trends", "http://yourporn.sexy/searches/%s.html"))
-		self.genreliste.insert(0, ("Orgasmic", "http://yourporn.sexy/orgasm/%s"))
-		self.genreliste.insert(0, ("Pornstars", "http://yourporn.sexy/pornstars/%s.html"))
-		self.genreliste.insert(0, ("Top Viewed (All Time)", "http://yourporn.sexy/popular/top-viewed.html/%s?p=all"))
-		self.genreliste.insert(0, ("Top Viewed (Monthly)", "http://yourporn.sexy/popular/top-viewed.html/%s?p=month"))
-		self.genreliste.insert(0, ("Top Viewed (Weekly)", "http://yourporn.sexy/popular/top-viewed.html/%s?p=week"))
-		self.genreliste.insert(0, ("Top Viewed (Daily)", "http://yourporn.sexy/popular/top-viewed.html/%s?p=day"))
-		self.genreliste.insert(0, ("Top Rated (All Time)", "http://yourporn.sexy/popular/top-rated.html/%s?p=all"))
-		self.genreliste.insert(0, ("Top Rated (Monthly)", "http://yourporn.sexy/popular/top-rated.html/%s?p=month"))
-		self.genreliste.insert(0, ("Top Rated (Weekly)", "http://yourporn.sexy/popular/top-rated.html/%s?p=week"))
-		self.genreliste.insert(0, ("Top Rated (Daily)", "http://yourporn.sexy/popular/top-rated.html/%s?p=day"))
-		self.genreliste.insert(0, ("Newest", "http://yourporn.sexy/blog/all/%s.html?fl=all&sm=latest"))
+		self.genreliste.insert(0, ("Trends", "https://sxyprn.com/searches/%s.html"))
+		self.genreliste.insert(0, ("Orgasmic", "https://sxyprn.com/orgasm/%s"))
+		self.genreliste.insert(0, ("Pornstars", "https://sxyprn.com/pornstars/%s.html"))
+		self.genreliste.insert(0, ("Top Viewed (All Time)", "https://sxyprn.com/popular/top-viewed.html/%s?p=all"))
+		self.genreliste.insert(0, ("Top Viewed (Monthly)", "https://sxyprn.com/popular/top-viewed.html/%s?p=month"))
+		self.genreliste.insert(0, ("Top Viewed (Weekly)", "https://sxyprn.com/popular/top-viewed.html/%s?p=week"))
+		self.genreliste.insert(0, ("Top Viewed (Daily)", "https://sxyprn.com/popular/top-viewed.html/%s?p=day"))
+		self.genreliste.insert(0, ("Top Rated (All Time)", "https://sxyprn.com/popular/top-rated.html/%s?p=all"))
+		self.genreliste.insert(0, ("Top Rated (Monthly)", "https://sxyprn.com/popular/top-rated.html/%s?p=month"))
+		self.genreliste.insert(0, ("Top Rated (Weekly)", "https://sxyprn.com/popular/top-rated.html/%s?p=week"))
+		self.genreliste.insert(0, ("Top Rated (Daily)", "https://sxyprn.com/popular/top-rated.html/%s?p=day"))
+		self.genreliste.insert(0, ("Newest", "https://sxyprn.com/blog/all/%s.html?fl=all&sm=latest"))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -99,7 +99,7 @@ class YourPornSexyGenreScreen(MPScreen):
 			self.session.open(YourPornSexyFilmScreen, Link, Name)
 
 	def getSuggestions(self, text, max_res):
-		url = "https://yourporn.sexy/php/livesearch.php"
+		url = "https://sxyprn.com/php/livesearch.php"
 		postdata = {'key': text.replace(' ','-'), 'c':'livesearch4', 'uid': uid}
 		d = twAgentGetPage(url, method='POST', postdata=urlencode(postdata), agent=myagent, headers=json_headers, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
@@ -298,7 +298,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 		else:
 			count = 20
 		if re.match(".*?Search", self.Name) or self.Name == "Trends" or self.Name == "Pornstars":
-			url = "https://yourporn.sexy/%s.html?page=%s" % (self.Link, str((self.page-1)*30))
+			url = "https://sxyprn.com/%s.html?page=%s" % (self.Link, str((self.page-1)*30))
 			twAgentGetPage(url, agent=myagent, cookieJar=yps_cookies).addCallback(self.loadData).addErrback(self.dataError)
 		else:
 			url = self.Link.replace('%s', str((self.page-1)*count))
@@ -329,7 +329,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 							else:
 								Added = "-"
 								Views = "-"
-							Url = "http://yourporn.sexy" + Url
+							Url = "https://sxyprn.com" + Url
 							if Image.startswith('//'):
 								Image = "http:" + Image
 							self.filmliste.append((decodeHtml(Title), Url, Image, Views, Runtime, Added))
@@ -347,7 +347,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 								else:
 									Added = "-"
 									Views = "-"
-								Url = "http://yourporn.sexy" + Url
+								Url = "https://sxyprn.com" + Url
 								if Image.startswith('//'):
 									Image = "http:" + Image
 								self.filmliste.append((decodeHtml(Title), Url, Image, Views, Runtime, Added))
@@ -382,7 +382,7 @@ class YourPornSexyFilmScreen(MPScreen, ThumbsHelper):
 		videoUrl = re.findall('data-vnfo=\'\{"[0-9a-f]+":"(.*?)"\}\'', data, re.S)
 		if videoUrl:
 			url = videoUrl[-1].replace('\/','/')
-			url = 'https://yourporn.sexy' + url.replace('/cdn/','/cdn4/')
+			url = 'https://sxyprn.com' + url.replace('/cdn/','/cdn4/')
 			self.tw_agent_hlp.getRedirectedUrl(url).addCallback(self.getStream).addErrback(self.dataError)
 
 	def getStream(self, url):

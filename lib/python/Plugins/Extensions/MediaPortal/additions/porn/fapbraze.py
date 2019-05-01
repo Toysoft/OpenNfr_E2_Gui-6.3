@@ -176,7 +176,7 @@ class fapbrazeFilmScreen(MPScreen, ThumbsHelper):
 			title = self['liste'].getCurrent()[0][0]
 			self.session.open(SimplePlayer, [(title, streams[0])], showPlaylist=False, ltype='fapbraze')
 		else:
-			streams = re.findall('<iframe.*?src="(https://www.fembed.com/v/.*?)\s{0,1}"', data, re.S)
+			streams = re.findall('<iframe.*?src="(https://(?:www.fembed.com|kissmovies.cc|smartshare.tv)/v/.*?)\s{0,1}"', data, re.S)
 			if streams:
 				get_stream_link(self.session).check_link(streams[0], self.got_link)
 			else:

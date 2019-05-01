@@ -21,26 +21,26 @@ class porntrexGenreScreen(MPScreen):
 		self.mode = mode
 
 		global default_cover
+		global username
+		global password
 		if self.mode == "porntrex":
 			self.portal = "Porntrex.com"
 			self.baseurl = "https://www.porntrex.com"
 			default_cover = "file://%s/porntrex.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
-			global username
-			global password
 			username = str(config_mp.mediaportal.porntrex_username.value)
 			password = str(config_mp.mediaportal.porntrex_password.value)
 		elif self.mode == "javwhores":
 			self.portal = "JavWhores.com"
 			self.baseurl = "https://www.javwhores.com"
 			default_cover = "file://%s/javwhores.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
-			global username
-			global password
 			username = str(config_mp.mediaportal.javwhores_username.value)
 			password = str(config_mp.mediaportal.javwhores_password.value)
 		elif self.mode == "camwhoresbay":
 			self.portal = "Camwhoresbay.com"
 			self.baseurl = "https://www.camwhoresbay.com"
 			default_cover = "file://%s/camwhoresbay.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+			username = ""
+			password = ""
 
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
@@ -310,7 +310,7 @@ class porntrexFilmScreen(MPScreen, ThumbsHelper):
 			self.keyLocked = True
 			getPage(url, agent=myagent, cookies=ck).addCallback(self.getVideoPage).addErrback(self.dataError)
 		else:
-			message = self.session.open(MessageBoxExt, _("Login data is required video playback!"), MessageBoxExt.TYPE_INFO, timeout=5)
+			message = self.session.open(MessageBoxExt, _("Login data is required for video playback!"), MessageBoxExt.TYPE_INFO, timeout=5)
 
 	def getVideoPage(self, data):
 		vidurl = None

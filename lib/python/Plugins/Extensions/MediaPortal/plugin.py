@@ -70,12 +70,6 @@ if desktopSize.width() == 1920:
 	mp_globals.pagebar_posy = 985
 
 try:
-	from enigma import eMediaDatabase
-	mp_globals.isDreamOS = True
-except:
-	mp_globals.isDreamOS = False
-
-try:
 	f = open("/proc/stb/info/model", "r")
 	model = ''.join(f.readlines()).strip()
 except:
@@ -169,8 +163,8 @@ config.mediaportal = ConfigSubsection()
 config_mp.mediaportal.fake_entry = NoSave(ConfigNothing())
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2019042101"))
-config.mediaportal.version = NoSave(ConfigText(default="2019042101"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2019050101"))
+config.mediaportal.version = NoSave(ConfigText(default="2019050101"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 

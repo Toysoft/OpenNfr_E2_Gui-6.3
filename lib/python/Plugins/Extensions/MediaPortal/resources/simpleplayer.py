@@ -20,7 +20,6 @@ from cannalink import CannaLink
 from eightieslink import EightiesLink
 from coverhelper import CoverHelper
 from Components.Pixmap import MovingPixmap
-from simpleevent import SimpleEvent
 from enigma import iPlayableService
 
 try:
@@ -81,6 +80,34 @@ def clearTmpBuffer():
 	if os.path.exists(path):
 		for fn in next(os.walk(path))[2]:
 			BgFileEraser.erase(os.path.join(path,fn))
+
+class SimpleEvent:
+	def __init__(self):
+		self._ev_callback = None
+		self._ev_on = False
+		self._fini_callback = None
+
+	def genEvent(self, fini_cb=None):
+		self._fini_callback = fini_cb
+		if self._ev_callback:
+			self._ev_on = False
+			self._ev_callback()
+		else:
+			self._ev_on = True
+
+	def addCallback(self, cb):
+		self._ev_callback=cb
+		if self._ev_on:
+			self._ev_on = False
+			cb()
+
+	def reset(self):
+		self._ev_callback = None
+		self._ev_on = False
+		cb = self._fini_callback
+		self._fini_callback = None
+		if cb:
+			cb()
 
 class M3U8Player:
 
@@ -2004,7 +2031,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 	def showCover2(self, ret, cover=None):
 		if model in ["dm7080","dm900","dm920"]:
 			self.summaries.updateCover('file:///tmp/.RadioCover.jpg')
-		if config_mp.mediaportal.sp_radio_visualization.value == "3":
+		if MerlinMusicPlayerPresent and config_mp.mediaportal.sp_radio_visualization.value == "3":
 			self.RadioBg['coverGL'].setCover('/tmp/.RadioCover.jpg')
 		else:
 			self.RadioBg['cover'].hide()

@@ -18,9 +18,9 @@
 <hoster>filer.net</hoster><regex>filer.net</regex>
 <hoster>filefactory</hoster><regex>filefactory.com</regex>
 <hoster>bitshare</hoster><regex>bitshare.com</regex>
+<hoster>bitporno</hoster><regex>bitporno.com</regex>
 <hoster>vk.com</hoster><regex>vk.com</regex>
 <hoster>vk.me</hoster><regex>vk.me</regex>
-<hoster>userporn</hoster><regex>userporn.com</regex>
 <hoster>allmyvideos</hoster><regex>allmyvideos.net</regex>
 <hoster>mp4upload</hoster><regex>mp4upload.com</regex>
 <hoster>mega3x</hoster><regex>mega3x.net</regex>
@@ -35,7 +35,6 @@
 <hoster>bestreams</hoster><regex>bestreams.net</regex>
 <hoster>vidto.me</hoster><regex>vidto.me</regex>
 <hoster>zettahost</hoster><regex>zettahost.tv</regex>
-<hoster>epornik</hoster><regex>epornik.com</regex>
 <hoster>vidspot</hoster><regex>vidspot.net</regex>
 <hoster>kodik</hoster><regex>kodik.biz</regex>
 <hoster>docs.google.com</hoster><regex>docs.google.com</regex>
@@ -53,7 +52,7 @@
 <hoster>vidzi</hoster><regex>vidzi.tv</regex>
 <hoster>ok.ru</hoster><regex>ok.ru</regex>
 <hoster>mail.ru</hoster><regex>mail.ru</regex>
-<hoster>vidlox</hoster><regex>vidlox.tv</regex>
+<hoster>vidlox</hoster><regex>vidlox\.(?:tv|me)</regex>
 <hoster>vidcloud</hoster><regex>vidcloud.co</regex>
 <hoster>xdrive</hoster><regex>xdrive.cc</regex>
 <hoster>streamango</hoster><regex>streamango.com</regex>

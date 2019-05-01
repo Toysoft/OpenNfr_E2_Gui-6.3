@@ -39,7 +39,6 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from imports import *
 import mp_globals
-from jsunpacker import cJsUnpacker
 from debuglog import printlog as printl
 from messageboxext import MessageBoxExt
 from realdebrid import realdebrid_oauth2
@@ -76,10 +75,10 @@ class get_stream_link:
 
 	# hosters
 	from hosters.bestreams import bestreams, bestreamsCalllater, bestreamsPostData
+	from hosters.bitporno import bitporno
 	from hosters.bitshare import bitshare, bitshare_start
 	from hosters.clipwatching import clipwatching
 	from hosters.datoporn import datoporn
-	from hosters.epornik import epornik
 	from hosters.exashare import exashare
 	from hosters.fembed import fembed
 	from hosters.flashx import flashx
@@ -99,7 +98,6 @@ class get_stream_link:
 	from hosters.streamango import streamango
 	from hosters.thevideome import thevideome
 	from hosters.uptostream import uptostream
-	from hosters.userporn import Userporn
 	from hosters.vidcloud import vidcloud
 	from hosters.videowood import videowood
 	from hosters.vidlox import vidlox
@@ -463,10 +461,6 @@ class get_stream_link:
 				link = data
 				getPage(link).addCallback(self.bitshare).addErrback(self.errorload)
 
-			elif re.search('epornik.com', data, re.S):
-				link = data
-				getPage(link).addCallback(self.epornik).addErrback(self.errorload)
-
 			elif re.search('clipwatching.com', data, re.S):
 				link = data
 				twAgentGetPage(link).addCallback(self.clipwatching).addErrback(self.errorload)
@@ -480,6 +474,15 @@ class get_stream_link:
 				link = 'https://smartshare.tv/api/source/' + data.split('/v/')[-1]
 				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
 				twAgentGetPage(link, method='POST', agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.smartshare).addErrback(self.errorload)
+
+			elif re.search('bitporno.com', data, re.S):
+				if "/e/" in data:
+					data = data.replace('/e/','/v/')
+				if "&" in data:
+					data = data.split('&')[0]
+				link = data
+				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+				twAgentGetPage(link, agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', timeout=60).addCallback(self.bitporno).addErrback(self.errorload)
 
 			elif re.search('fembed.com', data, re.S):
 				link = 'http://www.fembed.com/api/source/' + data.split('/v/')[-1]
@@ -505,9 +508,6 @@ class get_stream_link:
 						self.only_premium()
 				else:
 					self.stream_not_found()
-
-			elif re.search('userporn.com', data, re.S):
-				self.userporn_tv(data)
 
 			elif re.search('vk.com|vk.me', data, re.S):
 				link = data
@@ -540,8 +540,11 @@ class get_stream_link:
 				getPage(link).addCallback(self.mega3x).addErrback(self.errorload)
 
 			elif re.search("dato.porn|datoporn.co", data, re.S):
-				link = data
-				getPage(link).addCallback(self.datoporn).addErrback(self.errorload)
+				if "embed-" in data:
+					link = data
+				else:
+					link = "https://datoporn.co/embed-" + data.split('/')[-1] + ".html"
+				twAgentGetPage(link).addCallback(self.datoporn).addErrback(self.errorload)
 
 			elif re.search("gounlimited.to", data, re.S):
 				link = data
@@ -722,11 +725,11 @@ class get_stream_link:
 				link = data
 				getPage(link, cookies=ck).addCallback(self.vidzi).addErrback(self.errorload)
 
-			elif re.search('vidlox\.tv/', data, re.S):
-				if re.search('vidlox\.tv/embed-', data, re.S):
+			elif re.search('vidlox(\.tv|\.me)', data, re.S):
+				if re.search('vidlox(\.tv|\.me)/embed-', data, re.S):
 					link = data
 				else:
-					id = re.search('vidlox\.tv/(\w+)', data)
+					id = re.search('vidlox(?:\.tv|\.me)/(\w+)', data)
 					if id:
 						link = "https://vidlox.tv/embed-%s.html" % id.group(1)
 				twAgentGetPage(link).addCallback(self.vidlox).addErrback(self.errorload)
@@ -811,13 +814,5 @@ class get_stream_link:
 			self._callback(stream)
 		elif re.search('This video is encoding now', data, re.S):
 			self.session.open(MessageBoxExt, _("This video is encoding now. Please check back later."), MessageBoxExt.TYPE_INFO, timeout=10)
-		else:
-			self.stream_not_found()
-
-	def userporn_tv(self, link):
-		fx = self.Userporn()
-		stream_url = fx.get_media_url(link)
-		if stream_url:
-			self._callback(stream_url)
 		else:
 			self.stream_not_found()

@@ -20,6 +20,7 @@ else:
 
 import urlparse
 import thread
+import subprocess
 
 iv_cookies = CookieJar()
 iv_ck = {}
@@ -51,6 +52,7 @@ class ivhunterGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
+		self['name'].setText(_('Please wait...'))
 		thread.start_new_thread(self.get_tokens,("GetTokens",))
 
 	def get_tokens(self, threadName):
@@ -78,7 +80,7 @@ class ivhunterGenreScreen(MPScreen):
 			reactor.callFromThread(self.iv_error)
 
 	def iv_error(self):
-		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or python-pyexecjs and nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
+		message = self.session.open(MessageBoxExt, _("Mandatory depends python-requests and/or nodejs are missing!"), MessageBoxExt.TYPE_ERROR)
 		self.keyCancel()
 
 	def getGenres(self):
@@ -104,6 +106,7 @@ class ivhunterGenreScreen(MPScreen):
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
+		self['name'].setText('')
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
@@ -185,7 +188,7 @@ class ivhunterFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class=\'wp-pagenavi\'>(.*?)</div>', '.*\/page\/(\d+)')
-		Movies = re.findall('id="post-\d+".*?clip-link.*?title="(.*?)"\shref="(.*?)".*?img\ssrc="(.*?)"', data, re.S)
+		Movies = re.findall('id="post-\d{2,6}".*?clip-link.*?title="(.*?)"\shref="(.*?)".*?img\ssrc="(.*?)"', data, re.S)
 		if Movies:
 			for (Title, Url, Image) in Movies:
 				if not Image and "/category/" in Url:
@@ -233,7 +236,7 @@ class ivhunterFilmScreen(MPScreen, ThumbsHelper):
 			twAgentGetPage(url, agent=iv_agent, cookieJar=iv_cookies).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def loadPageData(self, data):
-		streams = re.findall('<iframe\ssrc="((?:http[s]?|)//javdos.com/embed.*?)"', data, re.S)
+		streams = re.findall('<iframe\ssrc="((?:http[s]?:|)//javdos.com/embed.*?)"', data, re.S)
 		if streams:
 			url = streams[0]
 			if url.startswith('//'):
@@ -249,15 +252,16 @@ class ivhunterFilmScreen(MPScreen, ThumbsHelper):
 					break
 			monday = re.findall('clientSide.init\((monday.*?\))\);', data, re.S)
 			if monday:
-				js = js + "vidurl = " + monday[0] + ";return vidurl;"
+				js = js + "vidurl = " + monday[0] + ";console.log(vidurl);"
 				try:
-					import execjs
-					node = execjs.get("Node")
-					url = str(node.exec_(js))
-					get_stream_link(self.session).check_link(url, self.got_link)
-					self.keyLocked = False
-				except:
-					self.session.open(MessageBoxExt, _("This plugin requires packages python-pyexecjs and nodejs."), MessageBoxExt.TYPE_INFO)
+					url = subprocess.check_output(["node", "-e", js]).strip()
+				except OSError as e:
+					if e.errno == 2:
+						self.session.open(MessageBoxExt, _("This plugin requires package nodejs."), MessageBoxExt.TYPE_INFO)
+				except Exception:
+					self.session.open(MessageBoxExt, _("Error executing Javascript, please report to the developers."), MessageBoxExt.TYPE_INFO)
+				get_stream_link(self.session).check_link(url, self.got_link)
+				self.keyLocked = False
 			else:
 				message = self.session.open(MessageBoxExt, _("No supported streams found!"), MessageBoxExt.TYPE_INFO, timeout=3)
 				self.keyLocked = False
