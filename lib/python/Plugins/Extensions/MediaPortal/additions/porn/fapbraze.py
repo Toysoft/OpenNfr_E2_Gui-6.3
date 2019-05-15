@@ -183,7 +183,8 @@ class fapbrazeFilmScreen(MPScreen, ThumbsHelper):
 				streams = re.findall('(?:src|href)=[\'|"](http[s]?://(?!(?:www.|m.|)fapbraze.com)(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
 				if streams:
 					for (stream, hostername) in streams:
-						if isSupportedHoster(hostername, True):
+						check = isSupportedHoster(hostername)
+						if check:
 							url = stream.replace('&amp;','&').replace('&#038;','&')
 							get_stream_link(self.session).check_link(url, self.got_link)
 		self.keyLocked = False

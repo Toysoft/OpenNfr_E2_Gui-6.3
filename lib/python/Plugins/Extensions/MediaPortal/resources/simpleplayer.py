@@ -1137,8 +1137,10 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 
 		if (self.__class__.ctr + 1) > 1:
 			printl('[SP]: only 1 instance allowed',self,"E")
+			self.multiple_instance = True
 		else:
 			self.__class__.ctr += 1
+			self.multiple_instance = False
 
 		try:
 			from enigma import eServiceMP3
@@ -1288,44 +1290,47 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 		self.youtubelive = False
 		self.dash = False
 
-		self.EmbeddedCoverTimer = eTimer()
-		if mp_globals.isDreamOS:
-			self.EmbeddedCoverTimer_conn = self.EmbeddedCoverTimer.timeout.connect(self.checkEmbeddedCover)
+		if self.multiple_instance:
+			self.leavePlayer()
 		else:
-			self.EmbeddedCoverTimer.callback.append(self.checkEmbeddedCover)
+			self.EmbeddedCoverTimer = eTimer()
+			if mp_globals.isDreamOS:
+				self.EmbeddedCoverTimer_conn = self.EmbeddedCoverTimer.timeout.connect(self.checkEmbeddedCover)
+			else:
+				self.EmbeddedCoverTimer.callback.append(self.checkEmbeddedCover)
 
-		self.hideSPCover()
-		self.onClose.append(self.playExit)
+			self.hideSPCover()
+			self.onClose.append(self.playExit)
 
-		self.setPlayerAgent()
+			self.setPlayerAgent()
 
-		if mp_globals.isDreamOS:
-			self.onLayoutFinish.append(self._animation)
+			if mp_globals.isDreamOS:
+				self.onLayoutFinish.append(self._animation)
 
-		self.onFirstExecBegin.append(self.showIcon)
-		self.onFirstExecBegin.append(self.playVideo)
+			self.onFirstExecBegin.append(self.showIcon)
+			self.onFirstExecBegin.append(self.playVideo)
 
-		if self.playerMode in ('MP3',):
-			self.onFirstExecBegin.append(self.openPlaylist)
+			if self.playerMode in ('MP3',):
+				self.onFirstExecBegin.append(self.openPlaylist)
 
-		if is_eServiceMP3:
-			self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
-				{
-					eServiceMP3.evAudioDecodeError: self.__evAudioDecodeError,
-					eServiceMP3.evVideoDecodeError: self.__evVideoDecodeError,
-					eServiceMP3.evPluginError: self.__evPluginError,
-					eServiceMP3.evStreamingSrcError: self.__evStreamingSrcError,
-					eServiceMP3.evEmbeddedCoverArt: self._evEmbeddedCoverArt,
-					iPlayableService.evStart: self.__serviceStarted,
-					iPlayableService.evUpdatedInfo: self.__evUpdatedInfo
-				})
-		else:
-			self.embeddedCoverArt = False
-			self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
-				{
-					iPlayableService.evStart: self.__serviceStarted,
-					iPlayableService.evUpdatedInfo: self.__evUpdatedInfo
-				})
+			if is_eServiceMP3:
+				self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
+					{
+						eServiceMP3.evAudioDecodeError: self.__evAudioDecodeError,
+						eServiceMP3.evVideoDecodeError: self.__evVideoDecodeError,
+						eServiceMP3.evPluginError: self.__evPluginError,
+						eServiceMP3.evStreamingSrcError: self.__evStreamingSrcError,
+						eServiceMP3.evEmbeddedCoverArt: self._evEmbeddedCoverArt,
+						iPlayableService.evStart: self.__serviceStarted,
+						iPlayableService.evUpdatedInfo: self.__evUpdatedInfo
+					})
+			else:
+				self.embeddedCoverArt = False
+				self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
+					{
+						iPlayableService.evStart: self.__serviceStarted,
+						iPlayableService.evUpdatedInfo: self.__evUpdatedInfo
+					})
 
 	def cleanTitleRadio(self, sTitle):
 		if self.ltype == 'canna':
@@ -1725,6 +1730,10 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 			self.playPrevStream(config_mp.mediaportal.sp_on_movie_stop.value)
 
 	def handleLeave(self, how):
+		if self.multiple_instance:
+			self.is_closing = True
+			self.leavePlayerConfirmed([True, "quit"])
+			return
 		if self.playerMode in ('MP3',):
 			self.openPlaylist()
 			return

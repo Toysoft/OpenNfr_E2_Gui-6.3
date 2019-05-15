@@ -166,9 +166,9 @@ class wrestlingnetworkPlayer(MPScreen):
 				streams = re.findall('(http[s]?://(.*?)\/.*?)[\'|"|\&|<]', data, re.S)
 				if streams:
 					for (stream, hostername) in streams:
-						if isSupportedHoster(hostername, True):
-							hostername = hostername.replace('www.','').replace('embed.','').replace('play.','')
-							self.filmliste.append((hostername, stream, True))
+						check = isSupportedHoster(hostername)
+						if check:
+							self.filmliste.append((check, stream, True))
 		self.keyLocked = False
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 

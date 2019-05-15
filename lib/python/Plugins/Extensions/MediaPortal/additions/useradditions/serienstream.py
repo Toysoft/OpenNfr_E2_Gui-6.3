@@ -803,14 +803,15 @@ class ssStreams(MPScreen):
 		streams = re.findall('episodeLink.*?data-lang-key="(.*?)".*?data-link-target="(.*?)">.*?<i class="icon\s(.*?)"', data, re.S)
 		if streams:
 			for (language, url, hoster) in streams:
-				if isSupportedHoster(hoster, True):
+				check = isSupportedHoster(hoster)
+				if check:
 					if language == "1":
 						Flag = "DE"
 					elif language == "2":
 						Flag = "EN"
 					else:
 						Flag = "DEUS"
-					self.streamList.append((hoster, url, False, Flag))
+					self.streamList.append((check, url, False, Flag))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No supported streams found!'), None, False, ""))
 		else:

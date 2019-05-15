@@ -159,7 +159,7 @@ class sharedirMenueScreen(sharedirHelper, MPScreen):
 		hosterdata = re.findall('<input\stype="checkbox"(?:\sclass="styled"|)\sname="dho_\d+"\sid="dho_\d+"\svalue="(\d+)".*?<label\sfor="dho_\d+".*?>(.*?)</label>', data, re.S)
 		if hosterdata:
 			for (id, hostername) in hosterdata:
-				if isSupportedHoster(hostername, True):
+				if isSupportedHoster(hostername):
 					self.hosters.append((hostername, id))
 			global hosters
 			hosters = self.hosters
@@ -413,7 +413,7 @@ class sharedirListScreen(sharedirHelper, MPScreen):
 			if Movies:
 				for Title, Url, Hostername, Ext, Size, Date, Source in Movies:
 					Url = "https://sharedir.com%s" % Url
-					if isSupportedHoster(Hostername, True):
+					if isSupportedHoster(Hostername):
 						Size = stripAllTags(Size).strip()
 						self.filmliste.append((decodeHtml(Title), Url, Hostername, Ext, Size, Date, Source.strip("www.")))
 		if len(self.filmliste) == 0:

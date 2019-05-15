@@ -276,9 +276,11 @@ class PrimeWireStreamsScreen(MPScreen):
 		streams = re.findall('<a href="(/stream/.*?\.html)".*?version_host">(.*?)</', data, re.S)
 		if streams:
 			for (Url, StreamHoster) in streams:
-				if isSupportedHoster(StreamHoster, True):
+				StreamHoster = StreamHoster.replace('vShare','vshare.eu')
+				check = isSupportedHoster(StreamHoster)
+				if check:
 					Url = pw_url + Url
-					self.streamList.append((StreamHoster, Url))
+					self.streamList.append((check, Url))
 			if len(self.streamList) == 0:
 				self.streamList.append((_('No supported streams found!'), None))
 			else:

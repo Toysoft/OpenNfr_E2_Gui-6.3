@@ -622,8 +622,9 @@ class m4kStreamListeScreen(MPScreen):
 						hoster_url = "%s%s" % (m4k_url, h_url.replace('\\',''))
 						if not hoster_url in dupe:
 							dupe.append(hoster_url)
-							if isSupportedHoster(h_name.replace('Streamclou','Streamcloud').replace('Streamcher','Streamcherry').replace('Openload.c','Openload').replace('Vidcloud.c','Vidcloud'), True):
-								self.list.append((h_name.replace('Streamclou','Streamcloud').replace('Streamcher','Streamcherry').replace('Openload.c','Openload').replace('Vidcloud.c','Vidcloud'), hoster_url, h_date))
+							check = isSupportedHoster(h_name.replace('Streamclou','Streamcloud').replace('Streamcher','Streamcherry').replace('Openload.c','Openload').replace('Vidcloud.c','Vidcloud'))
+							if check:
+								self.list.append((check, hoster_url, h_date))
 			else:
 				hosters = re.findall('<a target="_blank" href="(http[s]?://(.*?)/.*?)"', data, re.S)
 				if not hosters:
@@ -633,7 +634,7 @@ class m4kStreamListeScreen(MPScreen):
 					h_name = h_name.split('.')[-2]
 					h_name = h_name.lower().replace('faststream', 'rapidvideo').replace('fastvideo', 'rapidvideo')
 					h_url = h_url.replace('faststream.in', 'rapidvideo.ws').replace('fastvideo.in', 'rapidvideo.ws')
-					if re.search('(streamin|porntube4k|pandamovie|plashporn|porntorpia)', h_name) or isSupportedHoster(h_name, True):
+					if re.search('(streamin|porntube4k|pandamovie|plashporn|porntorpia)', h_name) or isSupportedHoster(h_name):
 						self.list.append((h_name.capitalize(), h_url, ""))
 			if len(self.list) == 0:
 				self.list.append(("No supported streams found.", '', '', '', ''))
@@ -656,7 +657,8 @@ class m4kStreamListeScreen(MPScreen):
 		if self.keyLocked or exist == None:
 			return
 		streamLink = self['liste'].getCurrent()[0][1]
-		if isSupportedHoster(streamLink, True):
+		check = isSupportedHoster(streamLink)
+		if check:
 			get_stream_link(self.session).check_link(streamLink, self.got_link)
 		else:
 			twAgentGetPage(streamLink, agent=m4k_agent, cookieJar=m4k_cookies, timeout=30).addCallback(self.get_streamlink, streamLink).addErrback(self.dataError)

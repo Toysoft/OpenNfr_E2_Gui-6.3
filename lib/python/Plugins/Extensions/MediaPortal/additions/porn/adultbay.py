@@ -224,12 +224,9 @@ class StreamAuswahl(MPScreen):
 		streams = re.findall('(http[s]?://(?!adultbay.org)(.*?)\/.*?)[\'|"|\&|<]', parse.group(1), re.S)
 		if streams:
 			for (stream, hostername) in streams:
-				if isSupportedHoster(hostername, True):
-					hostername = hostername.replace('www.','')
-					quality = re.search('(360|480|720|1080)[p]?[_\d+]?.*?\.mp4', stream)
-					if quality:
-						hostername = hostername + " (" + quality.group(1) + "p)"
-					self.filmliste.append((hostername, stream))
+				check = isSupportedHoster(hostername)
+				if check:
+					self.filmliste.append((check, stream))
 			# remove duplicates
 			self.filmliste = list(set(self.filmliste))
 		if len(self.filmliste) == 0:

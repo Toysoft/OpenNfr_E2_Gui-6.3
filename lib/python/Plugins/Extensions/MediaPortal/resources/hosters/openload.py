@@ -20,7 +20,7 @@ def openload(self, data, link, count=0):
 	stream_url = re.findall('"url":"(.*?)"', data)
 	if stream_url:
 		self._callback(stream_url[0].replace('\\',''))
-	elif youtubedl and phantomjs:
+	elif mp_globals.isDreamOS and youtubedl and phantomjs:
 		result = None
 		try:
 			os.environ["QT_QPA_PLATFORM"] = "phantom"

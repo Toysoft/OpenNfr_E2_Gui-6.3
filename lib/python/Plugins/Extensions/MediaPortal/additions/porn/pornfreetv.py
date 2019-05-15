@@ -254,9 +254,9 @@ class pornfreetvStreamListeScreen(MPScreen):
 		streams = re.findall('(http[s]?://(.*?)\/.*?)[\'|"|\&|<]', data, re.S)
 		if streams:
 			for (stream, hostername) in streams:
-				if isSupportedHoster(hostername, True):
-					hostername = hostername.replace('www.','')
-					self.filmliste.append((hostername, stream))
+				check = isSupportedHoster(hostername)
+				if check:
+					self.filmliste.append((check, stream))
 			# remove duplicates
 			self.filmliste = list(set(self.filmliste))
 		if len(self.filmliste) == 0:

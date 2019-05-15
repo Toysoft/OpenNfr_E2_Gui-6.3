@@ -806,15 +806,17 @@ class kxStreams(MPScreen):
 										if details:
 											(dname, dhoster) = details[0]
 											get_stream_url_m = kx_url + "/aGET/Mirror/%s&Hoster=%s" %  (dname, dhoster)
-								if isSupportedHoster(hostername, True):
-									self.streamList.append((hostername, get_stream_url_m, str(i)+"/"+mirrors[0], '', date))
+								check = isSupportedHoster(hostername)
+								if check:
+									self.streamList.append((check, get_stream_url_m, str(i)+"/"+mirrors[0], '', date))
 				else:
 					hosters = re.findall('rel="(.*?)".*?<div class="Named">(.*?)</div>.*?<div class="Data"><b>Vom</b>\:.(.*\d+)</div>',each, re.S)
 					if hosters:
 						(get_stream_url, hostername, date)= hosters[0]
 						get_stream_url = kx_url + "/aGET/Mirror/%s" % get_stream_url.replace('&amp;','&')
-						if isSupportedHoster(hostername, True):
-							self.streamList.append((hostername, get_stream_url, "1", '', date))
+						check = isSupportedHoster(hostername)
+						if check:
+							self.streamList.append((check, get_stream_url, "1", '', date))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No supported streams found!'), None, None, None, None))
 			self.ml.setList(map(self._defaultlistleft, self.streamList))

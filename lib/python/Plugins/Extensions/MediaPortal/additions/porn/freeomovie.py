@@ -231,17 +231,12 @@ class freeomovieFilmAuswahlScreen(MPScreen):
 
 	def loadPageData(self, data):
 		parse = re.search('class="videosection(.*?)class="textsection', data, re.S)
-		streams = re.findall('(http[s]?://(.*?)\/.*?)[\'|"|\&|<]', parse.group(1) , re.S)
+		streams = re.findall('(http[s]?://(?!(www.google.com))(.*?)\/.*?)[\'|"|\&|<]', parse.group(1) , re.S)
 		if streams:
-			for (stream, hostername) in streams:
-				if isSupportedHoster(hostername, True):
-					disc = re.search('.*?(CD-1|CD1|CD-2|CD2|_a.avi|_b.avi|-a.avi|-b.avi|DISC1|DISC2).*?', stream, re.S|re.I)
-					if disc:
-						discno = disc.group(1)
-						discno = discno.replace('cd1','Teil 1').replace('cd2','Teil 2').replace('CD1','Teil 1').replace('CD2','Teil 2').replace('CD-1','Teil 1').replace('CD-2','Teil 2').replace('_a.avi','Teil 1').replace('_b.avi','Teil 2')
-						discno = discno.replace('-a.avi','Teil 1').replace('-b.avi','Teil 2').replace('DISC1','Teil 1').replace('DISC2','Teil 2').replace('Disc1','Teil 1').replace('Disc2','Teil 2')
-						hostername = hostername + ' (' + discno + ')'
-					self.filmliste.append((hostername, stream))
+			for (stream, dummy, hostername) in streams:
+				check = isSupportedHoster(hostername)
+				if check:
+					self.filmliste.append((check, stream))
 			# remove duplicates
 			self.filmliste = list(set(self.filmliste))
 		if len(self.filmliste) == 0:

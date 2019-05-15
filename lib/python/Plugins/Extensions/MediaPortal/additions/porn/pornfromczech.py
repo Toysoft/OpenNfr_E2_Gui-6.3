@@ -227,12 +227,9 @@ class pornCzechFilmAuswahlScreen(MPScreen):
 		streams = re.findall('<iframe.*?src=[\'|"](http[s]?://(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
 		if streams:
 			for (stream, hostername) in streams:
-				if isSupportedHoster(hostername, True):
-					hostername = hostername.replace('www.','').replace('embed.','').replace('play.','')
-					self.filmliste.append((hostername, stream))
-				if hostername == "www.strdef.world":
-					hostername = "Openload"
-					self.filmliste.append((hostername, stream))
+				check = isSupportedHoster(hostername)
+				if check:
+					self.filmliste.append((check, stream))
 			# remove duplicates
 			self.filmliste = list(set(self.filmliste))
 		if len(self.filmliste) == 0:

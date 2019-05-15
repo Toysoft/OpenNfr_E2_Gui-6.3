@@ -369,8 +369,9 @@ class wsoStreams(MPScreen):
 		streams = re.findall('<a\starget="_blank"\srel="nofollow"\shref="(.*?)">(.*?)</a>', data, re.S)
 		if streams:
 			for (url, hoster) in streams:
-				if isSupportedHoster(hoster, True):
-					self.streamList.append((hoster, url))
+				check = isSupportedHoster(hoster)
+				if check:
+					self.streamList.append((check, url))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No supported streams found!'), None))
 		self.ml.setList(map(self._defaultlisthoster, self.streamList))

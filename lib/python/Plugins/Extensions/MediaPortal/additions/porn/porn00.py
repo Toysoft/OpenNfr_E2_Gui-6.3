@@ -16,7 +16,7 @@ class porn00GenreScreen(MPScreen):
 			"cancel" : self.keyCancel
 		}, -1)
 
-		self['title'] = Label("porn00.org")
+		self['title'] = Label("Porn00.org")
 		self['ContentTitle'] = Label("Genre:")
 		self.keyLocked = True
 		self.suchString = ''
@@ -84,7 +84,7 @@ class porn00FilmScreen(MPScreen, ThumbsHelper):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("porn00.org")
+		self['title'] = Label("Porn00.org")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
 
@@ -158,7 +158,7 @@ class porn00FilmAuswahlScreen(MPScreen):
 
 		self.altcounter = 1
 		self.keyLocked = True
-		self['title'] = Label("porn00.org")
+		self['title'] = Label("Porn00.org")
 		self['ContentTitle'] = Label("Streams")
 		self['name'] = Label(self.genreName)
 
@@ -193,17 +193,20 @@ class porn00FilmAuswahlScreen(MPScreen):
 			for (stream, urlstart, hostername) in streams:
 				if not re.search('.*?\?v=22$',stream):
 					if 'http://porn00.org/video_ext.php' in stream:
-						hostername = 'porn00 vk'
+						hostername = 'Porn00 vk'
 					elif 'http://www.porn00.org/video_ext.php' in stream:
-						hostername = 'porn00 pornaq'
-					elif 'http://www.porn00.org/play/?v=' in stream:
-						hostername = 'porn00 direct'
+						hostername = 'Porn00 pornaq'
 					elif hostername == 'www.wankz.com':
-						hostername = 'porn00 wankz'
-					elif re.search('http://www.porn00.org/(player|video|server|watch|plays)/\?.=.*?', stream):
-						hostername = 'porn00 direct'
-					if re.match('porn00 ', hostername) or isSupportedHoster(hostername, True):
+						hostername = 'Porn00 wankz'
+					elif re.search('http://www.porn00.org/(player|video|server|watch|plays|play)/\?.=.*?', stream):
+						hostername = 'Porn00 direct'
+					if re.match('Porn00 ', hostername):
 						self.filmliste.append((hostername, stream))
+					else:
+						check = isSupportedHoster(hostername)
+						if check:
+							self.filmliste.append((check, stream))
+
 		if self.altcounter == 0:
 			if len(self.filmliste) == 0:
 				self.filmliste.append(("No supported streams found!",None))
@@ -219,14 +222,14 @@ class porn00FilmAuswahlScreen(MPScreen):
 		if url == None:
 			return
 		url = url.replace('&amp;','&').replace('&#038;','&')
-		if hoster == 'porn00 vk':
+		if hoster == 'Porn00 vk':
 			url = url.replace('porn00.org', 'vk.com')
 			get_stream_link(self.session).check_link(url, self.got_link)
-		elif hoster == 'porn00 pornaq':
+		elif hoster == 'Porn00 pornaq':
 			twAgentGetPage(url, agent=myagent).addCallback(self.porn00pornaqData).addErrback(self.dataError)
-		elif hoster == 'porn00 direct':
+		elif hoster == 'Porn00 direct':
 			twAgentGetPage(url, agent=myagent).addCallback(self.porn00directData, url).addErrback(self.dataError)
-		elif hoster == 'porn00 wankz':
+		elif hoster == 'Porn00 wankz':
 			twAgentGetPage(url, agent=myagent).addCallback(self.porn00wankzData).addErrback(self.dataError)
 		else:
 			get_stream_link(self.session).check_link(url, self.got_link)

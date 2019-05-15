@@ -2,7 +2,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-default_cover = "file://%s/ivhunter.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+default_cover = "file://%s/javdos.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 try:
 	from Plugins.Extensions.MediaPortal.resources import cfscrape
@@ -28,7 +28,7 @@ iv_agent = ''
 
 BASE_URL = "http://javdos.com"
 
-class ivhunterGenreScreen(MPScreen):
+class javdosGenreScreen(MPScreen):
 
 	def __init__(self, session):
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
@@ -39,7 +39,7 @@ class ivhunterGenreScreen(MPScreen):
 			"cancel" : self.keyCancel
 		}, -1)
 
-		self['title'] = Label("IVHUNTER")
+		self['title'] = Label("JavDos.com")
 		self['ContentTitle'] = Label("Genre:")
 		self.keyLocked = True
 		self.suchString = ''
@@ -113,7 +113,7 @@ class ivhunterGenreScreen(MPScreen):
 			self.suchString = urllib.quote(callback).replace(' ', '+')
 			Name = "--- Search ---"
 			Link = '%s' % (self.suchString)
-			self.session.open(ivhunterFilmScreen, Link, Name)
+			self.session.open(javdosFilmScreen, Link, Name)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -123,9 +123,9 @@ class ivhunterGenreScreen(MPScreen):
 			self.suchen()
 		else:
 			Link = self['liste'].getCurrent()[0][1]
-			self.session.open(ivhunterFilmScreen, Link, Name)
+			self.session.open(javdosFilmScreen, Link, Name)
 
-class ivhunterFilmScreen(MPScreen, ThumbsHelper):
+class javdosFilmScreen(MPScreen, ThumbsHelper):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
@@ -155,7 +155,7 @@ class ivhunterFilmScreen(MPScreen, ThumbsHelper):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("IVHUNTER")
+		self['title'] = Label("JavDos.com")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
 
@@ -273,4 +273,4 @@ class ivhunterFilmScreen(MPScreen, ThumbsHelper):
 		title = self['liste'].getCurrent()[0][0]
 		self['name'].setText(title)
 		mp_globals.player_agent = iv_agent
-		self.session.open(SimplePlayer, [(title, stream_url)], showPlaylist=False, ltype='ivhunter')
+		self.session.open(SimplePlayer, [(title, stream_url)], showPlaylist=False, ltype='javdos')

@@ -639,7 +639,7 @@ class MPScreen(Screen, HelpableScreen):
 		except:
 			pass
 
-		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz, entry[0], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb, entry[0], re.S|re.I)):
+		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz[0], entry[0], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb[0], entry[0], re.S|re.I)):
 			premiumFarbe = int(config_mp.mediaportal.premium_color.value, 0)
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, pwidth+50+self.langoffset, 0, width, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0], premiumFarbe))
 		else:
@@ -652,7 +652,7 @@ class MPScreen(Screen, HelpableScreen):
 		height = self['liste'].l.getItemSize().height()
 		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
 		res = [entry]
-		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz, entry[0], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb, entry[0], re.S|re.I)):
+		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz[0], entry[0], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb[0], entry[0], re.S|re.I)):
 			premiumFarbe = int(config_mp.mediaportal.premium_color.value, 0)
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, width, height, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0], premiumFarbe))
 		else:
@@ -796,7 +796,7 @@ class MPScreen(Screen, HelpableScreen):
 		height = self['liste'].l.getItemSize().height()
 		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
 		res = [entry]
-		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz, entry[0], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb, entry[0], re.S|re.I)):
+		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz[0], entry[0], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb[0], entry[0], re.S|re.I)):
 			premiumFarbe = int(config_mp.mediaportal.premium_color.value, 0)
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 250, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0], premiumFarbe))
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 260, 0, 150, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2], premiumFarbe))
@@ -834,7 +834,7 @@ class MPScreen(Screen, HelpableScreen):
 		height = self['liste'].l.getItemSize().height()
 		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
 		res = [entry]
-		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz, entry[0], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb, entry[0], re.S|re.I)):
+		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz[0], entry[0], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb[0], entry[0], re.S|re.I)):
 			premiumFarbe = int(config_mp.mediaportal.premium_color.value, 0)
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, width, height, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0] + entry[2], premiumFarbe))
 		else:
@@ -846,7 +846,7 @@ class MPScreen(Screen, HelpableScreen):
 		height = self['liste'].l.getItemSize().height()
 		self.ml.l.setFont(0, gFont(mp_globals.font, height - 2 * mp_globals.sizefactor))
 		res = [entry]
-		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz, entry[0], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb, entry[0], re.S|re.I)):
+		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz[0], entry[0], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb[0], entry[0], re.S|re.I)):
 			premiumFarbe = int(config_mp.mediaportal.premium_color.value, 0)
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, self.DEFAULT_LM, 0, 220, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0], premiumFarbe))
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 260, 0, width - 720 - 2 * self.DEFAULT_LM, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2], premiumFarbe))
@@ -898,7 +898,7 @@ class MPScreen(Screen, HelpableScreen):
 		height = self['liste'].l.getItemSize().height()
 		self.ml.l.setFont(0, gFont(mp_globals.font, height - 3 * mp_globals.sizefactor))
 		res = [entry]
-		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz, entry[2], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb, entry[2], re.S|re.I)):
+		if (config_mp.mediaportal.premiumize_use.value and re.search(mp_globals.premium_hosters_prz[0], entry[2], re.S|re.I)) or (config_mp.mediaportal.realdebrid_use.value and re.search(mp_globals.premium_hosters_rdb[0], entry[2], re.S|re.I)):
 			premiumFarbe = int(config_mp.mediaportal.premium_color.value, 0)
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 0, 0, width - 380, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]))
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, width - 370, 0, 180, height, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3]))

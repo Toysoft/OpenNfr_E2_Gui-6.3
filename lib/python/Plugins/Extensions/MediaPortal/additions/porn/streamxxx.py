@@ -246,9 +246,9 @@ class streamxxxStreamListeScreen(MPScreen):
 		streams = re.findall('(http[s]?://(.*?)\/.*?)[\'|"|\&|<]', parse.group(1), re.S)
 		if streams:
 			for (stream, hostername) in streams:
-				if isSupportedHoster(hostername, True):
-					hostername = hostername.replace('www.','')
-					self.filmliste.append((hostername, stream))
+				check = isSupportedHoster(hostername)
+				if check:
+					self.filmliste.append((check, stream))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_("No supported streams found!"), None))
 		self.filmliste = list(set(self.filmliste))

@@ -3,11 +3,54 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
 myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36'
-default_cover = "file://%s/javbraze.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class javbrazeGenreScreen(MPScreen):
 
-	def __init__(self, session):
+	def __init__(self, session, mode):
+		self.mode = mode
+
+		global default_cover
+		if self.mode == "javbraze":
+			self.portal = "JavBraze.com"
+			self.baseurl = "https://www.javbraze.com"
+			default_cover = "file://%s/javbraze.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "javfindx":
+			self.portal = "JavFindX.com"
+			self.baseurl = "https://www.javfindx.com"
+			default_cover = "file://%s/javfindx.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "pornbraze":
+			self.portal = "PornBraze.com"
+			self.baseurl = "https://www.pornbraze.com"
+			default_cover = "file://%s/pornbraze.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "alotav":
+			self.portal = "AlotAv.com"
+			self.baseurl = "https://www.alotav.com"
+			default_cover = "file://%s/alotav.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "javfuq":
+			self.portal = "JavFuq.com"
+			self.baseurl = "https://www.javfuq.com"
+			default_cover = "file://%s/javfuq.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "javhd":
+			self.portal = "JavHD.today"
+			self.baseurl = "https://www.javhd.today"
+			default_cover = "file://%s/javhd.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "javboob":
+			self.portal = "JavBoob.com"
+			self.baseurl = "https://www.javboob.com"
+			default_cover = "file://%s/javboob.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "javmeta":
+			self.portal = "JavMeta.com"
+			self.baseurl = "https://www.javmeta.com"
+			default_cover = "file://%s/javmeta.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "javfinder":
+			self.portal = "JavFinder.us"
+			self.baseurl = "https://www.javfinder.us"
+			default_cover = "file://%s/javfinder.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.mode == "javbs":
+			self.portal = "JavBs.com"
+			self.baseurl = "https://www.javbs.com"
+			default_cover = "file://%s/javbs.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
 		self["actions"] = ActionMap(["MP_Actions"], {
@@ -20,7 +63,7 @@ class javbrazeGenreScreen(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("JavBraze.com")
+		self['title'] = Label(self.portal)
 		self['ContentTitle'] = Label("Genre:")
 		self.keyLocked = True
 		self.suchString = ''
@@ -33,24 +76,31 @@ class javbrazeGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "https://javbraze.com/categories/"
+		url = "%s/categories/" % self.baseurl
 		twAgentGetPage(url, agent=myagent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		Cats = re.findall('class="category".*?href="(.*?)".*?img\ssrc="(.*?)".*?title">(.*?)</div', data, re.S)
+		Cats = re.findall('class="category".*?href="(.*?)".*?img\s(?:style="width: 277px;height: 155px;"\s|)src="(.*?)".*?title">(.*?)</div', data, re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
-				Url = 'https://javbraze.com/' + Url
-				Image = 'https://javbraze.com/' + Image
-				self.genreliste.append((Title, Url, Image, True))
+				Url = self.baseurl + '/' + Url
+				if self.mode == "alotav" and "-" in Title:
+					Title = Title.split('-')[0].strip()
+				if Image.startswith('/'):
+					Image = self.baseurl + Image
+				self.genreliste.append((decodeHtml(Title), Url, Image, True))
+		if self.mode == "javbraze":
+			self.genreliste.append(("Uncensored", "%s/tag/uncen/" % self.baseurl, default_cover, False))
+		elif self.mode == "pornbraze":
+			self.genreliste.append(("Uncensored", "%s/jav-uncensored/" % self.baseurl, default_cover, True))
 		self.genreliste.sort()
-		self.genreliste.insert(0, ("Being Watched", "https://javbraze.com/watched/", default_cover, False))
-		self.genreliste.insert(0, ("Longest", "https://javbraze.com/longest/", default_cover, False))
-		self.genreliste.insert(0, ("Most Downloaded", "https://javbraze.com/downloaded/", default_cover, False))
-		self.genreliste.insert(0, ("Most Discussed", "https://javbraze.com/discussed/", default_cover, False))
-		self.genreliste.insert(0, ("Top Rated", "https://javbraze.com/rated/", default_cover, False))
-		self.genreliste.insert(0, ("Most Popular", "https://javbraze.com/popular/", default_cover, False))
-		self.genreliste.insert(0, ("Most Recent", "https://javbraze.com/recent/", default_cover, False))
+		self.genreliste.insert(0, ("Being Watched", "%s/watched/" % self.baseurl, default_cover, False))
+		self.genreliste.insert(0, ("Longest", "%s/longest/" % self.baseurl, default_cover, False))
+		self.genreliste.insert(0, ("Most Downloaded", "%s/downloaded/" % self.baseurl, default_cover, False))
+		self.genreliste.insert(0, ("Most Discussed", "%s/discussed/" % self.baseurl, default_cover, False))
+		self.genreliste.insert(0, ("Top Rated", "%s/rated/" % self.baseurl, default_cover, False))
+		self.genreliste.insert(0, ("Most Popular", "%s/popular/" % self.baseurl, default_cover, False))
+		self.genreliste.insert(0, ("Most Recent", "%s/recent/" % self.baseurl, default_cover, False))
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover, False))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 		self.keyLocked = False
@@ -65,7 +115,7 @@ class javbrazeGenreScreen(MPScreen):
 			self.suchString = urllib.quote(callback).replace(' ', '+')
 			Name = "--- Search ---"
 			Link = '%s' % (self.suchString)
-			self.session.open(javbrazeFilmScreen, Link, Name, False)
+			self.session.open(javbrazeFilmScreen, Link, Name, False, self.portal, self.baseurl)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -76,14 +126,39 @@ class javbrazeGenreScreen(MPScreen):
 		else:
 			Link = self['liste'].getCurrent()[0][1]
 			Cat = self['liste'].getCurrent()[0][3]
-			self.session.open(javbrazeFilmScreen, Link, Name, Cat)
+			self.session.open(javbrazeFilmScreen, Link, Name, Cat, self.portal, self.baseurl)
 
 class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, Link, Name, Cat):
+	def __init__(self, session, Link, Name, Cat, portal, baseurl):
 		self.Link = Link
 		self.Name = Name
 		self.Cat = Cat
+		self.portal = portal
+		self.baseurl = baseurl
+
+		global default_cover
+		if self.portal == "JavBraze.com":
+			default_cover = "file://%s/javbraze.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "JavFindX.com":
+			default_cover = "file://%s/javfindx.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "PornBraze.com":
+			default_cover = "file://%s/pornbraze.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "AlotAv.com":
+			default_cover = "file://%s/alotav.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "JavFuq.com":
+			default_cover = "file://%s/javfuq.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "JavHD.today":
+			default_cover = "file://%s/javhd.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "JavBoob.com":
+			default_cover = "file://%s/javboob.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "JavMeta.com":
+			default_cover = "file://%s/javmeta.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "JavFinder.us":
+			default_cover = "file://%s/javfinder.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+		elif self.portal == "JavBs.com":
+			default_cover = "file://%s/javbs.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
+
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
 
@@ -101,7 +176,7 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("JavBraze.com")
+		self['title'] = Label(self.portal)
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
 
@@ -121,7 +196,7 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*?Search", self.Name):
-			url = "https://javbraze.com/search/video/?s=%s&page=%s" % (self.Link, str(self.page))
+			url = "%s/search/video/?s=%s&page=%s" % (self.baseurl, self.Link, str(self.page))
 		else:
 			if self.page > 1:
 				if self.Cat:
@@ -136,15 +211,35 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</ul>')
 		parse = re.search('<div class="panel-body(.*?)$', data, re.S)
-		Movies = re.findall('class="well well-sm">.*?href="(.*?)"\stitle="(.*?)".*?img\s(?:class="img-responsive\s"\s|)src="(.*?)".*?class="time-video.*?>(.*?)</span.*?class="video-view.*?>(.*?)</span>', parse.group(1), re.S)
+		Movies = re.findall('(?:class="video">|class="well well-sm">).*?href="(.*?)"\stitle="(.*?)".*?img\s(?:class="img-responsive\s"\s|)src="(.*?)"(.*?(?:</div>(?:.|\n\t+)</li>|</span>.</div>))', parse.group(1), re.S)
 		if Movies:
-			for (Url, Title, Image, Runtime, Age) in Movies:
-				Url = "https://javbraze.com" + Url
-				Runtime = Runtime.strip()
-				Age = stripAllTags(Age).strip()
-				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Age))
+			for (Url, Title, Image, Meta) in Movies:
+				Url = self.baseurl + Url
+				Image = Image.replace('&amp;','&')
+				if Image.startswith('/'):
+					Image = self.baseurl + Image
+				Runtime = re.findall('(?:class="time-video|class="video-overlay).*?>(.*?)</span', Meta, re.S)
+				if Runtime:
+					Runtime = Runtime[0].replace('HD','').strip()
+				else:
+					Runtime = "-"
+				Added = re.findall('(?:class="video-view|class="pull-left).*?>(.*?)(?:</span>|</a>)', Meta, re.S)
+				if Added:
+					Added = stripAllTags(Added[0]).strip()
+				else:
+					Added = None
+				Views = re.findall('(?:class="pull-right).*?>(.*?)(?:</span>|</a>)', Meta, re.S)
+				if Views:
+					Views = Views[0].replace('views','').replace('view','').strip()
+				else:
+					if Added and "view" in Added:
+						Views = Added.replace('views','').replace('view','').strip()
+						Added = None
+					else:
+						Views = None
+				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Added, Views))
 		if len(self.filmliste) == 0:
-			self.filmliste.append((_('No movies found!'), None, None, None, None))
+			self.filmliste.append((_('No movies found!'), None, None, None, None, None))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
 		self.ml.moveToIndex(0)
 		self.keyLocked = False
@@ -157,8 +252,14 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 		Url = self['liste'].getCurrent()[0][1]
 		pic = self['liste'].getCurrent()[0][2]
 		runtime = self['liste'].getCurrent()[0][3]
-		age = self['liste'].getCurrent()[0][4]
-		self['handlung'].setText("Runtime: %s\nAge: %s" % (runtime, age))
+		added = self['liste'].getCurrent()[0][4]
+		views = self['liste'].getCurrent()[0][5]
+		meta = "Runtime: %s" % runtime
+		if views:
+			meta = meta + "\nViews: %s" % views
+		if added:
+			meta = meta + "\nAdded: %s" % added
+		self['handlung'].setText(meta)
 		CoverHelper(self['coverArt']).getCover(pic)
 
 	def keyOK(self):
@@ -171,19 +272,20 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 			twAgentGetPage(url, agent=myagent).addCallback(self.loadStream).addErrback(self.dataError)
 
 	def loadStream(self, data):
-		streams = re.findall('<iframe.*?src="(https://(?:www.fembed.com|kissmovies.cc|smartshare.tv)/v/.*?)\s{0,1}"', data, re.S)
+		streams = re.findall('<iframe.*?src="(https://(?:www.fembed.com|kissmovies.cc|smartshare.tv|vcdn.io)/v/.*?)\s{0,1}"', data, re.S)
 		if streams:
 			get_stream_link(self.session).check_link(streams[0], self.got_link)
 		else:
 			streams = re.findall('src="(/modules/video/player/config2.php\?id=\d+)"', data, re.S)
 			if streams:
-				url = "https://javbraze.com" + streams[0]
+				url = self.baseurl + streams[0]
 				twAgentGetPage(url, agent=myagent).addCallback(self.get_link).addErrback(self.dataError)
 			else:
-				streams = re.findall('(?:src|href)=[\'|"](http[s]?://(?!(?:www.|m.|)javbraze.com)(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
+				streams = re.findall('(?:src|href)=[\'|"](http[s]?://(?!(?:www.|m.|)javbraze.com|javfindx.com|pornbraze.com|alotav.com|javfuq.com|javhd.today|javboob.com|javmeta.com|javfinder.us|javbs.com)(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
 				if streams:
 					for (stream, hostername) in streams:
-						if isSupportedHoster(hostername, True):
+						check = isSupportedHoster(hostername)
+						if check:
 							url = stream.replace('&amp;','&').replace('&#038;','&')
 							get_stream_link(self.session).check_link(url, self.got_link)
 		self.keyLocked = False

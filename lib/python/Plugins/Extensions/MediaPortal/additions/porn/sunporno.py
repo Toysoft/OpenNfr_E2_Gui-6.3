@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-##############################################################################################################
+#######################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -15,15 +15,12 @@
 #  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
 #  on hardware which is NOT licensed by Dream Property GmbH.
 #
-#  This applies to the source code as a whole as well as to parts of it, unless
-#  explicitely stated otherwise.
+#  This applies to the source code as a whole as well as to parts of it, unless explicitely
+#  stated otherwise.
 #
-#  If you want to use or modify the code or parts of it,
-#  you have to keep OUR license and inform us about the modifications, but it may NOT be
-#  commercially distributed other than under the conditions noted above.
-#
-#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
-#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
+#  If you want to use or modify the code or parts of it, permission from the authors is necessary.
+#  You have to keep OUR license and inform us about any modification, but it may NOT be distributed
+#  other than under the conditions noted above.
 #
 #  As an exception regarding modifcations, you are NOT permitted to remove
 #  any copy protections implemented in this plugin or change them for means of disabling
@@ -32,9 +29,10 @@
 #  parts is NOT permitted.
 #
 #  Advertising with this plugin is NOT allowed.
+#
 #  For other uses, permission from the authors is necessary.
 #
-##############################################################################################################
+#######################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -260,6 +258,10 @@ class sunpornoFilmScreen(MPScreen, ThumbsHelper):
 			title = self['liste'].getCurrent()[0][0]
 		video = re.findall('video\ssrc="(.*?)"', data, re.S)
 		if video:
-			url = video[0].replace('https','http')
+			url = video[0].replace('http:','https:') + "?rnd=" + str(int(time())) + str(random.randint(100,999))
+			referer = self['liste'].getCurrent()[0][1]
+			headers = '&Referer=%s' % referer
+			mp_globals.player_agent = spAgent
+			url = url + '#User-Agent='+mp_globals.player_agent+headers
 			self.keyLocked = False
 			self.session.open(SimplePlayer, [(title, url)], showPlaylist=False, ltype='sunporno')

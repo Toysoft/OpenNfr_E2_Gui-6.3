@@ -211,9 +211,9 @@ class StreamAuswahl(MPScreen):
 		streams = re.findall('href=[\'|"](http[s]?://(?!(pandamovie.\w+|pandanetwork.\w+))(.*?)\/.*?)[\'|"|\&|<]', parse.group(1), re.S|re.I)
 		if streams:
 			for (stream, dummy, hostername) in streams:
-				if isSupportedHoster(hostername, True):
-					hostername = hostername.replace('www.','').replace('embed.','').replace('play.','').replace('.pandanetwork.club','')
-					self.filmliste.append((hostername, stream))
+				check = isSupportedHoster(hostername)
+				if check:
+					self.filmliste.append((check, stream))
 			# remove duplicates
 			self.filmliste = list(set(self.filmliste))
 		if len(self.filmliste) == 0:

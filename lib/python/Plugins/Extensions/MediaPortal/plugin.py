@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################################################
+#######################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -15,15 +15,12 @@
 #  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
 #  on hardware which is NOT licensed by Dream Property GmbH.
 #
-#  This applies to the source code as a whole as well as to parts of it, unless
-#  explicitely stated otherwise.
+#  This applies to the source code as a whole as well as to parts of it, unless explicitely
+#  stated otherwise.
 #
-#  If you want to use or modify the code or parts of it,
-#  you have to keep OUR license and inform us about the modifications, but it may NOT be
-#  commercially distributed other than under the conditions noted above.
-#
-#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
-#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
+#  If you want to use or modify the code or parts of it, permission from the authors is necessary.
+#  You have to keep OUR license and inform us about any modification, but it may NOT be distributed
+#  other than under the conditions noted above.
 #
 #  As an exception regarding modifcations, you are NOT permitted to remove
 #  any copy protections implemented in this plugin or change them for means of disabling
@@ -32,9 +29,10 @@
 #  parts is NOT permitted.
 #
 #  Advertising with this plugin is NOT allowed.
+#
 #  For other uses, permission from the authors is necessary.
 #
-##############################################################################################################
+#######################################################################################################
 
 SHOW_HANG_STAT = False
 
@@ -163,8 +161,8 @@ config.mediaportal = ConfigSubsection()
 config_mp.mediaportal.fake_entry = NoSave(ConfigNothing())
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2019050101"))
-config.mediaportal.version = NoSave(ConfigText(default="2019050101"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2019051201"))
+config.mediaportal.version = NoSave(ConfigText(default="2019051201"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 
@@ -320,7 +318,7 @@ autoStartTimer = None
 _session = None
 
 # eUriResolver Imports for DreamOS
-##############################################################################################################
+#######################################################################################################
 try:
 	from enigma import eUriResolver
 
@@ -342,7 +340,7 @@ try:
 
 except ImportError:
 	pass
-##############################################################################################################
+#######################################################################################################
 
 
 conf = xml.etree.cElementTree.parse(CONFIG)
@@ -3457,6 +3455,7 @@ def exit(session, result, lastservice):
 		configfile_mp.save()
 
 		_stylemanager(0)
+		clear_mp()
 
 		reactor.callLater(1, export_lru_caches)
 		reactor.callLater(5, clearTmpBuffer)
@@ -3693,9 +3692,11 @@ def _hosters():
 	open_hosters = open(hosters_file)
 	data = open_hosters.read()
 	open_hosters.close()
-	hosters = re.findall('<hoster>(.*?)</hoster><regex>(.*?)</regex>', data)
-	mp_globals.hosters = ["|".join([hoster for hoster,regex in hosters])]
-	mp_globals.hosters += ["|".join([regex for hoster,regex in hosters])]
+	hosters = re.findall('<name>(.*?)</name><hoster>(.*?)</hoster><regex>(.*?)</regex>(?:<premium>(.*?)</premium>|)', data)
+	mp_globals.hosters = ["|".join(["(?P<%s>%s)" % (name, hoster) for name,hoster,regex,premium in hosters])]
+	mp_globals.hosters += ["|".join(["(?P<%s>%s)" % (name, regex) for name,hoster,regex,premium in hosters])]
+	mp_globals.premium_hosters_prz = ["|".join(["%s" % name.replace('_space_',' ').replace('_dot_','.').replace('___','') for name,hoster,regex,premium in hosters if "p" in premium])]
+	mp_globals.premium_hosters_rdb = ["|".join(["%s" % name.replace('_space_',' ').replace('_dot_','.').replace('___','') for name,hoster,regex,premium in hosters if "r" in premium])]
 
 def _status(data):
 	statusdata = re.findall('"(.*?)"\s"(.*?)"\s"(.*?)"', data)

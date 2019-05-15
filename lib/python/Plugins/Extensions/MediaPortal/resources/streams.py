@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################################################
+#######################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -15,15 +15,12 @@
 #  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
 #  on hardware which is NOT licensed by Dream Property GmbH.
 #
-#  This applies to the source code as a whole as well as to parts of it, unless
-#  explicitely stated otherwise.
+#  This applies to the source code as a whole as well as to parts of it, unless explicitely
+#  stated otherwise.
 #
-#  If you want to use or modify the code or parts of it,
-#  you have to keep OUR license and inform us about the modifications, but it may NOT be
-#  commercially distributed other than under the conditions noted above.
-#
-#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
-#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
+#  If you want to use or modify the code or parts of it, permission from the authors is necessary.
+#  You have to keep OUR license and inform us about any modification, but it may NOT be distributed
+#  other than under the conditions noted above.
 #
 #  As an exception regarding modifcations, you are NOT permitted to remove
 #  any copy protections implemented in this plugin or change them for means of disabling
@@ -32,9 +29,10 @@
 #  parts is NOT permitted.
 #
 #  Advertising with this plugin is NOT allowed.
+#
 #  For other uses, permission from the authors is necessary.
 #
-##############################################################################################################
+#######################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from imports import *
@@ -52,21 +50,29 @@ else:
 
 ck = {}
 
-def isSupportedHoster(linkOrHoster, check=False):
-	if not check:
-		return False
+def isSupportedHoster(linkOrHoster):
 	if not linkOrHoster:
 		return False
 
 	printl("check hoster: %s" % linkOrHoster,'',"S")
 
 	host = linkOrHoster.lower().strip()
-	if re.search(mp_globals.hosters[0], host):
-		printl("match1: %s" % linkOrHoster,'',"H")
-		return True
-	elif re.search(mp_globals.hosters[1], host):
-		printl("match2: %s" % linkOrHoster,'',"H")
-		return True
+	match1 = re.search(mp_globals.hosters[0], host)
+	if match1:
+		names = [name for name, value in match1.groupdict().iteritems() if value is not None]
+		ret = names[0].replace('_space_',' ').replace('_dot_','.').replace('___','')
+		if linkOrHoster.endswith('HD'):
+			ret = ret + ' HD'
+		printl("match1: %s" % ret,'',"H")
+		return ret
+	match2 = re.search(mp_globals.hosters[1], host)
+	if match2:
+		names = [name for name, value in match2.groupdict().iteritems() if value is not None]
+		ret = names[0].replace('_space_',' ').replace('_dot_','.').replace('___','')
+		if linkOrHoster.endswith('HD'):
+			ret = ret + ' HD'
+		printl("match2: %s" % ret,'',"H")
+		return ret
 
 	printl("hoster not supported",'',"H")
 	return False
@@ -74,42 +80,39 @@ def isSupportedHoster(linkOrHoster, check=False):
 class get_stream_link:
 
 	# hosters
-	from hosters.bestreams import bestreams, bestreamsCalllater, bestreamsPostData
 	from hosters.bitporno import bitporno
 	from hosters.bitshare import bitshare, bitshare_start
 	from hosters.clipwatching import clipwatching
 	from hosters.datoporn import datoporn
-	from hosters.exashare import exashare
 	from hosters.fembed import fembed
 	from hosters.flashx import flashx
 	from hosters.flyflv import flyflv, flyflvData
 	from hosters.google import google
 	from hosters.gounlimited import gounlimited
 	from hosters.kissmovies import kissmovies
-	from hosters.kodik import kodik, kodikData
 	from hosters.mailru import mailru
-	from hosters.mega3x import mega3x
 	from hosters.mp4upload import mp4upload
 	from hosters.okru import okru
 	from hosters.openload import openload
-	from hosters.powvideo import powvideo
 	from hosters.rapidvideocom import rapidvideocom
 	from hosters.smartshare import smartshare
+	from hosters.streamcloud import streamcloud, streamcloud_getpage, streamcloud_data
 	from hosters.streamango import streamango
-	from hosters.thevideome import thevideome
 	from hosters.uptostream import uptostream
+	from hosters.vcdn import vcdn
+	from hosters.verystream import verystream, verystreamUrl
 	from hosters.vidcloud import vidcloud
 	from hosters.videowood import videowood
+	from hosters.vidfast import vidfast
 	from hosters.vidlox import vidlox
 	from hosters.vidoza import vidoza
 	from hosters.vidspot import vidspot
 	from hosters.vidto import vidto
-	from hosters.vidup import vidup, vidup_thief
-	from hosters.vidwoot import vidwoot
+	from hosters.vidup import vidup
 	from hosters.vidzi import vidzi
 	from hosters.vivo import vivo
 	from hosters.vkme import vkme, vkmeHash, vkmeHashGet, vkmeHashData, vkPrivat, vkPrivatData
-	from hosters.xdrive import xdrive
+	from hosters.vshare import vshare
 	from hosters.yourupload import yourupload
 	from hosters.youwatch import youwatch, youwatchLink
 
@@ -200,7 +203,8 @@ class get_stream_link:
 					self.callPremium(link)
 				else:
 					spezialagent = 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0'
-					getPage(link, cookies=ck, agent=spezialagent).addCallback(self.streamcloud).addErrback(self.errorload)
+					self.ck = {}
+					getPage(link, cookies=self.ck, agent=spezialagent).addCallback(self.streamcloud).addErrback(self.errorload)
 
 			elif re.search('rapidgator.net|rg.to', data, re.S):
 				link = data
@@ -465,15 +469,11 @@ class get_stream_link:
 				link = data
 				twAgentGetPage(link).addCallback(self.clipwatching).addErrback(self.errorload)
 
-			elif re.search('vidup.tv', data, re.S):
-				link = data
-				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
-				twAgentGetPage(link, agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36').addCallback(self.vidup).addErrback(self.errorload)
-
-			elif re.search('smartshare.tv', data, re.S):
-				link = 'https://smartshare.tv/api/source/' + data.split('/v/')[-1]
-				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
-				twAgentGetPage(link, method='POST', agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.smartshare).addErrback(self.errorload)
+			elif re.search('vidup\.(?:tv|io)|vev\.(?:io)', data, re.S):
+				link = data.replace('/embed','').rsplit('/', 1)
+				link = link[0] + '/api/serve/video/' + link[1]
+				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36'
+				twAgentGetPage(link, method='POST', agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.vidup).addErrback(self.errorload)
 
 			elif re.search('bitporno.com', data, re.S):
 				if "/e/" in data:
@@ -489,11 +489,22 @@ class get_stream_link:
 				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
 				twAgentGetPage(link, method='POST', agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.fembed).addErrback(self.errorload)
 
+			elif re.search('smartshare.tv', data, re.S):
+				link = 'https://smartshare.tv/api/source/' + data.split('/v/')[-1]
+				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+				twAgentGetPage(link, method='POST', agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.smartshare).addErrback(self.errorload)
+
 			elif re.search('kissmovies.cc', data, re.S):
 				link = 'https://kissmovies.cc/api/source/' + data.split('/v/')[-1]
 				print link
 				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
 				twAgentGetPage(link, method='POST', agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.kissmovies).addErrback(self.errorload)
+
+			elif re.search('vcdn.io', data, re.S):
+				link = 'https://vcdn.io/api/source/' + data.split('/v/')[-1]
+				print link
+				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+				twAgentGetPage(link, method='POST', agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.vcdn).addErrback(self.errorload)
 
 			elif re.search('flashx.tv|flashx.pw|flashx.co|flashx.to', data, re.S):
 				link = data
@@ -519,25 +530,9 @@ class get_stream_link:
 				url = "http://youwatch.org/embed-%s.html" % id[1]
 				getPage(url).addCallback(self.youwatch).addErrback(self.errorload)
 
-			elif re.search('allmyvideos.net', data, re.S):
-				link = data
-				if re.search('allmyvideos.net/embed', link, re.S):
-					getPage(link).addCallback(self.allmyvids).addErrback(self.errorload)
-				else:
-					id = re.findall('allmyvideos.net/(.*?)$', link)
-					if id:
-						new_link = "http://allmyvideos.net/embed-%s.html" % id[0]
-						getPage(new_link).addCallback(self.allmyvids).addErrback(self.errorload)
-					else:
-						self.stream_not_found()
-
 			elif re.search("mp4upload.com", data, re.S):
 				link = data
 				getPage(link).addCallback(self.mp4upload).addErrback(self.errorload)
-
-			elif re.search("mega3x.com|mega3x.net", data, re.S):
-				link = data
-				getPage(link).addCallback(self.mega3x).addErrback(self.errorload)
 
 			elif re.search("dato.porn|datoporn.co", data, re.S):
 				if "embed-" in data:
@@ -554,11 +549,7 @@ class get_stream_link:
 				link = data
 				getPage(link).addCallback(self.uptostream).addErrback(self.errorload)
 
-			elif re.search("vidwoot.com", data, re.S):
-				link = data
-				getPage(link).addCallback(self.vidwoot).addErrback(self.errorload)
-
-			elif re.search("yourupload.com", data, re.S):
+			elif re.search("yourupload.com|vidwoot.com", data, re.S):
 				link = data
 				getPage(link).addCallback(self.yourupload).addErrback(self.errorload)
 
@@ -580,12 +571,7 @@ class get_stream_link:
 				link = data.replace('http:','https:')
 				twAgentGetPage(link).addCallback(self.vivo, link).addErrback(self.errorload)
 
-			elif re.search('bestreams\.net/', data, re.S):
-				link = data
-				getPage(link, cookies=ck, headers={'Accept-Language': 'en-US,en;q=0.5'}).addCallback(self.bestreams, link, ck).addErrback(self.errorload)
-
 			elif re.search('vidto\.me/', data, re.S):
-				# http://vidto.me/embed-u1etw7z2o50u-640x360.html
 				if re.search('vidto\.me/embed-', data, re.S):
 					link = data
 				else:
@@ -601,9 +587,22 @@ class get_stream_link:
 					getPage(link, cookies=ck).addCallback(self.vidto).addErrback(self.errorload)
 
 
+			elif re.search('vshare\.eu/', data, re.S):
+				if not "embed-" in data:
+					link = data.replace('.htm','').rsplit('/', 1)
+					link = "https://vshare.eu/embed-%s.html" % link[-1]
+				else:
+					link = data
+				twAgentGetPage(link).addCallback(self.vshare).addErrback(self.errorload)
+
 			elif re.search('vidoza\.net/', data, re.S):
 				link = data.replace('https','http')
-				twAgentGetPage(link).addCallback(self.vidoza).addErrback(self.errorload)
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
+					self.rdb = 1
+					self.prz = 1
+					self.callPremium(link)
+				else:
+					twAgentGetPage(link).addCallback(self.vidoza).addErrback(self.errorload)
 
 			elif re.search('vidspot\.net/', data, re.S):
 				if re.search('vidspot\.net/embed', data, re.S):
@@ -613,10 +612,6 @@ class get_stream_link:
 					if id:
 						link = "http://vidspot.net/embed-%s.html" % id[0]
 				getPage(link).addCallback(self.vidspot).addErrback(self.errorload)
-
-			elif re.search('kodik\.biz/', data, re.S):
-				link = data
-				getPage(link).addCallback(self.kodik).addErrback(self.errorload)
 
 			elif re.search('(docs|drive)\.google\.com/|youtube\.googleapis\.com|googleusercontent.com', data, re.S):
 				if 'youtube.googleapis.com' in data:
@@ -653,9 +648,9 @@ class get_stream_link:
 						link = "http://rapidvideo.com/embed/%s" % id[0]
 					getPage(link).addCallback(self.rapidvideocom).addErrback(self.errorload)
 
-			elif re.search('openload\.(?:co|io|link)|oload\.(?:tv|stream|site|xyz|win|download|cloud|cc)', data, re.S):
+			elif re.search('openload\.(?:co|io|link|pw)|oload\.(?:tv|stream|site|xyz|win|download|cloud|cc|icu|fun|club|info|pw|live|space|services)|oladblock\.(?:services|xyz|me)|openloed\.co', data, re.S):
 				link = data
-				id = re.search('http[s]?://(?:openload\.(?:co|io|link)|oload\.(?:tv|stream|site|xyz|win|download|cloud|cc))\/[^/]+\/(.*?)(\/.*?)?$', link, re.S)
+				id = re.search('http[s]?://(?:openload\.(?:co|io|link|pw)|oload\.(?:tv|stream|site|xyz|win|download|cloud|cc|icu|fun|club|info|pw|live|space|services)|oladblock\.(?:services|xyz|me)|openloed\.co)\/[^/]+\/(.*?)(?:\/.*?)?$', link, re.S)
 				if id:
 					link = 'https://openload.co/embed/' + id.group(1)
 				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
@@ -665,43 +660,6 @@ class get_stream_link:
 				else:
 					url = "https://api.openload.co/1/streaming/get?file=" + id.group(1)
 					getPage(url).addCallback(self.openload, link).addErrback(self.errorload)
-
-			elif re.search('thevideo\.me|thevideo\.cc', data, re.S):
-				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
-					if (re.search('thevideo(\.me|\.cc)/embed-', data, re.S) or re.search('640x360.html', data, re.S)):
-						id = re.findall('thevideo(?:\.me|\.cc)/(?:embed-|)(.*?)(?:\.html|-\d+x\d+\.html)', data)
-						if id:
-							link = "https://www.thevideo.me/%s" % id[0]
-					else:
-						link = data
-					self.rdb = 1
-					self.prz = 1
-					self.callPremium(link)
-				else:
-					if (re.search('thevideo(\.me|\.cc)/embed-', data, re.S) or re.search('640x360.html', data, re.S)):
-						id = re.findall('thevideo(?:\.me|\.cc)/(?:embed-|)(.*?)(?:\.html|-\d+x\d+\.html)', data)
-						if id:
-							link = "https://thevideo.me/embed-%s-640x360.html" % id[0]
-							twAgentGetPage(link, agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36').addCallback(self.thevideome).addErrback(self.errorload)
-
-			elif re.search('exashare\.com', data, re.S):
-				if re.search('exashare\.com/embed-', data, re.S):
-					link = data
-				else:
-					id = re.findall('exashare\.com/(.*?)$', data)
-					if id:
-						link = "http://www.exashare.com/embed-%s-620x330.html" % id[0]
-				getPage(link).addCallback(self.exashare).addErrback(self.errorload)
-
-			elif re.search('powvideo\.net/', data, re.S):
-				id = re.search('powvideo\.net/(embed-|)(\w+)', data)
-				if id:
-					referer = "http://powvideo.net/embed-%s-954x562.html" % id.group(2)
-					link = "http://powvideo.net/iframe-%s-954x562.html" % id.group(2)
-					getPage(link, headers={'Referer':referer, 'Accept-Language': 'en-US,en;q=0.5'}).addCallback(self.powvideo).addErrback(self.errorload)
-
-			elif re.search('my\.pcloud\.com', data, re.S):
-				getPage(data).addCallback(self.mypcloud).addErrback(self.errorload)
 
 			elif re.search('ok\.ru', data, re.S):
 				id = data.split('/')[-1]
@@ -725,6 +683,29 @@ class get_stream_link:
 				link = data
 				getPage(link, cookies=ck).addCallback(self.vidzi).addErrback(self.errorload)
 
+			elif re.search('vidfast\.co/', data, re.S):
+				link = data
+				agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36 OPR/34.0.2036.50'
+				mp_globals.player_agent = agent
+				twAgentGetPage(link, agent=agent).addCallback(self.vidfast).addErrback(self.errorload)
+
+			elif re.search('verystream\.com', data, re.S):
+				if "/e/" in data:
+					link = data
+				else:
+					vid = re.search('.*?/stream/(.*?)(?:/|$)', data, re.S)
+					if vid:
+						link = "https://verystream.com/e/" + vid.group(1)
+					else:
+						self.stream_not_found()
+						return
+				id = link.strip('/').rsplit('/')[-1]
+				self.agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36'
+				mp_globals.player_agent = self.agent
+				self.referer = 'https://filmpalast.to'
+				self.retry = 0
+				twAgentGetPage(link, agent=self.agent, headers={'referer':self.referer}).addCallback(self.verystream, id, link).addErrback(self.errorload)
+
 			elif re.search('vidlox(\.tv|\.me)', data, re.S):
 				if re.search('vidlox(\.tv|\.me)/embed-', data, re.S):
 					link = data
@@ -732,7 +713,12 @@ class get_stream_link:
 					id = re.search('vidlox(?:\.tv|\.me)/(\w+)', data)
 					if id:
 						link = "https://vidlox.tv/embed-%s.html" % id.group(1)
-				twAgentGetPage(link).addCallback(self.vidlox).addErrback(self.errorload)
+				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
+					self.rdb = 1
+					self.prz = 1
+					self.callPremium(link)
+				else:
+					twAgentGetPage(link).addCallback(self.vidlox).addErrback(self.errorload)
 
 			elif re.search('vidcloud\.co', data, re.S):
 				fid = re.search('vidcloud\.co/embed/(.*?)/', data, re.S)
@@ -743,12 +729,6 @@ class get_stream_link:
 					twAgentGetPage(link, agent=agent).addCallback(self.vidcloud).addErrback(self.errorload)
 				else:
 					self.stream_not_found()
-
-			elif re.search('xdrive\.cc', data, re.S):
-				link = data.replace('https','http')
-				agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36 OPR/34.0.2036.50'
-				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36 OPR/34.0.2036.50'
-				twAgentGetPage(link, agent=agent).addCallback(self.xdrive).addErrback(self.errorload)
 
 			elif re.search('streamango\.com|streamcherry\.com', data, re.S):
 				link = data
@@ -773,46 +753,3 @@ class get_stream_link:
 	def errorload(self, error):
 		printl('[streams]: ' + str(error),'','E')
 		message = self.session.open(MessageBoxExt, _("Unknown error, check MP logfile."), MessageBoxExt.TYPE_INFO, timeout=5)
-
-##############################################################################################################
-
-	def mypcloud(self, data):
-		m = re.search('publink.set_download_link\(\'(.*?)\'\)', data)
-		if m and m.group(1):
-			self._callback(unquote(m.group(1)))
-		else:
-			self.stream_not_found()
-
-	def allmyvids(self, data):
-		stream_url = re.findall('file"\s:\s"(.*?)",', data)
-		if stream_url:
-			self._callback(stream_url[0])
-		else:
-			self.stream_not_found()
-
-	def streamcloud(self, data):
-		id = re.findall('<input type="hidden" name="id".*?value="(.*?)">', data)
-		fname = re.findall('<input type="hidden" name="fname".*?alue="(.*?)">', data)
-		if id and fname:
-			url = "http://streamcloud.eu/%s" % id[0]
-			post_data = urllib.urlencode({'op': 'download1', 'usr_login': '', 'id': id[0], 'fname': fname[0], 'referer': url, 'hash': '', 'imhuman':'Weiter zum Video'})
-			reactor.callLater(10, self.streamcloud_getpage, url, post_data)
-			message = self.session.open(MessageBoxExt, _("Stream starts in 10 sec."), MessageBoxExt.TYPE_INFO, timeout=10)
-		else:
-			self.stream_not_found()
-
-	def streamcloud_getpage(self, url, post_data):
-		spezialagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
-		getPage(url, method='POST', cookies=ck, agent=spezialagent, postdata=post_data, headers={'Content-Type':'application/x-www-form-urlencoded', 'Referer': url, 'Origin':'http://streamcloud.eu'}).addCallback(self.streamcloud_data, url).addErrback(self.errorload)
-
-	def streamcloud_data(self, data, url):
-		stream_url = re.findall('file:\s"(.*?)",', data)
-		if stream_url:
-			mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
-			headers = '&Referer=' + url
-			stream = stream_url[0] + '#User-Agent='+mp_globals.player_agent+headers
-			self._callback(stream)
-		elif re.search('This video is encoding now', data, re.S):
-			self.session.open(MessageBoxExt, _("This video is encoding now. Please check back later."), MessageBoxExt.TYPE_INFO, timeout=10)
-		else:
-			self.stream_not_found()

@@ -175,9 +175,9 @@ class LFPornFilmAuswahlScreen(MPScreen):
 		streams = re.findall('iframe\ssrc=[\'|"](http[s]?://(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
 		if streams:
 			for (stream, hostername) in streams:
-				if isSupportedHoster(hostername, True):
-					hostername = hostername.replace('www.','').replace('embed.','').replace('play.','')
-					self.filmliste.append((hostername, stream))
+				check = isSupportedHoster(hostername)
+				if check:
+					self.filmliste.append((check, stream))
 			# remove duplicates
 			self.filmliste = list(set(self.filmliste))
 		if len(self.filmliste) == 0:

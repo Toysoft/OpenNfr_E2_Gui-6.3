@@ -194,9 +194,9 @@ class PornStreamsFilmAuswahlScreen(MPScreen):
 		streams = re.findall('(?:src|href)=[\'|"](http[s]?://(?!(pornstreams.eu))(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
 		if streams:
 			for (stream, dummy, hostername) in streams:
-				if isSupportedHoster(hostername, True):
-					hostername = hostername.replace('www.','').replace('embed.','').replace('play.','')
-					self.filmliste.append((hostername, stream))
+				check = isSupportedHoster(hostername)
+				if check:
+					self.filmliste.append((check, stream))
 			# remove duplicates
 			self.filmliste = list(set(self.filmliste))
 		if len(self.filmliste) == 0:

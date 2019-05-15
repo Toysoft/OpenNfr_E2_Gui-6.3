@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-##############################################################################################################
+#######################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -15,15 +15,12 @@
 #  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
 #  on hardware which is NOT licensed by Dream Property GmbH.
 #
-#  This applies to the source code as a whole as well as to parts of it, unless
-#  explicitely stated otherwise.
+#  This applies to the source code as a whole as well as to parts of it, unless explicitely
+#  stated otherwise.
 #
-#  If you want to use or modify the code or parts of it,
-#  you have to keep OUR license and inform us about the modifications, but it may NOT be
-#  commercially distributed other than under the conditions noted above.
-#
-#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
-#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
+#  If you want to use or modify the code or parts of it, permission from the authors is necessary.
+#  You have to keep OUR license and inform us about any modification, but it may NOT be distributed
+#  other than under the conditions noted above.
 #
 #  As an exception regarding modifcations, you are NOT permitted to remove
 #  any copy protections implemented in this plugin or change them for means of disabling
@@ -32,9 +29,10 @@
 #  parts is NOT permitted.
 #
 #  Advertising with this plugin is NOT allowed.
+#
 #  For other uses, permission from the authors is necessary.
 #
-##############################################################################################################
+#######################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -48,7 +46,7 @@ json_headers = {
 	'X-Requested-With':'XMLHttpRequest',
 	'Content-Type':'application/x-www-form-urlencoded',
 	}
-	
+
 default_cover = "file://%s/homemoviestube.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 class homemoviestubeGenreScreen(MPScreen):
@@ -85,9 +83,11 @@ class homemoviestubeGenreScreen(MPScreen):
 	def genreData(self, data):
 		parse = re.search('<h4>Channels</h4>(.*?)<h4>Top Categories', data, re.S)
 		if parse:
-			Cats = re.findall('<a\shref=[\'|"](http://www.homemoviestube.com/channels/.*?)[\'|"]>(.*?)<', parse.group(1), re.S)
+			Cats = re.findall('<a\shref=[\'|"]((?:http[s]?:|)//www.homemoviestube.com/channels/.*?)[\'|"]>(.*?)<', parse.group(1), re.S)
 			if Cats:
 				for (Url, Title) in Cats:
+					if Url.startswith('//'):
+						Url = "http:" + Url
 					Title = Title.strip(' ')
 					self.genreliste.append((Title, Url))
 				self.genreliste.sort()
@@ -200,9 +200,13 @@ class homemoviestubeFilmScreen(MPScreen, ThumbsHelper):
 			parse = re.search('<head>(.*)</html>', data, re.S)
 		Liste = re.findall('class="film-item.*?-wrapper">(.*?)<a\shref="(.*?)"\stitle="(.*?)".*?class="film-thumb.*?img\ssrc="(.*?)".*?class="film-time">(.*?)</span.*?stat-added">(.*?)</span>.*?stat-views">(.*?)</span.*?stat-rated">(.*?)</span', parse.group(1), re.S)
 		if Liste:
-			for (Premium, Link, Name, Image, Runtime, Added, Views, Rated) in Liste:
+			for (Premium, Url, Name, Image, Runtime, Added, Views, Rated) in Liste:
 				if not "premium_star.png" in Premium:
-					self.streamList.append((decodeHtml(Name), Image, Link, Runtime, Added, Views, Rated))
+					if Url.startswith('//'):
+						Url = "http:" + Url
+					if Image.startswith('//'):
+						Image = "http:" + Image
+					self.streamList.append((decodeHtml(Name), Image, Url, Runtime, Added, Views, Rated))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No videos found!'), None, '', ''))
 		self.ml.setList(map(self._defaultlistleft, self.streamList))
@@ -248,5 +252,8 @@ class homemoviestubeFilmScreen(MPScreen, ThumbsHelper):
 		Title = self['liste'].getCurrent()[0][0]
 		File = re.findall('<source src="(.*?)" type=\'video/mp4\'>', data)
 		if File:
+			Url = File[0]
+			if Url.startswith('//'):
+				Url = "http:" + Url
 			self.keyLocked = False
-			self.session.open(SimplePlayer, [(Title, File[0])], showPlaylist=False, ltype='homemoviestube')
+			self.session.open(SimplePlayer, [(Title, Url)], showPlaylist=False, ltype='homemoviestube')

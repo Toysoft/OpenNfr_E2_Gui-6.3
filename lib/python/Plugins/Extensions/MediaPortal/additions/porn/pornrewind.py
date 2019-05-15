@@ -196,9 +196,9 @@ class pornrewindFilmAuswahlScreen(MPScreen):
 		streams = re.findall('iframe (?:src|href)=[\'|"](http[s]?://(.*?)\/.*?)[\'|"|\&|<]', data, re.S|re.I)
 		if streams:
 			for (stream, hostername) in streams:
-				if isSupportedHoster(hostername, True):
-					hostername = hostername.replace('www.','').replace('embed.','').replace('play.','')
-					self.filmliste.append((hostername, stream))
+				check = isSupportedHoster(hostername)
+				if check:
+					self.filmliste.append((check, stream))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No supported streams found!'), None))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))

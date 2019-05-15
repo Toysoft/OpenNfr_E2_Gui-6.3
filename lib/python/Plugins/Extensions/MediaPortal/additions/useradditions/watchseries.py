@@ -287,10 +287,11 @@ class watchseriesStreamListeScreen(MPScreen):
 			if streams:
 				self.filmliste = []
 				for (url,hostername) in streams:
-					if isSupportedHoster(hostername, True):
+					check = isSupportedHoster(hostername)
+					if check:
 						import base64
 						url = base64.b64decode(url)
-						self.filmliste.append((decodeHtml(hostername),url))
+						self.filmliste.append((check, url))
 			if len(self.filmliste) == 0:
 				self.filmliste.append((_("No supported streams found!"), None))
 			else:

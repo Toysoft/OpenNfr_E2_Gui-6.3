@@ -243,7 +243,7 @@ class filmPalastEpisodenParsing(MPScreen, ThumbsHelper):
 		twAgentGetPage(self.url, agent=fp_agent, cookieJar=fp_cookies).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		episoden = re.findall('<a id="staffId_" href="((?:https:|)//filmpalast.to/stream/.*?)" class="getStaffelStream".*?</i>(.*?)&', data, re.S)
+		episoden = re.findall('<a\s+id="staffId_"\n\s+href="((?:https:|)//filmpalast.to/stream/.*?)"\n\s+class="getStaffelStream".*?</i>(.*?)&', data, re.S)
 		if episoden:
 			for (Url, title) in episoden:
 				if Url.startswith('//'):
@@ -382,11 +382,12 @@ class filmPalastStreams(MPScreen):
 
 	def parseData(self, data):
 		self.streamList = []
-		streams = re.findall('currentStreamLinks.*?class="hostName">(.*?)<.*?href="(.*?)"', data, re.S)
+		streams = re.findall('currentStreamLinks.*?class="hostName">(.*?)<.*?(?:data-player-url|href)="(.*?)"', data, re.S)
 		if streams:
 			for (Hoster, Url) in streams:
-					if isSupportedHoster(Hoster, True):
-						self.streamList.append((Hoster, Url))
+					check = isSupportedHoster(Hoster)
+					if check:
+						self.streamList.append((check, Url))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No supported streams found!'), None))
 		self.ml.setList(map(self._defaultlisthoster, self.streamList))

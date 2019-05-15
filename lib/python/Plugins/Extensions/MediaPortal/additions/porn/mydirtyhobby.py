@@ -116,11 +116,9 @@ class MDHtoFilmScreen(MPScreen, ThumbsHelper):
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination">(.*?)</div>', '.*[>|=](\d+)[<|&|\/span]')
 		if self.Name.startswith("Pornstar"):
-			Pornstars = re.findall('<div class="col-xs-6 col-sm-3 col-lg-2b model-pad">.*?class="model-sh" href="(.*?)">.*?<img class="img-responsive" src="(.*?)"/>.*?class="model-title title-small">(.*?)</span>.*?class="pull-left model-stat title-tiny"><i class="fa fa-film"></i>\s{0,1}(\d+)</span>', data, re.S)
+			Pornstars = re.findall('<div class="col-xs-6 col-sm-3 col-lg-2b model-pad">.*?class="model-sh" href="(.*?)">.*?<img class="img-responsive" src="(.*?)"/>.*?class="model-title title-small">(.*?)</span>', data, re.S)
 			if Pornstars:
-				for (Url, Image, Title, Count) in Pornstars:
-					if int(Count) < 1:
-						continue
+				for (Url, Image, Title) in Pornstars:
 					Url = "https://www.mydirtyhobby.to" + Url + "?page="
 					Image = "https://www.mydirtyhobby.to" + Image
 					self.filmliste.append((decodeHtml(Title), Url, Image, "star"))

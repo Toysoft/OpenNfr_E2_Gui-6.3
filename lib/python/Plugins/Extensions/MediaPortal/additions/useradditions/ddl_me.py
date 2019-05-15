@@ -496,11 +496,12 @@ class DDLMEStreams(MPScreen):
 
 									if streams:
 										s = mg.group(1)
-										if isSupportedHoster(s, True):
+										check = isSupportedHoster(s)
+										if check:
 
 											for h, t in streams:
 												url = h.replace('\\', '')
-												self.streamListe.append((s,url,'',''))
+												self.streamListe.append((check,url,'',''))
 								else:
 									a2 = l2
 							a = l
@@ -542,7 +543,8 @@ class DDLMEStreams(MPScreen):
 
 						if streams:
 							s = mg.group(1)
-							if isSupportedHoster(s, True):
+							check = isSupportedHoster(s)
+							if check:
 								part = ''
 								for (p, h, t) in streams:
 									url = h.replace('\\', '')
@@ -550,7 +552,7 @@ class DDLMEStreams(MPScreen):
 										part = "Part " + p
 									else:
 										part = "One Part"
-									self.streamListe.append((s,url,part,kap))
+									self.streamListe.append((check,url,part,kap))
 					else:
 						a = l
 

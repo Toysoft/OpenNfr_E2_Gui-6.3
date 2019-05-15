@@ -98,6 +98,8 @@ class hqpornerSubGenreScreen(MPScreen):
 				Url = "http://hqporner.com" + Url
 				if Image.startswith('//'):
 					Image = "http:" + Image
+				elif Image.startswith('/'):
+					Image = "http://hqporner.com" + Image
 				self.filmliste.append((decodeHtml(Title.title()), Url, Image))
 			self.filmliste.sort()
 			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
@@ -207,28 +209,10 @@ class hqpornerListScreen(MPScreen, ThumbsHelper):
 				url = Link[0][0]
 			if re.match('.*?//hqporner.com', url):
 				getPage(url, agent=hqAgent).addCallback(self.getVideoLink).addErrback(self.dataError)
-			elif re.match('.*?//bemywife\.cc', url):
-				getPage(url, agent=hqAgent).addCallback(self.bemywife).addErrback(self.dataError)
 			elif re.match('.*?//mydaddy\.cc', url):
 				getPage(url, agent=hqAgent).addCallback(self.mydaddy).addErrback(self.dataError)
-			elif re.match('.*?//hqwo\.cc', url):
-				getPage(url, agent=hqAgent).addCallback(self.leaseweb).addErrback(self.dataError)
-			elif re.match('.*?//5\.79\.64\.169', url):
-				getPage(url, agent=hqAgent).addCallback(self.leaseweb).addErrback(self.dataError)
-			elif isSupportedHoster(Link[0][1].replace('www.',''), True):
+			elif isSupportedHoster(Link[0][1].replace('www.','')):
 				get_stream_link(self.session).check_link(url, self.got_link)
-		else:
-			message = self.session.open(MessageBoxExt, _("No supported streams found!"), MessageBoxExt.TYPE_INFO, timeout=3)
-
-	def bemywife(self, data):
-		stream_url = re.findall('file:\s"(.*?(\d+).mp4)"', data, re.S)
-		if stream_url:
-			stream_url.sort(key=lambda t : t[1], reverse=False)
-			if 'http://' in stream_url[-1][0]:
-				link = stream_url[-1][0]
-			else:
-				link = "http://bemywife.cc" + stream_url[-1][0]
-			self.got_link(link)
 		else:
 			message = self.session.open(MessageBoxExt, _("No supported streams found!"), MessageBoxExt.TYPE_INFO, timeout=3)
 
@@ -243,20 +227,6 @@ class hqpornerListScreen(MPScreen, ThumbsHelper):
 			if link.startswith('//'):
 				link = 'http:' + link
 			self.got_link(link)
-		else:
-			message = self.session.open(MessageBoxExt, _("No supported streams found!"), MessageBoxExt.TYPE_INFO, timeout=3)
-
-	def leaseweb(self, data):
-		stream_url = re.findall('src=["|\'](http://[A-Za-z0-9\.]+/runplayer/.*?)["|\']', data, re.S)
-		if stream_url:
-			getPage(stream_url[0], agent=hqAgent).addCallback(self.leaseweblink).addErrback(self.dataError)
-		else:
-			message = self.session.open(MessageBoxExt, _("No supported streams found!"), MessageBoxExt.TYPE_INFO, timeout=3)
-
-	def leaseweblink(self, data):
-		stream_url = re.findall('file":\s"(.*?mp4)"', data, re.S)
-		if stream_url:
-			self.got_link(stream_url[-1])
 		else:
 			message = self.session.open(MessageBoxExt, _("No supported streams found!"), MessageBoxExt.TYPE_INFO, timeout=3)
 

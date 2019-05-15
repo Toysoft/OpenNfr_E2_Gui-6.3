@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-##############################################################################################################
+#######################################################################################################
 #
 #    MediaPortal for Dreambox OS
 #
@@ -15,15 +15,12 @@
 #  It's NOT allowed to execute this plugin and its source code or even parts of it in ANY way
 #  on hardware which is NOT licensed by Dream Property GmbH.
 #
-#  This applies to the source code as a whole as well as to parts of it, unless
-#  explicitely stated otherwise.
+#  This applies to the source code as a whole as well as to parts of it, unless explicitely
+#  stated otherwise.
 #
-#  If you want to use or modify the code or parts of it,
-#  you have to keep OUR license and inform us about the modifications, but it may NOT be
-#  commercially distributed other than under the conditions noted above.
-#
-#  As an exception regarding execution on hardware, you are permitted to execute this plugin on VU+ hardware
-#  which is licensed by satco europe GmbH, if the VTi image is used on that hardware.
+#  If you want to use or modify the code or parts of it, permission from the authors is necessary.
+#  You have to keep OUR license and inform us about any modification, but it may NOT be distributed
+#  other than under the conditions noted above.
 #
 #  As an exception regarding modifcations, you are NOT permitted to remove
 #  any copy protections implemented in this plugin or change them for means of disabling
@@ -32,9 +29,10 @@
 #  parts is NOT permitted.
 #
 #  Advertising with this plugin is NOT allowed.
+#
 #  For other uses, permission from the authors is necessary.
 #
-##############################################################################################################
+#######################################################################################################
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
@@ -783,7 +781,7 @@ class pornhubChannelScreen(MPScreen, ThumbsHelper):
 
 	def loadPageData(self, data):
 		self.getLastPage(data, 'class="pagination3">(.*?)</div>')
-		Cats = re.findall('class="channelsWrapper.*?class="rank">.*?<span>Rank<br/>\s{0,1}(\d+)</span>.*?href="(.*?)".*?img\salt="(.*?)"\ssrc="(.*?)".*?Videos<span>(.*?)</span>.*?data-subscribe-url="(.*?)"\sdata-unsubscribe-url="(.*?)"\sdata-subscribed="(.*?)"', data, re.S)
+		Cats = re.findall('class="channelsWrapper.*?class="rank">.*?<span>Rank<br/>\s{0,1}(\d+)</span>.*?href="(.*?)".*?img.*?alt="(.*?)".*?src="(.*?)".*?Videos<span>(.*?)</span>.*?data-subscribe-url="(.*?)"\sdata-unsubscribe-url="(.*?)"\sdata-subscribed="(.*?)"', data, re.S)
 		if Cats:
 			for Rank, Url, Title, Image, Videos, Reg, Unreg, Subscribed in Cats:
 				Url = base_url + Url + "/videos?o=da&page="
