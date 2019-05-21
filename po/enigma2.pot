@@ -13697,3 +13697,100 @@ msgstr ""
 
 msgid "Download_openNFRskin"
 msgstr ""
+
+msgid "Retrieving image list - Please wait..."
+msgstr ""
+
+msgid "Retrieving image slots - Please wait..."
+msgstr ""
+
+
+msgid "Downloaded Images"
+msgstr ""
+
+msgid ""
+"Do you want to flash image\n"
+"%s"
+msgstr ""
+
+msgid "Cannot delete downloaded image"
+msgstr ""
+
+msgid "Save settings and EPG data"
+msgstr ""
+
+msgid "Upgrade (Backup, Flash & Restore All)"
+msgstr ""
+
+msgid "Clean (Just flash and start clean)"
+msgstr ""
+
+msgid "Backup, flash and restore settings and no plugins"
+msgstr ""
+
+msgid "Backup, flash and restore settings and selected plugins (ask user)"
+msgstr ""
+
+msgid "Delete Image"
+msgstr ""
+
+msgid "Use the cursor keys to select an installed image and then Erase button."
+msgstr ""
+
+msgid ""
+"Use the cursor keys to select an installed image and then Reboot button."
+msgstr ""
+
+
+msgid ""
+"Error during downloading image\n"
+"%s\n"
+"%s"
+msgstr ""
+
+msgid ""
+"Error during unzipping image\n"
+"%s"
+msgstr ""
+
+msgid "Flashing image successful"
+msgstr ""
+
+msgid ""
+"Flashing image was not successful\n"
+"%s"
+msgstr ""
+
+msgid "slot%s - %s (current image)"
+msgstr ""
+
+msgid "No, do not flash an image"
+msgstr ""
+
+msgid "Empty slot"
+msgstr ""
+
+msgid "slot%s - %s"
+msgstr ""
+
+msgid "slot%s -%s - %s (current image)"
+msgstr ""
+
+msgid "slot%s -%s - %s"
+msgstr ""
+
+msgid "slot%s -%s- %s "
+msgstr ""
+
+msgid "Do you want to reboot now the image in slot %s?"
+msgstr ""
+
+
+msgid "Recovery Mode"
+msgstr ""
+
+msgid "Your %s %s is rebooting into Recovery Mode"
+msgstr ""
+
+msgid "Really reboot into Recovery Mode?"
+msgstr ""
