@@ -35,15 +35,8 @@ if [ ! "$(grep config.misc.firstrun /etc/enigma2/settings)" == "config.misc.firs
 fi
 
 if [ -e /proc/stb/info/boxtype ]; then
-	stbcheck=`cat /proc/stb/info/boxtype | cut -c1-3`
-	if [ $stbcheck == "cc1" ]; then
-		count=`ps -ef |grep libreader |grep -v "grep" |wc -l`
-		if [ 0 == $count ];then
-			libreader 720P_50
-		fi
-	fi
-	stbcheck=`cat /proc/stb/info/boxtype | cut -c1-6`
-	if [ $stbcheck == "sf8008" ]; then
+	stbcheck=`cat /proc/stb/info/boxtype`
+	if [ $stbcheck == "sf8008" ] || [ $stbcheck == "ustym4kpro" ] || [ $stbcheck == "cc1" ] || [ $stbcheck == "trio4k" ] || [ $stbcheck == "gbmv200" ] || [ $stbcheck == "v2" ] || [ $stbcheck == "viper4k" ]; then
 		count=`ps -ef |grep libreader |grep -v "grep" |wc -l`
 		if [ 0 == $count ];then
 			libreader 720P_50
@@ -53,14 +46,14 @@ fi
 if [ -x @bindir@/showiframe ]; then
 	if [ -e /proc/stb/info/boxtype ]; then
 		stbcheck=`cat /proc/stb/info/boxtype | cut -c1-2`
-		if [ ! $stbcheck == "u5" ]; then
+		if [ ! $stbcheck == "u5" ] && [ ! $stbcheck == "u4" ]; then
 			killall -9 showiframe; sleep 1
 		fi
 	else
 		killall -9 showiframe; sleep 1
 	fi
-	if [ -f @sysconfdir@//backdrop.mvi ]; then
-		@bindir@/showiframe @sysconfdir@/backdrop.mvi
+	if [ -f @sysconfdir@/enigma2/backdrop.mvi ]; then
+		@bindir@/showiframe @sysconfdir@/enigma2/backdrop.mvi
 	elif [ -f @datadir@/backdrop.mvi ]; then
 		@bindir@/showiframe @datadir@/backdrop.mvi
 	fi
@@ -120,9 +113,9 @@ if [ -e /proc/stb/info/boxtype ] && [ -e /proc/stb/info/chipset ]; then
        stbcheck=01
    fi
 fi
-if [ -e /etc/defaultsat.tar.gz ] && [ ! -e /etc/enigma2/lamedb ] && [ ! $stbcheck == "01" ] && [ ! $stbcheck == "1" ]; then
-	tar -xzf /etc/defaultsat.tar.gz -C /etc/enigma2
-fi
+#if [ -e /etc/defaultsat.tar.gz ] && [ ! -e /etc/enigma2/lamedb ] && [ ! $stbcheck == "01" ] && [ ! $stbcheck == "1" ]; then
+#	tar -xzf /etc/defaultsat.tar.gz -C /etc/enigma2
+#fi
 
 sync
 
@@ -166,10 +159,11 @@ ret=$?
 if [ "$ret" -ne "1" ]; then
 	if [ -e /proc/stb/info/boxtype ]; then
 		stbcheck=`cat /proc/stb/info/boxtype | cut -c1-2`
-		if [ $stbcheck == "u5" ]; then
+		if [ $stbcheck == "u5" ] || [ $stbcheck == "u4" ]; then
 			killall -9 showiframe; sleep 5
 		fi
-		if [ $stbcheck == "cc" ]; then
+		stbcheck=`cat /proc/stb/info/boxtype`
+		if [ $stbcheck == "sf8008" ] || [ $stbcheck == "ustym4kpro" ] || [ $stbcheck == "cc1" ] || [ $stbcheck == "trio4k" ] || [ $stbcheck == "gbmv200" ] || [ $stbcheck == "v2" ] || [ $stbcheck == "viper4k" ]; then
 			killall -9 libreader; sleep 5
 		fi
 	fi
@@ -198,7 +192,13 @@ case $ret in
 		/sbin/reboot
 		;;
 	16)
-		echo "rescue" > /proc/stb/fp/boot_mode
+		if [ -e /dev/block/by-name/bootoptions ]; then
+			mkdir -p /tmp/bootoptions
+			mount /dev/block/by-name/bootoptions /tmp/bootoptions
+			cp -f /tmp/bootoptions/STARTUP_RECOVERY /tmp/bootoptions/STARTUP_ONCE
+		else
+			echo "rescue" > /proc/stb/fp/boot_mode
+		fi
 		/sbin/reboot
 		;;
 	42)

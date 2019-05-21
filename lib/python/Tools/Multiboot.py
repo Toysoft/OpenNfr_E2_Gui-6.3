@@ -13,7 +13,10 @@ def GetCurrentImage():
 		else:
 			f = open('/sys/firmware/devicetree/base/chosen/bootargs', 'r').read()
 			if "%s" %(SystemInfo["canMultiBoot"][2]) in f:
-				return SystemInfo["canMultiBoot"] and (int(open('/sys/firmware/devicetree/base/chosen/bootargs', 'r').read()[:-1].split("%s" % SystemInfo["canMultiBoot"][2])[1].split(' ')[0])-SystemInfo["canMultiBoot"][0])/2
+				if SystemInfo["HasSDmmc"]:
+					return SystemInfo["canMultiBoot"] and (int(open('/sys/firmware/devicetree/base/chosen/bootargs', 'r').read()[:-1].split("%s" % SystemInfo["canMultiBoot"][2])[1].split(' ')[0])+2)/2
+				else:
+					return SystemInfo["canMultiBoot"] and (int(open('/sys/firmware/devicetree/base/chosen/bootargs', 'r').read()[:-1].split("%s" % SystemInfo["canMultiBoot"][2])[1].split(' ')[0])-SystemInfo["canMultiBoot"][0])/2
 			else:
 				return 0	# if media not in SystemInfo["canMultiBoot"], then using SDcard and Image is in eMMC (1st slot) so tell caller with 0 return
 
@@ -120,11 +123,11 @@ class GetImagelist():
 	def appClosed(self, data, retval, extra_args):
 		if retval == 0 and self.phase == self.MOUNT:
 			BuildVersion = "  "	
-			Build = " "	#ViX Build No.#
-			Dev = " "	#ViX Dev No.#
-			Creator = " " 	#Openpli Openvix Openatv etc #
+			Build = " "
+			Dev = " "
+			Creator = " "
 			Date = " "	
-			BuildType = " "	#release etc #
+			BuildType = " "
 			self.OsPath = "NoPath"
 			if SystemInfo["HasRootSubdir"]:
 				if self.slot == 1 and os.path.isfile("/tmp/testmount/linuxrootfs1/usr/bin/enigma2"):
@@ -156,8 +159,8 @@ class GetImagelist():
 					st = os.stat('%s/var/lib/opkg/status' %self.OsPath)
 					tm = time.localtime(st.st_mtime)
 					if tm.tm_year >= 2011:
-						Date = time.strftime("%d-%m-%Y", tm).replace("-20", "-")
-					BuildVersion = "%s rel %s" % (Creator, Date)
+						Date = time.strftime("%d-%m-%Y", tm)
+					BuildVersion = _("%s build date %s") % (Creator, Date)
 				self.imagelist[self.slot2] =  { 'imagename': '%s' %BuildVersion, 'part': '%s' %self.part2 }
 			self.phase = self.UNMOUNT
 			self.run()
