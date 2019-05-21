@@ -17,8 +17,8 @@ from Tools.Multiboot import GetImagelist, GetCurrentImage, GetCurrentImageMode, 
 class MultiBootSelector(Screen):
 
 	skin = """
-  <screen name="Multiboot Image Selector" position="center,center" size="1920,1080" flags="wfNoBorder">
-    <ePixmap position="center,center" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/menu.png" />
+   <screen name="Multiboot Image Selector" position="center,center" size="1920,1080" flags="wfNoBorder">
+    <ePixmap position="2,-2" zPosition="-10" size="1920,1080" pixmap="skin_default/menu/menu.png" />
     <eLabel position="1056,210" zPosition="1" size="805,500" backgroundColor="unff000000" />
     <widget source="session.VideoPicture" render="Pig" position="1056,210" size="805,500" zPosition="0" />
     <widget source="session.CurrentService" render="Label" position="1079,747" size="750,45" zPosition="2" font="NFRLCD; 38" halign="center" noWrap="1" transparent="1" backgroundColor="white">
@@ -41,14 +41,14 @@ class MultiBootSelector(Screen):
     <ePixmap pixmap="skin_default/buttons/green.png" position="568,1000" size="300,76" alphatest="blend" />
     <widget source="key_red" render="Label" position="77,1017" size="255,34" zPosition="1" font="NFRLCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
     <widget source="key_green" render="Label" position="590,1017" size="255,34" zPosition="1" font="NFRLCD; 34" halign="center" valign="center" backgroundColor="white" transparent="1" />
-    <widget source="description" render="Label" position="55,220" size="920,40" halign="center" font="Regular; 28" backgroundColor="black" foregroundColor="white" transparent="1" />
-    <widget source="options" render="Label" position="55,290" size="920,60" halign="center" font="Regular; 22" backgroundColor="black" foregroundColor="white" transparent="1" />
-    <widget name="config" position="53,372" size="920,550" halign="center" font="Regular; 32" backgroundColor="black" foregroundColor="yellow" transparent="1" />
+    <widget source="description" render="Label" position="55,220" size="920,90" halign="center" font="Regular; 30" backgroundColor="black" foregroundColor="white" transparent="1" />
+    <widget source="options" render="Label" position="55,344" size="920,90" halign="center" font="Regular; 22" backgroundColor="black" foregroundColor="white" transparent="1" />
+    <widget name="config" position="50,477" size="920,440" halign="center" backgroundColor="black" foregroundColor="yellow" transparent="1" />
     <applet type="onLayoutFinish">
         self["config"].instance.setItemHeight(50)
     </applet>
-    <ePixmap name="selector" position="50,270" size="930,10" pixmap="skin_default/menu/selector.png" zPosition="1" />
-    <ePixmap name="selector" position="50,358" size="930,10" pixmap="skin_default/menu/selector.png" zPosition="1" />
+    <ePixmap name="selector" position="50,320" size="930,10" pixmap="skin_default/menu/selector.png" zPosition="1" />
+    <ePixmap name="selector" position="50,453" size="930,10" pixmap="skin_default/menu/selector.png" zPosition="1" />
   </screen>
 	"""
 
