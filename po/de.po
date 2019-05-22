@@ -13801,16 +13801,16 @@ msgid "Save settings and EPG data"
 msgstr "Einstellungen und EPG-Daten speichern"
 
 msgid "Upgrade (Backup, Flash & Restore All)"
-msgstr "Aktualisierung (Sichern, Flashen und Wiederherstellen"
+msgstr "Flashen und Wiederherstellen der Einstellungen incl. Plugins"
 
 msgid "Clean (Just flash and start clean)"
-msgstr "Flash bereinigen (Normal flashen und loslegen)"
+msgstr "Flashen und Assistenten für die Grundeinstellung benutzen"
 
 msgid "Backup, flash and restore settings and no plugins"
-msgstr "Sicherung, Flash, Einstellungen sichern aber keine Plugins wiederherstellen"
+msgstr "Flashen und Wiederherstellen der Einstellungen, ohne Plugins"
 
 msgid "Backup, flash and restore settings and selected plugins (ask user)"
-msgstr "Sicherung, Flash, Einstellungen sichern und Plugins wiederherstellen (User fragen)"
+msgstr "Flashen und Wiederherstellen der Einstellungen (mit Plugin-Abfrage)"
 
 msgid "Delete Image"
 msgstr "Image Löschen"
