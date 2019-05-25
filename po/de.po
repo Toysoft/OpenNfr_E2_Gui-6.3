@@ -13880,3 +13880,9 @@ msgstr "Ihre %s %s startet in den Wiederherstellungsmodus"
 
 msgid "Really reboot into Recovery Mode?"
 msgstr "Wirklich einen Neustart in den Wiederherstellungsmodus durchführen?"
+
+msgid "Backup to destination: %s"
+msgstr "Backup nach: %s"
+
+msgid "No, do not backup a image"
+msgstr "Nein, kein Backup sichern"

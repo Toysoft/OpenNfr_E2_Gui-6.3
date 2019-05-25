@@ -13797,3 +13797,9 @@ msgstr ""
 
 msgid "Really reboot into Recovery Mode?"
 msgstr ""
+
+msgid "Backup to destination: %s"
+msgstr ""
+
+msgid "No, do not backup a image"
+msgstr ""
