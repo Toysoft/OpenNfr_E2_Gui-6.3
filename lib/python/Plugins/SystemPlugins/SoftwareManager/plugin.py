@@ -6,7 +6,7 @@ from stat import ST_MTIME
 
 from enigma import eTimer, getDesktop, ePicLoad, eRCInput, getPrevAsciiCode, eEnv
 from twisted.web import client
-from ImageBackup import ImageManagerautostart
+#from ImageBackup import ImageManagerautostart
 
 from Plugins.Plugin import PluginDescriptor
 from Screens.ChoiceBox import ChoiceBox
@@ -1938,7 +1938,7 @@ def Plugins(path, **kwargs):
 		PluginDescriptor(name=_("Software management"), description=_("Manage your %s %s's software") % (getMachineBrand(), getMachineName()), where = PluginDescriptor.WHERE_MENU, needsRestart = False, fnc=startSetup),
 		PluginDescriptor(name=_("Ipkg"), where = PluginDescriptor.WHERE_FILESCAN, needsRestart = False, fnc = filescan)
 	]
-	list.append(PluginDescriptor(where=PluginDescriptor.WHERE_SESSIONSTART, fnc=ImageManagerautostart))
+	#list.append(PluginDescriptor(where=PluginDescriptor.WHERE_SESSIONSTART, fnc=ImageManagerautostart))
 	if not config.plugins.softwaremanager.onSetupMenu.value and not config.plugins.softwaremanager.onBlueButton.value:
 		list.append(PluginDescriptor(name=_("Software management"), description=_("Manage your %s %s's software") % (getMachineBrand(), getMachineName()), icon='SoftwareManagerFHD.png' , where = PluginDescriptor.WHERE_PLUGINMENU, needsRestart = False, fnc=UpgradeMain))
 	if config.plugins.softwaremanager.onBlueButton.value:
