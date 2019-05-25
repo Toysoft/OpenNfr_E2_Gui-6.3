@@ -13737,6 +13737,9 @@ msgstr ""
 msgid "Use the cursor keys to select an installed image and then Erase button."
 msgstr ""
 
+msgid "Use the cursor keys to select an installed image and then Start button."
+msgstr ""
+
 msgid ""
 "Use the cursor keys to select an installed image and then Reboot button."
 msgstr ""

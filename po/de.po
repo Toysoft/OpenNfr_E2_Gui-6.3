@@ -13822,6 +13822,8 @@ msgid ""
 "Use the cursor keys to select an installed image and then Reboot button."
 msgstr "Wähle ein installiertes Image aus und dann die GRÜN/OK-Taste für den Neustart."
 
+msgid "Use the cursor keys to select an installed image and then Start button."
+msgstr "Wähle ein installiertes Image aus und danach GRÜN/OK um das Fullbackup zu starten."
 
 msgid ""
 "Error during downloading image\n"
