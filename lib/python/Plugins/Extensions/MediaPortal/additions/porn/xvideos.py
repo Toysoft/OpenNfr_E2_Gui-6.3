@@ -549,7 +549,7 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 						else:
 							self.lastpage = 20000
 							self['page'].setText(str(self.page))
-			Movies = re.findall('id="video_\d+"\sclass="thumb-block\s{0,1}">.*?class="thumb"><a href="(.*?)"><img src=".*?data-src="(.*?)".*?<a href.*?title="(.*?)">.*?</a></p><p class="metadata">(.*?)</div>', data, re.S)
+			Movies = re.findall('id="video_\d+"\s(?:data-id="\d+"\s|)class="thumb-block\s{0,1}">.*?class="thumb"><a href="(.*?)"><img src=".*?data-src="(.*?)".*?<a href.*?title="(.*?)">.*?</a></p><p class="metadata">(.*?)</div>', data, re.S)
 			if Movies:
 				for (Url, Image, Title, Meta) in Movies:
 					Views = re.findall('class="sprfluous"> - </span>\s(.*?)\s<span class="sprfluous">Views</span>', Meta, re.S)

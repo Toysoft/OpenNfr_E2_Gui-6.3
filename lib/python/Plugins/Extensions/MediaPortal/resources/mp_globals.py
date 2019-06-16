@@ -53,3 +53,14 @@ yt_i = None
 animationfix = False
 lastservice = None
 stateinfo = False
+mp_hide = False
+
+try:
+	f = open("/proc/stb/info/vumodel", "r")
+	model = ''.join(f.readlines()).strip()
+except:
+	try:
+		f = open("/proc/stb/info/model", "r")
+		model = ''.join(f.readlines()).strip()
+	except:
+		model = ''

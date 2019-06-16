@@ -4,7 +4,10 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
 
 try:
-	from Plugins.Extensions.MediaPortal.resources import cfscrape
+	if mp_globals.model in ["one"]:
+		from Plugins.Extensions.MediaPortal.resources import cfscrape
+	else:
+		from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 except:
 	cfscrapeModule = False
 else:

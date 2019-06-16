@@ -138,21 +138,15 @@ class camsodaFilmScreen(MPScreen, ThumbsHelper):
 			if node.has_key("tpl"):
 				if node.has_key("schedule_private") and node["schedule_private"] == 1:
 					continue
-				stream_name = str(node["tpl"][5])
+				stream_name = str(node["tpl"][2])
 				if stream_name != "":
-					Title = str(node["tpl"][1])
-					Name = str(node["tpl"][0])
-					enc = stream_name.split('-')[-1]
-					try:
-						tsize = str(node["tpl"][6])
-					except:
-						try:
-							tsize = str(node["thumb_small"]).split('/')[-3]
-						except:
-							tsize = str(node["thumb"]).split('/')[-3]
-					Image = 'https://thumbs-orig.camsoda.com/thumbs/' + stream_name + '/' + enc + '/' + tsize + '/null/' + Name + '.jpg'
-					Viewers = node["tpl"][2]
-					descr = str(node["tpl"][4])
+					Title = str(node["tpl"][2])
+					Name = str(node["tpl"][1])
+					Image = str(node["tpl"][9])
+					if Image.startswith('//'):
+						Image = 'http:' + Image
+					Viewers = node["tpl"][3]
+					descr = str(node["tpl"][5])
 					self.filmliste.append((Title, Name, Image, Viewers, descr))
 			else:
 				if node.has_key("status"):

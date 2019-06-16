@@ -2,6 +2,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 
 from enigma import gFont, addFont, eTimer, eConsoleAppContainer, ePicLoad, loadPNG, getDesktop, eServiceReference, iPlayableService, eListboxPythonMultiContent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, eListbox, gPixmapPtr, getPrevAsciiCode, eBackgroundFileEraser
+from operator import isCallable
 
 from Plugins.Plugin import PluginDescriptor
 
@@ -101,7 +102,7 @@ from time import time, localtime, strftime, mktime
 from base64 import b64decode as gfcdf
 
 # MediaPortal Imports
-from debuglog import printlog as printl
+from debuglog import printl
 
 class InsensitiveKey(object):
 	def __init__(self, key):
@@ -156,8 +157,43 @@ from showAsThumb import ThumbsHelper
 from messageboxext import MessageBoxExt
 
 def clear_mp():
-	if os.path.isdir(gfcdf("L3Vzci9saWIvZW5pZ21hMi9weXRob24vUGx1Z2lucy9FeHRlbnNpb25zL0dvbGRlblBhbmVs")) or os.path.isdir(gfcdf("L3Vzci9saWIvZW5pZ21hMi9weXRob24vUGx1Z2lucy9FeHRlbnNpb25zL1BlcnNpYW5EcmVhbWJveA==")):
+	if os.path.isdir(gfcdf("L3Vzci9saWIvZW5pZ21hMi9weXRob24vUGx1Z2lucy9FeHRlbnNpb25zL0dvbGRlblBhbmVs")) or os.path.isdir(gfcdf("L3Vzci9saWIvZW5pZ21hMi9weXRob24vUGx1Z2lucy9FeHRlbnNpb25zL1BlcnNpYW5EcmVhbWJveA==")) or os.path.isdir(gfcdf("L3Vzci9saWIvZW5pZ21hMi9weXRob24vUGx1Z2lucy9FeHRlbnNpb25zL1NhdFZlbnVzUGFuZWw=")):
 		os.system("rm -r %s" % gfcdf("L3Vzci9saWIvZW5pZ21hMi9weXRob24vUGx1Z2lucy9FeHRlbnNpb25zL01lZGlhUG9ydGFs"))
+
+TimerInstances = []
+
+class TimerCall:
+	def __init__(self, delay, function, *params):
+		try:
+			if isCallable(function):
+				global TimerInstances
+				TimerInstances.append(self)
+				self.function = function
+				self.params = params
+				self.timer = None
+				self.timer = eTimer()
+				self.timer_conn = None
+				try:
+					self.timer_conn = self.timer.timeout.connect(self.timerLaunch)
+				except:
+					self.timer.timeout.get().append(self.timerLaunch)
+				self.timer.start(int(delay*1000), False)
+		except Exception, e:
+			pass
+
+	def timerLaunch(self):
+		try:
+			global TimerInstances
+			TimerInstances.remove(self)
+			self.timer.stop()
+			try:
+				self.timer_conn = None
+			except:
+				self.timer.timeout.get().remove(self.timerLaunch)
+			self.timer = None
+			self.function(*self.params)
+		except Exception, e:
+			pass
 
 def registerFont(file, name, scale, replacement):
 	addFont(file, name, scale, replacement)
@@ -330,14 +366,17 @@ def decodeHtml(text):
 		endpos = len(text)
 		pos = 0
 		out = ''
-		while pos < endpos:
-			if text[pos] == "\\" and text[pos+1] == "u" and re.match('[0-9a-fA-F]{4}', text[pos+2:pos+6], re.S):
-				dec = text[pos:pos+6].decode('unicode-escape').encode('utf-8')
-				out += dec
-				pos += 6
-			else:
-				out += text[pos]
-				pos += 1
+		try:
+			while pos < endpos:
+				if text[pos] == "\\" and text[pos+1] == "u" and re.match('[0-9a-fA-F]{4}', text[pos+2:pos+6], re.S):
+					dec = text[pos:pos+6].decode('unicode-escape').encode('utf-8')
+					out += dec
+					pos += 6
+				else:
+					out += text[pos]
+					pos += 1
+		except:
+			out = text
 	else: out = text
 	return out
 

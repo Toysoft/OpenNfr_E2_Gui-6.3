@@ -37,7 +37,6 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPage
-from Plugins.Extensions.MediaPortal.resources.debuglog import printlog as printl
 
 BASE_URL = "http://api.tvnow.de/v3/"
 nowAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'

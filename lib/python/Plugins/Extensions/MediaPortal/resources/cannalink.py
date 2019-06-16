@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 from imports import *
-from debuglog import printlog as printl
+from debuglog import printl
 from messageboxext import MessageBoxExt
 from Plugins.Extensions.MediaPortal.plugin import _
 import mechanize

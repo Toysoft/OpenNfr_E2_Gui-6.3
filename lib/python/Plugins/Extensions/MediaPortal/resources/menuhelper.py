@@ -3,7 +3,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from imports import *
 from twagenthelper import twAgentGetPage
-from debuglog import printlog as printl
+from debuglog import printl
 
 MDEBUG = False
 

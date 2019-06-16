@@ -17,7 +17,7 @@ import signal
 import traceback
 
 from twisted.internet import task
-from debuglog import printlog as printl
+from debuglog import printl
 
 # These values are seconds
 CANCEL_INTERVAL = 0.5

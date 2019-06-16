@@ -20,7 +20,7 @@ import os
 import math
 from time import time
 
-from debuglog import printlog as printl
+from debuglog import printl
 
 class M3U8(object):
 

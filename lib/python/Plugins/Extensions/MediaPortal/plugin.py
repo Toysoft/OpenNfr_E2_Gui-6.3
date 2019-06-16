@@ -68,12 +68,6 @@ if desktopSize.width() == 1920:
 	mp_globals.pagebar_posy = 985
 
 try:
-	f = open("/proc/stb/info/model", "r")
-	model = ''.join(f.readlines()).strip()
-except:
-	model = ''
-
-try:
 	from Components.ScreenAnimations import *
 	mp_globals.animations = True
 	sa = ScreenAnimations()
@@ -83,7 +77,7 @@ except:
 
 try:
 	from Components.CoverCollection import CoverCollection
-	if mp_globals.isDreamOS and model not in ["dm520","dm525"]:
+	if mp_globals.isDreamOS and mp_globals.model not in ["dm520","dm525"]:
 		mp_globals.covercollection = True
 	else:
 		mp_globals.covercollection = False
@@ -161,8 +155,8 @@ config.mediaportal = ConfigSubsection()
 config_mp.mediaportal.fake_entry = NoSave(ConfigNothing())
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2019051201"))
-config.mediaportal.version = NoSave(ConfigText(default="2019051201"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2019061501"))
+config.mediaportal.version = NoSave(ConfigText(default="2019061501"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 
@@ -268,7 +262,7 @@ config_mp.mediaportal.sp_use_yt_with_proxy = ConfigSelectionExt(default = "no", 
 config_mp.mediaportal.sp_on_movie_start = ConfigSelectionExt(default = "start", choices = [("start", _("Start from the beginning")), ("ask", _("Ask user")), ("resume", _("Resume from last position"))])
 config_mp.mediaportal.sp_save_resumecache = ConfigYesNo(default = False)
 config_mp.mediaportal.sp_radio_cover = ConfigSelectionExt(default = "large", choices = [("large", _("large")), ("small", _("small")), ("off", _("off"))])
-if model in ["dm900","dm920"]:
+if mp_globals.model in ["dm900","dm920"]:
 	config_mp.mediaportal.sp_radio_visualization = ConfigSelectionExt(default = "1", choices = [("0", _("Off")), ("1", _("Mode 1")), ("2", _("Mode 2")), ("3", _("Mode 3"))])
 else:
 	config_mp.mediaportal.sp_radio_visualization = ConfigSelectionExt(default = "1", choices = [("0", _("Off")), ("1", _("Mode 1")), ("2", _("Mode 2"))])
@@ -3393,15 +3387,15 @@ class MPSummary(Screen):
 	def __init__(self, session, parent):
 		try:
 			displaysize = getDesktop(1).size()
-			if model in ["dm900","dm920"]:
+			if mp_globals.model in ["dm900","dm920"]:
 				disp_id = ' id="3"'
 				disp_size = str(displaysize.width()-8) + "," + str(displaysize.height())
 				disp_pos = "8,0"
-			elif model in ["dm7080"]:
+			elif mp_globals.model in ["dm7080"]:
 				disp_id = ' id="3"'
 				disp_size = str(displaysize.width()) + "," + str(displaysize.height()-14)
 				disp_pos = "0,0"
-			elif model in ["dm820"]:
+			elif mp_globals.model in ["dm820"]:
 				disp_id = ' id="2"'
 				disp_size = str(displaysize.width()) + "," + str(displaysize.height())
 				disp_pos = "0,0"
@@ -3768,7 +3762,7 @@ def startMP(session):
 	except:
 		pass
 
-	from resources.debuglog import printlog as printl
+	from resources.debuglog import printl
 	printl('Starting MediaPortal %s' % config_mp.mediaportal.version.value,None,'H')
 
 	global watcher, lc_stats

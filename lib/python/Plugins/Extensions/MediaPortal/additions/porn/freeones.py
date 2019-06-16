@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 #######################################################################################################
 #
 #    MediaPortal for Dreambox OS
@@ -36,16 +36,12 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
+from Plugins.Extensions.MediaPortal.resources.twagenthelper import TwAgentHelper
+import requests
+agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'
+default_cover = "file://%s/freeones.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
-agent='Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0'
-headers = {
-	'Accept-Language':'de,en-US;q=0.7,en;q=0.3',
-	'X-Requested-With':'XMLHttpRequest',
-	}
-default_cover = "file://%s/eporner.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
-
-class epornerGenreScreen(MPScreen):
+class freeonesGenreScreen(MPScreen):
 
 	def __init__(self, session):
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
@@ -60,7 +56,7 @@ class epornerGenreScreen(MPScreen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("Eporner.com")
+		self['title'] = Label("FreeOnes.com")
 		self['ContentTitle'] = Label("Genre:")
 
 		self.keyLocked = True
@@ -74,32 +70,32 @@ class epornerGenreScreen(MPScreen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.eporner.com/categories/"
-		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
+		url = "https://videos.freeones.com/categories/"
+		twAgentGetPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		Cats = re.findall('class="categoriesbox.*?"\sid=".*?">.*?<a\shref="(.*?)".*?title=".*?">.{0,1}<img\ssrc="(.*?)"\salt="(.*?)"', data, re.S)
+		Cats = re.findall('class="catBlock".*?href="(.*?)".*?>(.*?)<img\ssrc="(.*?)"', data, re.S)
 		if Cats:
-			for (Url, Image, Title) in Cats:
-				Url = "http://www.eporner.com" + Url
-				Title = Title.replace(' porn videos', '')
+			for (Url, Title, Image) in Cats:
+				Url = "https://videos.freeones.com" + Url
+				Title = Title.strip()
 				self.genreliste.append((Title, Url, Image))
-			if mp_globals.model in ["one"]:
-				self.genreliste.insert(0, ("4K Ultra HD", "https://www.eporner.com/category/4k-porn/", default_cover))
-			self.genreliste.sort()
-			self.genreliste.insert(0, ("Longest", "https://www.eporner.com/%page/longest/", default_cover))
-			self.genreliste.insert(0, ("Top Rated", "https://www.eporner.com/top-rated/", default_cover))
-			self.genreliste.insert(0, ("Most Viewed", "https://www.eporner.com/%page/most_viewed/", default_cover))
-			self.genreliste.insert(0, ("Most Recent", "http://www.eporner.com/", default_cover))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
-			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
-			self.showInfos()
+		self.genreliste.sort()
+		self.genreliste.insert(0, ("Longest", "https://videos.freeones.com/all-videos/duration/", default_cover))
+		self.genreliste.insert(0, ("Full-Videos - Most Viewed", "https://videos.freeones.com/full-videos/views/", default_cover))
+		self.genreliste.insert(0, ("Full-Videos - Most Popular", "https://videos.freeones.com/full-videos/rank/", default_cover))
+		self.genreliste.insert(0, ("Full-Videos - Latest", "https://videos.freeones.com/full-videos/date/", default_cover))
+		self.genreliste.insert(0, ("Most Viewed", "https://videos.freeones.com/all-videos/views/", default_cover))
+		self.genreliste.insert(0, ("Most Popular", "https://videos.freeones.com/all-videos/rank/", default_cover))
+		self.genreliste.insert(0, ("Latest", "https://videos.freeones.com/all-videos/date/", default_cover))
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
+		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
+		self.keyLocked = False
+		self.showInfos()
 
 	def showInfos(self):
 		Image = self['liste'].getCurrent()[0][2]
-		CoverHelper(self['coverArt']).getCover(Image)
+		CoverHelper(self['coverArt']).getCover(Image, agent=agent)
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -108,19 +104,19 @@ class epornerGenreScreen(MPScreen):
 		if Name == "--- Search ---":
 			self.suchen(suggest_func=self.getSuggestions)
 		else:
-			streamGenreLink = self['liste'].getCurrent()[0][1]
-			self.session.open(epornerFilmScreen, streamGenreLink, Name)
+			Link = self['liste'].getCurrent()[0][1]
+			self.session.open(freeonesFilmScreen, Link, Name)
 
 	def SuchenCallback(self, callback = None):
 		if callback is not None and len(callback):
-			Name = self['liste'].getCurrent()[0][0]
+			Name = "--- Search ---"
 			self.suchString = callback
-			streamGenreLink = 'http://www.eporner.com/search/%s/' % urllib.quote(self.suchString).replace(' ', '-')
-			self.session.open(epornerFilmScreen, streamGenreLink, Name)
+			Link = urllib.quote(callback).replace(' ', '+')
+			self.session.open(freeonesFilmScreen, Link, Name)
 
 	def getSuggestions(self, text, max_res):
-		url = "https://www.eporner.com/suggest/%s" % urllib.quote_plus(text)
-		d = twAgentGetPage(url, agent=agent, headers=headers, timeout=5)
+		url = "https://www.freeones.com/suggestions.php?q=%s&t=8" % urllib.quote_plus(text)
+		d = twAgentGetPage(url, agent=agent, timeout=5)
 		d.addCallback(self.gotSuggestions, max_res)
 		d.addErrback(self.gotSuggestions, max_res, err=True)
 		return d
@@ -128,9 +124,9 @@ class epornerGenreScreen(MPScreen):
 	def gotSuggestions(self, suggestions, max_res, err=False):
 		list = []
 		if not err and type(suggestions) in (str, buffer):
-			suggestions = re.findall('title="(.*?)"', suggestions)
+			suggestions = re.findall('id="suggestion">(.*?)</div', suggestions, re.S)
 			for item in suggestions:
-				li = item
+				li = stripAllTags(item).strip('\'').strip()
 				list.append(str(li))
 				max_res -= 1
 				if not max_res: break
@@ -138,10 +134,10 @@ class epornerGenreScreen(MPScreen):
 			printl(str(suggestions),self,'E')
 		return list
 
-class epornerFilmScreen(MPScreen, ThumbsHelper):
+class freeonesFilmScreen(MPScreen, ThumbsHelper):
 
-	def __init__(self, session, CatLink, Name):
-		self.CatLink = CatLink
+	def __init__(self, session, Link, Name):
+		self.Link = Link
 		self.Name = Name
 		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 		ThumbsHelper.__init__(self)
@@ -160,7 +156,7 @@ class epornerFilmScreen(MPScreen, ThumbsHelper):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("Eporner.com")
+		self['title'] = Label("FreeOnes.com")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['F2'] = Label(_("Page"))
 
@@ -179,79 +175,54 @@ class epornerFilmScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
-		if re.match(".*%page", self.CatLink):
-			url = self.CatLink.replace('%page',str(self.page))
+		if re.match(".*?Search", self.Name):
+			url = "https://www.freeones.com/search/?t=8&q=%s&sq=&page=%s" % (self.Link, str(self.page))
 		else:
-			url = "%s%s/" % (self.CatLink, str(self.page))
-		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
+			url = "%s%s.html" % (self.Link, str(self.page))
+		twAgentGetPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
-		self.getLastPage(data, 'class="numlist2">(.*?)title=\'Next page\'')
-		if "<h2>Recent HD Porn Videos</h2>" in data:
-			data = re.search('<h2>Recent HD Porn Videos</h2>(.*?)</html>', data, re.S).group(1)
-		Movies = re.findall('class="mb(?: hdy|)".*?>\s+<a\shref="(.*?)"\stitle="(.*?)".*?src="(.*?)".*?"mbtim">(.*?)</div>.*?"mbvie">(.*?)</div>', data, re.S)
+		self.getLastPage(data, 'class="Paging">(.*?)</div>', '.*[\/|>|\/](?:\s+|)(\d+)(?:\s+|)[\"|<|\.html]')
+		Movies = re.findall('class="video_thumb.*?href="(.*?)">.*?<img.*?src="(.*?)".*?Views\s(\d+)\sDuration\s(.*?)(?:\s|</span).*?class="(?:video-info\s|)video-title">(.*?)</span', data, re.S)
 		if Movies:
-			for (Url, Title, Image, Runtime, Views) in Movies:
-				Views = Views.replace(',','')
+			for (Url, Image, Views, Runtime, Title) in Movies:
+				Image = Image.replace('/small/','/poster/')
 				self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views))
-			self.ml.setList(map(self._defaultlistleft, self.filmliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
-			self.th_ThumbsQuery(self.filmliste,0,1,2,3,None,self.page,self.lastpage, mode=1)
-			self.showInfos()
+		if len(self.filmliste) == 0:
+			self.filmliste.append((_('No movies found!'), None, None, None, None))
+		self.ml.setList(map(self._defaultlistleft, self.filmliste))
+		self.ml.moveToIndex(0)
+		self.keyLocked = False
+		self.th_ThumbsQuery(self.filmliste, 0, 1, 2, None, None, self.page, self.lastpage, mode=1)
+		self.showInfos()
 
 	def showInfos(self):
+		Url = self['liste'].getCurrent()[0][1]
+		if Url == None:
+			return
 		title = self['liste'].getCurrent()[0][0]
-		coverUrl = self['liste'].getCurrent()[0][2]
+		pic = self['liste'].getCurrent()[0][2]
 		runtime = self['liste'].getCurrent()[0][3]
 		views = self['liste'].getCurrent()[0][4]
 		self['name'].setText(title)
 		self['handlung'].setText("Runtime: %s\nViews: %s" % (runtime, views))
-		CoverHelper(self['coverArt']).getCover(coverUrl)
+		CoverHelper(self['coverArt']).getCover(pic, agent=agent)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		url = 'http://www.eporner.com%s' % (self['liste'].getCurrent()[0][1])
+		Link = self['liste'].getCurrent()[0][1]
+		if Link == None:
+			return
 		self.keyLocked = True
-		id = re.findall('//[^/]+/[^/]+/([^/]+)', url)
-		if id:
-			getPage(url).addCallback(self.getXMLPage,id[0]).addErrback(self.dataError)
-
-	def int_to_str(self, n, b, symbols='0123456789abcdefghijklmnopqrstuvwxyz'):
-		return (self.int_to_str(n/b, b, symbols) if n >= b else "") + symbols[n%b]
-
-	def make_hash(self, s):
-		return ''.join((self.int_to_str(int(s[lb:lb + 8], 16), 36) for lb in range(0, 32, 8)))
-
-	def getXMLPage(self, data, id):
-		videoPage = re.findall('hash:\s*["\']([^\'"]+)', data, re.S)
-		xml = 'http://www.eporner.com/xhr/video/%s?device=generic&domain=www.eporner.com&hash=%s&fallback=false' % (id, self.make_hash(videoPage[0]))
-		getPage(xml).addCallback(self.getVideoPage).addErrback(self.dataError)
+		twAgentGetPage(Link, agent=agent).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoRes = re.findall('"(\d+p).*?src["\']:\s+["\'](.*?)["\']', data, re.S)
-		if videoRes:
-			for item in videoRes:
-				if ("2160p" in item and mp_globals.model in ["one"]):
-					url = item[1]
-					break
-				if ("1440p" in item and mp_globals.model in ["one"]):
-					url = item[1]
-					break
-				if "1080p" in item:
-					url = item[1]
-					break
-				if "720p" in item:
-					url = item[1]
-					break
-				if "480p" in item:
-					url = item[1]
-					break
-				if "360p" in item:
-					url = item[1]
-					break
-		if url:
+		videoPage = re.findall("streamingUrl:\s'(.*?)',", data, re.S)
+		qualities = re.findall("qualities:\s'(.*?)'", data, re.S)
+		if videoPage and qualities:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]
-			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='eporner')
+			url = videoPage[0] + "/" + qualities[0].split(',')[0] + ".mp4"
+			mp_globals.player_agent = agent
+			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='freeones')

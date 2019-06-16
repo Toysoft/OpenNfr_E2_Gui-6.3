@@ -5,7 +5,6 @@ from keyboardext import VirtualKeyBoardExt
 from Components.Sources.StaticText import StaticText
 from Components.Pixmap import MovingPixmap
 from thread import allocate_lock
-from debuglog import printlog as printl
 import mp_globals
 
 thumb_cookies = CookieJar()

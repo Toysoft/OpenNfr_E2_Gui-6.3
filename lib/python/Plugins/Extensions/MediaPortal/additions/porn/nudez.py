@@ -77,7 +77,7 @@ class nudezGenreScreen(MPScreen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		url = "https://nudez.com/channels/"
-		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
+		twAgentGetPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('<h1>Categories(.*?)$', data, re.S)
@@ -183,7 +183,7 @@ class nudezFilmScreen(MPScreen, ThumbsHelper):
 			url = "https://nudez.com/search/videos/%s/page%s.html" % (self.Link, str(self.page))
 		else:
 			url = "%spage%s.html" % (self.Link, str(self.page))
-		getPage(url).addCallback(self.loadData).addErrback(self.dataError)
+		twAgentGetPage(url).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</nav>', '.*[\/|>](\d+)[\"|<]')
@@ -217,10 +217,10 @@ class nudezFilmScreen(MPScreen, ThumbsHelper):
 		if Link == None:
 			return
 		self.keyLocked = True
-		getPage(Link).addCallback(self.getVideoPage).addErrback(self.dataError)
+		twAgentGetPage(Link).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall("<source src=\"(.*?)\" type='video/mp4'", data, re.S)
+		videoPage = re.findall("<source src=\"(.*?)\" type=['|\"]video/mp4['|\"]", data, re.S)
 		if videoPage:
 			self.keyLocked = False
 			Title = self['liste'].getCurrent()[0][0]

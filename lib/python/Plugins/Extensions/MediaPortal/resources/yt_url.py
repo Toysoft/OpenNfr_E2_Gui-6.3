@@ -246,7 +246,7 @@ class youtubeUrl(object):
 				url = urllib.unquote(url_desc_map[u"stream"][0])
 
 			if url_desc_map.has_key(u"sig"):
-				url = url + u"&signature=" + url_desc_map[u"sig"][0]
+				url = url + u"&" + url_desc_map[u"sp"][0] + u"=" + url_desc_map[u"sig"][0]
 			elif url_desc_map.has_key(u"s"):
 				sig = url_desc_map[u"s"][0]
 				flashvars = self.extractFlashVars(videoinfo, 1)
@@ -256,7 +256,7 @@ class youtubeUrl(object):
 					self.errReturn(None)
 					return
 				else:
-					url += u"&signature=" + signature
+					url += u"&" + url_desc_map[u"sp"][0] + u"=" + signature
 
 			try:
 				links[self.VIDEO_FMT_PRIORITY_MAP[str(key)]] = url

@@ -28,7 +28,7 @@ from Tools.Directories import fileExists
 from enigma import eBackgroundFileEraser, eTimer
 
 import mp_globals
-from debuglog import printlog as printl
+from debuglog import printl
 from mp_hlsp_fetcher import HLSFetcher
 from mp_hlsp_httpplayer import GSTPlayer
 from twagenthelper import twAgentGetPage

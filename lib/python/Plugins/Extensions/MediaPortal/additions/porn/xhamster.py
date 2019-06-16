@@ -38,7 +38,6 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
-from Plugins.Extensions.MediaPortal.resources.debuglog import printlog as printl
 
 ck = {}
 favourites = []
@@ -761,14 +760,10 @@ class xhamsterFilmScreen(MPScreen, ThumbsHelper):
 
 	def playUrl(self, data):
 		Title = self['liste'].getCurrent()[0][0]
-		url = None
-		playUrl = re.findall('"\d+p":"(.*?)"', data, re.S)
-		if playUrl:
-			url = playUrl[-1]
-		else:
-			playUrl = re.findall('"(?:960|720)p","url":"(.*?)"', data, re.S)
-			if playUrl:
-				url = playUrl[0]
+		jsondata = re.findall('window.XPlayer2\("player",\s(.*?{"autoplay":false,"preview":true}})', data, re.S)
+		if jsondata:
+			jsondata = json.loads(jsondata[0])
+			url = str(jsondata["sources"]["standard"]["mp4"][0]["url"])
 		if url:
 			self.keyLocked = False
-			self.session.open(SimplePlayer, [(Title, url.replace('&amp;','&').replace('\/','/'))], showPlaylist=False, ltype='xhamster')
+			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='xhamster')

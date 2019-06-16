@@ -39,7 +39,6 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.configlistext import ConfigListScreenExt
 from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoardExt
 from Plugins.Extensions.MediaPortal.resources.choiceboxext import ChoiceBoxExt
-from Plugins.Extensions.MediaPortal.resources.DelayedFunction import DelayedFunction
 import requests
 
 config_mp.mediaportal.pornhub_username = ConfigText(default="pornhubUserName", fixed_size=False)
@@ -427,7 +426,7 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper):
 				FavUrl = base_url + "/playlist_json/favourite?playlist_id=%s&token=%s" % (id, favtoken)
 			twAgentGetPage(FavUrl, agent=phAgent, cookieJar=ph_cookies, headers={'Content-Type':'application/x-www-form-urlencoded','Referer':self.playurl}).addCallback(self.ok).addErrback(self.dataError)
 			self.reload = True
-			DelayedFunction(1000, self.loadPage)
+			TimerCall(1, self.loadPage)
 
 	def ok(self, data):
 		if data == "2":
@@ -592,7 +591,7 @@ class pornhubSubscriptionsScreen(MPScreen, ThumbsHelper):
 		unsub = re.findall('(Subscription removed.*?PASS)', data, re.S)
 		if unsub:
 			self.reload = True
-			DelayedFunction(1000, self.loadPage)
+			TimerCall(1, self.loadPage)
 		else:
 			self.session.open(MessageBoxExt, _("Unknown error."), MessageBoxExt.TYPE_INFO)
 
@@ -721,12 +720,12 @@ class pornhubPornstarScreen(MPScreen, ThumbsHelper):
 		unsub = re.findall('(Subscription removed.*?PASS)', data, re.S)
 		if unsub:
 			self.reload = True
-			DelayedFunction(1000, self.loadPage)
+			TimerCall(1, self.loadPage)
 		else:
 			sub = re.findall('(Subscription added.*?PASS)', data, re.S)
 			if sub:
 				self.reload = True
-				DelayedFunction(1000, self.loadPage)
+				TimerCall(1, self.loadPage)
 			else:
 				self.session.open(MessageBoxExt, _("Unknown error."), MessageBoxExt.TYPE_INFO)
 
@@ -846,12 +845,12 @@ class pornhubChannelScreen(MPScreen, ThumbsHelper):
 		unsub = re.findall('(Subscription removed.*?PASS)', data, re.S)
 		if unsub:
 			self.reload = True
-			DelayedFunction(1000, self.loadPage)
+			TimerCall(1, self.loadPage)
 		else:
 			sub = re.findall('(Subscription added.*?PASS)', data, re.S)
 			if sub:
 				self.reload = True
-				DelayedFunction(1000, self.loadPage)
+				TimerCall(1, self.loadPage)
 			else:
 				self.session.open(MessageBoxExt, _("Unknown error."), MessageBoxExt.TYPE_INFO)
 
@@ -1145,7 +1144,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 			twAgentGetPage(FavUrl, agent=phAgent, method='POST', postdata=urlencode(FavData), cookieJar=ph_cookies, headers={'Content-Type':'application/x-www-form-urlencoded','Referer':self.url}).addCallback(self.ok).addErrback(self.dataError)
 			if self.Name == "Favourite Videos":
 				self.reload = True
-				DelayedFunction(1000, self.loadPage)
+				TimerCall(1, self.loadPage)
 			else:
 				self.showInfos()
 
@@ -1175,7 +1174,7 @@ class pornhubFilmScreen(MPScreen, ThumbsHelper, LoginFunc):
 		if unsub:
 			if re.match(".*Feed",self.Name):
 				self.reload = True
-				DelayedFunction(1000, self.loadPage)
+				TimerCall(1, self.loadPage)
 			else:
 				self.showInfos()
 		else:

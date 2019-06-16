@@ -10,12 +10,6 @@ from messageboxext import MessageBoxExt
 
 screenList = []
 
-try:
-	f = open("/proc/stb/info/model", "r")
-	model = ''.join(f.readlines()).strip()
-except:
-	model = ''
-
 class SearchHelper:
 
 	def __init__(self):
@@ -195,7 +189,6 @@ class MPScreen(Screen, HelpableScreen):
 		screenList.append((self, ret_args))
 		self["hidePig"] = Boolean()
 		self["hidePig"].setBoolean(config_mp.mediaportal.minitv.value)
-		self.mp_hide = False
 		self["mp_specActions"]  = ActionMap(["MP_SpecialActions"], {
 			"specTv": self.mp_showHide
 		}, -2)
@@ -267,13 +260,13 @@ class MPScreen(Screen, HelpableScreen):
 			pass
 
 	def mp_showHide(self):
-		if not self.mp_hide:
-			self.mp_hide = True
+		if not mp_globals.mp_hide:
+			mp_globals.mp_hide = True
 			self.hide()
 			self.session.nav.playService(mp_globals.lastservice)
 			self.summaries.updateCover(None)
 		else:
-			self.mp_hide = False
+			mp_globals.mp_hide = False
 			self.show()
 			if config_mp.mediaportal.restorelastservice.value == "1" and not config_mp.mediaportal.backgroundtv.value:
 				self.session.nav.playService(mp_globals.lastservice)
@@ -282,7 +275,7 @@ class MPScreen(Screen, HelpableScreen):
 			self.summaries.updateCover(self.default_cover)
 
 	def close(self, *args):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		Screen.close(self, *args)
 		if len(screenList):
@@ -305,7 +298,7 @@ class MPScreen(Screen, HelpableScreen):
 			self['name'].setText('')
 
 	def mp_tmdb(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
@@ -376,7 +369,7 @@ class MPScreen(Screen, HelpableScreen):
 		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 
 	def keyPageNumber(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoardExt, title = (_("Enter page number")), text = str(self.page), is_dialog=True)
 
@@ -394,47 +387,47 @@ class MPScreen(Screen, HelpableScreen):
 				self.loadPage()
 
 	def suchen(self, auto_text_init=False, suggest_func=None):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoardExt, title = (_("Enter search criteria")), text = self.suchString, is_dialog=True, auto_text_init=auto_text_init, suggest_func=suggest_func)
 
 	def keyUpRepeated(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
 		self['liste'].up()
 
 	def keyDownRepeated(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
 		self['liste'].down()
 
 	def keyLeftRepeated(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
 		self['liste'].pageUp()
 
 	def keyRightRepeated(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
 		self['liste'].pageDown()
 
 	def key_repeatedUp(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
 		self.loadPicQueued()
 
 	def keyPageDown(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
@@ -443,7 +436,7 @@ class MPScreen(Screen, HelpableScreen):
 			self.loadPage()
 
 	def keyPageUp(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
@@ -452,7 +445,7 @@ class MPScreen(Screen, HelpableScreen):
 			self.loadPage()
 
 	def keyLeft(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
@@ -460,7 +453,7 @@ class MPScreen(Screen, HelpableScreen):
 		self.showInfos()
 
 	def keyRight(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
@@ -468,7 +461,7 @@ class MPScreen(Screen, HelpableScreen):
 		self.showInfos()
 
 	def keyUp(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
@@ -476,7 +469,7 @@ class MPScreen(Screen, HelpableScreen):
 		self.showInfos()
 
 	def keyDown(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		if self.keyLocked:
 			return
@@ -484,17 +477,17 @@ class MPScreen(Screen, HelpableScreen):
 		self.showInfos()
 
 	def keyTxtPageUp(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		self['handlung'].pageUp()
 
 	def keyTxtPageDown(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		self['handlung'].pageDown()
 
 	def keyCancel(self):
-		if self.mp_hide:
+		if mp_globals.mp_hide:
 			return
 		self.close()
 
@@ -542,16 +535,16 @@ class MPScreen(Screen, HelpableScreen):
 				self['liste'].moveToIndex(countIndex)
 
 	def dataError(self, error):
-		from debuglog import printlog as printl
+		from debuglog import printl
 		printl(error,self,"E")
 
 	@staticmethod
 	def closeAll():
+		if mp_globals.mp_hide:
+			return
 		i = len(screenList)
 		while i > 0:
 			screen, args = screenList.pop()
-			if screen.mp_hide:
-				return
 			screen.mp_close(*args)
 			i -= 1
 
@@ -915,15 +908,15 @@ class MPScreenSummary(Screen):
 	def __init__(self, session, parent):
 		try:
 			displaysize = getDesktop(1).size()
-			if model in ["dm900","dm920"]:
+			if mp_globals.model in ["dm900","dm920"]:
 				disp_id = ' id="3"'
 				disp_size = str(displaysize.width()-8) + "," + str(displaysize.height())
 				disp_pos = "8,0"
-			elif model in ["dm7080"]:
+			elif mp_globals.model in ["dm7080"]:
 				disp_id = ' id="3"'
 				disp_size = str(displaysize.width()) + "," + str(displaysize.height()-14)
 				disp_pos = "0,0"
-			elif model in ["dm820"]:
+			elif mp_globals.model in ["dm820"]:
 				disp_id = ' id="2"'
 				disp_size = str(displaysize.width()) + "," + str(displaysize.height())
 				disp_pos = "0,0"

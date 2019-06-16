@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 
-from debuglog import printlog as printl
+from debuglog import printl
 
 class SimpleLRUCache:
 

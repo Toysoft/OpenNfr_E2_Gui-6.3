@@ -221,7 +221,7 @@ class hqpornerListScreen(MPScreen, ThumbsHelper):
 		if stream_urls:
 			res = 0
 			for stream in stream_urls:
-				if int(stream[1]) > res and int(stream[1]) <=1080:
+				if int(stream[1]) > res and (int(stream[1]) <=1080 or mp_globals.model in ["one"]):
 					link = stream[0]
 					res = int(stream[1])
 			if link.startswith('//'):

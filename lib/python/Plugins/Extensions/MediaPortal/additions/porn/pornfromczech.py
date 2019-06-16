@@ -5,7 +5,10 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 default_cover = "file://%s/pornfromczech.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
 try:
-	from Plugins.Extensions.MediaPortal.resources import cfscrape
+	if mp_globals.model in ["one"]:
+		from Plugins.Extensions.MediaPortal.resources import cfscrape
+	else:
+		from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 except:
 	cfscrapeModule = False
 else:

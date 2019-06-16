@@ -75,6 +75,20 @@ class sporttotalGenreScreen(MPScreen):
 		raw = re.findall('a\shref="(.*?)">(.*?)</a>', preparse.group(1), re.S)
 		if raw:
 			for (Url, Title) in raw:
+				if "far fa-futbol" in Title:
+					Title = "Fußball"
+				elif "volleyball" in Title:
+					Title = "Volleyball"
+				elif "field-hockey" in Title:
+					Title = "Feldhockey"
+				elif "hockey-sticks" in Title:
+					Title = "Eishockey"
+				elif "football-ball" in Title:
+					Title = "American Football"
+				elif "fal fa-futbol" in Title:
+					Title = "Futsal"
+				elif "basketball" in Title:
+					Title = "Basketball"
 				Url = "https://www.sporttotal.tv/live" + Url
 				self.filmliste.append((decodeHtml(Title.strip()), Url))
 			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
@@ -154,9 +168,15 @@ class sporttotalSubGenreScreen(MPScreen):
 		streams = re.findall('file:\s"(.*?)",', data, re.S)
 		if not streams:
 			streams = re.findall('<source\ssrc="(.*?)"\stype="', data, re.S)
+		if not streams:
+			streams = re.findall('playerSource = decodeHtml\("(.*?)"\);', data, re.S)
 		if streams:
 			url = streams[0]
-			getPage(url).addCallback(self.loadplaylist, url).addErrback(self.dataError)
+			if "m3u8" in url:
+				getPage(url).addCallback(self.loadplaylist, url).addErrback(self.dataError)
+			else:
+				Name = self['liste'].getCurrent()[0][0]
+				self.session.open(SimplePlayer, [(Name, url)], showPlaylist=False, ltype='sporttotal')
 
 	def loadplaylist(self, data, baseurl):
 		self.bandwith_list = []

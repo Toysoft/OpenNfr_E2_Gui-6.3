@@ -924,6 +924,7 @@ lib/python/Plugins/Extensions/MediaPortal/locale/de/LC_MESSAGES/Makefile
 lib/python/Plugins/Extensions/MediaPortal/resources/Makefile
 lib/python/Plugins/Extensions/MediaPortal/resources/hosters/Makefile
 lib/python/Plugins/Extensions/MediaPortal/resources/cfscrape/Makefile
+lib/python/Plugins/Extensions/MediaPortal/resources/cfscrape_old/Makefile
 lib/python/Plugins/Extensions/MediaPortal/resources/iso3166/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_720/Makefile
 lib/python/Plugins/Extensions/MediaPortal/skins_720/clean_hd/Makefile

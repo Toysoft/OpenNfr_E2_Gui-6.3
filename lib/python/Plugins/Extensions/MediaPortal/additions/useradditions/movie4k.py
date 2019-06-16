@@ -13,7 +13,10 @@ m4k_url = "%s/" % config_mp.mediaportal.movie4kdomain4.value
 g_url = "%s/movies-genre-" % config_mp.mediaportal.movie4kdomain4.value
 
 try:
-	from Plugins.Extensions.MediaPortal.resources import cfscrape
+	if mp_globals.model in ["one"]:
+		from Plugins.Extensions.MediaPortal.resources import cfscrape
+	else:
+		from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 except:
 	cfscrapeModule = False
 else:
@@ -661,9 +664,10 @@ class m4kStreamListeScreen(MPScreen):
 		if check:
 			get_stream_link(self.session).check_link(streamLink, self.got_link)
 		else:
-			twAgentGetPage(streamLink, agent=m4k_agent, cookieJar=m4k_cookies, timeout=30).addCallback(self.get_streamlink, streamLink).addErrback(self.dataError)
+			twAgentGetPage(streamLink, agent=m4k_agent, cookieJar=m4k_cookies, timeout=30).addCallback(self.get_streamlink).addErrback(self.dataError)
 
-	def get_streamlink(self, data, streamLink):
+	def get_streamlink(self, data):
+		data = data.replace('nullrefer.com/?','')
 		link = re.search('<a\starget="_blank"\shref="(.*?)"><img\sborder=0\ssrc="/img/click_link.jpg"', data, re.S|re.I)
 		if link:
 			get_stream_link(self.session).check_link(link.group(1), self.got_link)
@@ -762,6 +766,7 @@ class m4kPartListeScreen(MPScreen):
 		twAgentGetPage(streamLinkPart, agent=m4k_agent, cookieJar=m4k_cookies, timeout=30).addCallback(self.get_streamlink).addErrback(self.dataError)
 
 	def get_streamlink(self, data):
+		data = data.replace('nullrefer.com/?','')
 		link = re.search('<a\starget="_blank"\shref="(.*?)"><img\sborder=0\ssrc="/img/click_link.jpg"', data, re.S|re.I)
 		if link:
 			get_stream_link(self.session).check_link(link.group(1), self.got_link)

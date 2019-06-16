@@ -190,7 +190,10 @@ class gigatvFilmScreen(MPScreen, ThumbsHelper):
 
 	def getVideoPage(self, data):
 		data = data.replace('\/','/')
-		videoPage = re.findall('src":"(http[s]?:\/\/(?:lx\d+.spieletips.de|vid-cdn\d+.stroeermb.de)/\d+(?:_v\d+|)/(?:1080|720|480|360)+p.mp4)"', data, re.S)
+		if mp_globals.model in ["one"]:
+			videoPage = re.findall('src":"(http[s]?:\/\/(?:lx\d+.spieletips.de|vid-cdn\d+.stroeermb.de)/\d+(?:_v\d+|)/(?:2160|1080|720|480|360)+p.mp4)"', data, re.S)
+		else:
+			videoPage = re.findall('src":"(http[s]?:\/\/(?:lx\d+.spieletips.de|vid-cdn\d+.stroeermb.de)/\d+(?:_v\d+|)/(?:1080|720|480|360)+p.mp4)"', data, re.S)
 		if videoPage:
 			url = videoPage[0]
 			self.play(url)

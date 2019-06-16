@@ -23,12 +23,12 @@ class show_FVCDE_Genre(MenuHelper):
 		entrys = []
 		menu = re.search('class="widget-title widgettitle">Lustige Videos</h4>(.*?)</ul>', data, re.S)
 		if menu:
-			entrys += re.findall('<li.*?href="(.*?)"\s*>(.*?)</a>', menu.group(1))
+			entrys += re.findall('<li.*?href="(.*?)"\s.*?>(.*?)</a>', menu.group(1))
 
 		return entrys
 
 	def mh_callGenreListScreen(self):
-		genreurl = self.mh_baseUrl+self.mh_genreUrl[0]+self.mh_genreUrl[1]
+		genreurl = self.mh_genreUrl[0]+self.mh_genreUrl[1]
 		self.session.open(FVCDE_FilmListeScreen, genreurl, self.mh_genreTitle)
 
 class FVCDE_FilmListeScreen(MPScreen, ThumbsHelper):

@@ -79,11 +79,11 @@ class bongacamsGenreScreen(MPScreen):
 		getPage(BASEURL).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('categories_list(.*?)class="panel_item">', data, re.S)
-		Cats = re.findall('href="\/(.*?)">(.*?)</a', parse.group(1), re.S)
+		parse = re.search('js-spa_categories">(.*?)</ul', data, re.S)
+		Cats = re.findall('href="\/(.*?)".*?>(.*?) <span', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
-				self.genreliste.append((Title, Url))
+				self.genreliste.append((Title.strip(), Url))
 		self.genreliste.sort()
 		self.genreliste.insert(0, ("Couple", "couples"))
 		self.genreliste.insert(0, ("Female", "females"))

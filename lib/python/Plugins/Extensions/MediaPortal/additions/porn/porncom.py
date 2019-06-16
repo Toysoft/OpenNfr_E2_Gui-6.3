@@ -81,13 +81,13 @@ class porncomGenreScreen(MPScreen):
 
 	def genreData(self, data):
 		dupelist = []
-		Cats = re.findall('class="thumb"><a href="(.*?)"\stitle=".*?<img src="(.*?)".*?></a></div><h3><a href=".*?>(.*?)</a>', data, re.S)
+		Cats = re.findall('class="thumb"\shref="(.*?)".*?<img.src="(.*?)".*?></picture></a><h3><a href=".*?>(.*?)</a>', data, re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
 				Url = "https://www.porn.com" + Url + "?p="
 				dupelist.append(Title)
 				self.filmliste.append((Title, Url, Image, True))
-		Cats2 = re.findall('class="flex"><a href="(.*?)">(.*?)</a>', data, re.S)
+		Cats2 = re.findall('class="flex(?:\sexpanded|)"><a href="(.*?)">(.*?)</a>', data, re.S)
 		if Cats2:
 			for (Url, Title) in Cats2:
 				if Title not in dupelist:
@@ -96,7 +96,6 @@ class porncomGenreScreen(MPScreen):
 		# remove duplicates
 		self.filmliste = list(set(self.filmliste))
 		self.filmliste.sort()
-		self.filmliste.insert(0, ("HD", "https://www.porn.com/videos/hd?p=", default_cover, True))
 		self.filmliste.insert(0, ("Playlists", "https://www.porn.com/playlists?p=", default_cover, True))
 		self.filmliste.insert(0, ("Channels", "https://www.porn.com/channels?p=", default_cover, True))
 		self.filmliste.insert(0, ("Pornstars", "https://www.porn.com/pornstars?p=", default_cover, True))
@@ -758,7 +757,10 @@ class porncomFilmScreen(MPScreen, ThumbsHelper):
 
 	def parseData(self, data):
 		Title = self['liste'].getCurrent()[0][0]
-		match = re.findall('"\d+p",url:"(http.*?)"', data)
+		if mp_globals.model in ["one"]:
+			match = re.findall('"(?:\d+p|2K|4K)",url:"(http.*?)"', data)
+		else:
+			match = re.findall('"\d+p",url:"(http.*?)"', data)
 		if match:
 			url = match[-1].replace('\/','/').replace('%2F','%252F').replace('%3D','%253D').replace('%2B','%252B')
 			self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='porncom')

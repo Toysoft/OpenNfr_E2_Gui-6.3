@@ -96,6 +96,8 @@ class spankbangGenreScreen(MPScreen):
 					Image = "https://spankbang.com" + Image
 					self.filmliste.append((Title, Url, Image, False, False, True))
 		self.filmliste.sort()
+		if mp_globals.model in ["one"]:
+			self.filmliste.insert(0, ("4K Ultra HD", "https://spankbang.com/new_videos/", default_cover, False, False, False))
 		self.filmliste.insert(0, ("Longest", "https://spankbang.com/longest_videos/", default_cover, False, True, False))
 		self.filmliste.insert(0, ("Trending", "https://spankbang.com/trending_videos/", default_cover, False, False, False))
 		self.filmliste.insert(0, ("Upcoming", "https://spankbang.com/upcoming/", default_cover, False, False, False))
@@ -203,6 +205,8 @@ class spankbangFilmScreen(MPScreen, ThumbsHelper):
 		self.filmliste = []
 		if re.match(".*Search", self.Name):
 			url = "https://spankbang.com/s/%s/%s/?%s&%s" % (self.Link, str(self.page), self.sort, self.age)
+		elif self.Name == "4K Ultra HD":
+			url = self.Link + "%s/?4k=1" % str(self.page)
 		else:
 			url = self.Link + "%s/?%s&%s" % (str(self.page), self.sort, self.age)
 		twAgentGetPage(url, agent=agent, cookieJar=cookies).addCallback(self.genreData).addErrback(self.dataError)
@@ -291,14 +295,21 @@ class spankbangFilmScreen(MPScreen, ThumbsHelper):
 			twAgentGetPage(url, method='POST', postdata=urlencode(postdata), cookieJar=cookies, agent=agent, headers=json_headers).addCallback(self.parseVideo, vr).addErrback(self.dataError)
 
 	def parseVideo(self, data, vr):
-		if vr:
-			resolutions = "720|480|320|240"
+		if mp_globals.model in ["one"]:
+			if vr:
+				resolutions = "1080p|720p|480p|320p|240p"
+			else:
+				resolutions = "4k|1080p|720p|480p|320p|240p"
 		else:
-			resolutions = "1080|720|480|320|240"
-		streams = re.findall('stream_url_(%s)p":"(.*?)"' % resolutions, data, re.S)
+			if vr:
+				resolutions = "720p|480p|320p|240p"
+			else:
+				resolutions = "1080p|720p|480p|320p|240p"
+		streams = re.findall('stream_url_(%s)":"(.*?)"' % resolutions, data, re.S)
 		if streams:
 			vidres = 0
 			for (res, url) in streams:
+				res = res.replace('p','').replace('4k','2160')
 				if int(res) > vidres and len(url) > 0:
 					vidres = int(res)
 					vidurl = url

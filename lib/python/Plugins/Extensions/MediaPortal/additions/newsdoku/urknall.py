@@ -78,8 +78,7 @@ class UrknallFilmListeScreen(MPScreen, ThumbsHelper):
 		from collections import OrderedDict
 		movies = json.loads(data, object_pairs_hook=OrderedDict)
 		for item in movies:
-			print str(movies[item]["name"])
-			url = "https://www.urknall-weltall-leben.de/" + str(movies[item]["url"])
+			url = "https://www.urknall-weltall-leben.de/component/k2/item/" + str(movies[item]["id"]) + "-" + str(movies[item]["alias"]) + ".html"
 			image = "https://www.urknall-weltall-leben.de/" + str(movies[item]["thumbnail"])
 			title = str(movies[item]["name"])
 			try:

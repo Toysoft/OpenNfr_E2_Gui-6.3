@@ -8,7 +8,7 @@ from Plugins.Extensions.MediaPortal.plugin import _
 from imports import *
 from simpleplayer import SimplePlayer, SimplePlaylistIO
 from Components.FileList import FileList
-from debuglog import printlog as printl
+from debuglog import printl
 from configlistext import ConfigListScreenExt
 from choiceboxext import ChoiceBoxExt
 from twisted.internet import task
@@ -18,7 +18,10 @@ if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/SerienFilm/MovieSelect
 	from Plugins.Extensions.SerienFilm.MovieSelection import MovieSelection
 else:
 	from Screens.MovieSelection import MovieSelection
-from Plugins.Extensions.MediaPortal.resources.mp_hlsp import *
+try:
+	from mp_hlsp import *
+except:
+	pass
 
 try:
 	from Plugins.Extensions.MediaInfo.plugin import MediaInfo

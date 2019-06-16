@@ -37,7 +37,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from imports import *
 import mp_globals
-from debuglog import printlog as printl
+from debuglog import printl
 from messageboxext import MessageBoxExt
 from realdebrid import realdebrid_oauth2
 
@@ -108,7 +108,7 @@ class get_stream_link:
 	from hosters.vidoza import vidoza
 	from hosters.vidspot import vidspot
 	from hosters.vidto import vidto
-	from hosters.vidup import vidup
+	from hosters.vidup import vidup, vidup_pair
 	from hosters.vidzi import vidzi
 	from hosters.vivo import vivo
 	from hosters.vkme import vkme, vkmeHash, vkmeHashGet, vkmeHashData, vkPrivat, vkPrivatData
@@ -471,9 +471,11 @@ class get_stream_link:
 
 			elif re.search('vidup\.(?:tv|io)|vev\.(?:io)', data, re.S):
 				link = data.replace('/embed','').rsplit('/', 1)
-				link = link[0] + '/api/serve/video/' + link[1]
+				host = link[0]
+				id = link[1]
+				link = host + '/api/serve/video/' + id
 				mp_globals.player_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36'
-				twAgentGetPage(link, method='POST', agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.vidup).addErrback(self.errorload)
+				twAgentGetPage(link, method='POST', agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36', headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.vidup, host, id).addErrback(self.errorload)
 
 			elif re.search('bitporno.com', data, re.S):
 				if "/e/" in data:
@@ -510,11 +512,11 @@ class get_stream_link:
 				link = data
 				id = re.search('flashx.(tv|pw|co|to)/(embed-|dl\?|fxplay-|embed.php\?c=|)(\w+)', data)
 				if id:
-					link = "https://www.flashx.co/%s.html" % id.group(3)
+					link = "http://www.flashx.co/%s.html" % id.group(3)
 					if config_mp.mediaportal.premiumize_use.value and not self.fallback:
 						self.rdb = 1
 						self.prz = 1
-						TwAgentHelper().getRedirectedUrl(link).addCallback(self.flashx).addErrback(self.errorload)
+						self.callPremium(link)
 					else:
 						self.only_premium()
 				else:
@@ -637,16 +639,16 @@ class get_stream_link:
 					getPage(link, agent=mp_globals.player_agent, cookies=self.google_ck).addCallback(self.google).addErrback(self.errorload)
 
 			elif re.search('rapidvideo\.com', data, re.S):
-				link = data.replace('rapidvideo.com/e/', 'rapidvideo.com/v/')
+				link = data.replace('rapidvideo.com/v/', 'rapidvideo.com/e/').replace('rapidvideo.com/embed/', 'rapidvideo.com/e/').replace('http:', 'https:')
 				if (config_mp.mediaportal.premiumize_use.value or config_mp.mediaportal.realdebrid_use.value) and not self.fallback:
 					self.rdb = 1
 					self.prz = 1
 					self.callPremium(link)
 				else:
-					id = re.findall('rapidvideo\.com/v/(.*?)$', link)
+					id = re.findall('rapidvideo\.com/(?:v|e|embed)/(.*?)$', link)
 					if id:
-						link = "http://rapidvideo.com/embed/%s" % id[0]
-					getPage(link).addCallback(self.rapidvideocom).addErrback(self.errorload)
+						link = "https://rapidvideo.com/e/%s" % id[0]
+					twAgentGetPage(link).addCallback(self.rapidvideocom).addErrback(self.errorload)
 
 			elif re.search('openload\.(?:co|io|link|pw)|oload\.(?:tv|stream|site|xyz|win|download|cloud|cc|icu|fun|club|info|pw|live|space|services)|oladblock\.(?:services|xyz|me)|openloed\.co', data, re.S):
 				link = data

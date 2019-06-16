@@ -2,7 +2,7 @@
 from Plugins.Extensions.MediaPortal.plugin import _
 from imports import *
 import mp_globals
-from debuglog import printlog as printl
+from debuglog import printl
 from keyboardext import VirtualKeyBoardExt
 from coverhelper import CoverHelper
 from youtubeplayer import YoutubePlayer
@@ -93,7 +93,7 @@ class MediaPortalTmdbScreen(MPScreen):
 		CoverHelper(self['coverArt']).getCover(url_cover)
 
 	def dataError(self, error):
-		from debuglog import printlog as printl
+		from debuglog import printl
 		printl(error,self,"E")
 
 	def keyOk(self):
@@ -395,7 +395,7 @@ class MediaPortaltmdbScreenMovie(MPScreen):
 			pass
 
 	def dataError(self, error):
-		from debuglog import printlog as printl
+		from debuglog import printl
 		printl(error,self,"E")
 
 	def keyLeft(self):

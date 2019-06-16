@@ -1,7 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
-from Plugins.Extensions.MediaPortal.resources.DelayedFunction import DelayedFunction
 import subprocess
 
 myagent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
@@ -47,7 +46,7 @@ class MDHGenreScreen(MPScreen):
 		if "XMLHttpRequest" in data:
 			parse = re.findall('GET","(.*?)".*?"(.*?)"', data, re.S)
 			url = "https://stream-mdh.co" + parse[0][0] + str(random.randint(1400,1800)) + parse[0][1]
-			DelayedFunction(4000, self.getJs, url)
+			TimerCall(4, self.getJs, url)
 		elif 'class="g-recaptcha"' in data:
 			self['name'].setText('')
 			self.session.open(MessageBoxExt, _("Google reCAPTCHA detected, please verify your current IP by\naccessing the website 'https://stream-mdh.co' with your browser."), MessageBoxExt.TYPE_INFO)

@@ -15,7 +15,7 @@ import Queue
 from twisted.web.server import NOT_DONE_YET
 from functools import partial
 
-from debuglog import printlog as printl
+from debuglog import printl
 
 CHUNK_SZ = 4096
 

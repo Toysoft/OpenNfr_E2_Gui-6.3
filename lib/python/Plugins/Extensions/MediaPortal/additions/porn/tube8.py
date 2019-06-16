@@ -86,26 +86,26 @@ class tube8GenreScreen(MPScreen):
 		getPage(self.url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('id="categories-subnav" class="gridList"(.*?)</div>', data,re.S)
-		Cats = re.findall('a\shref="(http[s]?://www.tube8.com/%scat/.*?)">.*?class="category-thumb">.*?data-thumb="(.*?)".*?class="category-name">(.*?)</span>' % self.scopeval[self.scope], parse.group(1), re.S)
+		parse = re.search('id="porn-categories-box" class="gridList"(.*?)</ul>', data,re.S)
+		Cats = re.findall('a\shref="(http[s]?://www.tube8.com/%scat/.*?)">.*?data-thumb="(.*?)".*?<h5>(.*?)<span>' % self.scopeval[self.scope], parse.group(1), re.S)
 		if Cats:
 			for (Url, Image, Title) in Cats:
 				Url = Url + "page/"
 				self.filmliste.append((Title, Url, Image))
-			self.filmliste.sort()
-			self.filmliste.insert(0, ("Longest", "http://www.tube8.com/%slongest/page/" % self.scopeval[self.scope], default_cover))
-			self.filmliste.insert(0, ("Most Voted", "http://www.tube8.com/%smost-voted/page/" % self.scopeval[self.scope], default_cover))
-			self.filmliste.insert(0, ("Most Discussed", "http://www.tube8.com/%smost-discussed/page/" % self.scopeval[self.scope], default_cover))
-			self.filmliste.insert(0, ("Most Favorited", "http://www.tube8.com/%smost-favorited/page/" % self.scopeval[self.scope], default_cover))
-			self.filmliste.insert(0, ("Top Rated", "http://www.tube8.com/%stop/page/" % self.scopeval[self.scope], default_cover))
-			self.filmliste.insert(0, ("Most Popular", "http://www.tube8.com/%shottest/page/" % self.scopeval[self.scope], default_cover))
-			self.filmliste.insert(0, ("Most Viewed", "http://www.tube8.com/%smost-viewed/page/" % self.scopeval[self.scope], default_cover))
-			self.filmliste.insert(0, ("Featured", "http://www.tube8.com/%slatest/page/" % self.scopeval[self.scope], default_cover))
-			self.filmliste.insert(0, ("Newest", "http://www.tube8.com/%snewest/page/" % self.scopeval[self.scope], default_cover))
-			self.filmliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
-			self.ml.setList(map(self._defaultlistcenter, self.filmliste))
-			self.ml.moveToIndex(0)
-			self.keyLocked = False
+		self.filmliste.sort()
+		self.filmliste.insert(0, ("Longest", "http://www.tube8.com/%slongest/page/" % self.scopeval[self.scope], default_cover))
+		self.filmliste.insert(0, ("Most Voted", "http://www.tube8.com/%smost-voted/page/" % self.scopeval[self.scope], default_cover))
+		self.filmliste.insert(0, ("Most Discussed", "http://www.tube8.com/%smost-discussed/page/" % self.scopeval[self.scope], default_cover))
+		self.filmliste.insert(0, ("Most Favorited", "http://www.tube8.com/%smost-favorited/page/" % self.scopeval[self.scope], default_cover))
+		self.filmliste.insert(0, ("Top Rated", "http://www.tube8.com/%stop/page/" % self.scopeval[self.scope], default_cover))
+		self.filmliste.insert(0, ("Most Popular", "http://www.tube8.com/%shottest/page/" % self.scopeval[self.scope], default_cover))
+		self.filmliste.insert(0, ("Most Viewed", "http://www.tube8.com/%smost-viewed/page/" % self.scopeval[self.scope], default_cover))
+		self.filmliste.insert(0, ("Featured", "http://www.tube8.com/%slatest/page/" % self.scopeval[self.scope], default_cover))
+		self.filmliste.insert(0, ("Newest", "http://www.tube8.com/%snewest/page/" % self.scopeval[self.scope], default_cover))
+		self.filmliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
+		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
+		self.ml.moveToIndex(0)
+		self.keyLocked = False
 		self.showInfos()
 
 	def showInfos(self):
@@ -204,12 +204,17 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 		self['Page'] = Label(_("Page:"))
 		self.keyLocked = True
 		self.page = 1
-		self.lastpage = 999
-		self.sort = 'lt'
-		self.sortsearch = 'tube8_slave_featured'
+		self.lastpage = 1
+		if re.match(".*Search", self.Name):
+			self.sort = ''
+			self.sortsearch = 'tube8_slave_relevance'
+			self.sortname = 'Relevance'
+		else:
+			self.sort = 'lt'
+			self.sortsearch = 'tube8_slave_featured'
+			self.sortname = 'Featured'
 		self.filter = None
 		self.filtersearch = ''
-		self.sortname = 'Featured'
 		self.filtername = 'Any Duration'
 
 		self.filmliste = []
@@ -222,10 +227,9 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 		self.keyLocked = True
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
-		self['page'].setText(str(self.page))
 		if re.match(".*Search", self.Name):
-			url = "https://bnzmzkcxit-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.0&x-algolia-application-id=BNZMZKCXIT&x-algolia-api-key=3624454cb0b8c87da7f6100dde6ce062"
-			postdata = '{"requests":[{"indexName":"banned_words","params":"query=' + self.Link + '&optionalWords=%5B%22%22%5D&queryType=prefixNone&typoTolerance=false&optionalFacetFilters=%5B%22%22%5D&getRankingInfo=1&hitsPerPage=50"},{"indexName":"' + self.sortsearch + '","params":"query=' + self.Link + '&optionalWords=%5B%22%22%5D&facetFilters=%5B%22attributes.orientation%3A' + self.Scope + '%22' + self.filtersearch + '%5D&facets=*&page=' + str(self.page-1) +'"}]}'
+			url = "https://bnzmzkcxit-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20JavaScript%20(3.33.0)%3B%20Browser&x-algolia-application-id=BNZMZKCXIT&x-algolia-api-key=3624454cb0b8c87da7f6100dde6ce062"
+			postdata = '{"requests":[{"indexName":"' + self.sortsearch + '","params":"query=' + self.Link + '&optionalWords=null&facetFilters=%5B%22attributes.orientation%3A' + self.Scope + '%22' + self.filtersearch + '%5D&facets=*&page=' + str(self.page-1) +'&hitsPerPage=19"}]}'
 			getPage(url, method='POST', agent=agent, postdata=postdata, headers={'Content-Type': 'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 		else:
 			if self.page == 1:
@@ -242,7 +246,9 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 		if re.match(".*Search", self.Name):
 			results = json.loads(data)
 			if results:
-				for node in results["results"][1]["hits"]:
+				self.lastpage = int(results["results"][0]["nbPages"])
+				self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+				for node in results["results"][0]["hits"]:
 					Url = str(node["link"])
 					Image = str(node["thumbnails"][0]["urls"][0])
 					Title = str(node["title"])
@@ -252,13 +258,14 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 					Views = str(node["attributes"]["stats"]["views"])
 					self.filmliste.append((Title, Url, Image, Runtime, Views))
 		else:
+			self.getLastPage(data, 'id="pagination"(.*?)</ul>')
 			preparse = re.search('id="category_video_list"(.*?)$', data, re.S)
-			Movies = re.findall('id="video_i\d+.*?data-thumb="(http[s]?://.*?\.jpg)".*?class="video_title">\s+<a\shref="(.*?)"\stitle="(.*?)".*?(class="video_info">.*?class="video_duration">.*?</div)', preparse.group(1), re.S)
+			Movies = re.findall('id="video_i\d+.*?href="(.*?)".*?data-thumb="(http[s]?://.*?\.jpg)".*?title="(.*?)".*?(class="video-attributes-features">.*?video-likes)', preparse.group(1), re.S)
 			if Movies:
-				for (Image, Url, Title, Meta) in Movies:
-					Metadata = re.findall('video_views">(.*?)\sviews.*?video_duration">(.*?)</div', Meta, re.S)
-					Views = Metadata[0][0]
-					Runtime = Metadata[0][1]
+				for (Url, Image, Title, Meta) in Movies:
+					Metadata = re.findall('video-duration">(.*?)</span.*?video-views"></span><span>(.*?)</span', Meta, re.S)
+					Runtime = Metadata[0][0]
+					Views = Metadata[0][1]
 					self.filmliste.append((decodeHtml(Title), Url, Image, Runtime, Views.strip()))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No movies found!'), "", None, None, None))
@@ -272,6 +279,8 @@ class tube8FilmScreen(MPScreen, ThumbsHelper):
 		if self.keyLocked:
 			return
 		rangelist = [ ['Featured', 'lt', 'tube8_slave_featured'], ['Longest', 'ln', 'tube8_slave_longest'], ['Newest', 'nt', 'tube8_slave_newest'], ['Rating', 'tr', 'tube8_slave_rating'], ['Views', 'mv', 'tube8_slave_views'], ['Hottest', 'rl', 'tube8_slave_magic'], ['Votes', 'mt', 'tube8_slave_votes'], ['Comments', 'md', 'tube8_slave_comments'], ['Favorites', 'mf', 'tube8_slave_favorites']]
+		if re.match(".*Search", self.Name):
+			rangelist.insert(0,['Relevance', '', 'tube8_slave_relevance'])
 		self.session.openWithCallback(self.keySortAction, ChoiceBoxExt, title=_('Select Action'), list = rangelist)
 
 	def keySortAction(self, result):

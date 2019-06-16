@@ -75,7 +75,8 @@ class cam4GenreScreen(MPScreen):
 			filter = ""
 		else:
 			filter = config_mp.mediaportal.cam4_filter.value
-		url = BASEURL + 'tags?json=true&index=0&count=100&category=' + filter
+		url = BASEURL + 'tags?json=true&index=0&count=75&category=' + filter
+		self['name'].setText(_('Please wait...'))
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -87,6 +88,7 @@ class cam4GenreScreen(MPScreen):
 			self.genreliste.append(("#"+Title, Url))
 		self.genreliste.sort()
 		self.genreliste.insert(0, ("France", "&country=fr"))
+		self.genreliste.insert(0, ("UK", "&country=gb"))
 		self.genreliste.insert(0, ("Spain", "&country=es"))
 		self.genreliste.insert(0, ("Italy", "&country=it"))
 		self.genreliste.insert(0, ("Brazil", "&country=br"))
@@ -95,6 +97,7 @@ class cam4GenreScreen(MPScreen):
 		self.genreliste.insert(0, ("Couple", ""))
 		self.genreliste.insert(0, ("Trending", ""))
 		self.ml.setList(map(self._defaultlistcenter, self.genreliste))
+		self['name'].setText('')
 		self.keyLocked = False
 
 	def keyOK(self):
