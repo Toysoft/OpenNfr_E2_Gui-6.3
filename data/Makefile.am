@@ -19,9 +19,13 @@ dist_pkgdata_DATA = \
 	distro-logo.png \
 	lcd_picon_default.png
 	
-if HAVE_TEXTLCD
 if HAVE_7SEGMENT
 SUBDIRS += 7segment
+endif
+
+if HAVE_TEXTLCD
+if SPARK
+SUBDIRS += displaydualtext
 else
 SUBDIRS += displaytext
 endif
