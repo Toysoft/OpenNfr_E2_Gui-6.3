@@ -14,7 +14,10 @@ g_url = "%s/movies-genre-" % config_mp.mediaportal.movie4kdomain4.value
 
 try:
 	if mp_globals.model in ["one"]:
-		from Plugins.Extensions.MediaPortal.resources import cfscrape
+		try:
+			from Plugins.Extensions.MediaPortal.resources import cfscrape
+		except:
+			from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 	else:
 		from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 except:

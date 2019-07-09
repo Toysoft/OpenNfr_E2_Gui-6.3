@@ -46,7 +46,7 @@ json_headers = {
 agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36'
 default_cover = "file://%s/hotscope.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
-BASE_URL = 'https://hotscope.tv/api/'
+BASE_URL = 'https://api.hotscope.tv/'
 
 class hotscopeGenreScreen(MPScreen):
 
@@ -81,17 +81,17 @@ class hotscopeGenreScreen(MPScreen):
 		twAgentGetPage(url, agent=agent).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		Cats = re.findall('<a href="/category/(.*?)".*?image:url\(&quot;(.*?)&quot;\)', data, re.S)
+		Cats = re.findall('<a.*?href="/category/(.*?)".*?data-src="(.*?)"', data, re.S)
 		if Cats:
 			for (Url, Image) in Cats:
 				Title = Url.title()
+				Url = BASE_URL + "videos/category?category=" + Url + "&page="
 				self.genreliste.append((Title, Url, Image))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Snapchat", "snapchat", default_cover))
-			self.genreliste.insert(0, ("Porn", "porn", default_cover))
-			self.genreliste.insert(0, ("Periscope", "periscope", default_cover))
-			self.genreliste.insert(0, ("Most Viewed", "popular", default_cover))
-			self.genreliste.insert(0, ("Most Recent", "recent", default_cover))
+			self.genreliste.insert(0, ("Porn", BASE_URL + "videos/group?group=other&page=", default_cover))
+			self.genreliste.insert(0, ("Periscope", BASE_URL + "videos/group?group=periscope&page=", default_cover))
+			self.genreliste.insert(0, ("Most Viewed", BASE_URL + "videos/sortBy?sort=-views&page=", default_cover))
+			self.genreliste.insert(0, ("Most Recent", BASE_URL + "videos/sortBy?sort=-date&page=", default_cover))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", default_cover))
 			self.ml.setList(map(self._defaultlistcenter, self.genreliste))
 			self.ml.moveToIndex(0)
@@ -116,7 +116,7 @@ class hotscopeGenreScreen(MPScreen):
 		if callback is not None and len(callback):
 			Name = "--- Search ---"
 			self.suchString = callback
-			Link = urllib.quote(self.suchString).replace(' ', '+')
+			Link = urllib.quote(self.suchString).replace(' ', '%20')
 			self.session.open(hotscopeFilmScreen, Link, Name)
 
 class hotscopeFilmScreen(MPScreen, ThumbsHelper):
@@ -161,14 +161,9 @@ class hotscopeFilmScreen(MPScreen, ThumbsHelper):
 		self['name'].setText(_('Please wait...'))
 		self.filmliste = []
 		if re.match(".*Search", self.Name):
-			url = BASE_URL + "search/all" + "/" + str(self.page) + "/" + self.Link
+			url = BASE_URL + "videos/search?search=%s&page=%s" % (self.Link, str(self.page))
 		else:
-			if not self.Link in ['recent', 'popular', 'snapchat', 'periscope', 'porn']:
-				url = BASE_URL + "category/all/" + str(self.page) + "/" + self.Link + "/-date"
-			elif not self.Link in ['recent', 'popular']:
-				url = BASE_URL + self.Link + "/all/" + str(self.page) + "/-date"
-			else:
-				url = BASE_URL + self.Link + "/all/" + str(self.page)
+			url = self.Link + str(self.page)
 		twAgentGetPage(url, agent=agent).addCallback(self.loadData).addErrback(self.dataError)
 
 	def loadData(self, data):
@@ -208,7 +203,7 @@ class hotscopeFilmScreen(MPScreen, ThumbsHelper):
 			twAgentGetPage(url, agent=agent).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		video = re.findall('id="video".*?src="(.*?)"', data, re.S)
+		video = re.findall('<video preload.*?src="(.*?)"', data, re.S)
 		if video:
 			url = video[-1]
 			Title = self['liste'].getCurrent()[0][0]

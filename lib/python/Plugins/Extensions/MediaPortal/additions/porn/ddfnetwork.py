@@ -79,7 +79,7 @@ class ddfnetworkGenreScreen(MPScreen):
 		if self.mode == "Genres":
 			parse = re.search('filterSelect" multiple name="tags">(.*?)</select>', data, re.S)
 		else:
-			parse = re.search('filterWebsiteSelect" multiple name="tags">(.*?)</select>', data, re.S)
+			parse = re.search('filterWebsiteSelect" multiple name="websites">(.*?)</select>', data, re.S)
 		Cats = re.findall('data-mode="(.*?)">(.*?)</option>', parse.group(1), re.S)
 		if Cats:
 			for (Url, Title) in Cats:
@@ -186,6 +186,8 @@ class ddfnetworkPornstarsScreen(MPScreen, ThumbsHelper):
 		if Pornstars:
 			for (Title, Url, Image) in Pornstars:
 				Url = "https://ddfnetwork.com" + Url
+				if not Url.endswith('/'):
+					Url = Url + '/'
 				if Image.startswith('//'):
 					Image = 'https:' + Image
 				self.filmliste.append((decodeHtml(Title), Url, Image))
@@ -259,14 +261,15 @@ class ddfnetworkFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</ul>', '.*(?:\/|\">)(\d+)(?:\"|</a)')
-		Movies = re.findall('class="card\s.*?href="(.*?)"\stitle="(.*?)".*?data-src="(.*?)".*?"card-subtitle.*?">(.*?)</h6>.*?icon-eye">.*?card-text">(.*?)</.*?icon-video">.*?card-text">(.*?)</p.*?datetime="(.*?)"', data, re.S)
+		Movies = re.findall('class="card\stext.*?href="(.*?)"\stitle="(.*?)".*?data-src="(.*?)".*?"card-subtitle.*?">(.*?)</h6>.*?icon-eye">.*?card-text">(.*?)</.*?icon-video">.*?card-text">(.*?)</small.*?datetime="(.*?)"', data, re.S)
 		if Movies:
 			for (Url, Title, Image, Pornstars, Views, Runtime, Date) in Movies:
 				if Image.startswith('//'):
 					Image = "https:" + Image
 				Url = "https://ddfnetwork.com" + Url
-				Pornstars = stripAllTags(Pornstars)
-				Title = Pornstars + " - " + Title
+				Pornstars = stripAllTags(Pornstars).strip()
+				Pornstars = re.sub('\s+', ' ', Pornstars).strip()
+				Title = Pornstars + " - " + Title.strip()
 				self.filmliste.append((decodeHtml(Title), Url, Image, Date, Runtime, Views))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_('No videos found!'), '', None, ''))

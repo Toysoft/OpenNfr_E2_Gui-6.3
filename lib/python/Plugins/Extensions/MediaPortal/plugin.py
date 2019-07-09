@@ -155,8 +155,8 @@ config.mediaportal = ConfigSubsection()
 config_mp.mediaportal.fake_entry = NoSave(ConfigNothing())
 
 # Allgemein
-config_mp.mediaportal.version = NoSave(ConfigText(default="2019061501"))
-config.mediaportal.version = NoSave(ConfigText(default="2019061501"))
+config_mp.mediaportal.version = NoSave(ConfigText(default="2019063001"))
+config.mediaportal.version = NoSave(ConfigText(default="2019063001"))
 config_mp.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.autoupdate = NoSave(ConfigYesNo(default = True))
 

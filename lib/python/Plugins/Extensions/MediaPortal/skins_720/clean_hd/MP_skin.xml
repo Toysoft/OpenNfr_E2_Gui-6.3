@@ -44,15 +44,15 @@
 		<pixmap filename="skins_720/clean_hd/images/scrollbar.png" name="BackgroundPixmap" />
 		<pixmap filename="skins_720/clean_hd/images/slider.png" name="ValuePixmap" />
 	</windowstylescrollbar>
-    <listboxcontent>
-        <offset name="left" value="3" />
-        <offset name="right" value="3" />
-        <font font="mediaportal;19" name="string" />
-        <value name="string_item_height" value="26" />
-        <font font="mediaportal;19" name="config_description" />
-        <font font="mediaportal;17" name="config_value" />
-        <value name="config_item_height" value="26" />
-    </listboxcontent>
+	<listboxcontent>
+		<offset name="left" value="3" />
+		<offset name="right" value="3" />
+		<font font="mediaportal;19" name="string" />
+		<value name="string_item_height" value="26" />
+		<font font="mediaportal;19" name="config_description" />
+		<font font="mediaportal;17" name="config_value" />
+		<value name="config_item_height" value="26" />
+	</listboxcontent>
 	<mediaportal>
 		<color color="#00ffffff" name="ThumbViewTextForeground" />
 		<color color="#20000000" name="ThumbViewTextBackground" />

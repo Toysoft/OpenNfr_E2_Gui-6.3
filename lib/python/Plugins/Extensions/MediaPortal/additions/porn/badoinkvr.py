@@ -79,7 +79,7 @@ class badoinkvrGenreScreen(MPScreen):
 				Url = "https://badoinkvr.com" + Url + "/%s"
 				self.genreliste.append((decodeHtml(Title), Url, True))
 			self.genreliste.sort()
-		self.genreliste.insert(0, ("Girls", 'https://badoinkvr.com/pornstars/%s?order=name', True))
+		self.genreliste.insert(0, ("Girls", 'https://badoinkvr.com/vr-pornstars/%s?order=name', True))
 		self.genreliste.insert(0, ("Most Viewed", 'https://badoinkvr.com/vrpornvideos/%s?order=most_viewed', True))
 		self.genreliste.insert(0, ("Top Rated", 'https://badoinkvr.com/vrpornvideos/%s?order=top_rated', True))
 		self.genreliste.insert(0, ("Newest", 'https://badoinkvr.com/vrpornvideos/%s?order=newest', True))
@@ -149,7 +149,7 @@ class badoinkvrModelsScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'pagination">(.*?)</ul>')
-		Movies = re.findall('class="girl-card-image" src="(.*?)".*?class="girl-card-name.*?href="(.*?)"\sitemprop="url"><span\sitemprop="name">(.*?)</span>', data, re.S)
+		Movies = re.findall('class="girl-card-image" src="(.*?)".*?class="girl-card-name.*?href="(.*?)"\sitemprop="url".*?itemprop="name">(.*?)</span>', data, re.S)
 		if Movies:
 			for (Image, Url, Title) in Movies:
 				Image = Image.replace('&amp;','&')
@@ -226,7 +226,7 @@ class badoinkvrFilmScreen(MPScreen, ThumbsHelper):
 
 	def loadData(self, data):
 		self.getLastPage(data, 'pagination">(.*?)</ul>')
-		Movies = re.findall('class="video-card-image" src="(.*?)".*?class="video-card-title.*?href="(.*?)"\stitle="(.*?)".*?itemprop="datePublished".*?>(.*?)</span.*?itemprop="duration".*?>(.*?)</span.*?itemprop="actor">(.*?)</div>', data, re.S)
+		Movies = re.findall('class="video-card-image" src="(.*?)".*?class="video-card-title.*?href="(.*?)"\stitle="(.*?)".*?itemprop="datePublished".*?>(.*?)</span.*?itemprop="duration".*?>(.*?)</span.*?itemprop="actor".*?>(.*?)</div>', data, re.S)
 		if Movies:
 			for (Image, Url, Title, Date, Runtime, Models) in Movies:
 				Image = Image.replace('&amp;','&')

@@ -342,8 +342,7 @@ class pornhubPlayListScreen(MPScreen, ThumbsHelper):
 			preparse = re.search('class="sectionWrapper(.*?)id="profileInformation"', data, re.S)
 		Cats = re.findall('class="playlist-videos">.*?class="number"><span>(.*?)</span>.*?borderLink.*?href="(/view_video.php.*?)".*?class="viewPlaylistLink\s{0,1}"\shref="(.*?)".*?data-mediumthumb="(.*?)".*?class="title\s{0,1}"\stitle="(.*?)"', preparse.group(1), re.S)
 		if Cats:
-			for Videos, PlayUrl, Url, Image, Title in Cats:
-				Image = re.sub(r"\(.*?\)", "", Image)
+			for (Videos, PlayUrl, Url, Image, Title) in Cats:
 				Url = base_url + Url
 				PlayUrl = base_url + PlayUrl
 				self.filmliste.append((decodeHtml(Title), Videos, Image, Url, PlayUrl))

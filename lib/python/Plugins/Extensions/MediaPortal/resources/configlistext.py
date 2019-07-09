@@ -7,7 +7,9 @@ from Components.HTMLComponent import HTMLComponent
 from Components.GUIComponent import GUIComponent
 from Components.config import KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_0, KEY_DELETE, KEY_BACKSPACE, KEY_OK, KEY_TOGGLEOW, KEY_ASCII, KEY_TIMEOUT, KEY_NUMBERS, ConfigElement, ConfigText, ConfigPassword
 from Components.ActionMap import NumberActionMap, ActionMap
-from enigma import eListbox, eListboxPythonConfigContent, eTimer
+from enigma import eListbox, eListboxPythonConfigContent, eTimer, getDesktop
+
+desktopSize = getDesktop(0).size()
 
 class ConfigListExt(HTMLComponent, GUIComponent, object):
 	def __init__(self, list, session = None, enableWrapAround=False):
@@ -15,9 +17,12 @@ class ConfigListExt(HTMLComponent, GUIComponent, object):
 		self.l = eListboxPythonConfigContent()
 		try:
 			from skin import componentSizes
-			sizes = componentSizes[componentSizes.CONFIG_LIST]
-			self.l.setSeperation(sizes.get("seperation", 400))
-			self.l.setDividerHeight(sizes.get("dividerHeight", 2))
+			if desktopSize.width() == 1920:
+				self.l.setSeperation(800)
+				self.l.setDividerHeight(1)
+			else:
+				self.l.setSeperation(550)
+				self.l.setDividerHeight(1)
 		except:
 			self.l.setSeperation(400)
 		self.timer = eTimer()

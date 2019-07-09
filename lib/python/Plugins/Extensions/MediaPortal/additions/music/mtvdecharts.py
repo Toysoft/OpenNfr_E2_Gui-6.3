@@ -98,12 +98,18 @@ class MTVdeChartsGenreScreen(MPScreen):
 				('MTV.it\tUSA Charts','http://classifiche.mtv.it/classifica-musica-americana/a6i0r1'),
 				('MTV.it\tMost Viewed Video Ranking','http://classifiche.mtv.it/mtv-it-classifica-mtv-video/4cadoe'),
 				('MTV.it\tMost Beautiful Songs To Download','http://classifiche.mtv.it/imtv-chart/xrbmn1'),
+				('MTV.it\tBest Summer Song Ever','http://classifiche.mtv.it/best-summer-song-ever-classifica-migliori-canzoni-estate-di-sempre/igfbtk'),
+				('MTV.it\tSummer Hits 2019','http://classifiche.mtv.it/summer-hits-classifica-canzoni-estate-2019/n27py3'),
+				('MTV.it\tSummer Hits 2018','http://classifiche.mtv.it/summer-hits-classifica-canzoni-estate-2018/u7hcln'),
 				('MTV.it\tDance Top10','http://classifiche.mtv.it/mtv-dance-top-ten-musica-dance/0w1hcj'),
 				('MTV.it\tHits Top10','http://classifiche.mtv.it/mtv-hits-top-ten-video-canzoni-del-momento/kao1ot'),
 				('MTV.it\tRock Top10','http://classifiche.mtv.it/mtv-rocks-classifica-rock-top-ten/5qu1no'),
 				('MTV.it\tHip Hop R&B Top10','http://classifiche.mtv.it/mtv-dance-top-ten-musica-hip-hop-r-and-b/rou2ne'),
 				('MTV.it\tTop30 Girl Power','http://classifiche.mtv.it/classifica-musica-pop-top-50-women-in-pop/yvxcp1'),
-				('MTV.it\tTop30 Love Songs','http://classifiche.mtv.it/classifica-love-chart-canzoni-d-amore/y5qjc6'),
+				('MTV.it\tTop20 Love Songs','http://classifiche.mtv.it/classifica-love-chart-canzoni-d-amore/y5qjc6'),
+				('MTV.it\tTop20 Halloween','http://classifiche.mtv.it/classifica-musica-halloween-top-20/zs6vmu'),
+				('MTV.it\tTop20 Madonna','http://classifiche.mtv.it/madonna-classifica-migliori-video-top-20-chart/tk2gmp'),
+				('MTV.it\tTop20 Queen','http://classifiche.mtv.it/top-20-classifica-canzoni-queen/viaxoa'),
 				('MTV.it\tTop20 2019','http://classifiche.mtv.it/hit-parade-2019/e65ji7'),
 				('MTV.it\tTop20 2018','http://classifiche.mtv.it/hit-parade-2018/n1atw0'),
 				('MTV.it\tTop50 2017','http://classifiche.mtv.it/hit-parade-2017/bb4i30'),
@@ -314,7 +320,7 @@ class MTVdeChartsSongListeScreen(MPScreen):
 class MTVdeChartsPlayer(SimplePlayer):
 
 	def __init__(self, session, playList, playIdx=0, playAll=True, listTitle=None):
-		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, listTitle=listTitle, ltype='mtv', forceGST=False)
+		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, listTitle=listTitle, ltype='mtv')
 
 	def getVideo(self):
 		title = self.playList[self.playIdx][self.title_inr]

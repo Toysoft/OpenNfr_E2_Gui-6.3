@@ -6,7 +6,10 @@ from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPag
 
 try:
 	if mp_globals.model in ["one"]:
-		from Plugins.Extensions.MediaPortal.resources import cfscrape
+		try:
+			from Plugins.Extensions.MediaPortal.resources import cfscrape
+		except:
+			from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 	else:
 		from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 except:
@@ -841,7 +844,7 @@ class ssStreams(MPScreen):
 				s.mount('http://', adapter)
 				s.mount('https://', adapter)
 
-				response = s.get(url, cookies=ss_cookies, headers=headers)
+				response = s.get(url, cookies=ss_cookies, headers=headers, verify=False)
 				if response.history:
 					get_stream_link(self.session).check_link(str(response.url), self.playfile)
 				else:

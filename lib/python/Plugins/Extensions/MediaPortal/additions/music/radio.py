@@ -36,8 +36,10 @@
 
 from Plugins.Extensions.MediaPortal.plugin import _
 from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.configlistext import ConfigListScreenExt
 
 config_mp.mediaportal.radio_base = ConfigText(default="http://www.rad.io", fixed_size=False)
+config_mp.mediaportal.radio_sort = ConfigYesNo(default=True)
 
 default_cover = "file://%s/radio.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 base_url = config_mp.mediaportal.radio_base.value
@@ -80,12 +82,14 @@ class RadioGenreScreen(MPScreen):
 		self["actions"] = ActionMap(["MP_Actions"], {
 			"ok"    : self.keyOK,
 			"0" : self.closeAll,
-			"cancel": self.keyCancel
+			"cancel": self.keyCancel,
+			"blue": self.keySetup
 		}, -1)
 
 		self.keyLocked = True
 		self['title'] = Label("Radio")
 		self['ContentTitle'] = Label(_("Genre:"))
+		self['F4'] = Label(_("Setup"))
 
 		self.genreliste = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -127,8 +131,45 @@ class RadioGenreScreen(MPScreen):
 			base_url = config_mp.mediaportal.radio_base.value
 			self.session.open(RadioSubGenreScreen, Genre, Url)
 
+	def keySetup(self):
+		if mp_globals.isDreamOS:
+			self.session.openWithCallback(self.setupCallback, RadioSetupScreen, is_dialog=True)
+		else:
+			self.session.openWithCallback(self.setupCallback, RadioSetupScreen)
+
+	def setupCallback(self, answer=False):
+		self.loadPage()
+
 	def restoreRadio(self):
 		config_mp.mediaportal.is_radio.value = False
+
+class RadioSetupScreen(MPSetupScreen, ConfigListScreenExt):
+
+	def __init__(self, session):
+		MPSetupScreen.__init__(self, session, skin='MP_PluginSetup')
+
+		self['title'] = Label("Radio " + _("Setup"))
+		self['F4'] = Label('')
+		self.setTitle("Radio " + _("Setup"))
+
+		self.list = []
+		ConfigListScreenExt.__init__(self, self.list)
+
+		self.list.append(getConfigListEntry(_("Sort Favorites:"), config_mp.mediaportal.radio_sort))
+
+		self["config"].setList(self.list)
+
+		self["setupActions"] = ActionMap(["MP_Actions"],
+		{
+			"ok"    : self.keySave,
+			"cancel": self.keyCancel
+		}, -1)
+
+	def keySave(self):
+		for x in self["config"].list:
+			if len(x) > 1:
+				x[1].save()
+		self.close(True)
 
 class RadioSubGenreScreen(MPScreen):
 
@@ -408,7 +449,8 @@ class RadioPlaylist(MPScreen):
 				if data:
 					(stationName, stationId) = data[0]
 					self.playList.append((stationName, stationId))
-			self.playList.sort()
+			if config_mp.mediaportal.radio_sort.value:
+				self.playList.sort()
 			readStations.close()
 		if len(self.playList) == 0:
 			self.playList.append((_('No entries found!'), None, default_cover))

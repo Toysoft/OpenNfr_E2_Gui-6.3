@@ -42,6 +42,8 @@ config_mp.mediaportal.southparkquality = ConfigText(default="HD", fixed_size=Fal
 
 default_cover = "file://%s/southpark.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 
+agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+
 class SouthparkGenreScreen(MPScreen):
 
 	def __init__(self, session):
@@ -271,13 +273,14 @@ class SouthparkAktScreen(MPScreen):
 			return
 		self.keyLocked = True
 		self.link = self['liste'].getCurrent()[0][1]
-		getPage(self.link).addCallback(self.StartStream).addErrback(self.dataError)
+		getPage(self.link, agent=agent).addCallback(self.StartStream).addErrback(self.dataError)
 
 	def StartStream(self, data):
 		title = self['liste'].getCurrent()[0][0]
 		http_data = re.findall('<rendition.*?".*?<src>(.*?)</src>.*?</rendition>', data, re.S|re.I)
 		if http_data:
 			idx = self['liste'].getSelectedIndex()
+			mp_globals.player_agent = agent
 			self.session.open(SouthparkPlayer, self.filmliste, int(idx) , True, False)
 		else:
 			message = self.session.open(MessageBoxExt, _("Sorry, this video is not found or no longer available due to date or rights restrictions."), MessageBoxExt.TYPE_INFO, timeout=5)
@@ -286,14 +289,39 @@ class SouthparkAktScreen(MPScreen):
 class SouthparkPlayer(SimplePlayer):
 
 	def __init__(self, session, playList, playIdx=0, playAll=True, showPlaylist=False):
-		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, showPlaylist=showPlaylist, ltype='southpark', forceGST=False)
+		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, showPlaylist=showPlaylist, ltype='southpark')
 
-	def getVideo(self):
+	def getVideo(self, fallback=False):
 		self.title = self.playList[self.playIdx][0]
 		self.pageurl = self.playList[self.playIdx][2]
 		url = self.playList[self.playIdx][1]
-		getPage(url).addCallback(self.gotVideo).addErrback(self.dataError)
+		if fallback:
+			url = url.replace('hls','phttp')
+		getPage(url, agent=agent).addCallback(self.gotVideo).addErrback(self.dataError)
 
 	def gotVideo(self, data):
 		http_data = re.findall('<rendition.*?".*?<src>(.*?)</src>.*?</rendition>', data, re.S|re.I)
-		self.playStream(self.title, http_data[-1].replace('&amp;','&'))
+		if http_data:
+			videourl = http_data[-1].replace('&amp;','&')
+			videourl = urllib.unquote(videourl)
+			if config_mp.mediaportal.southparkquality.value == "HD" and ".m3u8" in videourl and not "akamaihd.net" in videourl:
+				if ",stream_" in videourl:
+					splitstring = ',stream_'
+				else:
+					splitstring = ','
+				splits = videourl.split(splitstring)
+				maxres = 0
+				for split in splits:
+					res = re.search('(\d+)x\d+', split)
+					if res:
+						if int(res.group(1)) > maxres:
+							maxres = int(res.group(1))
+							vid = split
+				if "/master.m3u8" in vid:
+					vid = vid.split('/master.m3u8')[0]
+				token = splits[-1].split('master.m3u8')
+				videourl = splits[0] + splitstring + vid + '/master.m3u8' + token[-1]
+			elif config_mp.mediaportal.southparkquality.value == "HD" and ".m3u8" in videourl and "akamaihd.net" in videourl:
+				self.getVideo(True)
+			mp_globals.player_agent = agent
+			self.playStream(self.title, videourl)

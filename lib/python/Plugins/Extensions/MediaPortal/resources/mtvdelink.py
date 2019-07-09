@@ -54,6 +54,23 @@ class MTVdeLink:
 		hlsurl = re.findall('<src>(.*?)</src>', data)
 		if hlsurl:
 			videourl = hlsurl[-1].replace('&amp;','&')
+			if config_mp.mediaportal.mtvquality.value == "HD":
+				if ",stream_" in videourl:
+					splitstring = ',stream_'
+				else:
+					splitstring = ','
+				splits = videourl.split(splitstring)
+				maxres = 0
+				for split in splits:
+					res = re.search('(\d+)x\d+', split)
+					if res:
+						if int(res.group(1)) > maxres:
+							maxres = int(res.group(1))
+							vid = split
+				if "/master.m3u8" in vid:
+					vid = vid.split('/master.m3u8')[0]
+				token = splits[-1].split('master.m3u8')
+				videourl = splits[0] + splitstring + vid + '/master.m3u8' + token[-1]
 		else:
 			if "geo_block" in data:
 				self._errback(_('Sorry, this video is not available in your region.'))

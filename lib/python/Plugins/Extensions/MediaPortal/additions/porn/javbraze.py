@@ -20,7 +20,7 @@ class javbrazeGenreScreen(MPScreen):
 			default_cover = "file://%s/javfindx.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "pornbraze":
 			self.portal = "PornBraze.com"
-			self.baseurl = "https://www.pornbraze.com"
+			self.baseurl = "https://www1.pornbraze.com"
 			default_cover = "file://%s/pornbraze.png" % (config_mp.mediaportal.iconcachepath.value + "logos")
 		elif self.mode == "alotav":
 			self.portal = "AlotAv.com"
@@ -211,7 +211,7 @@ class javbrazeFilmScreen(MPScreen, ThumbsHelper):
 	def loadData(self, data):
 		self.getLastPage(data, 'class="pagination(.*?)</ul>')
 		parse = re.search('<div class="panel-body(.*?)$', data, re.S)
-		Movies = re.findall('(?:class="video">|class="well well-sm">).*?href="(.*?)"\stitle="(.*?)".*?img\s(?:class="img-responsive\s"\s|)src="(.*?)"(.*?(?:</div>(?:.|\n\t+)</li>|</span>.</div>))', parse.group(1), re.S)
+		Movies = re.findall('(?:class="video">|class="col-sm-4|class="well well-sm">).*?href="(.*?)"\stitle="(.*?)".*?img\s(?:class="img-responsive\s"\s|)src="(.*?)"(.*?(?:</div>(?:.|\n\t+)</li>|</span>.</div>))', parse.group(1), re.S)
 		if Movies:
 			for (Url, Title, Image, Meta) in Movies:
 				Url = self.baseurl + Url

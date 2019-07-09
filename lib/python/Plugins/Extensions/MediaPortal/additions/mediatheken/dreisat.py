@@ -60,6 +60,73 @@ class dreisatGenreScreen(MPScreen):
 
 		self['title'] = Label("3sat Mediathek")
 		self['ContentTitle'] = Label("Genre:")
+
+		self.keyLocked = True
+		self.suchString = ''
+		self.filmliste = []
+		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self['liste'] = self.ml
+
+		self.onLayoutFinish.append(self.parseData)
+
+	def parseData(self):
+		self.filmliste.append(("Suche", '', default_cover))
+		self.filmliste.append(("Sendung verpasst!?", '', default_cover))
+		self.filmliste.append(("Sendungen A-Z", '/sendungen-a-z', default_cover))
+		self.filmliste.append(("Themen", '/themen', default_cover))
+		self.filmliste.append(("Kultur", '/kultur', default_cover))
+		self.filmliste.append(("Wissen", '/wissen', default_cover))
+		self.filmliste.append(("Gesellschaft", '/gesellschaft', default_cover))
+		self.filmliste.append(("Film", '/film', default_cover))
+		self.filmliste.append(("Dokumentation", '/dokumentation', default_cover))
+		self.filmliste.append(("Kabarett", '/kabarett', default_cover))
+		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
+		self.keyLocked = False
+		self.showInfos()
+
+	def keyOK(self):
+		if self.keyLocked:
+			return
+		Name = self['liste'].getCurrent()[0][0]
+		Link = self['liste'].getCurrent()[0][1]
+		if Name == "Suche":
+			self.suchen()
+		elif Name == 'Sendung verpasst!?':
+			self.session.open(dreisatDateScreen, Link, Name)
+		elif Name == "Sendungen A-Z":
+			self.session.open(dreisatGenreSubScreen, Link, Name)
+		elif Name == "Themen":
+			self.session.open(dreisatGenreSubScreen, Link, Name)
+		else:
+			Link = baseurl + Link
+			self.session.open(dreisatListScreen, Link, Name)
+
+	def SuchenCallback(self, callback = None):
+		if callback is not None and len(callback):
+			Name = "Suche"
+			self.suchString = callback
+			Link = urllib.quote(self.suchString).replace(' ', '+')
+			self.session.open(dreisatListScreen, Link, Name)
+
+class dreisatGenreSubScreen(MPScreen):
+
+	def __init__(self, session, Link, Name):
+		self.Link = Link
+		self.Name = Name
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
+
+		self["actions"] = ActionMap(["MP_Actions"], {
+			"0"		: self.closeAll,
+			"ok"	: self.keyOK,
+			"cancel": self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft
+		}, -1)
+
+		self['title'] = Label("3sat Mediathek")
+		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['name'] = Label(_("Please wait..."))
 
 		self.keyLocked = True
@@ -71,58 +138,101 @@ class dreisatGenreScreen(MPScreen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		url = baseurl + "/sendungen-a-z"
+		url = baseurl + self.Link
 		twAgentGetPage(url, agent=agent).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		self.filmliste.append(("Suche", '', default_cover))
-		raw = re.findall('<li class="item.*?<a class="link" href="(.*?)" title="Sendungen mit (?:\w|0-9)">(.*?)</a>', data, re.S)
-		if raw:
-			for (Url, Title) in raw:
-				Url = baseurl + Url
-				self.filmliste.append((decodeHtml(Title), Url, default_cover))
+		if self.Name == "Sendungen A-Z":
+			raw = re.findall('<li class="item.*?<a class="link" href="(.*?)" title="Sendungen mit (?:\w|0-9)">(.*?)</a>', data, re.S)
+			if raw:
+				for (Url, Title) in raw:
+					Url = baseurl + Url
+					self.filmliste.append((decodeHtml(Title), Url, default_cover, None))
+		else:
+			raw = re.findall('class="m--content-module.*?data-src="(.*?)".*?href="(.*?)".*?headline level-4\s+">(.*?)</h3>.*?paragraph-large\s{0,2}">(.*?)</p>', data, re.S)
+			if raw:
+				for (Image, Url, Title, Handlung) in raw:
+					Url = baseurl + Url
+					self.filmliste.append((decodeHtml(Title), Url, Image, Handlung))
+			raw = re.findall('class="m--teaser-topic.*?data-src="(.*?)".*?href="(.*?)".*?class="a--headline.*?>(.*?)</h3>.*?class="a--subheadline.*?>(.*?)</p>', data, re.S)
+			if raw:
+				for (Image, Url, Title, Handlung) in raw:
+					Url = baseurl + Url
+					self.filmliste.append((decodeHtml(Title), Url, Image, Handlung))
+			raw = re.findall('class="m--teaser-small.*?data-src="(.*?)".*?href="(.*?)".*?class="a--headline.*?clickarea-link">(.*?)</p>.*?class="a--subheadline.*?>(.*?)</p>', data, re.S)
+			if raw:
+				for (Image, Url, Title, Handlung) in raw:
+					Url = baseurl + Url
+					self.filmliste.append((decodeHtml(Title), Url, Image, Handlung))
 		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
 		self.keyLocked = False
 		self.showInfos()
+
+	def showInfos(self):
+		title = self['liste'].getCurrent()[0][0]
+		coverUrl = self['liste'].getCurrent()[0][2]
+		handlung = self['liste'].getCurrent()[0][3]
+		self['name'].setText(title)
+		if handlung:
+			self['handlung'].setText(decodeHtml(handlung))
+		else:
+			self['handlung'].setText('')
+		CoverHelper(self['coverArt']).getCover(coverUrl)
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		Name = self['liste'].getCurrent()[0][0]
 		Link = self['liste'].getCurrent()[0][1]
-		if Name == "Suche":
-			self.suchen(suggest_func=self.getSuggestions)
+		if self.Name == "Sendungen A-Z":
+			self.session.open(dreisatAZScreen, Link, Name)
 		else:
-			self.session.open(dreisatSubScreen, Link, Name)
-
-	def SuchenCallback(self, callback = None):
-		if callback is not None and len(callback):
-			Name = "Suche"
-			self.suchString = callback
-			Link = urllib.quote(self.suchString).replace(' ', '+')
 			self.session.open(dreisatListScreen, Link, Name)
 
-	def getSuggestions(self, text, max_res):
-		url = "%s/search/typeahead?context=user&q=%s" % (apiurl, urllib.quote_plus(text))
-		d = twAgentGetPage(url, agent=agent, headers={'Api-Auth':'Bearer 22918a9c7a733c027addbcc7d065d4349d375825'}, timeout=5)
-		d.addCallback(self.gotSuggestions, max_res)
-		d.addErrback(self.gotSuggestions, max_res, err=True)
-		return d
+class dreisatDateScreen(MPScreen):
 
-	def gotSuggestions(self, suggestions, max_res, err=False):
-		list = []
-		if not err and type(suggestions) in (str, buffer):
-			suggestions = json.loads(suggestions)
-			for item in suggestions['http://zdf.de/rels/search/typeahead-suggestions']:
-				li = item['text']
-				list.append(str(li))
-				max_res -= 1
-				if not max_res: break
-		elif err:
-			printl(str(suggestions),self,'E')
-		return list
+	def __init__(self, session, Link, Name):
+		self.Link = Link
+		self.Name = Name
+		MPScreen.__init__(self, session, skin='MP_Plugin', default_cover=default_cover)
 
-class dreisatSubScreen(MPScreen):
+		self["actions"] = ActionMap(["MP_Actions"], {
+			"0"		: self.closeAll,
+			"ok"	: self.keyOK,
+			"cancel": self.keyCancel
+		}, -1)
+
+		self['title'] = Label("3sat Mediathek")
+		self['ContentTitle'] = Label("Sendung verpasst!?")
+		self['name'] = Label(_("Selection:"))
+
+		self.keyLocked = True
+		self.filmliste = []
+		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self['liste'] = self.ml
+
+		self.onLayoutFinish.append(self.loadPage)
+
+	def loadPage(self):
+		today = datetime.date.today()
+		for daynr in range(-21,15):
+			day1 = today - datetime.timedelta(days=daynr)
+			dateselect = day1.strftime('%Y-%m-%d')
+			link = '%s/programm?airtimeDate=%s' % (baseurl, dateselect)
+			self.filmliste.append((dateselect, link, ''))
+		self.ml.setList(map(self._defaultlistcenter, self.filmliste))
+		self.ml.moveToIndex(21)
+		self.keyLocked = False
+
+	def keyOK(self):
+		exist = self['liste'].getCurrent()
+		if self.keyLocked or exist == None:
+			return
+		Name = self['liste'].getCurrent()[0][0]
+		Link = self['liste'].getCurrent()[0][1]
+		self.session.open(dreisatListScreen, Link, Name)
+
+class dreisatAZScreen(MPScreen):
 
 	def __init__(self, session, Link, Name):
 		self.Link = Link
@@ -154,10 +264,10 @@ class dreisatSubScreen(MPScreen):
 		twAgentGetPage(self.Link, agent=agent).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		raw = re.findall('data-module="teaser-small".*?data-src="(.*?)".*?href="(.*?)".*?clickarea-link">(.*?)</p>', data, re.S)
+		raw = re.findall('data-module="teaser-small".*?data-src="(.*?)".*?href="(.*?)".*?clickarea-link">(.*?)</p>.*?class="a--subheadline.*?>(.*?)</p>', data, re.S)
 		if raw:
-			for (Image, Url, Title) in raw:
-				self.filmliste.append((decodeHtml(Title), Url, Image))
+			for (Image, Url, Title, Handlung) in raw:
+				self.filmliste.append((decodeHtml(Title), Url, Image, Handlung))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_("No contents / results found!"), None, default_cover))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -167,7 +277,12 @@ class dreisatSubScreen(MPScreen):
 	def showInfos(self):
 		title = self['liste'].getCurrent()[0][0]
 		coverUrl = self['liste'].getCurrent()[0][2]
+		handlung = self['liste'].getCurrent()[0][3]
 		self['name'].setText(title)
+		if handlung:
+			self['handlung'].setText(decodeHtml(handlung))
+		else:
+			self['handlung'].setText('')
 		CoverHelper(self['coverArt']).getCover(coverUrl)
 
 	def keyOK(self):
@@ -223,30 +338,46 @@ class dreisatListScreen(MPScreen):
 		twAgentGetPage(url, agent=agent).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		raw = re.findall('class="m--content-module.*?teaser-image="\[(.*?),.*?toggle-title="(.*?)".*?<span class="label">(.*?)</span>.*?href="(.*?)".*?paragraph-large\s{0,2}">(.*?)</p>', data, re.S)
-		if raw:
-			for (Image, Title, Runtime, Url, Handlung) in raw:
-				Handlung = "Laufzeit: " + Runtime + "\n\n" + decodeHtml(Handlung).strip()
-				self.filmliste.append((decodeHtml(Title), Url, Image, Handlung))
-		raw = re.findall('class="video-carousel-item">.*?"title":\s"(.*?)",.*?duration":\s"(.*?)",.*?"embed_content":\s"(.*?)",.*?teaser-image-overwrite=[\"|\']\{"\d+x\d+":"(.*?)",', decodeHtml(data), re.S)
-		if raw:
-			for (Title, Runtime, Url, Image) in raw:
-				Url = Url + ".html"
-				Runtime = "Laufzeit: " + Runtime
-				self.filmliste.append((decodeHtml(Title).strip().replace('\\"','"'), Url, Image.replace('\/','/'), Runtime))
-		raw = re.findall('data-module="teaser-small".*?data-src="(.*?)".*?href="(.*?)".*?clickarea-link">(.*?)</p>.*?class="label">(.*?)</span>.*?clickarea-link"\s{0,1}>(.*?)</p>', data, re.S)
-		if raw:
-			for (Image, Url, Title, Runtime, Handlung) in raw:
-				Handlung = "Laufzeit: " + Runtime + "\n\n" + decodeHtml(Handlung).strip()
-				self.filmliste.append((decodeHtml(Title), Url, Image, Handlung))
-		raw = re.findall('sophoraId":\s"(.*?)",.*?teaserHeadline":\s"(.*?)",.*?teasertext":\s"(.*?)",', decodeHtml(data), re.S)
-		if raw:
-			topurl = re.search('class="cluster-skip js-rb-click js-track-click" href="(.*?)#skip', decodeHtml(data), re.S)
-			if topurl:
-				for (Id, Title, Handlung) in raw:
-					Url = topurl.group(1) + "/" + Id + ".html"
-					Image = None
-					self.filmliste.append((decodeHtml(Title).strip().replace('\\"','"'), Url, Image, decodeHtml(Handlung).strip().replace('\\"','"'), Id))
+		if re.match('\d{4}-\d{2}-\d{2}', self.Name):
+			raw = re.findall('class="m--teaser-epg js-teaser-article is-video.*?data-src="(.*?)".*?airtime-begin class="time">(.*?)</span>.*?class="a--headline.*?>(.*?)</h3>.*?class="label">(.*?)</span>.*?data-teasertext.*?>(.*?)(?:</p>|<br />).*?href="(.*?)"', data, re.S)
+			if raw:
+				for (Image, Airtime, Title, Runtime, Handlung, Url) in raw:
+					Title = Airtime + " - " + decodeHtml(Title)
+					Handlung = "Laufzeit: " + Runtime + "\n\n" + decodeHtml(Handlung).replace('<b>','').replace('</b>','').strip()
+					self.filmliste.append((Title, Url, Image, Handlung))
+		else:
+			raw = re.findall('class="m--content-module.*?title":\s"(.*?)",.*?"duration":\s"(.*?)".*?"embed_content":\s"(.*?)",.*?teaser-image="\[(.*?),(.*?)class="teaser-info', decodeHtml(data), re.S)
+			if raw:
+				for (Title, Runtime, Embed, Image, Meta) in raw:
+					url = re.findall('href="(.*?)"', Meta, re.S)
+					if url:
+						Url = url[0]
+					else:
+						Url = Embed + ".html"
+					handlung = re.findall('paragraph-large\s{0,2}">(.*?)</p>', Meta, re.S)
+					Handlung = "Laufzeit: " + Runtime + "\n\n" + decodeHtml(handlung[0]).strip()
+					self.filmliste.append((decodeHtml(Title).replace('\/','/'), Url, Image, Handlung))
+			raw = re.findall('class="video-carousel-item">.*?"title":\s"(.*?)",.*?duration":\s"(.*?)",.*?"embed_content":\s"(.*?)",.*?teaser-image-overwrite=[\"|\']\{"\d+x\d+":"(.*?)",', decodeHtml(data), re.S)
+			if raw:
+				for (Title, Runtime, Url, Image) in raw:
+					Url = Url + ".html"
+					Runtime = "Laufzeit: " + Runtime
+					self.filmliste.append((decodeHtml(Title).strip().replace('\\"','"').replace('\/','/'), Url, Image.replace('\/','/'), Runtime))
+			raw = re.findall('<article class="m--teaser-small.*?data-src="(.*?)".*?href="(.*?)".*?<h3(.*?)</article>', data, re.S)
+			if raw:
+				for (Image, Url, Meta) in raw:
+					meta = re.findall('clickarea-link">(.*?)</p>.*?class="label">(.*?)</span>.*?clickarea-link"\s{0,1}>(.*?)</p>', Meta, re.S)
+					if meta:
+						Handlung = "Laufzeit: " + meta[0][1] + "\n\n" + decodeHtml(meta[0][2]).strip()
+						self.filmliste.append((decodeHtml(meta[0][0]), Url, Image, Handlung))
+			raw = re.findall('sophoraId":\s"(.*?)",.*?teaserHeadline":\s"(.*?)",.*?teasertext":\s"(.*?)",', decodeHtml(data), re.S)
+			if raw:
+				topurl = re.search('class="cluster-skip js-rb-click js-track-click" href="(.*?)#skip', decodeHtml(data), re.S)
+				if topurl:
+					for (Id, Title, Handlung) in raw:
+						Url = topurl.group(1) + "/" + Id + ".html"
+						Image = None
+						self.filmliste.append((decodeHtml(Title).strip().replace('\\"','"').replace('\/','/'), Url, Image, decodeHtml(Handlung).strip().replace('\\"','"'), Id))
 		if len(self.filmliste) == 0:
 			self.filmliste.append((_("No videos found!"), None, default_cover, ""))
 		self.ml.setList(map(self._defaultlistleft, self.filmliste))
@@ -262,21 +393,24 @@ class dreisatListScreen(MPScreen):
 		if not coverUrl:
 			Id = self['liste'].getCurrent()[0][4]
 			teaserurl = baseurl + "/teaserElement?sophoraId=%s&style=m2&moduleId=mod-2&teaserHeadline=&clusterTitle=Alle+Sendungen&clusterType=Cluster_S&sourceModuleType=cluster-s" % str(Id)
-			s = requests.session()
-			page = s.get(teaserurl, timeout=5)
-			teaserdata = page.content
-			teaser = re.findall('data-module="teaser-small".*?data-src="(.*?)".*?<div class="ratio-inner">(.*?)class="info-panel-content".*?clickarea-link"\s{0,1}>(.*?)</p>', teaserdata, re.S)
-			if teaser:
-				for (Image, RuntimeData, Handlung) in teaser:
-					if RuntimeData:
-						Runtime = re.search('class="label">(.*?)</span>', RuntimeData, re.S)
-						if Runtime:
-							handlung = "Laufzeit: " + Runtime.group(1) + "\n\n" + decodeHtml(Handlung).strip()
+			try:
+				s = requests.session()
+				page = s.get(teaserurl, timeout=5)
+				teaserdata = page.content
+				teaser = re.findall('data-module="teaser-small".*?data-src="(.*?)".*?<div class="ratio-inner">(.*?)class="info-panel-content".*?clickarea-link"\s{0,1}>(.*?)</p>', teaserdata, re.S)
+				if teaser:
+					for (Image, RuntimeData, Handlung) in teaser:
+						if RuntimeData:
+							Runtime = re.search('class="label">(.*?)</span>', RuntimeData, re.S)
+							if Runtime:
+								handlung = "Laufzeit: " + Runtime.group(1) + "\n\n" + decodeHtml(Handlung).strip()
+							else:
+								handlung = decodeHtml(Handlung).strip()
 						else:
 							handlung = decodeHtml(Handlung).strip()
-					else:
-						handlung = decodeHtml(Handlung).strip()
-					coverUrl = Image
+						coverUrl = Image
+			except:
+				pass
 		if handlung:
 			self['handlung'].setText(decodeHtml(handlung))
 		else:
@@ -286,11 +420,12 @@ class dreisatListScreen(MPScreen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		self['name'].setText(_("Please wait..."))
 		streamName = self['liste'].getCurrent()[0][0]
 		streamLink = self['liste'].getCurrent()[0][1]
-		Link = baseurl + streamLink
-		twAgentGetPage(Link, agent=agent).addCallback(self.getToken).addErrback(self.dataError)
+		if streamLink:
+			self['name'].setText(_("Please wait..."))
+			Link = baseurl + streamLink
+			twAgentGetPage(Link, agent=agent).addCallback(self.getToken).addErrback(self.dataError)
 
 	def getToken(self,data):
 		token = re.findall('data-zdfplayer-jsb.*?apiToken":\s"(.*?)",', data, re.S)

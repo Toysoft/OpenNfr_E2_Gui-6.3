@@ -5,7 +5,10 @@ from Plugins.Extensions.MediaPortal.resources.twagenthelper import twAgentGetPag
 
 try:
 	if mp_globals.model in ["one"]:
-		from Plugins.Extensions.MediaPortal.resources import cfscrape
+		try:
+			from Plugins.Extensions.MediaPortal.resources import cfscrape
+		except:
+			from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 	else:
 		from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 except:
@@ -388,9 +391,10 @@ class filmPalastStreams(MPScreen):
 		streams = re.findall('currentStreamLinks.*?class="hostName">(.*?)<.*?(?:data-player-url|href)="(.*?)"', data, re.S)
 		if streams:
 			for (Hoster, Url) in streams:
-					check = isSupportedHoster(Hoster)
-					if check:
-						self.streamList.append((check, Url))
+					if not "hash=" in Url:
+						check = isSupportedHoster(Hoster)
+						if check:
+							self.streamList.append((check, Url))
 		if len(self.streamList) == 0:
 			self.streamList.append((_('No supported streams found!'), None))
 		self.ml.setList(map(self._defaultlisthoster, self.streamList))

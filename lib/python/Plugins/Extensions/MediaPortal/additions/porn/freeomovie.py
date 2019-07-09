@@ -5,7 +5,10 @@ default_cover = "file://%s/freeomovie.png" % (config_mp.mediaportal.iconcachepat
 
 try:
 	if mp_globals.model in ["one"]:
-		from Plugins.Extensions.MediaPortal.resources import cfscrape
+		try:
+			from Plugins.Extensions.MediaPortal.resources import cfscrape
+		except:
+			from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 	else:
 		from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 except:

@@ -343,6 +343,7 @@ class youtubeGenreScreen(MenuHelper):
 			('Rocket Beans TV', 'https://www.youtube.com/user/ROCKETBEANSTV'),
 			('Daheimkino', 'https://www.youtube.com/user/Daheimkino'),
 			('E2WORLD', 'https://www.youtube.com/channel/UC95hFgcA4hzKcOQHiEFX3UA'),
+			('heise online', 'https://www.youtube.com/channel/UCAszOEwa5CS4WFwYpkjdaUQ'),
 			('The HDR Channel', 'https://www.youtube.com/channel/UCve7_yAZHFNipzeAGBI5t9g'),
 			('4K Relaxation Channel', 'https://www.youtube.com/channel/UCg72Hd6UZAgPBAUZplnmPMQ'),
 			('La Belle Musique', 'https://www.youtube.com/user/LaBelleChannel'),

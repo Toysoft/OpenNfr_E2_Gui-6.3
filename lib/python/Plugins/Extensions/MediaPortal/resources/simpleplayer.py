@@ -16,8 +16,6 @@ from Screens.InfoBarGenerics import *
 from imports import *
 from youtubelink import YoutubeLink
 from mtvdelink import MTVdeLink
-from cannalink import CannaLink
-from eightieslink import EightiesLink
 from coverhelper import CoverHelper
 from Components.Pixmap import MovingPixmap
 from enigma import iPlayableService
@@ -836,12 +834,12 @@ class RadioBackground(Screen):
 					<widget name="rms1" channel="1" backgroundColor="#404040" zPosition="13" position="1200,251" size="70,495" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_90x60_h9.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="0" pixmapBackgroundColor1="#080808" distance="15" maxValue="40" fadeOutTime="500" smoothing="0.9" />'''
 
 				if config_mp.mediaportal.sp_radio_visualization.value == "1":
-					if mp_globals.model in ["dm900","dm920"]:
+					if mp_globals.model in ["dm900","dm920","one"]:
 						self.skin += '''<widget name="visu" position="0,741" size="1920,339" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="2" blendColor="#fcc000" smoothing="0.4" />'''
 					else:
 						self.skin += '''<widget name="visu" position="0,741" size="1920,339" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="0" blendColor="#fcc000" smoothing="0.4" />'''
 				if config_mp.mediaportal.sp_radio_visualization.value == "2":
-					if mp_globals.model in ["dm900","dm920"]:
+					if mp_globals.model in ["dm900","dm920","one"]:
 						self.skin += '''<widget name="visu" position="0,930" size="1920,150" transparent="1" zPosition="11" pixmapBackground2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmap2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_30x20_h8.png" distance1="18" distance2="8" mode="visImagesUp" maxValue="20" fadeOutTime="0" internalSize="2" pixmapBackgroundColor1="#080808" drawBackground="0" smoothing="0.6" />'''
 					else:
 						self.skin += '''<widget name="visu" position="0,930" size="1920,150" transparent="1" zPosition="11" pixmapBackground2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmap2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_30x20_h8.png" distance1="18" distance2="8" mode="visImagesUp" maxValue="15" fadeOutTime="0" internalSize="1" pixmapBackgroundColor1="#080808" drawBackground="0" smoothing="0.6" />'''
@@ -863,12 +861,12 @@ class RadioBackground(Screen):
 					<widget name="rms1" channel="1" backgroundColor="#404040" zPosition="13" position="800,167" size="60,330" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_60x40_h6.png" transparent="1" mode="imagesOrientationUp" pixmapBackground1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" drawBackground="0" pixmapBackgroundColor1="#080808" distance="10" maxValue="40" fadeOutTime="500" smoothing="0.9" />'''
 
 				if config_mp.mediaportal.sp_radio_visualization.value == "1":
-					if mp_globals.model in ["dm900","dm920"]:
+					if mp_globals.model in ["dm900","dm920","one"]:
 						self.skin += '''<widget name="visu" position="0,494" size="1280,226" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="2" blendColor="#fcc000" smoothing="0.4" />'''
 					else:
 						self.skin += '''<widget name="visu" position="0,494" size="1280,226" transparent="1" zPosition="11" pixmap1="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/bar_88_226.png" distance1="12" threshold1="24" mode="visUp" internalSize="1" blendColor="#fcc000" smoothing="0.4" />'''
 				if config_mp.mediaportal.sp_radio_visualization.value == "2":
-					if mp_globals.model in ["dm900","dm920"]:
+					if mp_globals.model in ["dm900","dm920","one"]:
 						self.skin += '''<widget name="visu" position="0,620" size="1280,100" transparent="1" zPosition="11" pixmapBackground2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmap2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_20x13_h5.png" distance1="12" distance2="5" mode="visImagesUp" maxValue="20" fadeOutTime="0" internalSize="2" pixmapBackgroundColor1="#080808" drawBackground="0" smoothing="0.6" />'''
 					else:
 						self.skin += '''<widget name="visu" position="0,570" size="1280,150" transparent="1" zPosition="11" pixmapBackground2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/colorgradient.png" pixmap2="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/led_20x13_h5.png" distance1="12" distance2="5" mode="visImagesUp" maxValue="15" fadeOutTime="0" internalSize="1" pixmapBackgroundColor1="#080808" drawBackground="0" smoothing="0.6" />'''
@@ -933,7 +931,7 @@ class RadioBackground(Screen):
 				return
 
 			try:
-				if mp_globals.model in ["dm900","dm920"]:
+				if mp_globals.model in ["dm900","dm920","one"]:
 					self['screenSaver'].instance.setShowHideAnimation("mp_screensaver")
 				elif config_mp.mediaportal.sp_radio_visualization.value not in ["1", "2"]:
 					self['screenSaver'].instance.setShowHideAnimation("mp_screensaver")
@@ -965,11 +963,14 @@ class RadioBackground(Screen):
 			self.val += 1
 			self.timestamp = self.getTimestamp()
 		if self.val == self.offset:
-			if mp_globals.model in ["dm900","dm920"]:
+			if mp_globals.model in ["dm900","dm920","one"]:
 				self['screenSaver'].hide()
+				self.fadeouttimer.start(500, 1)
 			elif config_mp.mediaportal.sp_radio_visualization.value not in ["1", "2"]:
 				self['screenSaver'].hide()
-			self.fadeouttimer.start(500, 1)
+				self.fadeouttimer.start(500, 1)
+			else:
+				self.initCallNewPicture()
 		else:
 			self.changetimer.start(5, 1)
 			if self.mode == "1":
@@ -1604,7 +1605,7 @@ class SimplePlayer(Screen, M3U8Player, CoverSearchHelper, SimpleSeekHelper, Simp
 					self.searchTitle = video_title
 
 				self.session.nav.playService(sref)
-				if mp_globals.isDreamOS:
+				if mp_globals.isDreamOS and self.playerMode not in ["RADIO"] and mp_globals.model not in ["one"]:
 					from imports import TimerCall
 					TimerCall(1, self.fixSeek)
 

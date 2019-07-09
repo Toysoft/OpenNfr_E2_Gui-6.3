@@ -5,7 +5,10 @@ from Plugins.Extensions.MediaPortal.resources.keyboardext import VirtualKeyBoard
 
 try:
 	if mp_globals.model in ["one"]:
-		from Plugins.Extensions.MediaPortal.resources import cfscrape
+		try:
+			from Plugins.Extensions.MediaPortal.resources import cfscrape
+		except:
+			from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 	else:
 		from Plugins.Extensions.MediaPortal.resources import cfscrape_old as cfscrape
 except:

@@ -96,7 +96,7 @@ class xnxxGenreScreen(MPScreen):
 	def genreData(self, data):
 		if self.Name:
 			parse = re.search('id="best-months">(.*?)$', data, re.S)
-			Cats = re.findall('<a href="(/best/.*?)"\s+(?:class="hidden"|)>(.*?)</a>', parse.group(1), re.S)
+			Cats = re.findall('<a href="(/best/.*?)"\s+(?:class="active"\s{0,2}|class="hidden"\s{0,2}|)>(.*?)</a>', parse.group(1), re.S)
 			if Cats:
 				for (Url, Title) in Cats:
 					Url = "https://www.xnxx.com" + Url + "/$$PAGE$$"
@@ -109,7 +109,7 @@ class xnxxGenreScreen(MPScreen):
 					for (Url, Title, Count) in Cats:
 						Count = int(Count.replace(',',''))
 						if Count > 250:
-							Url = "https://www.xnxx.com" + Url + "/$$PAGE$$/"
+							Url = "https://www.xnxx.com" + Url.replace('tags','search') + "/$$PAGE$$/"
 							self.filmliste.append((Title.title(), Url, default_cover, False))
 			self.filmliste.sort()
 			self.filmliste.insert(0, ("Best Of", "https://www.xnxx.com/best", default_cover, False))
@@ -368,12 +368,16 @@ class xnxxFilmScreen(MPScreen, ThumbsHelper):
 			self.bandwith_list.append((int(bandwith),url))
 		_, best = min((abs(int(x[0]) - bw), x) for x in self.bandwith_list)
 		url = baseurl.replace('https','http') + best[1]
-		playlist_path = config_mp.mediaportal.storagepath.value+"tmp.m3u8"
-		f1 = open(playlist_path, 'w')
-		f1.write('#EXTM3U\n#EXT-X-STREAM-INF:PROGRAM-ID=1\n%s' % url)
-		f1.close()
-		self.playVideo("file://%stmp.m3u8" % config_mp.mediaportal.storagepath.value)
+		if "vid-egc.xnxx-cdn.com" in url:
+			playlist_path = config_mp.mediaportal.storagepath.value+"tmp.m3u8"
+			f1 = open(playlist_path, 'w')
+			f1.write('#EXTM3U\n#EXT-X-STREAM-INF:PROGRAM-ID=1\n%s' % url)
+			f1.close()
+			self.playVideo("file://%stmp.m3u8" % config_mp.mediaportal.storagepath.value)
+		else:
+			self.playVideo(url)
 
 	def playVideo(self, url):
 		Title = self['liste'].getCurrent()[0][0]
+		mp_globals.player_agent = agent
 		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='xnxx')

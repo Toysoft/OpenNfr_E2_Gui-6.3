@@ -36,7 +36,7 @@ class Vidz7GenreScreen(MPScreen):
 		getPage(url).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		cats = re.findall('<li><a href="(.*?)(?:\?ky=5)">(.*?)</a><span>\((.*?)\)</span></li>', data, re.S)
+		cats = re.findall('<li><a href="(.*?)(?:\?\w+=5)">(.*?)</a><span>\((.*?)\)</span></li>', data, re.S)
 		if cats:
 			for (url, title, count) in cats:
 				if int(count.strip()) > 250:

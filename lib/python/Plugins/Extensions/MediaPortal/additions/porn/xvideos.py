@@ -715,12 +715,16 @@ class xvideosFilmScreen(MPScreen, ThumbsHelper):
 			self.bandwith_list.append((int(bandwith),url))
 		_, best = min((abs(int(x[0]) - bw), x) for x in self.bandwith_list)
 		url = baseurl.replace('https','http') + best[1]
-		playlist_path = config_mp.mediaportal.storagepath.value+"tmp.m3u8"
-		f1 = open(playlist_path, 'w')
-		f1.write('#EXTM3U\n#EXT-X-STREAM-INF:PROGRAM-ID=1\n%s' % url)
-		f1.close()
-		self.playVideo("file://%stmp.m3u8" % config_mp.mediaportal.storagepath.value)
+		if "vid-egc.xvideos-cdn.com" in url:
+			playlist_path = config_mp.mediaportal.storagepath.value+"tmp.m3u8"
+			f1 = open(playlist_path, 'w')
+			f1.write('#EXTM3U\n#EXT-X-STREAM-INF:PROGRAM-ID=1\n%s' % url)
+			f1.close()
+			self.playVideo("file://%stmp.m3u8" % config_mp.mediaportal.storagepath.value)
+		else:
+			self.playVideo(url)
 
 	def playVideo(self, url):
 		Title = self['liste'].getCurrent()[0][0]
+		mp_globals.player_agent = agent
 		self.session.open(SimplePlayer, [(Title, url)], showPlaylist=False, ltype='xvideos')

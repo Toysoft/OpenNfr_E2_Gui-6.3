@@ -144,7 +144,7 @@ class CloudflareScraper(Session):
         if ssl.OPENSSL_VERSION_NUMBER < 0x10101000:
             error += ". Your OpenSSL version is lower than 1.1.1. Please upgrade your OpenSSL library and recompile Python."
 
-        raise CloudflareCaptchaError(error, response=resp)
+        logging.error(error)
 
     def solve_cf_challenge(self, resp, **original_kwargs):
         start_time = time.time()
@@ -166,13 +166,13 @@ class CloudflareScraper(Session):
 
             for k in ("jschl_vc", "pass"):
                 if k not in params:
-                    raise ValueError("%s is missing from challenge form" % k)
+                    logging.error("%s is missing from challenge form" % k)
         except Exception as e:
             # Something is wrong with the page.
             # This may indicate Cloudflare has changed their anti-bot
             # technique. If you see this and are running the latest version,
             # please open a GitHub issue so I can update the code accordingly.
-            raise ValueError(
+            logging.error(
                 "Unable to parse Cloudflare anti-bot IUAM page: %s %s"
                 % (e.message, BUG_REPORT)
             )
@@ -246,7 +246,7 @@ class CloudflareScraper(Session):
             # Use the provided delay, parsed delay, or default to 8 secs
             delay = self.delay or (float(ms) / float(1000) if ms else 8)
         except Exception:
-            raise ValueError(
+            logging.error(
                 "Unable to identify Cloudflare IUAM Javascript on website. %s"
                 % BUG_REPORT
             )
@@ -281,19 +281,17 @@ class CloudflareScraper(Session):
             )
         except OSError as e:
             if e.errno == 2:
-                raise EnvironmentError(
+                logging.error(
                     "Missing Node.js runtime. Node is required and must be in the PATH (check with `node -v`). Your Node binary may be called `nodejs` rather than `node`, in which case you may need to run `apt-get install nodejs-legacy` on some Debian-based systems. (Please read the cfscrape"
                     " README's Dependencies section: https://github.com/Anorov/cloudflare-scrape#dependencies."
                 )
-            raise
         except Exception:
             logging.error("Error executing Cloudflare IUAM Javascript. %s" % BUG_REPORT)
-            raise
 
         try:
             float(result)
         except Exception:
-            raise ValueError(
+            logging.error(
                 "Cloudflare IUAM challenge returned unexpected answer. %s" % BUG_REPORT
             )
 
@@ -337,7 +335,6 @@ class CloudflareScraper(Session):
             resp.raise_for_status()
         except Exception:
             logging.error("'%s' returned an error. Could not collect tokens." % url)
-            raise
 
         domain = urlparse(resp.url).netloc
         cookie_domain = None
@@ -347,7 +344,7 @@ class CloudflareScraper(Session):
                 cookie_domain = d
                 break
         else:
-            raise ValueError(
+            logging.error(
                 'Unable to find Cloudflare cookies. Does the site actually have Cloudflare IUAM ("I\'m Under Attack Mode") enabled?'
             )
 
